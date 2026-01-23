@@ -981,7 +981,306 @@ async def delete_product(product_id: str, current_user: dict = Depends(get_curre
         raise HTTPException(status_code=404, detail="Product not found")
     return {"message": "Product deleted"}
 
-# ==================== EMISSION FACTORS ENDPOINTS ====================
+# ==================== FISCAL YEARS ENDPOINTS ====================
+
+@api_router.get("/fiscal-years")
+async def get_fiscal_years(current_user: dict = Depends(get_current_user)):
+    """Get all fiscal years for the current tenant"""
+    fiscal_years = list(fiscal_years_collection.find({"tenant_id": current_user["id"]}).sort("start_date", -1))
+    return [serialize_doc(fy) for fy in fiscal_years]
+
+@api_router.get("/fiscal-years/current")
+async def get_current_fiscal_year(current_user: dict = Depends(get_current_user)):
+    """Get the current active fiscal year (most recent draft, or most recent if all closed)"""
+    # First try to find a draft fiscal year
+    draft = fiscal_years_collection.find_one(
+        {"tenant_id": current_user["id"], "status": "draft"},
+        sort=[("start_date", -1)]
+    )
+    if draft:
+        return serialize_doc(draft)
+    
+    # Otherwise return the most recent one
+    recent = fiscal_years_collection.find_one(
+        {"tenant_id": current_user["id"]},
+        sort=[("start_date", -1)]
+    )
+    if recent:
+        return serialize_doc(recent)
+    
+    return None
+
+@api_router.get("/fiscal-years/{fiscal_year_id}")
+async def get_fiscal_year(fiscal_year_id: str, current_user: dict = Depends(get_current_user)):
+    """Get a specific fiscal year with its summary"""
+    fy = fiscal_years_collection.find_one({
+        "_id": ObjectId(fiscal_year_id),
+        "tenant_id": current_user["id"]
+    })
+    if not fy:
+        raise HTTPException(status_code=404, detail="Fiscal year not found")
+    return serialize_doc(fy)
+
+@api_router.post("/fiscal-years")
+async def create_fiscal_year(fy: FiscalYearCreate, current_user: dict = Depends(get_current_user)):
+    """Create a new fiscal year"""
+    company = companies_collection.find_one({"tenant_id": current_user["id"]})
+    if not company:
+        raise HTTPException(status_code=400, detail="Please create a company first")
+    
+    # Check for overlapping fiscal years
+    existing = fiscal_years_collection.find_one({
+        "tenant_id": current_user["id"],
+        "$or": [
+            {"start_date": {"$lte": fy.end_date}, "end_date": {"$gte": fy.start_date}}
+        ]
+    })
+    if existing:
+        raise HTTPException(status_code=400, detail="This period overlaps with an existing fiscal year")
+    
+    fy_doc = {
+        "tenant_id": current_user["id"],
+        "company_id": str(company["_id"]),
+        "name": fy.name,
+        "start_date": fy.start_date,
+        "end_date": fy.end_date,
+        "status": "draft",
+        "created_at": datetime.now(timezone.utc).isoformat(),
+        "summary": None
+    }
+    
+    result = fiscal_years_collection.insert_one(fy_doc)
+    fy_doc["id"] = str(result.inserted_id)
+    return serialize_doc(fy_doc)
+
+@api_router.post("/fiscal-years/{fiscal_year_id}/close")
+async def close_fiscal_year(fiscal_year_id: str, current_user: dict = Depends(get_current_user)):
+    """Close a fiscal year - locks data and generates summary"""
+    fy = fiscal_years_collection.find_one({
+        "_id": ObjectId(fiscal_year_id),
+        "tenant_id": current_user["id"]
+    })
+    if not fy:
+        raise HTTPException(status_code=404, detail="Fiscal year not found")
+    
+    if fy.get("status") == "closed":
+        raise HTTPException(status_code=400, detail="Fiscal year is already closed")
+    
+    # Calculate summary from activities in this period
+    activities = list(activities_collection.find({
+        "tenant_id": current_user["id"],
+        "fiscal_year_id": fiscal_year_id
+    }))
+    
+    # Also include activities without fiscal_year_id but within date range
+    if fy.get("start_date") and fy.get("end_date"):
+        activities_by_date = list(activities_collection.find({
+            "tenant_id": current_user["id"],
+            "fiscal_year_id": {"$exists": False},
+            "date": {"$gte": fy["start_date"], "$lte": fy["end_date"]}
+        }))
+        activities.extend(activities_by_date)
+    
+    # Calculate totals
+    total_emissions = sum(a.get("emissions", 0) for a in activities) / 1000  # Convert to tCO2e
+    by_scope = {}
+    by_category = {}
+    
+    for a in activities:
+        scope = a.get("scope", "unknown")
+        cat = a.get("category_id", "unknown")
+        emissions = a.get("emissions", 0) / 1000
+        
+        by_scope[scope] = by_scope.get(scope, 0) + emissions
+        by_category[cat] = by_category.get(cat, 0) + emissions
+    
+    summary = {
+        "total_emissions_tco2e": round(total_emissions, 4),
+        "by_scope": {k: round(v, 4) for k, v in by_scope.items()},
+        "by_category": {k: round(v, 4) for k, v in by_category.items()},
+        "activities_count": len(activities),
+        "generated_at": datetime.now(timezone.utc).isoformat()
+    }
+    
+    # Update fiscal year
+    fiscal_years_collection.update_one(
+        {"_id": ObjectId(fiscal_year_id)},
+        {"$set": {
+            "status": "closed",
+            "closed_at": datetime.now(timezone.utc).isoformat(),
+            "closed_by": current_user["id"],
+            "summary": summary
+        }}
+    )
+    
+    updated = fiscal_years_collection.find_one({"_id": ObjectId(fiscal_year_id)})
+    return serialize_doc(updated)
+
+@api_router.post("/fiscal-years/{fiscal_year_id}/rectify")
+async def rectify_fiscal_year(fiscal_year_id: str, rectify: FiscalYearRectify, current_user: dict = Depends(get_current_user)):
+    """Reopen a closed fiscal year with justification"""
+    fy = fiscal_years_collection.find_one({
+        "_id": ObjectId(fiscal_year_id),
+        "tenant_id": current_user["id"]
+    })
+    if not fy:
+        raise HTTPException(status_code=404, detail="Fiscal year not found")
+    
+    if fy.get("status") != "closed":
+        raise HTTPException(status_code=400, detail="Only closed fiscal years can be rectified")
+    
+    if not rectify.reason or len(rectify.reason.strip()) < 10:
+        raise HTTPException(status_code=400, detail="Please provide a detailed justification (at least 10 characters)")
+    
+    # Store rectification history
+    rectifications = fy.get("rectifications", [])
+    rectifications.append({
+        "previous_summary": fy.get("summary"),
+        "reopened_at": datetime.now(timezone.utc).isoformat(),
+        "reopened_by": current_user["id"],
+        "reason": rectify.reason.strip()
+    })
+    
+    fiscal_years_collection.update_one(
+        {"_id": ObjectId(fiscal_year_id)},
+        {"$set": {
+            "status": "rectified",
+            "rectifications": rectifications,
+            "summary": None  # Will be recalculated on next close
+        }}
+    )
+    
+    updated = fiscal_years_collection.find_one({"_id": ObjectId(fiscal_year_id)})
+    return serialize_doc(updated)
+
+@api_router.post("/fiscal-years/{fiscal_year_id}/duplicate")
+async def duplicate_to_new_fiscal_year(fiscal_year_id: str, dup: FiscalYearDuplicate, current_user: dict = Depends(get_current_user)):
+    """Create a new fiscal year, optionally duplicating selected activities"""
+    source_fy = fiscal_years_collection.find_one({
+        "_id": ObjectId(fiscal_year_id),
+        "tenant_id": current_user["id"]
+    })
+    if not source_fy:
+        raise HTTPException(status_code=404, detail="Source fiscal year not found")
+    
+    company = companies_collection.find_one({"tenant_id": current_user["id"]})
+    
+    # Check for overlapping fiscal years
+    existing = fiscal_years_collection.find_one({
+        "tenant_id": current_user["id"],
+        "$or": [
+            {"start_date": {"$lte": dup.new_end_date}, "end_date": {"$gte": dup.new_start_date}}
+        ]
+    })
+    if existing:
+        raise HTTPException(status_code=400, detail="This period overlaps with an existing fiscal year")
+    
+    # Create new fiscal year
+    new_fy_doc = {
+        "tenant_id": current_user["id"],
+        "company_id": str(company["_id"]) if company else None,
+        "name": dup.new_name,
+        "start_date": dup.new_start_date,
+        "end_date": dup.new_end_date,
+        "status": "draft",
+        "created_at": datetime.now(timezone.utc).isoformat(),
+        "duplicated_from": fiscal_year_id,
+        "summary": None
+    }
+    
+    result = fiscal_years_collection.insert_one(new_fy_doc)
+    new_fy_id = str(result.inserted_id)
+    
+    duplicated_activities = []
+    
+    # Duplicate activities if requested
+    if dup.duplicate_activities or dup.activity_ids_to_duplicate:
+        if dup.activity_ids_to_duplicate:
+            # Duplicate specific activities
+            source_activities = list(activities_collection.find({
+                "_id": {"$in": [ObjectId(aid) for aid in dup.activity_ids_to_duplicate]},
+                "tenant_id": current_user["id"]
+            }))
+        else:
+            # Duplicate all activities from source fiscal year
+            source_activities = list(activities_collection.find({
+                "tenant_id": current_user["id"],
+                "fiscal_year_id": fiscal_year_id
+            }))
+        
+        for activity in source_activities:
+            new_activity = {**activity}
+            del new_activity["_id"]
+            new_activity["fiscal_year_id"] = new_fy_id
+            new_activity["duplicated_from"] = str(activity["_id"])
+            new_activity["created_at"] = datetime.now(timezone.utc).isoformat()
+            # Reset date to new period start
+            new_activity["date"] = dup.new_start_date
+            
+            result = activities_collection.insert_one(new_activity)
+            duplicated_activities.append(str(result.inserted_id))
+    
+    new_fy_doc["id"] = new_fy_id
+    return {
+        "fiscal_year": serialize_doc(new_fy_doc),
+        "duplicated_activities_count": len(duplicated_activities),
+        "duplicated_activity_ids": duplicated_activities
+    }
+
+@api_router.get("/fiscal-years/{fiscal_year_id}/activities")
+async def get_fiscal_year_activities(fiscal_year_id: str, current_user: dict = Depends(get_current_user)):
+    """Get all activities for a specific fiscal year"""
+    fy = fiscal_years_collection.find_one({
+        "_id": ObjectId(fiscal_year_id),
+        "tenant_id": current_user["id"]
+    })
+    if not fy:
+        raise HTTPException(status_code=404, detail="Fiscal year not found")
+    
+    # Get activities linked to this fiscal year
+    activities = list(activities_collection.find({
+        "tenant_id": current_user["id"],
+        "fiscal_year_id": fiscal_year_id
+    }))
+    
+    # Also get activities within date range without explicit fiscal_year_id
+    if fy.get("start_date") and fy.get("end_date"):
+        activities_by_date = list(activities_collection.find({
+            "tenant_id": current_user["id"],
+            "fiscal_year_id": {"$exists": False},
+            "date": {"$gte": fy["start_date"], "$lte": fy["end_date"]}
+        }))
+        activities.extend(activities_by_date)
+    
+    return [serialize_doc(a) for a in activities]
+
+@api_router.get("/fiscal-years/{fiscal_year_id}/activities-for-duplication")
+async def get_activities_for_duplication(fiscal_year_id: str, current_user: dict = Depends(get_current_user)):
+    """Get activities that can be duplicated to a new fiscal year (grouped by category)"""
+    fy = fiscal_years_collection.find_one({
+        "_id": ObjectId(fiscal_year_id),
+        "tenant_id": current_user["id"]
+    })
+    if not fy:
+        raise HTTPException(status_code=404, detail="Fiscal year not found")
+    
+    activities = list(activities_collection.find({
+        "tenant_id": current_user["id"],
+        "fiscal_year_id": fiscal_year_id
+    }))
+    
+    # Group by category for easier selection
+    by_category = {}
+    for a in activities:
+        cat = a.get("category_id", "unknown")
+        if cat not in by_category:
+            by_category[cat] = []
+        by_category[cat].append(serialize_doc(a))
+    
+    return {
+        "total_activities": len(activities),
+        "by_category": by_category
+    }
 
 @api_router.get("/emission-factors")
 async def get_emission_factors(category: Optional[str] = None, scope: Optional[str] = None, search: Optional[str] = None):
