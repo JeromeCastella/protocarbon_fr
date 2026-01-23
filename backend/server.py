@@ -1361,7 +1361,7 @@ def get_default_emission_factors():
         {"name": "Smartphone", "category": "biens_equipement", "scope": "scope3_amont", "value": 39.1, "unit": "kgCO2e/unité", "source": "OFEV", "tags": ["informatique", "téléphone", "équipement"], "region": "Global"},
         
         # Scope 3 - Déchets
-        {"name": "Déchets ménagers - Incinération", "category": "dechets_operations", "scope": "scope3_amont", "value": 0.51, "unit": "kgCO2e/kg", "source": "ADEME Base Carbone", "tags": ["déchets", "incinération"], "region": "France"},
+        {"name": "Déchets ménagers - Incinération", "category": "dechets_operations", "scope": "scope3_amont", "value": 0.51, "unit": "kgCO2e/kg", "source": "OFEV", "tags": ["déchets", "incinération"], "region": "Suisse"},
         {"name": "Déchets ménagers - Enfouissement", "category": "dechets_operations", "scope": "scope3_amont", "value": 0.69, "unit": "kgCO2e/kg", "source": "ADEME Base Carbone", "tags": ["déchets", "enfouissement"], "region": "France"},
         
         # ==================== MATÉRIAUX (pour composition produits) ====================
