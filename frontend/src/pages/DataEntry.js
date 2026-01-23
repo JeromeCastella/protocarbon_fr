@@ -189,11 +189,20 @@ const DataEntry = () => {
     }
   };
 
+  // Effect for filtering by search text
   useEffect(() => {
-    if (selectedSubcategory || selectedUnit || factorSearch) {
-      fetchFactors(selectedSubcategory?.code, selectedUnit, factorSearch);
+    if (factorSearch && allCategoryFactors.length > 0) {
+      const searchLower = factorSearch.toLowerCase();
+      const filtered = allCategoryFactors.filter(f => 
+        f.name?.toLowerCase().includes(searchLower) ||
+        f.tags?.some(tag => tag.toLowerCase().includes(searchLower))
+      );
+      setAvailableFactors(filtered);
+    } else if (allCategoryFactors.length > 0 && !selectedUnit) {
+      // Reset to all factors when search is cleared
+      setAvailableFactors(allCategoryFactors);
     }
-  }, [selectedSubcategory, selectedUnit, factorSearch]);
+  }, [factorSearch, allCategoryFactors, selectedUnit]);
 
   const scopes = [
     { id: 'scope1', name: t('scope.scope1'), subtitle: t('scope.scope1Title'), color: 'bg-blue-500' },
