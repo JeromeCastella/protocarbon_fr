@@ -80,6 +80,8 @@ class CompanyCreate(BaseModel):
     revenue: float
     consolidation_approach: str
     excluded_categories: List[str] = []
+    fiscal_year_start_month: int = 1  # Janvier par défaut
+    fiscal_year_start_day: int = 1
 
 class CompanyUpdate(BaseModel):
     name: Optional[str] = None
@@ -91,6 +93,28 @@ class CompanyUpdate(BaseModel):
     revenue: Optional[float] = None
     consolidation_approach: Optional[str] = None
     excluded_categories: Optional[List[str]] = None
+    fiscal_year_start_month: Optional[int] = None
+    fiscal_year_start_day: Optional[int] = None
+
+# ==================== FISCAL YEAR MODELS ====================
+
+class FiscalYearCreate(BaseModel):
+    name: str  # Ex: "Exercice 2024"
+    start_date: str  # ISO format: "2024-04-01"
+    end_date: str  # ISO format: "2025-03-31"
+
+class FiscalYearClose(BaseModel):
+    pass  # Pas de paramètres, juste confirmation
+
+class FiscalYearRectify(BaseModel):
+    reason: str  # Justification obligatoire
+
+class FiscalYearDuplicate(BaseModel):
+    new_name: str
+    new_start_date: str
+    new_end_date: str
+    duplicate_activities: bool = False  # Si True, copie les activités
+    activity_ids_to_duplicate: List[str] = []  # IDs spécifiques à copier (si duplicate_activities=False)
 
 class ActivityCreate(BaseModel):
     category_id: str
