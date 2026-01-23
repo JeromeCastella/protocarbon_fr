@@ -202,9 +202,9 @@ const Dashboard = () => {
               </div>
             </div>
             <p className={`text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-              {emissions?.toLocaleString() || 0}
+              {formatEmissions(emissions).value}
             </p>
-            <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>tCO₂e</p>
+            <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>{formatEmissions(emissions).unit}</p>
             
             {/* Completion */}
             <div className="mt-4 pt-4 border-t border-gray-200 dark:border-slate-700">
