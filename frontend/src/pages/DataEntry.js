@@ -174,10 +174,11 @@ const DataEntry = () => {
   const fetchFactors = async (subcatCode, unit, search) => {
     try {
       let url = `${API_URL}/api/emission-factors/search?`;
-      if (subcatCode) url += `subcategory=${subcatCode}&`;
+      // Don't filter by subcategory since factors don't have this field
+      // Filter by category instead
+      if (selectedCategory) url += `category=${selectedCategory.code}&`;
       if (unit) url += `unit=${unit}&`;
       if (search) url += `search=${encodeURIComponent(search)}&`;
-      if (selectedCategory) url += `category=${selectedCategory.code}`;
       
       const response = await axios.get(url);
       setAvailableFactors(response.data || []);
