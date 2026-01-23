@@ -500,7 +500,10 @@ const FiscalYears = () => {
                 </label>
                 <select
                   value={createForm.year}
-                  onChange={(e) => setCreateForm({ year: parseInt(e.target.value) })}
+                  onChange={(e) => {
+                    setCreateForm({ year: parseInt(e.target.value) });
+                    setCreateError('');
+                  }}
                   data-testid="fiscal-year-select"
                   className={`w-full px-4 py-3 rounded-xl border text-lg font-medium ${
                     isDark ? 'bg-slate-700 border-slate-600 text-white' : 'bg-white border-gray-200'
@@ -511,6 +514,18 @@ const FiscalYears = () => {
                   ))}
                 </select>
               </div>
+              
+              {/* Error message */}
+              {createError && (
+                <div className={`p-4 rounded-xl ${isDark ? 'bg-red-500/20' : 'bg-red-50'}`}>
+                  <div className="flex items-start gap-3">
+                    <AlertTriangle className="w-5 h-5 text-red-500 mt-0.5" />
+                    <p className={`text-sm ${isDark ? 'text-red-300' : 'text-red-700'}`}>
+                      {createError}
+                    </p>
+                  </div>
+                </div>
+              )}
               
               {/* Preview of dates */}
               <div className={`p-4 rounded-xl ${isDark ? 'bg-green-500/20' : 'bg-green-50'}`}>
@@ -524,7 +539,10 @@ const FiscalYears = () => {
               
               <div className="flex gap-3 pt-4">
                 <button
-                  onClick={() => setShowCreateModal(false)}
+                  onClick={() => {
+                    setShowCreateModal(false);
+                    setCreateError('');
+                  }}
                   className={`flex-1 px-4 py-3 rounded-xl border ${
                     isDark ? 'border-slate-600 hover:bg-slate-700 text-white' : 'border-gray-200 hover:bg-gray-50'
                   }`}
