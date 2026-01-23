@@ -770,11 +770,6 @@ const DataEntry = () => {
                   )}
                 </form>
               </div>
-                      )}
-                    </>
-                  )}
-                </form>
-              </div>
 
               {/* Modal Footer */}
               <div className={`p-6 border-t ${isDark ? 'border-slate-700' : 'border-gray-200'}`}>
