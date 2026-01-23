@@ -308,6 +308,47 @@ async def get_categories():
         categories = list(categories_collection.find({}))
     return [serialize_doc(c) for c in categories]
 
+@app.get("/subcategories")
+async def get_subcategories(category: Optional[str] = None):
+    """Get subcategories, optionally filtered by parent category"""
+    query = {}
+    if category:
+        query["parent_category"] = category
+    subcategories = list(db.subcategories.find(query).sort("order", 1))
+    return [serialize_doc(s) for s in subcategories]
+
+@app.get("/emission-factors/search")
+async def search_emission_factors(
+    subcategory: Optional[str] = None,
+    unit: Optional[str] = None,
+    search: Optional[str] = None,
+    category: Optional[str] = None
+):
+    """Search emission factors with filters"""
+    query = {}
+    
+    if subcategory:
+        query["subcategory"] = subcategory
+    
+    if category:
+        query["impacts.category"] = category
+    
+    if unit:
+        query["input_units"] = unit
+    
+    factors = list(emission_factors_collection.find(query))
+    
+    # Filter by search term (name + tags)
+    if search:
+        search_lower = search.lower()
+        factors = [
+            f for f in factors
+            if search_lower in f.get("name", "").lower() 
+            or any(search_lower in tag for tag in f.get("tags", []))
+        ]
+    
+    return [serialize_doc(f) for f in factors]
+
 def get_default_categories():
     return [
         # Scope 1 - Direct Emissions
