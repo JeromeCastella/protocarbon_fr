@@ -1330,9 +1330,9 @@ async def create_emission_factor(factor: EmissionFactorCreate, current_user: dic
 def get_default_emission_factors():
     return [
         # Scope 1 - Combustion mobile
-        {"name": "Diesel - Véhicules légers", "category": "combustion_mobile", "scope": "scope1", "value": 2.68, "unit": "kgCO2e/L", "source": "ADEME Base Carbone", "tags": ["diesel", "transport", "véhicule", "carburant"], "region": "France"},
-        {"name": "Essence - Véhicules légers", "category": "combustion_mobile", "scope": "scope1", "value": 2.28, "unit": "kgCO2e/L", "source": "ADEME Base Carbone", "tags": ["essence", "transport", "véhicule", "carburant"], "region": "France"},
-        {"name": "GPL - Véhicules", "category": "combustion_mobile", "scope": "scope1", "value": 1.66, "unit": "kgCO2e/L", "source": "ADEME Base Carbone", "tags": ["gpl", "transport", "carburant"], "region": "France"},
+        {"name": "Diesel - Véhicules légers", "category": "combustion_mobile", "scope": "scope1", "value": 2.68, "unit": "kgCO2e/L", "source": "OFEV", "tags": ["diesel", "transport", "véhicule", "carburant"], "region": "Suisse"},
+        {"name": "Essence - Véhicules légers", "category": "combustion_mobile", "scope": "scope1", "value": 2.28, "unit": "kgCO2e/L", "source": "OFEV", "tags": ["essence", "transport", "véhicule", "carburant"], "region": "Suisse"},
+        {"name": "GPL - Véhicules", "category": "combustion_mobile", "scope": "scope1", "value": 1.66, "unit": "kgCO2e/L", "source": "OFEV", "tags": ["gpl", "transport", "carburant"], "region": "Suisse"},
         
         # Scope 1 - Combustion fixe
         {"name": "Gaz naturel - Chauffage", "category": "combustion_fixe", "scope": "scope1", "value": 2.04, "unit": "kgCO2e/m³", "source": "ADEME Base Carbone", "tags": ["gaz", "chauffage", "combustible"], "region": "France"},
