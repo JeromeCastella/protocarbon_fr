@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException, Depends, status, UploadFile, File
+from fastapi import FastAPI, HTTPException, Depends, status, UploadFile, File, APIRouter
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from pydantic import BaseModel, Field, EmailStr
@@ -14,6 +14,9 @@ import io
 import json
 
 app = FastAPI(title="Carbon Footprint Calculator - GHG Protocol")
+
+# Create API router with /api prefix
+api_router = APIRouter(prefix="/api")
 
 # CORS
 app.add_middleware(
