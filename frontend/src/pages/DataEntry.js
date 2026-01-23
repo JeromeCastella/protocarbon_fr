@@ -231,6 +231,47 @@ const DataEntry = () => {
       }, 0) || 0
     : 0;
 
+  // Table view functions
+  const openTableView = (scope) => {
+    setTableViewScope(scope);
+    setShowTableView(true);
+  };
+
+  const getScopeActivities = (scope) => {
+    return activities.filter(a => a.scope === scope);
+  };
+
+  const handleDeleteActivity = async (activityId) => {
+    try {
+      await axios.delete(`${API_URL}/activities/${activityId}`);
+      fetchData();
+    } catch (error) {
+      console.error('Failed to delete activity:', error);
+    }
+  };
+
+  const handleUpdateActivity = async (activityId, updates) => {
+    try {
+      await axios.put(`${API_URL}/activities/${activityId}`, updates);
+      setEditingActivity(null);
+      fetchData();
+    } catch (error) {
+      console.error('Failed to update activity:', error);
+    }
+  };
+
+  const getCategoryName = (categoryCode) => {
+    const cat = categories.find(c => c.code === categoryCode);
+    return cat ? (language === 'fr' ? cat.name_fr : cat.name_de) : categoryCode;
+  };
+
+  const scopeLabels = {
+    scope1: { name: 'Scope 1', subtitle: 'Émissions directes', color: 'blue' },
+    scope2: { name: 'Scope 2', subtitle: 'Énergie indirecte', color: 'cyan' },
+    scope3_amont: { name: 'Scope 3 Amont', subtitle: 'Amont', color: 'purple' },
+    scope3_aval: { name: 'Scope 3 Aval', subtitle: 'Aval', color: 'indigo' },
+  };
+
   const handleFileUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
