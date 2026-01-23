@@ -41,7 +41,44 @@ export const FiscalYearProvider = ({ children }) => {
     } else {
       setLoading(false);
     }
+    
+    // Listen for storage changes (login/logout from other tabs)
+    const handleStorageChange = (e) => {
+      if (e.key === 'token') {
+        if (e.newValue) {
+          fetchFiscalYears();
+        } else {
+          setFiscalYears([]);
+          setCurrentFiscalYear(null);
+        }
+      }
+    };
+    
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
   }, []);
+  
+  // Also refresh when axios auth header changes (after login)
+  useEffect(() => {
+    const checkAuth = () => {
+      const hasAuthHeader = !!axios.defaults.headers.common['Authorization'];
+      const token = localStorage.getItem('token');
+      if (hasAuthHeader && token && fiscalYears.length === 0 && !loading) {
+        fetchFiscalYears();
+      }
+    };
+    
+    // Check periodically for auth changes
+    const interval = setInterval(checkAuth, 1000);
+    
+    // Clean up after 10 seconds (should be logged in by then)
+    const timeout = setTimeout(() => clearInterval(interval), 10000);
+    
+    return () => {
+      clearInterval(interval);
+      clearTimeout(timeout);
+    };
+  }, [fiscalYears.length, loading]);
 
   const selectFiscalYear = (fiscalYear) => {
     setCurrentFiscalYear(fiscalYear);
