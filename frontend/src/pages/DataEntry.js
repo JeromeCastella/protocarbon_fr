@@ -1145,7 +1145,7 @@ const DataEntry = () => {
                             </td>
                             <td className="py-4 px-4 text-right">
                               <span className={`font-bold ${scopeColor}`}>
-                                {((activity.emissions || 0) / 1000).toFixed(4)} tCO₂e
+                                {formatEmissions(activity.emissions).value} {formatEmissions(activity.emissions).unit}
                               </span>
                             </td>
                             <td className="py-4 px-4 text-right">
