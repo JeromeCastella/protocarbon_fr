@@ -284,22 +284,55 @@ const DataEntry = () => {
     setShowModal(true);
   };
 
+  // State for all factors (unfiltered) and filtered factors
+  const [allCategoryFactors, setAllCategoryFactors] = useState([]);
+
   const handleSubcategorySelect = (subcat) => {
     setSelectedSubcategory(subcat);
     setSelectedUnit('');
     setSelectedFactor(null);
     setFactorSearch('');
-    setShowFactorDropdown(true); // Show dropdown when subcategory selected
-    // Fetch factors using the current category directly
+    setShowFactorDropdown(true);
+    
+    // Fetch all factors for category, then filter by subcategory tags
     if (selectedCategory) {
-      fetchFactorsForCategory(selectedCategory.code);
+      fetchFactorsForCategoryAndFilter(selectedCategory.code, subcat.code);
+    }
+  };
+  
+  // Fetch factors and filter by subcategory (using tags)
+  const fetchFactorsForCategoryAndFilter = async (categoryCode, subcatCode) => {
+    try {
+      const response = await axios.get(`${API_URL}/api/emission-factors/search?category=${categoryCode}`);
+      const allFactors = response.data || [];
+      setAllCategoryFactors(allFactors);
+      
+      // Filter by subcategory using tags (subcategory name should be in tags)
+      const subcatLower = subcatCode?.toLowerCase() || '';
+      const filtered = subcatLower 
+        ? allFactors.filter(f => 
+            f.tags?.some(tag => tag.toLowerCase().includes(subcatLower)) ||
+            f.name?.toLowerCase().includes(subcatLower)
+          )
+        : allFactors;
+      
+      setAvailableFactors(filtered.length > 0 ? filtered : allFactors);
+    } catch (error) {
+      console.error('Failed to fetch factors:', error);
     }
   };
 
   const handleUnitSelect = (unit) => {
     setSelectedUnit(unit);
     setSelectedFactor(null);
-    fetchFactors(selectedSubcategory?.code, unit, factorSearch);
+    
+    // Filter available factors by selected unit
+    const filtered = allCategoryFactors.filter(f => {
+      const factorUnit = f.unit?.match(/kgCO2e\/(.+)/)?.[1] || f.unit;
+      return factorUnit === unit;
+    });
+    
+    setAvailableFactors(filtered);
   };
 
   const handleFactorSelect = (factor) => {
