@@ -815,26 +815,15 @@ const DataEntry = () => {
                           isDark ? 'bg-slate-700 border-slate-600' : 'bg-white border-gray-200'
                         }`}>
                           {availableFactors.map(factor => {
-                            // Group impacts by scope type
-                            const scopeImpacts = {};
-                            factor.impacts?.forEach(impact => {
-                              let scopeLabel;
-                              if (impact.scope === 'scope1') scopeLabel = 'Scope 1';
-                              else if (impact.scope === 'scope2') scopeLabel = 'Scope 2';
-                              else if (impact.scope.startsWith('scope3')) scopeLabel = 'Scope 3';
-                              else scopeLabel = impact.scope;
-                              
-                              if (!scopeImpacts[scopeLabel]) {
-                                scopeImpacts[scopeLabel] = { value: 0, unit: impact.unit };
-                              }
-                              scopeImpacts[scopeLabel].value += impact.value;
-                            });
-                            
+                            // Scope colors
                             const scopeColors = {
-                              'Scope 1': 'bg-blue-500',
-                              'Scope 2': 'bg-cyan-500',
-                              'Scope 3': 'bg-purple-500'
+                              'scope1': { bg: 'bg-blue-500', label: 'Scope 1' },
+                              'scope2': { bg: 'bg-cyan-500', label: 'Scope 2' },
+                              'scope3_amont': { bg: 'bg-purple-500', label: 'Scope 3' },
+                              'scope3_aval': { bg: 'bg-indigo-500', label: 'Scope 3' }
                             };
+                            
+                            const scopeInfo = scopeColors[factor.scope] || { bg: 'bg-gray-500', label: factor.scope };
                             
                             return (
                               <button
@@ -852,16 +841,13 @@ const DataEntry = () => {
                                 <div className="flex items-center justify-between gap-3">
                                   <span className="font-medium text-sm">{factor.name}</span>
                                   <div className="flex gap-2 flex-shrink-0">
-                                    {Object.entries(scopeImpacts).map(([scope, data]) => (
-                                      <span 
-                                        key={scope}
-                                        className={`px-2 py-1 rounded-md text-xs font-medium text-white whitespace-nowrap ${
-                                          selectedFactor?.id === factor.id ? 'bg-white/30' : scopeColors[scope]
-                                        }`}
-                                      >
-                                        {scope}: {data.value}
-                                      </span>
-                                    ))}
+                                    <span 
+                                      className={`px-2 py-1 rounded-md text-xs font-medium text-white whitespace-nowrap ${
+                                        selectedFactor?.id === factor.id ? 'bg-white/30' : scopeInfo.bg
+                                      }`}
+                                    >
+                                      {scopeInfo.label}: {factor.value} {factor.unit?.replace('kgCO2e/', '')}
+                                    </span>
                                   </div>
                                 </div>
                               </button>
