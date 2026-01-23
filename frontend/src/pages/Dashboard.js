@@ -18,6 +18,29 @@ import {
 
 const API_URL = process.env.REACT_APP_BACKEND_URL || '';
 
+// Utility function to format emissions with appropriate unit
+const formatEmissions = (valueInKg) => {
+  if (valueInKg === null || valueInKg === undefined) {
+    return { value: '0', unit: 'kgCO₂e' };
+  }
+  
+  const tonnes = valueInKg / 1000;
+  
+  if (tonnes >= 10) {
+    // Display in tonnes if >= 10 tonnes
+    return {
+      value: tonnes.toLocaleString('fr-FR', { maximumFractionDigits: 2 }),
+      unit: 'tCO₂e'
+    };
+  } else {
+    // Display in kg if < 10 tonnes
+    return {
+      value: valueInKg.toLocaleString('fr-FR', { maximumFractionDigits: 2 }),
+      unit: 'kgCO₂e'
+    };
+  }
+};
+
 const Dashboard = () => {
   const { isDark } = useTheme();
   const { t } = useLanguage();
