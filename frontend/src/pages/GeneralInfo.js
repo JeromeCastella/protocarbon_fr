@@ -108,38 +108,31 @@ const GeneralInfo = () => {
     }));
   };
 
-  // Calculate fiscal year end date based on start date
-  const getFiscalYearEndDate = () => {
+  // Calculate fiscal year end date based on start month
+  const getFiscalYearEndMonth = () => {
     const startMonth = company.fiscal_year_start_month || 1;
-    const startDay = company.fiscal_year_start_day || 1;
     
-    // End date is one day before the start date of next year
+    // End month is the month before start month
     let endMonth = startMonth - 1;
-    let endDay = startDay - 1;
-    
     if (endMonth < 1) {
       endMonth = 12;
     }
-    if (endDay < 1) {
-      // Get last day of previous month
-      const daysInMonth = new Date(2024, endMonth, 0).getDate();
-      endDay = daysInMonth;
-      endMonth = endMonth - 1;
-      if (endMonth < 1) endMonth = 12;
-    }
     
-    // Simpler approach: if start is Jan 1, end is Dec 31
-    if (startMonth === 1 && startDay === 1) {
-      return { month: 12, day: 31 };
-    }
-    
-    // Otherwise, end is the day before start
-    const startDate = new Date(2024, startMonth - 1, startDay);
-    startDate.setDate(startDate.getDate() - 1);
-    return { month: startDate.getMonth() + 1, day: startDate.getDate() };
+    return endMonth;
   };
 
-  const endDate = getFiscalYearEndDate();
+  const endMonth = getFiscalYearEndMonth();
+  
+  // Check if entity is private company (shows revenue and consolidation fields)
+  const isPrivateCompany = company.entity_type === 'private_company';
+
+  const entityTypes = [
+    { value: 'private_company', label: language === 'fr' ? 'Entreprise privée' : 'Privatunternehmen' },
+    { value: 'public_admin', label: language === 'fr' ? 'Administration publique' : 'Öffentliche Verwaltung' },
+    { value: 'association', label: language === 'fr' ? 'Association' : 'Verein' },
+    { value: 'foundation', label: language === 'fr' ? 'Fondation' : 'Stiftung' },
+    { value: 'other', label: language === 'fr' ? 'Autre' : 'Andere' }
+  ];
 
   const sectors = [
     'manufacturing', 'services', 'technology', 'retail', 'construction',
