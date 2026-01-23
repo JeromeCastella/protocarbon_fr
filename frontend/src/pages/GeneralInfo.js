@@ -260,7 +260,7 @@ const GeneralInfo = () => {
                   ? 'bg-slate-700 border-slate-600 text-white' 
                   : 'bg-white border-gray-200 text-gray-900'
               }`}
-              placeholder="Paris, France"
+              placeholder="Fribourg, Suisse"
             />
           </div>
 
@@ -348,13 +348,14 @@ const GeneralInfo = () => {
           <div>
             <label className={`flex items-center gap-2 text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
               <DollarSign className="w-4 h-4" />
-              {t('company.revenue')}
+              {t('company.revenue')} (kCHF)
             </label>
             <input
               type="number"
               value={company.revenue}
               onChange={(e) => setCompany({ ...company, revenue: parseFloat(e.target.value) || 0 })}
               data-testid="company-revenue-input"
+              placeholder="ex: 1500"
               className={`w-full px-4 py-3 rounded-xl border transition-all focus:ring-2 focus:ring-blue-500 ${
                 isDark 
                   ? 'bg-slate-700 border-slate-600 text-white' 
