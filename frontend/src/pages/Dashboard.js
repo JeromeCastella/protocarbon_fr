@@ -114,9 +114,9 @@ const Dashboard = () => {
             <div>
               <p className="text-blue-100 font-medium">{t('dataEntry.totalBalance')}</p>
               <h2 className="text-5xl font-bold mt-2" data-testid="total-emissions">
-                {summary?.total_emissions?.toLocaleString() || 0}
+                {formatEmissions(summary?.total_emissions).value}
               </h2>
-              <p className="text-blue-200 mt-1">tCO₂e</p>
+              <p className="text-blue-200 mt-1">{formatEmissions(summary?.total_emissions).unit}</p>
             </div>
             <div className="flex items-center gap-2 px-4 py-2 bg-white/20 backdrop-blur rounded-xl">
               <Target className="w-5 h-5" />
