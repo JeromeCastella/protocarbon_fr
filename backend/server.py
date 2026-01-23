@@ -129,6 +129,8 @@ class ActivityCreate(BaseModel):
     date: Optional[str] = None
     source: Optional[str] = None
     comments: Optional[str] = None
+    fiscal_year_id: Optional[str] = None  # Link to fiscal year
+    subcategory_id: Optional[str] = None
 
 class ActivityUpdate(BaseModel):
     name: Optional[str] = None
@@ -140,6 +142,7 @@ class ActivityUpdate(BaseModel):
     date: Optional[str] = None
     source: Optional[str] = None
     comments: Optional[str] = None
+    fiscal_year_id: Optional[str] = None
 
 # ==================== PRODUCT MODELS (Enhanced) ====================
 
