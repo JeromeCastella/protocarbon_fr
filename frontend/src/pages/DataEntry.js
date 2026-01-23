@@ -255,21 +255,37 @@ const DataEntry = () => {
     if (!activityForm.quantity || !selectedFactor) return;
     
     try {
-      await axios.post(`${API_URL}/activities`, {
-        category_id: selectedCategory.code,
-        subcategory_id: selectedSubcategory?.code,
-        scope: activeScope,
-        name: activityForm.name || selectedFactor.name,
-        description: activityForm.description,
-        quantity: parseFloat(activityForm.quantity),
-        unit: selectedUnit || selectedFactor.default_unit,
-        emission_factor_id: selectedFactor.id,
-        date: activityForm.date,
-        source: activityForm.source,
-        comments: activityForm.comments
-      });
+      if (editingActivityData) {
+        // UPDATE existing activity
+        await axios.put(`${API_URL}/activities/${editingActivityData.id}`, {
+          name: activityForm.name || selectedFactor.name,
+          description: activityForm.description,
+          quantity: parseFloat(activityForm.quantity),
+          unit: selectedUnit || selectedFactor.default_unit,
+          emission_factor_id: selectedFactor.id,
+          date: activityForm.date,
+          source: activityForm.source,
+          comments: activityForm.comments
+        });
+      } else {
+        // CREATE new activity
+        await axios.post(`${API_URL}/activities`, {
+          category_id: selectedCategory.code,
+          subcategory_id: selectedSubcategory?.code,
+          scope: activeScope,
+          name: activityForm.name || selectedFactor.name,
+          description: activityForm.description,
+          quantity: parseFloat(activityForm.quantity),
+          unit: selectedUnit || selectedFactor.default_unit,
+          emission_factor_id: selectedFactor.id,
+          date: activityForm.date,
+          source: activityForm.source,
+          comments: activityForm.comments
+        });
+      }
       
       setShowModal(false);
+      setEditingActivityData(null);
       fetchData();
     } catch (error) {
       console.error('Failed to save activity:', error);
