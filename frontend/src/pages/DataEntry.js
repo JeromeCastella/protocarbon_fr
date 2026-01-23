@@ -575,7 +575,10 @@ const DataEntry = () => {
                     </span>
                     <div className="flex items-center gap-2">
                       <span className={`font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                        {summary?.scope_emissions?.[scope]?.toLocaleString() || 0}
+                        {formatEmissions(summary?.scope_emissions?.[scope]).value}
+                      </span>
+                      <span className={`text-xs ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+                        {formatEmissions(summary?.scope_emissions?.[scope]).unit}
                       </span>
                       {scopeActivitiesCount > 0 && (
                         <span className={`text-xs px-2 py-0.5 rounded-full ${scopeConfig?.color} text-white`}>
