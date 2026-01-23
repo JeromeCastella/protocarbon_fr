@@ -1487,6 +1487,238 @@ async def get_category_stats(current_user: dict = Depends(get_current_user)):
     
     return category_counts
 
+@api_router.get("/dashboard/fiscal-comparison")
+async def get_fiscal_comparison(current_user: dict = Depends(get_current_user)):
+    """Get emissions comparison across all fiscal years"""
+    fiscal_years = list(fiscal_years_collection.find(
+        {"tenant_id": current_user["id"]},
+        {"_id": 1, "name": 1, "start_date": 1, "end_date": 1, "status": 1, "summary": 1}
+    ).sort("start_date", 1))
+    
+    comparison_data = []
+    
+    for fy in fiscal_years:
+        fy_id = str(fy["_id"])
+        
+        # If fiscal year is closed and has summary, use it
+        if fy.get("status") == "closed" and fy.get("summary"):
+            summary = fy["summary"]
+            comparison_data.append({
+                "id": fy_id,
+                "name": fy.get("name", ""),
+                "year": fy.get("start_date", "")[:4] if fy.get("start_date") else "",
+                "status": fy.get("status"),
+                "total": summary.get("total_emissions", 0),
+                "scope1": summary.get("scope_emissions", {}).get("scope1", 0),
+                "scope2": summary.get("scope_emissions", {}).get("scope2", 0),
+                "scope3_amont": summary.get("scope_emissions", {}).get("scope3_amont", 0),
+                "scope3_aval": summary.get("scope_emissions", {}).get("scope3_aval", 0)
+            })
+        else:
+            # Calculate from activities
+            activities = list(activities_collection.find({
+                "tenant_id": current_user["id"],
+                "fiscal_year_id": fy_id
+            }))
+            
+            scope_totals = {"scope1": 0, "scope2": 0, "scope3_amont": 0, "scope3_aval": 0}
+            for activity in activities:
+                scope = activity.get("scope", "scope1")
+                emissions = activity.get("emissions", 0)
+                scope_totals[scope] = scope_totals.get(scope, 0) + emissions
+            
+            comparison_data.append({
+                "id": fy_id,
+                "name": fy.get("name", ""),
+                "year": fy.get("start_date", "")[:4] if fy.get("start_date") else "",
+                "status": fy.get("status", "draft"),
+                "total": round(sum(scope_totals.values()), 2),
+                "scope1": round(scope_totals["scope1"], 2),
+                "scope2": round(scope_totals["scope2"], 2),
+                "scope3_amont": round(scope_totals["scope3_amont"], 2),
+                "scope3_aval": round(scope_totals["scope3_aval"], 2)
+            })
+    
+    return comparison_data
+
+@api_router.get("/dashboard/scope-breakdown/{fiscal_year_id}")
+async def get_scope_breakdown(fiscal_year_id: str, current_user: dict = Depends(get_current_user)):
+    """Get detailed breakdown by scope and category for a specific fiscal year"""
+    
+    # Handle 'current' as special case
+    if fiscal_year_id == "current":
+        current_fy = fiscal_years_collection.find_one({
+            "tenant_id": current_user["id"],
+            "status": "draft"
+        })
+        if current_fy:
+            fiscal_year_id = str(current_fy["_id"])
+        else:
+            # Return empty data if no current fiscal year
+            return {
+                "scope_data": [],
+                "category_data": {}
+            }
+    
+    # Get activities for this fiscal year
+    activities = list(activities_collection.find({
+        "tenant_id": current_user["id"],
+        "fiscal_year_id": fiscal_year_id
+    }))
+    
+    # Get all categories for names
+    categories = {str(c.get("code", "")): c.get("name", "") for c in categories_collection.find({})}
+    
+    # Calculate by scope
+    scope_totals = {"scope1": 0, "scope2": 0, "scope3_amont": 0, "scope3_aval": 0}
+    category_by_scope = {
+        "scope1": {},
+        "scope2": {},
+        "scope3_amont": {},
+        "scope3_aval": {}
+    }
+    
+    for activity in activities:
+        scope = activity.get("scope", "scope1")
+        emissions = activity.get("emissions", 0)
+        cat_id = activity.get("category_id", "other")
+        
+        scope_totals[scope] = scope_totals.get(scope, 0) + emissions
+        
+        if cat_id not in category_by_scope[scope]:
+            category_by_scope[scope][cat_id] = {
+                "name": categories.get(cat_id, cat_id),
+                "emissions": 0,
+                "count": 0
+            }
+        category_by_scope[scope][cat_id]["emissions"] += emissions
+        category_by_scope[scope][cat_id]["count"] += 1
+    
+    # Format scope data for chart
+    scope_names = {
+        "scope1": "Scope 1",
+        "scope2": "Scope 2", 
+        "scope3_amont": "Scope 3 Amont",
+        "scope3_aval": "Scope 3 Aval"
+    }
+    
+    scope_colors = {
+        "scope1": "#3b82f6",  # blue
+        "scope2": "#06b6d4",  # cyan
+        "scope3_amont": "#8b5cf6",  # purple
+        "scope3_aval": "#6366f1"  # indigo
+    }
+    
+    scope_data = []
+    for scope_key in ["scope1", "scope2", "scope3_amont", "scope3_aval"]:
+        scope_data.append({
+            "scope": scope_key,
+            "name": scope_names[scope_key],
+            "emissions": round(scope_totals[scope_key], 2),
+            "color": scope_colors[scope_key]
+        })
+    
+    # Format category data for drill-down
+    category_data = {}
+    for scope_key, cats in category_by_scope.items():
+        category_data[scope_key] = sorted(
+            [
+                {
+                    "id": cat_id,
+                    "name": data["name"],
+                    "emissions": round(data["emissions"], 2),
+                    "count": data["count"]
+                }
+                for cat_id, data in cats.items()
+            ],
+            key=lambda x: x["emissions"],
+            reverse=True
+        )
+    
+    return {
+        "scope_data": scope_data,
+        "category_data": category_data
+    }
+
+@api_router.get("/dashboard/kpis")
+async def get_dashboard_kpis(current_user: dict = Depends(get_current_user)):
+    """Get key performance indicators for the dashboard"""
+    company = companies_collection.find_one({"tenant_id": current_user["id"]})
+    
+    # Get all fiscal years
+    fiscal_years = list(fiscal_years_collection.find(
+        {"tenant_id": current_user["id"]}
+    ).sort("start_date", -1))
+    
+    # Get current and previous fiscal year
+    current_fy = None
+    previous_fy = None
+    
+    for fy in fiscal_years:
+        if fy.get("status") == "draft" and not current_fy:
+            current_fy = fy
+        elif current_fy and not previous_fy:
+            previous_fy = fy
+            break
+    
+    # Calculate current emissions
+    current_emissions = 0
+    current_activities_count = 0
+    if current_fy:
+        activities = list(activities_collection.find({
+            "tenant_id": current_user["id"],
+            "fiscal_year_id": str(current_fy["_id"])
+        }))
+        current_emissions = sum(a.get("emissions", 0) for a in activities)
+        current_activities_count = len(activities)
+    
+    # Calculate previous emissions
+    previous_emissions = 0
+    if previous_fy:
+        if previous_fy.get("summary"):
+            previous_emissions = previous_fy["summary"].get("total_emissions", 0)
+        else:
+            activities = list(activities_collection.find({
+                "tenant_id": current_user["id"],
+                "fiscal_year_id": str(previous_fy["_id"])
+            }))
+            previous_emissions = sum(a.get("emissions", 0) for a in activities)
+    
+    # Calculate variation
+    variation_percent = 0
+    variation_absolute = 0
+    if previous_emissions > 0:
+        variation_absolute = current_emissions - previous_emissions
+        variation_percent = round((variation_absolute / previous_emissions) * 100, 1)
+    
+    # Emissions per employee
+    emissions_per_employee = 0
+    if company and company.get("employees", 0) > 0:
+        emissions_per_employee = current_emissions / company["employees"]
+    
+    # Emissions per revenue (intensity)
+    emissions_intensity = 0
+    if company and company.get("revenue", 0) > 0:
+        emissions_intensity = current_emissions / company["revenue"]
+    
+    # Products count
+    products_count = products_collection.count_documents({"tenant_id": current_user["id"]})
+    
+    return {
+        "current_emissions": round(current_emissions, 2),
+        "previous_emissions": round(previous_emissions, 2),
+        "variation_percent": variation_percent,
+        "variation_absolute": round(variation_absolute, 2),
+        "activities_count": current_activities_count,
+        "products_count": products_count,
+        "emissions_per_employee": round(emissions_per_employee, 2) if emissions_per_employee else None,
+        "emissions_intensity": round(emissions_intensity, 6) if emissions_intensity else None,
+        "fiscal_years_count": len(fiscal_years),
+        "current_fiscal_year": current_fy.get("name") if current_fy else None,
+        "employees": company.get("employees") if company else None,
+        "revenue": company.get("revenue") if company else None
+    }
+
 # ==================== IMPORT/EXPORT ENDPOINTS ====================
 
 @api_router.post("/import/csv")
