@@ -152,6 +152,7 @@ const DataEntry = () => {
       
       // If no subcategories, load emission factors directly for this category
       if (subcats.length === 0) {
+        setShowFactorDropdown(true); // Show dropdown automatically
         fetchFactorsForCategory(categoryCode);
       }
     } catch (error) {
