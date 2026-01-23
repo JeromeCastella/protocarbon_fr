@@ -359,7 +359,7 @@ const DataEntry = () => {
     const formData = new FormData();
     formData.append('file', file);
     try {
-      await axios.post(`${API_URL}/import/csv`, formData, {
+      await axios.post(`${API_URL}/api/import/csv`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
       fetchData();
@@ -370,7 +370,7 @@ const DataEntry = () => {
 
   const handleExport = async () => {
     try {
-      const response = await axios.get(`${API_URL}/export/csv`);
+      const response = await axios.get(`${API_URL}/api/export/csv`);
       const blob = new Blob([response.data.csv_content], { type: 'text/csv' });
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
