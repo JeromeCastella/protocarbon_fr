@@ -1341,10 +1341,10 @@ def get_default_emission_factors():
         {"name": "Fioul lourd", "category": "combustion_fixe", "scope": "scope1", "value": 3.24, "unit": "kgCO2e/kg", "source": "OFEV", "tags": ["fioul", "combustible", "industrie"], "region": "Suisse"},
         
         # Scope 2 - Électricité
-        {"name": "Électricité - France", "category": "electricite", "scope": "scope2", "value": 0.0569, "unit": "kgCO2e/kWh", "source": "ADEME Base Carbone", "tags": ["électricité", "énergie"], "region": "France"},
-        {"name": "Électricité - Allemagne", "category": "electricite", "scope": "scope2", "value": 0.485, "unit": "kgCO2e/kWh", "source": "ADEME Base Carbone", "tags": ["électricité", "énergie"], "region": "Allemagne"},
-        {"name": "Électricité - Europe moyenne", "category": "electricite", "scope": "scope2", "value": 0.420, "unit": "kgCO2e/kWh", "source": "ADEME Base Carbone", "tags": ["électricité", "énergie"], "region": "Europe"},
-        {"name": "Électricité - Suisse", "category": "electricite", "scope": "scope2", "value": 0.128, "unit": "kgCO2e/kWh", "source": "ADEME Base Carbone", "tags": ["électricité", "énergie"], "region": "Suisse"},
+        {"name": "Électricité - Suisse", "category": "electricite", "scope": "scope2", "value": 0.128, "unit": "kgCO2e/kWh", "source": "OFEV", "tags": ["électricité", "énergie"], "region": "Suisse"},
+        {"name": "Électricité - Allemagne", "category": "electricite", "scope": "scope2", "value": 0.485, "unit": "kgCO2e/kWh", "source": "OFEV", "tags": ["électricité", "énergie"], "region": "Allemagne"},
+        {"name": "Électricité - Europe moyenne", "category": "electricite", "scope": "scope2", "value": 0.420, "unit": "kgCO2e/kWh", "source": "OFEV", "tags": ["électricité", "énergie"], "region": "Europe"},
+        {"name": "Électricité - France", "category": "electricite", "scope": "scope2", "value": 0.0569, "unit": "kgCO2e/kWh", "source": "OFEV", "tags": ["électricité", "énergie"], "region": "France"},
         
         # Scope 2 - Chaleur
         {"name": "Réseau de chaleur - France", "category": "chaleur_vapeur", "scope": "scope2", "value": 0.109, "unit": "kgCO2e/kWh", "source": "ADEME Base Carbone", "tags": ["chaleur", "réseau"], "region": "France"},
