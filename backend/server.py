@@ -384,25 +384,102 @@ def get_default_categories():
 
 # ==================== ACTIVITIES ENDPOINTS ====================
 
+class ActivityCreateMultiScope(BaseModel):
+    category_id: str
+    subcategory_id: Optional[str] = None
+    scope: str
+    name: str
+    description: Optional[str] = None
+    quantity: float
+    unit: str
+    emission_factor_id: Optional[str] = None
+    manual_emission_factor: Optional[float] = None
+    date: Optional[str] = None
+    source: Optional[str] = None
+    comments: Optional[str] = None
+
 @app.post("/activities")
-async def create_activity(activity: ActivityCreate, current_user: dict = Depends(get_current_user)):
+async def create_activity(activity: ActivityCreateMultiScope, current_user: dict = Depends(get_current_user)):
     company = companies_collection.find_one({"tenant_id": current_user["id"]})
     if not company:
         raise HTTPException(status_code=400, detail="Please create a company first")
     
-    # Calculate emissions
-    emissions = 0
+    created_activities = []
+    
     if activity.emission_factor_id:
         ef = emission_factors_collection.find_one({"_id": ObjectId(activity.emission_factor_id)})
-        if ef:
-            emissions = activity.quantity * ef["value"]
-    elif activity.manual_emission_factor:
+        if ef and "impacts" in ef:
+            # Create an activity for each impact (multi-scope)
+            for impact in ef["impacts"]:
+                # Handle unit conversion if needed
+                quantity = activity.quantity
+                if activity.unit != ef.get("default_unit") and "unit_conversions" in ef:
+                    conversion = ef["unit_conversions"].get(activity.unit)
+                    if conversion:
+                        quantity = activity.quantity * conversion.get("factor", 1)
+                
+                emissions = quantity * impact["value"]
+                
+                activity_doc = {
+                    "tenant_id": current_user["id"],
+                    "company_id": str(company["_id"]),
+                    "category_id": impact["category"],
+                    "subcategory_id": activity.subcategory_id,
+                    "scope": impact["scope"],
+                    "name": activity.name,
+                    "description": activity.description,
+                    "quantity": activity.quantity,
+                    "original_unit": activity.unit,
+                    "converted_quantity": quantity,
+                    "unit": ef.get("default_unit", activity.unit),
+                    "emission_factor_id": activity.emission_factor_id,
+                    "emission_factor_name": ef.get("name"),
+                    "emission_factor_value": impact["value"],
+                    "emission_factor_unit": impact["unit"],
+                    "impact_type": impact.get("type", "direct"),
+                    "emissions": emissions,
+                    "date": activity.date or datetime.now(timezone.utc).isoformat(),
+                    "source": activity.source,
+                    "comments": activity.comments,
+                    "created_at": datetime.now(timezone.utc).isoformat(),
+                    "linked_group_id": None  # Will be set after first insert
+                }
+                created_activities.append(activity_doc)
+            
+            # Insert all and link them together
+            if created_activities:
+                # Insert first activity
+                first_result = activities_collection.insert_one(created_activities[0])
+                group_id = str(first_result.inserted_id)
+                created_activities[0]["id"] = group_id
+                created_activities[0]["linked_group_id"] = group_id
+                activities_collection.update_one(
+                    {"_id": first_result.inserted_id},
+                    {"$set": {"linked_group_id": group_id}}
+                )
+                
+                # Insert remaining activities with the same group_id
+                for act in created_activities[1:]:
+                    act["linked_group_id"] = group_id
+                    result = activities_collection.insert_one(act)
+                    act["id"] = str(result.inserted_id)
+                
+                return {
+                    "message": f"Created {len(created_activities)} linked activities",
+                    "activities": [serialize_doc(a) for a in created_activities],
+                    "total_emissions": sum(a["emissions"] for a in created_activities)
+                }
+    
+    # Fallback: manual emission factor or no factor
+    emissions = 0
+    if activity.manual_emission_factor:
         emissions = activity.quantity * activity.manual_emission_factor
     
     activity_doc = {
         "tenant_id": current_user["id"],
         "company_id": str(company["_id"]),
         "category_id": activity.category_id,
+        "subcategory_id": activity.subcategory_id,
         "scope": activity.scope,
         "name": activity.name,
         "description": activity.description,
