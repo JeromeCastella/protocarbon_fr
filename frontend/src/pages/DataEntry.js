@@ -106,6 +106,7 @@ const DataEntry = () => {
   const [selectedSubcategory, setSelectedSubcategory] = useState(null);
   const [selectedUnit, setSelectedUnit] = useState('');
   const [availableFactors, setAvailableFactors] = useState([]);
+  const [allCategoryFactors, setAllCategoryFactors] = useState([]);
   const [selectedFactor, setSelectedFactor] = useState(null);
   const [factorSearch, setFactorSearch] = useState('');
   const [showFactorDropdown, setShowFactorDropdown] = useState(false);
