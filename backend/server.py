@@ -865,10 +865,31 @@ async def get_emission_factors_by_category(category: str):
     """Get emission factors filtered by category (materiaux, fin_vie_produits, refrigerants, electricite, etc.)"""
     factors = list(emission_factors_collection.find({"category": category}))
     if not factors:
-        # Try to seed if empty
-        await get_emission_factors()
-        factors = list(emission_factors_collection.find({"category": category}))
+        # Seed the new emission factors if they don't exist
+        new_factors = [f for f in get_default_emission_factors() if f.get("category") == category]
+        if new_factors:
+            for factor in new_factors:
+                # Check if factor already exists by name
+                existing = emission_factors_collection.find_one({"name": factor["name"]})
+                if not existing:
+                    emission_factors_collection.insert_one(factor)
+            factors = list(emission_factors_collection.find({"category": category}))
     return [serialize_doc(f) for f in factors]
+
+@api_router.post("/emission-factors/seed-new")
+async def seed_new_emission_factors():
+    """Seed all new emission factors (materials, treatments, refrigerants)"""
+    new_categories = ["materiaux", "fin_vie_produits", "refrigerants"]
+    new_factors = [f for f in get_default_emission_factors() if f.get("category") in new_categories]
+    
+    inserted = 0
+    for factor in new_factors:
+        existing = emission_factors_collection.find_one({"name": factor["name"]})
+        if not existing:
+            emission_factors_collection.insert_one(factor)
+            inserted += 1
+    
+    return {"message": f"Seeded {inserted} new emission factors", "total_new_factors": len(new_factors)}
 
 @api_router.get("/emission-factors/by-tags")
 async def get_emission_factors_by_tags(tags: str):
