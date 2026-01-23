@@ -897,6 +897,14 @@ async def import_json(file: UploadFile = File(...), current_user: dict = Depends
 async def health_check():
     return {"status": "healthy", "timestamp": datetime.now(timezone.utc).isoformat()}
 
+# Include the API router
+app.include_router(api_router)
+
+# Root health check (without /api prefix)
+@app.get("/")
+async def root():
+    return {"message": "Carbon Footprint Calculator API", "status": "running"}
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8001)
