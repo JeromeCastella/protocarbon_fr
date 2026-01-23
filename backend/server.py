@@ -417,7 +417,7 @@ async def search_emission_factors(
         query["subcategory"] = subcategory
     
     if category:
-        query["impacts.category"] = category
+        query["category"] = category
     
     if unit:
         query["input_units"] = unit
