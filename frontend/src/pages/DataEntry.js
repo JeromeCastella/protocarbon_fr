@@ -866,11 +866,14 @@ const DataEntry = () => {
                             <div className="flex-1">
                               <p className={`font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>{selectedFactor.name}</p>
                               <div className={`text-sm mt-1 ${isDark ? 'text-slate-300' : 'text-gray-600'}`}>
-                                {selectedFactor.impacts?.map((impact, idx) => (
-                                  <span key={idx} className="block">
-                                    • {impact.scope.replace('_', ' ')}: {impact.value} {impact.unit}
+                                <span className="block">
+                                  • {selectedFactor.value} {selectedFactor.unit}
+                                </span>
+                                {selectedFactor.source && (
+                                  <span className="block text-xs mt-1 opacity-70">
+                                    Source: {selectedFactor.source} ({selectedFactor.region})
                                   </span>
-                                ))}
+                                )}
                               </div>
                             </div>
                           </div>
