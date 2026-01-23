@@ -75,27 +75,25 @@ class CompanyCreate(BaseModel):
     name: str
     location: str
     sector: str
-    reference_year: int
+    entity_type: str = "private_company"  # private_company, public_admin, association, foundation, other
     employees: int
     surface_area: float
-    revenue: float
-    consolidation_approach: str
+    revenue: Optional[float] = None  # Only for private companies
+    consolidation_approach: Optional[str] = None  # Only for private companies
     excluded_categories: List[str] = []
     fiscal_year_start_month: int = 1  # Janvier par défaut
-    fiscal_year_start_day: int = 1
 
 class CompanyUpdate(BaseModel):
     name: Optional[str] = None
     location: Optional[str] = None
     sector: Optional[str] = None
-    reference_year: Optional[int] = None
+    entity_type: Optional[str] = None
     employees: Optional[int] = None
     surface_area: Optional[float] = None
     revenue: Optional[float] = None
     consolidation_approach: Optional[str] = None
     excluded_categories: Optional[List[str]] = None
     fiscal_year_start_month: Optional[int] = None
-    fiscal_year_start_day: Optional[int] = None
 
 # ==================== FISCAL YEAR MODELS ====================
 
