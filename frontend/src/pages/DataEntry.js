@@ -164,6 +164,13 @@ const DataEntry = () => {
   );
 
   const handleCategoryClick = (category) => {
+    // Check if this is a product-related category
+    if (PRODUCT_SALE_CATEGORIES.includes(category.code)) {
+      // Open the product sale modal instead of the regular entry modal
+      setShowProductSaleModal(true);
+      return;
+    }
+    
     setSelectedCategory(category);
     setSelectedSubcategory(null);
     setSelectedUnit('');
