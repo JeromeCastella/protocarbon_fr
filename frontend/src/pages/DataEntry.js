@@ -480,9 +480,14 @@ const DataEntry = () => {
         <motion.div
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
-          className="p-6 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 text-white"
+          onClick={openFullTableView}
+          data-testid="total-balance-card"
+          className="p-6 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 text-white cursor-pointer hover:from-blue-600 hover:to-blue-700 transition-all hover:scale-[1.02] hover:shadow-xl"
         >
-          <p className="text-blue-100 text-sm">{t('dataEntry.totalBalance')}</p>
+          <div className="flex items-center justify-between">
+            <p className="text-blue-100 text-sm">{t('dataEntry.totalBalance')}</p>
+            <Table className="w-5 h-5 text-blue-200" />
+          </div>
           <h2 className="text-4xl font-bold mt-1" data-testid="sidebar-total-emissions">
             {summary?.total_emissions?.toLocaleString() || 0}
           </h2>
@@ -498,6 +503,10 @@ const DataEntry = () => {
               {Math.round(Object.values(summary?.scope_completion || {}).reduce((a, b) => a + b.percentage, 0) / 4)}% {t('dataEntry.completed')}
             </span>
           </div>
+          <p className="text-xs text-blue-200 mt-3 flex items-center gap-1">
+            <ArrowRight className="w-3 h-3" />
+            Cliquer pour voir le détail complet
+          </p>
         </motion.div>
 
         <motion.div
