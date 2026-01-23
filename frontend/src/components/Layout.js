@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { Outlet, NavLink, useLocation } from 'react-router-dom';
+import { Outlet, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import { useLanguage } from '../context/LanguageContext';
+import FiscalYearSelector from './FiscalYearSelector';
 import { 
   LayoutDashboard, 
   Settings, 
@@ -16,7 +17,8 @@ import {
   Sun,
   LogOut,
   Globe,
-  Leaf
+  Leaf,
+  Calendar
 } from 'lucide-react';
 
 const Layout = () => {
@@ -24,6 +26,7 @@ const Layout = () => {
   const { isDark, toggleTheme } = useTheme();
   const { t, language, toggleLanguage } = useLanguage();
   const location = useLocation();
+  const navigate = useNavigate();
 
   const navItems = [
     { path: '/', icon: LayoutDashboard, label: t('nav.dashboard') },
@@ -31,6 +34,7 @@ const Layout = () => {
     { path: '/data-entry', icon: FileInput, label: t('nav.dataEntry') },
     { path: '/products', icon: Package, label: t('nav.products') },
     { path: '/emission-factors', icon: Database, label: t('nav.emissionFactors') },
+    { path: '/fiscal-years', icon: Calendar, label: 'Exercices' },
   ];
 
   return (
@@ -50,12 +54,18 @@ const Layout = () => {
           </div>
         </div>
 
+        {/* Fiscal Year Selector */}
+        <div className="px-4 py-3 border-b border-inherit">
+          <FiscalYearSelector onCreateNew={() => navigate('/fiscal-years')} />
+        </div>
+
         {/* Navigation */}
         <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
           {navItems.map(({ path, icon: Icon, label }) => (
             <NavLink
               key={path}
               to={path}
+              data-testid={`nav-${path === '/' ? 'dashboard' : path.slice(1)}`}
               className={({ isActive }) => `
                 flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200
                 ${isActive 
