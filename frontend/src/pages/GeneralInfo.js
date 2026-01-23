@@ -69,8 +69,8 @@ const GeneralInfo = () => {
       if (companyRes.data) {
         setCompany({
           ...companyRes.data,
-          fiscal_year_start_month: companyRes.data.fiscal_year_start_month || 1,
-          fiscal_year_start_day: companyRes.data.fiscal_year_start_day || 1
+          entity_type: companyRes.data.entity_type || 'private_company',
+          fiscal_year_start_month: companyRes.data.fiscal_year_start_month || 1
         });
       }
       setCategories(categoriesRes.data || []);
