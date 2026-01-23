@@ -198,7 +198,7 @@ const DataEntry = () => {
     
     // If activity has subcategory, select it
     if (activity.subcategory_id) {
-      const subcats = await axios.get(`${API_URL}/subcategories?category=${category.code}`);
+      const subcats = await axios.get(`${API_URL}/api/subcategories?category=${category.code}`);
       const subcat = subcats.data?.find(s => s.code === activity.subcategory_id);
       if (subcat) {
         setSelectedSubcategory(subcat);
@@ -211,7 +211,7 @@ const DataEntry = () => {
     // If activity has emission factor, try to load it
     if (activity.emission_factor_id) {
       try {
-        const factorsRes = await axios.get(`${API_URL}/emission-factors/search?category=${category.code}`);
+        const factorsRes = await axios.get(`${API_URL}/api/emission-factors/search?category=${category.code}`);
         setAvailableFactors(factorsRes.data || []);
         const factor = factorsRes.data?.find(f => f.id === activity.emission_factor_id);
         if (factor) {
