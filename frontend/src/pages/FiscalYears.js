@@ -86,6 +86,7 @@ const FiscalYears = () => {
   const [createForm, setCreateForm] = useState({
     year: new Date().getFullYear()
   });
+  const [createError, setCreateError] = useState('');
   const [rectifyReason, setRectifyReason] = useState('');
   const [duplicateForm, setDuplicateForm] = useState({
     new_name: '',
