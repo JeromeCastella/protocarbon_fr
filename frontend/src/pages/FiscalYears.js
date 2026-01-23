@@ -60,8 +60,7 @@ const FiscalYears = () => {
   
   // Company fiscal year settings
   const [companySettings, setCompanySettings] = useState({
-    fiscal_year_start_month: 1,
-    fiscal_year_start_day: 1
+    fiscal_year_start_month: 1
   });
   
   // Fetch company settings on mount
@@ -71,8 +70,7 @@ const FiscalYears = () => {
         const response = await axios.get(`${API_URL}/api/companies`);
         if (response.data) {
           setCompanySettings({
-            fiscal_year_start_month: response.data.fiscal_year_start_month || 1,
-            fiscal_year_start_day: response.data.fiscal_year_start_day || 1
+            fiscal_year_start_month: response.data.fiscal_year_start_month || 1
           });
         }
       } catch (error) {
