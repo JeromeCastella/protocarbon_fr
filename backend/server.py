@@ -1350,10 +1350,10 @@ def get_default_emission_factors():
         {"name": "Réseau de chaleur - Suisse", "category": "chaleur_vapeur", "scope": "scope2", "value": 0.109, "unit": "kgCO2e/kWh", "source": "OFEV", "tags": ["chaleur", "réseau"], "region": "Suisse"},
         
         # Scope 3 - Transport
-        {"name": "Avion court-courrier", "category": "deplacements_professionnels", "scope": "scope3_amont", "value": 0.258, "unit": "kgCO2e/km/passager", "source": "ADEME Base Carbone", "tags": ["avion", "voyage", "déplacement"], "region": "Global"},
-        {"name": "Avion long-courrier", "category": "deplacements_professionnels", "scope": "scope3_amont", "value": 0.195, "unit": "kgCO2e/km/passager", "source": "ADEME Base Carbone", "tags": ["avion", "voyage", "déplacement"], "region": "Global"},
-        {"name": "TGV", "category": "deplacements_professionnels", "scope": "scope3_amont", "value": 0.00173, "unit": "kgCO2e/km/passager", "source": "ADEME Base Carbone", "tags": ["train", "tgv", "déplacement"], "region": "France"},
-        {"name": "Voiture - Domicile-travail", "category": "deplacements_domicile_travail", "scope": "scope3_amont", "value": 0.193, "unit": "kgCO2e/km", "source": "ADEME Base Carbone", "tags": ["voiture", "trajet", "pendulaire"], "region": "France"},
+        {"name": "Avion court-courrier", "category": "deplacements_professionnels", "scope": "scope3_amont", "value": 0.258, "unit": "kgCO2e/km/passager", "source": "OFEV", "tags": ["avion", "voyage", "déplacement"], "region": "Global"},
+        {"name": "Avion long-courrier", "category": "deplacements_professionnels", "scope": "scope3_amont", "value": 0.195, "unit": "kgCO2e/km/passager", "source": "OFEV", "tags": ["avion", "voyage", "déplacement"], "region": "Global"},
+        {"name": "Train", "category": "deplacements_professionnels", "scope": "scope3_amont", "value": 0.00173, "unit": "kgCO2e/km/passager", "source": "OFEV", "tags": ["train", "déplacement"], "region": "Suisse"},
+        {"name": "Voiture - Domicile-travail", "category": "deplacements_domicile_travail", "scope": "scope3_amont", "value": 0.193, "unit": "kgCO2e/km", "source": "OFEV", "tags": ["voiture", "trajet", "pendulaire"], "region": "Suisse"},
         
         # Scope 3 - Achats
         {"name": "Papier - Bureau", "category": "biens_services_achetes", "scope": "scope3_amont", "value": 0.919, "unit": "kgCO2e/kg", "source": "ADEME Base Carbone", "tags": ["papier", "bureau", "fournitures"], "region": "France"},
