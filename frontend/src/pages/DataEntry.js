@@ -296,9 +296,6 @@ const DataEntry = () => {
     setShowModal(true);
   };
 
-  // State for all factors (unfiltered) and filtered factors
-  const [allCategoryFactors, setAllCategoryFactors] = useState([]);
-
   const handleSubcategorySelect = (subcat) => {
     setSelectedSubcategory(subcat);
     setSelectedUnit('');
