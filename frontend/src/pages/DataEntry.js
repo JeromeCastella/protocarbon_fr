@@ -637,13 +637,6 @@ const DataEntry = () => {
                               </button>
                             );
                           })}
-                                      {tag}
-                                    </span>
-                                  ))}
-                                </div>
-                              )}
-                            </button>
-                          ))}
                         </div>
                       )}
 
