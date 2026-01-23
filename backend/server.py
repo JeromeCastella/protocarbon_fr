@@ -1356,9 +1356,9 @@ def get_default_emission_factors():
         {"name": "Voiture - Domicile-travail", "category": "deplacements_domicile_travail", "scope": "scope3_amont", "value": 0.193, "unit": "kgCO2e/km", "source": "OFEV", "tags": ["voiture", "trajet", "pendulaire"], "region": "Suisse"},
         
         # Scope 3 - Achats
-        {"name": "Papier - Bureau", "category": "biens_services_achetes", "scope": "scope3_amont", "value": 0.919, "unit": "kgCO2e/kg", "source": "ADEME Base Carbone", "tags": ["papier", "bureau", "fournitures"], "region": "France"},
-        {"name": "Ordinateur portable", "category": "biens_equipement", "scope": "scope3_amont", "value": 156, "unit": "kgCO2e/unité", "source": "ADEME Base Carbone", "tags": ["informatique", "équipement", "ordinateur"], "region": "Global"},
-        {"name": "Smartphone", "category": "biens_equipement", "scope": "scope3_amont", "value": 39.1, "unit": "kgCO2e/unité", "source": "ADEME Base Carbone", "tags": ["informatique", "téléphone", "équipement"], "region": "Global"},
+        {"name": "Papier - Bureau", "category": "biens_services_achetes", "scope": "scope3_amont", "value": 0.919, "unit": "kgCO2e/kg", "source": "OFEV", "tags": ["papier", "bureau", "fournitures"], "region": "Suisse"},
+        {"name": "Ordinateur portable", "category": "biens_equipement", "scope": "scope3_amont", "value": 156, "unit": "kgCO2e/unité", "source": "OFEV", "tags": ["informatique", "équipement", "ordinateur"], "region": "Global"},
+        {"name": "Smartphone", "category": "biens_equipement", "scope": "scope3_amont", "value": 39.1, "unit": "kgCO2e/unité", "source": "OFEV", "tags": ["informatique", "téléphone", "équipement"], "region": "Global"},
         
         # Scope 3 - Déchets
         {"name": "Déchets ménagers - Incinération", "category": "dechets_operations", "scope": "scope3_amont", "value": 0.51, "unit": "kgCO2e/kg", "source": "ADEME Base Carbone", "tags": ["déchets", "incinération"], "region": "France"},
