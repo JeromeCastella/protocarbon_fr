@@ -1187,6 +1187,13 @@ const DataEntry = () => {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Product Sale Modal (for transformation/utilisation/fin_vie categories) */}
+      <ProductSaleModal
+        isOpen={showProductSaleModal}
+        onClose={() => setShowProductSaleModal(false)}
+        onSaleRecorded={fetchData}
+      />
     </div>
   );
 };
