@@ -588,36 +588,55 @@ const DataEntry = () => {
                         />
                       </div>
 
-                      {/* Dropdown list */}
+                      {/* Dropdown list - Simplified */}
                       {showFactorDropdown && availableFactors.length > 0 && (
-                        <div className={`rounded-xl border overflow-hidden max-h-48 overflow-y-auto ${
+                        <div className={`rounded-xl border overflow-hidden max-h-60 overflow-y-auto ${
                           isDark ? 'bg-slate-700 border-slate-600' : 'bg-white border-gray-200'
                         }`}>
-                          {availableFactors.map(factor => (
-                            <button
-                              key={factor.id}
-                              type="button"
-                              onClick={() => handleFactorSelect(factor)}
-                              className={`w-full p-3 text-left border-b last:border-b-0 transition-all ${
-                                selectedFactor?.id === factor.id
-                                  ? 'bg-blue-500 text-white'
-                                  : isDark 
-                                    ? 'border-slate-600 hover:bg-slate-600 text-white' 
-                                    : 'border-gray-100 hover:bg-gray-50 text-gray-900'
-                              }`}
-                            >
-                              <div className="font-medium text-sm">{factor.name}</div>
-                              <div className={`text-xs mt-1 ${selectedFactor?.id === factor.id ? 'text-blue-100' : isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-                                {factor.impacts?.map(i => `${i.value} ${i.unit}`).join(' + ')} • {factor.source}
-                              </div>
-                              {factor.tags && (
-                                <div className="flex flex-wrap gap-1 mt-2">
-                                  {factor.tags.slice(0, 4).map(tag => (
-                                    <span key={tag} className={`px-2 py-0.5 rounded text-xs ${
-                                      selectedFactor?.id === factor.id
-                                        ? 'bg-blue-400/30'
-                                        : isDark ? 'bg-slate-600' : 'bg-gray-100'
-                                    }`}>
+                          {availableFactors.map(factor => {
+                            // Get unique scopes from impacts
+                            const impactedScopes = [...new Set(factor.impacts?.map(i => {
+                              if (i.scope === 'scope1') return 'Scope 1';
+                              if (i.scope === 'scope2') return 'Scope 2';
+                              if (i.scope.startsWith('scope3')) return 'Scope 3';
+                              return i.scope;
+                            }) || [])];
+                            
+                            const scopeColors = {
+                              'Scope 1': 'bg-blue-500',
+                              'Scope 2': 'bg-cyan-500',
+                              'Scope 3': 'bg-purple-500'
+                            };
+                            
+                            return (
+                              <button
+                                key={factor.id}
+                                type="button"
+                                onClick={() => handleFactorSelect(factor)}
+                                className={`w-full px-4 py-3 text-left border-b last:border-b-0 transition-all flex items-center justify-between gap-3 ${
+                                  selectedFactor?.id === factor.id
+                                    ? 'bg-blue-500 text-white'
+                                    : isDark 
+                                      ? 'border-slate-600 hover:bg-slate-600 text-white' 
+                                      : 'border-gray-100 hover:bg-gray-50 text-gray-900'
+                                }`}
+                              >
+                                <span className="font-medium text-sm truncate">{factor.name}</span>
+                                <div className="flex gap-1.5 flex-shrink-0">
+                                  {impactedScopes.map(scope => (
+                                    <span 
+                                      key={scope}
+                                      className={`px-2 py-1 rounded-md text-xs font-medium text-white ${
+                                        selectedFactor?.id === factor.id ? 'bg-white/30' : scopeColors[scope]
+                                      }`}
+                                    >
+                                      {scope}
+                                    </span>
+                                  ))}
+                                </div>
+                              </button>
+                            );
+                          })}
                                       {tag}
                                     </span>
                                   ))}
