@@ -1,0 +1,133 @@
+import React, { useState } from 'react';
+import { Outlet, NavLink, useLocation } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+import { useTheme } from '../context/ThemeContext';
+import { useLanguage } from '../context/LanguageContext';
+import { 
+  LayoutDashboard, 
+  Settings, 
+  FileInput, 
+  Package, 
+  CheckSquare, 
+  Database, 
+  FileText, 
+  HelpCircle,
+  Moon,
+  Sun,
+  LogOut,
+  Globe,
+  Leaf
+} from 'lucide-react';
+
+const Layout = () => {
+  const { user, logout } = useAuth();
+  const { isDark, toggleTheme } = useTheme();
+  const { t, language, toggleLanguage } = useLanguage();
+  const location = useLocation();
+
+  const navItems = [
+    { path: '/', icon: LayoutDashboard, label: t('nav.dashboard') },
+    { path: '/general-info', icon: Settings, label: t('nav.generalInfo') },
+    { path: '/data-entry', icon: FileInput, label: t('nav.dataEntry') },
+    { path: '/products', icon: Package, label: t('nav.products') },
+    { path: '/emission-factors', icon: Database, label: t('nav.emissionFactors') },
+  ];
+
+  return (
+    <div className={`min-h-screen flex ${isDark ? 'bg-slate-900 text-white' : 'bg-gray-50 text-gray-900'}`}>
+      {/* Sidebar */}
+      <aside className={`w-64 fixed h-full flex flex-col ${isDark ? 'bg-slate-800 border-slate-700' : 'bg-white border-gray-200'} border-r`}>
+        {/* Logo */}
+        <div className="p-6 border-b border-inherit">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center">
+              <Leaf className="w-6 h-6 text-white" />
+            </div>
+            <div>
+              <h1 className="font-bold text-lg">Proto_carbon_{language.toUpperCase()}</h1>
+              <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>Comptabilité carbone</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Navigation */}
+        <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
+          {navItems.map(({ path, icon: Icon, label }) => (
+            <NavLink
+              key={path}
+              to={path}
+              className={({ isActive }) => `
+                flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200
+                ${isActive 
+                  ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/30' 
+                  : isDark 
+                    ? 'text-slate-300 hover:bg-slate-700' 
+                    : 'text-gray-600 hover:bg-gray-100'
+                }
+              `}
+            >
+              <Icon className="w-5 h-5" />
+              <span className="font-medium">{label}</span>
+            </NavLink>
+          ))}
+        </nav>
+
+        {/* Bottom section */}
+        <div className={`p-4 border-t ${isDark ? 'border-slate-700' : 'border-gray-200'}`}>
+          {/* Language toggle */}
+          <button
+            onClick={toggleLanguage}
+            data-testid="language-toggle"
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl mb-2 transition-all ${
+              isDark ? 'text-slate-300 hover:bg-slate-700' : 'text-gray-600 hover:bg-gray-100'
+            }`}
+          >
+            <Globe className="w-5 h-5" />
+            <span className="font-medium">{language === 'fr' ? 'Français' : 'Deutsch'}</span>
+          </button>
+
+          {/* Theme toggle */}
+          <button
+            onClick={toggleTheme}
+            data-testid="theme-toggle"
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl mb-4 transition-all ${
+              isDark ? 'text-slate-300 hover:bg-slate-700' : 'text-gray-600 hover:bg-gray-100'
+            }`}
+          >
+            {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+            <span className="font-medium">{isDark ? t('nav.lightMode') : t('nav.darkMode')}</span>
+          </button>
+
+          {/* User info */}
+          <div className={`p-4 rounded-xl ${isDark ? 'bg-slate-700/50' : 'bg-gray-100'}`}>
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white font-bold">
+                {user?.name?.[0]?.toUpperCase() || 'U'}
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="font-medium truncate">{user?.name || 'User'}</p>
+                <p className={`text-xs truncate ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>{user?.email}</p>
+              </div>
+              <button
+                onClick={logout}
+                data-testid="logout-btn"
+                className={`p-2 rounded-lg transition-colors ${isDark ? 'hover:bg-slate-600' : 'hover:bg-gray-200'}`}
+              >
+                <LogOut className="w-5 h-5" />
+              </button>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      {/* Main content */}
+      <main className="flex-1 ml-64 min-h-screen">
+        <div className="p-8">
+          <Outlet />
+        </div>
+      </main>
+    </div>
+  );
+};
+
+export default Layout;
