@@ -626,7 +626,7 @@ const DataEntry = () => {
                 <div className="flex items-center justify-between">
                   <div>
                     <h3 className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                      {t('dataEntry.addElement')}
+                      {editingActivityData ? 'Modifier l\'activité' : t('dataEntry.addElement')}
                     </h3>
                     {selectedCategory && (
                       <div className="flex items-center gap-2 mt-1">
@@ -646,7 +646,10 @@ const DataEntry = () => {
                     )}
                   </div>
                   <button
-                    onClick={() => setShowModal(false)}
+                    onClick={() => {
+                      setShowModal(false);
+                      setEditingActivityData(null);
+                    }}
                     className={`p-2 rounded-lg ${isDark ? 'hover:bg-slate-700' : 'hover:bg-gray-100'}`}
                   >
                     <X className="w-5 h-5" />
