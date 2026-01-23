@@ -705,18 +705,21 @@ async def create_emission_factor(factor: EmissionFactorCreate, current_user: dic
 def get_default_emission_factors():
     return [
         # Scope 1 - Combustion mobile
-        {"name": "Diesel - Véhicules légers", "category": "combustion_mobile", "scope": "scope1", "value": 2.68, "unit": "kgCO2e/L", "source": "ADEME Base Carbone", "tags": ["diesel", "transport", "véhicule"], "region": "France"},
-        {"name": "Essence - Véhicules légers", "category": "combustion_mobile", "scope": "scope1", "value": 2.28, "unit": "kgCO2e/L", "source": "ADEME Base Carbone", "tags": ["essence", "transport", "véhicule"], "region": "France"},
-        {"name": "GPL - Véhicules", "category": "combustion_mobile", "scope": "scope1", "value": 1.66, "unit": "kgCO2e/L", "source": "ADEME Base Carbone", "tags": ["gpl", "transport"], "region": "France"},
+        {"name": "Diesel - Véhicules légers", "category": "combustion_mobile", "scope": "scope1", "value": 2.68, "unit": "kgCO2e/L", "source": "ADEME Base Carbone", "tags": ["diesel", "transport", "véhicule", "carburant"], "region": "France"},
+        {"name": "Essence - Véhicules légers", "category": "combustion_mobile", "scope": "scope1", "value": 2.28, "unit": "kgCO2e/L", "source": "ADEME Base Carbone", "tags": ["essence", "transport", "véhicule", "carburant"], "region": "France"},
+        {"name": "GPL - Véhicules", "category": "combustion_mobile", "scope": "scope1", "value": 1.66, "unit": "kgCO2e/L", "source": "ADEME Base Carbone", "tags": ["gpl", "transport", "carburant"], "region": "France"},
         
         # Scope 1 - Combustion fixe
-        {"name": "Gaz naturel - Chauffage", "category": "combustion_fixe", "scope": "scope1", "value": 2.04, "unit": "kgCO2e/m³", "source": "ADEME Base Carbone", "tags": ["gaz", "chauffage"], "region": "France"},
-        {"name": "Fioul domestique", "category": "combustion_fixe", "scope": "scope1", "value": 3.25, "unit": "kgCO2e/L", "source": "ADEME Base Carbone", "tags": ["fioul", "chauffage"], "region": "France"},
+        {"name": "Gaz naturel - Chauffage", "category": "combustion_fixe", "scope": "scope1", "value": 2.04, "unit": "kgCO2e/m³", "source": "ADEME Base Carbone", "tags": ["gaz", "chauffage", "combustible"], "region": "France"},
+        {"name": "Gaz naturel - kWh PCI", "category": "combustion_fixe", "scope": "scope1", "value": 0.205, "unit": "kgCO2e/kWh", "source": "ADEME Base Carbone", "tags": ["gaz", "combustible", "énergie"], "region": "France"},
+        {"name": "Fioul domestique", "category": "combustion_fixe", "scope": "scope1", "value": 3.25, "unit": "kgCO2e/L", "source": "ADEME Base Carbone", "tags": ["fioul", "chauffage", "combustible"], "region": "France"},
+        {"name": "Fioul lourd", "category": "combustion_fixe", "scope": "scope1", "value": 3.24, "unit": "kgCO2e/kg", "source": "ADEME Base Carbone", "tags": ["fioul", "combustible", "industrie"], "region": "France"},
         
         # Scope 2 - Électricité
         {"name": "Électricité - France", "category": "electricite", "scope": "scope2", "value": 0.0569, "unit": "kgCO2e/kWh", "source": "ADEME Base Carbone", "tags": ["électricité", "énergie"], "region": "France"},
         {"name": "Électricité - Allemagne", "category": "electricite", "scope": "scope2", "value": 0.485, "unit": "kgCO2e/kWh", "source": "ADEME Base Carbone", "tags": ["électricité", "énergie"], "region": "Allemagne"},
         {"name": "Électricité - Europe moyenne", "category": "electricite", "scope": "scope2", "value": 0.420, "unit": "kgCO2e/kWh", "source": "ADEME Base Carbone", "tags": ["électricité", "énergie"], "region": "Europe"},
+        {"name": "Électricité - Suisse", "category": "electricite", "scope": "scope2", "value": 0.128, "unit": "kgCO2e/kWh", "source": "ADEME Base Carbone", "tags": ["électricité", "énergie"], "region": "Suisse"},
         
         # Scope 2 - Chaleur
         {"name": "Réseau de chaleur - France", "category": "chaleur_vapeur", "scope": "scope2", "value": 0.109, "unit": "kgCO2e/kWh", "source": "ADEME Base Carbone", "tags": ["chaleur", "réseau"], "region": "France"},
@@ -735,6 +738,43 @@ def get_default_emission_factors():
         # Scope 3 - Déchets
         {"name": "Déchets ménagers - Incinération", "category": "dechets_operations", "scope": "scope3_amont", "value": 0.51, "unit": "kgCO2e/kg", "source": "ADEME Base Carbone", "tags": ["déchets", "incinération"], "region": "France"},
         {"name": "Déchets ménagers - Enfouissement", "category": "dechets_operations", "scope": "scope3_amont", "value": 0.69, "unit": "kgCO2e/kg", "source": "ADEME Base Carbone", "tags": ["déchets", "enfouissement"], "region": "France"},
+        
+        # ==================== MATÉRIAUX (pour composition produits) ====================
+        {"name": "Acier", "category": "materiaux", "scope": "scope3_aval", "value": 1.92, "unit": "kgCO2e/kg", "source": "ADEME Base Carbone", "tags": ["matériau", "métal", "acier", "composition"], "region": "Global"},
+        {"name": "Aluminium primaire", "category": "materiaux", "scope": "scope3_aval", "value": 9.89, "unit": "kgCO2e/kg", "source": "ADEME Base Carbone", "tags": ["matériau", "métal", "aluminium", "composition"], "region": "Global"},
+        {"name": "Aluminium recyclé", "category": "materiaux", "scope": "scope3_aval", "value": 0.52, "unit": "kgCO2e/kg", "source": "ADEME Base Carbone", "tags": ["matériau", "métal", "aluminium", "recyclé", "composition"], "region": "Global"},
+        {"name": "Cuivre", "category": "materiaux", "scope": "scope3_aval", "value": 3.81, "unit": "kgCO2e/kg", "source": "ADEME Base Carbone", "tags": ["matériau", "métal", "cuivre", "composition"], "region": "Global"},
+        {"name": "Plastique PP (Polypropylène)", "category": "materiaux", "scope": "scope3_aval", "value": 1.98, "unit": "kgCO2e/kg", "source": "ADEME Base Carbone", "tags": ["matériau", "plastique", "pp", "composition"], "region": "Global"},
+        {"name": "Plastique PE (Polyéthylène)", "category": "materiaux", "scope": "scope3_aval", "value": 1.89, "unit": "kgCO2e/kg", "source": "ADEME Base Carbone", "tags": ["matériau", "plastique", "pe", "composition"], "region": "Global"},
+        {"name": "Plastique PVC", "category": "materiaux", "scope": "scope3_aval", "value": 2.41, "unit": "kgCO2e/kg", "source": "ADEME Base Carbone", "tags": ["matériau", "plastique", "pvc", "composition"], "region": "Global"},
+        {"name": "Plastique ABS", "category": "materiaux", "scope": "scope3_aval", "value": 3.27, "unit": "kgCO2e/kg", "source": "ADEME Base Carbone", "tags": ["matériau", "plastique", "abs", "composition"], "region": "Global"},
+        {"name": "Verre", "category": "materiaux", "scope": "scope3_aval", "value": 0.87, "unit": "kgCO2e/kg", "source": "ADEME Base Carbone", "tags": ["matériau", "verre", "composition"], "region": "Global"},
+        {"name": "Bois", "category": "materiaux", "scope": "scope3_aval", "value": 0.13, "unit": "kgCO2e/kg", "source": "ADEME Base Carbone", "tags": ["matériau", "bois", "composition"], "region": "Global"},
+        {"name": "Caoutchouc", "category": "materiaux", "scope": "scope3_aval", "value": 2.89, "unit": "kgCO2e/kg", "source": "ADEME Base Carbone", "tags": ["matériau", "caoutchouc", "composition"], "region": "Global"},
+        {"name": "Textile coton", "category": "materiaux", "scope": "scope3_aval", "value": 5.35, "unit": "kgCO2e/kg", "source": "ADEME Base Carbone", "tags": ["matériau", "textile", "coton", "composition"], "region": "Global"},
+        {"name": "Textile synthétique", "category": "materiaux", "scope": "scope3_aval", "value": 6.40, "unit": "kgCO2e/kg", "source": "ADEME Base Carbone", "tags": ["matériau", "textile", "synthétique", "composition"], "region": "Global"},
+        {"name": "Électronique (circuits)", "category": "materiaux", "scope": "scope3_aval", "value": 52.0, "unit": "kgCO2e/kg", "source": "ADEME Base Carbone", "tags": ["matériau", "électronique", "circuit", "composition"], "region": "Global"},
+        {"name": "Batterie lithium-ion", "category": "materiaux", "scope": "scope3_aval", "value": 73.0, "unit": "kgCO2e/kg", "source": "ADEME Base Carbone", "tags": ["matériau", "batterie", "lithium", "composition"], "region": "Global"},
+        
+        # ==================== TRAITEMENTS FIN DE VIE ====================
+        {"name": "Recyclage acier", "category": "fin_vie_produits", "scope": "scope3_aval", "value": -1.54, "unit": "kgCO2e/kg", "source": "ADEME Base Carbone", "tags": ["traitement", "recyclage", "acier", "fin de vie"], "region": "France"},
+        {"name": "Recyclage aluminium", "category": "fin_vie_produits", "scope": "scope3_aval", "value": -8.14, "unit": "kgCO2e/kg", "source": "ADEME Base Carbone", "tags": ["traitement", "recyclage", "aluminium", "fin de vie"], "region": "France"},
+        {"name": "Recyclage cuivre", "category": "fin_vie_produits", "scope": "scope3_aval", "value": -2.89, "unit": "kgCO2e/kg", "source": "ADEME Base Carbone", "tags": ["traitement", "recyclage", "cuivre", "fin de vie"], "region": "France"},
+        {"name": "Recyclage plastique", "category": "fin_vie_produits", "scope": "scope3_aval", "value": -1.20, "unit": "kgCO2e/kg", "source": "ADEME Base Carbone", "tags": ["traitement", "recyclage", "plastique", "fin de vie"], "region": "France"},
+        {"name": "Recyclage verre", "category": "fin_vie_produits", "scope": "scope3_aval", "value": -0.45, "unit": "kgCO2e/kg", "source": "ADEME Base Carbone", "tags": ["traitement", "recyclage", "verre", "fin de vie"], "region": "France"},
+        {"name": "Recyclage papier/carton", "category": "fin_vie_produits", "scope": "scope3_aval", "value": -0.65, "unit": "kgCO2e/kg", "source": "ADEME Base Carbone", "tags": ["traitement", "recyclage", "papier", "fin de vie"], "region": "France"},
+        {"name": "Incinération avec valorisation", "category": "fin_vie_produits", "scope": "scope3_aval", "value": 0.35, "unit": "kgCO2e/kg", "source": "ADEME Base Carbone", "tags": ["traitement", "incinération", "valorisation", "fin de vie"], "region": "France"},
+        {"name": "Incinération sans valorisation", "category": "fin_vie_produits", "scope": "scope3_aval", "value": 0.51, "unit": "kgCO2e/kg", "source": "ADEME Base Carbone", "tags": ["traitement", "incinération", "fin de vie"], "region": "France"},
+        {"name": "Enfouissement", "category": "fin_vie_produits", "scope": "scope3_aval", "value": 0.69, "unit": "kgCO2e/kg", "source": "ADEME Base Carbone", "tags": ["traitement", "enfouissement", "fin de vie"], "region": "France"},
+        {"name": "Traitement DEEE", "category": "fin_vie_produits", "scope": "scope3_aval", "value": 1.20, "unit": "kgCO2e/kg", "source": "ADEME Base Carbone", "tags": ["traitement", "deee", "électronique", "fin de vie"], "region": "France"},
+        
+        # ==================== RÉFRIGÉRANTS ====================
+        {"name": "R-134a (HFC)", "category": "refrigerants", "scope": "scope1", "value": 1430, "unit": "kgCO2e/kg", "source": "GIEC", "tags": ["réfrigérant", "hfc", "climatisation"], "region": "Global"},
+        {"name": "R-410A (HFC)", "category": "refrigerants", "scope": "scope1", "value": 2088, "unit": "kgCO2e/kg", "source": "GIEC", "tags": ["réfrigérant", "hfc", "climatisation"], "region": "Global"},
+        {"name": "R-32 (HFC)", "category": "refrigerants", "scope": "scope1", "value": 675, "unit": "kgCO2e/kg", "source": "GIEC", "tags": ["réfrigérant", "hfc", "climatisation"], "region": "Global"},
+        {"name": "R-404A (HFC)", "category": "refrigerants", "scope": "scope1", "value": 3922, "unit": "kgCO2e/kg", "source": "GIEC", "tags": ["réfrigérant", "hfc", "froid commercial"], "region": "Global"},
+        {"name": "R-290 (Propane)", "category": "refrigerants", "scope": "scope1", "value": 3, "unit": "kgCO2e/kg", "source": "GIEC", "tags": ["réfrigérant", "naturel", "propane"], "region": "Global"},
+        {"name": "R-744 (CO2)", "category": "refrigerants", "scope": "scope1", "value": 1, "unit": "kgCO2e/kg", "source": "GIEC", "tags": ["réfrigérant", "naturel", "co2"], "region": "Global"},
     ]
 
 # ==================== DASHBOARD/SUMMARY ENDPOINTS ====================
