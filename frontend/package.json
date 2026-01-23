@@ -2,6 +2,7 @@
   "name": "carbon-tracker",
   "version": "1.0.0",
   "private": true,
+  "proxy": "http://localhost:8001",
   "dependencies": {
     "@radix-ui/react-checkbox": "^1.0.4",
     "@radix-ui/react-dialog": "^1.0.5",
