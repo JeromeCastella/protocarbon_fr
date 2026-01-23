@@ -63,17 +63,19 @@ Application de calcul d'empreinte carbone selon le protocole GHG avec interface 
 - [x] MVP fonctionnel
 - [x] Gestion des produits avec cycle de vie
 - [x] Gestion des exercices fiscaux
+- [x] Configuration exercice fiscal simplifiée (paramètre entreprise)
+- [x] Mode sombre fonctionnel
 
 ### P1 - High Priority
-- [ ] Corriger le mode sombre (arrière-plan principal reste clair)
+- [ ] Graphiques comparatifs entre exercices fiscaux (dashboard)
 - [ ] Rapports PDF/Excel exportables
 - [ ] Graphiques de répartition par scope (pie chart, bar chart)
-- [ ] Comparaison N / N-1
 
 ### P2 - Medium Priority
-- [ ] Améliorer la gamification (animations pour validations et jalons)
-- [ ] Historique des bilans par année avec visualisation
-- [ ] Refactoring DataEntry.js (800+ lignes → composants)
+- [ ] Import en masse CSV (bulk upload)
+- [ ] Améliorer la gamification (animations, badges pour jalons)
+- [ ] Notifications Toast (sonner) pour confirmations
+- [ ] Refactoring DataEntry.js (1200+ lignes → composants)
 
 ### P3 - Low Priority
 - [ ] API externe pour intégration
