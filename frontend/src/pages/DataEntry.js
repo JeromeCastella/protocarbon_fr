@@ -65,8 +65,9 @@ const DataEntry = () => {
 
   // Table view state
   const [showTableView, setShowTableView] = useState(false);
-  const [tableViewScope, setTableViewScope] = useState(null);
+  const [tableViewScope, setTableViewScope] = useState(null); // null means "all scopes" (total view)
   const [editingActivity, setEditingActivity] = useState(null);
+  const [editingActivityData, setEditingActivityData] = useState(null); // For modal edit mode
 
   // Modal state for guided flow
   const [subcategories, setSubcategories] = useState([]);
@@ -160,6 +161,7 @@ const DataEntry = () => {
     setSelectedFactor(null);
     setFactorSearch('');
     setAvailableFactors([]);
+    setEditingActivityData(null); // Reset edit mode
     setActivityForm({
       name: '',
       description: '',
@@ -169,6 +171,59 @@ const DataEntry = () => {
       comments: ''
     });
     fetchSubcategories(category.code);
+    setShowModal(true);
+  };
+
+  // Open modal in edit mode with pre-filled data
+  const handleEditActivityInModal = async (activity) => {
+    // Find the category for this activity
+    const category = categories.find(c => c.code === activity.category_id);
+    if (!category) return;
+
+    setSelectedCategory(category);
+    setEditingActivityData(activity);
+    
+    // Pre-fill form with activity data
+    setActivityForm({
+      name: activity.name || '',
+      description: activity.description || '',
+      quantity: activity.quantity?.toString() || '',
+      date: activity.date?.split('T')[0] || new Date().toISOString().split('T')[0],
+      source: activity.source || '',
+      comments: activity.comments || ''
+    });
+
+    // Fetch subcategories for this category
+    await fetchSubcategories(category.code);
+    
+    // If activity has subcategory, select it
+    if (activity.subcategory_id) {
+      const subcats = await axios.get(`${API_URL}/subcategories?category=${category.code}`);
+      const subcat = subcats.data?.find(s => s.code === activity.subcategory_id);
+      if (subcat) {
+        setSelectedSubcategory(subcat);
+      }
+    }
+
+    // Set unit from activity
+    setSelectedUnit(activity.original_unit || activity.unit || '');
+
+    // If activity has emission factor, try to load it
+    if (activity.emission_factor_id) {
+      try {
+        const factorsRes = await axios.get(`${API_URL}/emission-factors/search?category=${category.code}`);
+        setAvailableFactors(factorsRes.data || []);
+        const factor = factorsRes.data?.find(f => f.id === activity.emission_factor_id);
+        if (factor) {
+          setSelectedFactor(factor);
+        }
+      } catch (error) {
+        console.error('Failed to load emission factor:', error);
+      }
+    }
+
+    // Close table view and open modal
+    setShowTableView(false);
     setShowModal(true);
   };
 
