@@ -290,7 +290,10 @@ const DataEntry = () => {
     setSelectedFactor(null);
     setFactorSearch('');
     setShowFactorDropdown(true); // Show dropdown when subcategory selected
-    fetchFactors(subcat.code, null, null);
+    // Fetch factors using the current category directly
+    if (selectedCategory) {
+      fetchFactorsForCategory(selectedCategory.code);
+    }
   };
 
   const handleUnitSelect = (unit) => {
