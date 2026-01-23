@@ -30,32 +30,20 @@ import {
   TrendingUp,
   X,
   Check,
-  Loader2
+  Search,
+  ChevronRight,
+  Info,
+  Sparkles
 } from 'lucide-react';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL || '';
 
 const iconMap = {
-  truck: Truck,
-  flame: Flame,
-  factory: Factory,
-  wind: Wind,
-  zap: Zap,
-  thermometer: Thermometer,
-  snowflake: Snowflake,
-  'shopping-cart': ShoppingCart,
-  tool: Wrench,
-  fuel: Fuel,
-  trash: Trash2,
-  plane: Plane,
-  car: Car,
-  building: Building,
-  settings: Settings,
-  power: Power,
-  recycle: Recycle,
-  home: Home,
-  store: Store,
-  'trending-up': TrendingUp,
+  truck: Truck, flame: Flame, factory: Factory, wind: Wind, zap: Zap,
+  thermometer: Thermometer, snowflake: Snowflake, 'shopping-cart': ShoppingCart,
+  tool: Wrench, fuel: Fuel, trash: Trash2, plane: Plane, car: Car,
+  building: Building, settings: Settings, power: Power, recycle: Recycle,
+  home: Home, store: Store, 'trending-up': TrendingUp,
 };
 
 const DataEntry = () => {
@@ -69,21 +57,26 @@ const DataEntry = () => {
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
-  const [emissionFactors, setEmissionFactors] = useState([]);
+  const [excludedCategories, setExcludedCategories] = useState([]);
   const fileInputRef = useRef(null);
 
+  // Modal state for guided flow
+  const [subcategories, setSubcategories] = useState([]);
+  const [selectedSubcategory, setSelectedSubcategory] = useState(null);
+  const [selectedUnit, setSelectedUnit] = useState('');
+  const [availableFactors, setAvailableFactors] = useState([]);
+  const [selectedFactor, setSelectedFactor] = useState(null);
+  const [factorSearch, setFactorSearch] = useState('');
+  const [showFactorDropdown, setShowFactorDropdown] = useState(false);
+  
   const [activityForm, setActivityForm] = useState({
     name: '',
     description: '',
-    quantity: 0,
-    unit: 'kWh',
-    emission_factor_id: '',
-    manual_emission_factor: '',
+    quantity: '',
     date: new Date().toISOString().split('T')[0],
     source: '',
     comments: ''
   });
-  const [excludedCategories, setExcludedCategories] = useState([]);
 
   useEffect(() => {
     fetchData();
@@ -91,18 +84,16 @@ const DataEntry = () => {
 
   const fetchData = async () => {
     try {
-      const [categoriesRes, activitiesRes, summaryRes, statsRes, factorsRes] = await Promise.all([
+      const [categoriesRes, activitiesRes, summaryRes, statsRes] = await Promise.all([
         axios.get(`${API_URL}/categories`),
         axios.get(`${API_URL}/activities`),
         axios.get(`${API_URL}/dashboard/summary`),
-        axios.get(`${API_URL}/dashboard/category-stats`),
-        axios.get(`${API_URL}/emission-factors`)
+        axios.get(`${API_URL}/dashboard/category-stats`)
       ]);
       setCategories(categoriesRes.data || []);
       setActivities(activitiesRes.data || []);
       setSummary(summaryRes.data);
       setCategoryStats(statsRes.data || {});
-      setEmissionFactors(factorsRes.data || []);
       setExcludedCategories(summaryRes.data?.excluded_categories || []);
     } catch (error) {
       console.error('Failed to fetch data:', error);
@@ -111,6 +102,38 @@ const DataEntry = () => {
     }
   };
 
+  // Fetch subcategories when category is selected
+  const fetchSubcategories = async (categoryCode) => {
+    try {
+      const response = await axios.get(`${API_URL}/subcategories?category=${categoryCode}`);
+      setSubcategories(response.data || []);
+    } catch (error) {
+      console.error('Failed to fetch subcategories:', error);
+    }
+  };
+
+  // Fetch emission factors based on filters
+  const fetchFactors = async (subcatCode, unit, search) => {
+    try {
+      let url = `${API_URL}/emission-factors/search?`;
+      if (subcatCode) url += `subcategory=${subcatCode}&`;
+      if (unit) url += `unit=${unit}&`;
+      if (search) url += `search=${encodeURIComponent(search)}&`;
+      if (selectedCategory) url += `category=${selectedCategory.code}`;
+      
+      const response = await axios.get(url);
+      setAvailableFactors(response.data || []);
+    } catch (error) {
+      console.error('Failed to fetch factors:', error);
+    }
+  };
+
+  useEffect(() => {
+    if (selectedSubcategory || selectedUnit || factorSearch) {
+      fetchFactors(selectedSubcategory?.code, selectedUnit, factorSearch);
+    }
+  }, [selectedSubcategory, selectedUnit, factorSearch]);
+
   const scopes = [
     { id: 'scope1', name: t('scope.scope1'), subtitle: t('scope.scope1Title'), color: 'bg-blue-500' },
     { id: 'scope2', name: t('scope.scope2'), subtitle: t('scope.scope2Title'), color: 'bg-cyan-500' },
@@ -118,54 +141,93 @@ const DataEntry = () => {
     { id: 'scope3_aval', name: t('scope.scope3Aval'), subtitle: t('scope.scope3AvalTitle'), color: 'bg-indigo-500' },
   ];
 
-  // Filter categories: only show active (non-excluded) categories for the current scope
   const scopeCategories = categories.filter(c => 
     c.scope === activeScope && !excludedCategories.includes(c.code)
   );
 
   const handleCategoryClick = (category) => {
     setSelectedCategory(category);
+    setSelectedSubcategory(null);
+    setSelectedUnit('');
+    setSelectedFactor(null);
+    setFactorSearch('');
+    setAvailableFactors([]);
     setActivityForm({
-      ...activityForm,
-      category_id: category.code,
-      scope: activeScope
+      name: '',
+      description: '',
+      quantity: '',
+      date: new Date().toISOString().split('T')[0],
+      source: '',
+      comments: ''
     });
+    fetchSubcategories(category.code);
     setShowModal(true);
+  };
+
+  const handleSubcategorySelect = (subcat) => {
+    setSelectedSubcategory(subcat);
+    setSelectedUnit('');
+    setSelectedFactor(null);
+    setFactorSearch('');
+    fetchFactors(subcat.code, null, null);
+  };
+
+  const handleUnitSelect = (unit) => {
+    setSelectedUnit(unit);
+    setSelectedFactor(null);
+    fetchFactors(selectedSubcategory?.code, unit, factorSearch);
+  };
+
+  const handleFactorSelect = (factor) => {
+    setSelectedFactor(factor);
+    setShowFactorDropdown(false);
+    setActivityForm(prev => ({
+      ...prev,
+      name: factor.name
+    }));
   };
 
   const handleSubmitActivity = async (e) => {
     e.preventDefault();
+    if (!activityForm.quantity || !selectedFactor) return;
+    
     try {
       await axios.post(`${API_URL}/activities`, {
-        ...activityForm,
         category_id: selectedCategory.code,
-        scope: activeScope
+        subcategory_id: selectedSubcategory?.code,
+        scope: activeScope,
+        name: activityForm.name || selectedFactor.name,
+        description: activityForm.description,
+        quantity: parseFloat(activityForm.quantity),
+        unit: selectedUnit || selectedFactor.default_unit,
+        emission_factor_id: selectedFactor.id,
+        date: activityForm.date,
+        source: activityForm.source,
+        comments: activityForm.comments
       });
+      
       setShowModal(false);
-      setActivityForm({
-        name: '',
-        description: '',
-        quantity: 0,
-        unit: 'kWh',
-        emission_factor_id: '',
-        manual_emission_factor: '',
-        date: new Date().toISOString().split('T')[0],
-        source: '',
-        comments: ''
-      });
       fetchData();
     } catch (error) {
       console.error('Failed to save activity:', error);
     }
   };
 
+  // Get all unique units from available factors
+  const availableUnits = [...new Set(availableFactors.flatMap(f => f.input_units || []))];
+
+  // Calculate estimated emissions
+  const estimatedEmissions = selectedFactor && activityForm.quantity
+    ? selectedFactor.impacts?.reduce((total, impact) => {
+        return total + (parseFloat(activityForm.quantity) * impact.value);
+      }, 0) || 0
+    : 0;
+
   const handleFileUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
-
     const formData = new FormData();
     formData.append('file', file);
-
     try {
       await axios.post(`${API_URL}/import/csv`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
@@ -190,8 +252,6 @@ const DataEntry = () => {
     }
   };
 
-  const units = ['kWh', 'MWh', 'L', 'm3', 'kg', 't', 'km', 'passager.km', 'unit', '€'];
-
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -204,7 +264,6 @@ const DataEntry = () => {
     <div data-testid="data-entry-page" className="flex gap-8">
       {/* Main Content */}
       <div className="flex-1">
-        {/* Header */}
         <div className="mb-6">
           <h1 className={`text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
             {t('dataEntry.title')}
@@ -214,7 +273,6 @@ const DataEntry = () => {
           </p>
         </div>
 
-        {/* Action buttons */}
         <div className="flex gap-3 mb-6">
           <button
             onClick={() => setShowModal(true)}
@@ -224,9 +282,7 @@ const DataEntry = () => {
             <Plus className="w-4 h-4" />
             {t('dataEntry.addElement')}
           </button>
-          <button
-            className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl hover:bg-gray-50 dark:hover:bg-slate-700 transition-all"
-          >
+          <button className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl hover:bg-gray-50 dark:hover:bg-slate-700 transition-all">
             <MessageSquare className="w-4 h-4" />
             {t('dataEntry.addComment')}
           </button>
@@ -291,7 +347,6 @@ const DataEntry = () => {
 
       {/* Right Sidebar - Progress */}
       <div className="w-80 space-y-6">
-        {/* Total Balance */}
         <motion.div
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
@@ -315,7 +370,6 @@ const DataEntry = () => {
           </div>
         </motion.div>
 
-        {/* Progress by Scope */}
         <motion.div
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
@@ -332,9 +386,7 @@ const DataEntry = () => {
                 <div key={scope} className={`p-4 rounded-xl ${isDark ? 'bg-slate-700' : 'bg-gray-50'}`}>
                   <div className="flex items-center justify-between mb-2">
                     <span className={`text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                      {scopeConfig?.name} {scopeConfig?.id.includes('scope3') ? '' : ''} 
-                      {scope === 'scope3_amont' && '- Amont'}
-                      {scope === 'scope3_aval' && '- Aval'}
+                      {scopeConfig?.name}
                     </span>
                     <span className={`font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
                       {summary?.scope_emissions?.[scope]?.toLocaleString() || 0}
@@ -373,20 +425,12 @@ const DataEntry = () => {
             {t('dataEntry.quickActions')}
           </h3>
           <div className="space-y-3">
-            <input
-              type="file"
-              ref={fileInputRef}
-              onChange={handleFileUpload}
-              accept=".csv"
-              className="hidden"
-            />
+            <input type="file" ref={fileInputRef} onChange={handleFileUpload} accept=".csv" className="hidden" />
             <button
               onClick={() => fileInputRef.current?.click()}
               data-testid="import-csv-btn"
               className={`w-full flex items-center gap-3 p-3 rounded-xl border transition-all ${
-                isDark 
-                  ? 'border-slate-700 hover:bg-slate-700' 
-                  : 'border-gray-200 hover:bg-gray-50'
+                isDark ? 'border-slate-700 hover:bg-slate-700' : 'border-gray-200 hover:bg-gray-50'
               }`}
             >
               <Upload className="w-5 h-5 text-blue-500" />
@@ -396,9 +440,7 @@ const DataEntry = () => {
               onClick={handleExport}
               data-testid="export-data-btn"
               className={`w-full flex items-center gap-3 p-3 rounded-xl border transition-all ${
-                isDark 
-                  ? 'border-slate-700 hover:bg-slate-700' 
-                  : 'border-gray-200 hover:bg-gray-50'
+                isDark ? 'border-slate-700 hover:bg-slate-700' : 'border-gray-200 hover:bg-gray-50'
               }`}
             >
               <Download className="w-5 h-5 text-green-500" />
@@ -408,7 +450,7 @@ const DataEntry = () => {
         </motion.div>
       </div>
 
-      {/* Activity Modal */}
+      {/* ========== NOUVEAU MODAL GUIDÉ ========== */}
       <AnimatePresence>
         {showModal && (
           <motion.div
@@ -423,183 +465,307 @@ const DataEntry = () => {
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.95, opacity: 0 }}
               onClick={(e) => e.stopPropagation()}
-              className={`w-full max-w-lg rounded-2xl p-6 ${isDark ? 'bg-slate-800' : 'bg-white'} shadow-2xl`}
+              className={`w-full max-w-2xl rounded-2xl ${isDark ? 'bg-slate-800' : 'bg-white'} shadow-2xl max-h-[90vh] overflow-hidden flex flex-col`}
             >
-              <div className="flex items-center justify-between mb-6">
-                <h3 className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                  {t('dataEntry.addElement')}
-                  {selectedCategory && (
-                    <span className="text-sm font-normal text-gray-500 ml-2">
-                      - {language === 'fr' ? selectedCategory.name_fr : selectedCategory.name_de}
-                    </span>
-                  )}
-                </h3>
-                <button
-                  onClick={() => setShowModal(false)}
-                  className={`p-2 rounded-lg ${isDark ? 'hover:bg-slate-700' : 'hover:bg-gray-100'}`}
-                >
-                  <X className="w-5 h-5" />
-                </button>
+              {/* Modal Header */}
+              <div className={`p-6 border-b ${isDark ? 'border-slate-700' : 'border-gray-200'}`}>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                      {t('dataEntry.addElement')}
+                    </h3>
+                    {selectedCategory && (
+                      <div className="flex items-center gap-2 mt-1">
+                        <div className="w-3 h-3 rounded-full" style={{ backgroundColor: selectedCategory.color }}></div>
+                        <span className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+                          {language === 'fr' ? selectedCategory.name_fr : selectedCategory.name_de}
+                        </span>
+                        {selectedSubcategory && (
+                          <>
+                            <ChevronRight className="w-4 h-4 text-gray-400" />
+                            <span className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+                              {language === 'fr' ? selectedSubcategory.name_fr : selectedSubcategory.name_de}
+                            </span>
+                          </>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                  <button
+                    onClick={() => setShowModal(false)}
+                    className={`p-2 rounded-lg ${isDark ? 'hover:bg-slate-700' : 'hover:bg-gray-100'}`}
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
               </div>
 
-              <form onSubmit={handleSubmitActivity} className="space-y-4">
-                <div>
-                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
-                    {t('activity.name')} *
-                  </label>
-                  <input
-                    type="text"
-                    value={activityForm.name}
-                    onChange={(e) => setActivityForm({ ...activityForm, name: e.target.value })}
-                    data-testid="activity-name-input"
-                    required
-                    className={`w-full px-4 py-3 rounded-xl border transition-all focus:ring-2 focus:ring-blue-500 ${
-                      isDark 
-                        ? 'bg-slate-700 border-slate-600 text-white' 
-                        : 'bg-white border-gray-200 text-gray-900'
-                    }`}
-                  />
-                </div>
+              {/* Modal Body - Scrollable */}
+              <div className="flex-1 overflow-y-auto p-6">
+                <form onSubmit={handleSubmitActivity} className="space-y-6">
+                  
+                  {/* Step 1: Sous-catégorie */}
+                  {subcategories.length > 0 && (
+                    <div>
+                      <label className={`block text-sm font-medium mb-3 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
+                        1. Sous-catégorie
+                      </label>
+                      <div className="grid grid-cols-2 gap-2">
+                        {subcategories.map(subcat => (
+                          <button
+                            key={subcat.code}
+                            type="button"
+                            onClick={() => handleSubcategorySelect(subcat)}
+                            className={`p-3 rounded-xl text-left transition-all ${
+                              selectedSubcategory?.code === subcat.code
+                                ? 'bg-blue-500 text-white'
+                                : isDark 
+                                  ? 'bg-slate-700 hover:bg-slate-600 text-white' 
+                                  : 'bg-gray-100 hover:bg-gray-200 text-gray-900'
+                            }`}
+                          >
+                            <span className="font-medium text-sm">
+                              {language === 'fr' ? subcat.name_fr : subcat.name_de}
+                            </span>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
 
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
-                      {t('activity.quantity')} *
-                    </label>
-                    <input
-                      type="number"
-                      value={activityForm.quantity}
-                      onChange={(e) => setActivityForm({ ...activityForm, quantity: parseFloat(e.target.value) || 0 })}
-                      data-testid="activity-quantity-input"
-                      required
-                      className={`w-full px-4 py-3 rounded-xl border transition-all focus:ring-2 focus:ring-blue-500 ${
-                        isDark 
-                          ? 'bg-slate-700 border-slate-600 text-white' 
-                          : 'bg-white border-gray-200 text-gray-900'
-                      }`}
-                    />
-                  </div>
-                  <div>
-                    <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
-                      {t('activity.unit')}
-                    </label>
-                    <select
-                      value={activityForm.unit}
-                      onChange={(e) => setActivityForm({ ...activityForm, unit: e.target.value })}
-                      data-testid="activity-unit-select"
-                      className={`w-full px-4 py-3 rounded-xl border transition-all focus:ring-2 focus:ring-blue-500 ${
-                        isDark 
-                          ? 'bg-slate-700 border-slate-600 text-white' 
-                          : 'bg-white border-gray-200 text-gray-900'
-                      }`}
-                    >
-                      {units.map(unit => (
-                        <option key={unit} value={unit}>{unit}</option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
+                  {/* Step 2: Unité de saisie */}
+                  {(selectedSubcategory || subcategories.length === 0) && availableUnits.length > 0 && (
+                    <div>
+                      <label className={`block text-sm font-medium mb-3 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
+                        2. Unité de saisie
+                      </label>
+                      <div className="flex flex-wrap gap-2">
+                        {availableUnits.map(unit => (
+                          <button
+                            key={unit}
+                            type="button"
+                            onClick={() => handleUnitSelect(unit)}
+                            className={`px-4 py-2 rounded-lg font-medium transition-all ${
+                              selectedUnit === unit
+                                ? 'bg-blue-500 text-white'
+                                : isDark 
+                                  ? 'bg-slate-700 hover:bg-slate-600 text-white' 
+                                  : 'bg-gray-100 hover:bg-gray-200 text-gray-900'
+                            }`}
+                          >
+                            {unit}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
 
-                <div>
-                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
-                    {t('activity.emissionFactor')}
-                  </label>
-                  <select
-                    value={activityForm.emission_factor_id}
-                    onChange={(e) => setActivityForm({ ...activityForm, emission_factor_id: e.target.value })}
-                    data-testid="activity-ef-select"
-                    className={`w-full px-4 py-3 rounded-xl border transition-all focus:ring-2 focus:ring-blue-500 ${
-                      isDark 
-                        ? 'bg-slate-700 border-slate-600 text-white' 
-                        : 'bg-white border-gray-200 text-gray-900'
-                    }`}
-                  >
-                    <option value="">{t('activity.selectEmissionFactor')}</option>
-                    {emissionFactors
-                      .filter(ef => !selectedCategory || ef.category === selectedCategory.code)
-                      .map(ef => (
-                        <option key={ef.id} value={ef.id}>
-                          {ef.name} ({ef.value} {ef.unit})
-                        </option>
-                      ))
-                    }
-                  </select>
-                </div>
+                  {/* Step 3: Facteur d'émission avec recherche */}
+                  {(selectedSubcategory || subcategories.length === 0) && (
+                    <div>
+                      <label className={`block text-sm font-medium mb-3 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
+                        3. Facteur d'émission
+                      </label>
+                      
+                      {/* Search input */}
+                      <div className="relative mb-3">
+                        <Search className={`absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 ${isDark ? 'text-slate-400' : 'text-gray-400'}`} />
+                        <input
+                          type="text"
+                          value={factorSearch}
+                          onChange={(e) => {
+                            setFactorSearch(e.target.value);
+                            setShowFactorDropdown(true);
+                          }}
+                          onFocus={() => setShowFactorDropdown(true)}
+                          placeholder="Rechercher par nom ou tag..."
+                          data-testid="factor-search-input"
+                          className={`w-full pl-10 pr-4 py-3 rounded-xl border transition-all focus:ring-2 focus:ring-blue-500 ${
+                            isDark 
+                              ? 'bg-slate-700 border-slate-600 text-white placeholder-slate-400' 
+                              : 'bg-white border-gray-200 text-gray-900 placeholder-gray-400'
+                          }`}
+                        />
+                      </div>
 
-                <div>
-                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
-                    {t('activity.orEnterManually')} - {t('activity.manualFactor')}
-                  </label>
-                  <input
-                    type="number"
-                    step="0.0001"
-                    value={activityForm.manual_emission_factor}
-                    onChange={(e) => setActivityForm({ ...activityForm, manual_emission_factor: e.target.value })}
-                    data-testid="activity-manual-ef-input"
-                    className={`w-full px-4 py-3 rounded-xl border transition-all focus:ring-2 focus:ring-blue-500 ${
-                      isDark 
-                        ? 'bg-slate-700 border-slate-600 text-white' 
-                        : 'bg-white border-gray-200 text-gray-900'
-                    }`}
-                  />
-                </div>
+                      {/* Dropdown list */}
+                      {showFactorDropdown && availableFactors.length > 0 && (
+                        <div className={`rounded-xl border overflow-hidden max-h-48 overflow-y-auto ${
+                          isDark ? 'bg-slate-700 border-slate-600' : 'bg-white border-gray-200'
+                        }`}>
+                          {availableFactors.map(factor => (
+                            <button
+                              key={factor.id}
+                              type="button"
+                              onClick={() => handleFactorSelect(factor)}
+                              className={`w-full p-3 text-left border-b last:border-b-0 transition-all ${
+                                selectedFactor?.id === factor.id
+                                  ? 'bg-blue-500 text-white'
+                                  : isDark 
+                                    ? 'border-slate-600 hover:bg-slate-600 text-white' 
+                                    : 'border-gray-100 hover:bg-gray-50 text-gray-900'
+                              }`}
+                            >
+                              <div className="font-medium text-sm">{factor.name}</div>
+                              <div className={`text-xs mt-1 ${selectedFactor?.id === factor.id ? 'text-blue-100' : isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+                                {factor.impacts?.map(i => `${i.value} ${i.unit}`).join(' + ')} • {factor.source}
+                              </div>
+                              {factor.tags && (
+                                <div className="flex flex-wrap gap-1 mt-2">
+                                  {factor.tags.slice(0, 4).map(tag => (
+                                    <span key={tag} className={`px-2 py-0.5 rounded text-xs ${
+                                      selectedFactor?.id === factor.id
+                                        ? 'bg-blue-400/30'
+                                        : isDark ? 'bg-slate-600' : 'bg-gray-100'
+                                    }`}>
+                                      {tag}
+                                    </span>
+                                  ))}
+                                </div>
+                              )}
+                            </button>
+                          ))}
+                        </div>
+                      )}
 
-                <div>
-                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
-                    {t('activity.date')}
-                  </label>
-                  <input
-                    type="date"
-                    value={activityForm.date}
-                    onChange={(e) => setActivityForm({ ...activityForm, date: e.target.value })}
-                    data-testid="activity-date-input"
-                    className={`w-full px-4 py-3 rounded-xl border transition-all focus:ring-2 focus:ring-blue-500 ${
-                      isDark 
-                        ? 'bg-slate-700 border-slate-600 text-white' 
-                        : 'bg-white border-gray-200 text-gray-900'
-                    }`}
-                  />
-                </div>
+                      {/* Selected factor display */}
+                      {selectedFactor && (
+                        <div className={`mt-3 p-4 rounded-xl ${isDark ? 'bg-slate-700' : 'bg-blue-50'}`}>
+                          <div className="flex items-start gap-3">
+                            <div className="w-10 h-10 rounded-lg bg-blue-500 flex items-center justify-center">
+                              <Check className="w-5 h-5 text-white" />
+                            </div>
+                            <div className="flex-1">
+                              <p className={`font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>{selectedFactor.name}</p>
+                              <div className={`text-sm mt-1 ${isDark ? 'text-slate-300' : 'text-gray-600'}`}>
+                                {selectedFactor.impacts?.map((impact, idx) => (
+                                  <span key={idx} className="block">
+                                    • {impact.scope.replace('_', ' ')}: {impact.value} {impact.unit}
+                                  </span>
+                                ))}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )}
 
-                <div>
-                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
-                    {t('activity.comments')}
-                  </label>
-                  <textarea
-                    value={activityForm.comments}
-                    onChange={(e) => setActivityForm({ ...activityForm, comments: e.target.value })}
-                    data-testid="activity-comments-input"
-                    rows={3}
-                    className={`w-full px-4 py-3 rounded-xl border transition-all focus:ring-2 focus:ring-blue-500 ${
-                      isDark 
-                        ? 'bg-slate-700 border-slate-600 text-white' 
-                        : 'bg-white border-gray-200 text-gray-900'
-                    }`}
-                  />
-                </div>
+                  {/* Step 4: Quantité et détails */}
+                  {selectedFactor && (
+                    <>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
+                            4. Quantité *
+                          </label>
+                          <div className="relative">
+                            <input
+                              type="number"
+                              value={activityForm.quantity}
+                              onChange={(e) => setActivityForm({ ...activityForm, quantity: e.target.value })}
+                              data-testid="activity-quantity-input"
+                              required
+                              step="any"
+                              className={`w-full px-4 py-3 rounded-xl border transition-all focus:ring-2 focus:ring-blue-500 ${
+                                isDark 
+                                  ? 'bg-slate-700 border-slate-600 text-white' 
+                                  : 'bg-white border-gray-200 text-gray-900'
+                              }`}
+                              placeholder="0"
+                            />
+                            <span className={`absolute right-4 top-1/2 -translate-y-1/2 text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+                              {selectedUnit || selectedFactor.default_unit}
+                            </span>
+                          </div>
+                        </div>
+                        <div>
+                          <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
+                            Date
+                          </label>
+                          <input
+                            type="date"
+                            value={activityForm.date}
+                            onChange={(e) => setActivityForm({ ...activityForm, date: e.target.value })}
+                            className={`w-full px-4 py-3 rounded-xl border transition-all focus:ring-2 focus:ring-blue-500 ${
+                              isDark 
+                                ? 'bg-slate-700 border-slate-600 text-white' 
+                                : 'bg-white border-gray-200 text-gray-900'
+                            }`}
+                          />
+                        </div>
+                      </div>
 
-                <div className="flex gap-3 pt-4">
+                      <div>
+                        <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
+                          Commentaire (optionnel)
+                        </label>
+                        <textarea
+                          value={activityForm.comments}
+                          onChange={(e) => setActivityForm({ ...activityForm, comments: e.target.value })}
+                          rows={2}
+                          className={`w-full px-4 py-3 rounded-xl border transition-all focus:ring-2 focus:ring-blue-500 ${
+                            isDark 
+                              ? 'bg-slate-700 border-slate-600 text-white' 
+                              : 'bg-white border-gray-200 text-gray-900'
+                          }`}
+                          placeholder="Notes, source des données..."
+                        />
+                      </div>
+
+                      {/* Estimation des émissions */}
+                      {activityForm.quantity && (
+                        <motion.div
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          className={`p-4 rounded-xl ${isDark ? 'bg-green-500/20 border border-green-500/30' : 'bg-green-50 border border-green-200'}`}
+                        >
+                          <div className="flex items-center gap-3">
+                            <Sparkles className="w-6 h-6 text-green-500" />
+                            <div>
+                              <p className={`text-sm ${isDark ? 'text-green-300' : 'text-green-700'}`}>
+                                Émissions estimées
+                              </p>
+                              <p className={`text-2xl font-bold ${isDark ? 'text-green-400' : 'text-green-600'}`}>
+                                {(estimatedEmissions / 1000).toFixed(4)} tCO₂e
+                              </p>
+                              <p className={`text-xs mt-1 ${isDark ? 'text-green-400/70' : 'text-green-600/70'}`}>
+                                {selectedFactor.impacts?.length > 1 && `Réparti sur ${selectedFactor.impacts.length} scopes`}
+                              </p>
+                            </div>
+                          </div>
+                        </motion.div>
+                      )}
+                    </>
+                  )}
+                </form>
+              </div>
+
+              {/* Modal Footer */}
+              <div className={`p-6 border-t ${isDark ? 'border-slate-700' : 'border-gray-200'}`}>
+                <div className="flex gap-3">
                   <button
                     type="button"
                     onClick={() => setShowModal(false)}
                     className={`flex-1 px-4 py-3 rounded-xl border transition-all ${
                       isDark 
-                        ? 'border-slate-600 hover:bg-slate-700' 
-                        : 'border-gray-200 hover:bg-gray-50'
+                        ? 'border-slate-600 hover:bg-slate-700 text-white' 
+                        : 'border-gray-200 hover:bg-gray-50 text-gray-900'
                     }`}
                   >
                     {t('common.cancel')}
                   </button>
                   <button
-                    type="submit"
+                    onClick={handleSubmitActivity}
+                    disabled={!selectedFactor || !activityForm.quantity}
                     data-testid="submit-activity-btn"
-                    className="flex-1 px-4 py-3 bg-blue-500 text-white rounded-xl hover:bg-blue-600 transition-all flex items-center justify-center gap-2"
+                    className="flex-1 px-4 py-3 bg-blue-500 text-white rounded-xl hover:bg-blue-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                   >
                     <Check className="w-5 h-5" />
                     {t('common.save')}
                   </button>
                 </div>
-              </form>
+              </div>
             </motion.div>
           </motion.div>
         )}
