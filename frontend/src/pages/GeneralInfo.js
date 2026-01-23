@@ -339,47 +339,51 @@ const GeneralInfo = () => {
             />
           </div>
 
-          {/* Revenue */}
-          <div>
-            <label className={`flex items-center gap-2 text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
-              <DollarSign className="w-4 h-4" />
-              {t('company.revenue')} (kCHF)
-            </label>
-            <input
-              type="number"
-              value={company.revenue}
-              onChange={(e) => setCompany({ ...company, revenue: parseFloat(e.target.value) || 0 })}
-              data-testid="company-revenue-input"
-              placeholder="ex: 1500"
-              className={`w-full px-4 py-3 rounded-xl border transition-all focus:ring-2 focus:ring-blue-500 ${
-                isDark 
-                  ? 'bg-slate-700 border-slate-600 text-white' 
-                  : 'bg-white border-gray-200 text-gray-900'
-              }`}
-            />
-          </div>
+          {/* Revenue - Only for private companies */}
+          {isPrivateCompany && (
+            <div>
+              <label className={`flex items-center gap-2 text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
+                <DollarSign className="w-4 h-4" />
+                {t('company.revenue')} (kCHF)
+              </label>
+              <input
+                type="number"
+                value={company.revenue}
+                onChange={(e) => setCompany({ ...company, revenue: parseFloat(e.target.value) || 0 })}
+                data-testid="company-revenue-input"
+                placeholder="ex: 1500"
+                className={`w-full px-4 py-3 rounded-xl border transition-all focus:ring-2 focus:ring-blue-500 ${
+                  isDark 
+                    ? 'bg-slate-700 border-slate-600 text-white' 
+                    : 'bg-white border-gray-200 text-gray-900'
+                }`}
+              />
+            </div>
+          )}
 
-          {/* Consolidation Approach */}
-          <div>
-            <label className={`flex items-center gap-2 text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
-              <Layers className="w-4 h-4" />
-              {t('company.consolidationApproach')}
-            </label>
-            <select
-              value={company.consolidation_approach}
-              onChange={(e) => setCompany({ ...company, consolidation_approach: e.target.value })}
-              data-testid="company-consolidation-select"
-              className={`w-full px-4 py-3 rounded-xl border transition-all focus:ring-2 focus:ring-blue-500 ${
-                isDark 
-                  ? 'bg-slate-700 border-slate-600 text-white' 
-                  : 'bg-white border-gray-200 text-gray-900'
-              }`}
-            >
-              {consolidationApproaches.map(approach => (
-                <option key={approach.value} value={approach.value}>{approach.label}</option>
-              ))}
-            </select>
-          </div>
+          {/* Consolidation Approach - Only for private companies */}
+          {isPrivateCompany && (
+            <div>
+              <label className={`flex items-center gap-2 text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
+                <Layers className="w-4 h-4" />
+                {t('company.consolidationApproach')}
+              </label>
+              <select
+                value={company.consolidation_approach}
+                onChange={(e) => setCompany({ ...company, consolidation_approach: e.target.value })}
+                data-testid="company-consolidation-select"
+                className={`w-full px-4 py-3 rounded-xl border transition-all focus:ring-2 focus:ring-blue-500 ${
+                  isDark 
+                    ? 'bg-slate-700 border-slate-600 text-white' 
+                    : 'bg-white border-gray-200 text-gray-900'
+                }`}
+              >
+                {consolidationApproaches.map(approach => (
+                  <option key={approach.value} value={approach.value}>{approach.label}</option>
+                ))}
+              </select>
+            </div>
+          )}
         </div>
       </motion.div>
 
