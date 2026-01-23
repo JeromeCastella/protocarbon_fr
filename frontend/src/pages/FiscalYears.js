@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useTheme } from '../context/ThemeContext';
 import { useFiscalYear } from '../context/FiscalYearContext';
 import { motion, AnimatePresence } from 'framer-motion';
+import axios from 'axios';
 import { 
   Calendar, 
   Plus, 
@@ -14,8 +15,27 @@ import {
   X,
   ChevronRight,
   FileText,
-  ArrowRight
+  ArrowRight,
+  Info
 } from 'lucide-react';
+
+const API_URL = process.env.REACT_APP_BACKEND_URL || '';
+
+// Months for display
+const MONTHS = [
+  { value: 1, label: 'Janvier' },
+  { value: 2, label: 'Février' },
+  { value: 3, label: 'Mars' },
+  { value: 4, label: 'Avril' },
+  { value: 5, label: 'Mai' },
+  { value: 6, label: 'Juin' },
+  { value: 7, label: 'Juillet' },
+  { value: 8, label: 'Août' },
+  { value: 9, label: 'Septembre' },
+  { value: 10, label: 'Octobre' },
+  { value: 11, label: 'Novembre' },
+  { value: 12, label: 'Décembre' }
+];
 
 const FiscalYears = () => {
   const { isDark } = useTheme();
@@ -38,11 +58,33 @@ const FiscalYears = () => {
   const [selectedFY, setSelectedFY] = useState(null);
   const [loading, setLoading] = useState(false);
   
-  // Form states
+  // Company fiscal year settings
+  const [companySettings, setCompanySettings] = useState({
+    fiscal_year_start_month: 1,
+    fiscal_year_start_day: 1
+  });
+  
+  // Fetch company settings on mount
+  useEffect(() => {
+    const fetchCompanySettings = async () => {
+      try {
+        const response = await axios.get(`${API_URL}/api/companies`);
+        if (response.data) {
+          setCompanySettings({
+            fiscal_year_start_month: response.data.fiscal_year_start_month || 1,
+            fiscal_year_start_day: response.data.fiscal_year_start_day || 1
+          });
+        }
+      } catch (error) {
+        console.error('Failed to fetch company settings:', error);
+      }
+    };
+    fetchCompanySettings();
+  }, []);
+  
+  // Form states - simplified to just year
   const [createForm, setCreateForm] = useState({
-    name: '',
-    start_date: '',
-    end_date: ''
+    year: new Date().getFullYear()
   });
   const [rectifyReason, setRectifyReason] = useState('');
   const [duplicateForm, setDuplicateForm] = useState({
