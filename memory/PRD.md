@@ -24,6 +24,16 @@ Application de calcul d'empreinte carbone selon le protocole GHG avec interface 
 
 ## What's Been Implemented
 
+### 2026-01-23 (Session 5) - Simplification Configuration Exercice Fiscal + Mode Sombre
+- **Configuration exercice fiscal au niveau entreprise** :
+  - Paramètre unique dans "Informations générales" (mois et jour de début)
+  - Par défaut : 1er janvier - 31 décembre
+  - Création d'exercice simplifiée : seulement l'année à saisir
+  - Dates calculées automatiquement selon configuration entreprise
+- **Mode sombre corrigé** :
+  - Fond de la zone principale maintenant en bg-slate-900
+  - Toutes les pages respectent le thème
+
 ### 2026-01-23 (Session 4) - Gestion des Exercices Fiscaux
 - **Exercices fiscaux** avec année paramétrable :
   - Création d'exercices avec nom, date début/fin
