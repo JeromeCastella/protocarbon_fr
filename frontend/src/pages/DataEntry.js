@@ -864,6 +864,226 @@ const DataEntry = () => {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* ========== TABLE VIEW MODAL ========== */}
+      <AnimatePresence>
+        {showTableView && tableViewScope && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4"
+            onClick={() => setShowTableView(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              onClick={(e) => e.stopPropagation()}
+              className={`w-full max-w-5xl rounded-2xl ${isDark ? 'bg-slate-800' : 'bg-white'} shadow-2xl max-h-[85vh] overflow-hidden flex flex-col`}
+            >
+              {/* Header */}
+              <div className={`p-6 border-b ${isDark ? 'border-slate-700' : 'border-gray-200'}`}>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-4">
+                    <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
+                      tableViewScope === 'scope1' ? 'bg-blue-500' :
+                      tableViewScope === 'scope2' ? 'bg-cyan-500' :
+                      tableViewScope.includes('amont') ? 'bg-purple-500' : 'bg-indigo-500'
+                    }`}>
+                      <Table className="w-6 h-6 text-white" />
+                    </div>
+                    <div>
+                      <h3 className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                        {scopeLabels[tableViewScope]?.name}
+                      </h3>
+                      <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+                        {getScopeActivities(tableViewScope).length} entrées • {(summary?.scope_emissions?.[tableViewScope] || 0).toLocaleString()} tCO₂e
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => setShowTableView(false)}
+                    className={`p-2 rounded-lg ${isDark ? 'hover:bg-slate-700' : 'hover:bg-gray-100'}`}
+                  >
+                    <X className="w-6 h-6" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Table Content */}
+              <div className="flex-1 overflow-auto p-6">
+                {getScopeActivities(tableViewScope).length === 0 ? (
+                  <div className="text-center py-16">
+                    <Table className={`w-16 h-16 mx-auto mb-4 ${isDark ? 'text-slate-600' : 'text-gray-300'}`} />
+                    <p className={`text-lg ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+                      Aucune donnée saisie pour ce scope
+                    </p>
+                    <p className={`text-sm mt-2 ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>
+                      Cliquez sur une catégorie pour ajouter des données
+                    </p>
+                  </div>
+                ) : (
+                  <table className="w-full">
+                    <thead>
+                      <tr className={`border-b ${isDark ? 'border-slate-700' : 'border-gray-200'}`}>
+                        <th className={`text-left py-3 px-4 text-sm font-medium ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+                          Activité
+                        </th>
+                        <th className={`text-left py-3 px-4 text-sm font-medium ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+                          Catégorie
+                        </th>
+                        <th className={`text-right py-3 px-4 text-sm font-medium ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+                          Quantité
+                        </th>
+                        <th className={`text-right py-3 px-4 text-sm font-medium ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+                          Émissions
+                        </th>
+                        <th className={`text-right py-3 px-4 text-sm font-medium ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+                          Actions
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {getScopeActivities(tableViewScope).map((activity, index) => (
+                        <motion.tr
+                          key={activity.id}
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: index * 0.03 }}
+                          className={`border-b ${isDark ? 'border-slate-700/50 hover:bg-slate-700/50' : 'border-gray-100 hover:bg-gray-50'} transition-colors`}
+                        >
+                          <td className="py-4 px-4">
+                            {editingActivity === activity.id ? (
+                              <input
+                                type="text"
+                                defaultValue={activity.name}
+                                onBlur={(e) => handleUpdateActivity(activity.id, { name: e.target.value })}
+                                onKeyDown={(e) => {
+                                  if (e.key === 'Enter') {
+                                    handleUpdateActivity(activity.id, { name: e.target.value });
+                                  }
+                                }}
+                                autoFocus
+                                className={`px-3 py-1.5 rounded-lg border w-full ${
+                                  isDark 
+                                    ? 'bg-slate-600 border-slate-500 text-white' 
+                                    : 'bg-white border-gray-200 text-gray-900'
+                                }`}
+                              />
+                            ) : (
+                              <div>
+                                <p className={`font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                                  {activity.name || activity.emission_factor_name || '—'}
+                                </p>
+                                {activity.comments && (
+                                  <p className={`text-xs mt-0.5 ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>
+                                    {activity.comments}
+                                  </p>
+                                )}
+                              </div>
+                            )}
+                          </td>
+                          <td className="py-4 px-4">
+                            <span className={`text-sm ${isDark ? 'text-slate-300' : 'text-gray-600'}`}>
+                              {getCategoryName(activity.category_id)}
+                            </span>
+                          </td>
+                          <td className="py-4 px-4 text-right">
+                            {editingActivity === activity.id ? (
+                              <input
+                                type="number"
+                                defaultValue={activity.quantity}
+                                onBlur={(e) => handleUpdateActivity(activity.id, { quantity: parseFloat(e.target.value) })}
+                                onKeyDown={(e) => {
+                                  if (e.key === 'Enter') {
+                                    handleUpdateActivity(activity.id, { quantity: parseFloat(e.target.value) });
+                                  }
+                                }}
+                                className={`px-3 py-1.5 rounded-lg border w-24 text-right ${
+                                  isDark 
+                                    ? 'bg-slate-600 border-slate-500 text-white' 
+                                    : 'bg-white border-gray-200 text-gray-900'
+                                }`}
+                              />
+                            ) : (
+                              <span className={`font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                                {activity.quantity?.toLocaleString()} {activity.unit || activity.original_unit}
+                              </span>
+                            )}
+                          </td>
+                          <td className="py-4 px-4 text-right">
+                            <span className={`font-bold ${
+                              tableViewScope === 'scope1' ? 'text-blue-500' :
+                              tableViewScope === 'scope2' ? 'text-cyan-500' :
+                              'text-purple-500'
+                            }`}>
+                              {((activity.emissions || 0) / 1000).toFixed(4)} tCO₂e
+                            </span>
+                          </td>
+                          <td className="py-4 px-4 text-right">
+                            <div className="flex items-center justify-end gap-2">
+                              <button
+                                onClick={() => setEditingActivity(editingActivity === activity.id ? null : activity.id)}
+                                className={`p-2 rounded-lg transition-colors ${
+                                  isDark ? 'hover:bg-slate-600' : 'hover:bg-gray-100'
+                                }`}
+                                title="Modifier"
+                              >
+                                <Edit3 className={`w-4 h-4 ${isDark ? 'text-slate-400' : 'text-gray-400'}`} />
+                              </button>
+                              <button
+                                onClick={() => handleDeleteActivity(activity.id)}
+                                className={`p-2 rounded-lg transition-colors hover:bg-red-500/10`}
+                                title="Supprimer"
+                              >
+                                <Trash2 className="w-4 h-4 text-red-500" />
+                              </button>
+                            </div>
+                          </td>
+                        </motion.tr>
+                      ))}
+                    </tbody>
+                    <tfoot>
+                      <tr className={`${isDark ? 'bg-slate-700/50' : 'bg-gray-50'}`}>
+                        <td colSpan="3" className={`py-4 px-4 font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                          Total {scopeLabels[tableViewScope]?.name}
+                        </td>
+                        <td className="py-4 px-4 text-right">
+                          <span className={`text-lg font-bold ${
+                            tableViewScope === 'scope1' ? 'text-blue-500' :
+                            tableViewScope === 'scope2' ? 'text-cyan-500' :
+                            'text-purple-500'
+                          }`}>
+                            {(getScopeActivities(tableViewScope).reduce((sum, a) => sum + (a.emissions || 0), 0) / 1000).toFixed(4)} tCO₂e
+                          </span>
+                        </td>
+                        <td></td>
+                      </tr>
+                    </tfoot>
+                  </table>
+                )}
+              </div>
+
+              {/* Footer */}
+              <div className={`p-4 border-t ${isDark ? 'border-slate-700 bg-slate-800/50' : 'border-gray-200 bg-gray-50'}`}>
+                <div className="flex justify-end">
+                  <button
+                    onClick={() => setShowTableView(false)}
+                    className={`px-6 py-2.5 rounded-xl font-medium transition-all ${
+                      isDark 
+                        ? 'bg-slate-700 hover:bg-slate-600 text-white' 
+                        : 'bg-gray-200 hover:bg-gray-300 text-gray-900'
+                    }`}
+                  >
+                    Fermer
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
