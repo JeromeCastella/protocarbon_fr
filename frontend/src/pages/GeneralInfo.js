@@ -14,10 +14,27 @@ import {
   Layers,
   Check,
   Save,
-  Loader2
+  Loader2,
+  Info
 } from 'lucide-react';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL || '';
+
+// Months for fiscal year configuration
+const MONTHS = [
+  { value: 1, label: 'Janvier' },
+  { value: 2, label: 'Février' },
+  { value: 3, label: 'Mars' },
+  { value: 4, label: 'Avril' },
+  { value: 5, label: 'Mai' },
+  { value: 6, label: 'Juin' },
+  { value: 7, label: 'Juillet' },
+  { value: 8, label: 'Août' },
+  { value: 9, label: 'Septembre' },
+  { value: 10, label: 'Octobre' },
+  { value: 11, label: 'Novembre' },
+  { value: 12, label: 'Décembre' }
+];
 
 const GeneralInfo = () => {
   const { isDark } = useTheme();
@@ -31,7 +48,9 @@ const GeneralInfo = () => {
     surface_area: 0,
     revenue: 0,
     consolidation_approach: 'operational_control',
-    excluded_categories: []
+    excluded_categories: [],
+    fiscal_year_start_month: 1,
+    fiscal_year_start_day: 1
   });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -49,7 +68,11 @@ const GeneralInfo = () => {
         axios.get(`${API_URL}/api/categories`)
       ]);
       if (companyRes.data) {
-        setCompany(companyRes.data);
+        setCompany({
+          ...companyRes.data,
+          fiscal_year_start_month: companyRes.data.fiscal_year_start_month || 1,
+          fiscal_year_start_day: companyRes.data.fiscal_year_start_day || 1
+        });
       }
       setCategories(categoriesRes.data || []);
     } catch (error) {
@@ -85,6 +108,39 @@ const GeneralInfo = () => {
         : [...(prev.excluded_categories || []), categoryCode]
     }));
   };
+
+  // Calculate fiscal year end date based on start date
+  const getFiscalYearEndDate = () => {
+    const startMonth = company.fiscal_year_start_month || 1;
+    const startDay = company.fiscal_year_start_day || 1;
+    
+    // End date is one day before the start date of next year
+    let endMonth = startMonth - 1;
+    let endDay = startDay - 1;
+    
+    if (endMonth < 1) {
+      endMonth = 12;
+    }
+    if (endDay < 1) {
+      // Get last day of previous month
+      const daysInMonth = new Date(2024, endMonth, 0).getDate();
+      endDay = daysInMonth;
+      endMonth = endMonth - 1;
+      if (endMonth < 1) endMonth = 12;
+    }
+    
+    // Simpler approach: if start is Jan 1, end is Dec 31
+    if (startMonth === 1 && startDay === 1) {
+      return { month: 12, day: 31 };
+    }
+    
+    // Otherwise, end is the day before start
+    const startDate = new Date(2024, startMonth - 1, startDay);
+    startDate.setDate(startDate.getDate() - 1);
+    return { month: startDate.getMonth() + 1, day: startDate.getDate() };
+  };
+
+  const endDate = getFiscalYearEndDate();
 
   const sectors = [
     'manufacturing', 'services', 'technology', 'retail', 'construction',
