@@ -43,14 +43,13 @@ const GeneralInfo = () => {
     name: '',
     location: '',
     sector: '',
-    reference_year: new Date().getFullYear(),
+    entity_type: 'private_company',
     employees: 0,
     surface_area: 0,
     revenue: 0,
     consolidation_approach: 'operational_control',
     excluded_categories: [],
-    fiscal_year_start_month: 1,
-    fiscal_year_start_day: 1
+    fiscal_year_start_month: 1
   });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
