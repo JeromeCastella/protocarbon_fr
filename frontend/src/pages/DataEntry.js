@@ -164,7 +164,9 @@ const DataEntry = () => {
   const fetchFactorsForCategory = async (categoryCode) => {
     try {
       const response = await axios.get(`${API_URL}/api/emission-factors/search?category=${categoryCode}`);
-      setAvailableFactors(response.data || []);
+      const factors = response.data || [];
+      setAllCategoryFactors(factors);
+      setAvailableFactors(factors);
     } catch (error) {
       console.error('Failed to fetch factors:', error);
     }
