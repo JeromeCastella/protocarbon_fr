@@ -353,14 +353,17 @@ const DataEntry = () => {
     }
   };
 
-  // Get all unique units from available factors
-  const availableUnits = [...new Set(availableFactors.flatMap(f => f.input_units || []))];
+  // Get all unique units from available factors (extract base unit from "kgCO2e/L" -> "L")
+  const availableUnits = [...new Set(availableFactors.map(f => {
+    const unit = f.unit || '';
+    // Extract the input unit from format like "kgCO2e/L" or "kgCO2e/kWh"
+    const match = unit.match(/kgCO2e\/(.+)/);
+    return match ? match[1] : unit;
+  }).filter(u => u))];
 
   // Calculate estimated emissions
   const estimatedEmissions = selectedFactor && activityForm.quantity
-    ? selectedFactor.impacts?.reduce((total, impact) => {
-        return total + (parseFloat(activityForm.quantity) * impact.value);
-      }, 0) || 0
+    ? parseFloat(activityForm.quantity) * (selectedFactor.value || 0)
     : 0;
 
   // Table view functions
