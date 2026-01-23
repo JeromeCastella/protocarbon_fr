@@ -1038,10 +1038,12 @@ const DataEntry = () => {
                       </h3>
                       <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
                         {getScopeActivities(tableViewScope).length} entrées • {
-                          tableViewScope === null 
-                            ? (summary?.total_emissions || 0).toLocaleString()
-                            : (summary?.scope_emissions?.[tableViewScope] || 0).toLocaleString()
-                        } tCO₂e
+                          formatEmissions(tableViewScope === null 
+                            ? summary?.total_emissions
+                            : summary?.scope_emissions?.[tableViewScope]).value
+                        } {formatEmissions(tableViewScope === null 
+                            ? summary?.total_emissions
+                            : summary?.scope_emissions?.[tableViewScope]).unit}
                       </p>
                     </div>
                   </div>
