@@ -933,7 +933,10 @@ const DataEntry = () => {
                 <div className="flex gap-3">
                   <button
                     type="button"
-                    onClick={() => setShowModal(false)}
+                    onClick={() => {
+                      setShowModal(false);
+                      setEditingActivityData(null);
+                    }}
                     className={`flex-1 px-4 py-3 rounded-xl border transition-all ${
                       isDark 
                         ? 'border-slate-600 hover:bg-slate-700 text-white' 
@@ -949,7 +952,7 @@ const DataEntry = () => {
                     className="flex-1 px-4 py-3 bg-blue-500 text-white rounded-xl hover:bg-blue-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                   >
                     <Check className="w-5 h-5" />
-                    {t('common.save')}
+                    {editingActivityData ? 'Mettre à jour' : t('common.save')}
                   </button>
                 </div>
               </div>
