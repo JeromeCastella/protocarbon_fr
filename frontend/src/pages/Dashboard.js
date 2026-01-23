@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useTheme } from '../context/ThemeContext';
 import { useLanguage } from '../context/LanguageContext';
+import { useFiscalYear } from '../context/FiscalYearContext';
 import axios from 'axios';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { 
   TrendingUp, 
   TrendingDown, 
@@ -13,8 +14,24 @@ import {
   Target,
   Award,
   BarChart3,
-  PieChart
+  PieChart,
+  Users,
+  DollarSign,
+  Calendar,
+  ArrowLeft,
+  Minus
 } from 'lucide-react';
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+  Cell
+} from 'recharts';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL || '';
 
@@ -27,13 +44,11 @@ const formatEmissions = (valueInKg) => {
   const tonnes = valueInKg / 1000;
   
   if (tonnes >= 10) {
-    // Display in tonnes if >= 10 tonnes
     return {
       value: tonnes.toLocaleString('fr-FR', { maximumFractionDigits: 2 }),
       unit: 'tCO₂e'
     };
   } else {
-    // Display in kg if < 10 tonnes
     return {
       value: valueInKg.toLocaleString('fr-FR', { maximumFractionDigits: 2 }),
       unit: 'kgCO₂e'
@@ -41,39 +56,78 @@ const formatEmissions = (valueInKg) => {
   }
 };
 
+// Format for chart tooltips (always in tonnes for consistency)
+const formatChartValue = (valueInKg) => {
+  if (valueInKg === null || valueInKg === undefined) return '0';
+  const tonnes = valueInKg / 1000;
+  return tonnes.toLocaleString('fr-FR', { maximumFractionDigits: 2 }) + ' tCO₂e';
+};
+
 const Dashboard = () => {
   const { isDark } = useTheme();
   const { t } = useLanguage();
+  const { fiscalYears } = useFiscalYear();
+  
   const [summary, setSummary] = useState(null);
+  const [kpis, setKpis] = useState(null);
+  const [fiscalComparison, setFiscalComparison] = useState([]);
+  const [scopeBreakdown, setScopeBreakdown] = useState(null);
+  const [selectedFiscalYear, setSelectedFiscalYear] = useState('current');
+  const [drillDownScope, setDrillDownScope] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchSummary();
+    fetchAllData();
   }, []);
 
-  const fetchSummary = async () => {
+  useEffect(() => {
+    if (selectedFiscalYear) {
+      fetchScopeBreakdown(selectedFiscalYear);
+    }
+  }, [selectedFiscalYear]);
+
+  const fetchAllData = async () => {
     try {
-      const response = await axios.get(`${API_URL}/api/dashboard/summary`);
-      setSummary(response.data);
+      const [summaryRes, kpisRes, comparisonRes, breakdownRes] = await Promise.all([
+        axios.get(`${API_URL}/api/dashboard/summary`),
+        axios.get(`${API_URL}/api/dashboard/kpis`),
+        axios.get(`${API_URL}/api/dashboard/fiscal-comparison`),
+        axios.get(`${API_URL}/api/dashboard/scope-breakdown/current`)
+      ]);
+      
+      setSummary(summaryRes.data);
+      setKpis(kpisRes.data);
+      setFiscalComparison(comparisonRes.data);
+      setScopeBreakdown(breakdownRes.data);
     } catch (error) {
-      console.error('Failed to fetch summary:', error);
+      console.error('Failed to fetch dashboard data:', error);
     } finally {
       setLoading(false);
     }
   };
 
+  const fetchScopeBreakdown = async (fyId) => {
+    try {
+      const response = await axios.get(`${API_URL}/api/dashboard/scope-breakdown/${fyId}`);
+      setScopeBreakdown(response.data);
+      setDrillDownScope(null);
+    } catch (error) {
+      console.error('Failed to fetch scope breakdown:', error);
+    }
+  };
+
   const scopeColors = {
-    scope1: { bg: 'from-blue-500 to-blue-600', light: 'bg-blue-100 text-blue-600', border: 'border-blue-500' },
-    scope2: { bg: 'from-cyan-500 to-cyan-600', light: 'bg-cyan-100 text-cyan-600', border: 'border-cyan-500' },
-    scope3_amont: { bg: 'from-purple-500 to-purple-600', light: 'bg-purple-100 text-purple-600', border: 'border-purple-500' },
-    scope3_aval: { bg: 'from-indigo-500 to-indigo-600', light: 'bg-indigo-100 text-indigo-600', border: 'border-indigo-500' },
+    scope1: { bg: 'from-blue-500 to-blue-600', light: 'bg-blue-100 text-blue-600', hex: '#3b82f6' },
+    scope2: { bg: 'from-cyan-500 to-cyan-600', light: 'bg-cyan-100 text-cyan-600', hex: '#06b6d4' },
+    scope3_amont: { bg: 'from-purple-500 to-purple-600', light: 'bg-purple-100 text-purple-600', hex: '#8b5cf6' },
+    scope3_aval: { bg: 'from-indigo-500 to-indigo-600', light: 'bg-indigo-100 text-indigo-600', hex: '#6366f1' },
   };
 
   const scopeNames = {
-    scope1: { fr: 'Scope 1', de: 'Scope 1' },
-    scope2: { fr: 'Scope 2', de: 'Scope 2' },
-    scope3_amont: { fr: 'Scope 3 - Amont', de: 'Scope 3 - Vorgelagert' },
-    scope3_aval: { fr: 'Scope 3 - Aval', de: 'Scope 3 - Nachgelagert' },
+    scope1: 'Scope 1',
+    scope2: 'Scope 2',
+    scope3_amont: 'Scope 3 - Amont',
+    scope3_aval: 'Scope 3 - Aval',
   };
 
   if (loading) {
@@ -90,6 +144,34 @@ const Dashboard = () => {
       )
     : 0;
 
+  // Custom tooltip for charts
+  const CustomTooltip = ({ active, payload, label }) => {
+    if (active && payload && payload.length) {
+      return (
+        <div className={`p-3 rounded-lg shadow-lg ${isDark ? 'bg-slate-800 border border-slate-700' : 'bg-white border border-gray-200'}`}>
+          <p className={`font-medium mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>{label}</p>
+          {payload.map((entry, index) => (
+            <p key={index} className="text-sm" style={{ color: entry.color }}>
+              {entry.name}: {formatChartValue(entry.value)}
+            </p>
+          ))}
+        </div>
+      );
+    }
+    return null;
+  };
+
+  // Prepare data for fiscal year comparison chart
+  const comparisonChartData = fiscalComparison.map(fy => ({
+    name: fy.name.replace('Exercice ', ''),
+    year: fy.year,
+    'Scope 1': fy.scope1,
+    'Scope 2': fy.scope2,
+    'Scope 3 Amont': fy.scope3_amont,
+    'Scope 3 Aval': fy.scope3_aval,
+    total: fy.total
+  }));
+
   return (
     <div data-testid="dashboard" className="space-y-8">
       {/* Header */}
@@ -98,85 +180,322 @@ const Dashboard = () => {
           {t('nav.dashboard')}
         </h1>
         <p className={`mt-2 ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-          Vue d&apos;ensemble de votre bilan carbone
+          Vue d'ensemble de votre bilan carbone
         </p>
       </div>
 
-      {/* Main Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {/* Total Emissions Card */}
+      {/* KPI Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        {/* Total Emissions KPI */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className={`col-span-1 md:col-span-2 p-6 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-xl shadow-blue-500/30`}
+          className={`p-5 rounded-2xl ${isDark ? 'bg-slate-800' : 'bg-white shadow-lg'}`}
         >
-          <div className="flex items-start justify-between">
-            <div>
-              <p className="text-blue-100 font-medium">{t('dataEntry.totalBalance')}</p>
-              <h2 className="text-5xl font-bold mt-2" data-testid="total-emissions">
-                {formatEmissions(summary?.total_emissions).value}
-              </h2>
-              <p className="text-blue-200 mt-1">{formatEmissions(summary?.total_emissions).unit}</p>
+          <div className="flex items-center justify-between mb-3">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center">
+              <BarChart3 className="w-5 h-5 text-white" />
             </div>
-            <div className="flex items-center gap-2 px-4 py-2 bg-white/20 backdrop-blur rounded-xl">
-              <Target className="w-5 h-5" />
-              <span className="font-medium">{totalCompletion}% {t('dataEntry.completed')}</span>
-            </div>
-          </div>
-          
-          {/* Mini progress bars */}
-          <div className="mt-6 space-y-3">
-            {Object.entries(summary?.scope_completion || {}).map(([scope, data]) => (
-              <div key={scope} className="flex items-center gap-4">
-                <span className="text-sm text-blue-100 w-32">{scopeNames[scope]?.fr}</span>
-                <div className="flex-1 h-2 bg-white/20 rounded-full overflow-hidden">
-                  <motion.div
-                    initial={{ width: 0 }}
-                    animate={{ width: `${data.percentage}%` }}
-                    transition={{ duration: 1, delay: 0.2 }}
-                    className="h-full bg-white rounded-full"
-                  />
-                </div>
-                <span className="text-sm font-medium w-12 text-right">{data.percentage}%</span>
+            {kpis?.variation_percent !== 0 && kpis?.variation_percent !== null && (
+              <div className={`flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${
+                kpis?.variation_percent > 0 
+                  ? 'bg-red-100 text-red-600' 
+                  : 'bg-green-100 text-green-600'
+              }`}>
+                {kpis?.variation_percent > 0 ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
+                {Math.abs(kpis?.variation_percent)}%
               </div>
-            ))}
+            )}
           </div>
+          <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>Émissions totales</p>
+          <p className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+            {formatEmissions(kpis?.current_emissions).value}
+          </p>
+          <p className={`text-xs ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>
+            {formatEmissions(kpis?.current_emissions).unit}
+          </p>
         </motion.div>
 
-        {/* Quick Stats */}
+        {/* Variation vs Previous Year */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
+          className={`p-5 rounded-2xl ${isDark ? 'bg-slate-800' : 'bg-white shadow-lg'}`}
+        >
+          <div className="flex items-center justify-between mb-3">
+            <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
+              kpis?.variation_percent > 0 
+                ? 'bg-gradient-to-br from-red-500 to-red-600' 
+                : kpis?.variation_percent < 0 
+                  ? 'bg-gradient-to-br from-green-500 to-green-600'
+                  : 'bg-gradient-to-br from-gray-500 to-gray-600'
+            }`}>
+              {kpis?.variation_percent > 0 ? (
+                <TrendingUp className="w-5 h-5 text-white" />
+              ) : kpis?.variation_percent < 0 ? (
+                <TrendingDown className="w-5 h-5 text-white" />
+              ) : (
+                <Minus className="w-5 h-5 text-white" />
+              )}
+            </div>
+          </div>
+          <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>Variation N-1</p>
+          <p className={`text-2xl font-bold ${
+            kpis?.variation_percent > 0 
+              ? 'text-red-500' 
+              : kpis?.variation_percent < 0 
+                ? 'text-green-500'
+                : isDark ? 'text-white' : 'text-gray-900'
+          }`}>
+            {kpis?.variation_percent > 0 ? '+' : ''}{kpis?.variation_percent || 0}%
+          </p>
+          <p className={`text-xs ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>
+            {kpis?.variation_absolute ? formatEmissions(kpis.variation_absolute).value + ' ' + formatEmissions(kpis.variation_absolute).unit : 'Pas de données N-1'}
+          </p>
+        </motion.div>
+
+        {/* Emissions per Employee */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className={`p-5 rounded-2xl ${isDark ? 'bg-slate-800' : 'bg-white shadow-lg'}`}
+        >
+          <div className="flex items-center justify-between mb-3">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center">
+              <Users className="w-5 h-5 text-white" />
+            </div>
+          </div>
+          <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>Par employé</p>
+          <p className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+            {kpis?.emissions_per_employee ? formatEmissions(kpis.emissions_per_employee).value : '-'}
+          </p>
+          <p className={`text-xs ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>
+            {kpis?.emissions_per_employee ? formatEmissions(kpis.emissions_per_employee).unit + '/employé' : `${kpis?.employees || 0} employés`}
+          </p>
+        </motion.div>
+
+        {/* Fiscal Years */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+          className={`p-5 rounded-2xl ${isDark ? 'bg-slate-800' : 'bg-white shadow-lg'}`}
+        >
+          <div className="flex items-center justify-between mb-3">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center">
+              <Calendar className="w-5 h-5 text-white" />
+            </div>
+          </div>
+          <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>Exercice actuel</p>
+          <p className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+            {kpis?.current_fiscal_year?.replace('Exercice ', '') || '-'}
+          </p>
+          <p className={`text-xs ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>
+            {kpis?.fiscal_years_count || 0} exercice(s) enregistré(s)
+          </p>
+        </motion.div>
+      </div>
+
+      {/* Charts Section */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        
+        {/* Fiscal Year Comparison Chart */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4 }}
           className={`p-6 rounded-2xl ${isDark ? 'bg-slate-800' : 'bg-white shadow-lg'}`}
         >
           <h3 className={`font-semibold mb-4 ${isDark ? 'text-white' : 'text-gray-900'}`}>
-            Statistiques rapides
+            Évolution des émissions par exercice
           </h3>
-          <div className="space-y-4">
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-xl bg-green-100 flex items-center justify-center">
-                <BarChart3 className="w-6 h-6 text-green-600" />
-              </div>
-              <div>
-                <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>Activités saisies</p>
-                <p className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                  {summary?.activities_count || 0}
-                </p>
-              </div>
+          
+          {comparisonChartData.length > 0 ? (
+            <ResponsiveContainer width="100%" height={300}>
+              <BarChart data={comparisonChartData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke={isDark ? '#334155' : '#e5e7eb'} />
+                <XAxis 
+                  dataKey="name" 
+                  tick={{ fill: isDark ? '#94a3b8' : '#6b7280' }}
+                  axisLine={{ stroke: isDark ? '#475569' : '#d1d5db' }}
+                />
+                <YAxis 
+                  tick={{ fill: isDark ? '#94a3b8' : '#6b7280' }}
+                  axisLine={{ stroke: isDark ? '#475569' : '#d1d5db' }}
+                  tickFormatter={(value) => `${(value / 1000).toFixed(0)}t`}
+                />
+                <Tooltip content={<CustomTooltip />} />
+                <Legend />
+                <Bar dataKey="Scope 1" stackId="a" fill="#3b82f6" radius={[0, 0, 0, 0]} />
+                <Bar dataKey="Scope 2" stackId="a" fill="#06b6d4" radius={[0, 0, 0, 0]} />
+                <Bar dataKey="Scope 3 Amont" stackId="a" fill="#8b5cf6" radius={[0, 0, 0, 0]} />
+                <Bar dataKey="Scope 3 Aval" stackId="a" fill="#6366f1" radius={[4, 4, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          ) : (
+            <div className="h-[300px] flex items-center justify-center">
+              <p className={`${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+                Aucun exercice fiscal enregistré
+              </p>
             </div>
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-xl bg-purple-100 flex items-center justify-center">
-                <PieChart className="w-6 h-6 text-purple-600" />
-              </div>
-              <div>
-                <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>Produits définis</p>
-                <p className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                  {summary?.products_count || 0}
-                </p>
-              </div>
+          )}
+        </motion.div>
+
+        {/* Scope Breakdown Chart with Drill-down */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5 }}
+          className={`p-6 rounded-2xl ${isDark ? 'bg-slate-800' : 'bg-white shadow-lg'}`}
+        >
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-3">
+              {drillDownScope && (
+                <button
+                  onClick={() => setDrillDownScope(null)}
+                  className={`p-2 rounded-lg transition-colors ${
+                    isDark ? 'hover:bg-slate-700' : 'hover:bg-gray-100'
+                  }`}
+                >
+                  <ArrowLeft className="w-5 h-5" />
+                </button>
+              )}
+              <h3 className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                {drillDownScope 
+                  ? `Détail ${scopeNames[drillDownScope]}`
+                  : 'Répartition par scope'}
+              </h3>
             </div>
+            
+            {/* Fiscal Year Selector */}
+            <select
+              value={selectedFiscalYear}
+              onChange={(e) => setSelectedFiscalYear(e.target.value)}
+              className={`px-3 py-1.5 rounded-lg text-sm border ${
+                isDark 
+                  ? 'bg-slate-700 border-slate-600 text-white' 
+                  : 'bg-white border-gray-200'
+              }`}
+            >
+              <option value="current">Exercice actuel</option>
+              {fiscalYears.map(fy => (
+                <option key={fy.id} value={fy.id}>
+                  {fy.name}
+                </option>
+              ))}
+            </select>
           </div>
+
+          <AnimatePresence mode="wait">
+            {!drillDownScope ? (
+              // Scope level chart
+              <motion.div
+                key="scope-chart"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 20 }}
+              >
+                {scopeBreakdown?.scope_data?.length > 0 ? (
+                  <ResponsiveContainer width="100%" height={300}>
+                    <BarChart 
+                      data={scopeBreakdown.scope_data} 
+                      layout="vertical"
+                      margin={{ top: 5, right: 30, left: 80, bottom: 5 }}
+                    >
+                      <CartesianGrid strokeDasharray="3 3" stroke={isDark ? '#334155' : '#e5e7eb'} />
+                      <XAxis 
+                        type="number"
+                        tick={{ fill: isDark ? '#94a3b8' : '#6b7280' }}
+                        axisLine={{ stroke: isDark ? '#475569' : '#d1d5db' }}
+                        tickFormatter={(value) => `${(value / 1000).toFixed(0)}t`}
+                      />
+                      <YAxis 
+                        type="category"
+                        dataKey="name"
+                        tick={{ fill: isDark ? '#94a3b8' : '#6b7280' }}
+                        axisLine={{ stroke: isDark ? '#475569' : '#d1d5db' }}
+                        width={75}
+                      />
+                      <Tooltip content={<CustomTooltip />} />
+                      <Bar 
+                        dataKey="emissions" 
+                        name="Émissions"
+                        radius={[0, 4, 4, 0]}
+                        cursor="pointer"
+                        onClick={(data) => {
+                          if (data && scopeBreakdown?.category_data?.[data.scope]?.length > 0) {
+                            setDrillDownScope(data.scope);
+                          }
+                        }}
+                      >
+                        {scopeBreakdown?.scope_data?.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={entry.color} />
+                        ))}
+                      </Bar>
+                    </BarChart>
+                  </ResponsiveContainer>
+                ) : (
+                  <div className="h-[300px] flex items-center justify-center">
+                    <p className={`${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+                      Aucune donnée pour cet exercice
+                    </p>
+                  </div>
+                )}
+                <p className={`text-xs text-center mt-2 ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>
+                  Cliquez sur une barre pour voir le détail par catégorie
+                </p>
+              </motion.div>
+            ) : (
+              // Category drill-down chart
+              <motion.div
+                key="category-chart"
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+              >
+                {scopeBreakdown?.category_data?.[drillDownScope]?.length > 0 ? (
+                  <ResponsiveContainer width="100%" height={300}>
+                    <BarChart 
+                      data={scopeBreakdown.category_data[drillDownScope].slice(0, 8)} 
+                      layout="vertical"
+                      margin={{ top: 5, right: 30, left: 100, bottom: 5 }}
+                    >
+                      <CartesianGrid strokeDasharray="3 3" stroke={isDark ? '#334155' : '#e5e7eb'} />
+                      <XAxis 
+                        type="number"
+                        tick={{ fill: isDark ? '#94a3b8' : '#6b7280' }}
+                        axisLine={{ stroke: isDark ? '#475569' : '#d1d5db' }}
+                        tickFormatter={(value) => `${(value / 1000).toFixed(0)}t`}
+                      />
+                      <YAxis 
+                        type="category"
+                        dataKey="name"
+                        tick={{ fill: isDark ? '#94a3b8' : '#6b7280', fontSize: 11 }}
+                        axisLine={{ stroke: isDark ? '#475569' : '#d1d5db' }}
+                        width={95}
+                        tickFormatter={(value) => value.length > 15 ? value.slice(0, 15) + '...' : value}
+                      />
+                      <Tooltip content={<CustomTooltip />} />
+                      <Bar 
+                        dataKey="emissions" 
+                        name="Émissions"
+                        fill={scopeColors[drillDownScope]?.hex}
+                        radius={[0, 4, 4, 0]}
+                      />
+                    </BarChart>
+                  </ResponsiveContainer>
+                ) : (
+                  <div className="h-[300px] flex items-center justify-center">
+                    <p className={`${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+                      Aucune donnée pour ce scope
+                    </p>
+                  </div>
+                )}
+              </motion.div>
+            )}
+          </AnimatePresence>
         </motion.div>
       </div>
 
@@ -187,12 +506,12 @@ const Dashboard = () => {
             key={scope}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 + index * 0.1 }}
+            transition={{ delay: 0.6 + index * 0.1 }}
             className={`p-5 rounded-2xl ${isDark ? 'bg-slate-800' : 'bg-white shadow-lg'}`}
           >
             <div className="flex items-center justify-between mb-4">
               <div className={`px-3 py-1 rounded-lg text-sm font-medium ${scopeColors[scope]?.light}`}>
-                {scopeNames[scope]?.fr}
+                {scopeNames[scope]}
               </div>
               <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${scopeColors[scope]?.bg} flex items-center justify-center text-white`}>
                 {scope === 'scope1' && <Factory className="w-5 h-5" />}
@@ -220,7 +539,7 @@ const Dashboard = () => {
                 <motion.div
                   initial={{ width: 0 }}
                   animate={{ width: `${summary?.scope_completion?.[scope]?.percentage || 0}%` }}
-                  transition={{ duration: 0.8, delay: 0.5 + index * 0.1 }}
+                  transition={{ duration: 0.8, delay: 0.7 + index * 0.1 }}
                   className={`h-full rounded-full bg-gradient-to-r ${scopeColors[scope]?.bg}`}
                 />
               </div>
