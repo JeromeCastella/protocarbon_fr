@@ -308,7 +308,17 @@ const DataEntry = () => {
     setShowTableView(true);
   };
 
+  // Open full view (all scopes) when clicking on total
+  const openFullTableView = () => {
+    setTableViewScope(null); // null = all scopes
+    setShowTableView(true);
+  };
+
   const getScopeActivities = (scope) => {
+    if (scope === null) {
+      // Return all activities
+      return activities;
+    }
     return activities.filter(a => a.scope === scope);
   };
 
