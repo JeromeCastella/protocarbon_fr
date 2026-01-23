@@ -528,9 +528,9 @@ const DataEntry = () => {
             <Table className="w-5 h-5 text-blue-200" />
           </div>
           <h2 className="text-4xl font-bold mt-1" data-testid="sidebar-total-emissions">
-            {summary?.total_emissions?.toLocaleString() || 0}
+            {formatEmissions(summary?.total_emissions).value}
           </h2>
-          <p className="text-blue-200 text-sm">tCO₂e</p>
+          <p className="text-blue-200 text-sm">{formatEmissions(summary?.total_emissions).unit}</p>
           <div className="mt-4 flex items-center gap-2">
             <div className="flex-1 h-2 bg-white/20 rounded-full overflow-hidden">
               <div 
