@@ -600,8 +600,284 @@ async def delete_activity(activity_id: str, current_user: dict = Depends(get_cur
         raise HTTPException(status_code=404, detail="Activity not found")
     return {"message": "Activity deleted"}
 
-# ==================== PRODUCTS ENDPOINTS ====================
+# ==================== PRODUCTS ENDPOINTS (Enhanced) ====================
 
+def calculate_product_emissions(product_doc: dict) -> dict:
+    """Calculate emissions breakdown for a product"""
+    transformation_emissions = 0
+    usage_emissions = 0
+    disposal_emissions = 0
+    
+    # Transformation emissions (if semi-finished)
+    if product_doc.get("product_type") == "semi_finished" and product_doc.get("transformation"):
+        transfo = product_doc["transformation"]
+        # Electricity
+        elec_factor = 0.0569  # Default France
+        if transfo.get("electricity_factor_id"):
+            ef = emission_factors_collection.find_one({"_id": ObjectId(transfo["electricity_factor_id"])})
+            if ef:
+                elec_factor = ef.get("value", 0.0569)
+        transformation_emissions += transfo.get("electricity_kwh", 0) * elec_factor
+        
+        # Fuel (combustible)
+        fuel_factor = 0.205  # Default gaz naturel kWh
+        if transfo.get("fuel_factor_id"):
+            ef = emission_factors_collection.find_one({"_id": ObjectId(transfo["fuel_factor_id"])})
+            if ef:
+                fuel_factor = ef.get("value", 0.205)
+        transformation_emissions += transfo.get("fuel_kwh", 0) * fuel_factor
+    
+    # Usage emissions
+    if product_doc.get("usage"):
+        usage = product_doc["usage"]
+        lifespan = product_doc.get("lifespan_years", 1)
+        cycles_per_year = usage.get("cycles_per_year", 1)
+        total_cycles = lifespan * cycles_per_year
+        
+        # Electricity per cycle
+        elec_factor = 0.0569
+        if usage.get("electricity_factor_id"):
+            ef = emission_factors_collection.find_one({"_id": ObjectId(usage["electricity_factor_id"])})
+            if ef:
+                elec_factor = ef.get("value", 0.0569)
+        usage_emissions += usage.get("electricity_kwh_per_cycle", 0) * elec_factor * total_cycles
+        
+        # Fuel (combustible) per cycle
+        fuel_factor = 0.205
+        if usage.get("fuel_factor_id"):
+            ef = emission_factors_collection.find_one({"_id": ObjectId(usage["fuel_factor_id"])})
+            if ef:
+                fuel_factor = ef.get("value", 0.205)
+        usage_emissions += usage.get("fuel_kwh_per_cycle", 0) * fuel_factor * total_cycles
+        
+        # Carburant per cycle
+        carbu_factor = 2.68  # Default diesel
+        if usage.get("carburant_factor_id"):
+            ef = emission_factors_collection.find_one({"_id": ObjectId(usage["carburant_factor_id"])})
+            if ef:
+                carbu_factor = ef.get("value", 2.68)
+        usage_emissions += usage.get("carburant_l_per_cycle", 0) * carbu_factor * total_cycles
+        
+        # Refrigerants per cycle
+        refrig_factor = 1430  # Default R-134a
+        if usage.get("refrigerant_factor_id"):
+            ef = emission_factors_collection.find_one({"_id": ObjectId(usage["refrigerant_factor_id"])})
+            if ef:
+                refrig_factor = ef.get("value", 1430)
+        usage_emissions += usage.get("refrigerant_kg_per_cycle", 0) * refrig_factor * total_cycles
+    
+    # Disposal emissions (end of life)
+    if product_doc.get("materials"):
+        for material in product_doc["materials"]:
+            weight = material.get("weight_kg", 0)
+            treatment_factor = 0.51  # Default incineration
+            if material.get("treatment_emission_factor_id"):
+                ef = emission_factors_collection.find_one({"_id": ObjectId(material["treatment_emission_factor_id"])})
+                if ef:
+                    treatment_factor = ef.get("value", 0.51)
+            disposal_emissions += weight * treatment_factor
+    
+    return {
+        "transformation_emissions": round(transformation_emissions, 4),
+        "usage_emissions": round(usage_emissions, 4),
+        "disposal_emissions": round(disposal_emissions, 4),
+        "total_emissions_per_unit": round(transformation_emissions + usage_emissions + disposal_emissions, 4)
+    }
+
+@api_router.post("/products/enhanced")
+async def create_product_enhanced(product: ProductCreateEnhanced, current_user: dict = Depends(get_current_user)):
+    """Create a product with full lifecycle emissions calculation"""
+    company = companies_collection.find_one({"tenant_id": current_user["id"]})
+    if not company:
+        raise HTTPException(status_code=400, detail="Please create a company first")
+    
+    product_doc = {
+        "tenant_id": current_user["id"],
+        "company_id": str(company["_id"]),
+        "name": product.name,
+        "description": product.description,
+        "product_type": product.product_type,
+        "unit": product.unit,
+        "lifespan_years": product.lifespan_years,
+        "materials": [m.model_dump() for m in product.materials],
+        "transformation": product.transformation.model_dump() if product.transformation else None,
+        "usage": product.usage.model_dump() if product.usage else None,
+        "sales": [],
+        "created_at": datetime.now(timezone.utc).isoformat(),
+        "is_enhanced": True
+    }
+    
+    # Calculate emissions
+    emissions = calculate_product_emissions(product_doc)
+    product_doc.update(emissions)
+    
+    result = products_collection.insert_one(product_doc)
+    product_doc["id"] = str(result.inserted_id)
+    return serialize_doc(product_doc)
+
+@api_router.put("/products/enhanced/{product_id}")
+async def update_product_enhanced(product_id: str, product: ProductCreateEnhanced, current_user: dict = Depends(get_current_user)):
+    """Update an enhanced product"""
+    existing = products_collection.find_one({"_id": ObjectId(product_id), "tenant_id": current_user["id"]})
+    if not existing:
+        raise HTTPException(status_code=404, detail="Product not found")
+    
+    update_data = {
+        "name": product.name,
+        "description": product.description,
+        "product_type": product.product_type,
+        "unit": product.unit,
+        "lifespan_years": product.lifespan_years,
+        "materials": [m.model_dump() for m in product.materials],
+        "transformation": product.transformation.model_dump() if product.transformation else None,
+        "usage": product.usage.model_dump() if product.usage else None,
+        "updated_at": datetime.now(timezone.utc).isoformat()
+    }
+    
+    # Recalculate emissions
+    temp_doc = {**existing, **update_data}
+    emissions = calculate_product_emissions(temp_doc)
+    update_data.update(emissions)
+    
+    products_collection.update_one({"_id": ObjectId(product_id)}, {"$set": update_data})
+    updated = products_collection.find_one({"_id": ObjectId(product_id)})
+    return serialize_doc(updated)
+
+@api_router.get("/products/{product_id}")
+async def get_product(product_id: str, current_user: dict = Depends(get_current_user)):
+    """Get a single product by ID"""
+    product = products_collection.find_one({"_id": ObjectId(product_id), "tenant_id": current_user["id"]})
+    if not product:
+        raise HTTPException(status_code=404, detail="Product not found")
+    return serialize_doc(product)
+
+@api_router.post("/products/{product_id}/sales/enhanced")
+async def add_product_sale_enhanced(product_id: str, sale: ProductSaleFromCategory, current_user: dict = Depends(get_current_user)):
+    """Record a sale and create corresponding activities in Scope 3 Aval categories"""
+    product = products_collection.find_one({"_id": ObjectId(product_id), "tenant_id": current_user["id"]})
+    if not product:
+        raise HTTPException(status_code=404, detail="Product not found")
+    
+    company = companies_collection.find_one({"tenant_id": current_user["id"]})
+    if not company:
+        raise HTTPException(status_code=400, detail="Company not found")
+    
+    quantity = sale.quantity
+    year = sale.year or datetime.now(timezone.utc).year
+    
+    # Calculate emissions for this sale
+    transformation_total = quantity * product.get("transformation_emissions", 0)
+    usage_total = quantity * product.get("usage_emissions", 0)
+    disposal_total = quantity * product.get("disposal_emissions", 0)
+    
+    created_activities = []
+    
+    # Create activity for Transformation (if applicable)
+    if transformation_total > 0:
+        activity_transfo = {
+            "tenant_id": current_user["id"],
+            "company_id": str(company["_id"]),
+            "category_id": "transformation_produits",
+            "scope": "scope3_aval",
+            "name": f"{product['name']} - Transformation",
+            "description": f"Transformation de {quantity} unités vendues",
+            "quantity": quantity,
+            "unit": product.get("unit", "unit"),
+            "emissions": transformation_total * 1000,  # Convert to gCO2e for storage
+            "product_id": product_id,
+            "product_name": product["name"],
+            "year": year,
+            "date": datetime.now(timezone.utc).isoformat(),
+            "created_at": datetime.now(timezone.utc).isoformat()
+        }
+        result = activities_collection.insert_one(activity_transfo)
+        activity_transfo["id"] = str(result.inserted_id)
+        created_activities.append(activity_transfo)
+    
+    # Create activity for Usage
+    if usage_total > 0:
+        activity_usage = {
+            "tenant_id": current_user["id"],
+            "company_id": str(company["_id"]),
+            "category_id": "utilisation_produits",
+            "scope": "scope3_aval",
+            "name": f"{product['name']} - Utilisation",
+            "description": f"Utilisation de {quantity} unités sur {product.get('lifespan_years', 1)} ans",
+            "quantity": quantity,
+            "unit": product.get("unit", "unit"),
+            "emissions": usage_total * 1000,
+            "product_id": product_id,
+            "product_name": product["name"],
+            "year": year,
+            "date": datetime.now(timezone.utc).isoformat(),
+            "created_at": datetime.now(timezone.utc).isoformat()
+        }
+        result = activities_collection.insert_one(activity_usage)
+        activity_usage["id"] = str(result.inserted_id)
+        created_activities.append(activity_usage)
+    
+    # Create activity for End of Life
+    if disposal_total > 0:
+        activity_disposal = {
+            "tenant_id": current_user["id"],
+            "company_id": str(company["_id"]),
+            "category_id": "fin_vie_produits",
+            "scope": "scope3_aval",
+            "name": f"{product['name']} - Fin de vie",
+            "description": f"Traitement fin de vie de {quantity} unités",
+            "quantity": quantity,
+            "unit": product.get("unit", "unit"),
+            "emissions": disposal_total * 1000,
+            "product_id": product_id,
+            "product_name": product["name"],
+            "year": year,
+            "date": datetime.now(timezone.utc).isoformat(),
+            "created_at": datetime.now(timezone.utc).isoformat()
+        }
+        result = activities_collection.insert_one(activity_disposal)
+        activity_disposal["id"] = str(result.inserted_id)
+        created_activities.append(activity_disposal)
+    
+    # Record the sale on the product
+    sale_doc = {
+        "quantity": quantity,
+        "year": year,
+        "transformation_emissions": transformation_total,
+        "usage_emissions": usage_total,
+        "disposal_emissions": disposal_total,
+        "total_emissions": transformation_total + usage_total + disposal_total,
+        "date": datetime.now(timezone.utc).isoformat()
+    }
+    
+    products_collection.update_one(
+        {"_id": ObjectId(product_id)},
+        {"$push": {"sales": sale_doc}}
+    )
+    
+    return {
+        "message": f"Sale recorded with {len(created_activities)} activities created",
+        "sale": sale_doc,
+        "activities_created": [serialize_doc(a) for a in created_activities]
+    }
+
+@api_router.get("/emission-factors/by-category/{category}")
+async def get_emission_factors_by_category(category: str):
+    """Get emission factors filtered by category (materiaux, fin_vie_produits, refrigerants, electricite, etc.)"""
+    factors = list(emission_factors_collection.find({"category": category}))
+    if not factors:
+        # Try to seed if empty
+        await get_emission_factors()
+        factors = list(emission_factors_collection.find({"category": category}))
+    return [serialize_doc(f) for f in factors]
+
+@api_router.get("/emission-factors/by-tags")
+async def get_emission_factors_by_tags(tags: str):
+    """Get emission factors filtered by tags (comma-separated)"""
+    tag_list = [t.strip().lower() for t in tags.split(",")]
+    factors = list(emission_factors_collection.find({"tags": {"$in": tag_list}}))
+    return [serialize_doc(f) for f in factors]
+
+# Legacy endpoints for backward compatibility
 @api_router.post("/products")
 async def create_product(product: ProductCreate, current_user: dict = Depends(get_current_user)):
     company = companies_collection.find_one({"tenant_id": current_user["id"]})
@@ -621,7 +897,8 @@ async def create_product(product: ProductCreate, current_user: dict = Depends(ge
         "total_emissions_per_unit": total_emissions,
         "unit": product.unit,
         "sales": [],
-        "created_at": datetime.now(timezone.utc).isoformat()
+        "created_at": datetime.now(timezone.utc).isoformat(),
+        "is_enhanced": False
     }
     result = products_collection.insert_one(product_doc)
     product_doc["id"] = str(result.inserted_id)
@@ -640,7 +917,7 @@ async def add_product_sale(product_id: str, sale: ProductSale, current_user: dic
     
     sale_doc = {
         "quantity": sale.quantity,
-        "emissions": sale.quantity * product["total_emissions_per_unit"],
+        "emissions": sale.quantity * product.get("total_emissions_per_unit", 0),
         "date": sale.date or datetime.now(timezone.utc).isoformat()
     }
     
