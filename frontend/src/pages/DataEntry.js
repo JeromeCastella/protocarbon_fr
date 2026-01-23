@@ -94,10 +94,10 @@ const DataEntry = () => {
   const fetchData = async () => {
     try {
       const [categoriesRes, activitiesRes, summaryRes, statsRes] = await Promise.all([
-        axios.get(`${API_URL}/categories`),
-        axios.get(`${API_URL}/activities`),
-        axios.get(`${API_URL}/dashboard/summary`),
-        axios.get(`${API_URL}/dashboard/category-stats`)
+        axios.get(`${API_URL}/api/categories`),
+        axios.get(`${API_URL}/api/activities`),
+        axios.get(`${API_URL}/api/dashboard/summary`),
+        axios.get(`${API_URL}/api/dashboard/category-stats`)
       ]);
       setCategories(categoriesRes.data || []);
       setActivities(activitiesRes.data || []);
@@ -114,7 +114,7 @@ const DataEntry = () => {
   // Fetch subcategories when category is selected
   const fetchSubcategories = async (categoryCode) => {
     try {
-      const response = await axios.get(`${API_URL}/subcategories?category=${categoryCode}`);
+      const response = await axios.get(`${API_URL}/api/subcategories?category=${categoryCode}`);
       setSubcategories(response.data || []);
     } catch (error) {
       console.error('Failed to fetch subcategories:', error);
@@ -124,7 +124,7 @@ const DataEntry = () => {
   // Fetch emission factors based on filters
   const fetchFactors = async (subcatCode, unit, search) => {
     try {
-      let url = `${API_URL}/emission-factors/search?`;
+      let url = `${API_URL}/api/emission-factors/search?`;
       if (subcatCode) url += `subcategory=${subcatCode}&`;
       if (unit) url += `unit=${unit}&`;
       if (search) url += `search=${encodeURIComponent(search)}&`;
