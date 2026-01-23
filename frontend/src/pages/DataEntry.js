@@ -152,10 +152,20 @@ const DataEntry = () => {
       
       // If no subcategories, load emission factors directly for this category
       if (subcats.length === 0) {
-        fetchFactors(null, null, null);
+        fetchFactorsForCategory(categoryCode);
       }
     } catch (error) {
       console.error('Failed to fetch subcategories:', error);
+    }
+  };
+  
+  // Fetch emission factors for a specific category (used when no subcategories)
+  const fetchFactorsForCategory = async (categoryCode) => {
+    try {
+      const response = await axios.get(`${API_URL}/api/emission-factors/search?category=${categoryCode}`);
+      setAvailableFactors(response.data || []);
+    } catch (error) {
+      console.error('Failed to fetch factors:', error);
     }
   };
 
