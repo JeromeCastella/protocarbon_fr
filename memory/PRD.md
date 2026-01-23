@@ -24,59 +24,46 @@ Application de calcul d'empreinte carbone selon le protocole GHG avec interface 
 
 ## What's Been Implemented
 
+### 2026-01-23 (Session 4) - Gestion des Exercices Fiscaux
+- **Exercices fiscaux** avec année paramétrable :
+  - Création d'exercices avec nom, date début/fin
+  - Clôture avec verrouillage et génération de résumé (total émissions, par scope, par catégorie)
+  - Rectification (réouverture) avec justification obligatoire + historique des rectifications
+  - Duplication vers nouvel exercice avec option de copier les activités
+  - Reprise automatique des fiches produits
+- **Sélecteur d'exercice** dans la sidebar pour naviguer entre périodes
+- **Page dédiée** `/fiscal-years` pour gérer les exercices
+
 ### 2026-01-23 (Session 3) - Produits et Cycle de Vie
-- **Wizard de création de produit** en 4-5 étapes :
-  - Étape 1: Infos générales (nom, type fini/semi-fini, durée de vie, unité)
-  - Étape 2: Composition matières (sélection depuis facteurs d'émission, poids, traitement fin de vie)
-  - Étape 3: Transformation (si semi-fini - électricité, combustible)
-  - Étape 4: Utilisation (électricité, combustible, carburant, réfrigérants par cycle × cycles/an × durée vie)
-  - Étape 5: Résumé avec aperçu des émissions par unité
+- **Wizard de création de produit** en 4-5 étapes (infos, matériaux, transformation, utilisation, résumé)
+- **Nouveaux facteurs d'émission** : 15 matériaux, 10 traitements fin de vie, 6 réfrigérants
+- **Enregistrement des ventes** avec ventilation Scope 3 Aval
+- **Deux chemins d'accès** : page Produits + catégories Scope 3 Aval
 
-- **Nouveaux facteurs d'émission** :
-  - 15 matériaux (Acier, Aluminium, Cuivre, Plastiques, Verre, Bois, etc.)
-  - 10 traitements fin de vie (Recyclage par matière, Incinération, Enfouissement, DEEE)
-  - 6 réfrigérants (R-134a, R-410A, R-32, R-404A, R-290, R-744)
-
-- **Enregistrement des ventes** avec ventilation automatique vers :
-  - Transformation des produits vendus (Scope 3 Aval)
-  - Utilisation des produits vendus (Scope 3 Aval)
-  - Traitement fin de vie des produits vendus (Scope 3 Aval)
-
-- **Deux chemins d'accès pour les ventes** :
-  - Depuis la page Produits (bouton "Enregistrer des ventes")
-  - Depuis Saisie de données → Scope 3 Aval (catégories produits)
-
-### 2026-01-23 (Session 2)
-- **Vue détaillée des activités**: 
-  - Clic sur "Total du bilan" ouvre modal "Bilan complet" avec toutes les activités
-  - Colonne Scope avec badges colorés pour identifier chaque entrée
-  - Bouton modifier ouvre le modal de saisie pré-rempli
-
-### 2026-01-23 (Session 1)
-- **Auth System**: Registration, Login, JWT tokens
-- **Dashboard**: Vue d'ensemble avec émissions totales, progression par scope
-- **Informations Générales**: Formulaire entreprise + périmètre du bilan
-- **Saisie de données**: 22 catégories avec cartes colorées, modal d'ajout d'activité
-- **Import/Export**: CSV et JSON
-- **Gamification**: Barres de progression animées
+### Sessions précédentes
+- Auth System, Dashboard, Informations Générales
+- Saisie de données avec 22 catégories, modal guidé
+- Vue détaillée des activités avec édition via modal
+- Import/Export CSV et JSON
+- Gamification avec barres de progression
 
 ## Prioritized Backlog
 
 ### P0 - Critical
 - [x] MVP fonctionnel
-- [x] Vue détaillée des activités avec édition via modal
-- [x] Gestion des produits avec cycle de vie complet
+- [x] Gestion des produits avec cycle de vie
+- [x] Gestion des exercices fiscaux
 
 ### P1 - High Priority
 - [ ] Corriger le mode sombre (arrière-plan principal reste clair)
 - [ ] Rapports PDF/Excel exportables
 - [ ] Graphiques de répartition par scope (pie chart, bar chart)
+- [ ] Comparaison N / N-1
 
 ### P2 - Medium Priority
 - [ ] Améliorer la gamification (animations pour validations et jalons)
-- [ ] Historique des bilans par année
-- [ ] Comparaison année N vs N-1
-- [ ] Refactoring DataEntry.js (800+ lignes → extraire en composants)
+- [ ] Historique des bilans par année avec visualisation
+- [ ] Refactoring DataEntry.js (800+ lignes → composants)
 
 ### P3 - Low Priority
 - [ ] API externe pour intégration
@@ -85,24 +72,25 @@ Application de calcul d'empreinte carbone selon le protocole GHG avec interface 
 
 ## API Endpoints Clés
 
+### Exercices fiscaux
+- `GET /api/fiscal-years` - Liste des exercices
+- `GET /api/fiscal-years/current` - Exercice actif
+- `POST /api/fiscal-years` - Créer exercice
+- `POST /api/fiscal-years/{id}/close` - Clôturer (verrouillage + résumé)
+- `POST /api/fiscal-years/{id}/rectify` - Réouvrir avec justification
+- `POST /api/fiscal-years/{id}/duplicate` - Créer nouvel exercice depuis existant
+
 ### Produits enrichis
 - `POST /api/products/enhanced` - Créer produit avec cycle de vie
-- `PUT /api/products/enhanced/{id}` - Modifier produit
-- `GET /api/products/{id}` - Obtenir un produit
-- `POST /api/products/{id}/sales/enhanced` - Enregistrer ventes → activités Scope 3 Aval
-
-### Facteurs d'émission
-- `GET /api/emission-factors/by-category/{category}` - Par catégorie (materiaux, fin_vie_produits, refrigerants)
-- `GET /api/emission-factors/by-tags?tags=combustible` - Par tags
-- `POST /api/emission-factors/seed-new` - Seed nouveaux facteurs
+- `POST /api/products/{id}/sales/enhanced` - Ventes → activités Scope 3 Aval
 
 ## Test Credentials
 - Email: newtest@x.com
 - Password: test123
 
 ## Fichiers Clés
+- `/app/frontend/src/context/FiscalYearContext.js` - Context exercices fiscaux
+- `/app/frontend/src/components/FiscalYearSelector.js` - Sélecteur d'exercice
+- `/app/frontend/src/pages/FiscalYears.js` - Page gestion exercices
 - `/app/frontend/src/components/ProductWizard.js` - Wizard création produit
-- `/app/frontend/src/components/ProductSaleModal.js` - Modal enregistrement ventes
-- `/app/frontend/src/pages/Products.js` - Page produits
-- `/app/frontend/src/pages/DataEntry.js` - Saisie données avec intégration produits
-- `/app/backend/server.py` - API complète avec calcul émissions cycle de vie
+- `/app/backend/server.py` - API complète
