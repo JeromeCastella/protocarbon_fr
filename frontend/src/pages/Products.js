@@ -41,7 +41,7 @@ const Products = () => {
 
   const fetchProducts = async () => {
     try {
-      const response = await axios.get(`${API_URL}/products`);
+      const response = await axios.get(`${API_URL}/api/products`);
       setProducts(response.data || []);
     } catch (error) {
       console.error('Failed to fetch products:', error);
@@ -53,7 +53,7 @@ const Products = () => {
   const handleCreateProduct = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(`${API_URL}/products`, productForm);
+      await axios.post(`${API_URL}/api/products`, productForm);
       setShowModal(false);
       setProductForm({
         name: '',
@@ -72,7 +72,7 @@ const Products = () => {
   const handleRecordSale = async () => {
     if (!selectedProduct) return;
     try {
-      await axios.post(`${API_URL}/products/${selectedProduct.id}/sales`, {
+      await axios.post(`${API_URL}/api/products/${selectedProduct.id}/sales`, {
         product_id: selectedProduct.id,
         quantity: saleQuantity
       });
@@ -86,7 +86,7 @@ const Products = () => {
 
   const handleDeleteProduct = async (productId) => {
     try {
-      await axios.delete(`${API_URL}/products/${productId}`);
+      await axios.delete(`${API_URL}/api/products/${productId}`);
       fetchProducts();
     } catch (error) {
       console.error('Failed to delete product:', error);

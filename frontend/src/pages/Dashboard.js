@@ -30,7 +30,7 @@ const Dashboard = () => {
 
   const fetchSummary = async () => {
     try {
-      const response = await axios.get(`${API_URL}/dashboard/summary`);
+      const response = await axios.get(`${API_URL}/api/dashboard/summary`);
       setSummary(response.data);
     } catch (error) {
       console.error('Failed to fetch summary:', error);

@@ -27,7 +27,7 @@ const EmissionFactors = () => {
 
   const fetchFactors = async () => {
     try {
-      const response = await axios.get(`${API_URL}/emission-factors`);
+      const response = await axios.get(`${API_URL}/api/emission-factors`);
       setFactors(response.data || []);
     } catch (error) {
       console.error('Failed to fetch emission factors:', error);
