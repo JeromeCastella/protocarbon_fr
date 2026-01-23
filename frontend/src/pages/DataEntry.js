@@ -324,7 +324,7 @@ const DataEntry = () => {
 
   const handleDeleteActivity = async (activityId) => {
     try {
-      await axios.delete(`${API_URL}/activities/${activityId}`);
+      await axios.delete(`${API_URL}/api/activities/${activityId}`);
       fetchData();
     } catch (error) {
       console.error('Failed to delete activity:', error);
@@ -333,7 +333,7 @@ const DataEntry = () => {
 
   const handleUpdateActivity = async (activityId, updates) => {
     try {
-      await axios.put(`${API_URL}/activities/${activityId}`, updates);
+      await axios.put(`${API_URL}/api/activities/${activityId}`, updates);
       setEditingActivity(null);
       fetchData();
     } catch (error) {
