@@ -318,6 +318,7 @@ async def register(user: UserRegister):
         "password": hashed_password,
         "name": user.name,
         "language": user.language,
+        "role": user.role if user.role in ["admin", "user"] else "user",
         "company_id": None,
         "created_at": datetime.now(timezone.utc).isoformat()
     }
@@ -331,6 +332,7 @@ async def register(user: UserRegister):
             "email": user.email,
             "name": user.name,
             "language": user.language,
+            "role": user_doc["role"],
             "company_id": None
         }
     }
@@ -349,6 +351,7 @@ async def login(user: UserLogin):
             "email": db_user["email"],
             "name": db_user["name"],
             "language": db_user.get("language", "fr"),
+            "role": db_user.get("role", "user"),
             "company_id": db_user.get("company_id")
         }
     }
@@ -364,6 +367,96 @@ async def update_language(language: dict, current_user: dict = Depends(get_curre
         {"$set": {"language": language.get("language", "fr")}}
     )
     return {"message": "Language updated"}
+
+# ==================== ADMIN ENDPOINTS ====================
+
+@api_router.get("/admin/users")
+async def get_all_users(current_user: dict = Depends(require_admin)):
+    """Get all users (admin only)"""
+    users = list(users_collection.find({}, {"password": 0}))
+    return [serialize_doc(u) for u in users]
+
+@api_router.put("/admin/users/{user_id}/role")
+async def update_user_role(user_id: str, role_data: dict, current_user: dict = Depends(require_admin)):
+    """Update user role (admin only)"""
+    new_role = role_data.get("role")
+    if new_role not in ["admin", "user"]:
+        raise HTTPException(status_code=400, detail="Invalid role. Must be 'admin' or 'user'")
+    
+    result = users_collection.update_one(
+        {"_id": ObjectId(user_id)},
+        {"$set": {"role": new_role}}
+    )
+    
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    return {"message": f"User role updated to {new_role}"}
+
+@api_router.get("/admin/emission-factors")
+async def admin_get_emission_factors(current_user: dict = Depends(require_admin)):
+    """Get all emission factors (admin only)"""
+    factors = list(emission_factors_collection.find())
+    return [serialize_doc(f) for f in factors]
+
+@api_router.post("/admin/emission-factors")
+async def admin_create_emission_factor(factor: EmissionFactorCreate, current_user: dict = Depends(require_admin)):
+    """Create new emission factor (admin only)"""
+    factor_doc = factor.dict()
+    result = emission_factors_collection.insert_one(factor_doc)
+    factor_doc["id"] = str(result.inserted_id)
+    return serialize_doc(factor_doc)
+
+@api_router.put("/admin/emission-factors/{factor_id}")
+async def admin_update_emission_factor(factor_id: str, factor: EmissionFactorUpdate, current_user: dict = Depends(require_admin)):
+    """Update emission factor (admin only)"""
+    update_data = {k: v for k, v in factor.dict().items() if v is not None}
+    
+    if not update_data:
+        raise HTTPException(status_code=400, detail="No data to update")
+    
+    result = emission_factors_collection.update_one(
+        {"_id": ObjectId(factor_id)},
+        {"$set": update_data}
+    )
+    
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Emission factor not found")
+    
+    updated = emission_factors_collection.find_one({"_id": ObjectId(factor_id)})
+    return serialize_doc(updated)
+
+@api_router.delete("/admin/emission-factors/{factor_id}")
+async def admin_delete_emission_factor(factor_id: str, current_user: dict = Depends(require_admin)):
+    """Delete emission factor (admin only)"""
+    result = emission_factors_collection.delete_one({"_id": ObjectId(factor_id)})
+    
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Emission factor not found")
+    
+    return {"message": "Emission factor deleted"}
+
+@api_router.get("/admin/emission-factors/export")
+async def admin_export_emission_factors(current_user: dict = Depends(require_admin)):
+    """Export all emission factors as JSON (admin only)"""
+    factors = list(emission_factors_collection.find({}, {"_id": 0}))
+    return {"factors": factors, "count": len(factors)}
+
+@api_router.post("/admin/emission-factors/import")
+async def admin_import_emission_factors(data: dict, current_user: dict = Depends(require_admin)):
+    """Import emission factors from JSON (admin only)"""
+    factors = data.get("factors", [])
+    if not factors:
+        raise HTTPException(status_code=400, detail="No factors to import")
+    
+    # Option to replace all or just add
+    replace_all = data.get("replace_all", False)
+    
+    if replace_all:
+        emission_factors_collection.delete_many({})
+    
+    result = emission_factors_collection.insert_many(factors)
+    return {"message": f"Imported {len(result.inserted_ids)} emission factors"}
 
 # ==================== COMPANY ENDPOINTS ====================
 
