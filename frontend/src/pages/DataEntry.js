@@ -1186,7 +1186,7 @@ const DataEntry = () => {
                             tableViewScope === 'scope2' ? 'text-cyan-500' :
                             'text-purple-500'
                           }`}>
-                            {(getScopeActivities(tableViewScope).reduce((sum, a) => sum + (a.emissions || 0), 0) / 1000).toFixed(4)} tCO₂e
+                            {formatEmissions(getScopeActivities(tableViewScope).reduce((sum, a) => sum + (a.emissions || 0), 0)).value} {formatEmissions(getScopeActivities(tableViewScope).reduce((sum, a) => sum + (a.emissions || 0), 0)).unit}
                           </span>
                         </td>
                         <td></td>
