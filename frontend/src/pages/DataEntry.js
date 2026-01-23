@@ -36,10 +36,16 @@ import {
   Sparkles,
   Edit3,
   Table,
-  ArrowRight
+  ArrowRight,
+  Package,
+  ShoppingBag
 } from 'lucide-react';
+import ProductSaleModal from '../components/ProductSaleModal';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL || '';
+
+// Categories that should open product sale modal instead of regular entry
+const PRODUCT_SALE_CATEGORIES = ['transformation_produits', 'utilisation_produits', 'fin_vie_produits'];
 
 const iconMap = {
   truck: Truck, flame: Flame, factory: Factory, wind: Wind, zap: Zap,
