@@ -58,6 +58,7 @@ class UserRegister(BaseModel):
     password: str
     name: str
     language: str = "fr"
+    role: str = "user"  # "admin" or "user"
 
 class UserLogin(BaseModel):
     email: EmailStr
@@ -68,8 +69,34 @@ class UserResponse(BaseModel):
     email: str
     name: str
     language: str
+    role: str = "user"
     company_id: Optional[str] = None
     created_at: str
+
+class UserUpdate(BaseModel):
+    name: Optional[str] = None
+    language: Optional[str] = None
+    role: Optional[str] = None
+
+class EmissionFactorCreate(BaseModel):
+    name: str
+    category: str
+    scope: str
+    value: float
+    unit: str
+    source: str = "OFEV"
+    tags: List[str] = []
+    region: str = "Suisse"
+
+class EmissionFactorUpdate(BaseModel):
+    name: Optional[str] = None
+    category: Optional[str] = None
+    scope: Optional[str] = None
+    value: Optional[float] = None
+    unit: Optional[str] = None
+    source: Optional[str] = None
+    tags: Optional[List[str]] = None
+    region: Optional[str] = None
 
 class CompanyCreate(BaseModel):
     name: str
