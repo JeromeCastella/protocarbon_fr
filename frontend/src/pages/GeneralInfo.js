@@ -406,11 +406,11 @@ const GeneralInfo = () => {
           Définissez la période de vos exercices comptables. Cette configuration s&apos;applique à tous les exercices.
         </p>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="max-w-md">
           {/* Start Month */}
           <div>
             <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
-              Mois de début
+              Mois de début de l&apos;exercice
             </label>
             <select
               value={company.fiscal_year_start_month}
@@ -427,27 +427,6 @@ const GeneralInfo = () => {
               ))}
             </select>
           </div>
-
-          {/* Start Day */}
-          <div>
-            <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
-              Jour de début
-            </label>
-            <select
-              value={company.fiscal_year_start_day}
-              onChange={(e) => setCompany({ ...company, fiscal_year_start_day: parseInt(e.target.value) })}
-              data-testid="fiscal-year-day-select"
-              className={`w-full px-4 py-3 rounded-xl border transition-all focus:ring-2 focus:ring-blue-500 ${
-                isDark 
-                  ? 'bg-slate-700 border-slate-600 text-white' 
-                  : 'bg-white border-gray-200 text-gray-900'
-              }`}
-            >
-              {Array.from({ length: 28 }, (_, i) => i + 1).map(day => (
-                <option key={day} value={day}>{day}</option>
-              ))}
-            </select>
-          </div>
         </div>
 
         {/* Preview */}
@@ -458,7 +437,7 @@ const GeneralInfo = () => {
               Exemple pour l&apos;exercice 2024 :
             </p>
             <p className={`text-sm ${isDark ? 'text-green-300/80' : 'text-green-600'}`}>
-              Du {company.fiscal_year_start_day} {MONTHS.find(m => m.value === company.fiscal_year_start_month)?.label} 2024 au {endDate.day} {MONTHS.find(m => m.value === endDate.month)?.label} {company.fiscal_year_start_month === 1 && company.fiscal_year_start_day === 1 ? '2024' : '2025'}
+              {MONTHS.find(m => m.value === company.fiscal_year_start_month)?.label} 2024 → {MONTHS.find(m => m.value === endMonth)?.label} {company.fiscal_year_start_month === 1 ? '2024' : '2025'}
             </p>
           </div>
         </div>
