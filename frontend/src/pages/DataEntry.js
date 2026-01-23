@@ -83,6 +83,7 @@ const DataEntry = () => {
     source: '',
     comments: ''
   });
+  const [excludedCategories, setExcludedCategories] = useState([]);
 
   useEffect(() => {
     fetchData();
@@ -102,6 +103,7 @@ const DataEntry = () => {
       setSummary(summaryRes.data);
       setCategoryStats(statsRes.data || {});
       setEmissionFactors(factorsRes.data || []);
+      setExcludedCategories(summaryRes.data?.excluded_categories || []);
     } catch (error) {
       console.error('Failed to fetch data:', error);
     } finally {
@@ -116,7 +118,10 @@ const DataEntry = () => {
     { id: 'scope3_aval', name: t('scope.scope3Aval'), subtitle: t('scope.scope3AvalTitle'), color: 'bg-indigo-500' },
   ];
 
-  const scopeCategories = categories.filter(c => c.scope === activeScope);
+  // Filter categories: only show active (non-excluded) categories for the current scope
+  const scopeCategories = categories.filter(c => 
+    c.scope === activeScope && !excludedCategories.includes(c.code)
+  );
 
   const handleCategoryClick = (category) => {
     setSelectedCategory(category);
