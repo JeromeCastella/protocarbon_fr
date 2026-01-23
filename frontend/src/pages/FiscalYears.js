@@ -172,12 +172,19 @@ const FiscalYears = () => {
   };
 
   const handleCreate = async () => {
-    if (!createForm.name || !createForm.start_date || !createForm.end_date) return;
+    if (!createForm.year) return;
     setLoading(true);
     try {
-      await createFiscalYear(createForm);
+      // Calculate dates based on company settings
+      const dates = calculateFiscalYearDates(createForm.year);
+      
+      await createFiscalYear({
+        name: `Exercice ${createForm.year}`,
+        start_date: dates.start_date,
+        end_date: dates.end_date
+      });
       setShowCreateModal(false);
-      setCreateForm({ name: '', start_date: '', end_date: '' });
+      setCreateForm({ year: new Date().getFullYear() });
     } catch (error) {
       console.error('Failed to create fiscal year:', error);
       alert(error.response?.data?.detail || 'Erreur lors de la création');
