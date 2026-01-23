@@ -83,11 +83,11 @@ Application de calcul d'empreinte carbone selon le protocole GHG avec interface 
 - [x] Gestion des exercices fiscaux
 - [x] Configuration exercice fiscal simplifiée (paramètre entreprise)
 - [x] Mode sombre fonctionnel
+- [x] Graphiques comparatifs entre exercices fiscaux (dashboard)
 
 ### P1 - High Priority
-- [ ] Graphiques comparatifs entre exercices fiscaux (dashboard)
 - [ ] Rapports PDF/Excel exportables
-- [ ] Graphiques de répartition par scope (pie chart, bar chart)
+- [ ] Pie chart de répartition globale
 
 ### P2 - Medium Priority
 - [ ] Import en masse CSV (bulk upload)
