@@ -484,7 +484,7 @@ const FiscalYears = () => {
                   <div>
                     <p className={`text-sm ${isDark ? 'text-blue-300' : 'text-blue-700'}`}>
                       Les dates sont calculées automatiquement selon la configuration de votre entreprise 
-                      ({companySettings.fiscal_year_start_day} {MONTHS.find(m => m.value === companySettings.fiscal_year_start_month)?.label}).
+                      (début en {MONTHS.find(m => m.value === companySettings.fiscal_year_start_month)?.label}).
                     </p>
                   </div>
                 </div>
