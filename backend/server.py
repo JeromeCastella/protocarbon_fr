@@ -190,7 +190,7 @@ def serialize_doc(doc):
 
 # ==================== AUTH ENDPOINTS ====================
 
-@app.post("/auth/register")
+@api_router.post("/auth/register")
 async def register(user: UserRegister):
     if users_collection.find_one({"email": user.email}):
         raise HTTPException(status_code=400, detail="Email already registered")
@@ -218,7 +218,7 @@ async def register(user: UserRegister):
         }
     }
 
-@app.post("/auth/login")
+@api_router.post("/auth/login")
 async def login(user: UserLogin):
     db_user = users_collection.find_one({"email": user.email})
     if not db_user or not pwd_context.verify(user.password, db_user["password"]):
@@ -236,11 +236,11 @@ async def login(user: UserLogin):
         }
     }
 
-@app.get("/auth/me")
+@api_router.get("/auth/me")
 async def get_me(current_user: dict = Depends(get_current_user)):
     return current_user
 
-@app.put("/auth/language")
+@api_router.put("/auth/language")
 async def update_language(language: dict, current_user: dict = Depends(get_current_user)):
     users_collection.update_one(
         {"_id": ObjectId(current_user["id"])},
@@ -250,7 +250,7 @@ async def update_language(language: dict, current_user: dict = Depends(get_curre
 
 # ==================== COMPANY ENDPOINTS ====================
 
-@app.post("/companies")
+@api_router.post("/companies")
 async def create_company(company: CompanyCreate, current_user: dict = Depends(get_current_user)):
     company_doc = {
         "tenant_id": current_user["id"],
@@ -278,14 +278,14 @@ async def create_company(company: CompanyCreate, current_user: dict = Depends(ge
     company_doc.pop("_id", None)
     return company_doc
 
-@app.get("/companies")
+@api_router.get("/companies")
 async def get_company(current_user: dict = Depends(get_current_user)):
     company = companies_collection.find_one({"tenant_id": current_user["id"]})
     if not company:
         return None
     return serialize_doc(company)
 
-@app.put("/companies/{company_id}")
+@api_router.put("/companies/{company_id}")
 async def update_company(company_id: str, company: CompanyUpdate, current_user: dict = Depends(get_current_user)):
     existing = companies_collection.find_one({"_id": ObjectId(company_id), "tenant_id": current_user["id"]})
     if not existing:
@@ -300,7 +300,7 @@ async def update_company(company_id: str, company: CompanyUpdate, current_user: 
 
 # ==================== CATEGORIES ENDPOINTS ====================
 
-@app.get("/categories")
+@api_router.get("/categories")
 async def get_categories():
     """Get all emission categories organized by scope"""
     categories = list(categories_collection.find({}))
@@ -311,7 +311,7 @@ async def get_categories():
         categories = list(categories_collection.find({}))
     return [serialize_doc(c) for c in categories]
 
-@app.get("/subcategories")
+@api_router.get("/subcategories")
 async def get_subcategories(category: Optional[str] = None):
     """Get subcategories, optionally filtered by parent category"""
     query = {}
@@ -320,7 +320,7 @@ async def get_subcategories(category: Optional[str] = None):
     subcategories = list(db.subcategories.find(query).sort("order", 1))
     return [serialize_doc(s) for s in subcategories]
 
-@app.get("/emission-factors/search")
+@api_router.get("/emission-factors/search")
 async def search_emission_factors(
     subcategory: Optional[str] = None,
     unit: Optional[str] = None,
@@ -401,7 +401,7 @@ class ActivityCreateMultiScope(BaseModel):
     source: Optional[str] = None
     comments: Optional[str] = None
 
-@app.post("/activities")
+@api_router.post("/activities")
 async def create_activity(activity: ActivityCreateMultiScope, current_user: dict = Depends(get_current_user)):
     company = companies_collection.find_one({"tenant_id": current_user["id"]})
     if not company:
@@ -500,7 +500,7 @@ async def create_activity(activity: ActivityCreateMultiScope, current_user: dict
     activity_doc["id"] = str(result.inserted_id)
     return serialize_doc(activity_doc)
 
-@app.get("/activities")
+@api_router.get("/activities")
 async def get_activities(scope: Optional[str] = None, category_id: Optional[str] = None, current_user: dict = Depends(get_current_user)):
     query = {"tenant_id": current_user["id"]}
     if scope:
@@ -511,7 +511,7 @@ async def get_activities(scope: Optional[str] = None, category_id: Optional[str]
     activities = list(activities_collection.find(query))
     return [serialize_doc(a) for a in activities]
 
-@app.put("/activities/{activity_id}")
+@api_router.put("/activities/{activity_id}")
 async def update_activity(activity_id: str, activity: ActivityUpdate, current_user: dict = Depends(get_current_user)):
     existing = activities_collection.find_one({"_id": ObjectId(activity_id), "tenant_id": current_user["id"]})
     if not existing:
@@ -536,7 +536,7 @@ async def update_activity(activity_id: str, activity: ActivityUpdate, current_us
     updated = activities_collection.find_one({"_id": ObjectId(activity_id)})
     return serialize_doc(updated)
 
-@app.delete("/activities/{activity_id}")
+@api_router.delete("/activities/{activity_id}")
 async def delete_activity(activity_id: str, current_user: dict = Depends(get_current_user)):
     result = activities_collection.delete_one({"_id": ObjectId(activity_id), "tenant_id": current_user["id"]})
     if result.deleted_count == 0:
@@ -545,7 +545,7 @@ async def delete_activity(activity_id: str, current_user: dict = Depends(get_cur
 
 # ==================== PRODUCTS ENDPOINTS ====================
 
-@app.post("/products")
+@api_router.post("/products")
 async def create_product(product: ProductCreate, current_user: dict = Depends(get_current_user)):
     company = companies_collection.find_one({"tenant_id": current_user["id"]})
     if not company:
@@ -570,12 +570,12 @@ async def create_product(product: ProductCreate, current_user: dict = Depends(ge
     product_doc["id"] = str(result.inserted_id)
     return serialize_doc(product_doc)
 
-@app.get("/products")
+@api_router.get("/products")
 async def get_products(current_user: dict = Depends(get_current_user)):
     products = list(products_collection.find({"tenant_id": current_user["id"]}))
     return [serialize_doc(p) for p in products]
 
-@app.post("/products/{product_id}/sales")
+@api_router.post("/products/{product_id}/sales")
 async def add_product_sale(product_id: str, sale: ProductSale, current_user: dict = Depends(get_current_user)):
     product = products_collection.find_one({"_id": ObjectId(product_id), "tenant_id": current_user["id"]})
     if not product:
@@ -594,7 +594,7 @@ async def add_product_sale(product_id: str, sale: ProductSale, current_user: dic
     
     return {"message": "Sale recorded", "emissions": sale_doc["emissions"]}
 
-@app.delete("/products/{product_id}")
+@api_router.delete("/products/{product_id}")
 async def delete_product(product_id: str, current_user: dict = Depends(get_current_user)):
     result = products_collection.delete_one({"_id": ObjectId(product_id), "tenant_id": current_user["id"]})
     if result.deleted_count == 0:
@@ -603,7 +603,7 @@ async def delete_product(product_id: str, current_user: dict = Depends(get_curre
 
 # ==================== EMISSION FACTORS ENDPOINTS ====================
 
-@app.get("/emission-factors")
+@api_router.get("/emission-factors")
 async def get_emission_factors(category: Optional[str] = None, scope: Optional[str] = None, search: Optional[str] = None):
     query = {}
     if category:
@@ -625,7 +625,7 @@ async def get_emission_factors(category: Optional[str] = None, scope: Optional[s
     
     return [serialize_doc(f) for f in factors]
 
-@app.post("/emission-factors")
+@api_router.post("/emission-factors")
 async def create_emission_factor(factor: EmissionFactorCreate, current_user: dict = Depends(get_current_user)):
     factor_doc = {
         "name": factor.name,
@@ -682,7 +682,7 @@ def get_default_emission_factors():
 
 # ==================== DASHBOARD/SUMMARY ENDPOINTS ====================
 
-@app.get("/dashboard/summary")
+@api_router.get("/dashboard/summary")
 async def get_dashboard_summary(current_user: dict = Depends(get_current_user)):
     activities = list(activities_collection.find({"tenant_id": current_user["id"]}))
     products = list(products_collection.find({"tenant_id": current_user["id"]}))
@@ -753,7 +753,7 @@ async def get_dashboard_summary(current_user: dict = Depends(get_current_user)):
         "excluded_categories": excluded_categories
     }
 
-@app.get("/dashboard/category-stats")
+@api_router.get("/dashboard/category-stats")
 async def get_category_stats(current_user: dict = Depends(get_current_user)):
     activities = list(activities_collection.find({"tenant_id": current_user["id"]}))
     
@@ -767,7 +767,7 @@ async def get_category_stats(current_user: dict = Depends(get_current_user)):
 
 # ==================== IMPORT/EXPORT ENDPOINTS ====================
 
-@app.post("/import/csv")
+@api_router.post("/import/csv")
 async def import_csv(file: UploadFile = File(...), current_user: dict = Depends(get_current_user)):
     if not file.filename.endswith('.csv'):
         raise HTTPException(status_code=400, detail="Only CSV files are accepted")
@@ -807,7 +807,7 @@ async def import_csv(file: UploadFile = File(...), current_user: dict = Depends(
     
     return {"imported": imported_count, "errors": errors}
 
-@app.get("/export/csv")
+@api_router.get("/export/csv")
 async def export_csv(current_user: dict = Depends(get_current_user)):
     activities = list(activities_collection.find({"tenant_id": current_user["id"]}))
     
@@ -831,7 +831,7 @@ async def export_csv(current_user: dict = Depends(get_current_user)):
     
     return {"csv_content": output.getvalue(), "filename": f"carbon_data_export_{datetime.now(timezone.utc).strftime('%Y%m%d')}.csv"}
 
-@app.get("/export/json")
+@api_router.get("/export/json")
 async def export_json(current_user: dict = Depends(get_current_user)):
     company = companies_collection.find_one({"tenant_id": current_user["id"]})
     activities = list(activities_collection.find({"tenant_id": current_user["id"]}))
@@ -846,7 +846,7 @@ async def export_json(current_user: dict = Depends(get_current_user)):
     
     return export_data
 
-@app.post("/import/json")
+@api_router.post("/import/json")
 async def import_json(file: UploadFile = File(...), current_user: dict = Depends(get_current_user)):
     content = await file.read()
     data = json.loads(content.decode('utf-8'))
@@ -893,7 +893,7 @@ async def import_json(file: UploadFile = File(...), current_user: dict = Depends
 
 # ==================== HEALTH CHECK ====================
 
-@app.get("/health")
+@api_router.get("/health")
 async def health_check():
     return {"status": "healthy", "timestamp": datetime.now(timezone.utc).isoformat()}
 
