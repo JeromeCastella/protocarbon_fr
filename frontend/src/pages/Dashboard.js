@@ -145,7 +145,7 @@ const Dashboard = () => {
     : 0;
 
   // Custom tooltip for charts
-  const CustomTooltip = ({ active, payload, label }) => {
+  const renderCustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
       return (
         <div className={`p-3 rounded-lg shadow-lg ${isDark ? 'bg-slate-800 border border-slate-700' : 'bg-white border border-gray-200'}`}>
