@@ -472,48 +472,48 @@ const FiscalYears = () => {
         {showCreateModal && (
           <Modal onClose={() => setShowCreateModal(false)} title="Créer un exercice fiscal">
             <div className="space-y-4">
+              {/* Info about fiscal year configuration */}
+              <div className={`p-4 rounded-xl ${isDark ? 'bg-blue-500/20' : 'bg-blue-50'}`}>
+                <div className="flex items-start gap-3">
+                  <Info className="w-5 h-5 text-blue-500 mt-0.5" />
+                  <div>
+                    <p className={`text-sm ${isDark ? 'text-blue-300' : 'text-blue-700'}`}>
+                      Les dates sont calculées automatiquement selon la configuration de votre entreprise 
+                      ({companySettings.fiscal_year_start_day} {MONTHS.find(m => m.value === companySettings.fiscal_year_start_month)?.label}).
+                    </p>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Year selector */}
               <div>
                 <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
-                  Nom de l&apos;exercice
+                  Année de l&apos;exercice
                 </label>
-                <input
-                  type="text"
-                  value={createForm.name}
-                  onChange={(e) => setCreateForm({ ...createForm, name: e.target.value })}
-                  placeholder="Ex: Exercice 2024"
-                  className={`w-full px-4 py-3 rounded-xl border ${
+                <select
+                  value={createForm.year}
+                  onChange={(e) => setCreateForm({ year: parseInt(e.target.value) })}
+                  data-testid="fiscal-year-select"
+                  className={`w-full px-4 py-3 rounded-xl border text-lg font-medium ${
                     isDark ? 'bg-slate-700 border-slate-600 text-white' : 'bg-white border-gray-200'
                   }`}
-                />
+                >
+                  {Array.from({ length: 10 }, (_, i) => new Date().getFullYear() - 5 + i).map(year => (
+                    <option key={year} value={year}>{year}</option>
+                  ))}
+                </select>
               </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
-                    Date de début
-                  </label>
-                  <input
-                    type="date"
-                    value={createForm.start_date}
-                    onChange={(e) => setCreateForm({ ...createForm, start_date: e.target.value })}
-                    className={`w-full px-4 py-3 rounded-xl border ${
-                      isDark ? 'bg-slate-700 border-slate-600 text-white' : 'bg-white border-gray-200'
-                    }`}
-                  />
-                </div>
-                <div>
-                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
-                    Date de fin
-                  </label>
-                  <input
-                    type="date"
-                    value={createForm.end_date}
-                    onChange={(e) => setCreateForm({ ...createForm, end_date: e.target.value })}
-                    className={`w-full px-4 py-3 rounded-xl border ${
-                      isDark ? 'bg-slate-700 border-slate-600 text-white' : 'bg-white border-gray-200'
-                    }`}
-                  />
-                </div>
+              
+              {/* Preview of dates */}
+              <div className={`p-4 rounded-xl ${isDark ? 'bg-green-500/20' : 'bg-green-50'}`}>
+                <p className={`font-medium mb-1 ${isDark ? 'text-green-300' : 'text-green-700'}`}>
+                  Exercice {createForm.year}
+                </p>
+                <p className={`text-sm ${isDark ? 'text-green-300/80' : 'text-green-600'}`}>
+                  Du {getFiscalYearPreview(createForm.year).start} au {getFiscalYearPreview(createForm.year).end}
+                </p>
               </div>
+              
               <div className="flex gap-3 pt-4">
                 <button
                   onClick={() => setShowCreateModal(false)}
@@ -525,7 +525,8 @@ const FiscalYears = () => {
                 </button>
                 <button
                   onClick={handleCreate}
-                  disabled={loading || !createForm.name || !createForm.start_date || !createForm.end_date}
+                  disabled={loading}
+                  data-testid="confirm-create-fiscal-year-btn"
                   className="flex-1 px-4 py-3 bg-blue-500 text-white rounded-xl hover:bg-blue-600 disabled:opacity-50"
                 >
                   {loading ? 'Création...' : 'Créer'}
