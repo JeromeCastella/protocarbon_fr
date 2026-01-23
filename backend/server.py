@@ -272,7 +272,7 @@ async def create_company(company: CompanyCreate, current_user: dict = Depends(ge
     )
     
     company_doc["id"] = str(result.inserted_id)
-    del company_doc["_id"] if "_id" in company_doc else None
+    company_doc.pop("_id", None)
     return company_doc
 
 @app.get("/api/companies")
