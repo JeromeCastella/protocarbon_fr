@@ -102,6 +102,49 @@ const FiscalYears = () => {
     return date.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
   };
 
+  // Calculate fiscal year dates based on company settings and selected year
+  const calculateFiscalYearDates = (year) => {
+    const startMonth = companySettings.fiscal_year_start_month;
+    const startDay = companySettings.fiscal_year_start_day;
+    
+    // Start date in the selected year
+    const startDate = new Date(year, startMonth - 1, startDay);
+    
+    // End date is the day before start date of next year
+    let endDate;
+    if (startMonth === 1 && startDay === 1) {
+      // Calendar year: Jan 1 to Dec 31
+      endDate = new Date(year, 11, 31);
+    } else {
+      // Fiscal year spans two calendar years
+      endDate = new Date(year + 1, startMonth - 1, startDay);
+      endDate.setDate(endDate.getDate() - 1);
+    }
+    
+    // Format as ISO date strings (YYYY-MM-DD)
+    const formatISO = (d) => d.toISOString().split('T')[0];
+    
+    return {
+      start_date: formatISO(startDate),
+      end_date: formatISO(endDate)
+    };
+  };
+
+  // Get preview of fiscal year dates
+  const getFiscalYearPreview = (year) => {
+    const dates = calculateFiscalYearDates(year);
+    const startDate = new Date(dates.start_date);
+    const endDate = new Date(dates.end_date);
+    
+    const startMonthName = MONTHS.find(m => m.value === (startDate.getMonth() + 1))?.label;
+    const endMonthName = MONTHS.find(m => m.value === (endDate.getMonth() + 1))?.label;
+    
+    return {
+      start: `${startDate.getDate()} ${startMonthName} ${startDate.getFullYear()}`,
+      end: `${endDate.getDate()} ${endMonthName} ${endDate.getFullYear()}`
+    };
+  };
+
   const getStatusBadge = (status) => {
     switch (status) {
       case 'closed':
