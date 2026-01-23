@@ -672,50 +672,42 @@ const DataEntry = () => {
                     </div>
                   )}
 
-                  {/* Step 4: Quantité et détails */}
+                  {/* Step 4: Quantité - MISE EN AVANT */}
                   {selectedFactor && (
                     <>
-                      <div className="grid grid-cols-2 gap-4">
-                        <div>
-                          <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
-                            4. Quantité *
-                          </label>
-                          <div className="relative">
-                            <input
-                              type="number"
-                              value={activityForm.quantity}
-                              onChange={(e) => setActivityForm({ ...activityForm, quantity: e.target.value })}
-                              data-testid="activity-quantity-input"
-                              required
-                              step="any"
-                              className={`w-full px-4 py-3 rounded-xl border transition-all focus:ring-2 focus:ring-blue-500 ${
-                                isDark 
-                                  ? 'bg-slate-700 border-slate-600 text-white' 
-                                  : 'bg-white border-gray-200 text-gray-900'
-                              }`}
-                              placeholder="0"
-                            />
-                            <span className={`absolute right-4 top-1/2 -translate-y-1/2 text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-                              {selectedUnit || selectedFactor.default_unit}
-                            </span>
-                          </div>
-                        </div>
-                        <div>
-                          <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
-                            Date
-                          </label>
+                      <motion.div
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        className={`p-6 rounded-2xl border-2 ${
+                          isDark 
+                            ? 'bg-gradient-to-br from-blue-500/20 to-purple-500/20 border-blue-500/50' 
+                            : 'bg-gradient-to-br from-blue-50 to-purple-50 border-blue-300'
+                        }`}
+                      >
+                        <label className={`block text-lg font-semibold mb-3 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                          Quantité consommée
+                        </label>
+                        <div className="relative">
                           <input
-                            type="date"
-                            value={activityForm.date}
-                            onChange={(e) => setActivityForm({ ...activityForm, date: e.target.value })}
-                            className={`w-full px-4 py-3 rounded-xl border transition-all focus:ring-2 focus:ring-blue-500 ${
+                            type="number"
+                            value={activityForm.quantity}
+                            onChange={(e) => setActivityForm({ ...activityForm, quantity: e.target.value })}
+                            data-testid="activity-quantity-input"
+                            required
+                            step="any"
+                            autoFocus
+                            className={`w-full px-6 py-5 text-3xl font-bold rounded-xl border-2 transition-all focus:ring-4 focus:ring-blue-500/50 focus:border-blue-500 ${
                               isDark 
-                                ? 'bg-slate-700 border-slate-600 text-white' 
-                                : 'bg-white border-gray-200 text-gray-900'
+                                ? 'bg-slate-800 border-slate-600 text-white placeholder-slate-500' 
+                                : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
                             }`}
+                            placeholder="0"
                           />
+                          <span className={`absolute right-6 top-1/2 -translate-y-1/2 text-xl font-semibold ${isDark ? 'text-blue-400' : 'text-blue-600'}`}>
+                            {selectedUnit || selectedFactor.default_unit}
+                          </span>
                         </div>
-                      </div>
+                      </motion.div>
 
                       <div>
                         <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
