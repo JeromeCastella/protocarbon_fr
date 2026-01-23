@@ -180,7 +180,7 @@ const Dashboard = () => {
           {t('nav.dashboard')}
         </h1>
         <p className={`mt-2 ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-          Vue d'ensemble de votre bilan carbone
+          Vue d&apos;ensemble de votre bilan carbone
         </p>
       </div>
 
