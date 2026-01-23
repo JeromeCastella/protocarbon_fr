@@ -131,7 +131,7 @@ const Layout = () => {
       </aside>
 
       {/* Main content */}
-      <main className="flex-1 ml-64 min-h-screen">
+      <main className={`flex-1 ml-64 min-h-screen ${isDark ? 'bg-slate-900' : 'bg-gray-50'}`}>
         <div className="p-8">
           <Outlet />
         </div>
