@@ -626,7 +626,7 @@ const DataEntry = () => {
                 <div className="flex items-center justify-between">
                   <div>
                     <h3 className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                      {editingActivityData ? 'Modifier l\'activité' : t('dataEntry.addElement')}
+                      {editingActivityData ? 'Modifier l\'entrée' : t('dataEntry.addElement')}
                     </h3>
                     {selectedCategory && (
                       <div className="flex items-center gap-2 mt-1">
