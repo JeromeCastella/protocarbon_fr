@@ -672,43 +672,84 @@ const DataEntry = () => {
                     </div>
                   )}
 
-                  {/* Step 4: Quantité - MISE EN AVANT */}
+                  {/* Step 4: Quantité + Résultat sur la même ligne */}
                   {selectedFactor && (
                     <>
                       <motion.div
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
-                        className={`p-6 rounded-2xl border-2 ${
+                        className={`p-4 rounded-xl ${
                           isDark 
-                            ? 'bg-gradient-to-br from-blue-500/20 to-purple-500/20 border-blue-500/50' 
-                            : 'bg-gradient-to-br from-blue-50 to-purple-50 border-blue-300'
+                            ? 'bg-gradient-to-r from-blue-500/20 to-green-500/20 border border-blue-500/30' 
+                            : 'bg-gradient-to-r from-blue-50 to-green-50 border border-blue-200'
                         }`}
                       >
-                        <label className={`block text-lg font-semibold mb-3 ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                          Quantité consommée
-                        </label>
-                        <div className="relative">
-                          <input
-                            type="number"
-                            value={activityForm.quantity}
-                            onChange={(e) => setActivityForm({ ...activityForm, quantity: e.target.value })}
-                            data-testid="activity-quantity-input"
-                            required
-                            step="any"
-                            autoFocus
-                            className={`w-full px-6 py-5 text-3xl font-bold rounded-xl border-2 transition-all focus:ring-4 focus:ring-blue-500/50 focus:border-blue-500 ${
-                              isDark 
-                                ? 'bg-slate-800 border-slate-600 text-white placeholder-slate-500' 
-                                : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
-                            }`}
-                            placeholder="0"
-                          />
-                          <span className={`absolute right-6 top-1/2 -translate-y-1/2 text-xl font-semibold ${isDark ? 'text-blue-400' : 'text-blue-600'}`}>
-                            {selectedUnit || selectedFactor.default_unit}
-                          </span>
+                        <div className="flex items-center gap-4">
+                          {/* Quantité */}
+                          <div className="flex-1">
+                            <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
+                              Quantité
+                            </label>
+                            <div className="relative">
+                              <input
+                                type="number"
+                                value={activityForm.quantity}
+                                onChange={(e) => setActivityForm({ ...activityForm, quantity: e.target.value })}
+                                data-testid="activity-quantity-input"
+                                required
+                                step="any"
+                                autoFocus
+                                className={`w-full px-4 py-3 pr-16 rounded-xl border transition-all focus:ring-2 focus:ring-blue-500 ${
+                                  isDark 
+                                    ? 'bg-slate-700 border-slate-600 text-white placeholder-slate-500' 
+                                    : 'bg-white border-gray-200 text-gray-900 placeholder-gray-400'
+                                }`}
+                                placeholder="0"
+                              />
+                              <span className={`absolute right-4 top-1/2 -translate-y-1/2 text-sm font-medium ${isDark ? 'text-blue-400' : 'text-blue-600'}`}>
+                                {selectedUnit || selectedFactor.default_unit}
+                              </span>
+                            </div>
+                          </div>
+
+                          {/* Flèche */}
+                          <div className={`pt-6 ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>
+                            <ChevronRight className="w-6 h-6" />
+                          </div>
+
+                          {/* Résultat */}
+                          <div className="flex-1">
+                            <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
+                              Émissions
+                            </label>
+                            <div className={`px-4 py-3 rounded-xl ${
+                              activityForm.quantity 
+                                ? isDark ? 'bg-green-500/20 border border-green-500/30' : 'bg-green-100 border border-green-300'
+                                : isDark ? 'bg-slate-700 border border-slate-600' : 'bg-gray-100 border border-gray-200'
+                            }`}>
+                              <span className={`text-lg font-bold ${
+                                activityForm.quantity 
+                                  ? isDark ? 'text-green-400' : 'text-green-600'
+                                  : isDark ? 'text-slate-500' : 'text-gray-400'
+                              }`}>
+                                {activityForm.quantity 
+                                  ? `${(estimatedEmissions / 1000).toFixed(4)} tCO₂e`
+                                  : '— tCO₂e'
+                                }
+                              </span>
+                            </div>
+                          </div>
                         </div>
+
+                        {/* Info multi-scope */}
+                        {activityForm.quantity && selectedFactor.impacts?.length > 1 && (
+                          <p className={`text-xs mt-3 ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+                            Réparti sur {selectedFactor.impacts.length} scopes
+                          </p>
+                        )}
                       </motion.div>
 
+                      {/* Commentaire */}
                       <div>
                         <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
                           Commentaire (optionnel)
@@ -725,29 +766,10 @@ const DataEntry = () => {
                           placeholder="Notes, source des données..."
                         />
                       </div>
-
-                      {/* Estimation des émissions */}
-                      {activityForm.quantity && (
-                        <motion.div
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          className={`p-4 rounded-xl ${isDark ? 'bg-green-500/20 border border-green-500/30' : 'bg-green-50 border border-green-200'}`}
-                        >
-                          <div className="flex items-center gap-3">
-                            <Sparkles className="w-6 h-6 text-green-500" />
-                            <div>
-                              <p className={`text-sm ${isDark ? 'text-green-300' : 'text-green-700'}`}>
-                                Émissions estimées
-                              </p>
-                              <p className={`text-2xl font-bold ${isDark ? 'text-green-400' : 'text-green-600'}`}>
-                                {(estimatedEmissions / 1000).toFixed(4)} tCO₂e
-                              </p>
-                              <p className={`text-xs mt-1 ${isDark ? 'text-green-400/70' : 'text-green-600/70'}`}>
-                                {selectedFactor.impacts?.length > 1 && `Réparti sur ${selectedFactor.impacts.length} scopes`}
-                              </p>
-                            </div>
-                          </div>
-                        </motion.div>
+                    </>
+                  )}
+                </form>
+              </div>
                       )}
                     </>
                   )}
