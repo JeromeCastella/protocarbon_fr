@@ -91,11 +91,11 @@ const DataEntry = () => {
   const fetchData = async () => {
     try {
       const [categoriesRes, activitiesRes, summaryRes, statsRes, factorsRes] = await Promise.all([
-        axios.get(`${API_URL}/api/categories`),
-        axios.get(`${API_URL}/api/activities`),
-        axios.get(`${API_URL}/api/dashboard/summary`),
-        axios.get(`${API_URL}/api/dashboard/category-stats`),
-        axios.get(`${API_URL}/api/emission-factors`)
+        axios.get(`${API_URL}/categories`),
+        axios.get(`${API_URL}/activities`),
+        axios.get(`${API_URL}/dashboard/summary`),
+        axios.get(`${API_URL}/dashboard/category-stats`),
+        axios.get(`${API_URL}/emission-factors`)
       ]);
       setCategories(categoriesRes.data || []);
       setActivities(activitiesRes.data || []);
@@ -131,7 +131,7 @@ const DataEntry = () => {
   const handleSubmitActivity = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(`${API_URL}/api/activities`, {
+      await axios.post(`${API_URL}/activities`, {
         ...activityForm,
         category_id: selectedCategory.code,
         scope: activeScope
@@ -162,7 +162,7 @@ const DataEntry = () => {
     formData.append('file', file);
 
     try {
-      await axios.post(`${API_URL}/api/import/csv`, formData, {
+      await axios.post(`${API_URL}/import/csv`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
       fetchData();
@@ -173,7 +173,7 @@ const DataEntry = () => {
 
   const handleExport = async () => {
     try {
-      const response = await axios.get(`${API_URL}/api/export/csv`);
+      const response = await axios.get(`${API_URL}/export/csv`);
       const blob = new Blob([response.data.csv_content], { type: 'text/csv' });
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');

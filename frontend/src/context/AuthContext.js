@@ -29,7 +29,7 @@ export const AuthProvider = ({ children }) => {
 
   const fetchUser = async () => {
     try {
-      const response = await axios.get(`${API_URL}/api/auth/me`);
+      const response = await axios.get(`${API_URL}/auth/me`);
       setUser(response.data);
     } catch (error) {
       console.error('Failed to fetch user:', error);
@@ -40,7 +40,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const login = async (email, password) => {
-    const response = await axios.post(`${API_URL}/api/auth/login`, { email, password });
+    const response = await axios.post(`${API_URL}/auth/login`, { email, password });
     const { token: newToken, user: userData } = response.data;
     localStorage.setItem('token', newToken);
     axios.defaults.headers.common['Authorization'] = `Bearer ${newToken}`;
@@ -50,7 +50,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const register = async (email, password, name, language) => {
-    const response = await axios.post(`${API_URL}/api/auth/register`, { 
+    const response = await axios.post(`${API_URL}/auth/register`, { 
       email, password, name, language 
     });
     const { token: newToken, user: userData } = response.data;
@@ -69,7 +69,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const updateLanguage = async (language) => {
-    await axios.put(`${API_URL}/api/auth/language`, { language });
+    await axios.put(`${API_URL}/auth/language`, { language });
     setUser(prev => ({ ...prev, language }));
   };
 

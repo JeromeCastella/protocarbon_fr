@@ -45,8 +45,8 @@ const GeneralInfo = () => {
   const fetchData = async () => {
     try {
       const [companyRes, categoriesRes] = await Promise.all([
-        axios.get(`${API_URL}/api/companies`),
-        axios.get(`${API_URL}/api/categories`)
+        axios.get(`${API_URL}/companies`),
+        axios.get(`${API_URL}/categories`)
       ]);
       if (companyRes.data) {
         setCompany(companyRes.data);
@@ -63,9 +63,9 @@ const GeneralInfo = () => {
     setSaving(true);
     try {
       if (company.id) {
-        await axios.put(`${API_URL}/api/companies/${company.id}`, company);
+        await axios.put(`${API_URL}/companies/${company.id}`, company);
       } else {
-        const response = await axios.post(`${API_URL}/api/companies`, company);
+        const response = await axios.post(`${API_URL}/companies`, company);
         setCompany(response.data);
       }
       setSaved(true);
