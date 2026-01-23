@@ -721,7 +721,7 @@ const DataEntry = () => {
                   {(selectedSubcategory || subcategories.length === 0) && (
                     <div>
                       <label className={`block text-sm font-medium mb-3 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
-                        3. Facteur d'émission
+                        3. Facteur d&apos;émission
                       </label>
                       
                       {/* Search input */}
