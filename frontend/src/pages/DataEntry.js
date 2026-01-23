@@ -588,19 +588,26 @@ const DataEntry = () => {
                         />
                       </div>
 
-                      {/* Dropdown list - Simplified */}
+                      {/* Dropdown list - Simplified with values */}
                       {showFactorDropdown && availableFactors.length > 0 && (
                         <div className={`rounded-xl border overflow-hidden max-h-60 overflow-y-auto ${
                           isDark ? 'bg-slate-700 border-slate-600' : 'bg-white border-gray-200'
                         }`}>
                           {availableFactors.map(factor => {
-                            // Get unique scopes from impacts
-                            const impactedScopes = [...new Set(factor.impacts?.map(i => {
-                              if (i.scope === 'scope1') return 'Scope 1';
-                              if (i.scope === 'scope2') return 'Scope 2';
-                              if (i.scope.startsWith('scope3')) return 'Scope 3';
-                              return i.scope;
-                            }) || [])];
+                            // Group impacts by scope type
+                            const scopeImpacts = {};
+                            factor.impacts?.forEach(impact => {
+                              let scopeLabel;
+                              if (impact.scope === 'scope1') scopeLabel = 'Scope 1';
+                              else if (impact.scope === 'scope2') scopeLabel = 'Scope 2';
+                              else if (impact.scope.startsWith('scope3')) scopeLabel = 'Scope 3';
+                              else scopeLabel = impact.scope;
+                              
+                              if (!scopeImpacts[scopeLabel]) {
+                                scopeImpacts[scopeLabel] = { value: 0, unit: impact.unit };
+                              }
+                              scopeImpacts[scopeLabel].value += impact.value;
+                            });
                             
                             const scopeColors = {
                               'Scope 1': 'bg-blue-500',
@@ -613,7 +620,7 @@ const DataEntry = () => {
                                 key={factor.id}
                                 type="button"
                                 onClick={() => handleFactorSelect(factor)}
-                                className={`w-full px-4 py-3 text-left border-b last:border-b-0 transition-all flex items-center justify-between gap-3 ${
+                                className={`w-full px-4 py-3 text-left border-b last:border-b-0 transition-all ${
                                   selectedFactor?.id === factor.id
                                     ? 'bg-blue-500 text-white'
                                     : isDark 
@@ -621,18 +628,20 @@ const DataEntry = () => {
                                       : 'border-gray-100 hover:bg-gray-50 text-gray-900'
                                 }`}
                               >
-                                <span className="font-medium text-sm truncate">{factor.name}</span>
-                                <div className="flex gap-1.5 flex-shrink-0">
-                                  {impactedScopes.map(scope => (
-                                    <span 
-                                      key={scope}
-                                      className={`px-2 py-1 rounded-md text-xs font-medium text-white ${
-                                        selectedFactor?.id === factor.id ? 'bg-white/30' : scopeColors[scope]
-                                      }`}
-                                    >
-                                      {scope}
-                                    </span>
-                                  ))}
+                                <div className="flex items-center justify-between gap-3">
+                                  <span className="font-medium text-sm">{factor.name}</span>
+                                  <div className="flex gap-2 flex-shrink-0">
+                                    {Object.entries(scopeImpacts).map(([scope, data]) => (
+                                      <span 
+                                        key={scope}
+                                        className={`px-2 py-1 rounded-md text-xs font-medium text-white whitespace-nowrap ${
+                                          selectedFactor?.id === factor.id ? 'bg-white/30' : scopeColors[scope]
+                                        }`}
+                                      >
+                                        {scope}: {data.value}
+                                      </span>
+                                    ))}
+                                  </div>
                                 </div>
                               </button>
                             );
