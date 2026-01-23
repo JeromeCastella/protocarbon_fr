@@ -4,7 +4,7 @@
 Application de calcul d'empreinte carbone selon le protocole GHG avec interface user-friendly, gamification, multi-tenant, multi-langue (FR/DE), mode clair/sombre.
 
 ## Architecture
-- **Frontend**: React 18 + Tailwind CSS + Framer Motion
+- **Frontend**: React 18 + Tailwind CSS + Framer Motion + Recharts
 - **Backend**: FastAPI (Python) avec routes préfixées `/api`
 - **Database**: MongoDB
 - **Auth**: JWT
@@ -23,6 +23,24 @@ Application de calcul d'empreinte carbone selon le protocole GHG avec interface 
 - [x] Structure GHG Protocol (Scope 1, 2, 3 Amont, 3 Aval)
 
 ## What's Been Implemented
+
+### 2026-01-23 (Session 6) - Dashboard Graphiques Comparatifs
+- **4 KPIs** :
+  - Émissions totales avec variation %
+  - Variation N-1 (comparaison exercice précédent)
+  - Émissions par employé
+  - Exercice actuel + nombre d'exercices
+- **Graphique évolution par exercice** :
+  - Bar chart empilé par scope (Scope 1, 2, 3 Amont, 3 Aval)
+  - Série temporelle de tous les exercices fiscaux
+- **Graphique répartition par scope avec drill-down** :
+  - Bar chart horizontal par scope
+  - Sélecteur d'exercice fiscal
+  - Clic sur scope → détail par catégorie
+- **Nouveaux endpoints API** :
+  - `/api/dashboard/kpis`
+  - `/api/dashboard/fiscal-comparison`
+  - `/api/dashboard/scope-breakdown/{fiscal_year_id}`
 
 ### 2026-01-23 (Session 5) - Simplification Configuration Exercice Fiscal + Mode Sombre
 - **Configuration exercice fiscal au niveau entreprise** :
