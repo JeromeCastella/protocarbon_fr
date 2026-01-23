@@ -116,6 +116,68 @@ class ActivityUpdate(BaseModel):
     source: Optional[str] = None
     comments: Optional[str] = None
 
+# ==================== PRODUCT MODELS (Enhanced) ====================
+
+class MaterialComposition(BaseModel):
+    """Composition d'une matière dans le produit"""
+    material_name: str  # Nom de la matière
+    emission_factor_id: Optional[str] = None  # Référence au facteur d'émission pour la matière
+    weight_kg: float  # Poids en kg
+    treatment_type: str  # recyclage, incineration, enfouissement
+    treatment_emission_factor_id: Optional[str] = None  # Facteur pour le traitement fin de vie
+    recyclability_percent: float = 0  # % recyclabilité
+
+class TransformationEnergy(BaseModel):
+    """Énergie nécessaire à la transformation (si semi-fini)"""
+    electricity_kwh: float = 0  # Électricité par unité
+    electricity_factor_id: Optional[str] = None
+    fuel_kwh: float = 0  # Combustible (gaz, fioul) par unité
+    fuel_factor_id: Optional[str] = None
+    region: str = "France"  # Pour le facteur d'émission électricité
+
+class UsageEnergy(BaseModel):
+    """Consommation par cycle d'utilisation"""
+    electricity_kwh_per_cycle: float = 0
+    electricity_factor_id: Optional[str] = None
+    fuel_kwh_per_cycle: float = 0  # Combustible (gaz naturel, fioul)
+    fuel_factor_id: Optional[str] = None
+    carburant_l_per_cycle: float = 0  # Carburant (essence, diesel)
+    carburant_factor_id: Optional[str] = None
+    refrigerant_kg_per_cycle: float = 0  # Réfrigérants (fuites)
+    refrigerant_factor_id: Optional[str] = None
+    cycles_per_year: int = 1  # Nombre de cycles par an
+
+class ProductCreateEnhanced(BaseModel):
+    """Modèle enrichi pour la création de produit"""
+    # Infos générales
+    name: str
+    description: Optional[str] = None
+    product_type: str = "finished"  # "finished" ou "semi_finished"
+    unit: str = "unit"
+    lifespan_years: float = 1  # Durée de vie en années
+    
+    # Composition matières (pour fin de vie)
+    materials: List[MaterialComposition] = []
+    
+    # Transformation (si semi-fini)
+    transformation: Optional[TransformationEnergy] = None
+    
+    # Utilisation
+    usage: Optional[UsageEnergy] = None
+
+class ProductSale(BaseModel):
+    product_id: str
+    quantity: int
+    year: Optional[int] = None  # Année de référence pour le bilan
+    date: Optional[str] = None
+
+class ProductSaleFromCategory(BaseModel):
+    """Pour saisie depuis les catégories Scope 3 Aval"""
+    product_id: str
+    quantity: int
+    year: Optional[int] = None
+
+# Legacy model for backward compatibility
 class ProductCreate(BaseModel):
     name: str
     description: Optional[str] = None
@@ -123,11 +185,6 @@ class ProductCreate(BaseModel):
     usage_emissions: float = 0
     disposal_emissions: float = 0
     unit: str = "unit"
-
-class ProductSale(BaseModel):
-    product_id: str
-    quantity: int
-    date: Optional[str] = None
 
 class EmissionFactorCreate(BaseModel):
     name: str
