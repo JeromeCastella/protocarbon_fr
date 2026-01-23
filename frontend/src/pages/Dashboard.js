@@ -326,7 +326,7 @@ const Dashboard = () => {
                   axisLine={{ stroke: isDark ? '#475569' : '#d1d5db' }}
                   tickFormatter={(value) => `${(value / 1000).toFixed(0)}t`}
                 />
-                <Tooltip content={<CustomTooltip />} />
+                <Tooltip content={renderCustomTooltip} />
                 <Legend />
                 <Bar dataKey="Scope 1" stackId="a" fill="#3b82f6" radius={[0, 0, 0, 0]} />
                 <Bar dataKey="Scope 2" stackId="a" fill="#06b6d4" radius={[0, 0, 0, 0]} />
@@ -418,7 +418,7 @@ const Dashboard = () => {
                         axisLine={{ stroke: isDark ? '#475569' : '#d1d5db' }}
                         width={75}
                       />
-                      <Tooltip content={<CustomTooltip />} />
+                      <Tooltip content={renderCustomTooltip} />
                       <Bar 
                         dataKey="emissions" 
                         name="Émissions"
@@ -477,7 +477,7 @@ const Dashboard = () => {
                         width={95}
                         tickFormatter={(value) => value.length > 15 ? value.slice(0, 15) + '...' : value}
                       />
-                      <Tooltip content={<CustomTooltip />} />
+                      <Tooltip content={renderCustomTooltip} />
                       <Bar 
                         dataKey="emissions" 
                         name="Émissions"
