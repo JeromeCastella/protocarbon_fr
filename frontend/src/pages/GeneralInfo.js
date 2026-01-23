@@ -279,23 +279,26 @@ const GeneralInfo = () => {
             </select>
           </div>
 
-          {/* Reference Year */}
+          {/* Entity Type */}
           <div>
             <label className={`flex items-center gap-2 text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
-              <Calendar className="w-4 h-4" />
-              {t('company.referenceYear')}
+              <Building2 className="w-4 h-4" />
+              {language === 'fr' ? "Type d'entité" : 'Unternehmenstyp'}
             </label>
-            <input
-              type="number"
-              value={company.reference_year}
-              onChange={(e) => setCompany({ ...company, reference_year: parseInt(e.target.value) })}
-              data-testid="company-year-input"
+            <select
+              value={company.entity_type || 'private_company'}
+              onChange={(e) => setCompany({ ...company, entity_type: e.target.value })}
+              data-testid="company-entity-type-select"
               className={`w-full px-4 py-3 rounded-xl border transition-all focus:ring-2 focus:ring-blue-500 ${
                 isDark 
                   ? 'bg-slate-700 border-slate-600 text-white' 
                   : 'bg-white border-gray-200 text-gray-900'
               }`}
-            />
+            >
+              {entityTypes.map(type => (
+                <option key={type.value} value={type.value}>{type.label}</option>
+              ))}
+            </select>
           </div>
 
           {/* Employees */}
