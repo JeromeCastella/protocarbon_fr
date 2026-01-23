@@ -220,7 +220,7 @@ const EmissionFactors = () => {
         <div className={`text-center py-16 rounded-2xl ${isDark ? 'bg-slate-800' : 'bg-white shadow-lg'}`}>
           <Database className={`w-16 h-16 mx-auto mb-4 ${isDark ? 'text-slate-600' : 'text-gray-300'}`} />
           <p className={isDark ? 'text-slate-400' : 'text-gray-500'}>
-            Aucun facteur d'émission trouvé pour cette recherche.
+            Aucun facteur d&apos;émission trouvé pour cette recherche.
           </p>
         </div>
       )}
