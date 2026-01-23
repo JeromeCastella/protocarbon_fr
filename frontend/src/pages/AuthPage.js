@@ -61,17 +61,6 @@ const AuthPage = () => {
                 : 'Berechnen und reduzieren Sie Ihren CO2-Fußabdruck nach dem GHG-Protokoll'
               }
             </p>
-            <div className="flex gap-4">
-              <div className="px-4 py-2 bg-white/20 backdrop-blur rounded-lg text-sm">
-                GHG Protocol
-              </div>
-              <div className="px-4 py-2 bg-white/20 backdrop-blur rounded-lg text-sm">
-                Scope 1, 2, 3
-              </div>
-              <div className="px-4 py-2 bg-white/20 backdrop-blur rounded-lg text-sm">
-                Multi-tenant
-              </div>
-            </div>
           </motion.div>
         </div>
       </div>
