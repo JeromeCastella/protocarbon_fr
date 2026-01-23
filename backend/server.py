@@ -278,9 +278,16 @@ def get_current_user(user_id: str = Depends(verify_token)):
         "email": user["email"],
         "name": user["name"],
         "language": user.get("language", "fr"),
+        "role": user.get("role", "user"),
         "company_id": user.get("company_id"),
         "created_at": user.get("created_at", "")
     }
+
+def require_admin(current_user: dict = Depends(get_current_user)):
+    """Dependency to check if user is admin"""
+    if current_user.get("role") != "admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+    return current_user
 
 def serialize_doc(doc):
     """Serialize MongoDB document to JSON-safe dict"""
