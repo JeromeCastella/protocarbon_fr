@@ -175,6 +175,7 @@ const FiscalYears = () => {
   const handleCreate = async () => {
     if (!createForm.year) return;
     setLoading(true);
+    setCreateError('');
     try {
       // Calculate dates based on company settings
       const dates = calculateFiscalYearDates(createForm.year);
@@ -188,7 +189,13 @@ const FiscalYears = () => {
       setCreateForm({ year: new Date().getFullYear() });
     } catch (error) {
       console.error('Failed to create fiscal year:', error);
-      alert(error.response?.data?.detail || 'Erreur lors de la création');
+      const errorMessage = error.response?.data?.detail || 'Erreur lors de la création';
+      // Translate common error messages
+      if (errorMessage.includes('overlaps')) {
+        setCreateError(`Un exercice existe déjà pour l'année ${createForm.year}. Choisissez une autre année.`);
+      } else {
+        setCreateError(errorMessage);
+      }
     } finally {
       setLoading(false);
     }
