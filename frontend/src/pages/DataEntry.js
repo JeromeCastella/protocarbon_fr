@@ -431,22 +431,37 @@ const DataEntry = () => {
           <div className="space-y-4">
             {Object.entries(summary?.scope_completion || {}).map(([scope, data]) => {
               const scopeConfig = scopes.find(s => s.id === scope);
+              const scopeActivitiesCount = getScopeActivities(scope).length;
               return (
-                <div key={scope} className={`p-4 rounded-xl ${isDark ? 'bg-slate-700' : 'bg-gray-50'}`}>
+                <div 
+                  key={scope} 
+                  onClick={() => openTableView(scope)}
+                  className={`p-4 rounded-xl cursor-pointer transition-all hover:scale-[1.02] ${
+                    isDark ? 'bg-slate-700 hover:bg-slate-600' : 'bg-gray-50 hover:bg-gray-100'
+                  }`}
+                >
                   <div className="flex items-center justify-between mb-2">
                     <span className={`text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
                       {scopeConfig?.name}
                     </span>
-                    <span className={`font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                      {summary?.scope_emissions?.[scope]?.toLocaleString() || 0}
-                    </span>
+                    <div className="flex items-center gap-2">
+                      <span className={`font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                        {summary?.scope_emissions?.[scope]?.toLocaleString() || 0}
+                      </span>
+                      {scopeActivitiesCount > 0 && (
+                        <span className={`text-xs px-2 py-0.5 rounded-full ${scopeConfig?.color} text-white`}>
+                          {scopeActivitiesCount}
+                        </span>
+                      )}
+                    </div>
                   </div>
                   <div className="flex items-center justify-between text-xs mb-2">
                     <span className={isDark ? 'text-slate-400' : 'text-gray-500'}>
                       {data.categories_filled}/{data.total_categories} {t('dataEntry.categories')}
                     </span>
-                    <span className={isDark ? 'text-slate-400' : 'text-gray-500'}>
+                    <span className={`flex items-center gap-1 ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
                       {data.percentage}%
+                      <ArrowRight className="w-3 h-3" />
                     </span>
                   </div>
                   <div className={`h-2 rounded-full ${isDark ? 'bg-slate-600' : 'bg-gray-200'} overflow-hidden`}>
