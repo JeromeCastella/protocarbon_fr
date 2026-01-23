@@ -1335,10 +1335,10 @@ def get_default_emission_factors():
         {"name": "GPL - Véhicules", "category": "combustion_mobile", "scope": "scope1", "value": 1.66, "unit": "kgCO2e/L", "source": "OFEV", "tags": ["gpl", "transport", "carburant"], "region": "Suisse"},
         
         # Scope 1 - Combustion fixe
-        {"name": "Gaz naturel - Chauffage", "category": "combustion_fixe", "scope": "scope1", "value": 2.04, "unit": "kgCO2e/m³", "source": "ADEME Base Carbone", "tags": ["gaz", "chauffage", "combustible"], "region": "France"},
-        {"name": "Gaz naturel - kWh PCI", "category": "combustion_fixe", "scope": "scope1", "value": 0.205, "unit": "kgCO2e/kWh", "source": "ADEME Base Carbone", "tags": ["gaz", "combustible", "énergie"], "region": "France"},
-        {"name": "Fioul domestique", "category": "combustion_fixe", "scope": "scope1", "value": 3.25, "unit": "kgCO2e/L", "source": "ADEME Base Carbone", "tags": ["fioul", "chauffage", "combustible"], "region": "France"},
-        {"name": "Fioul lourd", "category": "combustion_fixe", "scope": "scope1", "value": 3.24, "unit": "kgCO2e/kg", "source": "ADEME Base Carbone", "tags": ["fioul", "combustible", "industrie"], "region": "France"},
+        {"name": "Gaz naturel - Chauffage", "category": "combustion_fixe", "scope": "scope1", "value": 2.04, "unit": "kgCO2e/m³", "source": "OFEV", "tags": ["gaz", "chauffage", "combustible"], "region": "Suisse"},
+        {"name": "Gaz naturel - kWh PCI", "category": "combustion_fixe", "scope": "scope1", "value": 0.205, "unit": "kgCO2e/kWh", "source": "OFEV", "tags": ["gaz", "combustible", "énergie"], "region": "Suisse"},
+        {"name": "Fioul domestique", "category": "combustion_fixe", "scope": "scope1", "value": 3.25, "unit": "kgCO2e/L", "source": "OFEV", "tags": ["fioul", "chauffage", "combustible"], "region": "Suisse"},
+        {"name": "Fioul lourd", "category": "combustion_fixe", "scope": "scope1", "value": 3.24, "unit": "kgCO2e/kg", "source": "OFEV", "tags": ["fioul", "combustible", "industrie"], "region": "Suisse"},
         
         # Scope 2 - Électricité
         {"name": "Électricité - France", "category": "electricite", "scope": "scope2", "value": 0.0569, "unit": "kgCO2e/kWh", "source": "ADEME Base Carbone", "tags": ["électricité", "énergie"], "region": "France"},
