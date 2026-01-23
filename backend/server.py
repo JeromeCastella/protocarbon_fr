@@ -1347,7 +1347,7 @@ def get_default_emission_factors():
         {"name": "Électricité - France", "category": "electricite", "scope": "scope2", "value": 0.0569, "unit": "kgCO2e/kWh", "source": "OFEV", "tags": ["électricité", "énergie"], "region": "France"},
         
         # Scope 2 - Chaleur
-        {"name": "Réseau de chaleur - France", "category": "chaleur_vapeur", "scope": "scope2", "value": 0.109, "unit": "kgCO2e/kWh", "source": "ADEME Base Carbone", "tags": ["chaleur", "réseau"], "region": "France"},
+        {"name": "Réseau de chaleur - Suisse", "category": "chaleur_vapeur", "scope": "scope2", "value": 0.109, "unit": "kgCO2e/kWh", "source": "OFEV", "tags": ["chaleur", "réseau"], "region": "Suisse"},
         
         # Scope 3 - Transport
         {"name": "Avion court-courrier", "category": "deplacements_professionnels", "scope": "scope3_amont", "value": 0.258, "unit": "kgCO2e/km/passager", "source": "ADEME Base Carbone", "tags": ["avion", "voyage", "déplacement"], "region": "Global"},
