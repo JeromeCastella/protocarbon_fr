@@ -75,6 +75,9 @@ const DataEntry = () => {
   const [editingActivity, setEditingActivity] = useState(null);
   const [editingActivityData, setEditingActivityData] = useState(null); // For modal edit mode
 
+  // Product sale modal state (for transformation/utilisation/fin_vie categories)
+  const [showProductSaleModal, setShowProductSaleModal] = useState(false);
+
   // Modal state for guided flow
   const [subcategories, setSubcategories] = useState([]);
   const [selectedSubcategory, setSelectedSubcategory] = useState(null);
