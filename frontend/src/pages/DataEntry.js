@@ -287,6 +287,7 @@ const DataEntry = () => {
     setSelectedUnit('');
     setSelectedFactor(null);
     setFactorSearch('');
+    setShowFactorDropdown(true); // Show dropdown when subcategory selected
     fetchFactors(subcat.code, null, null);
   };
 
