@@ -565,8 +565,12 @@ def get_default_emission_factors():
 async def get_dashboard_summary(current_user: dict = Depends(get_current_user)):
     activities = list(activities_collection.find({"tenant_id": current_user["id"]}))
     products = list(products_collection.find({"tenant_id": current_user["id"]}))
+    company = companies_collection.find_one({"tenant_id": current_user["id"]})
     
-    # Calculate totals by scope
+    # Get excluded categories from company settings
+    excluded_categories = company.get("excluded_categories", []) if company else []
+    
+    # Calculate totals by scope (only for non-excluded categories)
     scope_totals = {
         "scope1": 0,
         "scope2": 0,
@@ -582,6 +586,9 @@ async def get_dashboard_summary(current_user: dict = Depends(get_current_user)):
     }
     
     for activity in activities:
+        # Skip activities in excluded categories
+        if activity.get("category_id") in excluded_categories:
+            continue
         scope = activity.get("scope", "scope1")
         emissions = activity.get("emissions", 0)
         scope_totals[scope] = scope_totals.get(scope, 0) + emissions
@@ -594,16 +601,18 @@ async def get_dashboard_summary(current_user: dict = Depends(get_current_user)):
     
     total_emissions = sum(scope_totals.values())
     
-    # Get category counts
+    # Get category counts (excluding excluded categories)
     categories = list(categories_collection.find({}))
+    active_categories = [c for c in categories if c.get("code") not in excluded_categories]
+    
     scope_category_counts = {
-        "scope1": len([c for c in categories if c.get("scope") == "scope1"]),
-        "scope2": len([c for c in categories if c.get("scope") == "scope2"]),
-        "scope3_amont": len([c for c in categories if c.get("scope") == "scope3_amont"]),
-        "scope3_aval": len([c for c in categories if c.get("scope") == "scope3_aval"]),
+        "scope1": len([c for c in active_categories if c.get("scope") == "scope1"]),
+        "scope2": len([c for c in active_categories if c.get("scope") == "scope2"]),
+        "scope3_amont": len([c for c in active_categories if c.get("scope") == "scope3_amont"]),
+        "scope3_aval": len([c for c in active_categories if c.get("scope") == "scope3_aval"]),
     }
     
-    # Calculate completion percentage
+    # Calculate completion percentage (only for active categories)
     def calc_completion(scope):
         total = scope_category_counts.get(scope, 1)
         filled = len(scope_categories.get(scope, set()))
@@ -619,7 +628,8 @@ async def get_dashboard_summary(current_user: dict = Depends(get_current_user)):
             "scope3_aval": {"categories_filled": len(scope_categories["scope3_aval"]), "total_categories": scope_category_counts["scope3_aval"], "percentage": calc_completion("scope3_aval")},
         },
         "activities_count": len(activities),
-        "products_count": len(products)
+        "products_count": len(products),
+        "excluded_categories": excluded_categories
     }
 
 @app.get("/dashboard/category-stats")
