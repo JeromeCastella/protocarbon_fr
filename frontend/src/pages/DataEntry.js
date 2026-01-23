@@ -147,7 +147,13 @@ const DataEntry = () => {
   const fetchSubcategories = async (categoryCode) => {
     try {
       const response = await axios.get(`${API_URL}/api/subcategories?category=${categoryCode}`);
-      setSubcategories(response.data || []);
+      const subcats = response.data || [];
+      setSubcategories(subcats);
+      
+      // If no subcategories, load emission factors directly for this category
+      if (subcats.length === 0) {
+        fetchFactors(null, null, null);
+      }
     } catch (error) {
       console.error('Failed to fetch subcategories:', error);
     }
