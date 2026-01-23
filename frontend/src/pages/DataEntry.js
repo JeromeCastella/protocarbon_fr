@@ -257,7 +257,7 @@ const DataEntry = () => {
     try {
       if (editingActivityData) {
         // UPDATE existing activity
-        await axios.put(`${API_URL}/activities/${editingActivityData.id}`, {
+        await axios.put(`${API_URL}/api/activities/${editingActivityData.id}`, {
           name: activityForm.name || selectedFactor.name,
           description: activityForm.description,
           quantity: parseFloat(activityForm.quantity),
@@ -269,7 +269,7 @@ const DataEntry = () => {
         });
       } else {
         // CREATE new activity
-        await axios.post(`${API_URL}/activities`, {
+        await axios.post(`${API_URL}/api/activities`, {
           category_id: selectedCategory.code,
           subcategory_id: selectedSubcategory?.code,
           scope: activeScope,
