@@ -33,7 +33,10 @@ import {
   Search,
   ChevronRight,
   Info,
-  Sparkles
+  Sparkles,
+  Edit3,
+  Table,
+  ArrowRight
 } from 'lucide-react';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL || '';
@@ -59,6 +62,11 @@ const DataEntry = () => {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [excludedCategories, setExcludedCategories] = useState([]);
   const fileInputRef = useRef(null);
+
+  // Table view state
+  const [showTableView, setShowTableView] = useState(false);
+  const [tableViewScope, setTableViewScope] = useState(null);
+  const [editingActivity, setEditingActivity] = useState(null);
 
   // Modal state for guided flow
   const [subcategories, setSubcategories] = useState([]);
