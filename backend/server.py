@@ -1197,33 +1197,35 @@ async def create_activity(activity: ActivityCreateMultiScope, current_user: dict
     if activity.emission_factor_id:
         ef = emission_factors_collection.find_one({"_id": ObjectId(activity.emission_factor_id)})
         if ef and "impacts" in ef:
-            # Apply business rules for multi-impact based on selected scope
+            # Apply business rules for multi-impact based on selected scope and category
             selected_scope = activity.scope
+            selected_category = activity.category_id
             impacts_to_create = []
+            
+            # Déterminer si la saisie est dans la catégorie Scope 3.3 (activités combustibles énergie)
+            is_entry_in_scope33_category = selected_category == "activites_combustibles_energie"
+            is_scope3_entry = selected_scope.startswith("scope3")
             
             for impact in ef["impacts"]:
                 impact_scope = impact["scope"]
+                is_impact_scope33 = impact.get("category") == "activites_combustibles_energie"
                 
                 # RÈGLE MÉTIER:
-                # - Si saisie en Scope 3 (hors 3.3/activites_combustibles_energie): 
-                #   -> Ne comptabiliser que les impacts Scope 3 correspondants
-                # - Si saisie en Scope 1 ou Scope 2:
+                # - Si saisie en Scope 3 dans une catégorie AUTRE que 3.3 (activites_combustibles_energie): 
+                #   -> Ne comptabiliser que les impacts Scope 3 de la même catégorie (exclure Scope 1, 2 et 3.3)
+                # - Si saisie en Scope 1, Scope 2, ou dans la catégorie Scope 3.3:
                 #   -> Comptabiliser les impacts Scope 1/2 + automatiquement Scope 3.3 (amont énergie)
                 
-                is_scope3_entry = selected_scope.startswith("scope3")
-                is_scope3_33_category = impact.get("category") == "activites_combustibles_energie"
-                
-                if is_scope3_entry and selected_scope != "scope3_amont":
-                    # Saisie Scope 3 (hors 3.3): uniquement impacts Scope 3 correspondants
-                    if impact_scope.startswith("scope3") and not is_scope3_33_category:
-                        impacts_to_create.append(impact)
-                    elif impact_scope == selected_scope:
+                if is_scope3_entry and not is_entry_in_scope33_category:
+                    # Saisie Scope 3 (hors catégorie 3.3): uniquement impacts Scope 3
+                    # Exclure Scope 1, Scope 2, et les impacts de type "upstream" (amont énergie)
+                    if impact_scope.startswith("scope3") and not is_impact_scope33:
                         impacts_to_create.append(impact)
                 else:
-                    # Saisie Scope 1, 2 ou 3.3: tous les impacts Scope 1/2 + Scope 3.3
+                    # Saisie Scope 1, 2 ou catégorie 3.3: tous les impacts Scope 1/2 + Scope 3.3
                     if impact_scope in ["scope1", "scope2"]:
                         impacts_to_create.append(impact)
-                    elif is_scope3_33_category:
+                    elif is_impact_scope33:
                         # Scope 3.3 (émissions amont énergie) ajouté automatiquement
                         impacts_to_create.append(impact)
                     elif impact_scope == selected_scope:
