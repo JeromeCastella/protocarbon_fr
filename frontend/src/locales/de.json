@@ -41,7 +41,8 @@
     "reports": "Berichte",
     "help": "Hilfe",
     "darkMode": "Dunkelmodus",
-    "lightMode": "Hellmodus"
+    "lightMode": "Hellmodus",
+    "admin": "Verwaltung"
   },
   "company": {
     "title": "Unternehmensinformationen",
