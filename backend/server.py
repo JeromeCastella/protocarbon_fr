@@ -1197,31 +1197,80 @@ async def create_activity(activity: ActivityCreateMultiScope, current_user: dict
     if activity.emission_factor_id:
         ef = emission_factors_collection.find_one({"_id": ObjectId(activity.emission_factor_id)})
         if ef and "impacts" in ef:
-            # Create an activity for each impact (multi-scope)
+            # Apply business rules for multi-impact based on selected scope
+            selected_scope = activity.scope
+            impacts_to_create = []
+            
             for impact in ef["impacts"]:
+                impact_scope = impact["scope"]
+                
+                # RÈGLE MÉTIER:
+                # - Si saisie en Scope 3 (hors 3.3/activites_combustibles_energie): 
+                #   -> Ne comptabiliser que les impacts Scope 3 correspondants
+                # - Si saisie en Scope 1 ou Scope 2:
+                #   -> Comptabiliser les impacts Scope 1/2 + automatiquement Scope 3.3 (amont énergie)
+                
+                is_scope3_entry = selected_scope.startswith("scope3")
+                is_scope3_33_category = impact.get("category") == "activites_combustibles_energie"
+                
+                if is_scope3_entry and selected_scope != "scope3_amont":
+                    # Saisie Scope 3 (hors 3.3): uniquement impacts Scope 3 correspondants
+                    if impact_scope.startswith("scope3") and not is_scope3_33_category:
+                        impacts_to_create.append(impact)
+                    elif impact_scope == selected_scope:
+                        impacts_to_create.append(impact)
+                else:
+                    # Saisie Scope 1, 2 ou 3.3: tous les impacts Scope 1/2 + Scope 3.3
+                    if impact_scope in ["scope1", "scope2"]:
+                        impacts_to_create.append(impact)
+                    elif is_scope3_33_category:
+                        # Scope 3.3 (émissions amont énergie) ajouté automatiquement
+                        impacts_to_create.append(impact)
+                    elif impact_scope == selected_scope:
+                        impacts_to_create.append(impact)
+            
+            # Create an activity for each applicable impact
+            for impact in impacts_to_create:
                 # Handle unit conversion if needed
                 quantity = activity.quantity
-                if activity.unit != ef.get("default_unit") and "unit_conversions" in ef:
-                    conversion = ef["unit_conversions"].get(activity.unit)
-                    if conversion:
-                        quantity = activity.quantity * conversion.get("factor", 1)
+                original_unit = activity.unit
+                default_unit = ef.get("default_unit", original_unit)
+                
+                if original_unit != default_unit:
+                    # Check factor-specific conversions
+                    conversion_key = f"{original_unit}_to_{default_unit}"
+                    if ef.get("unit_conversions", {}).get(conversion_key):
+                        quantity = activity.quantity * ef["unit_conversions"][conversion_key]
+                    else:
+                        # Check global conversions
+                        global_conv = unit_conversions_collection.find_one({
+                            "$or": [
+                                {"from_unit": original_unit, "to_unit": default_unit},
+                                {"from_unit": default_unit, "to_unit": original_unit}
+                            ]
+                        })
+                        if global_conv:
+                            if global_conv["from_unit"] == original_unit:
+                                quantity = activity.quantity * global_conv["factor"]
+                            else:
+                                quantity = activity.quantity / global_conv["factor"]
                 
                 emissions = quantity * impact["value"]
                 
                 activity_doc = {
                     "tenant_id": current_user["id"],
                     "company_id": str(company["_id"]),
-                    "category_id": impact["category"],
+                    "category_id": impact.get("category", activity.category_id),
                     "subcategory_id": activity.subcategory_id,
                     "scope": impact["scope"],
                     "name": activity.name,
                     "description": activity.description,
                     "quantity": activity.quantity,
-                    "original_unit": activity.unit,
+                    "original_unit": original_unit,
                     "converted_quantity": quantity,
-                    "unit": ef.get("default_unit", activity.unit),
+                    "unit": default_unit,
                     "emission_factor_id": activity.emission_factor_id,
-                    "emission_factor_name": ef.get("name"),
+                    "emission_factor_name": ef.get("name_fr", ef.get("name")),
                     "emission_factor_value": impact["value"],
                     "emission_factor_unit": impact["unit"],
                     "impact_type": impact.get("type", "direct"),
@@ -1230,7 +1279,8 @@ async def create_activity(activity: ActivityCreateMultiScope, current_user: dict
                     "source": activity.source,
                     "comments": activity.comments,
                     "created_at": datetime.now(timezone.utc).isoformat(),
-                    "linked_group_id": None  # Will be set after first insert
+                    "linked_group_id": None,
+                    "entry_scope": selected_scope  # Store the original entry scope for reference
                 }
                 created_activities.append(activity_doc)
             
@@ -1255,7 +1305,11 @@ async def create_activity(activity: ActivityCreateMultiScope, current_user: dict
                 return {
                     "message": f"Created {len(created_activities)} linked activities",
                     "activities": [serialize_doc(a) for a in created_activities],
-                    "total_emissions": sum(a["emissions"] for a in created_activities)
+                    "total_emissions": sum(a["emissions"] for a in created_activities),
+                    "breakdown": [
+                        {"scope": a["scope"], "emissions": a["emissions"], "type": a.get("impact_type", "direct")}
+                        for a in created_activities
+                    ]
                 }
     
     # Fallback: manual emission factor or no factor
