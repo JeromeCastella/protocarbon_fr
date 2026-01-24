@@ -24,26 +24,32 @@ Application de calcul d'empreinte carbone selon le protocole GHG avec interface 
 
 ## What's Been Implemented
 
-### 2026-01-24 (Session 7) - Panneau Administration
-- **Interface Admin complète** accessible via `/admin` :
-  - Visible uniquement pour utilisateurs avec rôle `admin`
-  - Lien conditionnel dans la navigation sidebar
-- **Gestion des facteurs d'émission** :
-  - Liste avec recherche, tri par scope (badges colorés)
-  - CRUD complet (Ajouter, Modifier, Supprimer)
-  - Export JSON de tous les facteurs
-  - Import JSON avec option de remplacement total
-- **Gestion des utilisateurs** :
-  - Liste de tous les utilisateurs avec email, nom, rôle, date création
-  - Promouvoir/Rétrograder admin
-  - Badge "Vous" pour l'utilisateur connecté
-- **RBAC Backend** :
-  - Middleware `require_admin` sur tous les endpoints `/api/admin/*`
-  - Erreur 403 pour utilisateurs non-admin
-- **Sécurité Frontend** :
-  - Page "Accès refusé" pour non-admins sur `/admin`
+### 2026-01-24 (Session 7) - REFONTE FACTEURS D'ÉMISSION (Phases 1-4)
 
-### 2026-01-23 (Session 6) - Dashboard Graphiques Comparatifs
+#### Phase 1 - Structure de données
+- **Nouvelle collection `subcategories`** : Relation N-N avec catégories, multilingue FR/DE
+- **Nouvelle collection `unit_conversions`** : Conversions globales (km→L, MWh→kWh, etc.)
+- **Format V2 des facteurs** : `name_fr`, `name_de`, `subcategory`, `input_units[]`, `impacts[]`
+- **Migration** : 54 facteurs V1 → V2, 41 sous-catégories, 11 conversions
+
+#### Phase 2 - Modal de saisie guidée
+- **Parcours en 4 étapes** : Sous-catégorie → Unité → Facteur → Quantité
+- **Breadcrumb dynamique** : Catégorie > Sous-catégorie > Unité
+- **Recherche facteurs** : Par nom, tags, avec badges scope/valeur
+- **Calcul automatique** : tCO₂e en temps réel
+
+#### Phase 3 - Multi-impacts + Règles métier
+- **Facteurs multi-impacts** : Un facteur peut avoir plusieurs impacts (Scope 1 + Scope 3.3)
+- **Règle métier Scope 1/2** : Inclut automatiquement Scope 3.3 (amont énergie)
+- **Règle métier Scope 3** : Exclut Scope 1, 2 et 3.3 (seulement les impacts Scope 3 correspondants)
+- **Création multi-lignes** : 1 saisie → plusieurs activités liées par `linked_group_id`
+
+#### Phase 4 - Admin enrichi
+- **3 onglets Admin** : Facteurs (60), Sous-catégories (41), Utilisateurs (11)
+- **Formulaire V2** : Multi-impacts, unités multiples, conversions, tags
+- **CRUD sous-catégories** : Code, Nom FR/DE, catégories liées (N-N), icône, ordre
+
+### Session précédente - Panneau Administration de base
 - **4 KPIs** :
   - Émissions totales avec variation %
   - Variation N-1 (comparaison exercice précédent)
