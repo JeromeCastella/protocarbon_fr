@@ -302,7 +302,34 @@ const GuidedEntryModal = ({
     }
   }, [factorSearch]);
 
-  // Calculer les émissions estimées
+  // Appliquer les règles métier pour filtrer les impacts selon le scope sélectionné
+  const applyBusinessRules = (impacts, selectedScope) => {
+    if (!impacts || impacts.length === 0) return impacts;
+    
+    const isScope3Entry = selectedScope?.startsWith('scope3');
+    const isScope33Entry = selectedScope === 'scope3_amont';
+    
+    return impacts.filter(impact => {
+      const impactScope = impact.scope;
+      const isScope33Category = impact.category === 'activites_combustibles_energie';
+      
+      if (isScope3Entry && !isScope33Entry) {
+        // Saisie Scope 3 (hors 3.3): uniquement impacts Scope 3 correspondants
+        // Exclure les impacts Scope 1, Scope 2 et Scope 3.3 (amont énergie)
+        if (impactScope === 'scope1' || impactScope === 'scope2') return false;
+        if (isScope33Category) return false;
+        return true;
+      } else {
+        // Saisie Scope 1, 2 ou 3.3: tous les impacts Scope 1/2 + Scope 3.3
+        if (impactScope === 'scope1' || impactScope === 'scope2') return true;
+        if (isScope33Category) return true;
+        if (impactScope === selectedScope) return true;
+        return false;
+      }
+    });
+  };
+
+  // Calculer les émissions estimées avec règles métier
   const calculateEmissions = () => {
     if (!selectedFactor || !quantity) return null;
     
@@ -334,14 +361,17 @@ const GuidedEntryModal = ({
       }
     }
     
-    // Calculer pour chaque impact
-    const impacts = selectedFactor.impacts || [{
+    // Récupérer les impacts du facteur
+    let impacts = selectedFactor.impacts || [{
       scope: selectedFactor.scope,
       category: selectedFactor.category,
       value: selectedFactor.value,
       unit: selectedFactor.unit,
       type: 'direct'
     }];
+    
+    // Appliquer les règles métier pour filtrer les impacts
+    impacts = applyBusinessRules(impacts, scope);
     
     return impacts.map(impact => ({
       ...impact,
@@ -351,6 +381,11 @@ const GuidedEntryModal = ({
 
   const emissions = calculateEmissions();
   const totalEmissions = emissions?.reduce((sum, e) => sum + e.emissions, 0) || 0;
+  
+  // Vérifier si des impacts ont été filtrés par les règles métier
+  const allImpacts = selectedFactor?.impacts || [];
+  const filteredImpacts = emissions || [];
+  const hasFilteredImpacts = allImpacts.length > filteredImpacts.length;
 
   const handleSubmit = async () => {
     if (!selectedFactor || !quantity) return;
