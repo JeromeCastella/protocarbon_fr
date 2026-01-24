@@ -562,6 +562,8 @@ async def admin_create_subcategory(subcategory: SubcategoryCreate, current_user:
     subcategory_doc = subcategory.model_dump()
     subcategory_doc["created_at"] = datetime.now(timezone.utc).isoformat()
     result = subcategories_collection.insert_one(subcategory_doc)
+    # Remove MongoDB _id and add clean id
+    subcategory_doc.pop("_id", None)
     subcategory_doc["id"] = str(result.inserted_id)
     return subcategory_doc
 
