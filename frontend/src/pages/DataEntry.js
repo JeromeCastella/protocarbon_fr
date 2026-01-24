@@ -41,6 +41,7 @@ import {
   ShoppingBag
 } from 'lucide-react';
 import ProductSaleModal from '../components/ProductSaleModal';
+import GuidedEntryModal from '../components/GuidedEntryModal';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL || '';
 
