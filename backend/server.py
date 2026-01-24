@@ -803,29 +803,86 @@ async def search_emission_factors(
     subcategory: Optional[str] = None,
     unit: Optional[str] = None,
     search: Optional[str] = None,
-    category: Optional[str] = None
+    category: Optional[str] = None,
+    scope: Optional[str] = None,
+    tags: Optional[str] = None  # Comma-separated tags
 ):
-    """Search emission factors with filters"""
+    """Search emission factors with filters (supports both V1 and V2 formats)"""
     query = {}
     
     if subcategory:
         query["subcategory"] = subcategory
     
+    # For V2 factors, search in impacts array for category match
     if category:
-        query["category"] = category
+        query["$or"] = [
+            {"category": category},  # V1 format
+            {"impacts.category": category}  # V2 format
+        ]
     
-    if unit:
-        query["input_units"] = unit
+    if scope:
+        query["$or"] = [
+            {"scope": scope},  # V1 format
+            {"impacts.scope": scope}  # V2 format
+        ]
     
     factors = list(emission_factors_collection.find(query))
+    
+    # Filter by unit compatibility
+    if unit:
+        compatible_factors = []
+        # Get global conversions for this unit
+        global_conversions = list(unit_conversions_collection.find({
+            "$or": [{"from_unit": unit}, {"to_unit": unit}]
+        }))
+        convertible_units = {unit}
+        for conv in global_conversions:
+            convertible_units.add(conv["from_unit"])
+            convertible_units.add(conv["to_unit"])
+        
+        for f in factors:
+            # Check V2 format (input_units list)
+            if "input_units" in f:
+                if unit in f.get("input_units", []):
+                    compatible_factors.append(f)
+                    continue
+                # Check factor-specific conversions
+                factor_conversions = f.get("unit_conversions", {})
+                for conv_key in factor_conversions.keys():
+                    parts = conv_key.split("_to_")
+                    if len(parts) == 2 and unit in parts:
+                        compatible_factors.append(f)
+                        break
+                # Check global conversions
+                for input_unit in f.get("input_units", []):
+                    if input_unit in convertible_units:
+                        compatible_factors.append(f)
+                        break
+            # V1 format - check unit directly
+            elif "unit" in f:
+                factor_unit = f.get("unit", "").split("/")[-1] if "/" in f.get("unit", "") else f.get("unit", "")
+                if factor_unit == unit or factor_unit in convertible_units:
+                    compatible_factors.append(f)
+        
+        factors = compatible_factors
     
     # Filter by search term (name + tags)
     if search:
         search_lower = search.lower()
         factors = [
             f for f in factors
-            if search_lower in f.get("name", "").lower() 
-            or any(search_lower in tag for tag in f.get("tags", []))
+            if search_lower in f.get("name", "").lower()
+            or search_lower in f.get("name_fr", "").lower()
+            or search_lower in f.get("name_de", "").lower()
+            or any(search_lower in tag.lower() for tag in f.get("tags", []))
+        ]
+    
+    # Filter by tags
+    if tags:
+        tag_list = [t.strip().lower() for t in tags.split(",")]
+        factors = [
+            f for f in factors
+            if any(tag in [t.lower() for t in f.get("tags", [])] for tag in tag_list)
         ]
     
     return [serialize_doc(f) for f in factors]
