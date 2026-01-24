@@ -24,6 +24,25 @@ Application de calcul d'empreinte carbone selon le protocole GHG avec interface 
 
 ## What's Been Implemented
 
+### 2026-01-24 (Session 7) - Panneau Administration
+- **Interface Admin complète** accessible via `/admin` :
+  - Visible uniquement pour utilisateurs avec rôle `admin`
+  - Lien conditionnel dans la navigation sidebar
+- **Gestion des facteurs d'émission** :
+  - Liste avec recherche, tri par scope (badges colorés)
+  - CRUD complet (Ajouter, Modifier, Supprimer)
+  - Export JSON de tous les facteurs
+  - Import JSON avec option de remplacement total
+- **Gestion des utilisateurs** :
+  - Liste de tous les utilisateurs avec email, nom, rôle, date création
+  - Promouvoir/Rétrograder admin
+  - Badge "Vous" pour l'utilisateur connecté
+- **RBAC Backend** :
+  - Middleware `require_admin` sur tous les endpoints `/api/admin/*`
+  - Erreur 403 pour utilisateurs non-admin
+- **Sécurité Frontend** :
+  - Page "Accès refusé" pour non-admins sur `/admin`
+
 ### 2026-01-23 (Session 6) - Dashboard Graphiques Comparatifs
 - **4 KPIs** :
   - Émissions totales avec variation %
@@ -84,6 +103,7 @@ Application de calcul d'empreinte carbone selon le protocole GHG avec interface 
 - [x] Configuration exercice fiscal simplifiée (paramètre entreprise)
 - [x] Mode sombre fonctionnel
 - [x] Graphiques comparatifs entre exercices fiscaux (dashboard)
+- [x] Panneau Administration (facteurs d'émission + utilisateurs)
 
 ### P1 - High Priority
 - [ ] Rapports PDF/Excel exportables
@@ -102,6 +122,16 @@ Application de calcul d'empreinte carbone selon le protocole GHG avec interface 
 
 ## API Endpoints Clés
 
+### Administration (Admin only)
+- `GET /api/admin/users` - Liste tous les utilisateurs
+- `PUT /api/admin/users/{id}/role` - Modifier rôle utilisateur
+- `GET /api/admin/emission-factors` - Liste tous les facteurs
+- `POST /api/admin/emission-factors` - Créer facteur
+- `PUT /api/admin/emission-factors/{id}` - Modifier facteur
+- `DELETE /api/admin/emission-factors/{id}` - Supprimer facteur
+- `GET /api/admin/emission-factors/export` - Export JSON
+- `POST /api/admin/emission-factors/import` - Import JSON
+
 ### Exercices fiscaux
 - `GET /api/fiscal-years` - Liste des exercices
 - `GET /api/fiscal-years/current` - Exercice actif
@@ -115,12 +145,13 @@ Application de calcul d'empreinte carbone selon le protocole GHG avec interface 
 - `POST /api/products/{id}/sales/enhanced` - Ventes → activités Scope 3 Aval
 
 ## Test Credentials
-- Email: newtest@x.com
-- Password: test123
+- **Admin**: newtest@x.com / test123
+- **User**: regular_user_test@test.com / test123
 
 ## Fichiers Clés
+- `/app/frontend/src/pages/Admin.js` - Panneau administration
 - `/app/frontend/src/context/FiscalYearContext.js` - Context exercices fiscaux
 - `/app/frontend/src/components/FiscalYearSelector.js` - Sélecteur d'exercice
 - `/app/frontend/src/pages/FiscalYears.js` - Page gestion exercices
 - `/app/frontend/src/components/ProductWizard.js` - Wizard création produit
-- `/app/backend/server.py` - API complète
+- `/app/backend/server.py` - API complète (incl. endpoints admin)
