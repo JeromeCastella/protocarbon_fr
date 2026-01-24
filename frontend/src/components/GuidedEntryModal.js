@@ -302,27 +302,27 @@ const GuidedEntryModal = ({
     }
   }, [factorSearch]);
 
-  // Appliquer les règles métier pour filtrer les impacts selon le scope sélectionné
-  const applyBusinessRules = (impacts, selectedScope) => {
+  // Appliquer les règles métier pour filtrer les impacts selon le scope et la catégorie sélectionnés
+  const applyBusinessRules = (impacts, selectedScope, selectedCategory) => {
     if (!impacts || impacts.length === 0) return impacts;
     
     const isScope3Entry = selectedScope?.startsWith('scope3');
-    const isScope33Entry = selectedScope === 'scope3_amont';
+    const isEntryInScope33Category = selectedCategory === 'activites_combustibles_energie';
     
     return impacts.filter(impact => {
       const impactScope = impact.scope;
-      const isScope33Category = impact.category === 'activites_combustibles_energie';
+      const isImpactScope33 = impact.category === 'activites_combustibles_energie';
       
-      if (isScope3Entry && !isScope33Entry) {
-        // Saisie Scope 3 (hors 3.3): uniquement impacts Scope 3 correspondants
-        // Exclure les impacts Scope 1, Scope 2 et Scope 3.3 (amont énergie)
+      if (isScope3Entry && !isEntryInScope33Category) {
+        // Saisie Scope 3 (hors catégorie 3.3): uniquement impacts Scope 3
+        // Exclure Scope 1, Scope 2, et les impacts amont énergie (Scope 3.3)
         if (impactScope === 'scope1' || impactScope === 'scope2') return false;
-        if (isScope33Category) return false;
+        if (isImpactScope33) return false;
         return true;
       } else {
-        // Saisie Scope 1, 2 ou 3.3: tous les impacts Scope 1/2 + Scope 3.3
+        // Saisie Scope 1, 2 ou catégorie 3.3: tous les impacts Scope 1/2 + Scope 3.3
         if (impactScope === 'scope1' || impactScope === 'scope2') return true;
-        if (isScope33Category) return true;
+        if (isImpactScope33) return true;
         if (impactScope === selectedScope) return true;
         return false;
       }
