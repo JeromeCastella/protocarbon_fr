@@ -374,7 +374,14 @@ async def update_language(language: dict, current_user: dict = Depends(get_curre
 async def get_all_users(current_user: dict = Depends(require_admin)):
     """Get all users (admin only)"""
     users = list(users_collection.find({}, {"password": 0}))
-    return [serialize_doc(u) for u in users]
+    # Ensure all users have a role field (default to 'user' for legacy users)
+    result = []
+    for u in users:
+        user_doc = serialize_doc(u)
+        if "role" not in user_doc:
+            user_doc["role"] = "user"
+        result.append(user_doc)
+    return result
 
 @api_router.put("/admin/users/{user_id}/role")
 async def update_user_role(user_id: str, role_data: dict, current_user: dict = Depends(require_admin)):
