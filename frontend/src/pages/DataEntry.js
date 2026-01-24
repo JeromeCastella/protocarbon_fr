@@ -201,81 +201,38 @@ const DataEntry = () => {
   const handleCategoryClick = (category) => {
     // Check if this is a product-related category
     if (PRODUCT_SALE_CATEGORIES.includes(category.code)) {
-      // Open the product sale modal instead of the regular entry modal
       setShowProductSaleModal(true);
       return;
     }
     
     setSelectedCategory(category);
-    setSelectedSubcategory(null);
-    setSelectedUnit('');
-    setSelectedFactor(null);
-    setFactorSearch('');
-    setAvailableFactors([]);
-    setEditingActivityData(null); // Reset edit mode
-    setActivityForm({
-      name: '',
-      description: '',
-      quantity: '',
-      date: new Date().toISOString().split('T')[0],
-      source: '',
-      comments: ''
-    });
-    fetchSubcategories(category.code);
+    setEditingActivityData(null);
     setShowModal(true);
   };
 
   // Open modal in edit mode with pre-filled data
-  const handleEditActivityInModal = async (activity) => {
-    // Find the category for this activity
+  const handleEditActivityInModal = (activity) => {
     const category = categories.find(c => c.code === activity.category_id);
     if (!category) return;
 
     setSelectedCategory(category);
     setEditingActivityData(activity);
-    
-    // Pre-fill form with activity data
-    setActivityForm({
-      name: activity.name || '',
-      description: activity.description || '',
-      quantity: activity.quantity?.toString() || '',
-      date: activity.date?.split('T')[0] || new Date().toISOString().split('T')[0],
-      source: activity.source || '',
-      comments: activity.comments || ''
-    });
-
-    // Fetch subcategories for this category
-    await fetchSubcategories(category.code);
-    
-    // If activity has subcategory, select it
-    if (activity.subcategory_id) {
-      const subcats = await axios.get(`${API_URL}/api/subcategories?category=${category.code}`);
-      const subcat = subcats.data?.find(s => s.code === activity.subcategory_id);
-      if (subcat) {
-        setSelectedSubcategory(subcat);
-      }
-    }
-
-    // Set unit from activity
-    setSelectedUnit(activity.original_unit || activity.unit || '');
-
-    // If activity has emission factor, try to load it
-    if (activity.emission_factor_id) {
-      try {
-        const factorsRes = await axios.get(`${API_URL}/api/emission-factors/search?category=${category.code}`);
-        setAvailableFactors(factorsRes.data || []);
-        const factor = factorsRes.data?.find(f => f.id === activity.emission_factor_id);
-        if (factor) {
-          setSelectedFactor(factor);
-        }
-      } catch (error) {
-        console.error('Failed to load emission factor:', error);
-      }
-    }
-
-    // Close table view and open modal
     setShowTableView(false);
     setShowModal(true);
+  };
+
+  // Handle activity submission from the guided modal
+  const handleActivitySubmit = async (activityData) => {
+    try {
+      if (editingActivityData) {
+        await axios.put(`${API_URL}/api/activities/${editingActivityData.id}`, activityData);
+      } else {
+        await axios.post(`${API_URL}/api/activities`, activityData);
+      }
+      fetchData();
+    } catch (error) {
+      console.error('Failed to save activity:', error);
+    }
   };
 
   const handleSubcategorySelect = (subcat) => {
