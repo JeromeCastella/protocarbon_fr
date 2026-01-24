@@ -371,7 +371,7 @@ const GuidedEntryModal = ({
     }];
     
     // Appliquer les règles métier pour filtrer les impacts
-    impacts = applyBusinessRules(impacts, scope);
+    impacts = applyBusinessRules(impacts, scope, category?.code);
     
     return impacts.map(impact => ({
       ...impact,
