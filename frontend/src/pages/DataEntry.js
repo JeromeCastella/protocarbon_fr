@@ -173,19 +173,6 @@ const DataEntry = () => {
       console.error('Failed to save activity:', error);
     }
   };
-
-  const handleSubcategorySelect = (subcat) => {
-    setSelectedSubcategory(subcat);
-    setSelectedUnit('');
-    setSelectedFactor(null);
-    setFactorSearch('');
-    setShowFactorDropdown(true);
-    
-    // Fetch all factors for category, then filter by subcategory tags
-    if (selectedCategory) {
-      fetchFactorsForCategoryAndFilter(selectedCategory.code, subcat.code);
-    }
-  };
   
   // Table view functions
   const openTableView = (scope) => {
