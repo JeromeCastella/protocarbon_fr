@@ -544,6 +544,176 @@ async def admin_import_emission_factors(data: dict, current_user: dict = Depends
     result = emission_factors_collection.insert_many(factors)
     return {"message": f"Imported {len(result.inserted_ids)} emission factors"}
 
+# ==================== ADMIN SUBCATEGORIES ENDPOINTS ====================
+
+@api_router.get("/admin/subcategories")
+async def admin_get_subcategories(current_user: dict = Depends(require_admin)):
+    """Get all subcategories (admin only)"""
+    subcategories = list(subcategories_collection.find().sort("order", 1))
+    return [serialize_doc(s) for s in subcategories]
+
+@api_router.post("/admin/subcategories")
+async def admin_create_subcategory(subcategory: SubcategoryCreate, current_user: dict = Depends(require_admin)):
+    """Create a new subcategory (admin only)"""
+    # Check if code already exists
+    if subcategories_collection.find_one({"code": subcategory.code}):
+        raise HTTPException(status_code=400, detail="Subcategory code already exists")
+    
+    subcategory_doc = subcategory.model_dump()
+    subcategory_doc["created_at"] = datetime.now(timezone.utc).isoformat()
+    result = subcategories_collection.insert_one(subcategory_doc)
+    subcategory_doc["id"] = str(result.inserted_id)
+    return subcategory_doc
+
+@api_router.put("/admin/subcategories/{subcategory_id}")
+async def admin_update_subcategory(subcategory_id: str, subcategory: SubcategoryUpdate, current_user: dict = Depends(require_admin)):
+    """Update a subcategory (admin only)"""
+    existing = subcategories_collection.find_one({"_id": ObjectId(subcategory_id)})
+    if not existing:
+        raise HTTPException(status_code=404, detail="Subcategory not found")
+    
+    update_data = {k: v for k, v in subcategory.model_dump().items() if v is not None}
+    if update_data:
+        update_data["updated_at"] = datetime.now(timezone.utc).isoformat()
+        subcategories_collection.update_one({"_id": ObjectId(subcategory_id)}, {"$set": update_data})
+    
+    updated = subcategories_collection.find_one({"_id": ObjectId(subcategory_id)})
+    return serialize_doc(updated)
+
+@api_router.delete("/admin/subcategories/{subcategory_id}")
+async def admin_delete_subcategory(subcategory_id: str, current_user: dict = Depends(require_admin)):
+    """Delete a subcategory (admin only)"""
+    result = subcategories_collection.delete_one({"_id": ObjectId(subcategory_id)})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Subcategory not found")
+    return {"message": "Subcategory deleted"}
+
+# ==================== ADMIN UNIT CONVERSIONS ENDPOINTS ====================
+
+@api_router.get("/admin/unit-conversions")
+async def admin_get_unit_conversions(current_user: dict = Depends(require_admin)):
+    """Get all unit conversions (admin only)"""
+    conversions = list(unit_conversions_collection.find())
+    return [serialize_doc(c) for c in conversions]
+
+@api_router.post("/admin/unit-conversions")
+async def admin_create_unit_conversion(conversion: UnitConversionCreate, current_user: dict = Depends(require_admin)):
+    """Create a new unit conversion (admin only)"""
+    # Check if conversion already exists
+    existing = unit_conversions_collection.find_one({
+        "from_unit": conversion.from_unit,
+        "to_unit": conversion.to_unit
+    })
+    if existing:
+        raise HTTPException(status_code=400, detail="Conversion already exists")
+    
+    conversion_doc = conversion.model_dump()
+    conversion_doc["created_at"] = datetime.now(timezone.utc).isoformat()
+    result = unit_conversions_collection.insert_one(conversion_doc)
+    conversion_doc["id"] = str(result.inserted_id)
+    return conversion_doc
+
+@api_router.put("/admin/unit-conversions/{conversion_id}")
+async def admin_update_unit_conversion(conversion_id: str, conversion: UnitConversionUpdate, current_user: dict = Depends(require_admin)):
+    """Update a unit conversion (admin only)"""
+    existing = unit_conversions_collection.find_one({"_id": ObjectId(conversion_id)})
+    if not existing:
+        raise HTTPException(status_code=404, detail="Conversion not found")
+    
+    update_data = {k: v for k, v in conversion.model_dump().items() if v is not None}
+    if update_data:
+        update_data["updated_at"] = datetime.now(timezone.utc).isoformat()
+        unit_conversions_collection.update_one({"_id": ObjectId(conversion_id)}, {"$set": update_data})
+    
+    updated = unit_conversions_collection.find_one({"_id": ObjectId(conversion_id)})
+    return serialize_doc(updated)
+
+@api_router.delete("/admin/unit-conversions/{conversion_id}")
+async def admin_delete_unit_conversion(conversion_id: str, current_user: dict = Depends(require_admin)):
+    """Delete a unit conversion (admin only)"""
+    result = unit_conversions_collection.delete_one({"_id": ObjectId(conversion_id)})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Conversion not found")
+    return {"message": "Conversion deleted"}
+
+# ==================== ADMIN EMISSION FACTORS V2 ENDPOINTS ====================
+
+@api_router.get("/admin/emission-factors-v2")
+async def admin_get_emission_factors_v2(current_user: dict = Depends(require_admin)):
+    """Get all emission factors V2 with multi-impacts (admin only)"""
+    factors = list(emission_factors_collection.find())
+    return [serialize_doc(f) for f in factors]
+
+@api_router.post("/admin/emission-factors-v2")
+async def admin_create_emission_factor_v2(factor: EmissionFactorV2Create, current_user: dict = Depends(require_admin)):
+    """Create a new emission factor V2 with multi-impacts (admin only)"""
+    factor_doc = factor.model_dump()
+    factor_doc["created_at"] = datetime.now(timezone.utc).isoformat()
+    factor_doc["version"] = 2  # Mark as V2 format
+    result = emission_factors_collection.insert_one(factor_doc)
+    factor_doc["id"] = str(result.inserted_id)
+    return factor_doc
+
+@api_router.put("/admin/emission-factors-v2/{factor_id}")
+async def admin_update_emission_factor_v2(factor_id: str, factor: EmissionFactorV2Update, current_user: dict = Depends(require_admin)):
+    """Update an emission factor V2 (admin only)"""
+    existing = emission_factors_collection.find_one({"_id": ObjectId(factor_id)})
+    if not existing:
+        raise HTTPException(status_code=404, detail="Emission factor not found")
+    
+    update_data = {k: v for k, v in factor.model_dump().items() if v is not None}
+    # Handle impacts list separately (convert Pydantic models to dict)
+    if "impacts" in update_data and update_data["impacts"]:
+        update_data["impacts"] = [imp.model_dump() if hasattr(imp, 'model_dump') else imp for imp in update_data["impacts"]]
+    
+    if update_data:
+        update_data["updated_at"] = datetime.now(timezone.utc).isoformat()
+        emission_factors_collection.update_one({"_id": ObjectId(factor_id)}, {"$set": update_data})
+    
+    updated = emission_factors_collection.find_one({"_id": ObjectId(factor_id)})
+    return serialize_doc(updated)
+
+@api_router.get("/admin/emission-factors-v2/export")
+async def admin_export_emission_factors_v2(current_user: dict = Depends(require_admin)):
+    """Export all emission factors V2, subcategories and unit conversions as JSON (admin only)"""
+    factors = list(emission_factors_collection.find({}, {"_id": 0}))
+    subcategories = list(subcategories_collection.find({}, {"_id": 0}))
+    conversions = list(unit_conversions_collection.find({}, {"_id": 0}))
+    return {
+        "factors": factors,
+        "subcategories": subcategories,
+        "unit_conversions": conversions,
+        "version": 2
+    }
+
+@api_router.post("/admin/emission-factors-v2/import")
+async def admin_import_emission_factors_v2(data: dict, current_user: dict = Depends(require_admin)):
+    """Import emission factors V2, subcategories and unit conversions from JSON (admin only)"""
+    replace_all = data.get("replace_all", False)
+    imported = {"factors": 0, "subcategories": 0, "unit_conversions": 0}
+    
+    if replace_all:
+        emission_factors_collection.delete_many({})
+        subcategories_collection.delete_many({})
+        unit_conversions_collection.delete_many({})
+    
+    factors = data.get("factors", [])
+    if factors:
+        result = emission_factors_collection.insert_many(factors)
+        imported["factors"] = len(result.inserted_ids)
+    
+    subcategories = data.get("subcategories", [])
+    if subcategories:
+        result = subcategories_collection.insert_many(subcategories)
+        imported["subcategories"] = len(result.inserted_ids)
+    
+    conversions = data.get("unit_conversions", [])
+    if conversions:
+        result = unit_conversions_collection.insert_many(conversions)
+        imported["unit_conversions"] = len(result.inserted_ids)
+    
+    return {"message": "Import completed", "imported": imported}
+
 # ==================== COMPANY ENDPOINTS ====================
 
 @api_router.post("/companies")
