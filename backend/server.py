@@ -651,6 +651,8 @@ async def admin_create_emission_factor_v2(factor: EmissionFactorV2Create, curren
     factor_doc["created_at"] = datetime.now(timezone.utc).isoformat()
     factor_doc["version"] = 2  # Mark as V2 format
     result = emission_factors_collection.insert_one(factor_doc)
+    # Return clean doc without _id
+    factor_doc.pop("_id", None)
     factor_doc["id"] = str(result.inserted_id)
     return factor_doc
 
