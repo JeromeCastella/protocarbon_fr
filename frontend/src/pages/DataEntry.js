@@ -126,67 +126,6 @@ const DataEntry = () => {
     }
   };
 
-  // Fetch subcategories when category is selected
-  const fetchSubcategories = async (categoryCode) => {
-    try {
-      const response = await axios.get(`${API_URL}/api/subcategories?category=${categoryCode}`);
-      const subcats = response.data || [];
-      setSubcategories(subcats);
-      
-      // If no subcategories, load emission factors directly for this category
-      if (subcats.length === 0) {
-        setShowFactorDropdown(true); // Show dropdown automatically
-        fetchFactorsForCategory(categoryCode);
-      }
-    } catch (error) {
-      console.error('Failed to fetch subcategories:', error);
-    }
-  };
-  
-  // Fetch emission factors for a specific category (used when no subcategories)
-  const fetchFactorsForCategory = async (categoryCode) => {
-    try {
-      const response = await axios.get(`${API_URL}/api/emission-factors/search?category=${categoryCode}`);
-      const factors = response.data || [];
-      setAllCategoryFactors(factors);
-      setAvailableFactors(factors);
-    } catch (error) {
-      console.error('Failed to fetch factors:', error);
-    }
-  };
-
-  // Fetch emission factors based on filters
-  const fetchFactors = async (subcatCode, unit, search) => {
-    try {
-      let url = `${API_URL}/api/emission-factors/search?`;
-      // Don't filter by subcategory since factors don't have this field
-      // Filter by category instead
-      if (selectedCategory) url += `category=${selectedCategory.code}&`;
-      if (unit) url += `unit=${unit}&`;
-      if (search) url += `search=${encodeURIComponent(search)}&`;
-      
-      const response = await axios.get(url);
-      setAvailableFactors(response.data || []);
-    } catch (error) {
-      console.error('Failed to fetch factors:', error);
-    }
-  };
-
-  // Effect for filtering by search text
-  useEffect(() => {
-    if (factorSearch && allCategoryFactors.length > 0) {
-      const searchLower = factorSearch.toLowerCase();
-      const filtered = allCategoryFactors.filter(f => 
-        f.name?.toLowerCase().includes(searchLower) ||
-        f.tags?.some(tag => tag.toLowerCase().includes(searchLower))
-      );
-      setAvailableFactors(filtered);
-    } else if (allCategoryFactors.length > 0 && !selectedUnit) {
-      // Reset to all factors when search is cleared
-      setAvailableFactors(allCategoryFactors);
-    }
-  }, [factorSearch, allCategoryFactors, selectedUnit]);
-
   const scopes = [
     { id: 'scope1', name: t('scope.scope1'), subtitle: t('scope.scope1Title'), color: 'bg-blue-500' },
     { id: 'scope2', name: t('scope.scope2'), subtitle: t('scope.scope2Title'), color: 'bg-cyan-500' },
