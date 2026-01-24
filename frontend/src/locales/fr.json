@@ -41,7 +41,8 @@
     "reports": "Rapports",
     "help": "Aide",
     "darkMode": "Mode sombre",
-    "lightMode": "Mode clair"
+    "lightMode": "Mode clair",
+    "admin": "Administration"
   },
   "company": {
     "title": "Informations de l'entreprise",
