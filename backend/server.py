@@ -80,6 +80,83 @@ class UserUpdate(BaseModel):
     language: Optional[str] = None
     role: Optional[str] = None
 
+# ==================== EMISSION FACTORS V2 - MULTI-IMPACT MODELS ====================
+
+class EmissionImpact(BaseModel):
+    """Un impact individuel d'un facteur d'émission"""
+    scope: str  # scope1, scope2, scope3_amont, scope3_aval
+    category: str  # combustion_mobile, electricite, etc.
+    value: float  # Valeur en kgCO2e par unité
+    unit: str  # kgCO2e/L, kgCO2e/kWh, etc.
+    type: str = "direct"  # direct, upstream, downstream
+
+class UnitConversion(BaseModel):
+    """Conversion d'unité (ex: km vers L)"""
+    from_unit: str
+    to_unit: str
+    factor: float  # Multiplier pour convertir from_unit vers to_unit
+    description: Optional[str] = None
+
+class SubcategoryCreate(BaseModel):
+    """Sous-catégorie pour le parcours guidé"""
+    code: str  # Ex: "voitures", "camions"
+    name_fr: str
+    name_de: str
+    categories: List[str]  # Liste des catégories parentes (relation N-N)
+    icon: str = "circle"
+    order: int = 0
+
+class SubcategoryUpdate(BaseModel):
+    code: Optional[str] = None
+    name_fr: Optional[str] = None
+    name_de: Optional[str] = None
+    categories: Optional[List[str]] = None
+    icon: Optional[str] = None
+    order: Optional[int] = None
+
+class UnitConversionCreate(BaseModel):
+    """Conversion d'unité globale"""
+    from_unit: str
+    to_unit: str
+    factor: float
+    description_fr: Optional[str] = None
+    description_de: Optional[str] = None
+
+class UnitConversionUpdate(BaseModel):
+    from_unit: Optional[str] = None
+    to_unit: Optional[str] = None
+    factor: Optional[float] = None
+    description_fr: Optional[str] = None
+    description_de: Optional[str] = None
+
+class EmissionFactorV2Create(BaseModel):
+    """Facteur d'émission enrichi avec multi-impacts"""
+    name_fr: str
+    name_de: str
+    subcategory: str  # Code de la sous-catégorie
+    input_units: List[str]  # Unités acceptées en entrée ["L", "km"]
+    default_unit: str  # Unité par défaut
+    impacts: List[EmissionImpact]  # Liste des impacts (multi-scope)
+    unit_conversions: Dict[str, float] = {}  # Conversions spécifiques au facteur {"km_to_L": 0.07}
+    tags: List[str] = []
+    source: str = "OFEV"
+    region: str = "Suisse"
+    year: int = 2024
+
+class EmissionFactorV2Update(BaseModel):
+    name_fr: Optional[str] = None
+    name_de: Optional[str] = None
+    subcategory: Optional[str] = None
+    input_units: Optional[List[str]] = None
+    default_unit: Optional[str] = None
+    impacts: Optional[List[EmissionImpact]] = None
+    unit_conversions: Optional[Dict[str, float]] = None
+    tags: Optional[List[str]] = None
+    source: Optional[str] = None
+    region: Optional[str] = None
+    year: Optional[int] = None
+
+# Legacy models for backward compatibility
 class EmissionFactorCreate(BaseModel):
     name: str
     category: str
