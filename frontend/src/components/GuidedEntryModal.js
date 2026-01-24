@@ -773,35 +773,75 @@ const GuidedEntryModal = ({
                       </div>
 
                       {/* Détail multi-impacts */}
-                      {quantity && emissions && emissions.length > 1 && (
+                      {quantity && emissions && emissions.length > 0 && (
                         <div className={`mt-4 pt-4 border-t ${isDark ? 'border-slate-600' : 'border-gray-200'}`}>
-                          <div className="flex items-center gap-2 mb-2">
-                            <Sparkles className="w-4 h-4 text-purple-500" />
-                            <span className={`text-sm font-medium ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
-                              {language === 'fr' ? 'Répartition multi-impacts' : 'Mehrfach-Auswirkungen'}
-                            </span>
+                          <div className="flex items-center justify-between mb-2">
+                            <div className="flex items-center gap-2">
+                              <Sparkles className="w-4 h-4 text-purple-500" />
+                              <span className={`text-sm font-medium ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
+                                {emissions.length > 1 
+                                  ? (language === 'fr' ? 'Répartition multi-impacts' : 'Mehrfach-Auswirkungen')
+                                  : (language === 'fr' ? 'Impact comptabilisé' : 'Berücksichtigte Auswirkung')
+                                }
+                              </span>
+                            </div>
+                            {hasFilteredImpacts && (
+                              <div className="flex items-center gap-1">
+                                <Info className="w-3 h-3 text-amber-500" />
+                                <span className={`text-xs ${isDark ? 'text-amber-400' : 'text-amber-600'}`}>
+                                  {language === 'fr' 
+                                    ? `Règle métier appliquée (${allImpacts.length - filteredImpacts.length} impact(s) exclu(s))` 
+                                    : `Geschäftsregel angewendet (${allImpacts.length - filteredImpacts.length} Auswirkung(en) ausgeschlossen)`
+                                  }
+                                </span>
+                              </div>
+                            )}
                           </div>
-                          <div className="grid grid-cols-2 gap-2">
+                          <div className={`grid ${emissions.length > 2 ? 'grid-cols-3' : emissions.length > 1 ? 'grid-cols-2' : 'grid-cols-1'} gap-2`}>
                             {emissions.map((e, i) => {
                               const scopeInfo = scopeColors[e.scope] || { bg: 'bg-gray-500', label: e.scope };
                               return (
                                 <div 
                                   key={i}
-                                  className={`p-2 rounded-lg ${isDark ? 'bg-slate-700' : 'bg-white'}`}
+                                  className={`p-3 rounded-lg ${isDark ? 'bg-slate-700' : 'bg-white'} border ${isDark ? 'border-slate-600' : 'border-gray-200'}`}
                                 >
-                                  <div className="flex items-center gap-2">
+                                  <div className="flex items-center gap-2 mb-1">
                                     <span className={`w-2 h-2 rounded-full ${scopeInfo.bg}`}></span>
-                                    <span className={`text-xs ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+                                    <span className={`text-xs font-medium ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
                                       {scopeInfo.label}
                                     </span>
+                                    {e.type && e.type !== 'direct' && (
+                                      <span className={`text-xs px-1.5 py-0.5 rounded ${isDark ? 'bg-slate-600 text-slate-300' : 'bg-gray-100 text-gray-600'}`}>
+                                        {e.type === 'upstream' ? (language === 'fr' ? 'amont' : 'Vorkette') : e.type}
+                                      </span>
+                                    )}
                                   </div>
-                                  <p className={`font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                                    {(e.emissions / 1000).toFixed(4)} tCO₂e
+                                  <p className={`text-lg font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                                    {(e.emissions / 1000).toFixed(4)} <span className="text-sm font-normal">tCO₂e</span>
+                                  </p>
+                                  <p className={`text-xs ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>
+                                    {e.value} {e.unit}
                                   </p>
                                 </div>
                               );
                             })}
                           </div>
+                          
+                          {/* Explication des règles métier */}
+                          {hasFilteredImpacts && (
+                            <div className={`mt-3 p-3 rounded-lg ${isDark ? 'bg-amber-500/10 border border-amber-500/20' : 'bg-amber-50 border border-amber-200'}`}>
+                              <p className={`text-xs ${isDark ? 'text-amber-300' : 'text-amber-700'}`}>
+                                {scope?.startsWith('scope3') && scope !== 'scope3_amont'
+                                  ? (language === 'fr' 
+                                      ? '📋 Saisie en Scope 3 : seuls les impacts Scope 3 sont comptabilisés (hors amont énergie).' 
+                                      : '📋 Scope 3 Eingabe: Nur Scope 3 Auswirkungen werden berücksichtigt (ohne Energievorkette).')
+                                  : (language === 'fr'
+                                      ? '📋 Saisie en Scope 1/2 : les impacts Scope 1, 2 et Scope 3.3 (amont énergie) sont comptabilisés.'
+                                      : '📋 Scope 1/2 Eingabe: Scope 1, 2 und Scope 3.3 (Energievorkette) Auswirkungen werden berücksichtigt.')
+                                }
+                              </p>
+                            </div>
+                          )}
                         </div>
                       )}
                     </div>
