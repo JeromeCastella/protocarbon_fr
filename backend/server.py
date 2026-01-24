@@ -612,6 +612,8 @@ async def admin_create_unit_conversion(conversion: UnitConversionCreate, current
     conversion_doc = conversion.model_dump()
     conversion_doc["created_at"] = datetime.now(timezone.utc).isoformat()
     result = unit_conversions_collection.insert_one(conversion_doc)
+    # Remove MongoDB _id and add clean id
+    conversion_doc.pop("_id", None)
     conversion_doc["id"] = str(result.inserted_id)
     return conversion_doc
 
