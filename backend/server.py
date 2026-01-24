@@ -920,7 +920,257 @@ def get_default_categories():
         {"scope": "scope3_aval", "code": "investissements", "name_fr": "Investissements", "name_de": "Investitionen", "icon": "trending-up", "color": "#06B6D4"},
     ]
 
-# ==================== ACTIVITIES ENDPOINTS ====================
+def get_default_subcategories():
+    """Default subcategories for guided selection"""
+    return [
+        # Combustion mobile
+        {"code": "voitures", "name_fr": "Voitures", "name_de": "Autos", "categories": ["combustion_mobile", "deplacements_professionnels", "deplacements_domicile_travail"], "icon": "car", "order": 1},
+        {"code": "camions", "name_fr": "Camions et utilitaires", "name_de": "LKW und Nutzfahrzeuge", "categories": ["combustion_mobile", "transport_distribution_amont", "transport_distribution_aval"], "icon": "truck", "order": 2},
+        {"code": "deux_roues", "name_fr": "Deux-roues motorisés", "name_de": "Motorräder", "categories": ["combustion_mobile", "deplacements_domicile_travail"], "icon": "bike", "order": 3},
+        {"code": "engins", "name_fr": "Engins et machines", "name_de": "Maschinen und Geräte", "categories": ["combustion_mobile"], "icon": "tractor", "order": 4},
+        
+        # Transport
+        {"code": "avions", "name_fr": "Avions", "name_de": "Flugzeuge", "categories": ["deplacements_professionnels"], "icon": "plane", "order": 1},
+        {"code": "trains", "name_fr": "Trains", "name_de": "Züge", "categories": ["deplacements_professionnels", "deplacements_domicile_travail", "transport_distribution_amont"], "icon": "train", "order": 2},
+        {"code": "bus", "name_fr": "Bus et cars", "name_de": "Busse", "categories": ["deplacements_professionnels", "deplacements_domicile_travail"], "icon": "bus", "order": 3},
+        {"code": "metro_tram", "name_fr": "Métro et tram", "name_de": "U-Bahn und Straßenbahn", "categories": ["deplacements_domicile_travail"], "icon": "train", "order": 4},
+        {"code": "velo", "name_fr": "Vélo", "name_de": "Fahrrad", "categories": ["deplacements_domicile_travail"], "icon": "bike", "order": 5},
+        {"code": "teletravail", "name_fr": "Télétravail", "name_de": "Homeoffice", "categories": ["deplacements_domicile_travail"], "icon": "home", "order": 6},
+        
+        # Combustion fixe
+        {"code": "chauffage_gaz", "name_fr": "Chauffage gaz", "name_de": "Gasheizung", "categories": ["combustion_fixe"], "icon": "flame", "order": 1},
+        {"code": "chauffage_fioul", "name_fr": "Chauffage fioul", "name_de": "Ölheizung", "categories": ["combustion_fixe"], "icon": "droplet", "order": 2},
+        {"code": "chauffage_bois", "name_fr": "Chauffage bois", "name_de": "Holzheizung", "categories": ["combustion_fixe"], "icon": "tree", "order": 3},
+        {"code": "chaudiere_industrielle", "name_fr": "Chaudière industrielle", "name_de": "Industriekessel", "categories": ["combustion_fixe"], "icon": "factory", "order": 4},
+        
+        # Électricité et énergie
+        {"code": "electricite_reseau", "name_fr": "Électricité réseau", "name_de": "Netzstrom", "categories": ["electricite"], "icon": "zap", "order": 1},
+        {"code": "electricite_renouvelable", "name_fr": "Électricité renouvelable", "name_de": "Erneuerbare Energie", "categories": ["electricite"], "icon": "sun", "order": 2},
+        {"code": "chaleur_reseau", "name_fr": "Réseau de chaleur", "name_de": "Fernwärme", "categories": ["chaleur_vapeur"], "icon": "thermometer", "order": 1},
+        {"code": "climatisation", "name_fr": "Climatisation", "name_de": "Klimaanlage", "categories": ["refroidissement", "emissions_fugitives"], "icon": "snowflake", "order": 1},
+        
+        # Réfrigérants
+        {"code": "refrigerants_hfc", "name_fr": "Réfrigérants HFC", "name_de": "HFC-Kältemittel", "categories": ["emissions_fugitives"], "icon": "wind", "order": 1},
+        {"code": "refrigerants_naturels", "name_fr": "Réfrigérants naturels", "name_de": "Natürliche Kältemittel", "categories": ["emissions_fugitives"], "icon": "leaf", "order": 2},
+        
+        # Achats
+        {"code": "fournitures_bureau", "name_fr": "Fournitures de bureau", "name_de": "Bürobedarf", "categories": ["biens_services_achetes"], "icon": "package", "order": 1},
+        {"code": "papier", "name_fr": "Papier", "name_de": "Papier", "categories": ["biens_services_achetes"], "icon": "file", "order": 2},
+        {"code": "services_numeriques", "name_fr": "Services numériques", "name_de": "Digitale Dienste", "categories": ["biens_services_achetes"], "icon": "cloud", "order": 3},
+        {"code": "informatique", "name_fr": "Équipements informatiques", "name_de": "IT-Ausrüstung", "categories": ["biens_equipement"], "icon": "laptop", "order": 1},
+        {"code": "mobilier", "name_fr": "Mobilier", "name_de": "Möbel", "categories": ["biens_equipement"], "icon": "armchair", "order": 2},
+        
+        # Déchets
+        {"code": "dechets_menagers", "name_fr": "Déchets ménagers", "name_de": "Hausmüll", "categories": ["dechets_operations"], "icon": "trash", "order": 1},
+        {"code": "dechets_industriels", "name_fr": "Déchets industriels", "name_de": "Industrieabfälle", "categories": ["dechets_operations"], "icon": "factory", "order": 2},
+        {"code": "dechets_dangereux", "name_fr": "Déchets dangereux", "name_de": "Sondermüll", "categories": ["dechets_operations"], "icon": "alert-triangle", "order": 3},
+        
+        # Matériaux (pour produits)
+        {"code": "metaux", "name_fr": "Métaux", "name_de": "Metalle", "categories": ["materiaux", "biens_services_achetes"], "icon": "circle", "order": 1},
+        {"code": "plastiques", "name_fr": "Plastiques", "name_de": "Kunststoffe", "categories": ["materiaux", "biens_services_achetes"], "icon": "box", "order": 2},
+        {"code": "verre", "name_fr": "Verre", "name_de": "Glas", "categories": ["materiaux", "biens_services_achetes"], "icon": "square", "order": 3},
+        {"code": "bois_materiaux", "name_fr": "Bois", "name_de": "Holz", "categories": ["materiaux", "biens_services_achetes"], "icon": "tree", "order": 4},
+        {"code": "textiles", "name_fr": "Textiles", "name_de": "Textilien", "categories": ["materiaux", "biens_services_achetes"], "icon": "shirt", "order": 5},
+        {"code": "electronique", "name_fr": "Composants électroniques", "name_de": "Elektronikkomponenten", "categories": ["materiaux", "biens_equipement"], "icon": "cpu", "order": 6},
+        
+        # Fin de vie
+        {"code": "recyclage", "name_fr": "Recyclage", "name_de": "Recycling", "categories": ["fin_vie_produits"], "icon": "recycle", "order": 1},
+        {"code": "incineration", "name_fr": "Incinération", "name_de": "Verbrennung", "categories": ["fin_vie_produits"], "icon": "flame", "order": 2},
+        {"code": "enfouissement", "name_fr": "Enfouissement", "name_de": "Deponierung", "categories": ["fin_vie_produits"], "icon": "archive", "order": 3},
+    ]
+
+def get_default_unit_conversions():
+    """Default global unit conversions"""
+    return [
+        # Distance to fuel consumption (average values)
+        {"from_unit": "km", "to_unit": "L", "factor": 0.07, "description_fr": "Consommation moyenne voiture", "description_de": "Durchschnittlicher Autoverbrauch"},
+        {"from_unit": "km", "to_unit": "kWh", "factor": 0.2, "description_fr": "Consommation moyenne véhicule électrique", "description_de": "Durchschnittlicher Elektrofahrzeugverbrauch"},
+        {"from_unit": "passager.km", "to_unit": "km", "factor": 1, "description_fr": "Passager-kilomètre", "description_de": "Passagierkilometer"},
+        
+        # Energy conversions
+        {"from_unit": "MWh", "to_unit": "kWh", "factor": 1000, "description_fr": "Mégawattheure en kilowattheure", "description_de": "Megawattstunde in Kilowattstunde"},
+        {"from_unit": "GJ", "to_unit": "kWh", "factor": 277.78, "description_fr": "Gigajoule en kilowattheure", "description_de": "Gigajoule in Kilowattstunde"},
+        {"from_unit": "tep", "to_unit": "kWh", "factor": 11630, "description_fr": "Tonne équivalent pétrole", "description_de": "Tonne Öleinheit"},
+        
+        # Mass conversions
+        {"from_unit": "t", "to_unit": "kg", "factor": 1000, "description_fr": "Tonne en kilogramme", "description_de": "Tonne in Kilogramm"},
+        {"from_unit": "g", "to_unit": "kg", "factor": 0.001, "description_fr": "Gramme en kilogramme", "description_de": "Gramm in Kilogramm"},
+        
+        # Volume conversions
+        {"from_unit": "m3", "to_unit": "L", "factor": 1000, "description_fr": "Mètre cube en litre", "description_de": "Kubikmeter in Liter"},
+        
+        # Currency (for monetary factors)
+        {"from_unit": "kCHF", "to_unit": "CHF", "factor": 1000, "description_fr": "Milliers de francs suisses", "description_de": "Tausend Schweizer Franken"},
+        {"from_unit": "k€", "to_unit": "€", "factor": 1000, "description_fr": "Milliers d'euros", "description_de": "Tausend Euro"},
+    ]
+
+# Translation dictionary for factor names (FR to DE)
+FACTOR_NAME_TRANSLATIONS = {
+    "Diesel - Véhicules légers": "Diesel - Leichte Fahrzeuge",
+    "Essence - Véhicules légers": "Benzin - Leichte Fahrzeuge",
+    "GPL - Véhicules": "LPG - Fahrzeuge",
+    "Gaz naturel - Chauffage": "Erdgas - Heizung",
+    "Gaz naturel - kWh PCI": "Erdgas - kWh Hi",
+    "Fioul domestique": "Heizöl",
+    "Fioul lourd": "Schweröl",
+    "Électricité - Suisse": "Strom - Schweiz",
+    "Électricité - Allemagne": "Strom - Deutschland",
+    "Électricité - Europe moyenne": "Strom - Europa Durchschnitt",
+    "Électricité - France": "Strom - Frankreich",
+    "Réseau de chaleur - Suisse": "Fernwärme - Schweiz",
+    "Avion court-courrier": "Kurzstreckenflug",
+    "Avion long-courrier": "Langstreckenflug",
+    "Train": "Zug",
+    "Voiture - Domicile-travail": "Auto - Pendeln",
+    "Ordinateur portable": "Laptop",
+    "Smartphone": "Smartphone",
+    "Papier - Bureau": "Papier - Büro",
+    "Déchets ménagers - Incinération": "Hausmüll - Verbrennung",
+    "Déchets ménagers - Enfouissement": "Hausmüll - Deponierung",
+    "R-134a (HFC)": "R-134a (HFKW)",
+    "R-410A (HFC)": "R-410A (HFKW)",
+    "R-32 (HFC)": "R-32 (HFKW)",
+    "R-404A (HFC)": "R-404A (HFKW)",
+    "R-407C (HFC)": "R-407C (HFKW)",
+    "CO2 (R-744)": "CO2 (R-744)",
+    "Acier": "Stahl",
+    "Aluminium primaire": "Primäraluminium",
+    "Aluminium recyclé": "Recyceltes Aluminium",
+    "Cuivre": "Kupfer",
+    "PVC": "PVC",
+    "PEHD": "HDPE",
+    "PET": "PET",
+    "Verre": "Glas",
+    "Papier/Carton": "Papier/Karton",
+    "Bois": "Holz",
+    "Béton": "Beton",
+    "Ciment": "Zite",
+    "Textiles synthétiques": "Synthetische Textilien",
+    "Textiles coton": "Baumwolltextilien",
+    "Caoutchouc": "Gummi",
+    "Recyclage acier": "Recycling Stahl",
+    "Recyclage aluminium": "Recycling Aluminium",
+    "Recyclage cuivre": "Recycling Kupfer",
+    "Recyclage plastiques": "Recycling Kunststoffe",
+    "Recyclage verre": "Recycling Glas",
+    "Recyclage papier": "Recycling Papier",
+    "Incinération plastiques": "Verbrennung Kunststoffe",
+    "Incinération déchets mixtes": "Verbrennung gemischte Abfälle",
+    "Enfouissement déchets": "Deponierung Abfälle",
+    "Compostage déchets organiques": "Kompostierung organische Abfälle",
+    "Diesel - Poids lourds": "Diesel - Schwere Nutzfahrzeuge",
+    "Diesel - Utilitaires": "Diesel - Lieferwagen",
+}
+
+def get_subcategory_for_category(category: str) -> str:
+    """Map old category to new subcategory"""
+    category_to_subcategory = {
+        "combustion_mobile": "voitures",
+        "combustion_fixe": "chauffage_gaz",
+        "emissions_procedes": "chaudiere_industrielle",
+        "emissions_fugitives": "refrigerants_hfc",
+        "electricite": "electricite_reseau",
+        "chaleur_vapeur": "chaleur_reseau",
+        "refroidissement": "climatisation",
+        "biens_services_achetes": "fournitures_bureau",
+        "biens_equipement": "informatique",
+        "activites_combustibles_energie": "chauffage_gaz",
+        "transport_distribution_amont": "camions",
+        "dechets_operations": "dechets_menagers",
+        "deplacements_professionnels": "avions",
+        "deplacements_domicile_travail": "voitures",
+        "actifs_loues_amont": "mobilier",
+        "transport_distribution_aval": "camions",
+        "transformation_produits": "metaux",
+        "utilisation_produits": "electronique",
+        "fin_vie_produits": "recyclage",
+        "actifs_loues_aval": "mobilier",
+        "franchises": "fournitures_bureau",
+        "investissements": "informatique",
+        "materiaux": "metaux",
+        "refrigerants": "refrigerants_hfc",
+    }
+    return category_to_subcategory.get(category, "fournitures_bureau")
+
+@api_router.post("/admin/migrate-emission-factors")
+async def admin_migrate_emission_factors(current_user: dict = Depends(require_admin)):
+    """Migrate existing V1 emission factors to V2 format and seed subcategories/conversions"""
+    
+    migrated_count = 0
+    seeded_subcategories = 0
+    seeded_conversions = 0
+    
+    # 1. Seed subcategories if empty
+    if subcategories_collection.count_documents({}) == 0:
+        default_subcategories = get_default_subcategories()
+        for subcat in default_subcategories:
+            subcat["created_at"] = datetime.now(timezone.utc).isoformat()
+        subcategories_collection.insert_many(default_subcategories)
+        seeded_subcategories = len(default_subcategories)
+    
+    # 2. Seed unit conversions if empty
+    if unit_conversions_collection.count_documents({}) == 0:
+        default_conversions = get_default_unit_conversions()
+        for conv in default_conversions:
+            conv["created_at"] = datetime.now(timezone.utc).isoformat()
+        unit_conversions_collection.insert_many(default_conversions)
+        seeded_conversions = len(default_conversions)
+    
+    # 3. Migrate V1 factors to V2 format
+    v1_factors = list(emission_factors_collection.find({"version": {"$ne": 2}}))
+    
+    for factor in v1_factors:
+        # Skip if already V2
+        if factor.get("version") == 2:
+            continue
+        
+        # Get translated name
+        name_fr = factor.get("name", "")
+        name_de = FACTOR_NAME_TRANSLATIONS.get(name_fr, name_fr)
+        
+        # Determine subcategory
+        subcategory = get_subcategory_for_category(factor.get("category", ""))
+        
+        # Parse unit to get input_units
+        unit = factor.get("unit", "")
+        # Extract the denominator unit (e.g., "kgCO2e/L" -> "L")
+        if "/" in unit:
+            input_unit = unit.split("/")[-1]
+        else:
+            input_unit = unit
+        
+        # Create V2 structure
+        update_data = {
+            "name_fr": name_fr,
+            "name_de": name_de,
+            "subcategory": subcategory,
+            "input_units": [input_unit],
+            "default_unit": input_unit,
+            "impacts": [{
+                "scope": factor.get("scope", "scope1"),
+                "category": factor.get("category", ""),
+                "value": factor.get("value", 0),
+                "unit": unit,
+                "type": "direct"
+            }],
+            "unit_conversions": {},
+            "year": 2024,
+            "version": 2,
+            "migrated_at": datetime.now(timezone.utc).isoformat()
+        }
+        
+        emission_factors_collection.update_one(
+            {"_id": factor["_id"]},
+            {"$set": update_data}
+        )
+        migrated_count += 1
+    
+    return {
+        "message": "Migration completed",
+        "migrated_factors": migrated_count,
+        "seeded_subcategories": seeded_subcategories,
+        "seeded_conversions": seeded_conversions
+    }
 
 class ActivityCreateMultiScope(BaseModel):
     category_id: str
