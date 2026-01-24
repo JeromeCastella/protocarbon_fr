@@ -1,0 +1,127 @@
+{
+  "summary": "Phase 4 testing completed successfully. All features working: Admin panel with 3 tabs (Factors, Subcategories, Users), V2 emission factors with multi-impacts, subcategories CRUD with N-N category relationship, GuidedEntryModal 4-step flow, and business rules for multi-impact activity creation.",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {
+        "endpoint": "/api/admin/subcategories POST",
+        "issue": "MongoDB _id was not being removed from response causing 500 error - FIXED",
+        "priority": "LOW",
+        "status": "FIXED"
+      },
+      {
+        "endpoint": "/api/admin/unit-conversions POST",
+        "issue": "Same MongoDB _id issue - FIXED",
+        "priority": "LOW",
+        "status": "FIXED"
+      }
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_phase4_features.py",
+    "/app/test_reports/pytest/phase4_results.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [],
+  "updated_files": [
+    "/app/backend/server.py - Fixed MongoDB _id serialization in subcategory and unit conversion creation endpoints",
+    "/app/backend/tests/test_phase4_features.py - Created comprehensive Phase 4 test suite"
+  ],
+  "success_rate": {
+    "backend": "100% (16/16 tests passed)",
+    "frontend": "100% (all Phase 4 features working)"
+  },
+  "test_credentials": {
+    "admin_user": {
+      "email": "newtest@x.com",
+      "password": "test123"
+    }
+  },
+  "seed_data_creation": "None - used existing data",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Phase 4 features fully functional. Admin panel has 3 tabs: Facteurs (60), Sous-catégories (41), Utilisateurs (11). V2 emission factors support multi-impacts. GuidedEntryModal works with 4-step flow: subcategory → unit → factor → quantity. Business rules implemented for Scope 1/2 (includes Scope 3.3) and Scope 3 (excludes Scope 1/2/3.3).",
+  "features_tested": {
+    "admin_factors_tab": {
+      "status": "PASS",
+      "details": [
+        "Displays 60 emission factors",
+        "Table columns: Nom, Sous-catégorie, Impacts, Unités, Source, Actions",
+        "Shows FR/DE names, tags, scope badges",
+        "Multi-impact indicator visible",
+        "Add/Edit/Delete/Export/Import buttons working"
+      ]
+    },
+    "admin_subcategories_tab": {
+      "status": "PASS",
+      "details": [
+        "Displays 41 subcategories",
+        "Table columns: Code, Nom FR, Nom DE, Catégories liées, Ordre, Actions",
+        "N-N relationship with categories displayed",
+        "CRUD operations working (after fix)"
+      ]
+    },
+    "admin_users_tab": {
+      "status": "PASS",
+      "details": [
+        "Displays 11 users",
+        "Role management working"
+      ]
+    },
+    "v2_emission_factors": {
+      "status": "PASS",
+      "details": [
+        "Create V2 factor with multi-impacts",
+        "Update V2 factor impacts",
+        "Export V2 factors with subcategories and conversions",
+        "Multi-impact factors: Diesel, Essence, etc."
+      ]
+    },
+    "guided_entry_modal": {
+      "status": "PASS",
+      "details": [
+        "4-step flow: subcategory → unit → factor → quantity",
+        "Step indicators with checkmarks",
+        "Breadcrumb navigation",
+        "Factor search with tags",
+        "Scope badges on factors",
+        "Real-time emissions calculation",
+        "Impact breakdown display"
+      ]
+    },
+    "multi_impact_activity_creation": {
+      "status": "PASS",
+      "details": [
+        "Activity creation with multi-impact factor creates linked activities",
+        "Business rules applied correctly"
+      ]
+    },
+    "business_rules": {
+      "status": "PASS",
+      "details": [
+        "Scope 1/2 entry includes Scope 1/2 + Scope 3.3 (upstream energy)",
+        "Scope 3 entry (non-3.3 category) excludes Scope 1/2 and Scope 3.3"
+      ]
+    }
+  },
+  "api_tests": {
+    "/api/admin/subcategories GET": {"status": 200},
+    "/api/admin/subcategories POST": {"status": 200, "note": "Fixed MongoDB _id issue"},
+    "/api/admin/subcategories PUT": {"status": 200},
+    "/api/admin/subcategories DELETE": {"status": 200},
+    "/api/admin/emission-factors-v2 GET": {"status": 200},
+    "/api/admin/emission-factors-v2 POST": {"status": 200},
+    "/api/admin/emission-factors-v2 PUT": {"status": 200},
+    "/api/admin/emission-factors-v2/export GET": {"status": 200},
+    "/api/subcategories?category=combustion_mobile GET": {"status": 200},
+    "/api/emission-factors/search?subcategory=voitures GET": {"status": 200},
+    "/api/emission-factors/search?unit=L GET": {"status": 200},
+    "/api/unit-conversions GET": {"status": 200},
+    "/api/activities POST (multi-impact)": {"status": 200}
+  }
+}
