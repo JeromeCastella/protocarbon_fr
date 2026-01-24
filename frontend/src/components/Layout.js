@@ -18,7 +18,8 @@ import {
   LogOut,
   Globe,
   Leaf,
-  Calendar
+  Calendar,
+  Shield
 } from 'lucide-react';
 
 const Layout = () => {
@@ -35,6 +36,8 @@ const Layout = () => {
     { path: '/products', icon: Package, label: t('nav.products') },
     { path: '/emission-factors', icon: Database, label: t('nav.emissionFactors') },
     { path: '/fiscal-years', icon: Calendar, label: 'Exercices' },
+    // Admin link - only shown if user is admin
+    ...(user?.role === 'admin' ? [{ path: '/admin', icon: Shield, label: t('nav.admin') || 'Administration' }] : []),
   ];
 
   return (

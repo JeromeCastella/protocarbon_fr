@@ -10,6 +10,7 @@ import DataEntry from './pages/DataEntry';
 import Products from './pages/Products';
 import EmissionFactors from './pages/EmissionFactors';
 import FiscalYears from './pages/FiscalYears';
+import Admin from './pages/Admin';
 import Layout from './components/Layout';
 
 function App() {
@@ -36,6 +37,7 @@ function App() {
             <Route path="products" element={<Products />} />
             <Route path="emission-factors" element={<EmissionFactors />} />
             <Route path="fiscal-years" element={<FiscalYears />} />
+            <Route path="admin" element={<Admin />} />
           </Route>
         </Routes>
       </FiscalYearProvider>
