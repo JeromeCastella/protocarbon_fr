@@ -95,31 +95,12 @@ const DataEntry = () => {
 
   // Table view state
   const [showTableView, setShowTableView] = useState(false);
-  const [tableViewScope, setTableViewScope] = useState(null); // null means "all scopes" (total view)
+  const [tableViewScope, setTableViewScope] = useState(null);
   const [editingActivity, setEditingActivity] = useState(null);
-  const [editingActivityData, setEditingActivityData] = useState(null); // For modal edit mode
+  const [editingActivityData, setEditingActivityData] = useState(null);
 
-  // Product sale modal state (for transformation/utilisation/fin_vie categories)
+  // Product sale modal state
   const [showProductSaleModal, setShowProductSaleModal] = useState(false);
-
-  // Modal state for guided flow
-  const [subcategories, setSubcategories] = useState([]);
-  const [selectedSubcategory, setSelectedSubcategory] = useState(null);
-  const [selectedUnit, setSelectedUnit] = useState('');
-  const [availableFactors, setAvailableFactors] = useState([]);
-  const [allCategoryFactors, setAllCategoryFactors] = useState([]);
-  const [selectedFactor, setSelectedFactor] = useState(null);
-  const [factorSearch, setFactorSearch] = useState('');
-  const [showFactorDropdown, setShowFactorDropdown] = useState(false);
-  
-  const [activityForm, setActivityForm] = useState({
-    name: '',
-    description: '',
-    quantity: '',
-    date: new Date().toISOString().split('T')[0],
-    source: '',
-    comments: ''
-  });
 
   useEffect(() => {
     fetchData();
