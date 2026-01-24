@@ -779,12 +779,24 @@ async def get_categories():
 
 @api_router.get("/subcategories")
 async def get_subcategories(category: Optional[str] = None):
-    """Get subcategories, optionally filtered by parent category"""
+    """Get subcategories, optionally filtered by category (N-N relationship)"""
     query = {}
     if category:
-        query["parent_category"] = category
-    subcategories = list(db.subcategories.find(query).sort("order", 1))
+        # N-N relationship: categories is a list in subcategory
+        query["categories"] = category
+    subcategories = list(subcategories_collection.find(query).sort("order", 1))
     return [serialize_doc(s) for s in subcategories]
+
+@api_router.get("/unit-conversions")
+async def get_unit_conversions(from_unit: Optional[str] = None, to_unit: Optional[str] = None):
+    """Get unit conversions, optionally filtered"""
+    query = {}
+    if from_unit:
+        query["from_unit"] = from_unit
+    if to_unit:
+        query["to_unit"] = to_unit
+    conversions = list(unit_conversions_collection.find(query))
+    return [serialize_doc(c) for c in conversions]
 
 @api_router.get("/emission-factors/search")
 async def search_emission_factors(
