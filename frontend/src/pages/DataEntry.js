@@ -187,105 +187,6 @@ const DataEntry = () => {
     }
   };
   
-  // Fetch factors and filter by subcategory (using tags)
-  const fetchFactorsForCategoryAndFilter = async (categoryCode, subcatCode) => {
-    try {
-      const response = await axios.get(`${API_URL}/api/emission-factors/search?category=${categoryCode}`);
-      const allFactors = response.data || [];
-      setAllCategoryFactors(allFactors);
-      
-      // Filter by subcategory using tags (subcategory name should be in tags)
-      const subcatLower = subcatCode?.toLowerCase() || '';
-      const filtered = subcatLower 
-        ? allFactors.filter(f => 
-            f.tags?.some(tag => tag.toLowerCase().includes(subcatLower)) ||
-            f.name?.toLowerCase().includes(subcatLower)
-          )
-        : allFactors;
-      
-      setAvailableFactors(filtered.length > 0 ? filtered : allFactors);
-    } catch (error) {
-      console.error('Failed to fetch factors:', error);
-    }
-  };
-
-  const handleUnitSelect = (unit) => {
-    setSelectedUnit(unit);
-    setSelectedFactor(null);
-    
-    // Filter available factors by selected unit
-    const filtered = allCategoryFactors.filter(f => {
-      const factorUnit = f.unit?.match(/kgCO2e\/(.+)/)?.[1] || f.unit;
-      return factorUnit === unit;
-    });
-    
-    setAvailableFactors(filtered);
-  };
-
-  const handleFactorSelect = (factor) => {
-    setSelectedFactor(factor);
-    setShowFactorDropdown(false);
-    setActivityForm(prev => ({
-      ...prev,
-      name: factor.name
-    }));
-  };
-
-  const handleSubmitActivity = async (e) => {
-    e.preventDefault();
-    if (!activityForm.quantity || !selectedFactor) return;
-    
-    try {
-      if (editingActivityData) {
-        // UPDATE existing activity
-        await axios.put(`${API_URL}/api/activities/${editingActivityData.id}`, {
-          name: activityForm.name || selectedFactor.name,
-          description: activityForm.description,
-          quantity: parseFloat(activityForm.quantity),
-          unit: selectedUnit || selectedFactor.default_unit,
-          emission_factor_id: selectedFactor.id,
-          date: activityForm.date,
-          source: activityForm.source,
-          comments: activityForm.comments
-        });
-      } else {
-        // CREATE new activity
-        await axios.post(`${API_URL}/api/activities`, {
-          category_id: selectedCategory.code,
-          subcategory_id: selectedSubcategory?.code,
-          scope: activeScope,
-          name: activityForm.name || selectedFactor.name,
-          description: activityForm.description,
-          quantity: parseFloat(activityForm.quantity),
-          unit: selectedUnit || selectedFactor.default_unit,
-          emission_factor_id: selectedFactor.id,
-          date: activityForm.date,
-          source: activityForm.source,
-          comments: activityForm.comments
-        });
-      }
-      
-      setShowModal(false);
-      setEditingActivityData(null);
-      fetchData();
-    } catch (error) {
-      console.error('Failed to save activity:', error);
-    }
-  };
-
-  // Get all unique units from available factors (extract base unit from "kgCO2e/L" -> "L")
-  const availableUnits = [...new Set(availableFactors.map(f => {
-    const unit = f.unit || '';
-    // Extract the input unit from format like "kgCO2e/L" or "kgCO2e/kWh"
-    const match = unit.match(/kgCO2e\/(.+)/);
-    return match ? match[1] : unit;
-  }).filter(u => u))];
-
-  // Calculate estimated emissions
-  const estimatedEmissions = selectedFactor && activityForm.quantity
-    ? parseFloat(activityForm.quantity) * (selectedFactor.value || 0)
-    : 0;
-
   // Table view functions
   const openTableView = (scope) => {
     setTableViewScope(scope);
@@ -294,13 +195,12 @@ const DataEntry = () => {
 
   // Open full view (all scopes) when clicking on total
   const openFullTableView = () => {
-    setTableViewScope(null); // null = all scopes
+    setTableViewScope(null);
     setShowTableView(true);
   };
 
   const getScopeActivities = (scope) => {
     if (scope === null) {
-      // Return all activities
       return activities;
     }
     return activities.filter(a => a.scope === scope);
