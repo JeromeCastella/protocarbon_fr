@@ -238,6 +238,7 @@ const GuidedEntryModal = ({
     setSelectedUnit(unit);
     setSelectedFactor(null);
     setStep(3);
+    setShowFactorList(true); // Afficher automatiquement la liste des facteurs
     
     // Filtrer les facteurs compatibles avec cette unité
     filterFactorsByUnit(unit);
