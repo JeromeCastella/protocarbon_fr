@@ -383,36 +383,6 @@ const Admin = () => {
     });
   };
 
-  // Add/remove impacts
-  const addImpact = () => {
-    setFactorForm(prev => ({
-      ...prev,
-      impacts: [...prev.impacts, { scope: 'scope1', category: '', value: '', unit: 'kgCO2e/', type: 'direct' }]
-    }));
-  };
-
-  const removeImpact = (index) => {
-    if (factorForm.impacts.length <= 1) return;
-    setFactorForm(prev => ({
-      ...prev,
-      impacts: prev.impacts.filter((_, i) => i !== index)
-    }));
-  };
-
-  const updateImpact = (index, field, value) => {
-    setFactorForm(prev => ({
-      ...prev,
-      impacts: prev.impacts.map((imp, i) => {
-        if (i !== index) return imp;
-        // If scope changes, reset category to avoid invalid state
-        if (field === 'scope') {
-          return { ...imp, [field]: value, category: '' };
-        }
-        return { ...imp, [field]: value };
-      })
-    }));
-  };
-
   // When subcategory changes, auto-generate required impact containers
   const handleSubcategoryChange = (newSubcategory) => {
     // First update subcategory
