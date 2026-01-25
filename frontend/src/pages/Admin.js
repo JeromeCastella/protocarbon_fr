@@ -413,12 +413,109 @@ const Admin = () => {
     }));
   };
 
-  // When subcategory changes, reset all impact categories
+  // When subcategory changes, auto-generate required impact containers
   const handleSubcategoryChange = (newSubcategory) => {
+    // First update subcategory
+    const subcat = subcategories.find(s => s.code === newSubcategory);
+    const linkedCats = subcat?.categories || [];
+    
+    // Determine which impacts are required
+    const hasScope1 = allCategories.some(cat => 
+      linkedCats.includes(cat.value) && cat.scope === 'scope1'
+    );
+    const hasScope2 = allCategories.some(cat => 
+      linkedCats.includes(cat.value) && cat.scope === 'scope2'
+    );
+    const hasScope1Or2 = hasScope1 || hasScope2;
+    const hasOtherScope3 = linkedCats.some(catValue => {
+      const cat = allCategories.find(c => c.value === catValue);
+      return cat && (cat.scope === 'scope3_amont' || cat.scope === 'scope3_aval') && 
+             catValue !== 'activites_combustibles_energie';
+    });
+
+    // Generate impacts array based on required types
+    const newImpacts = [];
+    
+    if (hasScope1) {
+      // Find the first scope1 category for this subcategory
+      const scope1Cat = allCategories.find(c => linkedCats.includes(c.value) && c.scope === 'scope1');
+      newImpacts.push({
+        impactKey: 'scope1',
+        scope: 'scope1',
+        category: scope1Cat?.value || '',
+        value: '',
+        unit: 'kgCO2e/',
+        type: 'direct'
+      });
+    }
+    
+    if (hasScope2) {
+      const scope2Cat = allCategories.find(c => linkedCats.includes(c.value) && c.scope === 'scope2');
+      newImpacts.push({
+        impactKey: 'scope2',
+        scope: 'scope2',
+        category: scope2Cat?.value || '',
+        value: '',
+        unit: 'kgCO2e/',
+        type: 'indirect'
+      });
+    }
+    
+    if (hasScope1Or2) {
+      // Scope 3.3 - fixed category
+      newImpacts.push({
+        impactKey: 'scope3_3',
+        scope: 'scope3_amont',
+        category: 'activites_combustibles_energie',
+        value: '',
+        unit: 'kgCO2e/',
+        type: 'upstream'
+      });
+    }
+    
+    if (hasOtherScope3) {
+      const scope3Cat = allCategories.find(c => 
+        linkedCats.includes(c.value) && 
+        (c.scope === 'scope3_amont' || c.scope === 'scope3_aval') &&
+        c.value !== 'activites_combustibles_energie'
+      );
+      newImpacts.push({
+        impactKey: 'scope3',
+        scope: scope3Cat?.scope || 'scope3_amont',
+        category: scope3Cat?.value || '',
+        value: '',
+        unit: 'kgCO2e/',
+        type: 'upstream'
+      });
+    }
+
+    // If no impacts determined, add a default empty one
+    if (newImpacts.length === 0) {
+      newImpacts.push({
+        impactKey: 'scope1',
+        scope: 'scope1',
+        category: '',
+        value: '',
+        unit: 'kgCO2e/',
+        type: 'direct'
+      });
+    }
+
     setFactorForm(prev => ({
       ...prev,
       subcategory: newSubcategory,
-      impacts: prev.impacts.map(imp => ({ ...imp, category: '' }))
+      impacts: newImpacts
+    }));
+  };
+
+  // Update a specific impact by its key
+  const updateImpactByKey = (impactKey, field, value) => {
+    setFactorForm(prev => ({
+      ...prev,
+      impacts: prev.impacts.map(imp => {
+        if (imp.impactKey !== impactKey) return imp;
+        return { ...imp, [field]: value };
+      })
     }));
   };
 
