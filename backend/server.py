@@ -1644,6 +1644,124 @@ async def delete_activity(activity_id: str, current_user: dict = Depends(get_cur
         raise HTTPException(status_code=404, detail="Activity not found")
     return {"message": "Activity deleted"}
 
+@api_router.post("/activities/recalculate")
+async def recalculate_activities_with_current_factors(request: RecalculateRequest, current_user: dict = Depends(get_current_user)):
+    """
+    Recalculate activities using the current (latest) emission factors.
+    Useful for comparing historical data with updated factors.
+    
+    If preview_only=True, returns comparison without modifying data.
+    If preview_only=False, creates new comparison records.
+    """
+    # Get the fiscal year to determine the date context
+    fiscal_year = fiscal_years_collection.find_one({
+        "_id": ObjectId(request.fiscal_year_id),
+        "tenant_id": current_user["id"]
+    })
+    if not fiscal_year:
+        raise HTTPException(status_code=404, detail="Fiscal year not found")
+    
+    # Build query for activities
+    query = {
+        "tenant_id": current_user["id"],
+        "fiscal_year_id": request.fiscal_year_id
+    }
+    if request.activity_ids:
+        query["_id"] = {"$in": [ObjectId(aid) for aid in request.activity_ids]}
+    
+    activities = list(activities_collection.find(query))
+    
+    if not activities:
+        return {"message": "No activities found", "comparisons": []}
+    
+    comparisons = []
+    total_original = 0
+    total_recalculated = 0
+    
+    for activity in activities:
+        original_emissions = activity.get("emissions", 0)
+        total_original += original_emissions
+        
+        recalculated_emissions = original_emissions  # Default if no factor found
+        new_factor_info = None
+        
+        # Get the original factor ID from the activity or snapshot
+        factor_id = activity.get("emission_factor_id")
+        if not factor_id and activity.get("factor_snapshot"):
+            factor_id = activity["factor_snapshot"].get("factor_id")
+        
+        if factor_id:
+            # Find the current (latest) version of this factor chain
+            current_factor = emission_factors_collection.find_one({
+                "_id": ObjectId(factor_id),
+                "deleted_at": None
+            })
+            
+            if current_factor:
+                # Follow the replaced_by chain to get the latest version
+                while current_factor.get("replaced_by"):
+                    next_factor = emission_factors_collection.find_one({
+                        "_id": ObjectId(current_factor["replaced_by"]),
+                        "deleted_at": None
+                    })
+                    if next_factor:
+                        current_factor = next_factor
+                    else:
+                        break
+                
+                # Find the matching impact
+                quantity = activity.get("converted_quantity", activity.get("quantity", 0))
+                scope = activity.get("scope")
+                category = activity.get("category_id")
+                
+                for impact in current_factor.get("impacts", []):
+                    if impact.get("scope") == scope and impact.get("category") == category:
+                        recalculated_emissions = quantity * impact["value"]
+                        new_factor_info = {
+                            "factor_id": str(current_factor["_id"]),
+                            "factor_version": current_factor.get("factor_version", 1),
+                            "name_fr": current_factor.get("name_fr"),
+                            "impact_value": impact["value"],
+                            "impact_unit": impact["unit"]
+                        }
+                        break
+        
+        total_recalculated += recalculated_emissions
+        difference = recalculated_emissions - original_emissions
+        difference_percent = (difference / original_emissions * 100) if original_emissions != 0 else 0
+        
+        comparison = {
+            "activity_id": str(activity["_id"]),
+            "activity_name": activity.get("name"),
+            "scope": activity.get("scope"),
+            "category": activity.get("category_id"),
+            "quantity": activity.get("quantity"),
+            "unit": activity.get("unit"),
+            "original_emissions": round(original_emissions, 4),
+            "recalculated_emissions": round(recalculated_emissions, 4),
+            "difference": round(difference, 4),
+            "difference_percent": round(difference_percent, 2),
+            "original_factor": activity.get("factor_snapshot", {}).get("factor_version", 1) if activity.get("factor_snapshot") else None,
+            "new_factor": new_factor_info
+        }
+        comparisons.append(comparison)
+    
+    result = {
+        "fiscal_year_id": request.fiscal_year_id,
+        "fiscal_year_name": fiscal_year.get("name"),
+        "preview_only": request.preview_only,
+        "summary": {
+            "total_activities": len(activities),
+            "total_original_emissions": round(total_original, 4),
+            "total_recalculated_emissions": round(total_recalculated, 4),
+            "total_difference": round(total_recalculated - total_original, 4),
+            "total_difference_percent": round((total_recalculated - total_original) / total_original * 100, 2) if total_original != 0 else 0
+        },
+        "comparisons": comparisons
+    }
+    
+    return result
+
 # ==================== PRODUCTS ENDPOINTS (Enhanced) ====================
 
 def calculate_product_emissions(product_doc: dict) -> dict:
