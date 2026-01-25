@@ -156,6 +156,44 @@ class EmissionFactorV2Update(BaseModel):
     region: Optional[str] = None
     year: Optional[int] = None
 
+# ==================== VERSIONING MODELS ====================
+
+class EmissionFactorNewVersion(BaseModel):
+    """Données pour créer une nouvelle version d'un facteur"""
+    impacts: List[EmissionImpact]  # Nouveaux impacts
+    is_correction: bool = False  # True si c'est une correction d'erreur
+    change_reason: str  # Raison du changement (obligatoire)
+    valid_from: Optional[str] = None  # Date de début de validité (ISO format), défaut = aujourd'hui
+    # Les autres champs (name, subcategory, etc.) peuvent aussi être mis à jour
+    name_fr: Optional[str] = None
+    name_de: Optional[str] = None
+    subcategory: Optional[str] = None
+    input_units: Optional[List[str]] = None
+    default_unit: Optional[str] = None
+    unit_conversions: Optional[Dict[str, float]] = None
+    tags: Optional[List[str]] = None
+    source: Optional[str] = None
+    region: Optional[str] = None
+    year: Optional[int] = None
+
+class FactorSnapshot(BaseModel):
+    """Snapshot d'un facteur au moment de la saisie d'activité"""
+    factor_id: str
+    factor_version: int
+    name_fr: str
+    name_de: str
+    subcategory: str
+    impacts: List[Dict[str, Any]]  # Copie complète des impacts
+    source: str
+    year: int
+    captured_at: str  # Date ISO du snapshot
+
+class RecalculateRequest(BaseModel):
+    """Requête pour recalculer des activités avec les facteurs actuels"""
+    activity_ids: Optional[List[str]] = None  # Si None, recalcule toutes les activités de l'exercice
+    fiscal_year_id: str
+    preview_only: bool = True  # Si True, retourne juste la comparaison sans modifier
+
 # Legacy models for backward compatibility
 class EmissionFactorCreate(BaseModel):
     name: str
