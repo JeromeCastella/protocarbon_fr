@@ -1633,6 +1633,278 @@ const Admin = () => {
             </motion.div>
           </motion.div>
         )}
+
+        {/* ==================== NEW VERSION MODAL ==================== */}
+        {showVersionModal && versioningFactor && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+            onClick={() => setShowVersionModal(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              className={`w-full max-w-2xl max-h-[90vh] rounded-2xl shadow-xl overflow-hidden ${isDark ? 'bg-slate-800' : 'bg-white'}`}
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Header */}
+              <div className={`p-6 border-b ${isDark ? 'border-slate-700' : 'border-gray-200'}`}>
+                <div className="flex items-center gap-3">
+                  <div className="p-2 rounded-xl bg-blue-500/20">
+                    <GitBranch className="w-6 h-6 text-blue-500" />
+                  </div>
+                  <div>
+                    <h2 className="text-xl font-bold">Nouvelle version</h2>
+                    <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+                      {versioningFactor.name_fr} - v{versioningFactor.factor_version || 1} → v{(versioningFactor.factor_version || 1) + 1}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Content */}
+              <div className="flex-1 overflow-y-auto p-6 space-y-6 max-h-[60vh]">
+                {/* Change reason */}
+                <div>
+                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
+                    Raison du changement *
+                  </label>
+                  <textarea
+                    value={versionForm.change_reason}
+                    onChange={(e) => setVersionForm(prev => ({ ...prev, change_reason: e.target.value }))}
+                    placeholder="Ex: Mise à jour annuelle des facteurs OFEV 2025"
+                    rows={2}
+                    className={`w-full px-4 py-3 rounded-xl border ${isDark ? 'bg-slate-700 border-slate-600 text-white' : 'bg-white border-gray-200'}`}
+                  />
+                </div>
+
+                {/* Is correction */}
+                <div className="flex items-center gap-3">
+                  <input
+                    type="checkbox"
+                    id="is_correction"
+                    checked={versionForm.is_correction}
+                    onChange={(e) => setVersionForm(prev => ({ ...prev, is_correction: e.target.checked }))}
+                    className="w-5 h-5 rounded"
+                  />
+                  <label htmlFor="is_correction" className={`${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
+                    <span className="font-medium">Correction d'erreur</span>
+                    <span className={`block text-xs ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+                      Cocher si cette version corrige une erreur dans les données précédentes
+                    </span>
+                  </label>
+                </div>
+
+                {/* Valid from date */}
+                <div>
+                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
+                    Date de début de validité
+                  </label>
+                  <input
+                    type="date"
+                    value={versionForm.valid_from}
+                    onChange={(e) => setVersionForm(prev => ({ ...prev, valid_from: e.target.value }))}
+                    className={`w-full px-4 py-3 rounded-xl border ${isDark ? 'bg-slate-700 border-slate-600 text-white' : 'bg-white border-gray-200'}`}
+                  />
+                  <p className={`text-xs mt-1 ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+                    Les exercices dont la date de fin est postérieure utiliseront cette nouvelle version
+                  </p>
+                </div>
+
+                {/* Impacts - simplified editor */}
+                <div>
+                  <label className={`block text-sm font-medium mb-3 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
+                    Valeurs des impacts
+                  </label>
+                  <div className="space-y-3">
+                    {versionForm.impacts.map((impact, i) => (
+                      <div key={i} className={`p-4 rounded-xl border ${isDark ? 'bg-slate-700/50 border-slate-600' : 'bg-gray-50 border-gray-200'}`}>
+                        <div className="flex items-center gap-3 mb-3">
+                          <span className={`px-2 py-1 rounded text-xs font-medium text-white ${getScopeColor(impact.scope)}`}>
+                            {impact.scope?.replace('_', ' ')}
+                          </span>
+                          <span className={`text-sm ${isDark ? 'text-slate-300' : 'text-gray-600'}`}>
+                            {allCategories.find(c => c.value === impact.category)?.label || impact.category}
+                          </span>
+                        </div>
+                        <div className="grid grid-cols-2 gap-3">
+                          <div>
+                            <label className="text-xs text-gray-500">Nouvelle valeur *</label>
+                            <input
+                              type="number"
+                              step="any"
+                              value={impact.value}
+                              onChange={(e) => updateVersionImpact(i, 'value', e.target.value)}
+                              className={`w-full px-3 py-2 rounded-lg border text-sm ${isDark ? 'bg-slate-600 border-slate-500 text-white' : 'bg-white border-gray-200'}`}
+                              placeholder="2.68"
+                            />
+                          </div>
+                          <div>
+                            <label className="text-xs text-gray-500">Unité</label>
+                            <input
+                              type="text"
+                              value={impact.unit}
+                              onChange={(e) => updateVersionImpact(i, 'unit', e.target.value)}
+                              className={`w-full px-3 py-2 rounded-lg border text-sm ${isDark ? 'bg-slate-600 border-slate-500 text-white' : 'bg-white border-gray-200'}`}
+                              placeholder="kgCO2e/L"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Footer */}
+              <div className={`p-6 border-t ${isDark ? 'border-slate-700' : 'border-gray-200'}`}>
+                <div className="flex gap-3">
+                  <button 
+                    onClick={() => setShowVersionModal(false)} 
+                    className={`flex-1 px-4 py-3 rounded-xl border ${isDark ? 'border-slate-600 hover:bg-slate-700' : 'border-gray-200 hover:bg-gray-50'}`}
+                  >
+                    Annuler
+                  </button>
+                  <button
+                    onClick={handleSaveNewVersion}
+                    disabled={!versionForm.change_reason || versionForm.impacts.some(i => !i.value)}
+                    className="flex-1 px-4 py-3 bg-blue-500 text-white rounded-xl hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                  >
+                    <GitBranch className="w-5 h-5" />
+                    Créer la version {(versioningFactor.factor_version || 1) + 1}
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+
+        {/* ==================== HISTORY MODAL ==================== */}
+        {showHistoryModal && factorHistory && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+            onClick={() => setShowHistoryModal(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              className={`w-full max-w-3xl max-h-[90vh] rounded-2xl shadow-xl overflow-hidden ${isDark ? 'bg-slate-800' : 'bg-white'}`}
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Header */}
+              <div className={`p-6 border-b ${isDark ? 'border-slate-700' : 'border-gray-200'}`}>
+                <div className="flex items-center gap-3">
+                  <div className="p-2 rounded-xl bg-purple-500/20">
+                    <History className="w-6 h-6 text-purple-500" />
+                  </div>
+                  <div>
+                    <h2 className="text-xl font-bold">Historique des versions</h2>
+                    <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+                      {factorHistory.total_versions} version(s)
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Content */}
+              <div className="flex-1 overflow-y-auto p-6 space-y-4 max-h-[60vh]">
+                {/* Change history timeline */}
+                {factorHistory.change_history?.length > 0 && (
+                  <div className={`p-4 rounded-xl border ${isDark ? 'bg-slate-700/30 border-slate-700' : 'bg-gray-50 border-gray-200'}`}>
+                    <h3 className={`font-medium mb-3 flex items-center gap-2 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
+                      <RefreshCw className="w-4 h-4" />
+                      Journal des modifications
+                    </h3>
+                    <div className="space-y-3 pl-4 border-l-2 border-blue-500/30">
+                      {factorHistory.change_history.slice().reverse().map((change, i) => (
+                        <div key={i} className="relative">
+                          <div className="absolute -left-[1.35rem] top-1 w-3 h-3 rounded-full bg-blue-500" />
+                          <div className={`text-sm ${isDark ? 'text-slate-300' : 'text-gray-600'}`}>
+                            <span className="font-medium">v{change.version}</span>
+                            {change.is_correction && (
+                              <span className="ml-2 px-1.5 py-0.5 text-xs rounded bg-amber-500/20 text-amber-500">Correction</span>
+                            )}
+                            <span className={`block text-xs ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+                              {new Date(change.changed_at).toLocaleDateString('fr-CH')} par {change.changed_by}
+                            </span>
+                            <span className={`block mt-1 ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+                              {change.reason}
+                            </span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* All versions */}
+                <div>
+                  <h3 className={`font-medium mb-3 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
+                    Toutes les versions
+                  </h3>
+                  <div className="space-y-3">
+                    {factorHistory.versions?.map((version, i) => (
+                      <div 
+                        key={version.id} 
+                        className={`p-4 rounded-xl border ${
+                          version.id === factorHistory.factor_id 
+                            ? isDark ? 'bg-blue-500/10 border-blue-500/30' : 'bg-blue-50 border-blue-200'
+                            : isDark ? 'bg-slate-700/30 border-slate-700' : 'bg-gray-50 border-gray-200'
+                        }`}
+                      >
+                        <div className="flex items-center justify-between mb-2">
+                          <div className="flex items-center gap-2">
+                            <span className={`px-2 py-1 rounded text-sm font-medium ${
+                              version.id === factorHistory.factor_id 
+                                ? 'bg-blue-500 text-white' 
+                                : isDark ? 'bg-slate-600 text-slate-300' : 'bg-gray-200 text-gray-700'
+                            }`}>
+                              v{version.factor_version || 1}
+                            </span>
+                            <span className="font-medium">{version.name_fr}</span>
+                            {version.deleted_at && (
+                              <span className="px-1.5 py-0.5 text-xs rounded bg-red-500/20 text-red-500">Archivé</span>
+                            )}
+                            {version.replaced_by && !version.deleted_at && (
+                              <span className="px-1.5 py-0.5 text-xs rounded bg-amber-500/20 text-amber-500">Remplacé</span>
+                            )}
+                          </div>
+                          <span className={`text-xs ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+                            {version.valid_from} → {version.valid_to || 'Actuel'}
+                          </span>
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                          {(version.impacts || []).map((imp, j) => (
+                            <span key={j} className={`text-xs px-2 py-1 rounded ${isDark ? 'bg-slate-600' : 'bg-gray-200'}`}>
+                              {imp.scope?.replace('_', ' ')}: {imp.value} {imp.unit}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Footer */}
+              <div className={`p-6 border-t ${isDark ? 'border-slate-700' : 'border-gray-200'}`}>
+                <button 
+                  onClick={() => setShowHistoryModal(false)} 
+                  className={`w-full px-4 py-3 rounded-xl border ${isDark ? 'border-slate-600 hover:bg-slate-700' : 'border-gray-200 hover:bg-gray-50'}`}
+                >
+                  Fermer
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
       </AnimatePresence>
     </div>
   );
