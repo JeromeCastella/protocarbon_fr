@@ -1698,19 +1698,21 @@ const Admin = () => {
                   </label>
                 </div>
 
-                {/* Valid from date */}
+                {/* Valid from year */}
                 <div>
                   <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
-                    Date de début de validité
+                    Année de début de validité
                   </label>
                   <input
-                    type="date"
-                    value={versionForm.valid_from}
-                    onChange={(e) => setVersionForm(prev => ({ ...prev, valid_from: e.target.value }))}
+                    type="number"
+                    min="2020"
+                    max="2100"
+                    value={versionForm.valid_from_year}
+                    onChange={(e) => setVersionForm(prev => ({ ...prev, valid_from_year: parseInt(e.target.value) || new Date().getFullYear() }))}
                     className={`w-full px-4 py-3 rounded-xl border ${isDark ? 'bg-slate-700 border-slate-600 text-white' : 'bg-white border-gray-200'}`}
                   />
                   <p className={`text-xs mt-1 ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-                    Les exercices dont la date de fin est postérieure utiliseront cette nouvelle version
+                    Les exercices {versionForm.valid_from_year} et suivants utiliseront cette nouvelle version
                   </p>
                 </div>
 
