@@ -862,7 +862,7 @@ const Admin = () => {
                       <th className="text-left px-4 py-3 font-medium">Nom</th>
                       <th className="text-left px-4 py-3 font-medium">Sous-catégorie</th>
                       <th className="text-left px-4 py-3 font-medium">Impacts</th>
-                      <th className="text-left px-4 py-3 font-medium">Unités</th>
+                      <th className="text-left px-4 py-3 font-medium">Version</th>
                       <th className="text-left px-4 py-3 font-medium">Source</th>
                       <th className="text-right px-4 py-3 font-medium">Actions</th>
                     </tr>
@@ -871,11 +871,27 @@ const Admin = () => {
                     {filteredFactors.map(factor => {
                       const impacts = factor.impacts || [{ scope: factor.scope, value: factor.value, unit: factor.unit }];
                       const isMultiImpact = impacts.length > 1;
+                      const isArchived = !!factor.deleted_at;
+                      const isReplaced = !!factor.replaced_by;
+                      const version = factor.factor_version || 1;
                       
                       return (
-                        <tr key={factor.id} className={`border-t ${isDark ? 'border-slate-700 hover:bg-slate-700/50' : 'border-gray-100 hover:bg-gray-50'}`}>
+                        <tr 
+                          key={factor.id} 
+                          className={`border-t ${
+                            isArchived ? 'opacity-50' : ''
+                          } ${isDark ? 'border-slate-700 hover:bg-slate-700/50' : 'border-gray-100 hover:bg-gray-50'}`}
+                        >
                           <td className="px-4 py-3">
-                            <div className="font-medium">{factor.name_fr || factor.name}</div>
+                            <div className="flex items-center gap-2">
+                              <div className="font-medium">{factor.name_fr || factor.name}</div>
+                              {isArchived && (
+                                <span className="px-1.5 py-0.5 text-xs rounded bg-red-500/20 text-red-500">Archivé</span>
+                              )}
+                              {isReplaced && !isArchived && (
+                                <span className="px-1.5 py-0.5 text-xs rounded bg-amber-500/20 text-amber-500">Remplacé</span>
+                              )}
+                            </div>
                             {factor.name_de && <div className={`text-xs ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>{factor.name_de}</div>}
                             {factor.tags?.length > 0 && (
                               <div className="flex flex-wrap gap-1 mt-1">
@@ -913,21 +929,73 @@ const Admin = () => {
                             </div>
                           </td>
                           <td className="px-4 py-3">
-                            <div className="flex flex-wrap gap-1">
-                              {(factor.input_units || [factor.unit?.split('/')[1]]).filter(Boolean).map(u => (
-                                <span key={u} className={`text-xs px-2 py-0.5 rounded ${isDark ? 'bg-blue-500/20 text-blue-400' : 'bg-blue-100 text-blue-600'}`}>{u}</span>
-                              ))}
+                            <div className="flex flex-col gap-1">
+                              <span className={`inline-flex items-center gap-1 text-sm font-medium ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
+                                <GitBranch className="w-3 h-3" />
+                                v{version}
+                              </span>
+                              {factor.valid_from && (
+                                <span className={`text-xs ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+                                  Depuis {factor.valid_from}
+                                </span>
+                              )}
+                              {factor.valid_to && (
+                                <span className={`text-xs ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+                                  Jusqu'au {factor.valid_to}
+                                </span>
+                              )}
                             </div>
                           </td>
                           <td className="px-4 py-3">
                             <span className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>{factor.source}</span>
+                            {factor.year && <div className={`text-xs ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>{factor.year}</div>}
                           </td>
                           <td className="px-4 py-3 text-right">
-                            <div className="flex items-center justify-end gap-2">
-                              <button onClick={() => handleEditFactor(factor)} className={`p-2 rounded-lg ${isDark ? 'hover:bg-slate-600' : 'hover:bg-gray-100'}`}>
-                                <Edit2 className="w-4 h-4" />
+                            <div className="flex items-center justify-end gap-1">
+                              {/* View history */}
+                              <button 
+                                onClick={() => handleViewHistory(factor.id)} 
+                                className={`p-2 rounded-lg ${isDark ? 'hover:bg-slate-600' : 'hover:bg-gray-100'}`}
+                                title="Historique des versions"
+                              >
+                                <History className="w-4 h-4" />
                               </button>
-                              <button onClick={() => handleDeleteFactor(factor.id)} className="p-2 rounded-lg text-red-500 hover:bg-red-500/10">
+                              {/* Create new version - only for active factors */}
+                              {!isArchived && !isReplaced && (
+                                <button 
+                                  onClick={() => handleCreateNewVersion(factor)} 
+                                  className={`p-2 rounded-lg text-blue-500 ${isDark ? 'hover:bg-blue-500/20' : 'hover:bg-blue-100'}`}
+                                  title="Créer nouvelle version"
+                                >
+                                  <GitBranch className="w-4 h-4" />
+                                </button>
+                              )}
+                              {/* Edit - only for active factors */}
+                              {!isArchived && !isReplaced && (
+                                <button 
+                                  onClick={() => handleEditFactor(factor)} 
+                                  className={`p-2 rounded-lg ${isDark ? 'hover:bg-slate-600' : 'hover:bg-gray-100'}`}
+                                  title="Modifier"
+                                >
+                                  <Edit2 className="w-4 h-4" />
+                                </button>
+                              )}
+                              {/* Archive (soft delete) - only for active factors */}
+                              {!isArchived && !isReplaced && (
+                                <button 
+                                  onClick={() => handleSoftDelete(factor.id)} 
+                                  className="p-2 rounded-lg text-amber-500 hover:bg-amber-500/10"
+                                  title="Archiver"
+                                >
+                                  <Archive className="w-4 h-4" />
+                                </button>
+                              )}
+                              {/* Hard delete - admin option */}
+                              <button 
+                                onClick={() => handleDeleteFactor(factor.id)} 
+                                className="p-2 rounded-lg text-red-500 hover:bg-red-500/10"
+                                title="Supprimer définitivement"
+                              >
                                 <Trash2 className="w-4 h-4" />
                               </button>
                             </div>
