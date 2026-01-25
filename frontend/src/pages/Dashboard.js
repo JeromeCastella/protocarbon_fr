@@ -19,7 +19,13 @@ import {
   DollarSign,
   Calendar,
   ArrowLeft,
-  Minus
+  Minus,
+  RefreshCw,
+  GitCompare,
+  AlertTriangle,
+  CheckCircle,
+  ChevronDown,
+  ChevronUp
 } from 'lucide-react';
 import {
   BarChart,
