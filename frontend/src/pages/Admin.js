@@ -863,7 +863,7 @@ const Admin = () => {
                     <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>Sous-catégorie *</label>
                     <select
                       value={factorForm.subcategory}
-                      onChange={(e) => setFactorForm(prev => ({ ...prev, subcategory: e.target.value }))}
+                      onChange={(e) => handleSubcategoryChange(e.target.value)}
                       className={`w-full px-4 py-2 rounded-lg border ${isDark ? 'bg-slate-700 border-slate-600 text-white' : 'bg-white border-gray-200'}`}
                     >
                       <option value="">Sélectionner...</option>
@@ -871,6 +871,11 @@ const Admin = () => {
                         <option key={s.code} value={s.code}>{s.name_fr} ({s.code})</option>
                       ))}
                     </select>
+                    {factorForm.subcategory && (
+                      <p className={`text-xs mt-1 ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+                        Catégories liées: {getLinkedCategories().join(', ') || 'aucune'}
+                      </p>
+                    )}
                   </div>
                   <div>
                     <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>Unité par défaut</label>
