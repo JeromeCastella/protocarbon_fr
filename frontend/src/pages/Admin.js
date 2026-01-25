@@ -85,7 +85,7 @@ const Admin = () => {
   const [versionForm, setVersionForm] = useState({
     change_reason: '',
     is_correction: false,
-    valid_from: new Date().toISOString().split('T')[0],
+    valid_from_year: new Date().getFullYear(),
     impacts: []
   });
   const [showHistoryModal, setShowHistoryModal] = useState(false);
