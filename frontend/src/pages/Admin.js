@@ -156,6 +156,30 @@ const Admin = () => {
     );
   };
 
+  // Get available scopes based on subcategory's linked categories
+  const getAvailableScopes = () => {
+    const linkedCats = getLinkedCategories();
+    if (!factorForm.subcategory || linkedCats.length === 0) {
+      return scopes; // All scopes if no subcategory
+    }
+
+    // Find which scopes have at least one linked category
+    const availableScopeValues = new Set();
+    linkedCats.forEach(catValue => {
+      const cat = allCategories.find(c => c.value === catValue);
+      if (cat) {
+        availableScopeValues.add(cat.scope);
+      }
+    });
+
+    // Special rule: If scope1 or scope2 is available, also allow scope3_amont (for 3.3)
+    if (availableScopeValues.has('scope1') || availableScopeValues.has('scope2')) {
+      availableScopeValues.add('scope3_amont');
+    }
+
+    return scopes.filter(s => availableScopeValues.has(s.value));
+  };
+
   // Get available categories for an impact based on scope and subcategory
   const getAvailableCategoriesForImpact = (impactScope) => {
     const linkedCats = getLinkedCategories();
@@ -172,6 +196,7 @@ const Admin = () => {
 
     // Special rule for Scope 3 amont: add activites_combustibles_energie (3.3) 
     // IF the subcategory has at least one Scope 1 or Scope 2 category
+    // This is for upstream energy impacts (amont énergie)
     if (impactScope === 'scope3_amont' && hasScope1Or2Category()) {
       const scope33 = allCategories.find(c => c.value === 'activites_combustibles_energie');
       if (scope33 && !availableCats.some(c => c.value === 'activites_combustibles_energie')) {
