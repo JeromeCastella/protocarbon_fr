@@ -855,6 +855,8 @@ const Dashboard = () => {
                     >
                       Recalculer un autre exercice
                     </button>
+                      </>
+                    )}
                   </div>
                 )}
               </div>
