@@ -1566,7 +1566,7 @@ async def create_activity(activity: ActivityCreateMultiScope, current_user: dict
                         "impacts": ef.get("impacts", []),
                         "source": ef.get("source", ""),
                         "year": ef.get("year", 0),
-                        "valid_from": ef.get("valid_from"),
+                        "valid_from_year": ef.get("valid_from_year"),
                         "captured_at": datetime.now(timezone.utc).isoformat()
                     }
                 }
