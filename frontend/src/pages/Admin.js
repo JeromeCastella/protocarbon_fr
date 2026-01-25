@@ -934,14 +934,14 @@ const Admin = () => {
                                 <GitBranch className="w-3 h-3" />
                                 v{version}
                               </span>
-                              {factor.valid_from && (
+                              {(factor.valid_from_year || factor.valid_from) && (
                                 <span className={`text-xs ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-                                  Depuis {factor.valid_from}
+                                  Depuis {factor.valid_from_year || factor.valid_from?.split('-')[0]}
                                 </span>
                               )}
-                              {factor.valid_to && (
+                              {(factor.valid_to_year || factor.valid_to) && (
                                 <span className={`text-xs ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-                                  Jusqu'au {factor.valid_to}
+                                  Jusqu'à {factor.valid_to_year || factor.valid_to?.split('-')[0]}
                                 </span>
                               )}
                             </div>
