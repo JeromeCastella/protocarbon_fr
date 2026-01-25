@@ -2787,11 +2787,27 @@ async def get_scope_breakdown(fiscal_year_id: str, current_user: dict = Depends(
                 "category_data": {}
             }
     
+    # Get fiscal year details for date filtering
+    fy = fiscal_years_collection.find_one({"_id": ObjectId(fiscal_year_id)})
+    if not fy:
+        return {"scope_data": [], "category_data": {}}
+    
+    fy_start = fy.get("start_date", "")
+    fy_end = fy.get("end_date", "")
+    
+    # Build query based on date range
+    query = {"tenant_id": current_user["id"]}
+    if fy_start and fy_end:
+        query["$or"] = [
+            {"date": {"$gte": fy_start, "$lte": fy_end}},
+            {"$and": [
+                {"date": {"$exists": False}},
+                {"created_at": {"$gte": fy_start, "$lte": fy_end + "T23:59:59"}}
+            ]}
+        ]
+    
     # Get activities for this fiscal year
-    activities = list(activities_collection.find({
-        "tenant_id": current_user["id"],
-        "fiscal_year_id": fiscal_year_id
-    }))
+    activities = list(activities_collection.find(query))
     
     # Get all categories for names
     categories = {str(c.get("code", "")): c.get("name", "") for c in categories_collection.find({})}
