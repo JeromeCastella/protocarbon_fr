@@ -1879,7 +1879,7 @@ const Admin = () => {
                             )}
                           </div>
                           <span className={`text-xs ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-                            {version.valid_from} → {version.valid_to || 'Actuel'}
+                            {version.valid_from_year || version.valid_from?.split('-')[0] || '?'} → {version.valid_to_year || (version.valid_to ? version.valid_to.split('-')[0] : 'Actuel')}
                           </span>
                         </div>
                         <div className="flex flex-wrap gap-2">
