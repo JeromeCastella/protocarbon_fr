@@ -163,7 +163,7 @@ class EmissionFactorNewVersion(BaseModel):
     impacts: List[EmissionImpact]  # Nouveaux impacts
     is_correction: bool = False  # True si c'est une correction d'erreur
     change_reason: str  # Raison du changement (obligatoire)
-    valid_from: Optional[str] = None  # Date de début de validité (ISO format), défaut = aujourd'hui
+    valid_from_year: Optional[int] = None  # Année de début de validité, défaut = année courante
     # Les autres champs (name, subcategory, etc.) peuvent aussi être mis à jour
     name_fr: Optional[str] = None
     name_de: Optional[str] = None
@@ -186,6 +186,7 @@ class FactorSnapshot(BaseModel):
     impacts: List[Dict[str, Any]]  # Copie complète des impacts
     source: str
     year: int
+    valid_from_year: Optional[int] = None
     captured_at: str  # Date ISO du snapshot
 
 class RecalculateRequest(BaseModel):
