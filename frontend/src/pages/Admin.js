@@ -1280,11 +1280,17 @@ const Admin = () => {
                   </button>
                   <button
                     onClick={handleSaveFactor}
-                    disabled={!factorForm.name_fr || !factorForm.subcategory || factorForm.impacts.every(i => !i.value)}
+                    disabled={
+                      !factorForm.name_fr || 
+                      !factorForm.subcategory || 
+                      factorForm.impacts.length === 0 ||
+                      factorForm.impacts.some(i => !i.value || !i.category || !i.unit)
+                    }
                     className="flex-1 px-4 py-3 bg-blue-500 text-white rounded-xl hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                   >
                     <Check className="w-5 h-5" />
                     {editingFactor ? 'Modifier' : 'Créer'}
+                  </button>
                   </button>
                 </div>
               </div>
