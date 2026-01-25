@@ -794,8 +794,9 @@ async def create_new_factor_version(factor_id: str, new_version: EmissionFactorN
     current_version = existing.get("factor_version", 1)
     new_version_number = current_version + 1
     
-    # Parse valid_from date
-    valid_from = new_version.valid_from or datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    # Get the valid_from_year (default to current year)
+    current_year = datetime.now(timezone.utc).year
+    valid_from_year = new_version.valid_from_year or current_year
     
     # Create the new factor document
     new_factor_doc = {
@@ -811,11 +812,11 @@ async def create_new_factor_version(factor_id: str, new_version: EmissionFactorN
         "source": new_version.source or existing.get("source"),
         "region": new_version.region or existing.get("region"),
         "year": new_version.year or existing.get("year"),
-        # Versioning fields
+        # Versioning fields (year-based)
         "version": 2,
         "factor_version": new_version_number,
-        "valid_from": valid_from,
-        "valid_to": None,  # Currently active
+        "valid_from_year": valid_from_year,
+        "valid_to_year": None,  # Currently active
         "is_correction": new_version.is_correction,
         "replaced_by": None,
         "previous_version_id": factor_id,
@@ -826,7 +827,8 @@ async def create_new_factor_version(factor_id: str, new_version: EmissionFactorN
             "changed_at": datetime.now(timezone.utc).isoformat(),
             "changed_by": current_user.get("email", "unknown"),
             "reason": new_version.change_reason,
-            "is_correction": new_version.is_correction
+            "is_correction": new_version.is_correction,
+            "valid_from_year": valid_from_year
         }]
     }
     
@@ -835,11 +837,11 @@ async def create_new_factor_version(factor_id: str, new_version: EmissionFactorN
     new_factor_id = str(result.inserted_id)
     
     # Update the old version to mark it as replaced
-    yesterday = (datetime.strptime(valid_from, "%Y-%m-%d") - timedelta(days=1)).strftime("%Y-%m-%d")
+    # The old version is valid until the year before the new one
     emission_factors_collection.update_one(
         {"_id": ObjectId(factor_id)},
         {"$set": {
-            "valid_to": yesterday,
+            "valid_to_year": valid_from_year - 1,
             "replaced_by": new_factor_id,
             "updated_at": datetime.now(timezone.utc).isoformat()
         }}
