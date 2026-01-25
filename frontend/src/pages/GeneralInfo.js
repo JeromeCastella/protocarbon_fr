@@ -71,6 +71,26 @@ const GeneralInfo = () => {
   const [saved, setSaved] = useState(false);
   const [categories, setCategories] = useState([]);
 
+  // Wizard state
+  const [showWizard, setShowWizard] = useState(false);
+  const [wizardStep, setWizardStep] = useState(0);
+  const [wizardAnswers, setWizardAnswers] = useState({
+    hasVehicles: null,
+    hasCombustion: null,
+    hasFugitiveEmissions: null,
+    usesElectricity: null,
+    usesHeating: null,
+    buysMaterials: null,
+    hasWaste: null,
+    hasFreight: null,
+    hasBusinessTravel: null,
+    hasCommuting: null,
+    sellsProducts: null,
+    hasDownstreamTransport: null,
+    hasProductUse: null,
+    hasEndOfLife: null
+  });
+
   useEffect(() => {
     fetchData();
   }, []);
