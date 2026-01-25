@@ -2725,17 +2725,34 @@ async def get_fiscal_comparison(current_user: dict = Depends(get_current_user)):
                 "scope3_aval": summary.get("scope_emissions", {}).get("scope3_aval", 0)
             })
         else:
-            # Calculate from activities
-            activities = list(activities_collection.find({
-                "tenant_id": current_user["id"],
-                "fiscal_year_id": fy_id
-            }))
+            # Calculate from activities based on date range
+            fy_start = fy.get("start_date", "")
+            fy_end = fy.get("end_date", "")
+            
+            # Query activities by date range
+            query = {
+                "tenant_id": current_user["id"]
+            }
+            
+            # Filter by date if we have valid fiscal year dates
+            if fy_start and fy_end:
+                query["$or"] = [
+                    {"date": {"$gte": fy_start, "$lte": fy_end}},
+                    # Fallback: check created_at for activities without date
+                    {"$and": [
+                        {"date": {"$exists": False}},
+                        {"created_at": {"$gte": fy_start, "$lte": fy_end + "T23:59:59"}}
+                    ]}
+                ]
+            
+            activities = list(activities_collection.find(query))
             
             scope_totals = {"scope1": 0, "scope2": 0, "scope3_amont": 0, "scope3_aval": 0}
             for activity in activities:
                 scope = activity.get("scope", "scope1")
                 emissions = activity.get("emissions", 0)
-                scope_totals[scope] = scope_totals.get(scope, 0) + emissions
+                if scope in scope_totals:
+                    scope_totals[scope] = scope_totals.get(scope, 0) + emissions
             
             comparison_data.append({
                 "id": fy_id,
