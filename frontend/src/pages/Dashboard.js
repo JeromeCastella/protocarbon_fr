@@ -129,6 +129,37 @@ const Dashboard = () => {
     }
   };
 
+  // Recalculation function
+  const handleRecalculate = async () => {
+    if (!recalcFiscalYear) {
+      alert('Veuillez sélectionner un exercice fiscal');
+      return;
+    }
+
+    setRecalcLoading(true);
+    setRecalcResult(null);
+
+    try {
+      const response = await axios.post(`${API_URL}/api/activities/recalculate`, {
+        fiscal_year_id: recalcFiscalYear,
+        preview_only: true
+      });
+      setRecalcResult(response.data);
+    } catch (error) {
+      console.error('Failed to recalculate:', error);
+      alert('Erreur lors du recalcul: ' + (error.response?.data?.detail || error.message));
+    } finally {
+      setRecalcLoading(false);
+    }
+  };
+
+  const openRecalcModal = () => {
+    setRecalcFiscalYear(fiscalYears[0]?.id || '');
+    setRecalcResult(null);
+    setExpandedActivities(false);
+    setShowRecalcModal(true);
+  };
+
   const scopeColors = {
     scope1: { bg: 'from-blue-500 to-blue-600', light: 'bg-blue-100 text-blue-600', hex: '#3b82f6' },
     scope2: { bg: 'from-cyan-500 to-cyan-600', light: 'bg-cyan-100 text-cyan-600', hex: '#06b6d4' },
