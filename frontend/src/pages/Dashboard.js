@@ -219,13 +219,26 @@ const Dashboard = () => {
   return (
     <div data-testid="dashboard" className="space-y-8">
       {/* Header */}
-      <div>
-        <h1 className={`text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-          {t('nav.dashboard')}
-        </h1>
-        <p className={`mt-2 ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-          Vue d&apos;ensemble de votre bilan carbone
-        </p>
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className={`text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+            {t('nav.dashboard')}
+          </h1>
+          <p className={`mt-2 ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+            Vue d&apos;ensemble de votre bilan carbone
+          </p>
+        </div>
+        <button
+          onClick={openRecalcModal}
+          className={`flex items-center gap-2 px-4 py-2 rounded-xl border transition-all ${
+            isDark 
+              ? 'border-slate-600 hover:bg-slate-700 text-slate-300 hover:text-white' 
+              : 'border-gray-200 hover:bg-gray-50 text-gray-600 hover:text-gray-900'
+          }`}
+        >
+          <GitCompare className="w-5 h-5" />
+          <span>Recalculer avec facteurs actuels</span>
+        </button>
       </div>
 
       {/* KPI Cards */}
