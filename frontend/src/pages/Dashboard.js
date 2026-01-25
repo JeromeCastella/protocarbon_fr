@@ -709,24 +709,41 @@ const Dashboard = () => {
                 {/* Results */}
                 {recalcResult && (
                   <div className="space-y-6">
-                    {/* Summary Card */}
-                    <div className={`p-6 rounded-xl border ${
-                      recalcResult.summary.total_difference > 0 
-                        ? isDark ? 'bg-red-500/10 border-red-500/30' : 'bg-red-50 border-red-200'
-                        : recalcResult.summary.total_difference < 0
-                          ? isDark ? 'bg-green-500/10 border-green-500/30' : 'bg-green-50 border-green-200'
-                          : isDark ? 'bg-slate-700/50 border-slate-600' : 'bg-gray-50 border-gray-200'
-                    }`}>
-                      <div className="flex items-center gap-3 mb-4">
-                        {recalcResult.summary.total_difference > 0 ? (
-                          <AlertTriangle className="w-6 h-6 text-red-500" />
-                        ) : recalcResult.summary.total_difference < 0 ? (
-                          <CheckCircle className="w-6 h-6 text-green-500" />
-                        ) : (
-                          <CheckCircle className="w-6 h-6 text-gray-500" />
-                        )}
-                        <h3 className="text-lg font-bold">Résumé du recalcul</h3>
+                    {/* No activities message */}
+                    {(!recalcResult.summary || recalcResult.comparisons?.length === 0) ? (
+                      <div className={`p-6 rounded-xl border text-center ${isDark ? 'bg-slate-700/50 border-slate-600' : 'bg-gray-50 border-gray-200'}`}>
+                        <AlertTriangle className="w-12 h-12 mx-auto mb-3 text-amber-500 opacity-50" />
+                        <h3 className="text-lg font-bold mb-2">Aucune activité trouvée</h3>
+                        <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+                          {recalcResult.message || "Aucune donnée d'activité pour cet exercice fiscal."}
+                        </p>
+                        <button
+                          onClick={() => setRecalcResult(null)}
+                          className={`mt-4 px-4 py-2 rounded-xl border ${isDark ? 'border-slate-600 hover:bg-slate-700' : 'border-gray-200 hover:bg-gray-50'}`}
+                        >
+                          Sélectionner un autre exercice
+                        </button>
                       </div>
+                    ) : (
+                      <>
+                        {/* Summary Card */}
+                        <div className={`p-6 rounded-xl border ${
+                          recalcResult.summary.total_difference > 0 
+                            ? isDark ? 'bg-red-500/10 border-red-500/30' : 'bg-red-50 border-red-200'
+                            : recalcResult.summary.total_difference < 0
+                              ? isDark ? 'bg-green-500/10 border-green-500/30' : 'bg-green-50 border-green-200'
+                              : isDark ? 'bg-slate-700/50 border-slate-600' : 'bg-gray-50 border-gray-200'
+                        }`}>
+                          <div className="flex items-center gap-3 mb-4">
+                            {recalcResult.summary.total_difference > 0 ? (
+                              <AlertTriangle className="w-6 h-6 text-red-500" />
+                            ) : recalcResult.summary.total_difference < 0 ? (
+                              <CheckCircle className="w-6 h-6 text-green-500" />
+                            ) : (
+                              <CheckCircle className="w-6 h-6 text-gray-500" />
+                            )}
+                            <h3 className="text-lg font-bold">Résumé du recalcul</h3>
+                          </div>
 
                       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                         <div>
