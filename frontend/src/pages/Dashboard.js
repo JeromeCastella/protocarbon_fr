@@ -82,6 +82,13 @@ const Dashboard = () => {
   const [drillDownScope, setDrillDownScope] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  // Recalculation state
+  const [showRecalcModal, setShowRecalcModal] = useState(false);
+  const [recalcFiscalYear, setRecalcFiscalYear] = useState('');
+  const [recalcResult, setRecalcResult] = useState(null);
+  const [recalcLoading, setRecalcLoading] = useState(false);
+  const [expandedActivities, setExpandedActivities] = useState(false);
+
   useEffect(() => {
     fetchAllData();
   }, []);
