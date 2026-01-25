@@ -143,6 +143,214 @@ const GeneralInfo = () => {
     }));
   };
 
+  // ==================== WIZARD CONFIGURATION ====================
+  
+  const wizardSteps = [
+    {
+      id: 'intro',
+      title: 'Configuration guidée',
+      subtitle: 'Répondez à quelques questions pour configurer automatiquement votre périmètre',
+      questions: []
+    },
+    {
+      id: 'scope1',
+      title: 'Scope 1 - Émissions directes',
+      subtitle: 'Identifions vos sources d\'émissions directes',
+      questions: [
+        {
+          key: 'hasVehicles',
+          icon: Car,
+          text: 'Possédez-vous des véhicules d\'entreprise ?',
+          hint: 'Voitures, camions, engins de chantier...',
+          categories: ['combustion_mobile']
+        },
+        {
+          key: 'hasCombustion',
+          icon: Flame,
+          text: 'Avez-vous des installations de combustion sur site ?',
+          hint: 'Chaudières, générateurs, fours industriels...',
+          categories: ['combustion_fixe']
+        },
+        {
+          key: 'hasFugitiveEmissions',
+          icon: Factory,
+          text: 'Utilisez-vous des gaz réfrigérants ou des procédés industriels ?',
+          hint: 'Climatisation, réfrigération, procédés chimiques...',
+          categories: ['emissions_fugitives', 'procedes_industriels']
+        }
+      ]
+    },
+    {
+      id: 'scope2',
+      title: 'Scope 2 - Énergie achetée',
+      subtitle: 'Identifions vos achats d\'énergie',
+      questions: [
+        {
+          key: 'usesElectricity',
+          icon: Zap,
+          text: 'Consommez-vous de l\'électricité ?',
+          hint: 'Bureaux, ateliers, éclairage...',
+          categories: ['electricite']
+        },
+        {
+          key: 'usesHeating',
+          icon: Flame,
+          text: 'Achetez-vous de la chaleur, vapeur ou froid ?',
+          hint: 'Chauffage urbain, vapeur industrielle...',
+          categories: ['chaleur_vapeur_froid']
+        }
+      ]
+    },
+    {
+      id: 'scope3_amont',
+      title: 'Scope 3 Amont - Chaîne de valeur',
+      subtitle: 'Émissions liées à vos achats et activités',
+      questions: [
+        {
+          key: 'buysMaterials',
+          icon: Package,
+          text: 'Achetez-vous des biens ou services ?',
+          hint: 'Matières premières, fournitures, services...',
+          categories: ['achats_biens_services', 'biens_immobilises']
+        },
+        {
+          key: 'hasWaste',
+          icon: Trash2,
+          text: 'Générez-vous des déchets ?',
+          hint: 'Déchets de production, emballages, papiers...',
+          categories: ['dechets']
+        },
+        {
+          key: 'hasFreight',
+          icon: Truck,
+          text: 'Faites-vous transporter des marchandises (fret) ?',
+          hint: 'Transport de matières premières, composants...',
+          categories: ['fret_amont']
+        },
+        {
+          key: 'hasBusinessTravel',
+          icon: Plane,
+          text: 'Vos employés font-ils des déplacements professionnels ?',
+          hint: 'Voyages d\'affaires, visites clients...',
+          categories: ['deplacements_professionnels']
+        },
+        {
+          key: 'hasCommuting',
+          icon: Home,
+          text: 'Vos employés se déplacent-ils entre leur domicile et le travail ?',
+          hint: 'Trajets quotidiens des employés',
+          categories: ['deplacements_domicile_travail']
+        }
+      ]
+    },
+    {
+      id: 'scope3_aval',
+      title: 'Scope 3 Aval - Produits vendus',
+      subtitle: 'Émissions liées à vos produits après vente',
+      questions: [
+        {
+          key: 'sellsProducts',
+          icon: ShoppingCart,
+          text: 'Vendez-vous des produits physiques ?',
+          hint: 'Produits manufacturés, biens de consommation...',
+          categories: ['transformation_produits']
+        },
+        {
+          key: 'hasDownstreamTransport',
+          icon: Truck,
+          text: 'Faites-vous livrer vos produits aux clients ?',
+          hint: 'Distribution, livraison finale...',
+          categories: ['fret_aval']
+        },
+        {
+          key: 'hasProductUse',
+          icon: Zap,
+          text: 'Vos produits consomment-ils de l\'énergie lors de leur utilisation ?',
+          hint: 'Appareils électriques, véhicules, machines...',
+          categories: ['utilisation_produits']
+        },
+        {
+          key: 'hasEndOfLife',
+          icon: Recycle,
+          text: 'Vos produits génèrent-ils des émissions en fin de vie ?',
+          hint: 'Recyclage, incinération, mise en décharge...',
+          categories: ['fin_vie_produits']
+        }
+      ]
+    },
+    {
+      id: 'summary',
+      title: 'Récapitulatif',
+      subtitle: 'Voici les catégories sélectionnées selon vos réponses',
+      questions: []
+    }
+  ];
+
+  const handleWizardAnswer = (key, value) => {
+    setWizardAnswers(prev => ({ ...prev, [key]: value }));
+  };
+
+  const getSelectedCategoriesFromWizard = () => {
+    const selected = new Set();
+    
+    wizardSteps.forEach(step => {
+      step.questions?.forEach(q => {
+        if (wizardAnswers[q.key] === true) {
+          q.categories.forEach(cat => selected.add(cat));
+        }
+      });
+    });
+    
+    // Always include energy upstream (3.3) if any scope 1 or 2 categories are selected
+    const scope1or2 = ['combustion_mobile', 'combustion_fixe', 'emissions_fugitives', 'procedes_industriels', 'electricite', 'chaleur_vapeur_froid'];
+    if (scope1or2.some(cat => selected.has(cat))) {
+      selected.add('activites_combustibles_energie');
+    }
+    
+    return selected;
+  };
+
+  const applyWizardResults = () => {
+    const selectedCategories = getSelectedCategoriesFromWizard();
+    const allCategoryCodes = categories.map(c => c.code);
+    
+    // Categories NOT selected by wizard should be excluded
+    const newExcluded = allCategoryCodes.filter(code => !selectedCategories.has(code));
+    
+    setCompany(prev => ({
+      ...prev,
+      excluded_categories: newExcluded
+    }));
+    
+    setShowWizard(false);
+    setWizardStep(0);
+  };
+
+  const resetWizard = () => {
+    setWizardStep(0);
+    setWizardAnswers({
+      hasVehicles: null,
+      hasCombustion: null,
+      hasFugitiveEmissions: null,
+      usesElectricity: null,
+      usesHeating: null,
+      buysMaterials: null,
+      hasWaste: null,
+      hasFreight: null,
+      hasBusinessTravel: null,
+      hasCommuting: null,
+      sellsProducts: null,
+      hasDownstreamTransport: null,
+      hasProductUse: null,
+      hasEndOfLife: null
+    });
+  };
+
+  const openWizard = () => {
+    resetWizard();
+    setShowWizard(true);
+  };
+
   // Calculate fiscal year end date based on start month
   const getFiscalYearEndMonth = () => {
     const startMonth = company.fiscal_year_start_month || 1;
