@@ -934,27 +934,36 @@ async def get_factors_valid_at_date(date: str, subcategory: Optional[str] = None
         date: ISO date string (YYYY-MM-DD)
         subcategory: Optional filter by subcategory code
     """
-    # Build query: valid_from <= date AND (valid_to is null OR valid_to >= date) AND not deleted
+    # Build query:
+    # Include factors where:
+    # - (valid_from is null OR valid_from <= date) AND (valid_to is null OR valid_to >= date)
+    # - AND not deleted
+    # - AND not replaced (if replaced_by is set, it means there's a newer version)
     query = {
-        "valid_from": {"$lte": date},
-        "$or": [
-            {"valid_to": None},
-            {"valid_to": {"$gte": date}}
+        "$and": [
+            # valid_from condition: null (legacy) or <= date
+            {"$or": [
+                {"valid_from": None},
+                {"valid_from": {"$exists": False}},
+                {"valid_from": {"$lte": date}}
+            ]},
+            # valid_to condition: null (active) or >= date
+            {"$or": [
+                {"valid_to": None},
+                {"valid_to": {"$exists": False}},
+                {"valid_to": {"$gte": date}}
+            ]}
         ],
-        "deleted_at": None
+        # Not deleted
+        "$or": [
+            {"deleted_at": None},
+            {"deleted_at": {"$exists": False}}
+        ]
     }
     
     if subcategory:
         query["subcategory"] = subcategory
     
-    factors = list(emission_factors_collection.find(query, {"_id": 0}))
-    
-    # Add id field
-    for f in factors:
-        if "_id" in f:
-            f["id"] = str(f["_id"])
-    
-    # Re-query with id
     factors = []
     for doc in emission_factors_collection.find(query):
         factors.append(serialize_doc(doc))
