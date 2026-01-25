@@ -1529,7 +1529,20 @@ async def create_activity(activity: ActivityCreateMultiScope, current_user: dict
                     "comments": activity.comments,
                     "created_at": datetime.now(timezone.utc).isoformat(),
                     "linked_group_id": None,
-                    "entry_scope": selected_scope  # Store the original entry scope for reference
+                    "entry_scope": selected_scope,  # Store the original entry scope for reference
+                    # Factor snapshot for versioning - preserves historical data
+                    "factor_snapshot": {
+                        "factor_id": activity.emission_factor_id,
+                        "factor_version": ef.get("factor_version", 1),
+                        "name_fr": ef.get("name_fr", ef.get("name")),
+                        "name_de": ef.get("name_de", ""),
+                        "subcategory": ef.get("subcategory", ""),
+                        "impacts": ef.get("impacts", []),
+                        "source": ef.get("source", ""),
+                        "year": ef.get("year", 0),
+                        "valid_from": ef.get("valid_from"),
+                        "captured_at": datetime.now(timezone.utc).isoformat()
+                    }
                 }
                 created_activities.append(activity_doc)
             
