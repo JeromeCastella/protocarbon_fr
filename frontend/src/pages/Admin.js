@@ -435,7 +435,7 @@ const Admin = () => {
         })).filter(imp => imp.value && imp.category),
         is_correction: versionForm.is_correction,
         change_reason: versionForm.change_reason,
-        valid_from: versionForm.valid_from
+        valid_from_year: parseInt(versionForm.valid_from_year)
       };
 
       await axios.post(`${API_URL}/api/admin/emission-factors-v2/${versioningFactor.id}/new-version`, payload);
