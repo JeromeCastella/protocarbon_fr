@@ -928,40 +928,39 @@ async def get_factor_version_history(factor_id: str, current_user: dict = Depend
         "change_history": factor.get("change_history", [])
     }
 
-@api_router.get("/emission-factors/valid-at")
-async def get_factors_valid_at_date(date: str, subcategory: Optional[str] = None, current_user: dict = Depends(get_current_user)):
+@api_router.get("/emission-factors/valid-for-year")
+async def get_factors_valid_for_year(year: int, subcategory: Optional[str] = None, current_user: dict = Depends(get_current_user)):
     """
-    Get emission factors that were valid at a specific date.
-    Used for selecting factors based on fiscal year end date.
+    Get emission factors that are valid for a specific year.
+    Used for selecting factors based on fiscal year.
     
     Args:
-        date: ISO date string (YYYY-MM-DD)
+        year: The fiscal year (e.g., 2024, 2025)
         subcategory: Optional filter by subcategory code
     """
     # Build query:
     # Include factors where:
-    # - (valid_from is null OR valid_from <= date) AND (valid_to is null OR valid_to >= date)
+    # - (valid_from_year is null OR valid_from_year <= year) AND (valid_to_year is null OR valid_to_year >= year)
     # - AND not deleted
-    # - AND not replaced (if replaced_by is set, it means there's a newer version)
     query = {
         "$and": [
-            # valid_from condition: null (legacy) or <= date
+            # valid_from_year condition: null (legacy) or <= year
             {"$or": [
-                {"valid_from": None},
-                {"valid_from": {"$exists": False}},
-                {"valid_from": {"$lte": date}}
+                {"valid_from_year": None},
+                {"valid_from_year": {"$exists": False}},
+                {"valid_from_year": {"$lte": year}}
             ]},
-            # valid_to condition: null (active) or >= date
+            # valid_to_year condition: null (active) or >= year
             {"$or": [
-                {"valid_to": None},
-                {"valid_to": {"$exists": False}},
-                {"valid_to": {"$gte": date}}
+                {"valid_to_year": None},
+                {"valid_to_year": {"$exists": False}},
+                {"valid_to_year": {"$gte": year}}
+            ]},
+            # Not deleted
+            {"$or": [
+                {"deleted_at": None},
+                {"deleted_at": {"$exists": False}}
             ]}
-        ],
-        # Not deleted
-        "$or": [
-            {"deleted_at": None},
-            {"deleted_at": {"$exists": False}}
         ]
     }
     
@@ -973,6 +972,20 @@ async def get_factors_valid_at_date(date: str, subcategory: Optional[str] = None
         factors.append(serialize_doc(doc))
     
     return factors
+
+# Keep legacy endpoint for backward compatibility
+@api_router.get("/emission-factors/valid-at")
+async def get_factors_valid_at_date(date: str, subcategory: Optional[str] = None, current_user: dict = Depends(get_current_user)):
+    """
+    Legacy endpoint - extracts year from date and calls year-based logic.
+    """
+    # Extract year from date string
+    try:
+        year = int(date.split("-")[0])
+    except:
+        year = datetime.now(timezone.utc).year
+    
+    return await get_factors_valid_for_year(year, subcategory, current_user)
 
 # ==================== COMPANY ENDPOINTS ====================
 
