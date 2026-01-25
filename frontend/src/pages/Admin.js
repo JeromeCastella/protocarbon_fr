@@ -148,55 +148,129 @@ const Admin = () => {
     return subcat?.categories || [];
   };
 
-  // Check if subcategory has Scope 1 or Scope 2 categories (for 3.3 rule)
-  const hasScope1Or2Category = () => {
+  // Check if subcategory has categories of a specific scope
+  const hasScopeCategory = (scopeValue) => {
     const linkedCats = getLinkedCategories();
     return allCategories.some(cat => 
-      linkedCats.includes(cat.value) && (cat.scope === 'scope1' || cat.scope === 'scope2')
+      linkedCats.includes(cat.value) && cat.scope === scopeValue
     );
   };
 
-  // Get available scopes based on subcategory's linked categories
-  const getAvailableScopes = () => {
-    const linkedCats = getLinkedCategories();
-    if (!factorForm.subcategory || linkedCats.length === 0) {
-      return scopes; // All scopes if no subcategory
-    }
-
-    // Find which scopes have at least one linked category
-    const availableScopeValues = new Set();
-    linkedCats.forEach(catValue => {
-      const cat = allCategories.find(c => c.value === catValue);
-      if (cat) {
-        availableScopeValues.add(cat.scope);
-      }
-    });
-
-    // Special rule: If scope1 or scope2 is available, also allow scope3_amont (for 3.3)
-    if (availableScopeValues.has('scope1') || availableScopeValues.has('scope2')) {
-      availableScopeValues.add('scope3_amont');
-    }
-
-    return scopes.filter(s => availableScopeValues.has(s.value));
+  // Check if subcategory has Scope 1 or Scope 2 categories (for 3.3 rule)
+  const hasScope1Or2Category = () => {
+    return hasScopeCategory('scope1') || hasScopeCategory('scope2');
   };
 
-  // Get available categories for an impact based on scope and subcategory
+  // Define the 4 possible impact types with their display info
+  const impactTypes_config = [
+    { 
+      key: 'scope1', 
+      label: 'Scope 1 - Émissions directes', 
+      scope: 'scope1',
+      color: 'blue',
+      description: 'Combustion directe de carburants',
+      defaultType: 'direct'
+    },
+    { 
+      key: 'scope2', 
+      label: 'Scope 2 - Émissions indirectes (énergie)', 
+      scope: 'scope2',
+      color: 'cyan',
+      description: 'Électricité, chaleur, vapeur achetées',
+      defaultType: 'indirect'
+    },
+    { 
+      key: 'scope3_3', 
+      label: 'Scope 3.3 - Amont énergie', 
+      scope: 'scope3_amont',
+      category: 'activites_combustibles_energie', // Fixed category for 3.3
+      color: 'amber',
+      description: 'Extraction, production et transport des énergies',
+      defaultType: 'upstream'
+    },
+    { 
+      key: 'scope3', 
+      label: 'Scope 3 - Autres émissions indirectes', 
+      scope: 'scope3_amont',
+      color: 'purple',
+      description: 'Déplacements, achats, déchets...',
+      defaultType: 'upstream'
+    }
+  ];
+
+  // Determine which impact containers to show based on subcategory
+  const getRequiredImpacts = () => {
+    if (!factorForm.subcategory) return [];
+    
+    const required = [];
+    
+    // Scope 1: if subcategory has scope1 categories
+    if (hasScopeCategory('scope1')) {
+      required.push('scope1');
+    }
+    
+    // Scope 2: if subcategory has scope2 categories
+    if (hasScopeCategory('scope2')) {
+      required.push('scope2');
+    }
+    
+    // Scope 3.3: if subcategory has scope1 OR scope2 categories
+    if (hasScope1Or2Category()) {
+      required.push('scope3_3');
+    }
+    
+    // Scope 3 (other): if subcategory has scope3 categories (excluding 3.3 scenario)
+    const hasOtherScope3 = getLinkedCategories().some(catValue => {
+      const cat = allCategories.find(c => c.value === catValue);
+      return cat && (cat.scope === 'scope3_amont' || cat.scope === 'scope3_aval') && 
+             catValue !== 'activites_combustibles_energie';
+    });
+    if (hasOtherScope3) {
+      required.push('scope3');
+    }
+    
+    return required;
+  };
+
+  // Get available categories for an impact type
+  const getCategoriesForImpactType = (impactKey) => {
+    const linkedCats = getLinkedCategories();
+    const config = impactTypes_config.find(c => c.key === impactKey);
+    if (!config) return [];
+
+    // Scope 3.3 has a fixed category
+    if (impactKey === 'scope3_3') {
+      return [allCategories.find(c => c.value === 'activites_combustibles_energie')].filter(Boolean);
+    }
+
+    // For other scopes, filter by scope and linked categories
+    if (impactKey === 'scope3') {
+      // Scope 3 other: show all linked scope3 categories except 3.3
+      return allCategories.filter(cat => 
+        linkedCats.includes(cat.value) && 
+        (cat.scope === 'scope3_amont' || cat.scope === 'scope3_aval') &&
+        cat.value !== 'activites_combustibles_energie'
+      );
+    }
+
+    // Scope 1 or Scope 2
+    return allCategories.filter(cat => 
+      linkedCats.includes(cat.value) && cat.scope === config.scope
+    );
+  };
+
+  // Get available categories for an impact based on scope and subcategory (legacy - kept for compatibility)
   const getAvailableCategoriesForImpact = (impactScope) => {
     const linkedCats = getLinkedCategories();
     
     if (!factorForm.subcategory || linkedCats.length === 0) {
-      // No subcategory selected: show all categories of the selected scope
       return allCategories.filter(c => c.scope === impactScope);
     }
 
-    // Filter categories that are linked to the subcategory AND match the scope
     let availableCats = allCategories.filter(cat => 
       linkedCats.includes(cat.value) && cat.scope === impactScope
     );
 
-    // Special rule for Scope 3 amont: add activites_combustibles_energie (3.3) 
-    // IF the subcategory has at least one Scope 1 or Scope 2 category
-    // This is for upstream energy impacts (amont énergie)
     if (impactScope === 'scope3_amont' && hasScope1Or2Category()) {
       const scope33 = allCategories.find(c => c.value === 'activites_combustibles_energie');
       if (scope33 && !availableCats.some(c => c.value === 'activites_combustibles_energie')) {
