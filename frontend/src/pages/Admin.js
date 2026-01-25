@@ -933,10 +933,15 @@ const Admin = () => {
                               className={`w-full px-3 py-2 rounded-lg border text-sm ${isDark ? 'bg-slate-600 border-slate-500 text-white' : 'bg-white border-gray-200'}`}
                             >
                               <option value="">Sélectionner...</option>
-                              {allCategories.filter(c => c.scope === impact.scope).map(c => (
+                              {getAvailableCategoriesForImpact(impact.scope).map(c => (
                                 <option key={c.value} value={c.value}>{c.label}</option>
                               ))}
                             </select>
+                            {factorForm.subcategory && getAvailableCategoriesForImpact(impact.scope).length === 0 && (
+                              <p className="text-xs text-amber-500 mt-1">
+                                Aucune catégorie {impact.scope} liée à cette sous-catégorie
+                              </p>
+                            )}
                           </div>
                           <div>
                             <label className="text-xs text-gray-500">Valeur</label>
