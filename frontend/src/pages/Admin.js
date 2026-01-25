@@ -303,7 +303,23 @@ const Admin = () => {
   const updateImpact = (index, field, value) => {
     setFactorForm(prev => ({
       ...prev,
-      impacts: prev.impacts.map((imp, i) => i === index ? { ...imp, [field]: value } : imp)
+      impacts: prev.impacts.map((imp, i) => {
+        if (i !== index) return imp;
+        // If scope changes, reset category to avoid invalid state
+        if (field === 'scope') {
+          return { ...imp, [field]: value, category: '' };
+        }
+        return { ...imp, [field]: value };
+      })
+    }));
+  };
+
+  // When subcategory changes, reset all impact categories
+  const handleSubcategoryChange = (newSubcategory) => {
+    setFactorForm(prev => ({
+      ...prev,
+      subcategory: newSubcategory,
+      impacts: prev.impacts.map(imp => ({ ...imp, category: '' }))
     }));
   };
 
