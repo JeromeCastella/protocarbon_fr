@@ -773,6 +773,194 @@ async def admin_import_emission_factors_v2(data: dict, current_user: dict = Depe
     
     return {"message": "Import completed", "imported": imported}
 
+# ==================== VERSIONING ENDPOINTS ====================
+
+@api_router.post("/admin/emission-factors-v2/{factor_id}/new-version")
+async def create_new_factor_version(factor_id: str, new_version: EmissionFactorNewVersion, current_user: dict = Depends(require_admin)):
+    """
+    Create a new version of an emission factor.
+    The old version is marked as replaced, and a new document is created.
+    """
+    # Find the current factor
+    existing = emission_factors_collection.find_one({"_id": ObjectId(factor_id)})
+    if not existing:
+        raise HTTPException(status_code=404, detail="Emission factor not found")
+    
+    if existing.get("deleted_at"):
+        raise HTTPException(status_code=400, detail="Cannot create new version of a deleted factor")
+    
+    # Determine the new version number
+    current_version = existing.get("factor_version", 1)
+    new_version_number = current_version + 1
+    
+    # Parse valid_from date
+    valid_from = new_version.valid_from or datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    
+    # Create the new factor document
+    new_factor_doc = {
+        # Copy base fields from existing or override with new values
+        "name_fr": new_version.name_fr or existing.get("name_fr"),
+        "name_de": new_version.name_de or existing.get("name_de"),
+        "subcategory": new_version.subcategory or existing.get("subcategory"),
+        "input_units": new_version.input_units or existing.get("input_units", []),
+        "default_unit": new_version.default_unit or existing.get("default_unit"),
+        "impacts": [imp.model_dump() for imp in new_version.impacts],
+        "unit_conversions": new_version.unit_conversions if new_version.unit_conversions is not None else existing.get("unit_conversions", {}),
+        "tags": new_version.tags or existing.get("tags", []),
+        "source": new_version.source or existing.get("source"),
+        "region": new_version.region or existing.get("region"),
+        "year": new_version.year or existing.get("year"),
+        # Versioning fields
+        "version": 2,
+        "factor_version": new_version_number,
+        "valid_from": valid_from,
+        "valid_to": None,  # Currently active
+        "is_correction": new_version.is_correction,
+        "replaced_by": None,
+        "previous_version_id": factor_id,
+        "deleted_at": None,
+        "created_at": datetime.now(timezone.utc).isoformat(),
+        "change_history": existing.get("change_history", []) + [{
+            "version": new_version_number,
+            "changed_at": datetime.now(timezone.utc).isoformat(),
+            "changed_by": current_user.get("email", "unknown"),
+            "reason": new_version.change_reason,
+            "is_correction": new_version.is_correction
+        }]
+    }
+    
+    # Insert the new version
+    result = emission_factors_collection.insert_one(new_factor_doc)
+    new_factor_id = str(result.inserted_id)
+    
+    # Update the old version to mark it as replaced
+    yesterday = (datetime.strptime(valid_from, "%Y-%m-%d") - timedelta(days=1)).strftime("%Y-%m-%d")
+    emission_factors_collection.update_one(
+        {"_id": ObjectId(factor_id)},
+        {"$set": {
+            "valid_to": yesterday,
+            "replaced_by": new_factor_id,
+            "updated_at": datetime.now(timezone.utc).isoformat()
+        }}
+    )
+    
+    # Return the new factor
+    new_factor_doc.pop("_id", None)
+    new_factor_doc["id"] = new_factor_id
+    return {
+        "message": f"Version {new_version_number} created successfully",
+        "new_factor": new_factor_doc,
+        "previous_factor_id": factor_id
+    }
+
+@api_router.delete("/admin/emission-factors-v2/{factor_id}/soft")
+async def soft_delete_factor(factor_id: str, current_user: dict = Depends(require_admin)):
+    """
+    Soft delete an emission factor. It remains in the database for historical data,
+    but won't appear in searches for new activities.
+    """
+    existing = emission_factors_collection.find_one({"_id": ObjectId(factor_id)})
+    if not existing:
+        raise HTTPException(status_code=404, detail="Emission factor not found")
+    
+    if existing.get("deleted_at"):
+        raise HTTPException(status_code=400, detail="Factor already deleted")
+    
+    # Soft delete
+    emission_factors_collection.update_one(
+        {"_id": ObjectId(factor_id)},
+        {"$set": {
+            "deleted_at": datetime.now(timezone.utc).isoformat(),
+            "valid_to": datetime.now(timezone.utc).strftime("%Y-%m-%d"),
+            "updated_at": datetime.now(timezone.utc).isoformat()
+        }}
+    )
+    
+    return {"message": "Factor soft-deleted successfully", "factor_id": factor_id}
+
+@api_router.get("/admin/emission-factors-v2/{factor_id}/history")
+async def get_factor_version_history(factor_id: str, current_user: dict = Depends(require_admin)):
+    """
+    Get the complete version history of a factor, including all previous versions.
+    """
+    # Find the factor
+    factor = emission_factors_collection.find_one({"_id": ObjectId(factor_id)})
+    if not factor:
+        raise HTTPException(status_code=404, detail="Emission factor not found")
+    
+    # Collect all versions in the chain
+    versions = []
+    current = factor
+    
+    # Go backwards through previous versions
+    while current:
+        versions.append(serialize_doc(current))
+        prev_id = current.get("previous_version_id")
+        if prev_id:
+            current = emission_factors_collection.find_one({"_id": ObjectId(prev_id)})
+        else:
+            current = None
+    
+    # Also check if there's a newer version (replaced_by)
+    newer_versions = []
+    next_id = factor.get("replaced_by")
+    while next_id:
+        next_factor = emission_factors_collection.find_one({"_id": ObjectId(next_id)})
+        if next_factor:
+            newer_versions.append(serialize_doc(next_factor))
+            next_id = next_factor.get("replaced_by")
+        else:
+            break
+    
+    # Combine and sort by version
+    all_versions = versions + newer_versions
+    all_versions.sort(key=lambda x: x.get("factor_version", 1))
+    
+    return {
+        "factor_id": factor_id,
+        "current_version": factor.get("factor_version", 1),
+        "total_versions": len(all_versions),
+        "versions": all_versions,
+        "change_history": factor.get("change_history", [])
+    }
+
+@api_router.get("/emission-factors/valid-at")
+async def get_factors_valid_at_date(date: str, subcategory: Optional[str] = None, current_user: dict = Depends(get_current_user)):
+    """
+    Get emission factors that were valid at a specific date.
+    Used for selecting factors based on fiscal year end date.
+    
+    Args:
+        date: ISO date string (YYYY-MM-DD)
+        subcategory: Optional filter by subcategory code
+    """
+    # Build query: valid_from <= date AND (valid_to is null OR valid_to >= date) AND not deleted
+    query = {
+        "valid_from": {"$lte": date},
+        "$or": [
+            {"valid_to": None},
+            {"valid_to": {"$gte": date}}
+        ],
+        "deleted_at": None
+    }
+    
+    if subcategory:
+        query["subcategory"] = subcategory
+    
+    factors = list(emission_factors_collection.find(query, {"_id": 0}))
+    
+    # Add id field
+    for f in factors:
+        if "_id" in f:
+            f["id"] = str(f["_id"])
+    
+    # Re-query with id
+    factors = []
+    for doc in emission_factors_collection.find(query):
+        factors.append(serialize_doc(doc))
+    
+    return factors
+
 # ==================== COMPANY ENDPOINTS ====================
 
 @api_router.post("/companies")
