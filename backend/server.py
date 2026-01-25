@@ -1728,10 +1728,19 @@ async def recalculate_activities_with_current_factors(request: RecalculateReques
     if not fiscal_year:
         raise HTTPException(status_code=404, detail="Fiscal year not found")
     
-    # Build query for activities
+    # Get fiscal year period to filter activities by date
+    fy_start = fiscal_year.get("start_date", f"{fiscal_year.get('year', 2024)}-01-01")
+    fy_end = fiscal_year.get("end_date", f"{fiscal_year.get('year', 2024)}-12-31")
+    
+    # Build query for activities - filter by date range of the fiscal year
     query = {
         "tenant_id": current_user["id"],
-        "fiscal_year_id": request.fiscal_year_id
+        "$or": [
+            # Activities with date in the fiscal year period
+            {"date": {"$gte": fy_start, "$lte": fy_end}},
+            # Or activities created during the fiscal year (fallback)
+            {"created_at": {"$gte": fy_start, "$lte": fy_end + "T23:59:59"}}
+        ]
     }
     if request.activity_ids:
         query["_id"] = {"$in": [ObjectId(aid) for aid in request.activity_ids]}
