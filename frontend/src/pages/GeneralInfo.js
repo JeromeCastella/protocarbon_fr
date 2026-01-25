@@ -15,7 +15,22 @@ import {
   Check,
   Save,
   Loader2,
-  Info
+  Info,
+  Wand2,
+  ChevronRight,
+  ChevronLeft,
+  Car,
+  Flame,
+  Zap,
+  Package,
+  Truck,
+  Plane,
+  Trash2,
+  Recycle,
+  Factory,
+  ShoppingCart,
+  Home,
+  Briefcase as BriefcaseIcon
 } from 'lucide-react';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL || '';
