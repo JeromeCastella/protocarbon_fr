@@ -1114,95 +1114,118 @@ const Admin = () => {
                   </div>
                 </div>
 
-                {/* Impacts (Multi-impact) */}
+                {/* Impacts - Auto-generated containers based on subcategory */}
                 <div>
-                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
-                    Impacts (multi-scope)
-                    <span className="ml-2 text-purple-500 font-normal">
-                      <Sparkles className="w-4 h-4 inline" /> {factorForm.impacts.length} impact(s)
-                    </span>
+                  <label className={`block text-sm font-medium mb-3 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
+                    Impacts par scope
+                    {factorForm.subcategory && (
+                      <span className="ml-2 text-purple-500 font-normal">
+                        <Sparkles className="w-4 h-4 inline" /> {factorForm.impacts.length} impact(s) requis
+                      </span>
+                    )}
                   </label>
-                  <div className="space-y-3">
-                    {factorForm.impacts.map((impact, i) => (
-                      <div key={i} className={`p-4 rounded-xl border ${isDark ? 'bg-slate-700/50 border-slate-600' : 'bg-gray-50 border-gray-200'}`}>
-                        <div className="flex items-center justify-between mb-3">
-                          <span className={`text-sm font-medium ${isDark ? 'text-slate-300' : 'text-gray-600'}`}>Impact #{i + 1}</span>
-                          {factorForm.impacts.length > 1 && (
-                            <button onClick={() => removeImpact(i)} className="text-red-500 text-sm hover:underline">Supprimer</button>
-                          )}
-                        </div>
-                        <div className="grid grid-cols-2 gap-3">
-                          <div>
-                            <label className="text-xs text-gray-500">Scope</label>
-                            <select
-                              value={impact.scope}
-                              onChange={(e) => updateImpact(i, 'scope', e.target.value)}
-                              className={`w-full px-3 py-2 rounded-lg border text-sm ${isDark ? 'bg-slate-600 border-slate-500 text-white' : 'bg-white border-gray-200'}`}
-                            >
-                              {getAvailableScopes().map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
-                            </select>
-                            {factorForm.subcategory && getAvailableScopes().length < scopes.length && (
-                              <p className={`text-xs mt-1 ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-                                Scopes filtrés selon la sous-catégorie
-                              </p>
-                            )}
+                  
+                  {!factorForm.subcategory ? (
+                    <div className={`p-6 rounded-xl border-2 border-dashed text-center ${isDark ? 'border-slate-600 text-slate-400' : 'border-gray-300 text-gray-500'}`}>
+                      <Layers className="w-8 h-8 mx-auto mb-2 opacity-50" />
+                      <p>Sélectionnez d'abord une sous-catégorie</p>
+                      <p className="text-xs mt-1">Les impacts seront générés automatiquement</p>
+                    </div>
+                  ) : (
+                    <div className="space-y-4">
+                      {factorForm.impacts.map((impact) => {
+                        const config = impactTypes_config.find(c => c.key === impact.impactKey);
+                        const colorClasses = {
+                          scope1: 'border-blue-500/50 bg-blue-500/5',
+                          scope2: 'border-cyan-500/50 bg-cyan-500/5',
+                          scope3_3: 'border-amber-500/50 bg-amber-500/5',
+                          scope3: 'border-purple-500/50 bg-purple-500/5'
+                        };
+                        const headerColors = {
+                          scope1: 'bg-blue-500',
+                          scope2: 'bg-cyan-500',
+                          scope3_3: 'bg-amber-500',
+                          scope3: 'bg-purple-500'
+                        };
+                        const availableCats = getCategoriesForImpactType(impact.impactKey);
+                        
+                        return (
+                          <div 
+                            key={impact.impactKey} 
+                            className={`rounded-xl border-2 overflow-hidden ${colorClasses[impact.impactKey] || 'border-gray-300'}`}
+                          >
+                            {/* Header */}
+                            <div className={`px-4 py-2 ${headerColors[impact.impactKey] || 'bg-gray-500'} text-white`}>
+                              <div className="flex items-center justify-between">
+                                <span className="font-medium">{config?.label || impact.impactKey}</span>
+                                <span className="text-xs opacity-80">{config?.description}</span>
+                              </div>
+                            </div>
+                            
+                            {/* Content */}
+                            <div className="p-4">
+                              <div className="grid grid-cols-2 gap-4">
+                                {/* Category - Fixed for 3.3, selectable for others */}
+                                <div>
+                                  <label className={`block text-xs font-medium mb-1 ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+                                    Catégorie *
+                                  </label>
+                                  {impact.impactKey === 'scope3_3' ? (
+                                    <div className={`px-3 py-2 rounded-lg border text-sm ${isDark ? 'bg-slate-700 border-slate-600 text-slate-300' : 'bg-gray-100 border-gray-200 text-gray-600'}`}>
+                                      Activités combustibles/énergie (3.3)
+                                    </div>
+                                  ) : (
+                                    <select
+                                      value={impact.category}
+                                      onChange={(e) => updateImpactByKey(impact.impactKey, 'category', e.target.value)}
+                                      required
+                                      className={`w-full px-3 py-2 rounded-lg border text-sm ${isDark ? 'bg-slate-700 border-slate-600 text-white' : 'bg-white border-gray-200'}`}
+                                    >
+                                      <option value="">Sélectionner...</option>
+                                      {availableCats.map(c => (
+                                        <option key={c.value} value={c.value}>{c.label}</option>
+                                      ))}
+                                    </select>
+                                  )}
+                                </div>
+                                
+                                {/* Value */}
+                                <div>
+                                  <label className={`block text-xs font-medium mb-1 ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+                                    Valeur (kgCO2e) *
+                                  </label>
+                                  <input
+                                    type="number"
+                                    step="any"
+                                    value={impact.value}
+                                    onChange={(e) => updateImpactByKey(impact.impactKey, 'value', e.target.value)}
+                                    required
+                                    className={`w-full px-3 py-2 rounded-lg border text-sm ${isDark ? 'bg-slate-700 border-slate-600 text-white' : 'bg-white border-gray-200'}`}
+                                    placeholder="ex: 2.68"
+                                  />
+                                </div>
+                                
+                                {/* Unit */}
+                                <div className="col-span-2">
+                                  <label className={`block text-xs font-medium mb-1 ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+                                    Unité complète *
+                                  </label>
+                                  <input
+                                    type="text"
+                                    value={impact.unit}
+                                    onChange={(e) => updateImpactByKey(impact.impactKey, 'unit', e.target.value)}
+                                    required
+                                    className={`w-full px-3 py-2 rounded-lg border text-sm ${isDark ? 'bg-slate-700 border-slate-600 text-white' : 'bg-white border-gray-200'}`}
+                                    placeholder="ex: kgCO2e/L"
+                                  />
+                                </div>
+                              </div>
+                            </div>
                           </div>
-                          <div>
-                            <label className="text-xs text-gray-500">Catégorie</label>
-                            <select
-                              value={impact.category}
-                              onChange={(e) => updateImpact(i, 'category', e.target.value)}
-                              className={`w-full px-3 py-2 rounded-lg border text-sm ${isDark ? 'bg-slate-600 border-slate-500 text-white' : 'bg-white border-gray-200'}`}
-                            >
-                              <option value="">Sélectionner...</option>
-                              {getAvailableCategoriesForImpact(impact.scope).map(c => (
-                                <option key={c.value} value={c.value}>{c.label}</option>
-                              ))}
-                            </select>
-                            {factorForm.subcategory && getAvailableCategoriesForImpact(impact.scope).length === 0 && (
-                              <p className="text-xs text-amber-500 mt-1">
-                                Aucune catégorie {impact.scope} liée à cette sous-catégorie
-                              </p>
-                            )}
-                          </div>
-                          <div>
-                            <label className="text-xs text-gray-500">Valeur</label>
-                            <input
-                              type="number"
-                              step="any"
-                              value={impact.value}
-                              onChange={(e) => updateImpact(i, 'value', e.target.value)}
-                              className={`w-full px-3 py-2 rounded-lg border text-sm ${isDark ? 'bg-slate-600 border-slate-500 text-white' : 'bg-white border-gray-200'}`}
-                              placeholder="2.68"
-                            />
-                          </div>
-                          <div>
-                            <label className="text-xs text-gray-500">Unité</label>
-                            <input
-                              type="text"
-                              value={impact.unit}
-                              onChange={(e) => updateImpact(i, 'unit', e.target.value)}
-                              className={`w-full px-3 py-2 rounded-lg border text-sm ${isDark ? 'bg-slate-600 border-slate-500 text-white' : 'bg-white border-gray-200'}`}
-                              placeholder="kgCO2e/L"
-                            />
-                          </div>
-                          <div className="col-span-2">
-                            <label className="text-xs text-gray-500">Type d'impact</label>
-                            <select
-                              value={impact.type}
-                              onChange={(e) => updateImpact(i, 'type', e.target.value)}
-                              className={`w-full px-3 py-2 rounded-lg border text-sm ${isDark ? 'bg-slate-600 border-slate-500 text-white' : 'bg-white border-gray-200'}`}
-                            >
-                              {impactTypes.map(t => <option key={t.value} value={t.value}>{t.label}</option>)}
-                            </select>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                    <button onClick={addImpact} className="w-full py-2 border-2 border-dashed border-purple-500/50 text-purple-500 rounded-xl hover:bg-purple-500/10">
-                      + Ajouter un impact
-                    </button>
-                  </div>
+                        );
+                      })}
+                    </div>
+                  )}
                 </div>
 
                 {/* Tags & Metadata */}
