@@ -79,6 +79,18 @@ const Admin = () => {
   const [importData, setImportData] = useState('');
   const [importReplaceAll, setImportReplaceAll] = useState(false);
 
+  // Versioning state
+  const [showVersionModal, setShowVersionModal] = useState(false);
+  const [versioningFactor, setVersioningFactor] = useState(null);
+  const [versionForm, setVersionForm] = useState({
+    change_reason: '',
+    is_correction: false,
+    valid_from: new Date().toISOString().split('T')[0],
+    impacts: []
+  });
+  const [showHistoryModal, setShowHistoryModal] = useState(false);
+  const [factorHistory, setFactorHistory] = useState(null);
+
   useEffect(() => {
     if (user?.role === 'admin') {
       fetchData();
