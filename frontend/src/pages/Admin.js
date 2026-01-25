@@ -133,14 +133,54 @@ const Admin = () => {
   ];
 
   const impactTypes = [
-    { value: 'direct', label: 'Direct' },
-    { value: 'indirect', label: 'Indirect' },
-    { value: 'upstream', label: 'Amont (upstream)' },
-    { value: 'downstream', label: 'Aval (downstream)' },
-    { value: 'commute', label: 'Domicile-travail' }
+    { value: 'direct', label: 'Direct (Scope 1)' },
+    { value: 'indirect', label: 'Indirect (Scope 2)' },
+    { value: 'upstream', label: 'Amont (Scope 3 amont)' },
+    { value: 'downstream', label: 'Aval (Scope 3 aval)' }
   ];
 
   const commonUnits = ['L', 'kWh', 'MWh', 'kg', 't', 'km', 'm3', 'GJ', 'tep', 'passager.km', 'CHF', 'kCHF'];
+
+  // Get categories linked to selected subcategory
+  const getLinkedCategories = () => {
+    if (!factorForm.subcategory) return [];
+    const subcat = subcategories.find(s => s.code === factorForm.subcategory);
+    return subcat?.categories || [];
+  };
+
+  // Check if subcategory has Scope 1 or Scope 2 categories (for 3.3 rule)
+  const hasScope1Or2Category = () => {
+    const linkedCats = getLinkedCategories();
+    return allCategories.some(cat => 
+      linkedCats.includes(cat.value) && (cat.scope === 'scope1' || cat.scope === 'scope2')
+    );
+  };
+
+  // Get available categories for an impact based on scope and subcategory
+  const getAvailableCategoriesForImpact = (impactScope) => {
+    const linkedCats = getLinkedCategories();
+    
+    if (!factorForm.subcategory || linkedCats.length === 0) {
+      // No subcategory selected: show all categories of the selected scope
+      return allCategories.filter(c => c.scope === impactScope);
+    }
+
+    // Filter categories that are linked to the subcategory AND match the scope
+    let availableCats = allCategories.filter(cat => 
+      linkedCats.includes(cat.value) && cat.scope === impactScope
+    );
+
+    // Special rule for Scope 3 amont: add activites_combustibles_energie (3.3) 
+    // IF the subcategory has at least one Scope 1 or Scope 2 category
+    if (impactScope === 'scope3_amont' && hasScope1Or2Category()) {
+      const scope33 = allCategories.find(c => c.value === 'activites_combustibles_energie');
+      if (scope33 && !availableCats.some(c => c.value === 'activites_combustibles_energie')) {
+        availableCats = [...availableCats, scope33];
+      }
+    }
+
+    return availableCats;
+  };
 
   // ==================== FACTOR CRUD ====================
   const handleSaveFactor = async () => {
