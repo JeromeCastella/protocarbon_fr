@@ -399,6 +399,90 @@ const Admin = () => {
     });
   };
 
+  // ==================== VERSIONING FUNCTIONS ====================
+  
+  const handleCreateNewVersion = (factor) => {
+    setVersioningFactor(factor);
+    setVersionForm({
+      change_reason: '',
+      is_correction: false,
+      valid_from: new Date().toISOString().split('T')[0],
+      impacts: (factor.impacts || []).map(imp => ({
+        scope: imp.scope,
+        category: imp.category,
+        value: imp.value?.toString() || '',
+        unit: imp.unit,
+        type: imp.type || 'direct'
+      }))
+    });
+    setShowVersionModal(true);
+  };
+
+  const handleSaveNewVersion = async () => {
+    if (!versioningFactor || !versionForm.change_reason) {
+      alert('Veuillez remplir la raison du changement');
+      return;
+    }
+
+    try {
+      const payload = {
+        impacts: versionForm.impacts.map(imp => ({
+          scope: imp.scope,
+          category: imp.category,
+          value: parseFloat(imp.value),
+          unit: imp.unit,
+          type: imp.type
+        })).filter(imp => imp.value && imp.category),
+        is_correction: versionForm.is_correction,
+        change_reason: versionForm.change_reason,
+        valid_from: versionForm.valid_from
+      };
+
+      await axios.post(`${API_URL}/api/admin/emission-factors-v2/${versioningFactor.id}/new-version`, payload);
+      
+      setShowVersionModal(false);
+      setVersioningFactor(null);
+      fetchData();
+      alert('Nouvelle version créée avec succès !');
+    } catch (error) {
+      console.error('Failed to create new version:', error);
+      alert('Erreur: ' + (error.response?.data?.detail || error.message));
+    }
+  };
+
+  const handleSoftDelete = async (factorId) => {
+    if (!window.confirm('Archiver ce facteur ? Il restera accessible pour les données historiques mais ne sera plus proposé pour de nouvelles saisies.')) return;
+    
+    try {
+      await axios.delete(`${API_URL}/api/admin/emission-factors-v2/${factorId}/soft`);
+      fetchData();
+      alert('Facteur archivé avec succès');
+    } catch (error) {
+      console.error('Failed to soft delete factor:', error);
+      alert('Erreur: ' + (error.response?.data?.detail || error.message));
+    }
+  };
+
+  const handleViewHistory = async (factorId) => {
+    try {
+      const response = await axios.get(`${API_URL}/api/admin/emission-factors-v2/${factorId}/history`);
+      setFactorHistory(response.data);
+      setShowHistoryModal(true);
+    } catch (error) {
+      console.error('Failed to fetch history:', error);
+      alert('Erreur: ' + (error.response?.data?.detail || error.message));
+    }
+  };
+
+  const updateVersionImpact = (index, field, value) => {
+    setVersionForm(prev => ({
+      ...prev,
+      impacts: prev.impacts.map((imp, i) => 
+        i === index ? { ...imp, [field]: value } : imp
+      )
+    }));
+  };
+
   // When subcategory changes, auto-generate required impact containers
   const handleSubcategoryChange = (newSubcategory) => {
     // First update subcategory
