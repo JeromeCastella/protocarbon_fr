@@ -1291,7 +1291,6 @@ const Admin = () => {
                     <Check className="w-5 h-5" />
                     {editingFactor ? 'Modifier' : 'Créer'}
                   </button>
-                  </button>
                 </div>
               </div>
             </motion.div>
