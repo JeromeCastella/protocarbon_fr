@@ -775,6 +775,47 @@ async def admin_import_emission_factors_v2(data: dict, current_user: dict = Depe
     
     return {"message": "Import completed", "imported": imported}
 
+@api_router.post("/admin/migrate-to-year-versioning")
+async def migrate_to_year_versioning(current_user: dict = Depends(require_admin)):
+    """
+    Migrate existing factors from date-based versioning to year-based versioning.
+    Converts valid_from/valid_to dates to valid_from_year/valid_to_year integers.
+    """
+    migrated = 0
+    factors = list(emission_factors_collection.find({}))
+    
+    for factor in factors:
+        update_fields = {}
+        
+        # Convert valid_from date to year
+        if factor.get("valid_from") and not factor.get("valid_from_year"):
+            try:
+                year = int(factor["valid_from"].split("-")[0])
+                update_fields["valid_from_year"] = year
+            except:
+                pass
+        
+        # Convert valid_to date to year
+        if factor.get("valid_to") and not factor.get("valid_to_year"):
+            try:
+                year = int(factor["valid_to"].split("-")[0])
+                update_fields["valid_to_year"] = year
+            except:
+                pass
+        
+        # Remove old date fields
+        if update_fields:
+            emission_factors_collection.update_one(
+                {"_id": factor["_id"]},
+                {
+                    "$set": update_fields,
+                    "$unset": {"valid_from": "", "valid_to": ""}
+                }
+            )
+            migrated += 1
+    
+    return {"message": f"Migration completed. {migrated} factors updated."}
+
 # ==================== VERSIONING ENDPOINTS ====================
 
 @api_router.post("/admin/emission-factors-v2/{factor_id}/new-version")
