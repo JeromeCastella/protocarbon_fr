@@ -19,7 +19,11 @@ import {
   AlertTriangle,
   Layers,
   Sparkles,
-  Tag
+  Tag,
+  GitBranch,
+  History,
+  Archive,
+  RefreshCw
 } from 'lucide-react';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL || '';
