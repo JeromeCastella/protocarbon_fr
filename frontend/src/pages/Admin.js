@@ -406,7 +406,7 @@ const Admin = () => {
     setVersionForm({
       change_reason: '',
       is_correction: false,
-      valid_from: new Date().toISOString().split('T')[0],
+      valid_from_year: new Date().getFullYear(),
       impacts: (factor.impacts || []).map(imp => ({
         scope: imp.scope,
         category: imp.category,
