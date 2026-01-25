@@ -692,6 +692,21 @@ async def admin_create_emission_factor_v2(factor: EmissionFactorV2Create, curren
     factor_doc = factor.model_dump()
     factor_doc["created_at"] = datetime.now(timezone.utc).isoformat()
     factor_doc["version"] = 2  # Mark as V2 format
+    # Versioning fields
+    factor_doc["factor_version"] = 1  # First version
+    factor_doc["valid_from"] = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    factor_doc["valid_to"] = None  # Currently active
+    factor_doc["is_correction"] = False
+    factor_doc["replaced_by"] = None
+    factor_doc["previous_version_id"] = None
+    factor_doc["deleted_at"] = None
+    factor_doc["change_history"] = [{
+        "version": 1,
+        "changed_at": datetime.now(timezone.utc).isoformat(),
+        "changed_by": current_user.get("email", "unknown"),
+        "reason": "Création initiale"
+    }]
+    
     result = emission_factors_collection.insert_one(factor_doc)
     # Return clean doc without _id
     factor_doc.pop("_id", None)
