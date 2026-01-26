@@ -24,7 +24,18 @@ Application de calcul d'empreinte carbone selon le protocole GHG avec interface 
 
 ## What's Been Implemented
 
-### 2026-01-26 (Session actuelle) - Corrections KPI Dashboard + Indicateurs Objectifs
+### 2026-01-26 (Session actuelle) - Optimisations Performance
+- **Index MongoDB** créés pour accélérer les requêtes :
+  - `activities`: indexes sur `tenant_id+date`, `tenant_id+company_id`, `tenant_id+scope`, `tenant_id+category_id`
+  - `emission_factors`: indexes sur `tenant_id+deleted_at`, `subcategory+valid_from_year`
+  - `fiscal_years`: indexes sur `tenant_id+start_date`, `company_id+status`
+  - `carbon_objectives`: index sur `company_id+status`
+- **API Activities paginée** : Nouveau format `{ data: [...], pagination: { page, limit, total, pages } }`
+- **Cache-Control headers** : Ajoutés sur `/api/categories`, `/api/subcategories`, `/api/unit-conversions` (1h)
+- **Hook useStaticData** : Cache frontend pour données statiques (catégories, sous-catégories, conversions)
+- **Frontend adapté** : Dashboard et DataEntry mis à jour pour gérer la pagination
+
+### 2026-01-26 (Session précédente) - Corrections KPI Dashboard + Indicateurs Objectifs
 - **Corrections onglet "Suivi de saisie"** :
   - Corrigé l'affichage des catégories remplies (8/16 au lieu de 0/16)
   - Corrigé le calcul de progression (50% au lieu de 0%)
