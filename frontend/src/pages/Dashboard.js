@@ -822,45 +822,136 @@ const Dashboard = () => {
                   </button>
                 </div>
 
-                {/* Target Cards */}
+                {/* Target Cards with Progress */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className={`p-4 rounded-xl ${isDark ? 'bg-slate-800/50' : 'bg-white'}`}>
-                    <div className="flex items-center gap-2 mb-2">
-                      <div className="w-3 h-3 rounded-full bg-blue-500"></div>
-                      <span className={`text-sm font-medium ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
-                        Scope 1 & 2
-                      </span>
-                    </div>
-                    <div className="flex items-end gap-2">
-                      <span className="text-3xl font-bold text-blue-500">-{objective.reduction_scope1_2_percent}%</span>
-                      <span className={`text-sm pb-1 ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-                        d'ici {objective.target_year}
-                      </span>
-                    </div>
-                    <p className={`text-xs mt-2 ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>
-                      Baseline : {formatEmissions(objective.baseline_scope1_2).value} {formatEmissions(objective.baseline_scope1_2).unit}
-                      → Cible : {formatEmissions(objective.target_scope1_2).value} {formatEmissions(objective.target_scope1_2).unit}
-                    </p>
-                  </div>
+                  {/* Scope 1&2 Progress Card */}
+                  {(() => {
+                    // Calculate current progress for Scope 1&2
+                    const latestActual = trajectoryData.actuals?.[trajectoryData.actuals.length - 1];
+                    const currentS12 = latestActual?.actual_scope1_2 || 0;
+                    const baselineS12 = objective.baseline_scope1_2 || 0;
+                    const targetS12 = objective.target_scope1_2 || 0;
+                    const reductionNeeded = baselineS12 - targetS12;
+                    const reductionAchieved = baselineS12 - currentS12;
+                    const progressPercent = reductionNeeded > 0 
+                      ? Math.min(100, Math.max(0, Math.round((reductionAchieved / reductionNeeded) * 100))) 
+                      : 0;
+                    const isOnTrack = currentS12 <= (trajectoryData.trajectory?.find(t => t.year === latestActual?.year)?.target_scope1_2 || baselineS12);
+                    
+                    return (
+                      <div className={`p-4 rounded-xl ${isDark ? 'bg-slate-800/50' : 'bg-white'}`}>
+                        <div className="flex items-center justify-between mb-3">
+                          <div className="flex items-center gap-2">
+                            <div className="w-3 h-3 rounded-full bg-blue-500"></div>
+                            <span className={`text-sm font-medium ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
+                              Scope 1 & 2
+                            </span>
+                          </div>
+                          <span className={`text-xs px-2 py-1 rounded-full ${
+                            isOnTrack 
+                              ? 'bg-green-500/20 text-green-500' 
+                              : 'bg-amber-500/20 text-amber-500'
+                          }`}>
+                            {isOnTrack ? '✓ En bonne voie' : '⚠ Effort requis'}
+                          </span>
+                        </div>
+                        
+                        <div className="flex items-end gap-2 mb-3">
+                          <span className="text-3xl font-bold text-blue-500">-{objective.reduction_scope1_2_percent}%</span>
+                          <span className={`text-sm pb-1 ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+                            d'ici {objective.target_year}
+                          </span>
+                        </div>
+                        
+                        {/* Progress bar */}
+                        <div className="mb-2">
+                          <div className="flex justify-between text-xs mb-1">
+                            <span className={isDark ? 'text-slate-400' : 'text-gray-500'}>Progression</span>
+                            <span className={`font-medium ${progressPercent >= 50 ? 'text-green-500' : 'text-blue-500'}`}>
+                              {progressPercent}%
+                            </span>
+                          </div>
+                          <div className={`h-2 rounded-full ${isDark ? 'bg-slate-700' : 'bg-gray-200'}`}>
+                            <div 
+                              className={`h-full rounded-full transition-all duration-500 ${
+                                progressPercent >= 50 ? 'bg-green-500' : 'bg-blue-500'
+                              }`}
+                              style={{ width: `${progressPercent}%` }}
+                            />
+                          </div>
+                        </div>
+                        
+                        <p className={`text-xs ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>
+                          Actuel : {formatEmissions(currentS12).value} {formatEmissions(currentS12).unit}
+                          {' • '}Cible : {formatEmissions(targetS12).value} {formatEmissions(targetS12).unit}
+                        </p>
+                      </div>
+                    );
+                  })()}
 
-                  <div className={`p-4 rounded-xl ${isDark ? 'bg-slate-800/50' : 'bg-white'}`}>
-                    <div className="flex items-center gap-2 mb-2">
-                      <div className="w-3 h-3 rounded-full bg-amber-500"></div>
-                      <span className={`text-sm font-medium ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
-                        Scope 3
-                      </span>
-                    </div>
-                    <div className="flex items-end gap-2">
-                      <span className="text-3xl font-bold text-amber-500">-{objective.reduction_scope3_percent}%</span>
-                      <span className={`text-sm pb-1 ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-                        d'ici {objective.target_year}
-                      </span>
-                    </div>
-                    <p className={`text-xs mt-2 ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>
-                      Baseline : {formatEmissions(objective.baseline_scope3).value} {formatEmissions(objective.baseline_scope3).unit}
-                      → Cible : {formatEmissions(objective.target_scope3).value} {formatEmissions(objective.target_scope3).unit}
-                    </p>
-                  </div>
+                  {/* Scope 3 Progress Card */}
+                  {(() => {
+                    const latestActual = trajectoryData.actuals?.[trajectoryData.actuals.length - 1];
+                    const currentS3 = latestActual?.actual_scope3 || 0;
+                    const baselineS3 = objective.baseline_scope3 || 0;
+                    const targetS3 = objective.target_scope3 || 0;
+                    const reductionNeeded = baselineS3 - targetS3;
+                    const reductionAchieved = baselineS3 - currentS3;
+                    const progressPercent = reductionNeeded > 0 
+                      ? Math.min(100, Math.max(0, Math.round((reductionAchieved / reductionNeeded) * 100))) 
+                      : 0;
+                    const isOnTrack = currentS3 <= (trajectoryData.trajectory?.find(t => t.year === latestActual?.year)?.target_scope3 || baselineS3);
+                    
+                    return (
+                      <div className={`p-4 rounded-xl ${isDark ? 'bg-slate-800/50' : 'bg-white'}`}>
+                        <div className="flex items-center justify-between mb-3">
+                          <div className="flex items-center gap-2">
+                            <div className="w-3 h-3 rounded-full bg-amber-500"></div>
+                            <span className={`text-sm font-medium ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
+                              Scope 3
+                            </span>
+                          </div>
+                          <span className={`text-xs px-2 py-1 rounded-full ${
+                            isOnTrack 
+                              ? 'bg-green-500/20 text-green-500' 
+                              : 'bg-amber-500/20 text-amber-500'
+                          }`}>
+                            {isOnTrack ? '✓ En bonne voie' : '⚠ Effort requis'}
+                          </span>
+                        </div>
+                        
+                        <div className="flex items-end gap-2 mb-3">
+                          <span className="text-3xl font-bold text-amber-500">-{objective.reduction_scope3_percent}%</span>
+                          <span className={`text-sm pb-1 ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+                            d'ici {objective.target_year}
+                          </span>
+                        </div>
+                        
+                        {/* Progress bar */}
+                        <div className="mb-2">
+                          <div className="flex justify-between text-xs mb-1">
+                            <span className={isDark ? 'text-slate-400' : 'text-gray-500'}>Progression</span>
+                            <span className={`font-medium ${progressPercent >= 50 ? 'text-green-500' : 'text-amber-500'}`}>
+                              {progressPercent}%
+                            </span>
+                          </div>
+                          <div className={`h-2 rounded-full ${isDark ? 'bg-slate-700' : 'bg-gray-200'}`}>
+                            <div 
+                              className={`h-full rounded-full transition-all duration-500 ${
+                                progressPercent >= 50 ? 'bg-green-500' : 'bg-amber-500'
+                              }`}
+                              style={{ width: `${progressPercent}%` }}
+                            />
+                          </div>
+                        </div>
+                        
+                        <p className={`text-xs ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>
+                          Actuel : {formatEmissions(currentS3).value} {formatEmissions(currentS3).unit}
+                          {' • '}Cible : {formatEmissions(targetS3).value} {formatEmissions(targetS3).unit}
+                        </p>
+                      </div>
+                    );
+                  })()}
                 </div>
               </motion.div>
 
