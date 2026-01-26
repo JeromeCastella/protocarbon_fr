@@ -24,6 +24,13 @@ Application de calcul d'empreinte carbone selon le protocole GHG avec interface 
 
 ## What's Been Implemented
 
+### 2026-01-26 (Session actuelle) - Validation refonte Dashboard 3 onglets
+- **Dashboard restructuré en 3 onglets** :
+  - **Onglet "Suivi de saisie"** : Statistiques (activités saisies, produits définis, catégories remplies, progression), avancement par scope avec barres de progression, gamification
+  - **Onglet "Résultats"** : KPI (émissions totales, par employé, par kCHF, variation N-1), graphiques d'évolution par exercice et répartition par scope, bouton recalcul avec facteurs actuels
+  - **Onglet "Avancé"** : Placeholder avec 3 KPI futurs (pkm moyen pendularité, consommation énergétique, intensité carbone)
+- **Fonctionnalité de recalcul validée** : Modal permettant de simuler le calcul des émissions d'un exercice passé avec les facteurs actuels
+
 ### 2026-01-24 (Session 7) - REFONTE FACTEURS D'ÉMISSION (Phases 1-4)
 
 #### Phase 1 - Structure de données
