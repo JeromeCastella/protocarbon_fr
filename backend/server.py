@@ -358,6 +358,85 @@ class ProductCreate(BaseModel):
     disposal_emissions: float = 0
     unit: str = "unit"
 
+# ==================== CARBON OBJECTIVES MODELS ====================
+
+class CarbonObjectiveCreate(BaseModel):
+    """Création d'un objectif carbone SBTi"""
+    reference_fiscal_year_id: str  # Exercice de référence pour le baseline
+    target_year: int  # 2030 ou 2035
+
+class CarbonObjectiveUpdate(BaseModel):
+    """Mise à jour d'un objectif"""
+    target_year: Optional[int] = None
+    status: Optional[str] = None  # active, archived
+
+class TrajectoryPoint(BaseModel):
+    """Point sur la trajectoire"""
+    year: int
+    target_scope1_2: float
+    target_scope3: float
+    actual_scope1_2: Optional[float] = None
+    actual_scope3: Optional[float] = None
+
+# ==================== SBTI CONFIGURATION ====================
+
+SBTI_TARGETS = {
+    2030: {
+        "reduction_scope1_2_percent": 42,
+        "reduction_scope3_percent": 25,
+        "label": "Near-term 2030"
+    },
+    2035: {
+        "reduction_scope1_2_percent": 65,
+        "reduction_scope3_percent": 39,
+        "label": "Near-term 2035"
+    }
+}
+
+# Mesures recommandées par catégorie (top émetteurs)
+RECOMMENDED_MEASURES = {
+    "combustion_mobile": [
+        {"title_fr": "Électrifier la flotte de véhicules", "title_de": "Fahrzeugflotte elektrifizieren", "impact": "high"},
+        {"title_fr": "Mettre en place le covoiturage", "title_de": "Fahrgemeinschaften einrichten", "impact": "medium"},
+        {"title_fr": "Favoriser le télétravail", "title_de": "Homeoffice fördern", "impact": "medium"}
+    ],
+    "electricite": [
+        {"title_fr": "Passer à l'électricité 100% renouvelable", "title_de": "Auf 100% erneuerbare Energie umsteigen", "impact": "high"},
+        {"title_fr": "Optimiser l'éclairage (LED)", "title_de": "Beleuchtung optimieren (LED)", "impact": "medium"},
+        {"title_fr": "Installer des panneaux solaires", "title_de": "Solaranlagen installieren", "impact": "high"}
+    ],
+    "combustion_stationnaire": [
+        {"title_fr": "Remplacer le chauffage fossile par PAC", "title_de": "Fossile Heizung durch Wärmepumpe ersetzen", "impact": "high"},
+        {"title_fr": "Améliorer l'isolation des bâtiments", "title_de": "Gebäudedämmung verbessern", "impact": "high"},
+        {"title_fr": "Optimiser la régulation thermique", "title_de": "Wärmeregulierung optimieren", "impact": "medium"}
+    ],
+    "deplacements_professionnels": [
+        {"title_fr": "Privilégier le train aux vols courts", "title_de": "Bahn statt Kurzstreckenflüge bevorzugen", "impact": "high"},
+        {"title_fr": "Réduire les déplacements (visioconférence)", "title_de": "Reisen reduzieren (Videokonferenzen)", "impact": "high"},
+        {"title_fr": "Compenser les vols nécessaires", "title_de": "Notwendige Flüge kompensieren", "impact": "low"}
+    ],
+    "deplacements_domicile_travail": [
+        {"title_fr": "Subventionner les transports en commun", "title_de": "Öffentliche Verkehrsmittel subventionieren", "impact": "high"},
+        {"title_fr": "Installer des bornes de recharge", "title_de": "Ladestationen installieren", "impact": "medium"},
+        {"title_fr": "Proposer le forfait mobilité durable", "title_de": "Nachhaltige Mobilitätspauschale anbieten", "impact": "medium"}
+    ],
+    "achats_biens_services": [
+        {"title_fr": "Achats responsables (labels éco)", "title_de": "Verantwortungsvoller Einkauf (Öko-Labels)", "impact": "medium"},
+        {"title_fr": "Réduire les achats de matériel neuf", "title_de": "Neuanschaffungen reduzieren", "impact": "medium"},
+        {"title_fr": "Favoriser les fournisseurs locaux", "title_de": "Lokale Lieferanten bevorzugen", "impact": "medium"}
+    ],
+    "transport_distribution_amont": [
+        {"title_fr": "Optimiser la logistique (groupage)", "title_de": "Logistik optimieren (Bündelung)", "impact": "high"},
+        {"title_fr": "Privilégier le transport ferroviaire", "title_de": "Bahntransport bevorzugen", "impact": "high"},
+        {"title_fr": "Choisir des transporteurs bas-carbone", "title_de": "CO2-arme Transportunternehmen wählen", "impact": "medium"}
+    ],
+    "dechets": [
+        {"title_fr": "Réduire les déchets à la source", "title_de": "Abfälle an der Quelle reduzieren", "impact": "high"},
+        {"title_fr": "Améliorer le tri sélectif", "title_de": "Mülltrennung verbessern", "impact": "medium"},
+        {"title_fr": "Valoriser les déchets organiques", "title_de": "Organische Abfälle verwerten", "impact": "medium"}
+    ]
+}
+
 class EmissionFactorCreate(BaseModel):
     name: str
     category: str
