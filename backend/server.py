@@ -2994,7 +2994,7 @@ async def get_dashboard_kpis(current_user: dict = Depends(get_current_user)):
     """Get key performance indicators for the dashboard"""
     company = companies_collection.find_one({"tenant_id": current_user["id"]})
     
-    # Get all fiscal years
+    # Get all fiscal years sorted by start_date descending
     fiscal_years = list(fiscal_years_collection.find(
         {"tenant_id": current_user["id"]}
     ).sort("start_date", -1))
@@ -3010,28 +3010,34 @@ async def get_dashboard_kpis(current_user: dict = Depends(get_current_user)):
             previous_fy = fy
             break
     
-    # Calculate current emissions
+    # Calculate current emissions - filter by DATE range, not fiscal_year_id
     current_emissions = 0
     current_activities_count = 0
     if current_fy:
+        start_date = current_fy.get("start_date", "")
+        end_date = current_fy.get("end_date", "")
+        
         activities = list(activities_collection.find({
             "tenant_id": current_user["id"],
-            "fiscal_year_id": str(current_fy["_id"])
+            "date": {"$gte": start_date, "$lte": end_date}
         }))
-        current_emissions = sum(a.get("emissions", 0) for a in activities)
+        current_emissions = sum(a.get("emissions", 0) or 0 for a in activities)
         current_activities_count = len(activities)
     
-    # Calculate previous emissions
+    # Calculate previous emissions - filter by DATE range
     previous_emissions = 0
     if previous_fy:
-        if previous_fy.get("summary"):
-            previous_emissions = previous_fy["summary"].get("total_emissions", 0)
+        if previous_fy.get("summary") and previous_fy["summary"].get("total_emissions_tco2e"):
+            previous_emissions = previous_fy["summary"].get("total_emissions_tco2e", 0) * 1000  # Convert to kg
         else:
+            start_date = previous_fy.get("start_date", "")
+            end_date = previous_fy.get("end_date", "")
+            
             activities = list(activities_collection.find({
                 "tenant_id": current_user["id"],
-                "fiscal_year_id": str(previous_fy["_id"])
+                "date": {"$gte": start_date, "$lte": end_date}
             }))
-            previous_emissions = sum(a.get("emissions", 0) for a in activities)
+            previous_emissions = sum(a.get("emissions", 0) or 0 for a in activities)
     
     # Calculate variation
     variation_percent = 0
@@ -3041,17 +3047,23 @@ async def get_dashboard_kpis(current_user: dict = Depends(get_current_user)):
         variation_percent = round((variation_absolute / previous_emissions) * 100, 1)
     
     # Emissions per employee
-    emissions_per_employee = 0
-    if company and company.get("employees", 0) > 0:
+    emissions_per_employee = None
+    if company and company.get("employees", 0) > 0 and current_emissions > 0:
         emissions_per_employee = current_emissions / company["employees"]
     
-    # Emissions per revenue (intensity)
-    emissions_intensity = 0
-    if company and company.get("revenue", 0) > 0:
-        emissions_intensity = current_emissions / company["revenue"]
+    # Emissions per revenue (intensity) - per kCHF
+    emissions_per_revenue = None
+    if company and company.get("revenue", 0) > 0 and current_emissions > 0:
+        revenue_kchf = company["revenue"] / 1000  # Convert to kCHF
+        emissions_per_revenue = current_emissions / revenue_kchf if revenue_kchf > 0 else None
     
     # Products count
     products_count = products_collection.count_documents({"tenant_id": current_user["id"]})
+    
+    # Year-over-year change
+    year_over_year_change = None
+    if previous_emissions > 0 and current_emissions > 0:
+        year_over_year_change = round(((current_emissions - previous_emissions) / previous_emissions) * 100, 1)
     
     return {
         "current_emissions": round(current_emissions, 2),
@@ -3061,9 +3073,11 @@ async def get_dashboard_kpis(current_user: dict = Depends(get_current_user)):
         "activities_count": current_activities_count,
         "products_count": products_count,
         "emissions_per_employee": round(emissions_per_employee, 2) if emissions_per_employee else None,
-        "emissions_intensity": round(emissions_intensity, 6) if emissions_intensity else None,
+        "emissions_per_revenue": round(emissions_per_revenue, 2) if emissions_per_revenue else None,
+        "year_over_year_change": year_over_year_change,
         "fiscal_years_count": len(fiscal_years),
         "current_fiscal_year": current_fy.get("name") if current_fy else None,
+        "previous_fiscal_year": previous_fy.get("name") if previous_fy else None,
         "employees": company.get("employees") if company else None,
         "revenue": company.get("revenue") if company else None
     }
