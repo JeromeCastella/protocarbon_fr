@@ -24,11 +24,30 @@ Application de calcul d'empreinte carbone selon le protocole GHG avec interface 
 
 ## What's Been Implemented
 
-### 2026-01-26 (Session actuelle) - Validation refonte Dashboard 3 onglets
+### 2026-01-26 (Session actuelle) - Onglet Objectifs SBTi
+- **Remplacement de l'onglet "Avancé" par "Objectifs"** :
+  - Modal de configuration d'objectifs SBTi Near-term (2030 ou 2035)
+  - Sélection de l'année de référence (baseline) parmi les exercices fiscaux
+  - Calcul automatique des baselines par scope à partir des activités
+  - Trajectoire de réduction linéaire visualisée dans un graphique combiné (lignes + barres)
+  - Comparaison réel vs cible par année
+  - Mesures recommandées basées sur les top 3 catégories émettrices
+- **Nouvelles APIs Backend** :
+  - `POST /api/objectives` - Création d'objectif avec calcul baseline automatique
+  - `GET /api/objectives` - Récupération de l'objectif actif
+  - `GET /api/objectives/trajectory` - Données de trajectoire pour graphiques
+  - `GET /api/objectives/recommendations` - Mesures recommandées
+  - `DELETE /api/objectives/{id}` - Archivage d'objectif
+- **Nouvelle collection MongoDB** : `carbon_objectives`
+- **Configuration SBTi** :
+  - 2030 : -42% Scope 1&2, -25% Scope 3
+  - 2035 : -65% Scope 1&2, -39% Scope 3
+
+### 2026-01-26 (Session précédente) - Validation refonte Dashboard 3 onglets
 - **Dashboard restructuré en 3 onglets** :
   - **Onglet "Suivi de saisie"** : Statistiques (activités saisies, produits définis, catégories remplies, progression), avancement par scope avec barres de progression, gamification
   - **Onglet "Résultats"** : KPI (émissions totales, par employé, par kCHF, variation N-1), graphiques d'évolution par exercice et répartition par scope, bouton recalcul avec facteurs actuels
-  - **Onglet "Avancé"** : Placeholder avec 3 KPI futurs (pkm moyen pendularité, consommation énergétique, intensité carbone)
+  - **Onglet "Objectifs"** : Configuration d'objectifs SBTi avec trajectoire et recommandations
 - **Fonctionnalité de recalcul validée** : Modal permettant de simuler le calcul des émissions d'un exercice passé avec les facteurs actuels
 
 ### 2026-01-24 (Session 7) - REFONTE FACTEURS D'ÉMISSION (Phases 1-4)
