@@ -827,8 +827,13 @@ const Dashboard = () => {
                   {/* Scope 1&2 Progress Card */}
                   {(() => {
                     // Calculate current progress for Scope 1&2
-                    const latestActual = trajectoryData.actuals?.[trajectoryData.actuals.length - 1];
-                    const currentS12 = latestActual?.actual_scope1_2 || 0;
+                    // Find the most recent actual with data
+                    const actualsWithData = trajectoryData.actuals?.filter(a => (a.actual_scope1_2 || 0) > 0 || (a.actual_scope3 || 0) > 0) || [];
+                    const latestActual = actualsWithData.length > 0 
+                      ? actualsWithData[actualsWithData.length - 1] 
+                      : trajectoryData.actuals?.[0]; // Fallback to first (baseline year)
+                    
+                    const currentS12 = latestActual?.actual_scope1_2 || objective.baseline_scope1_2;
                     const baselineS12 = objective.baseline_scope1_2 || 0;
                     const targetS12 = objective.target_scope1_2 || 0;
                     const reductionNeeded = baselineS12 - targetS12;
@@ -836,7 +841,11 @@ const Dashboard = () => {
                     const progressPercent = reductionNeeded > 0 
                       ? Math.min(100, Math.max(0, Math.round((reductionAchieved / reductionNeeded) * 100))) 
                       : 0;
-                    const isOnTrack = currentS12 <= (trajectoryData.trajectory?.find(t => t.year === latestActual?.year)?.target_scope1_2 || baselineS12);
+                    
+                    // Check if on track by comparing to target trajectory for current year
+                    const currentYear = latestActual?.year || objective.reference_year;
+                    const targetForYear = trajectoryData.trajectory?.find(t => t.year === currentYear);
+                    const isOnTrack = currentS12 <= (targetForYear?.target_scope1_2 || baselineS12);
                     
                     return (
                       <div className={`p-4 rounded-xl ${isDark ? 'bg-slate-800/50' : 'bg-white'}`}>
@@ -866,7 +875,7 @@ const Dashboard = () => {
                         {/* Progress bar */}
                         <div className="mb-2">
                           <div className="flex justify-between text-xs mb-1">
-                            <span className={isDark ? 'text-slate-400' : 'text-gray-500'}>Progression</span>
+                            <span className={isDark ? 'text-slate-400' : 'text-gray-500'}>Progression ({currentYear})</span>
                             <span className={`font-medium ${progressPercent >= 50 ? 'text-green-500' : 'text-blue-500'}`}>
                               {progressPercent}%
                             </span>
@@ -891,8 +900,13 @@ const Dashboard = () => {
 
                   {/* Scope 3 Progress Card */}
                   {(() => {
-                    const latestActual = trajectoryData.actuals?.[trajectoryData.actuals.length - 1];
-                    const currentS3 = latestActual?.actual_scope3 || 0;
+                    // Find the most recent actual with data
+                    const actualsWithData = trajectoryData.actuals?.filter(a => (a.actual_scope1_2 || 0) > 0 || (a.actual_scope3 || 0) > 0) || [];
+                    const latestActual = actualsWithData.length > 0 
+                      ? actualsWithData[actualsWithData.length - 1] 
+                      : trajectoryData.actuals?.[0];
+                    
+                    const currentS3 = latestActual?.actual_scope3 || objective.baseline_scope3;
                     const baselineS3 = objective.baseline_scope3 || 0;
                     const targetS3 = objective.target_scope3 || 0;
                     const reductionNeeded = baselineS3 - targetS3;
@@ -900,7 +914,10 @@ const Dashboard = () => {
                     const progressPercent = reductionNeeded > 0 
                       ? Math.min(100, Math.max(0, Math.round((reductionAchieved / reductionNeeded) * 100))) 
                       : 0;
-                    const isOnTrack = currentS3 <= (trajectoryData.trajectory?.find(t => t.year === latestActual?.year)?.target_scope3 || baselineS3);
+                    
+                    const currentYear = latestActual?.year || objective.reference_year;
+                    const targetForYear = trajectoryData.trajectory?.find(t => t.year === currentYear);
+                    const isOnTrack = currentS3 <= (targetForYear?.target_scope3 || baselineS3);
                     
                     return (
                       <div className={`p-4 rounded-xl ${isDark ? 'bg-slate-800/50' : 'bg-white'}`}>
@@ -930,7 +947,7 @@ const Dashboard = () => {
                         {/* Progress bar */}
                         <div className="mb-2">
                           <div className="flex justify-between text-xs mb-1">
-                            <span className={isDark ? 'text-slate-400' : 'text-gray-500'}>Progression</span>
+                            <span className={isDark ? 'text-slate-400' : 'text-gray-500'}>Progression ({currentYear})</span>
                             <span className={`font-medium ${progressPercent >= 50 ? 'text-green-500' : 'text-amber-500'}`}>
                               {progressPercent}%
                             </span>
