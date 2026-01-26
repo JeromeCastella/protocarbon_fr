@@ -2990,7 +2990,10 @@ async def get_scope_breakdown(fiscal_year_id: str, current_user: dict = Depends(
     }
 
 @api_router.get("/dashboard/kpis")
-async def get_dashboard_kpis(current_user: dict = Depends(get_current_user)):
+async def get_dashboard_kpis(
+    fiscal_year_id: Optional[str] = None,
+    current_user: dict = Depends(get_current_user)
+):
     """Get key performance indicators for the dashboard"""
     company = companies_collection.find_one({"tenant_id": current_user["id"]})
     
@@ -2999,18 +3002,46 @@ async def get_dashboard_kpis(current_user: dict = Depends(get_current_user)):
         {"tenant_id": current_user["id"]}
     ).sort("start_date", -1))
     
-    # Get current and previous fiscal year
+    # Determine current fiscal year
     current_fy = None
     previous_fy = None
     
-    for fy in fiscal_years:
-        if fy.get("status") == "draft" and not current_fy:
-            current_fy = fy
-        elif current_fy and not previous_fy:
-            previous_fy = fy
-            break
+    if fiscal_year_id and fiscal_year_id != 'current':
+        # Use specified fiscal year
+        current_fy = fiscal_years_collection.find_one({"_id": ObjectId(fiscal_year_id)})
+        # Find previous fiscal year
+        if current_fy:
+            current_start = current_fy.get("start_date", "")
+            for fy in fiscal_years:
+                if fy.get("start_date", "") < current_start:
+                    previous_fy = fy
+                    break
+    else:
+        # Find the most recent fiscal year with activities
+        for fy in fiscal_years:
+            fy_start = fy.get("start_date", "")
+            fy_end = fy.get("end_date", "")
+            
+            activity_count = activities_collection.count_documents({
+                "tenant_id": current_user["id"],
+                "date": {"$gte": fy_start, "$lte": fy_end}
+            })
+            
+            if activity_count > 0:
+                if not current_fy:
+                    current_fy = fy
+                elif current_fy:
+                    previous_fy = fy
+                    break
+        
+        # Fallback to most recent draft if no activities found
+        if not current_fy:
+            for fy in fiscal_years:
+                if fy.get("status") == "draft":
+                    current_fy = fy
+                    break
     
-    # Calculate current emissions - filter by DATE range, not fiscal_year_id
+    # Calculate current emissions - filter by DATE range
     current_emissions = 0
     current_activities_count = 0
     if current_fy:
