@@ -756,54 +756,432 @@ const Dashboard = () => {
         </div>
       )}
 
-      {/* ==================== TAB 3: AVANCÉ ==================== */}
-      {activeTab === 'avance' && (
+      {/* ==================== TAB 3: OBJECTIFS ==================== */}
+      {activeTab === 'objectifs' && (
         <div className="space-y-6">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className={`p-12 rounded-2xl text-center ${isDark ? 'bg-slate-800' : 'bg-white shadow-lg'}`}
-          >
-            <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-purple-500/20 to-indigo-500/20 flex items-center justify-center">
-              <Gauge className="w-10 h-10 text-purple-500" />
-            </div>
-            <h2 className={`text-2xl font-bold mb-4 ${isDark ? 'text-white' : 'text-gray-900'}`}>
-              Indicateurs avancés
-            </h2>
-            <p className={`max-w-md mx-auto mb-8 ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-              Cette section contiendra des KPI spécifiques à votre activité, comme les indicateurs de pendularité, 
-              d'intensité carbone et de consommation énergétique.
-            </p>
-            
-            {/* Placeholder cards for future KPIs */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-3xl mx-auto">
-              <div className={`p-4 rounded-xl border-2 border-dashed ${isDark ? 'border-slate-600' : 'border-gray-200'}`}>
-                <Route className={`w-8 h-8 mx-auto mb-2 ${isDark ? 'text-slate-500' : 'text-gray-400'}`} />
-                <p className={`text-sm font-medium ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-                  pkm moyen pendularité
-                </p>
-                <p className={`text-xs ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>À venir</p>
+          {/* No objective yet - Show setup button */}
+          {!objective ? (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className={`p-12 rounded-2xl text-center ${isDark ? 'bg-slate-800' : 'bg-white shadow-lg'}`}
+            >
+              <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-green-500/20 to-emerald-500/20 flex items-center justify-center">
+                <Target className="w-10 h-10 text-green-500" />
               </div>
+              <h2 className={`text-2xl font-bold mb-4 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                Définissez vos objectifs climatiques
+              </h2>
+              <p className={`max-w-md mx-auto mb-8 ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+                Alignez votre stratégie sur les objectifs Science Based Targets (SBTi) 
+                pour contribuer à limiter le réchauffement climatique à 1.5°C.
+              </p>
               
-              <div className={`p-4 rounded-xl border-2 border-dashed ${isDark ? 'border-slate-600' : 'border-gray-200'}`}>
-                <Droplets className={`w-8 h-8 mx-auto mb-2 ${isDark ? 'text-slate-500' : 'text-gray-400'}`} />
-                <p className={`text-sm font-medium ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-                  Consommation énergétique
+              <button
+                onClick={() => {
+                  setObjectiveForm({ reference_fiscal_year_id: fiscalYears[0]?.id || '', target_year: 2030 });
+                  setShowObjectiveModal(true);
+                }}
+                className="px-6 py-3 bg-green-500 text-white rounded-xl hover:bg-green-600 transition-colors font-medium flex items-center gap-2 mx-auto"
+              >
+                <Flag className="w-5 h-5" />
+                Fixer des objectifs
+              </button>
+            </motion.div>
+          ) : (
+            <>
+              {/* Objective Summary */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className={`p-6 rounded-2xl ${isDark ? 'bg-gradient-to-r from-green-500/10 to-emerald-500/10 border border-green-500/20' : 'bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200'}`}
+              >
+                <div className="flex items-start justify-between mb-6">
+                  <div className="flex items-center gap-4">
+                    <div className="p-3 rounded-xl bg-green-500/20">
+                      <Target className="w-8 h-8 text-green-500" />
+                    </div>
+                    <div>
+                      <h2 className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                        Objectif SBTi {objective.target_year}
+                      </h2>
+                      <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+                        Année de référence : {objective.reference_year}
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={handleArchiveObjective}
+                    className={`p-2 rounded-lg transition-colors ${isDark ? 'hover:bg-slate-700 text-slate-400' : 'hover:bg-gray-100 text-gray-400'}`}
+                    title="Archiver l'objectif"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
+
+                {/* Target Cards */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className={`p-4 rounded-xl ${isDark ? 'bg-slate-800/50' : 'bg-white'}`}>
+                    <div className="flex items-center gap-2 mb-2">
+                      <div className="w-3 h-3 rounded-full bg-blue-500"></div>
+                      <span className={`text-sm font-medium ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
+                        Scope 1 & 2
+                      </span>
+                    </div>
+                    <div className="flex items-end gap-2">
+                      <span className="text-3xl font-bold text-blue-500">-{objective.reduction_scope1_2_percent}%</span>
+                      <span className={`text-sm pb-1 ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+                        d'ici {objective.target_year}
+                      </span>
+                    </div>
+                    <p className={`text-xs mt-2 ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>
+                      Baseline : {formatEmissions(objective.baseline_scope1_2).value} {formatEmissions(objective.baseline_scope1_2).unit}
+                      → Cible : {formatEmissions(objective.target_scope1_2).value} {formatEmissions(objective.target_scope1_2).unit}
+                    </p>
+                  </div>
+
+                  <div className={`p-4 rounded-xl ${isDark ? 'bg-slate-800/50' : 'bg-white'}`}>
+                    <div className="flex items-center gap-2 mb-2">
+                      <div className="w-3 h-3 rounded-full bg-amber-500"></div>
+                      <span className={`text-sm font-medium ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
+                        Scope 3
+                      </span>
+                    </div>
+                    <div className="flex items-end gap-2">
+                      <span className="text-3xl font-bold text-amber-500">-{objective.reduction_scope3_percent}%</span>
+                      <span className={`text-sm pb-1 ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+                        d'ici {objective.target_year}
+                      </span>
+                    </div>
+                    <p className={`text-xs mt-2 ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>
+                      Baseline : {formatEmissions(objective.baseline_scope3).value} {formatEmissions(objective.baseline_scope3).unit}
+                      → Cible : {formatEmissions(objective.target_scope3).value} {formatEmissions(objective.target_scope3).unit}
+                    </p>
+                  </div>
+                </div>
+              </motion.div>
+
+              {/* Trajectory Chart */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 }}
+                className={`p-6 rounded-2xl ${isDark ? 'bg-slate-800' : 'bg-white shadow-lg'}`}
+              >
+                <h3 className={`text-lg font-semibold mb-4 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                  Trajectoire de réduction
+                </h3>
+                <div className="h-80">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <ComposedChart
+                      data={trajectoryData.trajectory.map(t => {
+                        const actual = trajectoryData.actuals.find(a => a.year === t.year);
+                        return {
+                          ...t,
+                          actual_scope1_2: actual?.actual_scope1_2,
+                          actual_scope3: actual?.actual_scope3,
+                          actual_total: actual?.actual_total
+                        };
+                      })}
+                      margin={{ top: 20, right: 30, left: 20, bottom: 20 }}
+                    >
+                      <CartesianGrid strokeDasharray="3 3" opacity={0.2} />
+                      <XAxis 
+                        dataKey="year" 
+                        tick={{ fill: isDark ? '#94a3b8' : '#6b7280' }}
+                      />
+                      <YAxis 
+                        tickFormatter={(value) => `${(value / 1000).toFixed(0)}t`}
+                        tick={{ fill: isDark ? '#94a3b8' : '#6b7280' }}
+                      />
+                      <Tooltip 
+                        formatter={(value, name) => [formatChartValue(value), name]}
+                        contentStyle={{ 
+                          backgroundColor: isDark ? '#1e293b' : '#fff',
+                          borderColor: isDark ? '#475569' : '#e5e7eb'
+                        }}
+                        labelFormatter={(year) => `Année ${year}`}
+                      />
+                      <Legend />
+                      
+                      {/* Target lines (dashed) */}
+                      <Line 
+                        type="monotone" 
+                        dataKey="target_scope1_2" 
+                        name="Cible Scope 1&2" 
+                        stroke="#3B82F6" 
+                        strokeDasharray="5 5"
+                        strokeWidth={2}
+                        dot={false}
+                      />
+                      <Line 
+                        type="monotone" 
+                        dataKey="target_scope3" 
+                        name="Cible Scope 3" 
+                        stroke="#F59E0B" 
+                        strokeDasharray="5 5"
+                        strokeWidth={2}
+                        dot={false}
+                      />
+                      
+                      {/* Actual values (bars) */}
+                      <Bar 
+                        dataKey="actual_scope1_2" 
+                        name="Réel Scope 1&2" 
+                        fill="#3B82F6"
+                        radius={[4, 4, 0, 0]}
+                        maxBarSize={40}
+                      />
+                      <Bar 
+                        dataKey="actual_scope3" 
+                        name="Réel Scope 3" 
+                        fill="#F59E0B"
+                        radius={[4, 4, 0, 0]}
+                        maxBarSize={40}
+                      />
+                    </ComposedChart>
+                  </ResponsiveContainer>
+                </div>
+                <p className={`text-xs mt-4 text-center ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>
+                  Les lignes pointillées représentent la trajectoire cible SBTi. Les barres montrent les émissions réelles par exercice.
                 </p>
-                <p className={`text-xs ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>À venir</p>
-              </div>
-              
-              <div className={`p-4 rounded-xl border-2 border-dashed ${isDark ? 'border-slate-600' : 'border-gray-200'}`}>
-                <Target className={`w-8 h-8 mx-auto mb-2 ${isDark ? 'text-slate-500' : 'text-gray-400'}`} />
-                <p className={`text-sm font-medium ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-                  Intensité carbone
-                </p>
-                <p className={`text-xs ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>À venir</p>
-              </div>
-            </div>
-          </motion.div>
+              </motion.div>
+
+              {/* Recommended Measures */}
+              {recommendations.length > 0 && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.2 }}
+                  className={`p-6 rounded-2xl ${isDark ? 'bg-slate-800' : 'bg-white shadow-lg'}`}
+                >
+                  <div className="flex items-center gap-3 mb-4">
+                    <Lightbulb className="w-6 h-6 text-amber-500" />
+                    <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                      Mesures recommandées
+                    </h3>
+                  </div>
+                  <p className={`text-sm mb-6 ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+                    Basées sur vos principales sources d'émissions
+                  </p>
+
+                  <div className="space-y-6">
+                    {recommendations.map((rec, idx) => (
+                      <div key={idx} className={`p-4 rounded-xl ${isDark ? 'bg-slate-700/50' : 'bg-gray-50'}`}>
+                        <div className="flex items-center justify-between mb-3">
+                          <span className={`font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                            {rec.category.replace(/_/g, ' ').replace(/^\w/, c => c.toUpperCase())}
+                          </span>
+                          <span className={`text-sm px-2 py-1 rounded-lg ${isDark ? 'bg-slate-600 text-slate-300' : 'bg-gray-200 text-gray-600'}`}>
+                            {formatEmissions(rec.emissions).value} {formatEmissions(rec.emissions).unit}
+                          </span>
+                        </div>
+                        <div className="space-y-2">
+                          {rec.measures.map((measure, mIdx) => (
+                            <div key={mIdx} className="flex items-center gap-3">
+                              <div className={`w-2 h-2 rounded-full ${
+                                measure.impact === 'high' ? 'bg-green-500' :
+                                measure.impact === 'medium' ? 'bg-amber-500' : 'bg-gray-400'
+                              }`}></div>
+                              <span className={`text-sm ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
+                                {measure.title_fr}
+                              </span>
+                              <span className={`text-xs px-2 py-0.5 rounded ${
+                                measure.impact === 'high' 
+                                  ? 'bg-green-500/20 text-green-600' 
+                                  : measure.impact === 'medium'
+                                    ? 'bg-amber-500/20 text-amber-600'
+                                    : 'bg-gray-500/20 text-gray-500'
+                              }`}>
+                                {measure.impact === 'high' ? 'Impact fort' : measure.impact === 'medium' ? 'Impact moyen' : 'Impact faible'}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </motion.div>
+              )}
+
+              {/* Change objective button */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+              >
+                <button
+                  onClick={() => {
+                    setObjectiveForm({ 
+                      reference_fiscal_year_id: objective.reference_fiscal_year_id || fiscalYears[0]?.id || '', 
+                      target_year: objective.target_year === 2030 ? 2035 : 2030
+                    });
+                    setShowObjectiveModal(true);
+                  }}
+                  className={`flex items-center gap-2 px-4 py-3 rounded-xl border transition-all ${
+                    isDark 
+                      ? 'border-slate-600 hover:bg-slate-700 text-slate-300 hover:text-white' 
+                      : 'border-gray-200 hover:bg-gray-50 text-gray-600 hover:text-gray-900'
+                  }`}
+                >
+                  <RefreshCw className="w-5 h-5" />
+                  <span>Modifier l'objectif</span>
+                </button>
+              </motion.div>
+            </>
+          )}
         </div>
       )}
+
+      {/* ==================== OBJECTIVE MODAL ==================== */}
+      <AnimatePresence>
+        {showObjectiveModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+            onClick={() => setShowObjectiveModal(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              className={`w-full max-w-lg rounded-2xl shadow-xl overflow-hidden ${isDark ? 'bg-slate-800' : 'bg-white'}`}
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Header */}
+              <div className={`p-6 border-b ${isDark ? 'border-slate-700' : 'border-gray-200'}`}>
+                <div className="flex items-center gap-3">
+                  <div className="p-2 rounded-xl bg-green-500/20">
+                    <Target className="w-6 h-6 text-green-500" />
+                  </div>
+                  <div>
+                    <h2 className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                      Fixer un objectif SBTi
+                    </h2>
+                    <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+                      Science Based Targets initiative
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Content */}
+              <div className="p-6 space-y-6">
+                {/* Reference Year Selection */}
+                <div>
+                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
+                    Année de référence (baseline)
+                  </label>
+                  <select
+                    value={objectiveForm.reference_fiscal_year_id}
+                    onChange={(e) => setObjectiveForm({ ...objectiveForm, reference_fiscal_year_id: e.target.value })}
+                    className={`w-full px-4 py-3 rounded-xl border ${isDark ? 'bg-slate-700 border-slate-600 text-white' : 'bg-white border-gray-200'}`}
+                  >
+                    <option value="">Sélectionner un exercice...</option>
+                    {fiscalYears.map(fy => (
+                      <option key={fy.id} value={fy.id}>{fy.name}</option>
+                    ))}
+                  </select>
+                  <p className={`text-xs mt-1 ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>
+                    Les émissions de cet exercice serviront de point de départ
+                  </p>
+                </div>
+
+                {/* Target Year Selection */}
+                <div>
+                  <label className={`block text-sm font-medium mb-3 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
+                    Horizon de réduction (Near-term)
+                  </label>
+                  <div className="grid grid-cols-2 gap-4">
+                    <button
+                      type="button"
+                      onClick={() => setObjectiveForm({ ...objectiveForm, target_year: 2030 })}
+                      className={`p-4 rounded-xl border-2 transition-all ${
+                        objectiveForm.target_year === 2030
+                          ? 'border-green-500 bg-green-500/10'
+                          : isDark ? 'border-slate-600 hover:border-slate-500' : 'border-gray-200 hover:border-gray-300'
+                      }`}
+                    >
+                      <div className={`text-2xl font-bold mb-1 ${objectiveForm.target_year === 2030 ? 'text-green-500' : isDark ? 'text-white' : 'text-gray-900'}`}>
+                        2030
+                      </div>
+                      <div className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+                        <span className="text-blue-500 font-medium">-42%</span> Scope 1&2
+                      </div>
+                      <div className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+                        <span className="text-amber-500 font-medium">-25%</span> Scope 3
+                      </div>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => setObjectiveForm({ ...objectiveForm, target_year: 2035 })}
+                      className={`p-4 rounded-xl border-2 transition-all ${
+                        objectiveForm.target_year === 2035
+                          ? 'border-green-500 bg-green-500/10'
+                          : isDark ? 'border-slate-600 hover:border-slate-500' : 'border-gray-200 hover:border-gray-300'
+                      }`}
+                    >
+                      <div className={`text-2xl font-bold mb-1 ${objectiveForm.target_year === 2035 ? 'text-green-500' : isDark ? 'text-white' : 'text-gray-900'}`}>
+                        2035
+                      </div>
+                      <div className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+                        <span className="text-blue-500 font-medium">-65%</span> Scope 1&2
+                      </div>
+                      <div className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+                        <span className="text-amber-500 font-medium">-39%</span> Scope 3
+                      </div>
+                    </button>
+                  </div>
+                </div>
+
+                {/* Info box */}
+                <div className={`p-4 rounded-xl ${isDark ? 'bg-slate-700/50' : 'bg-blue-50'}`}>
+                  <div className="flex items-start gap-3">
+                    <Sparkles className={`w-5 h-5 mt-0.5 ${isDark ? 'text-blue-400' : 'text-blue-500'}`} />
+                    <div className={`text-sm ${isDark ? 'text-slate-300' : 'text-blue-700'}`}>
+                      <strong>Objectifs SBTi Near-term</strong>
+                      <p className={`mt-1 ${isDark ? 'text-slate-400' : 'text-blue-600'}`}>
+                        Ces objectifs sont alignés sur une trajectoire limitant le réchauffement à 1.5°C, 
+                        conformément aux recommandations de la Science Based Targets initiative.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Footer */}
+              <div className={`p-6 border-t ${isDark ? 'border-slate-700' : 'border-gray-200'} flex gap-3`}>
+                <button
+                  onClick={() => setShowObjectiveModal(false)}
+                  className={`flex-1 px-4 py-3 rounded-xl border ${isDark ? 'border-slate-600 hover:bg-slate-700' : 'border-gray-200 hover:bg-gray-50'}`}
+                >
+                  Annuler
+                </button>
+                <button
+                  onClick={handleCreateObjective}
+                  disabled={!objectiveForm.reference_fiscal_year_id || objectiveLoading}
+                  className="flex-1 px-4 py-3 bg-green-500 text-white rounded-xl hover:bg-green-600 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                >
+                  {objectiveLoading ? (
+                    <>
+                      <RefreshCw className="w-5 h-5 animate-spin" />
+                      Création...
+                    </>
+                  ) : (
+                    <>
+                      <Flag className="w-5 h-5" />
+                      Définir l'objectif
+                    </>
+                  )}
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* ==================== RECALCULATION MODAL ==================== */}
       <AnimatePresence>
