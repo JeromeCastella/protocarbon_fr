@@ -24,7 +24,23 @@ Application de calcul d'empreinte carbone selon le protocole GHG avec interface 
 
 ## What's Been Implemented
 
-### 2026-01-26 (Session actuelle) - Onglet Objectifs SBTi
+### 2026-01-26 (Session actuelle) - Corrections KPI Dashboard + Indicateurs Objectifs
+- **Corrections onglet "Suivi de saisie"** :
+  - Corrigé l'affichage des catégories remplies (8/16 au lieu de 0/16)
+  - Corrigé le calcul de progression (50% au lieu de 0%)
+  - Corrigé l'affichage des volumes CO₂ par scope
+- **Corrections onglet "Résultats"** :
+  - Corrigé le calcul des KPI "Par employé" et "Par kCHF" 
+  - API KPIs modifiée pour détecter automatiquement l'exercice fiscal avec des données
+  - Corrigé l'affichage de "Variation N-1" (affiche "-" au lieu de "null%")
+- **Améliorations onglet "Objectifs"** :
+  - Ajout d'indicateurs de progression sur les objectifs Scope 1&2 et Scope 3
+  - Barres de progression colorées (bleu/ambre → vert quand >= 50%)
+  - Badge "✓ En bonne voie" ou "⚠ Effort requis" selon la trajectoire
+  - Affichage de l'année courante dans le label "Progression (2026)"
+  - Correction du calcul pour utiliser les vraies émissions actuelles
+
+### 2026-01-26 (Session précédente) - Onglet Objectifs SBTi
 - **Remplacement de l'onglet "Avancé" par "Objectifs"** :
   - Modal de configuration d'objectifs SBTi Near-term (2030 ou 2035)
   - Sélection de l'année de référence (baseline) parmi les exercices fiscaux
