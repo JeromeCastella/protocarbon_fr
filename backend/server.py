@@ -1187,8 +1187,9 @@ async def update_company(company_id: str, company: CompanyUpdate, current_user: 
 # ==================== CATEGORIES ENDPOINTS ====================
 
 @api_router.get("/categories")
-async def get_categories():
-    """Get all emission categories organized by scope"""
+async def get_categories(response: Response):
+    """Get all emission categories organized by scope - cached for 1 hour"""
+    response.headers["Cache-Control"] = "public, max-age=3600"
     categories = list(categories_collection.find({}))
     if not categories:
         # Seed default categories
@@ -1198,8 +1199,9 @@ async def get_categories():
     return [serialize_doc(c) for c in categories]
 
 @api_router.get("/subcategories")
-async def get_subcategories(category: Optional[str] = None):
-    """Get subcategories, optionally filtered by category (N-N relationship)"""
+async def get_subcategories(response: Response, category: Optional[str] = None):
+    """Get subcategories, optionally filtered by category - cached for 1 hour"""
+    response.headers["Cache-Control"] = "public, max-age=3600"
     query = {}
     if category:
         # N-N relationship: categories is a list in subcategory
@@ -1208,8 +1210,9 @@ async def get_subcategories(category: Optional[str] = None):
     return [serialize_doc(s) for s in subcategories]
 
 @api_router.get("/unit-conversions")
-async def get_unit_conversions(from_unit: Optional[str] = None, to_unit: Optional[str] = None):
-    """Get unit conversions, optionally filtered"""
+async def get_unit_conversions(response: Response, from_unit: Optional[str] = None, to_unit: Optional[str] = None):
+    """Get unit conversions, optionally filtered - cached for 1 hour"""
+    response.headers["Cache-Control"] = "public, max-age=3600"
     query = {}
     if from_unit:
         query["from_unit"] = from_unit
