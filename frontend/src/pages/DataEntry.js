@@ -110,12 +110,14 @@ const DataEntry = () => {
     try {
       const [categoriesRes, activitiesRes, summaryRes, statsRes] = await Promise.all([
         axios.get(`${API_URL}/api/categories`),
-        axios.get(`${API_URL}/api/activities`),
+        axios.get(`${API_URL}/api/activities?limit=500`), // Get up to 500 activities
         axios.get(`${API_URL}/api/dashboard/summary`),
         axios.get(`${API_URL}/api/dashboard/category-stats`)
       ]);
       setCategories(categoriesRes.data || []);
-      setActivities(activitiesRes.data || []);
+      // Handle paginated response
+      const activitiesData = activitiesRes.data?.data || activitiesRes.data || [];
+      setActivities(activitiesData);
       setSummary(summaryRes.data);
       setCategoryStats(statsRes.data || {});
       setExcludedCategories(summaryRes.data?.excluded_categories || []);
