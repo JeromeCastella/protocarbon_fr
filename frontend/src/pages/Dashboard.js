@@ -220,7 +220,7 @@ const Dashboard = () => {
       });
       
       setStats({
-        totalActivities: summaryRes.data?.activities_count || activities.length,
+        totalActivities: summaryRes.data?.activities_count || activitiesData.length,
         totalProducts: summaryRes.data?.products_count || products.length,
         totalEmissions: summaryRes.data?.total_emissions || 0,
         completedCategories: completedCats,
