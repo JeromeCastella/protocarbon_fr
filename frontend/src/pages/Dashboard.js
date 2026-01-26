@@ -197,7 +197,7 @@ const Dashboard = () => {
         axios.get(`${API_URL}/api/dashboard/kpis`),
         axios.get(`${API_URL}/api/dashboard/fiscal-comparison`),
         axios.get(`${API_URL}/api/dashboard/scope-breakdown/current`),
-        axios.get(`${API_URL}/api/activities`).catch(() => ({ data: [] })),
+        axios.get(`${API_URL}/api/activities?limit=100`).catch(() => ({ data: { data: [] } })),
         axios.get(`${API_URL}/api/products`).catch(() => ({ data: [] }))
       ]);
       
@@ -206,8 +206,8 @@ const Dashboard = () => {
       setFiscalComparison(comparisonRes.data);
       setScopeBreakdown(breakdownRes.data);
       
-      // Calculate stats from summary data
-      const activities = activitiesRes.data || [];
+      // Calculate stats from summary data (handle paginated activities response)
+      const activitiesData = activitiesRes.data?.data || activitiesRes.data || [];
       const products = productsRes.data || [];
       const scopeCompletion = summaryRes.data?.scope_completion || {};
       
