@@ -24,7 +24,21 @@ Application de calcul d'empreinte carbone selon le protocole GHG avec interface 
 
 ## What's Been Implemented
 
-### 2026-01-26 (Session actuelle) - Optimisations Performance
+### 2026-01-26 (Session actuelle) - Refactoring Architecture
+- **Backend restructuré** :
+  - `config.py` : Configuration et connexion MongoDB
+  - `models/__init__.py` : Tous les modèles Pydantic (User, Activity, EmissionFactor, etc.)
+  - `services/auth.py` : Authentification (JWT, password hashing)
+  - `services/emissions.py` : Calculs d'émissions
+  - `utils/__init__.py` : Fonctions utilitaires (serialize_doc, format_emissions)
+  - `routes/auth.py` : Routes authentification (exemple de migration)
+  - `ARCHITECTURE.md` : Documentation de la nouvelle structure
+- **Frontend restructuré** :
+  - `components/modals/ObjectiveModal.jsx` : Modal objectifs SBTi extrait
+  - `components/dashboard/RecommendationsList.jsx` : Liste des recommandations
+  - `hooks/useStaticData.js` : Hook de cache pour données statiques
+
+### 2026-01-26 (Session précédente) - Optimisations Performance
 - **Index MongoDB** créés pour accélérer les requêtes :
   - `activities`: indexes sur `tenant_id+date`, `tenant_id+company_id`, `tenant_id+scope`, `tenant_id+category_id`
   - `emission_factors`: indexes sur `tenant_id+deleted_at`, `subcategory+valid_from_year`
