@@ -254,7 +254,7 @@ const Dashboard = () => {
   const tabs = [
     { id: 'suivi', label: 'Suivi de saisie', icon: ClipboardList },
     { id: 'resultats', label: 'Résultats', icon: BarChart3 },
-    { id: 'avance', label: 'Avancé', icon: Settings }
+    { id: 'objectifs', label: 'Objectifs', icon: Target }
   ];
 
   return (
