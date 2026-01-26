@@ -1775,15 +1775,48 @@ async def create_activity(activity: ActivityCreateMultiScope, current_user: dict
     return serialize_doc(activity_doc)
 
 @api_router.get("/activities")
-async def get_activities(scope: Optional[str] = None, category_id: Optional[str] = None, current_user: dict = Depends(get_current_user)):
+async def get_activities(
+    scope: Optional[str] = None, 
+    category_id: Optional[str] = None,
+    fiscal_year_id: Optional[str] = None,
+    page: int = 1,
+    limit: int = 100,
+    current_user: dict = Depends(get_current_user)
+):
+    """Get activities with pagination and filters"""
     query = {"tenant_id": current_user["id"]}
     if scope:
         query["scope"] = scope
     if category_id:
         query["category_id"] = category_id
     
-    activities = list(activities_collection.find(query))
-    return [serialize_doc(a) for a in activities]
+    # Filter by fiscal year date range if specified
+    if fiscal_year_id:
+        fy = fiscal_years_collection.find_one({"_id": ObjectId(fiscal_year_id)})
+        if fy:
+            query["date"] = {"$gte": fy.get("start_date", ""), "$lte": fy.get("end_date", "")}
+    
+    # Count total for pagination metadata
+    total = activities_collection.count_documents(query)
+    
+    # Apply pagination with index-friendly sort
+    skip = (page - 1) * limit
+    activities = list(
+        activities_collection.find(query)
+        .sort("date", -1)
+        .skip(skip)
+        .limit(limit)
+    )
+    
+    return {
+        "data": [serialize_doc(a) for a in activities],
+        "pagination": {
+            "page": page,
+            "limit": limit,
+            "total": total,
+            "pages": (total + limit - 1) // limit
+        }
+    }
 
 @api_router.put("/activities/{activity_id}")
 async def update_activity(activity_id: str, activity: ActivityUpdate, current_user: dict = Depends(get_current_user)):
