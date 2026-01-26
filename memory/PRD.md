@@ -117,7 +117,7 @@ Application de calcul d'empreinte carbone selon le protocole GHG avec interface 
 
 ### P1 - High Priority
 - [ ] Rapports PDF/Excel exportables
-- [ ] Pie chart de répartition globale
+- [ ] Remplir l'onglet "Avancé" avec KPI spécifiques (pkm moyen, intensité carbone, consommation énergétique)
 
 ### P2 - Medium Priority
 - [ ] Import en masse CSV (bulk upload)
