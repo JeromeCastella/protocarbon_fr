@@ -206,7 +206,7 @@ const Dashboard = () => {
       setFiscalComparison(comparisonRes.data);
       setScopeBreakdown(breakdownRes.data);
       
-      // Calculate stats
+      // Calculate stats from summary data
       const activities = activitiesRes.data || [];
       const products = productsRes.data || [];
       const scopeCompletion = summaryRes.data?.scope_completion || {};
@@ -214,13 +214,14 @@ const Dashboard = () => {
       let completedCats = 0;
       let totalCats = 0;
       Object.values(scopeCompletion).forEach(scope => {
-        completedCats += scope.completed_categories || 0;
+        // API returns categories_filled, not completed_categories
+        completedCats += scope.categories_filled || 0;
         totalCats += scope.total_categories || 0;
       });
       
       setStats({
-        totalActivities: activities.length,
-        totalProducts: products.length,
+        totalActivities: summaryRes.data?.activities_count || activities.length,
+        totalProducts: summaryRes.data?.products_count || products.length,
         totalEmissions: summaryRes.data?.total_emissions || 0,
         completedCategories: completedCats,
         totalCategories: totalCats
