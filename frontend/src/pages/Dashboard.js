@@ -632,7 +632,7 @@ const Dashboard = () => {
                     ? 'text-green-500' 
                     : ''
               }`}>
-                {kpis?.year_over_year_change !== undefined 
+                {kpis?.year_over_year_change !== null && kpis?.year_over_year_change !== undefined
                   ? `${kpis.year_over_year_change > 0 ? '+' : ''}${kpis.year_over_year_change}%` 
                   : '-'}
               </p>
