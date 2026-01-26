@@ -30,10 +30,11 @@ import {
   Activity,
   Package,
   FileText,
-  Settings,
-  Gauge,
-  Droplets,
-  Route
+  Flag,
+  Lightbulb,
+  TrendingDown as TrendDown,
+  Sparkles,
+  X
 } from 'lucide-react';
 import {
   BarChart,
@@ -45,8 +46,12 @@ import {
   Legend,
   ResponsiveContainer,
   Cell,
-  PieChart as RechartsPieChart,
-  Pie
+  LineChart,
+  Line,
+  Area,
+  AreaChart,
+  ComposedChart,
+  ReferenceLine
 } from 'recharts';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL || '';
