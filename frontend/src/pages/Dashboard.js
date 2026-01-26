@@ -441,7 +441,9 @@ const Dashboard = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               {summary?.scope_completion && Object.entries(summary.scope_completion).map(([scope, data], index) => {
                 const Icon = scopeIcons[scope] || Factory;
-                const emissions = formatEmissions(data.emissions || 0);
+                // Get emissions from scope_emissions, not from scope_completion
+                const scopeEmissions = summary?.scope_emissions?.[scope] || 0;
+                const emissions = formatEmissions(scopeEmissions);
                 const completion = data.percentage || 0;
                 
                 return (
@@ -462,7 +464,7 @@ const Dashboard = () => {
                             {scopeNames[scope]}
                           </h3>
                           <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-                            {data.completed_categories}/{data.total_categories} catégories
+                            {data.categories_filled}/{data.total_categories} catégories
                           </p>
                         </div>
                       </div>
