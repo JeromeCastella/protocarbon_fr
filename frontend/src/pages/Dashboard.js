@@ -117,8 +117,20 @@ const Dashboard = () => {
   const [recalcLoading, setRecalcLoading] = useState(false);
   const [expandedActivities, setExpandedActivities] = useState(false);
 
+  // Objectives state
+  const [objective, setObjective] = useState(null);
+  const [trajectoryData, setTrajectoryData] = useState({ trajectory: [], actuals: [] });
+  const [recommendations, setRecommendations] = useState([]);
+  const [showObjectiveModal, setShowObjectiveModal] = useState(false);
+  const [objectiveForm, setObjectiveForm] = useState({
+    reference_fiscal_year_id: '',
+    target_year: 2030
+  });
+  const [objectiveLoading, setObjectiveLoading] = useState(false);
+
   useEffect(() => {
     fetchAllData();
+    fetchObjectiveData();
   }, []);
 
   useEffect(() => {
@@ -126,6 +138,57 @@ const Dashboard = () => {
       fetchScopeBreakdown(selectedFiscalYear);
     }
   }, [selectedFiscalYear]);
+
+  const fetchObjectiveData = async () => {
+    try {
+      const [objRes, trajRes, recoRes] = await Promise.all([
+        axios.get(`${API_URL}/api/objectives`).catch(() => ({ data: null })),
+        axios.get(`${API_URL}/api/objectives/trajectory`).catch(() => ({ data: { trajectory: [], actuals: [] } })),
+        axios.get(`${API_URL}/api/objectives/recommendations`).catch(() => ({ data: { recommendations: [] } }))
+      ]);
+      
+      setObjective(objRes.data);
+      setTrajectoryData(trajRes.data);
+      setRecommendations(recoRes.data.recommendations || []);
+    } catch (error) {
+      console.error('Failed to fetch objective data:', error);
+    }
+  };
+
+  const handleCreateObjective = async () => {
+    if (!objectiveForm.reference_fiscal_year_id) {
+      alert('Veuillez sélectionner une année de référence');
+      return;
+    }
+
+    setObjectiveLoading(true);
+    try {
+      await axios.post(`${API_URL}/api/objectives`, objectiveForm);
+      await fetchObjectiveData();
+      setShowObjectiveModal(false);
+    } catch (error) {
+      console.error('Failed to create objective:', error);
+      alert('Erreur lors de la création de l\'objectif: ' + (error.response?.data?.detail || error.message));
+    } finally {
+      setObjectiveLoading(false);
+    }
+  };
+
+  const handleArchiveObjective = async () => {
+    if (!objective?.id) return;
+    
+    if (!window.confirm('Êtes-vous sûr de vouloir archiver cet objectif ?')) return;
+
+    try {
+      await axios.delete(`${API_URL}/api/objectives/${objective.id}`);
+      setObjective(null);
+      setTrajectoryData({ trajectory: [], actuals: [] });
+      setRecommendations([]);
+    } catch (error) {
+      console.error('Failed to archive objective:', error);
+      alert('Erreur lors de l\'archivage: ' + (error.response?.data?.detail || error.message));
+    }
+  };
 
   const fetchAllData = async () => {
     try {
