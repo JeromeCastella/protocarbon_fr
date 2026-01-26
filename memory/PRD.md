@@ -110,6 +110,10 @@ Application de calcul d'empreinte carbone selon le protocole GHG avec interface 
 - [x] Mode sombre fonctionnel
 - [x] Graphiques comparatifs entre exercices fiscaux (dashboard)
 - [x] Panneau Administration (facteurs d'émission + utilisateurs)
+- [x] Refonte Dashboard en 3 onglets (Suivi de saisie, Résultats, Avancé)
+- [x] Versioning des facteurs d'émission par année
+- [x] Wizard configuration périmètre (Informations générales)
+- [x] Recalcul des émissions avec facteurs actuels
 
 ### P1 - High Priority
 - [ ] Rapports PDF/Excel exportables
