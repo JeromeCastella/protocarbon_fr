@@ -434,6 +434,32 @@ RECOMMENDED_MEASURES = {
         {"title_fr": "Réduire les déchets à la source", "title_de": "Abfälle an der Quelle reduzieren", "impact": "high"},
         {"title_fr": "Améliorer le tri sélectif", "title_de": "Mülltrennung verbessern", "impact": "medium"},
         {"title_fr": "Valoriser les déchets organiques", "title_de": "Organische Abfälle verwerten", "impact": "medium"}
+    ],
+    # Alias pour catégories existantes dans les données
+    "utilisation_produits": [
+        {"title_fr": "Améliorer l'efficacité énergétique des produits", "title_de": "Energieeffizienz der Produkte verbessern", "impact": "high"},
+        {"title_fr": "Proposer des modes d'utilisation bas-carbone", "title_de": "CO2-arme Nutzungsmodi anbieten", "impact": "medium"},
+        {"title_fr": "Sensibiliser les clients à l'usage responsable", "title_de": "Kunden für verantwortungsvolle Nutzung sensibilisieren", "impact": "medium"}
+    ],
+    "fin_vie_produits": [
+        {"title_fr": "Concevoir pour la recyclabilité", "title_de": "Für Recyclingfähigkeit konzipieren", "impact": "high"},
+        {"title_fr": "Mettre en place un programme de reprise", "title_de": "Rücknahmeprogramm einrichten", "impact": "high"},
+        {"title_fr": "Utiliser des matériaux recyclés", "title_de": "Recycelte Materialien verwenden", "impact": "medium"}
+    ],
+    "biens_services_achetes": [
+        {"title_fr": "Achats responsables (labels éco)", "title_de": "Verantwortungsvoller Einkauf (Öko-Labels)", "impact": "medium"},
+        {"title_fr": "Réduire les achats de matériel neuf", "title_de": "Neuanschaffungen reduzieren", "impact": "medium"},
+        {"title_fr": "Favoriser les fournisseurs locaux", "title_de": "Lokale Lieferanten bevorzugen", "impact": "medium"}
+    ],
+    "combustion_fixe": [
+        {"title_fr": "Remplacer le chauffage fossile par PAC", "title_de": "Fossile Heizung durch Wärmepumpe ersetzen", "impact": "high"},
+        {"title_fr": "Améliorer l'isolation des bâtiments", "title_de": "Gebäudedämmung verbessern", "impact": "high"},
+        {"title_fr": "Optimiser la régulation thermique", "title_de": "Wärmeregulierung optimieren", "impact": "medium"}
+    ],
+    "activites_combustibles_energie": [
+        {"title_fr": "Réduire la consommation énergétique", "title_de": "Energieverbrauch reduzieren", "impact": "high"},
+        {"title_fr": "Passer aux énergies renouvelables", "title_de": "Auf erneuerbare Energien umsteigen", "impact": "high"},
+        {"title_fr": "Optimiser les processus de production", "title_de": "Produktionsprozesse optimieren", "impact": "medium"}
     ]
 }
 
