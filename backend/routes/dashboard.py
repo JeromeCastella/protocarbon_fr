@@ -54,7 +54,15 @@ async def get_dashboard_summary(
     if fiscal_year_id:
         fy = fiscal_years_collection.find_one({"_id": ObjectId(fiscal_year_id)})
         if fy:
-            query["date"] = {"$gte": fy.get("start_date", ""), "$lte": fy.get("end_date", "")}
+            start_date = fy.get("start_date", "")
+            end_date = fy.get("end_date", "")
+            if start_date and end_date:
+                query["$expr"] = {
+                    "$and": [
+                        {"$gte": [{"$substr": ["$date", 0, 10]}, start_date]},
+                        {"$lte": [{"$substr": ["$date", 0, 10]}, end_date]}
+                    ]
+                }
     
     # Get activities (filtered by fiscal year if specified)
     activities = list(activities_collection.find(query))
