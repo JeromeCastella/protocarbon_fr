@@ -205,14 +205,23 @@ async def get_fiscal_comparison(current_user: dict = Depends(get_current_user)):
         
         total = sum(scope_emissions.values())
         
+        # Extract year from name for chart display (e.g., "Exercice 2026" -> "2026")
+        year_label = fy.get("name", "").replace("Exercice ", "")
+        
         comparison.append({
             "fiscal_year_id": fy_id,
             "name": fy.get("name", ""),
+            "year": year_label,  # For chart X-axis
             "status": fy.get("status", "draft"),
             "start_date": fy_start,
             "end_date": fy_end,
             "total_emissions": total,
-            "scope_emissions": scope_emissions,
+            # Flat scope emissions for direct chart usage
+            "scope1": scope_emissions["scope1"],
+            "scope2": scope_emissions["scope2"],
+            "scope3_amont": scope_emissions["scope3_amont"],
+            "scope3_aval": scope_emissions["scope3_aval"],
+            "scope_emissions": scope_emissions,  # Keep nested for backward compatibility
             "activities_count": len(activities)
         })
     
