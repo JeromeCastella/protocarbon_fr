@@ -100,7 +100,7 @@ const AdminSubcategoriesTab = ({ subcategories, onRefetch }) => {
     scope1: t('scope.scope1'),
     scope2: t('scope.scope2'),
     scope3_amont: t('scope.scope3Amont'),
-    scope3_aval: 'Scope 3 Aval'
+    scope3_aval: t('scope.scope3Aval')
   };
 
   return (
@@ -114,7 +114,7 @@ const AdminSubcategoriesTab = ({ subcategories, onRefetch }) => {
             data-testid="subcategory-search"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Rechercher une sous-catégorie..."
+            placeholder={t('common.search') + '...'}
             className={`w-full pl-10 pr-4 py-2 rounded-lg border ${isDark ? 'bg-slate-700 border-slate-600 text-white' : 'bg-white border-gray-200'}`}
           />
         </div>
@@ -124,7 +124,7 @@ const AdminSubcategoriesTab = ({ subcategories, onRefetch }) => {
           className="flex items-center gap-2 px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600"
         >
           <Plus className="w-5 h-5" />
-          Ajouter
+          {t('common.add')}
         </button>
       </div>
 
@@ -133,12 +133,12 @@ const AdminSubcategoriesTab = ({ subcategories, onRefetch }) => {
         <table className="w-full">
           <thead>
             <tr className={isDark ? 'bg-slate-700' : 'bg-gray-50'}>
-              <th className="text-left px-4 py-3 font-medium">Code</th>
-              <th className="text-left px-4 py-3 font-medium">Nom FR</th>
-              <th className="text-left px-4 py-3 font-medium">Nom DE</th>
-              <th className="text-left px-4 py-3 font-medium">Catégories liées</th>
-              <th className="text-left px-4 py-3 font-medium">Ordre</th>
-              <th className="text-right px-4 py-3 font-medium">Actions</th>
+              <th className="text-left px-4 py-3 font-medium">{t('common.code')}</th>
+              <th className="text-left px-4 py-3 font-medium">{t('admin.factors.nameFr')}</th>
+              <th className="text-left px-4 py-3 font-medium">{t('admin.factors.nameDe')}</th>
+              <th className="text-left px-4 py-3 font-medium">{t('admin.subcategories.linkedCategories')}</th>
+              <th className="text-left px-4 py-3 font-medium">{t('common.order')}</th>
+              <th className="text-right px-4 py-3 font-medium">{t('common.actions')}</th>
             </tr>
           </thead>
           <tbody>
