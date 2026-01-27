@@ -59,10 +59,10 @@ const ProductSaleModal = ({ isOpen, onClose, onSaleRecorded, preselectedProduct 
     
     setSubmitting(true);
     try {
-      await axios.post(`${API_URL}/api/products/${selectedProduct.id}/sales/enhanced`, {
+      await axios.post(`${API_URL}/api/products/${selectedProduct.id}/sales`, {
         product_id: selectedProduct.id,
         quantity: quantity,
-        year: year
+        date: `${year}-01-01`  // Use year as date in YYYY-MM-DD format
       });
       
       onSaleRecorded && onSaleRecorded();
