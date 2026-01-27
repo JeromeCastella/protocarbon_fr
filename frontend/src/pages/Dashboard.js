@@ -695,8 +695,8 @@ const Dashboard = () => {
                   Répartition par scope
                 </h3>
                 <select
-                  value={selectedFiscalYear}
-                  onChange={(e) => setSelectedFiscalYear(e.target.value)}
+                  value={selectedFiscalYearForChart}
+                  onChange={(e) => setSelectedFiscalYearForChart(e.target.value)}
                   className={`px-3 py-1.5 rounded-lg text-sm ${
                     isDark ? 'bg-slate-700 text-white border-slate-600' : 'bg-gray-100 text-gray-900 border-gray-200'
                   } border`}
