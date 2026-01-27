@@ -260,7 +260,11 @@ Application de calcul d'empreinte carbone selon le protocole GHG avec interface 
 
 ### Produits enrichis
 - `POST /api/products/enhanced` - Créer produit avec cycle de vie
-- `POST /api/products/{id}/sales/enhanced` - Ventes → activités Scope 3 Aval
+- `POST /api/products/{id}/sales` - Enregistrer vente avec sale_id unique
+- `GET /api/products/{id}/sales` - Liste des ventes d'un produit
+- `GET /api/products/{id}/sales/{sale_id}` - Détails d'une vente et ses activités liées
+- `PUT /api/products/{id}/sales/{sale_id}` - Modification groupée d'une vente
+- `DELETE /api/products/{id}/sales/{sale_id}` - Suppression groupée d'une vente
 
 ## Test Credentials
 - **Admin**: newtest@x.com / test123
