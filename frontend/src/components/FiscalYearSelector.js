@@ -53,7 +53,7 @@ const FiscalYearSelector = ({ onCreateNew }) => {
   };
 
   return (
-    <div className="relative">
+    <div className="relative z-50">
       <button
         onClick={() => setIsOpen(!isOpen)}
         className={`flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all ${
