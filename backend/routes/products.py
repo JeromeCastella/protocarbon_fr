@@ -569,13 +569,14 @@ async def record_product_sale(
             "product_id": product_id,
             "sale_id": sale_id,
             "sale_phase": "usage",
+            "profile_source": profile_source,
             "created_at": datetime.now(timezone.utc).isoformat()
         }
         result = activities_collection.insert_one(usage_activity)
         created_activity_ids.append(str(result.inserted_id))
     
     # Create activity for end of life (Scope 3.12 - Fin de vie des produits vendus)
-    disposal_emissions = product.get("disposal_emissions", 0) * sale.quantity
+    disposal_emissions = profile_disposal * sale.quantity
     if disposal_emissions > 0:
         disposal_activity = {
             "tenant_id": current_user["id"],
@@ -594,6 +595,7 @@ async def record_product_sale(
             "product_id": product_id,
             "sale_id": sale_id,
             "sale_phase": "disposal",
+            "profile_source": profile_source,
             "created_at": datetime.now(timezone.utc).isoformat()
         }
         result = activities_collection.insert_one(disposal_activity)
@@ -609,6 +611,8 @@ async def record_product_sale(
                     "sale_id": sale_id,
                     "quantity": sale.quantity,
                     "date": sale_date,
+                    "fiscal_year_id": fiscal_year_id,
+                    "profile_source": profile_source,
                     "total_emissions": total_emissions,
                     "manufacturing_emissions": manufacturing_emissions,
                     "usage_emissions": usage_emissions,
