@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useTheme } from '../context/ThemeContext';
 import { useLanguage } from '../context/LanguageContext';
+import { useFiscalYear } from '../context/FiscalYearContext';
 import axios from 'axios';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
@@ -15,30 +16,36 @@ import {
   Eye,
   Zap,
   Clock,
-  Scale
+  Scale,
+  History,
+  Archive
 } from 'lucide-react';
 import ProductWizard from '../components/ProductWizard';
 import ProductSaleModal from '../components/ProductSaleModal';
+import ProductVersionsModal from '../components/ProductVersionsModal';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL || '';
 
 const Products = () => {
   const { isDark } = useTheme();
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
+  const { currentFiscalYear } = useFiscalYear();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showWizard, setShowWizard] = useState(false);
   const [showSaleModal, setShowSaleModal] = useState(false);
+  const [showVersionsModal, setShowVersionsModal] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [editingProduct, setEditingProduct] = useState(null);
 
   useEffect(() => {
     fetchProducts();
-  }, []);
+  }, [currentFiscalYear]);
 
   const fetchProducts = async () => {
     try {
-      const response = await axios.get(`${API_URL}/api/products`);
+      const fiscalYearParam = currentFiscalYear?.id ? `?fiscal_year_id=${currentFiscalYear.id}` : '';
+      const response = await axios.get(`${API_URL}/api/products${fiscalYearParam}`);
       setProducts(response.data || []);
     } catch (error) {
       console.error('Failed to fetch products:', error);
@@ -48,9 +55,18 @@ const Products = () => {
   };
 
   const handleDeleteProduct = async (productId) => {
-    if (!window.confirm('Êtes-vous sûr de vouloir supprimer ce produit ?')) return;
+    const confirmMsg = language === 'fr' 
+      ? 'Êtes-vous sûr de vouloir supprimer ce produit ?' 
+      : 'Sind Sie sicher, dass Sie dieses Produkt löschen möchten?';
+    if (!window.confirm(confirmMsg)) return;
     try {
-      await axios.delete(`${API_URL}/api/products/${productId}`);
+      const response = await axios.delete(`${API_URL}/api/products/${productId}`);
+      // Show message if archived instead of deleted
+      if (response.data?.archived) {
+        alert(language === 'fr' 
+          ? 'Le produit a été archivé car il a des ventes enregistrées.' 
+          : 'Das Produkt wurde archiviert, da es Verkäufe gibt.');
+      }
       fetchProducts();
     } catch (error) {
       console.error('Failed to delete product:', error);
@@ -69,12 +85,9 @@ const Products = () => {
     setShowSaleModal(true);
   };
 
-  const getTotalSales = (product) => {
-    if (!product.sales || product.sales.length === 0) return { quantity: 0, emissions: 0 };
-    return product.sales.reduce((acc, sale) => ({
-      quantity: acc.quantity + sale.quantity,
-      emissions: acc.emissions + (sale.total_emissions || sale.emissions || 0)
-    }), { quantity: 0, emissions: 0 });
+  const handleManageVersions = (product) => {
+    setSelectedProduct(product);
+    setShowVersionsModal(true);
   };
 
   if (loading) {
