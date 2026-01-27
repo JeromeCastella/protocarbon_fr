@@ -44,6 +44,12 @@ const ProductSaleModal = ({ isOpen, onClose, onSaleRecorded, preselectedProduct 
   const [existingSale, setExistingSale] = useState(null);
   const [isEditMode, setIsEditMode] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  
+  // État pour le modal de versions
+  const [showVersionsModal, setShowVersionsModal] = useState(false);
+  
+  // Profil d'émissions actif
+  const [activeProfile, setActiveProfile] = useState(null);
 
   // Initialiser la date avec le milieu de l'exercice fiscal courant
   useEffect(() => {
