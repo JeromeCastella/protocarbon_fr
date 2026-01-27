@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useTheme } from '../../context/ThemeContext';
+import { useLanguage } from '../../context/LanguageContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Search, Plus, Edit2, Trash2, Download, Upload, 
@@ -13,14 +14,6 @@ import {
 } from '../../hooks/useAdminData';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL || '';
-
-// Configuration des types d'impacts
-const IMPACT_TYPES_CONFIG = [
-  { key: 'scope1', label: 'Scope 1 - Émissions directes', scope: 'scope1', type: 'direct', description: 'Combustion carburant' },
-  { key: 'scope2', label: 'Scope 2 - Énergie indirecte', scope: 'scope2', type: 'indirect', description: 'Électricité, chaleur' },
-  { key: 'scope3_3', label: 'Scope 3.3 - Amont énergie', scope: 'scope3_amont', type: 'upstream', description: 'Extraction, transport combustibles', category: 'activites_combustibles_energie' },
-  { key: 'scope3', label: 'Scope 3 - Autre', scope: 'scope3_amont', type: 'upstream', description: 'Autres émissions amont/aval' }
-];
 
 const INITIAL_FORM = {
   name_fr: '',
@@ -38,7 +31,16 @@ const INITIAL_FORM = {
 
 const AdminFactorsTab = ({ factors, subcategories, onRefetch }) => {
   const { isDark } = useTheme();
+  const { t, language } = useLanguage();
   const [search, setSearch] = useState('');
+
+  // Impact types config with translation keys
+  const IMPACT_TYPES_CONFIG = [
+    { key: 'scope1', labelKey: 'admin.factors.scope1Direct', scope: 'scope1', type: 'direct', descKey: 'scope.scope1Title' },
+    { key: 'scope2', labelKey: 'admin.factors.scope2Indirect', scope: 'scope2', type: 'indirect', descKey: 'scope.scope2Title' },
+    { key: 'scope3_3', labelKey: 'admin.factors.scope33Upstream', scope: 'scope3_amont', type: 'upstream', descKey: 'scope.scope3AmontTitle', category: 'activites_combustibles_energie' },
+    { key: 'scope3', labelKey: 'admin.factors.scope3Other', scope: 'scope3_amont', type: 'upstream', descKey: 'scope.scope3AvalTitle' }
+  ];
   
   // Modal states
   const [showFactorModal, setShowFactorModal] = useState(false);
