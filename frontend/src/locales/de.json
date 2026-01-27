@@ -216,7 +216,13 @@
     "categories": "Kategorien",
     "quickActions": "Schnellaktionen",
     "importCSV": "CSV importieren",
-    "exportData": "Daten exportieren"
+    "exportData": "Daten exportieren",
+    "category33": {
+      "title": "Kategorie 3.3 - Automatische Berechnung",
+      "message": "Diese Kategorie umfasst die Emissionen aus der Gewinnung, dem Transport und der Verteilung der von Ihrer Organisation verbrauchten Brennstoffe und Energie.",
+      "autoCalculated": "Diese Emissionen werden automatisch aus Ihren Eingaben in den Scopes 1 und 2 (Brennstoffe und Strom) berechnet.",
+      "noAction": "Für diese Kategorie ist keine manuelle Eingabe erforderlich."
+    }
   },
   "activity": {
     "name": "Aktivitätsname",
