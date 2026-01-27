@@ -687,13 +687,28 @@ const DataEntry = () => {
                                   <Edit3 className={`w-4 h-4 ${isDark ? 'text-slate-400' : 'text-gray-400'}`} />
                                 </button>
                                 <button
-                                  onClick={() => handleDeleteActivity(activity.id)}
+                                  onClick={() => {
+                                    // If this is a linked sale activity, open the sale edit modal instead of deleting directly
+                                    if (activity.sale_id && activity.product_id) {
+                                      handleEditActivityInModal(activity);
+                                    } else {
+                                      handleDeleteActivity(activity.id);
+                                    }
+                                  }}
                                   data-testid={`delete-activity-${activity.id}`}
                                   className={`p-2 rounded-lg transition-colors hover:bg-red-500/10`}
-                                  title="Supprimer"
+                                  title={activity.sale_id ? "Gérer la vente" : "Supprimer"}
                                 >
                                   <Trash2 className="w-4 h-4 text-red-500" />
                                 </button>
+                                {/* Sale indicator badge */}
+                                {activity.sale_id && (
+                                  <span className={`px-1.5 py-0.5 rounded text-xs font-medium ${
+                                    isDark ? 'bg-purple-500/20 text-purple-300' : 'bg-purple-100 text-purple-700'
+                                  }`} title="Cette activité fait partie d'une vente groupée">
+                                    <ShoppingBag className="w-3 h-3 inline" />
+                                  </span>
+                                )}
                               </div>
                             </td>
                           </motion.tr>
