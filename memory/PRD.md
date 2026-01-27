@@ -214,9 +214,9 @@ Application de calcul d'empreinte carbone selon le protocole GHG avec interface 
 - [x] **Nettoyage du backend** : server.py refactorisé (3556→29 lignes)
 
 ### P1 - High Priority
+- [x] **Refactoring Frontend Admin.js** : 1915→94 lignes (6 composants extraits)
 - [ ] Rapports PDF/Excel exportables
 - [ ] Import en masse CSV (bulk upload activities)
-- [ ] Refactoring Frontend Admin.js (1900+ lignes → composants)
 - [ ] Objectifs long-term SBTi (Net-Zero 2050)
 
 ### P2 - Medium Priority
