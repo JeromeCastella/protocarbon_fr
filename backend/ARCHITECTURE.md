@@ -4,7 +4,7 @@
 
 ```
 /app/backend/
-├── server.py              # Point d'entrée principal (FastAPI app)
+├── server.py              # Point d'entrée (FastAPI app + CORS + health check)
 ├── config.py              # Configuration et connexion MongoDB
 ├── models/
 │   └── __init__.py        # Modèles Pydantic (User, Activity, EmissionFactor, etc.)
@@ -32,7 +32,22 @@
     └── test_models.py     # Tests modèles (11 tests)
 ```
 
-## Routes migrées (67 total)
+## Architecture modulaire (Migration complète ✅)
+
+Le fichier `server.py` a été nettoyé et ne contient plus que :
+- L'initialisation de FastAPI
+- La configuration CORS
+- L'import du routeur modulaire (`routes.api_router`)
+- Un endpoint `/health` pour les probes Kubernetes
+
+Toute la logique métier est organisée en modules :
+- **config.py** : Connexion DB, variables d'environnement
+- **models/** : Modèles Pydantic
+- **routes/** : Endpoints API (67 routes)
+- **services/** : Logique métier (auth, calculs émissions)
+- **utils/** : Fonctions utilitaires (serialisation, formatage)
+
+## Routes (67 total)
 
 | Module | Routes | Description |
 |--------|--------|-------------|
@@ -50,30 +65,24 @@
 
 ```bash
 # Exécuter tous les tests
-cd /app/backend && python -m pytest tests/test_auth.py tests/test_emissions.py tests/test_models.py -v
+cd /app/backend && python -m pytest tests/ -v
 
 # Avec couverture
 python -m pytest tests/ --cov=. --cov-report=html
 ```
 
-## Comment utiliser les routes modulaires
+## server.py (version nettoyée)
 
 ```python
-# Dans server.py ou un nouveau fichier
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from routes import api_router
-app.include_router(api_router)
 
-# Ou importer un module spécifique
-from routes.dashboard import router as dashboard_router
+app = FastAPI(title="Carbon Footprint Calculator")
+app.add_middleware(CORSMiddleware, ...)
+app.include_router(api_router)  # Toutes les routes /api/*
+
+@app.get("/health")
+async def health_check():
+    return {"status": "healthy"}
 ```
-
-## Migration depuis server.py
-
-Le fichier `server.py` original contient encore toutes les routes pour assurer
-la rétrocompatibilité. Les nouveaux modules dans `routes/` sont une copie
-fonctionnelle et testée. Pour migrer complètement :
-
-1. Commenter les routes dans `server.py`
-2. Ajouter `app.include_router(api_router)` dans `server.py`
-3. Tester que tout fonctionne
-4. Supprimer les routes commentées
