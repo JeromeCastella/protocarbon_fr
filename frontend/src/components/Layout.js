@@ -43,7 +43,7 @@ const Layout = () => {
   return (
     <div className={`min-h-screen flex ${isDark ? 'bg-slate-900 text-white' : 'bg-gray-50 text-gray-900'}`}>
       {/* Sidebar */}
-      <aside className={`w-64 fixed h-full flex flex-col ${isDark ? 'bg-slate-800 border-slate-700' : 'bg-white border-gray-200'} border-r`}>
+      <aside className={`w-64 fixed h-full flex flex-col z-40 ${isDark ? 'bg-slate-800 border-slate-700' : 'bg-white border-gray-200'} border-r`}>
         {/* Logo */}
         <div className="p-6 border-b border-inherit">
           <div className="flex items-center gap-3">
