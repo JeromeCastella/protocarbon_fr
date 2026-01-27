@@ -145,7 +145,16 @@ const DataEntry = () => {
     c.scope === activeScope && !excludedCategories.includes(c.code)
   );
 
+  // Category 3.3 message state
+  const [showCategory33Message, setShowCategory33Message] = useState(false);
+
   const handleCategoryClick = (category) => {
+    // Check if this is category 3.3 (auto-calculated from Scope 1 & 2)
+    if (category.code === 'activites_combustibles_energie') {
+      setShowCategory33Message(true);
+      return;
+    }
+    
     // Check if this is a product-related category
     if (PRODUCT_SALE_CATEGORIES.includes(category.code)) {
       setShowProductSaleModal(true);
