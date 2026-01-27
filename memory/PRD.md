@@ -24,16 +24,23 @@ Application de calcul d'empreinte carbone selon le protocole GHG avec interface 
 
 ## What's Been Implemented
 
-### 2026-01-27 (Session actuelle) - Nettoyage Backend (P0 TERMINÉ ✅)
+### 2026-01-27 (Session actuelle) - Nettoyage Backend (P0) + Refactoring Admin.js (P1) ✅
 - **Nettoyage complet de `server.py`** :
   - Réduction de 3556 lignes → 29 lignes (99% de réduction)
   - Le fichier ne contient plus que : FastAPI init, CORS, import du routeur modulaire, health check
-  - Suppression de tout le code mort (anciennes routes, modèles dupliqués, helpers)
+- **Refactoring complet de `Admin.js`** :
+  - Réduction de 1915 lignes → 94 lignes (95% de réduction)
+  - Nouveaux composants créés dans `/app/frontend/src/components/admin/` :
+    - `AdminFactorsTab.jsx` (886 lignes) : Onglet facteurs avec toutes les modales
+    - `AdminSubcategoriesTab.jsx` (359 lignes) : Onglet sous-catégories avec modal
+    - `AdminUsersTab.jsx` (83 lignes) : Onglet utilisateurs
+    - `AdminHeader.jsx` (25 lignes) : En-tête de la page
+    - `AdminTabs.jsx` (35 lignes) : Navigation par onglets
+  - Nouveau hook `/app/frontend/src/hooks/useAdminData.js` (106 lignes) : Gestion des données admin
 - **Validation complète** :
-  - 33 tests unitaires pytest passent
-  - Tous les endpoints API fonctionnent (login, dashboard, objectives, etc.)
-  - Frontend fonctionne correctement
-- **Documentation `ARCHITECTURE.md` mise à jour** avec la nouvelle structure
+  - 33 tests unitaires pytest backend passent
+  - Tous les onglets Admin fonctionnent (Facteurs, Sous-catégories, Utilisateurs)
+  - Frontend et backend validés avec screenshots
 
 ### 2026-01-26 (Session précédente) - Migration Routes + Tests Unitaires
 - **Routes migrées vers architecture modulaire** :
