@@ -511,13 +511,20 @@ async def record_product_sale(
         if fiscal_year:
             fiscal_year_id = str(fiscal_year["_id"])
     
-    emissions_per_unit = product.get("total_emissions_per_unit", 0)
+    # Get the appropriate emission profile for this fiscal year
+    emission_profile = get_product_emissions_for_fiscal_year(product, fiscal_year_id)
+    profile_manufacturing = emission_profile["manufacturing_emissions"]
+    profile_usage = emission_profile["usage_emissions"]
+    profile_disposal = emission_profile["disposal_emissions"]
+    profile_source = emission_profile["profile_source"]
+    
+    emissions_per_unit = profile_manufacturing + profile_usage + profile_disposal
     total_emissions = emissions_per_unit * sale.quantity
     
     created_activity_ids = []
     
     # Create activity for transformation/manufacturing phase (Scope 3.10 - Transformation des produits vendus)
-    manufacturing_emissions = product.get("manufacturing_emissions", 0) * sale.quantity
+    manufacturing_emissions = profile_manufacturing * sale.quantity
     if manufacturing_emissions > 0:
         manufacturing_activity = {
             "tenant_id": current_user["id"],
@@ -536,13 +543,14 @@ async def record_product_sale(
             "product_id": product_id,
             "sale_id": sale_id,
             "sale_phase": "transformation",
+            "profile_source": profile_source,
             "created_at": datetime.now(timezone.utc).isoformat()
         }
         result = activities_collection.insert_one(manufacturing_activity)
         created_activity_ids.append(str(result.inserted_id))
     
     # Create activity for usage phase (Scope 3.11 - Utilisation des produits vendus)
-    usage_emissions = product.get("usage_emissions", 0) * sale.quantity
+    usage_emissions = profile_usage * sale.quantity
     if usage_emissions > 0:
         usage_activity = {
             "tenant_id": current_user["id"],
