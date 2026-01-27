@@ -153,14 +153,22 @@ const Products = () => {
             className="inline-flex items-center gap-2 px-6 py-3 bg-blue-500 text-white rounded-xl hover:bg-blue-600 transition-all"
           >
             <Plus className="w-5 h-5" />
-            Créer une fiche produit
+            {language === 'fr' ? 'Créer une fiche produit' : 'Produktkarte erstellen'}
           </button>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {products.map((product, index) => {
             const isEnhanced = product.is_enhanced;
-            const salesInfo = getTotalSales(product);
+            // Use active emissions from fiscal year profile
+            const activeManufacturing = product.active_manufacturing_emissions ?? product.manufacturing_emissions ?? 0;
+            const activeUsage = product.active_usage_emissions ?? product.usage_emissions ?? 0;
+            const activeDisposal = product.active_disposal_emissions ?? product.disposal_emissions ?? 0;
+            const activeTotal = product.active_total_emissions_per_unit ?? product.total_emissions_per_unit ?? 0;
+            
+            // Sales for current fiscal year
+            const fyQuantity = product.fiscal_year_sales_quantity ?? product.total_sales ?? 0;
+            const fyEmissions = product.fiscal_year_sales_emissions ?? 0;
             
             return (
               <motion.div
@@ -188,11 +196,19 @@ const Products = () => {
                       </div>
                     </div>
                     <div className="flex items-center gap-1">
+                      {/* Manage versions button */}
+                      <button
+                        onClick={() => handleManageVersions(product)}
+                        className="p-2 rounded-lg bg-white/20 hover:bg-white/30 transition-colors"
+                        title={language === 'fr' ? 'Gérer les versions' : 'Versionen verwalten'}
+                      >
+                        <History className="w-4 h-4 text-white" />
+                      </button>
                       {isEnhanced && (
                         <button
                           onClick={() => handleEditProduct(product)}
                           className="p-2 rounded-lg bg-white/20 hover:bg-white/30 transition-colors"
-                          title="Modifier"
+                          title={language === 'fr' ? 'Modifier' : 'Bearbeiten'}
                         >
                           <Edit3 className="w-4 h-4 text-white" />
                         </button>
@@ -200,7 +216,7 @@ const Products = () => {
                       <button
                         onClick={() => handleDeleteProduct(product.id)}
                         className="p-2 rounded-lg bg-white/20 hover:bg-red-500/50 transition-colors"
-                        title="Supprimer"
+                        title={language === 'fr' ? 'Supprimer' : 'Löschen'}
                       >
                         <Trash2 className="w-4 h-4 text-white" />
                       </button>
@@ -208,96 +224,85 @@ const Products = () => {
                   </div>
                 </div>
                 
+                {/* Profile indicator */}
+                {product.profile_source && (
+                  <div className={`px-4 py-2 text-xs flex items-center gap-1.5 ${
+                    product.profile_source === 'specific' 
+                      ? (isDark ? 'bg-purple-500/20 text-purple-300' : 'bg-purple-100 text-purple-700')
+                      : (isDark ? 'bg-slate-700 text-slate-400' : 'bg-gray-100 text-gray-500')
+                  }`}>
+                    <History className="w-3 h-3" />
+                    {product.profile_source === 'specific' 
+                      ? `Profil ${currentFiscalYear?.name}` 
+                      : (language === 'fr' ? 'Profil par défaut' : 'Standardprofil')
+                    }
+                  </div>
+                )}
+                
                 {/* Content */}
                 <div className="p-4 space-y-4">
-                  {isEnhanced ? (
-                    <>
-                      {/* Enhanced product details */}
-                      <div className="flex items-center gap-4 text-sm">
-                        <div className="flex items-center gap-1.5">
-                          <Clock className={`w-4 h-4 ${isDark ? 'text-slate-400' : 'text-gray-400'}`} />
-                          <span className={isDark ? 'text-slate-300' : 'text-gray-600'}>
-                            {product.lifespan_years} an(s)
-                          </span>
-                        </div>
-                        <div className="flex items-center gap-1.5">
-                          <Scale className={`w-4 h-4 ${isDark ? 'text-slate-400' : 'text-gray-400'}`} />
-                          <span className={isDark ? 'text-slate-300' : 'text-gray-600'}>
-                            {product.materials?.length || 0} matière(s)
-                          </span>
-                        </div>
+                  {isEnhanced && (
+                    <div className="flex items-center gap-4 text-sm">
+                      <div className="flex items-center gap-1.5">
+                        <Clock className={`w-4 h-4 ${isDark ? 'text-slate-400' : 'text-gray-400'}`} />
+                        <span className={isDark ? 'text-slate-300' : 'text-gray-600'}>
+                          {product.lifespan_years} an(s)
+                        </span>
                       </div>
-                      
-                      {/* Emissions breakdown */}
-                      <div className="space-y-2">
-                        {product.transformation_emissions > 0 && (
-                          <div className="flex items-center justify-between text-sm">
-                            <span className="flex items-center gap-2">
-                              <Factory className="w-4 h-4 text-orange-500" />
-                              <span className={isDark ? 'text-slate-300' : 'text-gray-600'}>Transformation</span>
-                            </span>
-                            <span className={isDark ? 'text-white' : 'text-gray-900'}>
-                              {product.transformation_emissions?.toFixed(3)} kgCO₂e
-                            </span>
-                          </div>
-                        )}
-                        <div className="flex items-center justify-between text-sm">
-                          <span className="flex items-center gap-2">
-                            <Leaf className="w-4 h-4 text-green-500" />
-                            <span className={isDark ? 'text-slate-300' : 'text-gray-600'}>Utilisation</span>
-                          </span>
-                          <span className={isDark ? 'text-white' : 'text-gray-900'}>
-                            {(product.usage_emissions || 0).toFixed(3)} kgCO₂e
-                          </span>
-                        </div>
-                        <div className="flex items-center justify-between text-sm">
-                          <span className="flex items-center gap-2">
-                            <Recycle className="w-4 h-4 text-blue-500" />
-                            <span className={isDark ? 'text-slate-300' : 'text-gray-600'}>Fin de vie</span>
-                          </span>
-                          <span className={isDark ? 'text-white' : 'text-gray-900'}>
-                            {(product.disposal_emissions || 0).toFixed(3)} kgCO₂e
-                          </span>
-                        </div>
+                      <div className="flex items-center gap-1.5">
+                        <Scale className={`w-4 h-4 ${isDark ? 'text-slate-400' : 'text-gray-400'}`} />
+                        <span className={isDark ? 'text-slate-300' : 'text-gray-600'}>
+                          {product.materials?.length || 0} matière(s)
+                        </span>
                       </div>
-                    </>
-                  ) : (
-                    <>
-                      {/* Legacy product details */}
-                      <div className="space-y-2">
-                        <div className="flex items-center justify-between text-sm">
-                          <span className="flex items-center gap-2">
-                            <Factory className="w-4 h-4 text-orange-500" />
-                            <span className={isDark ? 'text-slate-300' : 'text-gray-600'}>Fabrication</span>
-                          </span>
-                          <span className={isDark ? 'text-white' : 'text-gray-900'}>
-                            {product.manufacturing_emissions} kgCO₂e
-                          </span>
-                        </div>
-                        <div className="flex items-center justify-between text-sm">
-                          <span className="flex items-center gap-2">
-                            <Leaf className="w-4 h-4 text-green-500" />
-                            <span className={isDark ? 'text-slate-300' : 'text-gray-600'}>Utilisation</span>
-                          </span>
-                          <span className={isDark ? 'text-white' : 'text-gray-900'}>
-                            {product.usage_emissions} kgCO₂e
-                          </span>
-                        </div>
-                        <div className="flex items-center justify-between text-sm">
-                          <span className="flex items-center gap-2">
-                            <Recycle className="w-4 h-4 text-blue-500" />
-                            <span className={isDark ? 'text-slate-300' : 'text-gray-600'}>Fin de vie</span>
-                          </span>
-                          <span className={isDark ? 'text-white' : 'text-gray-900'}>
-                            {product.disposal_emissions} kgCO₂e
-                          </span>
-                        </div>
-                      </div>
-                    </>
+                    </div>
                   )}
+                  
+                  {/* Emissions breakdown - using active profile values */}
+                  <div className="space-y-2">
+                    {activeManufacturing > 0 && (
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="flex items-center gap-2">
+                          <Factory className="w-4 h-4 text-orange-500" />
+                          <span className={isDark ? 'text-slate-300' : 'text-gray-600'}>
+                            {language === 'fr' ? 'Transformation' : 'Transformation'}
+                          </span>
+                        </span>
+                        <span className={isDark ? 'text-white' : 'text-gray-900'}>
+                          {activeManufacturing.toFixed(3)} kgCO₂e
+                        </span>
+                      </div>
+                    )}
+                    {activeUsage > 0 && (
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="flex items-center gap-2">
+                          <Leaf className="w-4 h-4 text-green-500" />
+                          <span className={isDark ? 'text-slate-300' : 'text-gray-600'}>
+                            {language === 'fr' ? 'Utilisation' : 'Nutzung'}
+                          </span>
+                        </span>
+                        <span className={isDark ? 'text-white' : 'text-gray-900'}>
+                          {activeUsage.toFixed(3)} kgCO₂e
+                        </span>
+                      </div>
+                    )}
+                    {activeDisposal > 0 && (
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="flex items-center gap-2">
+                          <Recycle className="w-4 h-4 text-blue-500" />
+                          <span className={isDark ? 'text-slate-300' : 'text-gray-600'}>
+                            {language === 'fr' ? 'Fin de vie' : 'Lebensende'}
+                          </span>
+                        </span>
+                        <span className={isDark ? 'text-white' : 'text-gray-900'}>
+                          {activeDisposal.toFixed(3)} kgCO₂e
+                        </span>
+                      </div>
+                    )}
+                  </div>
 
                   {/* Total emissions */}
-                  <div className={`p-3 rounded-xl ${isDark ? 'bg-slate-700' : 'bg-gray-100'}`}>
+                  <div className={`p-3 rounded-xl ${isDark ? 'bg-slate-700' : 'bg-gray-100'}`}>>
                     <div className="flex items-center justify-between">
                       <span className={`font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
                         Total par unité
