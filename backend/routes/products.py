@@ -5,6 +5,7 @@ from fastapi import APIRouter, HTTPException, Depends
 from datetime import datetime, timezone
 from bson import ObjectId
 from typing import Optional, List
+import uuid
 
 import sys
 sys.path.append('/app/backend')
@@ -14,7 +15,7 @@ from config import (
     activities_collection,
     emission_factors_collection
 )
-from models import ProductCreate, ProductCreateEnhanced, ProductSale
+from models import ProductCreate, ProductCreateEnhanced, ProductSale, ProductSaleUpdate
 from services.auth import get_current_user
 from utils import serialize_doc
 

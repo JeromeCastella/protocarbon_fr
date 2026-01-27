@@ -288,6 +288,11 @@ class ProductSale(BaseModel):
     year: Optional[int] = None
     date: Optional[str] = None
 
+class ProductSaleUpdate(BaseModel):
+    """Model for updating a product sale and its linked activities"""
+    quantity: int
+    date: Optional[str] = None
+
 class ProductSaleFromCategory(BaseModel):
     product_id: str
     quantity: int
