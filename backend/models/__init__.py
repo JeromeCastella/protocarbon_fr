@@ -246,6 +246,31 @@ class ActivityUpdate(BaseModel):
 
 # ==================== PRODUCT MODELS ====================
 
+class ProductEmissionProfile(BaseModel):
+    """Profil d'émissions pour un exercice fiscal spécifique"""
+    fiscal_year_id: str
+    fiscal_year_name: Optional[str] = None
+    manufacturing_emissions: Optional[float] = None  # kgCO2e per unit
+    usage_emissions: Optional[float] = None  # kgCO2e per unit
+    disposal_emissions: Optional[float] = None  # kgCO2e per unit
+    change_reason: Optional[str] = None  # Raison du changement
+    created_at: Optional[str] = None
+
+class ProductEmissionProfileCreate(BaseModel):
+    """Création d'un nouveau profil d'émissions"""
+    fiscal_year_id: str
+    manufacturing_emissions: Optional[float] = None
+    usage_emissions: Optional[float] = None
+    disposal_emissions: Optional[float] = None
+    change_reason: Optional[str] = None
+
+class ProductEmissionProfileUpdate(BaseModel):
+    """Mise à jour d'un profil d'émissions"""
+    manufacturing_emissions: Optional[float] = None
+    usage_emissions: Optional[float] = None
+    disposal_emissions: Optional[float] = None
+    change_reason: Optional[str] = None
+
 class MaterialComposition(BaseModel):
     material_name: str
     emission_factor_id: Optional[str] = None
