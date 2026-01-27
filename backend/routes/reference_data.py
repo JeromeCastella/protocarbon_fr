@@ -1,0 +1,181 @@
+"""
+Routes pour les données de référence (catégories, sous-catégories, conversions)
+"""
+from fastapi import APIRouter, HTTPException, Depends, Response
+from datetime import datetime, timezone
+from bson import ObjectId
+from typing import Optional
+
+import sys
+sys.path.append('/app/backend')
+
+from config import (
+    categories_collection,
+    subcategories_collection,
+    unit_conversions_collection,
+    emission_factors_collection
+)
+from services.auth import get_current_user
+from utils import serialize_doc
+
+router = APIRouter(tags=["Reference Data"])
+
+
+def get_default_categories():
+    """Get default GHG categories"""
+    return [
+        {"code": "scope1", "name_fr": "Scope 1 - Émissions directes", "name_de": "Scope 1 - Direkte Emissionen", 
+         "subcategories": ["combustion_stationnaire", "combustion_mobile", "emissions_process", "emissions_fugitives"]},
+        {"code": "scope2", "name_fr": "Scope 2 - Énergie indirecte", "name_de": "Scope 2 - Indirekte Energie",
+         "subcategories": ["electricite", "chaleur_vapeur"]},
+        {"code": "scope3_amont", "name_fr": "Scope 3 Amont", "name_de": "Scope 3 Upstream",
+         "subcategories": ["achats_biens_services", "biens_immobilisations", "energie_amont", "transport_amont", 
+                          "dechets", "deplacements_professionnels", "deplacements_domicile_travail", "actifs_loues_amont"]},
+        {"code": "scope3_aval", "name_fr": "Scope 3 Aval", "name_de": "Scope 3 Downstream",
+         "subcategories": ["transport_aval", "transformation_produits", "utilisation_produits", "fin_vie_produits",
+                          "actifs_loues_aval", "franchises", "investissements"]}
+    ]
+
+
+@router.get("/categories")
+async def get_categories(response: Response):
+    """Get all emission categories - cached for 1 hour"""
+    response.headers["Cache-Control"] = "public, max-age=3600"
+    
+    categories = list(categories_collection.find({}))
+    if not categories:
+        default_categories = get_default_categories()
+        categories_collection.insert_many(default_categories)
+        categories = list(categories_collection.find({}))
+    
+    return [serialize_doc(c) for c in categories]
+
+
+@router.get("/subcategories")
+async def get_subcategories(response: Response, category: Optional[str] = None):
+    """Get subcategories - cached for 1 hour"""
+    response.headers["Cache-Control"] = "public, max-age=3600"
+    
+    query = {}
+    if category:
+        query["categories"] = category
+    
+    subcategories = list(subcategories_collection.find(query).sort("order", 1))
+    return [serialize_doc(s) for s in subcategories]
+
+
+@router.get("/unit-conversions")
+async def get_unit_conversions(
+    response: Response, 
+    from_unit: Optional[str] = None, 
+    to_unit: Optional[str] = None
+):
+    """Get unit conversions - cached for 1 hour"""
+    response.headers["Cache-Control"] = "public, max-age=3600"
+    
+    query = {}
+    if from_unit:
+        query["from_unit"] = from_unit
+    if to_unit:
+        query["to_unit"] = to_unit
+    
+    conversions = list(unit_conversions_collection.find(query))
+    return [serialize_doc(c) for c in conversions]
+
+
+@router.get("/emission-factors")
+async def get_emission_factors(
+    category: Optional[str] = None,
+    scope: Optional[str] = None,
+    subcategory: Optional[str] = None,
+    current_user: dict = Depends(get_current_user)
+):
+    """Get emission factors with optional filters"""
+    query = {"deleted_at": None}
+    
+    if category:
+        query["category"] = category
+    if scope:
+        query["scope"] = scope
+    if subcategory:
+        query["subcategory"] = subcategory
+    
+    factors = list(emission_factors_collection.find(query))
+    return [serialize_doc(f) for f in factors]
+
+
+@router.get("/emission-factors/search")
+async def search_emission_factors(
+    q: str,
+    subcategory: Optional[str] = None,
+    current_user: dict = Depends(get_current_user)
+):
+    """Search emission factors by name"""
+    query = {
+        "deleted_at": None,
+        "$or": [
+            {"name_fr": {"$regex": q, "$options": "i"}},
+            {"name_de": {"$regex": q, "$options": "i"}},
+            {"name": {"$regex": q, "$options": "i"}}
+        ]
+    }
+    
+    if subcategory:
+        query["subcategory"] = subcategory
+    
+    factors = list(emission_factors_collection.find(query).limit(50))
+    return [serialize_doc(f) for f in factors]
+
+
+@router.get("/emission-factors/by-category/{category}")
+async def get_factors_by_category(
+    category: str,
+    current_user: dict = Depends(get_current_user)
+):
+    """Get emission factors by category"""
+    factors = list(emission_factors_collection.find({
+        "deleted_at": None,
+        "$or": [
+            {"category": category},
+            {"subcategory": category}
+        ]
+    }))
+    return [serialize_doc(f) for f in factors]
+
+
+@router.get("/emission-factors/by-tags")
+async def get_factors_by_tags(
+    tags: str,
+    current_user: dict = Depends(get_current_user)
+):
+    """Get emission factors by tags (comma-separated)"""
+    tag_list = [t.strip() for t in tags.split(",")]
+    
+    factors = list(emission_factors_collection.find({
+        "deleted_at": None,
+        "tags": {"$in": tag_list}
+    }))
+    return [serialize_doc(f) for f in factors]
+
+
+@router.get("/emission-factors/valid-for-year")
+async def get_factors_valid_for_year(
+    year: int,
+    subcategory: Optional[str] = None,
+    current_user: dict = Depends(get_current_user)
+):
+    """Get emission factors valid for a specific year"""
+    query = {
+        "deleted_at": None,
+        "valid_from_year": {"$lte": year},
+        "$or": [
+            {"valid_to_year": {"$gte": year}},
+            {"valid_to_year": None}
+        ]
+    }
+    
+    if subcategory:
+        query["subcategory"] = subcategory
+    
+    factors = list(emission_factors_collection.find(query))
+    return [serialize_doc(f) for f in factors]
