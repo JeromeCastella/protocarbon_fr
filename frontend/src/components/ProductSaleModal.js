@@ -225,10 +225,7 @@ const ProductSaleModal = ({ isOpen, onClose, onSaleRecorded, preselectedProduct 
                   }
                 </h2>
                 <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-                  {isEditMode 
-                    ? (language === 'fr' ? 'Ajustez le total des ventes' : 'Gesamtverkäufe anpassen')
-                    : (language === 'fr' ? 'Ventilation automatique Scope 3 Aval' : 'Automatische Scope 3 Downstream-Aufteilung')
-                  }
+                  {currentFiscalYear?.name || (language === 'fr' ? 'Exercice courant' : 'Aktuelles Geschäftsjahr')}
                 </p>
               </div>
             </div>
@@ -240,6 +237,21 @@ const ProductSaleModal = ({ isOpen, onClose, onSaleRecorded, preselectedProduct 
 
         {/* Content */}
         <div className="p-6 space-y-6">
+          {/* Fiscal year indicator */}
+          {currentFiscalYear && (
+            <div className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm ${
+              isDark ? 'bg-slate-700/50 text-slate-300' : 'bg-gray-100 text-gray-600'
+            }`}>
+              <Calendar className="w-4 h-4" />
+              <span>
+                {language === 'fr' ? 'Exercice' : 'Geschäftsjahr'}: <strong>{currentFiscalYear.name}</strong>
+                <span className="ml-2 opacity-75">
+                  ({currentFiscalYear.start_date} → {currentFiscalYear.end_date})
+                </span>
+              </span>
+            </div>
+          )}
+
           {loading ? (
             <div className="flex items-center justify-center py-8">
               <div className="w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
@@ -250,8 +262,8 @@ const ProductSaleModal = ({ isOpen, onClose, onSaleRecorded, preselectedProduct 
               <div className={`p-4 rounded-xl ${isDark ? 'bg-red-500/20 border border-red-500/30' : 'bg-red-50 border border-red-200'}`}>
                 <p className={`text-sm ${isDark ? 'text-red-200' : 'text-red-700'}`}>
                   {language === 'fr' 
-                    ? `Supprimer toutes les ventes de "${selectedProduct?.name}" (${existingSale?.quantity} unités) et les activités associées ?`
-                    : `Alle Verkäufe von "${selectedProduct?.name}" (${existingSale?.quantity} Einheiten) und zugehörige Aktivitäten löschen?`
+                    ? `Supprimer les ventes de "${selectedProduct?.name}" pour cet exercice (${existingSale?.quantity} unités) ?`
+                    : `Verkäufe von "${selectedProduct?.name}" für dieses Geschäftsjahr löschen (${existingSale?.quantity} Einheiten)?`
                   }
                 </p>
               </div>
