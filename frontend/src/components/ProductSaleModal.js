@@ -95,25 +95,30 @@ const ProductSaleModal = ({ isOpen, onClose, onSaleRecorded, preselectedProduct 
 
   const fetchProductSales = async (productId) => {
     try {
-      const response = await axios.get(`${API_URL}/api/products/${productId}/sales`);
+      // Filtrer par exercice fiscal courant
+      const fiscalYearParam = currentFiscalYear?.id ? `?fiscal_year_id=${currentFiscalYear.id}` : '';
+      const response = await axios.get(`${API_URL}/api/products/${productId}/sales${fiscalYearParam}`);
       const sales = response.data?.sales || [];
       
       if (sales.length > 0) {
-        // Prendre la première vente (on gère un total unique par produit)
+        // Prendre la première vente pour cet exercice
         const sale = sales[0];
         setExistingSale(sale);
         setQuantity(sale.quantity || 0);
         setIsEditMode(true);
         
-        // Extraire l'année de la date
+        // Utiliser la date de la vente existante
         if (sale.date) {
-          const saleYear = parseInt(sale.date.split('-')[0]);
-          if (!isNaN(saleYear)) setYear(saleYear);
+          setSaleDate(sale.date);
         }
       } else {
         setExistingSale(null);
         setQuantity(0);
         setIsEditMode(false);
+        // Réinitialiser avec la date de début de l'exercice
+        if (currentFiscalYear?.start_date) {
+          setSaleDate(currentFiscalYear.start_date);
+        }
       }
     } catch (error) {
       console.error('Failed to fetch product sales:', error);
@@ -132,7 +137,7 @@ const ProductSaleModal = ({ isOpen, onClose, onSaleRecorded, preselectedProduct 
         // Mettre à jour la vente existante
         await axios.put(`${API_URL}/api/products/${selectedProduct.id}/sales/${existingSale.sale_id}`, {
           quantity: quantity,
-          date: `${year}-01-01`
+          date: saleDate
         });
       } else {
         // Créer une nouvelle vente
