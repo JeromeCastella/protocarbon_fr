@@ -44,6 +44,7 @@ import {
 } from 'lucide-react';
 import ProductSaleModal from '../components/ProductSaleModal';
 import GuidedEntryModal from '../components/GuidedEntryModal';
+import SaleEditModal from '../components/SaleEditModal';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL || '';
 
