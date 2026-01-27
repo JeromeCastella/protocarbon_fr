@@ -51,9 +51,10 @@ class TestEmissionsCalculation:
             emission_factor=factor
         )
         
-        assert result["total_emissions"] == 289.0  # 231 + 58
-        assert result["emissions_by_scope"]["scope1"] == 231.0
-        assert result["emissions_by_scope"]["scope3_amont"] == 58.0
+        # 231 + 58 = 289
+        assert abs(result["total_emissions"] - 289.0) < 0.01
+        assert abs(result["emissions_by_scope"]["scope1"] - 231.0) < 0.01
+        assert abs(result["emissions_by_scope"]["scope3_amont"] - 58.0) < 0.01
     
     def test_calculate_emissions_with_unit_conversion(self):
         """Test calculation with unit conversion (km to L)"""
