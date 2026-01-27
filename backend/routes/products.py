@@ -16,7 +16,7 @@ from config import (
     emission_factors_collection,
     fiscal_years_collection
 )
-from models import ProductCreate, ProductCreateEnhanced, ProductSale, ProductSaleUpdate
+from models import ProductCreate, ProductCreateEnhanced, ProductSale, ProductSaleUpdate, ProductEmissionProfileCreate, ProductEmissionProfileUpdate
 from services.auth import get_current_user
 from utils import serialize_doc
 
