@@ -13,7 +13,8 @@ sys.path.append('/app/backend')
 from config import (
     products_collection,
     activities_collection,
-    emission_factors_collection
+    emission_factors_collection,
+    fiscal_years_collection
 )
 from models import ProductCreate, ProductCreateEnhanced, ProductSale, ProductSaleUpdate
 from services.auth import get_current_user
