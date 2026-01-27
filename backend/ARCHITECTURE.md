@@ -9,108 +9,71 @@
 ├── models/
 │   └── __init__.py        # Modèles Pydantic (User, Activity, EmissionFactor, etc.)
 ├── routes/
-│   ├── __init__.py        # Router principal + exports
-│   ├── auth.py            # Routes authentification
-│   ├── companies.py       # Routes entreprises
-│   ├── activities.py      # Routes activités (CRUD + pagination)
-│   └── objectives.py      # Routes objectifs carbone (SBTi)
+│   ├── __init__.py        # Router principal (67 routes)
+│   ├── auth.py            # Authentification (7 routes)
+│   ├── companies.py       # Entreprises (4 routes)
+│   ├── activities.py      # Activités CRUD + pagination (6 routes)
+│   ├── objectives.py      # Objectifs SBTi (5 routes)
+│   ├── dashboard.py       # Dashboard KPIs (5 routes)
+│   ├── fiscal_years.py    # Exercices fiscaux (9 routes)
+│   ├── products.py        # Produits (7 routes)
+│   ├── reference_data.py  # Catégories, conversions (8 routes)
+│   └── admin.py           # Administration (16 routes)
 ├── services/
 │   ├── __init__.py        # Exports des services
-│   ├── auth.py            # Service authentification (JWT, password)
-│   └── emissions.py       # Service calcul d'émissions
+│   ├── auth.py            # JWT, password hashing
+│   └── emissions.py       # Calculs d'émissions
 ├── utils/
-│   └── __init__.py        # Fonctions utilitaires (serialize_doc, etc.)
+│   └── __init__.py        # Fonctions utilitaires
 └── tests/
-    ├── conftest.py        # Configuration pytest + fixtures
-    ├── test_auth.py       # Tests authentification (7 tests)
-    ├── test_emissions.py  # Tests calcul émissions (15 tests)
-    └── test_models.py     # Tests modèles Pydantic (11 tests)
+    ├── conftest.py        # Fixtures pytest
+    ├── test_auth.py       # Tests auth (7 tests)
+    ├── test_emissions.py  # Tests émissions (15 tests)
+    └── test_models.py     # Tests modèles (11 tests)
 ```
 
-## Comment exécuter les tests
+## Routes migrées (67 total)
+
+| Module | Routes | Description |
+|--------|--------|-------------|
+| `auth.py` | 7 | Login, register, me, users CRUD |
+| `companies.py` | 4 | Company CRUD |
+| `activities.py` | 6 | Activities CRUD + bulk + pagination |
+| `objectives.py` | 5 | SBTi objectives + trajectory |
+| `dashboard.py` | 5 | Summary, KPIs, comparisons |
+| `fiscal_years.py` | 9 | FY CRUD, close, rectify, duplicate |
+| `products.py` | 7 | Products CRUD + sales |
+| `reference_data.py` | 8 | Categories, subcategories, factors |
+| `admin.py` | 16 | Admin: factors v2, subcats, conversions |
+
+## Tests unitaires (33 tests)
 
 ```bash
-# Tous les tests unitaires
+# Exécuter tous les tests
 cd /app/backend && python -m pytest tests/test_auth.py tests/test_emissions.py tests/test_models.py -v
-
-# Un fichier spécifique
-python -m pytest tests/test_emissions.py -v
 
 # Avec couverture
 python -m pytest tests/ --cov=. --cov-report=html
 ```
 
-## Comment utiliser les modules
+## Comment utiliser les routes modulaires
 
-### Imports depuis config.py
 ```python
-from config import (
-    db,
-    users_collection,
-    activities_collection,
-    emission_factors_collection,
-    # ... autres collections
-    JWT_SECRET,
-    pwd_context
-)
+# Dans server.py ou un nouveau fichier
+from routes import api_router
+app.include_router(api_router)
+
+# Ou importer un module spécifique
+from routes.dashboard import router as dashboard_router
 ```
 
-### Imports depuis models/
-```python
-from models import (
-    UserRegister,
-    UserLogin,
-    ActivityCreate,
-    EmissionFactorV2Create,
-    # ... autres modèles
-)
-```
+## Migration depuis server.py
 
-### Imports depuis services/
-```python
-from services import (
-    get_current_user,
-    require_admin,
-    calculate_emissions_for_activity,
-    create_factor_snapshot
-)
-```
+Le fichier `server.py` original contient encore toutes les routes pour assurer
+la rétrocompatibilité. Les nouveaux modules dans `routes/` sont une copie
+fonctionnelle et testée. Pour migrer complètement :
 
-### Imports depuis utils/
-```python
-from utils import (
-    serialize_doc,
-    serialize_docs,
-    format_emissions,
-    validate_scope
-)
-```
-
-## Migration progressive
-
-Le fichier `server.py` reste le point d'entrée principal et contient encore
-la majorité des routes. Les nouveaux modules dans `routes/` sont des exemples
-de migration :
-
-- ✅ `routes/auth.py` - Authentification (migré)
-- ✅ `routes/companies.py` - Entreprises (migré)
-- ✅ `routes/activities.py` - Activités avec pagination (migré)
-- ✅ `routes/objectives.py` - Objectifs SBTi (migré)
-- ⏳ `routes/dashboard.py` - Dashboard (à migrer)
-- ⏳ `routes/admin.py` - Administration (à migrer)
-
-## Tests unitaires
-
-| Fichier | Tests | Description |
-|---------|-------|-------------|
-| `test_auth.py` | 7 | Password hashing, JWT tokens |
-| `test_emissions.py` | 15 | Calcul émissions, conversions, snapshots |
-| `test_models.py` | 11 | Validation Pydantic |
-| **Total** | **33** | |
-
-## Avantages de cette architecture
-
-- **Séparation des responsabilités** : Chaque fichier a un rôle clair
-- **Testabilité** : Les services peuvent être testés unitairement
-- **Maintenabilité** : Plus facile de trouver et modifier le code
-- **Réutilisabilité** : Les services peuvent être utilisés dans plusieurs routes
+1. Commenter les routes dans `server.py`
+2. Ajouter `app.include_router(api_router)` dans `server.py`
+3. Tester que tout fonctionne
+4. Supprimer les routes commentées
