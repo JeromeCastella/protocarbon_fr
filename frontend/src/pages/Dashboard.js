@@ -132,10 +132,14 @@ const Dashboard = () => {
   useEffect(() => {
     fetchAllData();
     fetchObjectiveData();
+    // Sync the chart fiscal year selector with the global context
+    if (currentFiscalYear?.id) {
+      setSelectedFiscalYearForChart(currentFiscalYear.id);
+    }
   }, [currentFiscalYear?.id]);
 
   useEffect(() => {
-    if (selectedFiscalYearForChart) {
+    if (selectedFiscalYearForChart && selectedFiscalYearForChart !== 'current') {
       fetchScopeBreakdown(selectedFiscalYearForChart);
     }
   }, [selectedFiscalYearForChart]);
