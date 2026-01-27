@@ -217,6 +217,7 @@ Application de calcul d'empreinte carbone selon le protocole GHG avec interface 
 - [x] Wizard configuration périmètre (Informations générales)
 - [x] Recalcul des émissions avec facteurs actuels
 - [x] **Nettoyage du backend** : server.py refactorisé (3556→29 lignes)
+- [x] **Gestion liée des ventes produits** : sale_id unique lie les 3 activités (transformation, utilisation, fin de vie)
 
 ### P1 - High Priority
 - [x] **Refactoring Frontend Admin.js** : 1915→94 lignes (6 composants extraits)
