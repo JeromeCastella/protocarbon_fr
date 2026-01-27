@@ -631,6 +631,8 @@ async def record_product_sale(
         "manufacturing_emissions": manufacturing_emissions,
         "usage_emissions": usage_emissions,
         "disposal_emissions": disposal_emissions,
+        "profile_source": profile_source,
+        "fiscal_year_id": fiscal_year_id,
         "activity_ids": created_activity_ids
     }
 
