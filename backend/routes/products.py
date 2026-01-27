@@ -202,6 +202,18 @@ async def record_product_sale(
     sale_id = str(uuid.uuid4())
     sale_date = sale.date or datetime.now(timezone.utc).strftime("%Y-%m-%d")
     
+    # Find the appropriate fiscal year for this sale date
+    fiscal_year_id = None
+    company_id = current_user.get("company_id")
+    if company_id:
+        fiscal_year = fiscal_years_collection.find_one({
+            "company_id": company_id,
+            "start_date": {"$lte": sale_date},
+            "end_date": {"$gte": sale_date}
+        })
+        if fiscal_year:
+            fiscal_year_id = str(fiscal_year["_id"])
+    
     emissions_per_unit = product.get("total_emissions_per_unit", 0)
     total_emissions = emissions_per_unit * sale.quantity
     
@@ -213,6 +225,7 @@ async def record_product_sale(
         manufacturing_activity = {
             "tenant_id": current_user["id"],
             "company_id": current_user.get("company_id"),
+            "fiscal_year_id": fiscal_year_id,
             "category_id": "transformation_produits",
             "subcategory_id": "transformation_produits",
             "scope": "scope3_aval",
