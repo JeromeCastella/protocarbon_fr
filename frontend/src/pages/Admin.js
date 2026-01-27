@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useTheme } from '../context/ThemeContext';
 import { useAuth } from '../context/AuthContext';
+import { useLanguage } from '../context/LanguageContext';
 import { AlertTriangle } from 'lucide-react';
 
 // Import refactored components
@@ -16,6 +17,7 @@ import { useAdminData } from '../hooks/useAdminData';
 const Admin = () => {
   const { isDark } = useTheme();
   const { user } = useAuth();
+  const { t } = useLanguage();
   
   const [activeTab, setActiveTab] = useState('factors');
   
@@ -29,10 +31,10 @@ const Admin = () => {
         <div className="text-center">
           <AlertTriangle className="w-16 h-16 mx-auto mb-4 text-red-500" />
           <h1 className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-            Accès refusé
+            {t('admin.accessDenied')}
           </h1>
           <p className={`mt-2 ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-            Cette page est réservée aux administrateurs.
+            {t('admin.accessDeniedDesc')}
           </p>
         </div>
       </div>
