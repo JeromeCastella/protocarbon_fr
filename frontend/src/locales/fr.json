@@ -15,7 +15,41 @@
     "next": "Suivant",
     "previous": "Précédent",
     "export": "Exporter",
-    "import": "Importer"
+    "import": "Importer",
+    "actions": "Actions",
+    "create": "Créer",
+    "archive": "Archiver",
+    "archived": "Archivé",
+    "replaced": "Remplacé",
+    "version": "Version",
+    "history": "Historique",
+    "all": "Tous",
+    "none": "Aucun",
+    "yes": "Oui",
+    "no": "Non",
+    "or": "ou",
+    "and": "et",
+    "from": "De",
+    "to": "À",
+    "since": "Depuis",
+    "current": "Actuel",
+    "total": "Total",
+    "details": "Détails",
+    "description": "Description",
+    "status": "Statut",
+    "active": "Actif",
+    "inactive": "Inactif",
+    "name": "Nom",
+    "code": "Code",
+    "order": "Ordre",
+    "icon": "Icône",
+    "year": "Année",
+    "date": "Date",
+    "createdAt": "Date de création",
+    "updatedAt": "Date de modification",
+    "filter": "Filtrer",
+    "noData": "Aucune donnée",
+    "selectOption": "Sélectionner..."
   },
   "auth": {
     "login": "Connexion",
@@ -29,7 +63,13 @@
     "hasAccount": "Déjà un compte ?",
     "createAccount": "Créer un compte",
     "welcome": "Bienvenue",
-    "welcomeBack": "Bon retour parmi nous"
+    "welcomeBack": "Bon retour parmi nous",
+    "role": "Rôle",
+    "admin": "Administrateur",
+    "user": "Utilisateur",
+    "you": "Vous",
+    "promoteAdmin": "Promouvoir admin",
+    "removeAdmin": "Retirer admin"
   },
   "nav": {
     "dashboard": "Tableau de bord",
@@ -67,10 +107,103 @@
     "scope1Title": "Émissions directes",
     "scope2": "Scope 2",
     "scope2Title": "Énergie indirecte",
-    "scope3Amont": "Scope 3",
+    "scope3Amont": "Scope 3 Amont",
     "scope3AmontTitle": "Amont",
-    "scope3Aval": "Scope 3",
+    "scope3Aval": "Scope 3 Aval",
     "scope3AvalTitle": "Aval"
+  },
+  "dashboard": {
+    "title": "Tableau de bord",
+    "tabs": {
+      "tracking": "Suivi de la saisie",
+      "results": "Résultats",
+      "objectives": "Objectifs"
+    },
+    "tracking": {
+      "title": "Suivi de la progression",
+      "subtitle": "Suivez l'avancement de la saisie de vos données d'émissions",
+      "progress": "Progression globale",
+      "totalEmissions": "Émissions totales",
+      "dataPoints": "Points de données",
+      "categoriesCompleted": "Catégories complétées",
+      "entriesCount": "Nombre de saisies",
+      "incomplete": "Incomplet",
+      "complete": "Complet",
+      "noEntries": "Aucune entrée",
+      "progressByScope": "Progression par Scope"
+    },
+    "results": {
+      "title": "Résultats",
+      "subtitle": "Analyse de vos émissions carbone",
+      "totalEmissions": "Émissions totales",
+      "comparedToPrevious": "vs exercice précédent",
+      "byScope": "Répartition par Scope",
+      "byCategory": "Répartition par catégorie",
+      "topCategories": "Top catégories émettrices",
+      "evolution": "Évolution des émissions",
+      "comparison": "Comparaison entre exercices",
+      "currentFiscalYear": "Exercice actuel",
+      "previousFiscalYear": "Exercice précédent",
+      "noDataForPeriod": "Aucune donnée pour cette période"
+    },
+    "objectives": {
+      "title": "Objectifs SBTi",
+      "subtitle": "Définissez et suivez vos objectifs de réduction d'émissions",
+      "defineObjective": "Définir un objectif",
+      "editObjective": "Modifier l'objectif",
+      "noObjective": "Aucun objectif défini",
+      "noObjectiveDesc": "Définissez un objectif de réduction pour suivre votre trajectoire carbone",
+      "referenceYear": "Année de référence",
+      "targetYear": "Année cible",
+      "baselineEmissions": "Émissions de référence",
+      "targetEmissions": "Émissions cibles",
+      "currentEmissions": "Émissions actuelles",
+      "reduction": "Réduction",
+      "reductionTarget": "Objectif de réduction",
+      "trajectory": "Trajectoire de réduction",
+      "trajectoryDesc": "Évolution prévue vs réelle de vos émissions",
+      "onTrack": "En bonne voie",
+      "offTrack": "Hors trajectoire",
+      "progress": "Progression vers l'objectif",
+      "recommendations": "Recommandations",
+      "recommendationsDesc": "Actions suggérées pour atteindre vos objectifs",
+      "sbtiNearTerm": "Objectifs SBTi Near-term",
+      "sbtiNetZero": "Objectifs SBTi Net-Zero",
+      "scope12": "Scope 1+2",
+      "scope3": "Scope 3",
+      "perYear": "par an",
+      "aligned": "Aligné avec la trajectoire 1.5°C",
+      "targetLine": "Objectif",
+      "actualLine": "Réel",
+      "projectedLine": "Projeté"
+    },
+    "recalculate": {
+      "title": "Recalculer les émissions",
+      "description": "Recalculer les bilans avec les facteurs d'émission actuels",
+      "fiscalYear": "Exercice fiscal à recalculer",
+      "selectFiscalYear": "Sélectionner un exercice",
+      "originalEmissions": "Émissions originales",
+      "recalculatedEmissions": "Émissions recalculées",
+      "difference": "Différence",
+      "recalculate": "Recalculer",
+      "noChange": "Aucun changement",
+      "increase": "Augmentation",
+      "decrease": "Diminution"
+    }
+  },
+  "fiscalYear": {
+    "title": "Exercice fiscal",
+    "current": "Exercice actuel",
+    "previous": "Exercice précédent",
+    "select": "Sélectionner un exercice",
+    "create": "Créer un exercice",
+    "close": "Clôturer",
+    "reopen": "Réouvrir",
+    "duplicate": "Dupliquer",
+    "closed": "Clôturé",
+    "open": "Ouvert",
+    "startDate": "Date de début",
+    "endDate": "Date de fin"
   },
   "dataEntry": {
     "title": "Saisie de données",
@@ -122,6 +255,85 @@
     "tags": "Tags",
     "region": "Région"
   },
+  "admin": {
+    "title": "Administration",
+    "subtitle": "Gestion des facteurs d'émission, sous-catégories et utilisateurs",
+    "accessDenied": "Accès refusé",
+    "accessDeniedDesc": "Cette page est réservée aux administrateurs.",
+    "tabs": {
+      "factors": "Facteurs",
+      "subcategories": "Sous-catégories",
+      "users": "Utilisateurs"
+    },
+    "factors": {
+      "title": "Facteurs d'émission V2",
+      "add": "Ajouter un facteur",
+      "edit": "Modifier le facteur",
+      "new": "Nouveau facteur V2",
+      "nameFr": "Nom FR",
+      "nameDe": "Nom DE",
+      "subcategory": "Sous-catégorie",
+      "defaultUnit": "Unité par défaut",
+      "inputUnits": "Unités d'entrée acceptées",
+      "addUnit": "Ajouter une unité",
+      "impacts": "Impacts par scope",
+      "impactsRequired": "impact(s) requis",
+      "selectSubcategoryFirst": "Sélectionnez d'abord une sous-catégorie",
+      "impactsAutoGenerated": "Les impacts seront générés automatiquement",
+      "category": "Catégorie",
+      "valueKgCO2e": "Valeur (kgCO2e)",
+      "fullUnit": "Unité complète",
+      "tagsSeparated": "Tags (séparés par des virgules)",
+      "multiImpact": "Multi-impact",
+      "linkedCategories": "Catégories liées",
+      "scope1Direct": "Scope 1 - Émissions directes",
+      "scope2Indirect": "Scope 2 - Énergie indirecte",
+      "scope33Upstream": "Scope 3.3 - Amont énergie",
+      "scope3Other": "Scope 3 - Autre"
+    },
+    "subcategories": {
+      "title": "Sous-catégories",
+      "add": "Ajouter une sous-catégorie",
+      "edit": "Modifier la sous-catégorie",
+      "new": "Nouvelle sous-catégorie",
+      "linkedCategories": "Catégories liées (relation N-N)"
+    },
+    "users": {
+      "title": "Utilisateurs",
+      "email": "Email",
+      "name": "Nom",
+      "role": "Rôle",
+      "createdAt": "Date création"
+    },
+    "versioning": {
+      "title": "Nouvelle version",
+      "currentVersion": "Version actuelle",
+      "newVersion": "Nouvelle version",
+      "changeReason": "Raison du changement",
+      "changeReasonPlaceholder": "Ex: Mise à jour annuelle des facteurs OFEV 2025",
+      "isCorrection": "Correction d'erreur",
+      "isCorrectionDesc": "Cocher si cette version corrige une erreur",
+      "validFromYear": "Année de début de validité",
+      "impactValues": "Valeurs des impacts",
+      "newValue": "Nouvelle valeur",
+      "createVersion": "Créer la version"
+    },
+    "history": {
+      "title": "Historique des versions",
+      "totalVersions": "version(s)",
+      "changeLog": "Journal des modifications",
+      "correction": "Correction",
+      "allVersions": "Toutes les versions",
+      "validFrom": "Valide de",
+      "validTo": "à"
+    },
+    "import": {
+      "title": "Importer des données V2",
+      "placeholder": "Collez ici le JSON exporté...",
+      "replaceAll": "Remplacer toutes les données existantes",
+      "success": "Import réussi !"
+    }
+  },
   "categories": {
     "combustion_mobile": "Combustion mobile",
     "combustion_fixe": "Combustion fixe",
@@ -171,7 +383,9 @@
     "km": "km",
     "passager_km": "passager.km",
     "unit": "unité",
-    "euro": "€"
+    "euro": "€",
+    "tCO2e": "tCO2e",
+    "kgCO2e": "kgCO2e"
   },
   "gamification": {
     "milestone": "Jalon atteint !",
@@ -181,5 +395,19 @@
     "almostThere": "Vous y êtes presque !",
     "firstEntry": "Première saisie effectuée !",
     "scopeComplete": "Scope complété !"
+  },
+  "errors": {
+    "generic": "Une erreur est survenue",
+    "notFound": "Non trouvé",
+    "unauthorized": "Non autorisé",
+    "forbidden": "Accès interdit",
+    "validation": "Erreur de validation",
+    "network": "Erreur réseau",
+    "timeout": "Délai dépassé"
+  },
+  "confirmations": {
+    "delete": "Êtes-vous sûr de vouloir supprimer ?",
+    "archive": "Archiver cet élément ? Il restera disponible pour les données historiques.",
+    "removeAdminSelf": "Vous allez retirer vos droits admin. Continuer ?"
   }
 }
