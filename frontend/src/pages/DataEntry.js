@@ -83,6 +83,7 @@ const iconMap = {
 const DataEntry = () => {
   const { isDark } = useTheme();
   const { t, language } = useLanguage();
+  const { currentFiscalYear } = useFiscalYear();
   const [activeScope, setActiveScope] = useState('scope1');
   const [categories, setCategories] = useState([]);
   const [activities, setActivities] = useState([]);
@@ -103,17 +104,21 @@ const DataEntry = () => {
   // Product sale modal state
   const [showProductSaleModal, setShowProductSaleModal] = useState(false);
 
+  // Reload data when fiscal year changes
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [currentFiscalYear?.id]);
 
   const fetchData = async () => {
     try {
+      // Build query params with fiscal year filter
+      const fiscalYearParam = currentFiscalYear?.id ? `&fiscal_year_id=${currentFiscalYear.id}` : '';
+      
       const [categoriesRes, activitiesRes, summaryRes, statsRes] = await Promise.all([
         axios.get(`${API_URL}/api/categories`),
-        axios.get(`${API_URL}/api/activities?limit=500`), // Get up to 500 activities
-        axios.get(`${API_URL}/api/dashboard/summary`),
-        axios.get(`${API_URL}/api/dashboard/category-stats`)
+        axios.get(`${API_URL}/api/activities?limit=500${fiscalYearParam}`),
+        axios.get(`${API_URL}/api/dashboard/summary${fiscalYearParam ? '?' + fiscalYearParam.slice(1) : ''}`),
+        axios.get(`${API_URL}/api/dashboard/category-stats${fiscalYearParam ? '?' + fiscalYearParam.slice(1) : ''}`)
       ]);
       setCategories(categoriesRes.data || []);
       // Handle paginated response
