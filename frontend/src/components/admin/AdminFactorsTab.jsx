@@ -462,7 +462,7 @@ const AdminFactorsTab = ({ factors, subcategories, onRefetch }) => {
                           </button>
                         </>
                       )}
-                      <button onClick={() => handleDeleteFactor(factor.id)} className="p-2 rounded-lg text-red-500 hover:bg-red-500/10" title="Supprimer">
+                      <button onClick={() => handleDeleteFactor(factor.id)} className="p-2 rounded-lg text-red-500 hover:bg-red-500/10" title={t('common.delete')}>
                         <Trash2 className="w-4 h-4" />
                       </button>
                     </div>
@@ -495,7 +495,7 @@ const AdminFactorsTab = ({ factors, subcategories, onRefetch }) => {
                 <div className="flex items-center justify-between">
                   <h3 className="text-xl font-bold flex items-center gap-2">
                     <Sparkles className="w-6 h-6 text-blue-500" />
-                    {editingFactor ? 'Modifier le facteur' : 'Nouveau facteur V2'}
+                    {editingFactor ? t('admin.factors.edit') : t('admin.factors.new')}
                   </h3>
                   <button onClick={() => setShowFactorModal(false)} className={`p-2 rounded-lg ${isDark ? 'hover:bg-slate-700' : 'hover:bg-gray-100'}`}>
                     <X className="w-5 h-5" />
@@ -507,7 +507,7 @@ const AdminFactorsTab = ({ factors, subcategories, onRefetch }) => {
                 {/* Names */}
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>Nom FR *</label>
+                    <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>{t('admin.factors.nameFr')} *</label>
                     <input
                       type="text"
                       value={factorForm.name_fr}
@@ -517,7 +517,7 @@ const AdminFactorsTab = ({ factors, subcategories, onRefetch }) => {
                     />
                   </div>
                   <div>
-                    <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>Nom DE *</label>
+                    <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>{t('admin.factors.nameDe')} *</label>
                     <input
                       type="text"
                       value={factorForm.name_de}
