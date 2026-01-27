@@ -42,7 +42,17 @@ async def get_activities(
     if fiscal_year_id:
         fy = fiscal_years_collection.find_one({"_id": ObjectId(fiscal_year_id)})
         if fy:
-            query["date"] = {"$gte": fy.get("start_date", ""), "$lte": fy.get("end_date", "")}
+            start_date = fy.get("start_date", "")
+            end_date = fy.get("end_date", "")
+            # Handle both ISO format (2024-01-01T00:00:00) and simple format (2024-01-01)
+            # by using regex to match the date prefix
+            if start_date and end_date:
+                query["$expr"] = {
+                    "$and": [
+                        {"$gte": [{"$substr": ["$date", 0, 10]}, start_date]},
+                        {"$lte": [{"$substr": ["$date", 0, 10]}, end_date]}
+                    ]
+                }
     
     # Count total for pagination metadata
     total = activities_collection.count_documents(query)
