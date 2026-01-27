@@ -338,7 +338,7 @@ const AdminSubcategoriesTab = ({ subcategories, onRefetch }) => {
                     onClick={() => setShowModal(false)} 
                     className={`flex-1 px-4 py-3 rounded-xl border ${isDark ? 'border-slate-600 hover:bg-slate-700' : 'border-gray-200 hover:bg-gray-50'}`}
                   >
-                    Annuler
+                    {t('common.cancel')}
                   </button>
                   <button
                     onClick={handleSave}
@@ -346,7 +346,7 @@ const AdminSubcategoriesTab = ({ subcategories, onRefetch }) => {
                     className="flex-1 px-4 py-3 bg-purple-500 text-white rounded-xl hover:bg-purple-600 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                   >
                     <Check className="w-5 h-5" />
-                    {editing ? 'Modifier' : 'Créer'}
+                    {editing ? t('common.edit') : t('common.create')}
                   </button>
                 </div>
               </div>
