@@ -731,6 +731,72 @@ const DataEntry = () => {
         onClose={() => setShowProductSaleModal(false)}
         onSaleRecorded={fetchData}
       />
+
+      {/* Category 3.3 Information Modal */}
+      <AnimatePresence>
+        {showCategory33Message && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4"
+            onClick={() => setShowCategory33Message(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              onClick={(e) => e.stopPropagation()}
+              className={`w-full max-w-md rounded-2xl ${isDark ? 'bg-slate-800' : 'bg-white'} shadow-2xl overflow-hidden`}
+            >
+              {/* Header with icon */}
+              <div className="bg-gradient-to-r from-amber-500 to-orange-500 p-6 text-white">
+                <div className="flex items-center gap-4">
+                  <div className="p-3 bg-white/20 rounded-xl">
+                    <Zap className="w-8 h-8" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold">{t('dataEntry.category33.title')}</h3>
+                    <p className="text-white/80 text-sm">Scope 3.3</p>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Content */}
+              <div className="p-6 space-y-4">
+                <p className={`${isDark ? 'text-slate-300' : 'text-gray-600'}`}>
+                  {t('dataEntry.category33.message')}
+                </p>
+                
+                <div className={`p-4 rounded-xl ${isDark ? 'bg-amber-500/10 border border-amber-500/30' : 'bg-amber-50 border border-amber-200'}`}>
+                  <div className="flex items-start gap-3">
+                    <div className="p-2 rounded-lg bg-amber-500/20">
+                      <RefreshCw className="w-5 h-5 text-amber-500" />
+                    </div>
+                    <p className={`text-sm ${isDark ? 'text-amber-200' : 'text-amber-800'}`}>
+                      {t('dataEntry.category33.autoCalculated')}
+                    </p>
+                  </div>
+                </div>
+                
+                <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+                  {t('dataEntry.category33.noAction')}
+                </p>
+              </div>
+              
+              {/* Footer */}
+              <div className={`p-6 border-t ${isDark ? 'border-slate-700' : 'border-gray-200'}`}>
+                <button
+                  onClick={() => setShowCategory33Message(false)}
+                  className="w-full px-4 py-3 bg-amber-500 text-white rounded-xl hover:bg-amber-600 font-medium transition-colors"
+                >
+                  {t('common.close')}
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
