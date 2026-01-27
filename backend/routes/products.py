@@ -402,9 +402,13 @@ async def record_product_sale(
 @router.get("/{product_id}/sales")
 async def get_product_sales(
     product_id: str,
+    fiscal_year_id: Optional[str] = None,
     current_user: dict = Depends(get_current_user)
 ):
-    """Get all sales for a specific product"""
+    """
+    Get sales for a specific product.
+    If fiscal_year_id is provided, only returns sales within that fiscal year's date range.
+    """
     product = products_collection.find_one({
         "_id": ObjectId(product_id),
         "tenant_id": current_user["id"]
@@ -415,9 +419,25 @@ async def get_product_sales(
     
     sales_history = product.get("sales_history", [])
     
-    # Enrich each sale with its linked activities
+    # If fiscal year filter is provided, get its date range
+    start_date = None
+    end_date = None
+    if fiscal_year_id:
+        fiscal_year = fiscal_years_collection.find_one({"_id": ObjectId(fiscal_year_id)})
+        if fiscal_year:
+            start_date = fiscal_year.get("start_date")
+            end_date = fiscal_year.get("end_date")
+    
+    # Enrich and filter each sale
     enriched_sales = []
     for sale in sales_history:
+        sale_date = sale.get("date", "")
+        
+        # Filter by fiscal year if provided
+        if start_date and end_date:
+            if not (start_date <= sale_date <= end_date):
+                continue  # Skip sales outside the fiscal year
+        
         sale_id = sale.get("sale_id")
         if sale_id:
             # Get linked activities
@@ -428,10 +448,15 @@ async def get_product_sales(
             sale["linked_activities_count"] = len(linked_activities)
         enriched_sales.append(sale)
     
+    # Calculate total for filtered sales
+    filtered_total = sum(s.get("quantity", 0) for s in enriched_sales)
+    
     return {
         "product_id": product_id,
         "product_name": product.get("name"),
         "total_sales": product.get("total_sales", 0),
+        "filtered_total": filtered_total,
+        "fiscal_year_id": fiscal_year_id,
         "sales": enriched_sales
     }
 
