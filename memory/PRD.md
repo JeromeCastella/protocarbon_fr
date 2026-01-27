@@ -24,7 +24,29 @@ Application de calcul d'empreinte carbone selon le protocole GHG avec interface 
 
 ## What's Been Implemented
 
-### 2026-01-27 (Session actuelle) - Nettoyage Backend (P0) + Refactoring Admin.js (P1) + Traductions (P1) ✅
+### 2026-01-27 (Session actuelle) - Gestion des ventes produits par exercice fiscal ✅
+- **Ventes liées par sale_id** :
+  - Chaque vente génère un `sale_id` unique liant les 3 activités (transformation, utilisation, fin de vie)
+  - Modification/suppression groupée via les nouveaux endpoints
+- **Filtrage par exercice fiscal** :
+  - Les ventes sont maintenant filtrées par l'exercice fiscal courant
+  - Changer d'exercice fiscal → voir/modifier les ventes de cet exercice uniquement
+  - Le champ date respecte les limites de l'exercice fiscal
+- **Archivage automatique des produits** :
+  - DELETE sur un produit avec des ventes → archivage (soft delete)
+  - DELETE sur un produit sans ventes → suppression permanente
+  - Nouveau endpoint PUT /api/products/{id}/restore pour restaurer
+- **Interface améliorée** :
+  - Modal affiche l'exercice fiscal courant avec dates (start → end)
+  - Mode "Modifier" si vente existante pour l'exercice, sinon mode "Enregistrer"
+  - Champ Date au lieu d'Année avec contraintes min/max
+- **Nouveaux endpoints API** :
+  - `GET /api/products?include_archived=true` - Inclure les archivés
+  - `GET /api/products/archived` - Liste des produits archivés
+  - `GET /api/products/{id}/sales?fiscal_year_id=xxx` - Ventes filtrées par exercice
+  - `PUT /api/products/{id}/restore` - Restaurer un produit archivé
+
+### 2026-01-27 (Session précédente) - Nettoyage Backend (P0) + Refactoring Admin.js (P1) + Traductions (P1) ✅
 - **Nettoyage complet de `server.py`** :
   - Réduction de 3556 lignes → 29 lignes (99% de réduction)
   - Le fichier ne contient plus que : FastAPI init, CORS, import du routeur modulaire, health check
