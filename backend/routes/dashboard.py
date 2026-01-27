@@ -236,10 +236,17 @@ async def get_scope_breakdown(fiscal_year_id: str, current_user: dict = Depends(
     fy_start = fy.get("start_date", "")
     fy_end = fy.get("end_date", "")
     
-    activities = list(activities_collection.find({
-        "tenant_id": current_user["id"],
-        "date": {"$gte": fy_start, "$lte": fy_end}
-    }))
+    # Use $expr for ISO date comparison
+    query = {"tenant_id": current_user["id"]}
+    if fy_start and fy_end:
+        query["$expr"] = {
+            "$and": [
+                {"$gte": [{"$substr": ["$date", 0, 10]}, fy_start]},
+                {"$lte": [{"$substr": ["$date", 0, 10]}, fy_end]}
+            ]
+        }
+    
+    activities = list(activities_collection.find(query))
     
     scopes = {
         "scope1": {"total": 0, "categories": {}},
