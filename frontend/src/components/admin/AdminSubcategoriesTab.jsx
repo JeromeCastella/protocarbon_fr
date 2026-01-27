@@ -215,7 +215,7 @@ const AdminSubcategoriesTab = ({ subcategories, onRefetch }) => {
                 <div className="flex items-center justify-between">
                   <h3 className="text-xl font-bold flex items-center gap-2">
                     <Layers className="w-6 h-6 text-purple-500" />
-                    {editing ? 'Modifier la sous-catégorie' : 'Nouvelle sous-catégorie'}
+                    {editing ? t('admin.subcategories.edit') : t('admin.subcategories.new')}
                   </h3>
                   <button 
                     onClick={() => setShowModal(false)} 
@@ -232,7 +232,7 @@ const AdminSubcategoriesTab = ({ subcategories, onRefetch }) => {
                 <div className="grid grid-cols-3 gap-4">
                   <div>
                     <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
-                      Code *
+                      {t('common.code')} *
                     </label>
                     <input
                       type="text"
@@ -245,7 +245,7 @@ const AdminSubcategoriesTab = ({ subcategories, onRefetch }) => {
                   </div>
                   <div>
                     <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
-                      Nom FR *
+                      {t('admin.factors.nameFr')} *
                     </label>
                     <input
                       type="text"
