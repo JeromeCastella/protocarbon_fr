@@ -433,7 +433,10 @@ async def update_product_emission_profile(
     profile_update: ProductEmissionProfileUpdate,
     current_user: dict = Depends(get_current_user)
 ):
-    """Update an existing emission profile"""
+    """
+    Update an existing emission profile.
+    Also recalculates all existing activities for that fiscal year.
+    """
     product = products_collection.find_one({
         "_id": ObjectId(product_id),
         "tenant_id": current_user["id"]
@@ -441,6 +444,8 @@ async def update_product_emission_profile(
     
     if not product:
         raise HTTPException(status_code=404, detail="Product not found")
+    
+    recalculated_count = 0
     
     # If updating default profile
     if fiscal_year_id == "default":
@@ -463,12 +468,16 @@ async def update_product_emission_profile(
                 {"_id": ObjectId(product_id)},
                 {"$set": update_fields}
             )
+            
+            # Recalculate activities that use the default profile (no specific profile for their fiscal year)
+            # This is complex - for now, don't auto-recalculate default profile changes
         
-        return {"message": "Default profile updated"}
+        return {"message": "Default profile updated", "recalculated_activities": 0}
     
     # Find and update the specific profile
     profiles = product.get("emission_profiles", [])
     profile_found = False
+    updated_profile = None
     
     for i, p in enumerate(profiles):
         if p.get("fiscal_year_id") == fiscal_year_id:
@@ -482,6 +491,7 @@ async def update_product_emission_profile(
                 profiles[i]["change_reason"] = profile_update.change_reason
             profiles[i]["updated_at"] = datetime.now(timezone.utc).isoformat()
             profile_found = True
+            updated_profile = profiles[i]
             break
     
     if not profile_found:
@@ -492,7 +502,75 @@ async def update_product_emission_profile(
         {"$set": {"emission_profiles": profiles}}
     )
     
-    return {"message": "Profile updated", "profile": profiles[i]}
+    # Recalculate all existing activities for this fiscal year
+    new_manufacturing = updated_profile.get("manufacturing_emissions", 0)
+    new_usage = updated_profile.get("usage_emissions", 0)
+    new_disposal = updated_profile.get("disposal_emissions", 0)
+    
+    # Get all sales for this product in this fiscal year
+    sales_history = product.get("sales_history", [])
+    for sale in sales_history:
+        sale_id = sale.get("sale_id")
+        sale_fiscal_year_id = sale.get("fiscal_year_id")
+        
+        # Only recalculate sales from this specific fiscal year
+        if sale_fiscal_year_id != fiscal_year_id:
+            continue
+        
+        if not sale_id:
+            continue
+        
+        quantity = sale.get("quantity", 0)
+        
+        # Update transformation activities
+        activities_collection.update_many(
+            {"sale_id": sale_id, "sale_phase": "transformation"},
+            {"$set": {
+                "emissions": new_manufacturing * quantity,
+                "calculated_emissions": new_manufacturing * quantity,
+                "recalculated_at": datetime.now(timezone.utc).isoformat()
+            }}
+        )
+        
+        # Update usage activities
+        activities_collection.update_many(
+            {"sale_id": sale_id, "sale_phase": "usage"},
+            {"$set": {
+                "emissions": new_usage * quantity,
+                "calculated_emissions": new_usage * quantity,
+                "recalculated_at": datetime.now(timezone.utc).isoformat()
+            }}
+        )
+        
+        # Update disposal activities
+        activities_collection.update_many(
+            {"sale_id": sale_id, "sale_phase": "disposal"},
+            {"$set": {
+                "emissions": new_disposal * quantity,
+                "calculated_emissions": new_disposal * quantity,
+                "recalculated_at": datetime.now(timezone.utc).isoformat()
+            }}
+        )
+        
+        recalculated_count += 1
+        
+        # Update the sale in sales_history
+        products_collection.update_one(
+            {"_id": ObjectId(product_id), "sales_history.sale_id": sale_id},
+            {"$set": {
+                "sales_history.$.manufacturing_emissions": new_manufacturing * quantity,
+                "sales_history.$.usage_emissions": new_usage * quantity,
+                "sales_history.$.disposal_emissions": new_disposal * quantity,
+                "sales_history.$.total_emissions": (new_manufacturing + new_usage + new_disposal) * quantity,
+                "sales_history.$.recalculated_at": datetime.now(timezone.utc).isoformat()
+            }}
+        )
+    
+    return {
+        "message": "Profile updated",
+        "profile": updated_profile,
+        "recalculated_sales": recalculated_count
+    }
 
 
 @router.delete("/{product_id}/emission-profiles/{fiscal_year_id}")
