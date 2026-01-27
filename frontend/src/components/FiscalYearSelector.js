@@ -89,7 +89,7 @@ const FiscalYearSelector = ({ onCreateNew }) => {
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className={`absolute top-full left-0 mt-2 w-72 rounded-xl shadow-xl z-50 overflow-hidden ${
+            className={`absolute top-full left-0 mt-2 w-72 rounded-xl shadow-xl z-[100] overflow-hidden ${
               isDark ? 'bg-slate-800 border border-slate-700' : 'bg-white border border-gray-200'
             }`}
           >
