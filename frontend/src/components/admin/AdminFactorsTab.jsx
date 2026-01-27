@@ -185,7 +185,7 @@ const AdminFactorsTab = ({ factors, subcategories, onRefetch }) => {
       onRefetch();
     } catch (error) {
       console.error('Failed to save factor:', error);
-      alert('Erreur: ' + (error.response?.data?.detail || error.message));
+      alert(t('errors.generic') + ': ' + (error.response?.data?.detail || error.message));
     }
   };
 
@@ -214,24 +214,24 @@ const AdminFactorsTab = ({ factors, subcategories, onRefetch }) => {
   };
 
   const handleDeleteFactor = async (factorId) => {
-    if (!window.confirm('Supprimer définitivement ce facteur ?')) return;
+    if (!window.confirm(t('confirmations.delete'))) return;
     try {
       await axios.delete(`${API_URL}/api/admin/emission-factors/${factorId}`);
       onRefetch();
     } catch (error) {
       console.error('Failed to delete factor:', error);
-      alert('Erreur lors de la suppression');
+      alert(t('errors.generic'));
     }
   };
 
   const handleSoftDelete = async (factorId) => {
-    if (!window.confirm('Archiver ce facteur ? Il restera disponible pour les données historiques.')) return;
+    if (!window.confirm(t('confirmations.archive'))) return;
     try {
       await axios.delete(`${API_URL}/api/admin/emission-factors-v2/${factorId}/soft`);
       onRefetch();
     } catch (error) {
       console.error('Failed to archive factor:', error);
-      alert('Erreur: ' + (error.response?.data?.detail || error.message));
+      alert(t('errors.generic') + ': ' + (error.response?.data?.detail || error.message));
     }
   };
 
