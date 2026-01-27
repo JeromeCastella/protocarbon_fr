@@ -204,18 +204,33 @@ const ProductSaleModal = ({ isOpen, onClose, onSaleRecorded, preselectedProduct 
     setExistingSale(null);
     setIsEditMode(false);
     setShowDeleteConfirm(false);
+    setActiveProfile(null);
+    setShowVersionsModal(false);
     onClose();
   };
 
-  // Calculate emissions preview
-  const manufacturingEmissions = selectedProduct ? quantity * (selectedProduct.manufacturing_emissions || 0) : 0;
-  const usageEmissions = selectedProduct ? quantity * (selectedProduct.usage_emissions || 0) : 0;
-  const disposalEmissions = selectedProduct ? quantity * (selectedProduct.disposal_emissions || 0) : 0;
+  const handleProfileUpdated = () => {
+    // Refresh product data to get updated emissions
+    if (selectedProduct) {
+      fetchProductSales(selectedProduct.id);
+      fetchProducts(); // Refresh product list too in case default values changed
+    }
+  };
+
+  // Calculate emissions preview using active profile
+  const profileManufacturing = activeProfile?.manufacturing_emissions ?? selectedProduct?.manufacturing_emissions ?? 0;
+  const profileUsage = activeProfile?.usage_emissions ?? selectedProduct?.usage_emissions ?? 0;
+  const profileDisposal = activeProfile?.disposal_emissions ?? selectedProduct?.disposal_emissions ?? 0;
+  
+  const manufacturingEmissions = quantity * profileManufacturing;
+  const usageEmissions = quantity * profileUsage;
+  const disposalEmissions = quantity * profileDisposal;
   const totalEmissions = manufacturingEmissions + usageEmissions + disposalEmissions;
 
   if (!isOpen) return null;
 
   return (
+    <>
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
