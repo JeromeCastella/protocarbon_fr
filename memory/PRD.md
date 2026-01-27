@@ -230,6 +230,7 @@ Application de calcul d'empreinte carbone selon le protocole GHG avec interface 
 - [ ] Skeleton loaders au lieu de spinners
 - [ ] Audit Trail (historique des modifications)
 - [ ] Refactoring DataEntry.js (1200+ lignes → composants)
+- [ ] Traduire les composants Dashboard et DataEntry (partiellement fait)
 
 ### P3 - Low Priority
 - [ ] API externe pour intégration
