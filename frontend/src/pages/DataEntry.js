@@ -175,6 +175,16 @@ const DataEntry = () => {
 
   // Open modal in edit mode with pre-filled data
   const handleEditActivityInModal = (activity) => {
+    // Check if this activity is part of a linked sale (has sale_id)
+    if (activity.sale_id && activity.product_id) {
+      // Open the Sale Edit Modal for grouped editing
+      setEditingSaleId(activity.sale_id);
+      setEditingProductId(activity.product_id);
+      setShowSaleEditModal(true);
+      return;
+    }
+    
+    // Regular activity - open the standard guided entry modal
     const category = categories.find(c => c.code === activity.category_id);
     if (!category) return;
 
