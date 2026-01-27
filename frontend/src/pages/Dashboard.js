@@ -87,7 +87,7 @@ const formatChartValue = (valueInKg) => {
 const Dashboard = () => {
   const { isDark } = useTheme();
   const { t } = useLanguage();
-  const { fiscalYears } = useFiscalYear();
+  const { fiscalYears, currentFiscalYear } = useFiscalYear();
   
   // Tab state
   const [activeTab, setActiveTab] = useState('suivi');
@@ -97,7 +97,7 @@ const Dashboard = () => {
   const [kpis, setKpis] = useState(null);
   const [fiscalComparison, setFiscalComparison] = useState([]);
   const [scopeBreakdown, setScopeBreakdown] = useState(null);
-  const [selectedFiscalYear, setSelectedFiscalYear] = useState('current');
+  const [selectedFiscalYearForChart, setSelectedFiscalYearForChart] = useState('current');
   const [drillDownScope, setDrillDownScope] = useState(null);
   const [loading, setLoading] = useState(true);
   
@@ -128,16 +128,17 @@ const Dashboard = () => {
   });
   const [objectiveLoading, setObjectiveLoading] = useState(false);
 
+  // Reload data when fiscal year changes
   useEffect(() => {
     fetchAllData();
     fetchObjectiveData();
-  }, []);
+  }, [currentFiscalYear?.id]);
 
   useEffect(() => {
-    if (selectedFiscalYear) {
-      fetchScopeBreakdown(selectedFiscalYear);
+    if (selectedFiscalYearForChart) {
+      fetchScopeBreakdown(selectedFiscalYearForChart);
     }
-  }, [selectedFiscalYear]);
+  }, [selectedFiscalYearForChart]);
 
   const fetchObjectiveData = async () => {
     try {
