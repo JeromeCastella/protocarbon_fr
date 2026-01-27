@@ -193,12 +193,16 @@ const Dashboard = () => {
 
   const fetchAllData = async () => {
     try {
+      // Build fiscal year query param
+      const fyParam = currentFiscalYear?.id ? `?fiscal_year_id=${currentFiscalYear.id}` : '';
+      const fyParamAmp = currentFiscalYear?.id ? `&fiscal_year_id=${currentFiscalYear.id}` : '';
+      
       const [summaryRes, kpisRes, comparisonRes, breakdownRes, activitiesRes, productsRes] = await Promise.all([
-        axios.get(`${API_URL}/api/dashboard/summary`),
+        axios.get(`${API_URL}/api/dashboard/summary${fyParam}`),
         axios.get(`${API_URL}/api/dashboard/kpis`),
         axios.get(`${API_URL}/api/dashboard/fiscal-comparison`),
-        axios.get(`${API_URL}/api/dashboard/scope-breakdown/current`),
-        axios.get(`${API_URL}/api/activities?limit=100`).catch(() => ({ data: { data: [] } })),
+        axios.get(`${API_URL}/api/dashboard/scope-breakdown/${currentFiscalYear?.id || 'current'}`),
+        axios.get(`${API_URL}/api/activities?limit=100${fyParamAmp}`).catch(() => ({ data: { data: [] } })),
         axios.get(`${API_URL}/api/products`).catch(() => ({ data: [] }))
       ]);
       
