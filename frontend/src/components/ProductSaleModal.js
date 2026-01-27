@@ -105,8 +105,23 @@ const ProductSaleModal = ({ isOpen, onClose, onSaleRecorded, preselectedProduct 
     try {
       // Filtrer par exercice fiscal courant
       const fiscalYearParam = currentFiscalYear?.id ? `?fiscal_year_id=${currentFiscalYear.id}` : '';
-      const response = await axios.get(`${API_URL}/api/products/${productId}/sales${fiscalYearParam}`);
-      const sales = response.data?.sales || [];
+      const [salesResponse, profilesResponse] = await Promise.all([
+        axios.get(`${API_URL}/api/products/${productId}/sales${fiscalYearParam}`),
+        axios.get(`${API_URL}/api/products/${productId}/emission-profiles`)
+      ]);
+      
+      const sales = salesResponse.data?.sales || [];
+      
+      // Déterminer le profil actif pour cet exercice
+      const defaultProfile = profilesResponse.data?.default_profile;
+      const profiles = profilesResponse.data?.profiles || [];
+      const specificProfile = profiles.find(p => p.fiscal_year_id === currentFiscalYear?.id);
+      
+      if (specificProfile) {
+        setActiveProfile({ ...specificProfile, source: 'specific' });
+      } else if (defaultProfile) {
+        setActiveProfile({ ...defaultProfile, source: 'default' });
+      }
       
       if (sales.length > 0) {
         // Prendre la première vente pour cet exercice
@@ -133,6 +148,7 @@ const ProductSaleModal = ({ isOpen, onClose, onSaleRecorded, preselectedProduct 
       setExistingSale(null);
       setQuantity(0);
       setIsEditMode(false);
+      setActiveProfile(null);
     }
   };
 
