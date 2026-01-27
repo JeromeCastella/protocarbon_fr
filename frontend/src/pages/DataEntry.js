@@ -320,7 +320,8 @@ const DataEntry = () => {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {scopeCategories.map((category, index) => {
             const IconComponent = iconMap[category.icon] || Factory;
-            const count = categoryStats[category.code] || 0;
+            const catStats = categoryStats[category.code];
+            const count = catStats?.count || 0;
             
             return (
               <motion.div
@@ -330,14 +331,14 @@ const DataEntry = () => {
                 transition={{ delay: index * 0.05 }}
                 onClick={() => handleCategoryClick(category)}
                 data-testid={`category-card-${category.code}`}
-                className="category-card relative cursor-pointer"
+                className="relative cursor-pointer"
               >
                 <div
                   className="p-6 rounded-2xl text-white min-h-[140px] flex flex-col justify-between"
                   style={{ backgroundColor: category.color }}
                 >
                   {count > 0 && (
-                    <div className="absolute -top-2 -right-2 w-7 h-7 bg-white rounded-full flex items-center justify-center text-sm font-bold shadow-lg" style={{ color: category.color }}>
+                    <div className="absolute -top-2 -right-2 w-7 h-7 bg-white rounded-full flex items-center justify-center text-sm font-bold shadow-lg z-10" style={{ color: category.color }}>
                       {count}
                     </div>
                   )}
