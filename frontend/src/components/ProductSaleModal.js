@@ -16,8 +16,10 @@ import {
   Edit3,
   Plus,
   Trash2,
-  Calendar
+  Calendar,
+  History
 } from 'lucide-react';
+import ProductVersionsModal from './ProductVersionsModal';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL || '';
 
