@@ -106,6 +106,11 @@ const DataEntry = () => {
   // Product sale modal state
   const [showProductSaleModal, setShowProductSaleModal] = useState(false);
 
+  // Sale edit modal state (for editing linked sale activities)
+  const [showSaleEditModal, setShowSaleEditModal] = useState(false);
+  const [editingSaleId, setEditingSaleId] = useState(null);
+  const [editingProductId, setEditingProductId] = useState(null);
+
   // Reload data when fiscal year changes
   useEffect(() => {
     fetchData();
