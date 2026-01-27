@@ -85,7 +85,7 @@ const AdminFactorsTab = ({ factors, subcategories, onRefetch }) => {
     if (!config) return [];
 
     if (impactKey === 'scope3_3') {
-      return [{ value: 'activites_combustibles_energie', label: 'Activités liées aux combustibles et à l\'énergie' }];
+      return [{ value: 'activites_combustibles_energie', label: t('categories.activites_combustibles_energie') }];
     }
 
     return ALL_CATEGORIES.filter(cat => {
