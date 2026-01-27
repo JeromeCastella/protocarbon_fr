@@ -24,9 +24,26 @@ router = APIRouter(prefix="/products", tags=["Products"])
 
 
 @router.get("")
-async def get_products(current_user: dict = Depends(get_current_user)):
-    """Get all products for the current user"""
-    products = list(products_collection.find({"tenant_id": current_user["id"]}))
+async def get_products(
+    include_archived: bool = False,
+    current_user: dict = Depends(get_current_user)
+):
+    """Get all products for the current user (excludes archived by default)"""
+    query = {"tenant_id": current_user["id"]}
+    if not include_archived:
+        query["archived"] = {"$ne": True}
+    
+    products = list(products_collection.find(query))
+    return [serialize_doc(p) for p in products]
+
+
+@router.get("/archived")
+async def get_archived_products(current_user: dict = Depends(get_current_user)):
+    """Get all archived products for the current user"""
+    products = list(products_collection.find({
+        "tenant_id": current_user["id"],
+        "archived": True
+    }))
     return [serialize_doc(p) for p in products]
 
 
