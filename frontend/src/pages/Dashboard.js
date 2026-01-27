@@ -245,7 +245,27 @@ const Dashboard = () => {
   const fetchScopeBreakdown = async (fyId) => {
     try {
       const response = await axios.get(`${API_URL}/api/dashboard/scope-breakdown/${fyId}`);
-      setScopeBreakdown(response.data);
+      const data = response.data;
+      
+      // Transform scopes data for the chart
+      const scopeLabels = {
+        scope1: 'Scope 1',
+        scope2: 'Scope 2',
+        scope3_amont: 'Scope 3 Amont',
+        scope3_aval: 'Scope 3 Aval'
+      };
+      
+      const scope_data = Object.entries(data.scopes || {}).map(([scope, values]) => ({
+        name: scopeLabels[scope] || scope,
+        scope: scope,
+        emissions: values.total || 0,
+        categories: values.categories || {}
+      })).filter(s => s.emissions > 0); // Only show scopes with data
+      
+      setScopeBreakdown({
+        ...data,
+        scope_data
+      });
       setDrillDownScope(null);
     } catch (error) {
       console.error('Failed to fetch scope breakdown:', error);
