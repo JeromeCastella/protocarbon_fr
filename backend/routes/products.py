@@ -250,6 +250,7 @@ async def record_product_sale(
         usage_activity = {
             "tenant_id": current_user["id"],
             "company_id": current_user.get("company_id"),
+            "fiscal_year_id": fiscal_year_id,
             "category_id": "utilisation_produits",
             "subcategory_id": "utilisation_produits",
             "scope": "scope3_aval",
@@ -274,6 +275,7 @@ async def record_product_sale(
         disposal_activity = {
             "tenant_id": current_user["id"],
             "company_id": current_user.get("company_id"),
+            "fiscal_year_id": fiscal_year_id,
             "category_id": "fin_vie_produits",
             "subcategory_id": "fin_vie_produits",
             "scope": "scope3_aval",
