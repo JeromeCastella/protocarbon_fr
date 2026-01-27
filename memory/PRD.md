@@ -192,7 +192,7 @@ Application de calcul d'empreinte carbone selon le protocole GHG avec interface 
 
 ## Prioritized Backlog
 
-### P0 - Critical
+### P0 - Critical (TOUS TERMINÉS ✅)
 - [x] MVP fonctionnel
 - [x] Gestion des produits avec cycle de vie
 - [x] Gestion des exercices fiscaux
@@ -200,25 +200,29 @@ Application de calcul d'empreinte carbone selon le protocole GHG avec interface 
 - [x] Mode sombre fonctionnel
 - [x] Graphiques comparatifs entre exercices fiscaux (dashboard)
 - [x] Panneau Administration (facteurs d'émission + utilisateurs)
-- [x] Refonte Dashboard en 3 onglets (Suivi de saisie, Résultats, Avancé)
+- [x] Refonte Dashboard en 3 onglets (Suivi de saisie, Résultats, Objectifs)
 - [x] Versioning des facteurs d'émission par année
 - [x] Wizard configuration périmètre (Informations générales)
 - [x] Recalcul des émissions avec facteurs actuels
+- [x] **Nettoyage du backend** : server.py refactorisé (3556→29 lignes)
 
 ### P1 - High Priority
 - [ ] Rapports PDF/Excel exportables
+- [ ] Import en masse CSV (bulk upload activities)
+- [ ] Refactoring Frontend Admin.js (1900+ lignes → composants)
 - [ ] Objectifs long-term SBTi (Net-Zero 2050)
 
 ### P2 - Medium Priority
-- [ ] Import en masse CSV (bulk upload)
 - [ ] Améliorer la gamification (animations, badges pour jalons)
 - [ ] Notifications Toast (sonner) pour confirmations
+- [ ] Skeleton loaders au lieu de spinners
+- [ ] Audit Trail (historique des modifications)
 - [ ] Refactoring DataEntry.js (1200+ lignes → composants)
 
 ### P3 - Low Priority
 - [ ] API externe pour intégration
 - [ ] Mode collaboratif multi-utilisateurs par entreprise
-- [ ] Import en masse CSV (bulk upload)
+- [ ] Complétion traductions allemandes
 
 ## API Endpoints Clés
 
