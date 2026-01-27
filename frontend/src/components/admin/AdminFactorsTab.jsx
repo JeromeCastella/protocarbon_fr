@@ -333,7 +333,7 @@ const AdminFactorsTab = ({ factors, subcategories, onRefetch }) => {
             data-testid="factor-search"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Rechercher par nom, tag ou sous-catégorie..."
+            placeholder={t('common.search') + '...'}
             className={`w-full pl-10 pr-4 py-2 rounded-lg border ${isDark ? 'bg-slate-700 border-slate-600 text-white' : 'bg-white border-gray-200'}`}
           />
         </div>
@@ -343,7 +343,7 @@ const AdminFactorsTab = ({ factors, subcategories, onRefetch }) => {
           className="flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
         >
           <Plus className="w-5 h-5" />
-          Ajouter
+          {t('common.add')}
         </button>
         <button 
           data-testid="export-btn"
@@ -351,7 +351,7 @@ const AdminFactorsTab = ({ factors, subcategories, onRefetch }) => {
           className={`flex items-center gap-2 px-4 py-2 rounded-lg border ${isDark ? 'border-slate-600 hover:bg-slate-700' : 'border-gray-200 hover:bg-gray-50'}`}
         >
           <Download className="w-5 h-5" />
-          Exporter
+          {t('common.export')}
         </button>
         <button 
           data-testid="import-btn"
@@ -359,7 +359,7 @@ const AdminFactorsTab = ({ factors, subcategories, onRefetch }) => {
           className={`flex items-center gap-2 px-4 py-2 rounded-lg border ${isDark ? 'border-slate-600 hover:bg-slate-700' : 'border-gray-200 hover:bg-gray-50'}`}
         >
           <Upload className="w-5 h-5" />
-          Importer
+          {t('common.import')}
         </button>
       </div>
 
@@ -368,12 +368,12 @@ const AdminFactorsTab = ({ factors, subcategories, onRefetch }) => {
         <table className="w-full">
           <thead>
             <tr className={isDark ? 'bg-slate-700' : 'bg-gray-50'}>
-              <th className="text-left px-4 py-3 font-medium">Nom</th>
-              <th className="text-left px-4 py-3 font-medium">Sous-catégorie</th>
-              <th className="text-left px-4 py-3 font-medium">Impacts</th>
-              <th className="text-left px-4 py-3 font-medium">Version</th>
-              <th className="text-left px-4 py-3 font-medium">Source</th>
-              <th className="text-right px-4 py-3 font-medium">Actions</th>
+              <th className="text-left px-4 py-3 font-medium">{t('common.name')}</th>
+              <th className="text-left px-4 py-3 font-medium">{t('admin.factors.subcategory')}</th>
+              <th className="text-left px-4 py-3 font-medium">{t('admin.factors.impacts')}</th>
+              <th className="text-left px-4 py-3 font-medium">{t('common.version')}</th>
+              <th className="text-left px-4 py-3 font-medium">{t('emissionFactors.source')}</th>
+              <th className="text-right px-4 py-3 font-medium">{t('common.actions')}</th>
             </tr>
           </thead>
           <tbody>
@@ -392,11 +392,12 @@ const AdminFactorsTab = ({ factors, subcategories, onRefetch }) => {
                 >
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-2">
-                      <div className="font-medium">{factor.name_fr || factor.name}</div>
-                      {isArchived && <span className="px-1.5 py-0.5 text-xs rounded bg-red-500/20 text-red-500">Archivé</span>}
-                      {isReplaced && !isArchived && <span className="px-1.5 py-0.5 text-xs rounded bg-amber-500/20 text-amber-500">Remplacé</span>}
+                      <div className="font-medium">{language === 'de' ? (factor.name_de || factor.name_fr || factor.name) : (factor.name_fr || factor.name)}</div>
+                      {isArchived && <span className="px-1.5 py-0.5 text-xs rounded bg-red-500/20 text-red-500">{t('common.archived')}</span>}
+                      {isReplaced && !isArchived && <span className="px-1.5 py-0.5 text-xs rounded bg-amber-500/20 text-amber-500">{t('common.replaced')}</span>}
                     </div>
-                    {factor.name_de && <div className={`text-xs ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>{factor.name_de}</div>}
+                    {language === 'fr' && factor.name_de && <div className={`text-xs ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>{factor.name_de}</div>}
+                    {language === 'de' && factor.name_fr && <div className={`text-xs ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>{factor.name_fr}</div>}
                     {factor.tags?.length > 0 && (
                       <div className="flex flex-wrap gap-1 mt-1">
                         {factor.tags.slice(0, 3).map(tag => (
