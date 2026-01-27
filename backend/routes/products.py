@@ -253,6 +253,229 @@ async def restore_product(product_id: str, current_user: dict = Depends(get_curr
     return {"message": "Product restored"}
 
 
+# ==================== EMISSION PROFILES ====================
+
+@router.get("/{product_id}/emission-profiles")
+async def get_product_emission_profiles(
+    product_id: str,
+    current_user: dict = Depends(get_current_user)
+):
+    """Get all emission profiles for a product"""
+    product = products_collection.find_one({
+        "_id": ObjectId(product_id),
+        "tenant_id": current_user["id"]
+    })
+    
+    if not product:
+        raise HTTPException(status_code=404, detail="Product not found")
+    
+    # Get default values
+    default_profile = {
+        "fiscal_year_id": "default",
+        "fiscal_year_name": "Valeurs par défaut",
+        "manufacturing_emissions": product.get("manufacturing_emissions", 0),
+        "usage_emissions": product.get("usage_emissions", 0),
+        "disposal_emissions": product.get("disposal_emissions", 0),
+        "is_default": True
+    }
+    
+    # Get custom profiles
+    profiles = product.get("emission_profiles", [])
+    
+    # Enrich profiles with fiscal year names
+    for profile in profiles:
+        fy_id = profile.get("fiscal_year_id")
+        if fy_id:
+            fy = fiscal_years_collection.find_one({"_id": ObjectId(fy_id)})
+            if fy:
+                profile["fiscal_year_name"] = fy.get("name")
+                profile["start_date"] = fy.get("start_date")
+                profile["end_date"] = fy.get("end_date")
+    
+    return {
+        "product_id": product_id,
+        "product_name": product.get("name"),
+        "default_profile": default_profile,
+        "profiles": profiles
+    }
+
+
+@router.post("/{product_id}/emission-profiles")
+async def create_product_emission_profile(
+    product_id: str,
+    profile: ProductEmissionProfileCreate,
+    current_user: dict = Depends(get_current_user)
+):
+    """Create a new emission profile for a specific fiscal year"""
+    product = products_collection.find_one({
+        "_id": ObjectId(product_id),
+        "tenant_id": current_user["id"]
+    })
+    
+    if not product:
+        raise HTTPException(status_code=404, detail="Product not found")
+    
+    # Verify fiscal year exists
+    fiscal_year = fiscal_years_collection.find_one({"_id": ObjectId(profile.fiscal_year_id)})
+    if not fiscal_year:
+        raise HTTPException(status_code=404, detail="Fiscal year not found")
+    
+    # Check if profile already exists for this fiscal year
+    existing_profiles = product.get("emission_profiles", [])
+    for p in existing_profiles:
+        if p.get("fiscal_year_id") == profile.fiscal_year_id:
+            raise HTTPException(status_code=400, detail="Profile already exists for this fiscal year")
+    
+    # Create the new profile with values (use defaults if not provided)
+    new_profile = {
+        "fiscal_year_id": profile.fiscal_year_id,
+        "fiscal_year_name": fiscal_year.get("name"),
+        "manufacturing_emissions": profile.manufacturing_emissions if profile.manufacturing_emissions is not None else product.get("manufacturing_emissions", 0),
+        "usage_emissions": profile.usage_emissions if profile.usage_emissions is not None else product.get("usage_emissions", 0),
+        "disposal_emissions": profile.disposal_emissions if profile.disposal_emissions is not None else product.get("disposal_emissions", 0),
+        "change_reason": profile.change_reason,
+        "created_at": datetime.now(timezone.utc).isoformat()
+    }
+    
+    # Add to product
+    products_collection.update_one(
+        {"_id": ObjectId(product_id)},
+        {"$push": {"emission_profiles": new_profile}}
+    )
+    
+    return {
+        "message": "Emission profile created",
+        "profile": new_profile
+    }
+
+
+@router.put("/{product_id}/emission-profiles/{fiscal_year_id}")
+async def update_product_emission_profile(
+    product_id: str,
+    fiscal_year_id: str,
+    profile_update: ProductEmissionProfileUpdate,
+    current_user: dict = Depends(get_current_user)
+):
+    """Update an existing emission profile"""
+    product = products_collection.find_one({
+        "_id": ObjectId(product_id),
+        "tenant_id": current_user["id"]
+    })
+    
+    if not product:
+        raise HTTPException(status_code=404, detail="Product not found")
+    
+    # If updating default profile
+    if fiscal_year_id == "default":
+        update_fields = {}
+        if profile_update.manufacturing_emissions is not None:
+            update_fields["manufacturing_emissions"] = profile_update.manufacturing_emissions
+        if profile_update.usage_emissions is not None:
+            update_fields["usage_emissions"] = profile_update.usage_emissions
+        if profile_update.disposal_emissions is not None:
+            update_fields["disposal_emissions"] = profile_update.disposal_emissions
+        
+        if update_fields:
+            # Recalculate total emissions per unit
+            new_manufacturing = update_fields.get("manufacturing_emissions", product.get("manufacturing_emissions", 0))
+            new_usage = update_fields.get("usage_emissions", product.get("usage_emissions", 0))
+            new_disposal = update_fields.get("disposal_emissions", product.get("disposal_emissions", 0))
+            update_fields["total_emissions_per_unit"] = new_manufacturing + new_usage + new_disposal
+            
+            products_collection.update_one(
+                {"_id": ObjectId(product_id)},
+                {"$set": update_fields}
+            )
+        
+        return {"message": "Default profile updated"}
+    
+    # Find and update the specific profile
+    profiles = product.get("emission_profiles", [])
+    profile_found = False
+    
+    for i, p in enumerate(profiles):
+        if p.get("fiscal_year_id") == fiscal_year_id:
+            if profile_update.manufacturing_emissions is not None:
+                profiles[i]["manufacturing_emissions"] = profile_update.manufacturing_emissions
+            if profile_update.usage_emissions is not None:
+                profiles[i]["usage_emissions"] = profile_update.usage_emissions
+            if profile_update.disposal_emissions is not None:
+                profiles[i]["disposal_emissions"] = profile_update.disposal_emissions
+            if profile_update.change_reason is not None:
+                profiles[i]["change_reason"] = profile_update.change_reason
+            profiles[i]["updated_at"] = datetime.now(timezone.utc).isoformat()
+            profile_found = True
+            break
+    
+    if not profile_found:
+        raise HTTPException(status_code=404, detail="Profile not found for this fiscal year")
+    
+    products_collection.update_one(
+        {"_id": ObjectId(product_id)},
+        {"$set": {"emission_profiles": profiles}}
+    )
+    
+    return {"message": "Profile updated", "profile": profiles[i]}
+
+
+@router.delete("/{product_id}/emission-profiles/{fiscal_year_id}")
+async def delete_product_emission_profile(
+    product_id: str,
+    fiscal_year_id: str,
+    current_user: dict = Depends(get_current_user)
+):
+    """Delete an emission profile (cannot delete default)"""
+    if fiscal_year_id == "default":
+        raise HTTPException(status_code=400, detail="Cannot delete default profile")
+    
+    product = products_collection.find_one({
+        "_id": ObjectId(product_id),
+        "tenant_id": current_user["id"]
+    })
+    
+    if not product:
+        raise HTTPException(status_code=404, detail="Product not found")
+    
+    profiles = product.get("emission_profiles", [])
+    new_profiles = [p for p in profiles if p.get("fiscal_year_id") != fiscal_year_id]
+    
+    if len(new_profiles) == len(profiles):
+        raise HTTPException(status_code=404, detail="Profile not found")
+    
+    products_collection.update_one(
+        {"_id": ObjectId(product_id)},
+        {"$set": {"emission_profiles": new_profiles}}
+    )
+    
+    return {"message": "Profile deleted"}
+
+
+def get_product_emissions_for_fiscal_year(product: dict, fiscal_year_id: str) -> dict:
+    """
+    Helper function to get the appropriate emission values for a given fiscal year.
+    Returns the specific profile if it exists, otherwise returns the default values.
+    """
+    profiles = product.get("emission_profiles", [])
+    
+    # Look for a specific profile for this fiscal year
+    for profile in profiles:
+        if profile.get("fiscal_year_id") == fiscal_year_id:
+            return {
+                "manufacturing_emissions": profile.get("manufacturing_emissions", 0),
+                "usage_emissions": profile.get("usage_emissions", 0),
+                "disposal_emissions": profile.get("disposal_emissions", 0),
+                "profile_source": "specific"
+            }
+    
+    # Return default values
+    return {
+        "manufacturing_emissions": product.get("manufacturing_emissions", 0),
+        "usage_emissions": product.get("usage_emissions", 0),
+        "disposal_emissions": product.get("disposal_emissions", 0),
+        "profile_source": "default"
+    }
+
+
 @router.post("/{product_id}/sales")
 async def record_product_sale(
     product_id: str,
@@ -262,6 +485,7 @@ async def record_product_sale(
     """
     Record a product sale and create corresponding linked activities.
     All activities created from this sale are linked via a unique sale_id.
+    Uses the emission profile specific to the fiscal year if available.
     """
     product = products_collection.find_one({
         "_id": ObjectId(product_id),
