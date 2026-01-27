@@ -257,7 +257,7 @@ const AdminSubcategoriesTab = ({ subcategories, onRefetch }) => {
                   </div>
                   <div>
                     <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
-                      Nom DE *
+                      {t('admin.factors.nameDe')} *
                     </label>
                     <input
                       type="text"
@@ -273,7 +273,7 @@ const AdminSubcategoriesTab = ({ subcategories, onRefetch }) => {
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
-                      Icône
+                      {t('common.icon')}
                     </label>
                     <input
                       type="text"
@@ -285,7 +285,7 @@ const AdminSubcategoriesTab = ({ subcategories, onRefetch }) => {
                   </div>
                   <div>
                     <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
-                      Ordre
+                      {t('common.order')}
                     </label>
                     <input
                       type="number"
@@ -299,7 +299,7 @@ const AdminSubcategoriesTab = ({ subcategories, onRefetch }) => {
                 {/* Categories */}
                 <div>
                   <label className={`block text-sm font-medium mb-3 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
-                    Catégories liées (relation N-N)
+                    {t('admin.subcategories.linkedCategories')}
                   </label>
                   <div className="space-y-4">
                     {Object.entries(categoriesByScope).map(([scope, cats]) => (
@@ -317,7 +317,7 @@ const AdminSubcategoriesTab = ({ subcategories, onRefetch }) => {
                                 form.categories.includes(cat.value)
                                   ? 'bg-purple-500 text-white'
                                   : isDark 
-                                    ? 'bg-slate-700 text-slate-300 hover:bg-slate-600' 
+                                    ? 'bg-slate-700 text-slate-300 hover:bg-slate-600'
                                     : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                               }`}
                             >
