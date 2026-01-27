@@ -40,8 +40,7 @@ import {
   ArrowRight,
   Package,
   ShoppingBag,
-  RefreshCw,
-  Zap
+  RefreshCw
 } from 'lucide-react';
 import ProductSaleModal from '../components/ProductSaleModal';
 import GuidedEntryModal from '../components/GuidedEntryModal';
