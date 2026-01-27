@@ -24,7 +24,19 @@ Application de calcul d'empreinte carbone selon le protocole GHG avec interface 
 
 ## What's Been Implemented
 
-### 2026-01-26 (Session actuelle) - Refactoring Architecture
+### 2026-01-26 (Session actuelle) - Migration Routes + Tests Unitaires
+- **Routes migrées vers architecture modulaire** :
+  - `routes/auth.py` : Authentification (login, register, users)
+  - `routes/companies.py` : Gestion entreprises (CRUD)
+  - `routes/activities.py` : Activités avec pagination
+  - `routes/objectives.py` : Objectifs SBTi (CRUD + trajectory + recommendations)
+- **Tests unitaires pytest créés** (33 tests) :
+  - `test_auth.py` : 7 tests (password hashing, JWT tokens)
+  - `test_emissions.py` : 15 tests (calculs, conversions, snapshots, formatage)
+  - `test_models.py` : 11 tests (validation Pydantic)
+- **Documentation** : `ARCHITECTURE.md` mise à jour avec guide complet
+
+### 2026-01-26 (Session précédente) - Refactoring Architecture
 - **Backend restructuré** :
   - `config.py` : Configuration et connexion MongoDB
   - `models/__init__.py` : Tous les modèles Pydantic (User, Activity, EmissionFactor, etc.)
