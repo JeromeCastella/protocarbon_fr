@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useTheme } from '../context/ThemeContext';
+import { useLanguage } from '../context/LanguageContext';
 import axios from 'axios';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { 
   Package, 
   ShoppingBag,
@@ -10,19 +11,33 @@ import {
   Factory,
   Leaf,
   Recycle,
-  ArrowRight
+  ArrowRight,
+  Edit3,
+  Plus,
+  Trash2
 } from 'lucide-react';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL || '';
 
+/**
+ * Modal pour gérer les ventes totales d'un produit.
+ * - Si aucune vente n'existe : crée une nouvelle vente
+ * - Si une vente existe : permet de modifier le total (pas d'ajout de ligne)
+ */
 const ProductSaleModal = ({ isOpen, onClose, onSaleRecorded, preselectedProduct = null }) => {
   const { isDark } = useTheme();
+  const { language } = useLanguage();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
-  const [quantity, setQuantity] = useState(1);
+  const [quantity, setQuantity] = useState(0);
   const [year, setYear] = useState(new Date().getFullYear());
+  
+  // État pour la vente existante
+  const [existingSale, setExistingSale] = useState(null);
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
@@ -36,15 +51,27 @@ const ProductSaleModal = ({ isOpen, onClose, onSaleRecorded, preselectedProduct 
     }
   }, [preselectedProduct]);
 
+  // Quand un produit est sélectionné, charger ses ventes existantes
+  useEffect(() => {
+    if (selectedProduct) {
+      fetchProductSales(selectedProduct.id);
+    } else {
+      setExistingSale(null);
+      setQuantity(0);
+      setIsEditMode(false);
+    }
+  }, [selectedProduct]);
+
   const fetchProducts = async () => {
+    setLoading(true);
     try {
       const response = await axios.get(`${API_URL}/api/products`);
-      // Filter only enhanced products
-      const enhancedProducts = (response.data || []).filter(p => p.is_enhanced);
-      setProducts(enhancedProducts);
+      // Inclure tous les produits (enhanced et simples)
+      const allProducts = response.data || [];
+      setProducts(allProducts);
       
       if (preselectedProduct) {
-        const found = enhancedProducts.find(p => p.id === preselectedProduct.id);
+        const found = allProducts.find(p => p.id === preselectedProduct.id);
         if (found) setSelectedProduct(found);
       }
     } catch (error) {
@@ -54,38 +81,96 @@ const ProductSaleModal = ({ isOpen, onClose, onSaleRecorded, preselectedProduct 
     }
   };
 
+  const fetchProductSales = async (productId) => {
+    try {
+      const response = await axios.get(`${API_URL}/api/products/${productId}/sales`);
+      const sales = response.data?.sales || [];
+      
+      if (sales.length > 0) {
+        // Prendre la première vente (on gère un total unique par produit)
+        const sale = sales[0];
+        setExistingSale(sale);
+        setQuantity(sale.quantity || 0);
+        setIsEditMode(true);
+        
+        // Extraire l'année de la date
+        if (sale.date) {
+          const saleYear = parseInt(sale.date.split('-')[0]);
+          if (!isNaN(saleYear)) setYear(saleYear);
+        }
+      } else {
+        setExistingSale(null);
+        setQuantity(0);
+        setIsEditMode(false);
+      }
+    } catch (error) {
+      console.error('Failed to fetch product sales:', error);
+      setExistingSale(null);
+      setQuantity(0);
+      setIsEditMode(false);
+    }
+  };
+
   const handleSubmit = async () => {
-    if (!selectedProduct) return;
+    if (!selectedProduct || quantity <= 0) return;
     
     setSubmitting(true);
     try {
-      await axios.post(`${API_URL}/api/products/${selectedProduct.id}/sales`, {
-        product_id: selectedProduct.id,
-        quantity: quantity,
-        date: `${year}-01-01`  // Use year as date in YYYY-MM-DD format
-      });
+      if (isEditMode && existingSale?.sale_id) {
+        // Mettre à jour la vente existante
+        await axios.put(`${API_URL}/api/products/${selectedProduct.id}/sales/${existingSale.sale_id}`, {
+          quantity: quantity,
+          date: `${year}-01-01`
+        });
+      } else {
+        // Créer une nouvelle vente
+        await axios.post(`${API_URL}/api/products/${selectedProduct.id}/sales`, {
+          product_id: selectedProduct.id,
+          quantity: quantity,
+          date: `${year}-01-01`
+        });
+      }
       
       onSaleRecorded && onSaleRecorded();
       handleClose();
     } catch (error) {
-      console.error('Failed to record sale:', error);
+      console.error('Failed to save sale:', error);
     } finally {
       setSubmitting(false);
     }
   };
 
+  const handleDelete = async () => {
+    if (!selectedProduct || !existingSale?.sale_id) return;
+    
+    setSubmitting(true);
+    try {
+      await axios.delete(`${API_URL}/api/products/${selectedProduct.id}/sales/${existingSale.sale_id}`);
+      onSaleRecorded && onSaleRecorded();
+      handleClose();
+    } catch (error) {
+      console.error('Failed to delete sale:', error);
+    } finally {
+      setSubmitting(false);
+      setShowDeleteConfirm(false);
+    }
+  };
+
   const handleClose = () => {
     setSelectedProduct(preselectedProduct || null);
-    setQuantity(1);
+    setQuantity(0);
     setYear(new Date().getFullYear());
+    setExistingSale(null);
+    setIsEditMode(false);
+    setShowDeleteConfirm(false);
     onClose();
   };
 
   // Calculate emissions preview
-  const transformationTotal = selectedProduct ? quantity * (selectedProduct.transformation_emissions || 0) : 0;
-  const usageTotal = selectedProduct ? quantity * (selectedProduct.usage_emissions || 0) : 0;
-  const disposalTotal = selectedProduct ? quantity * (selectedProduct.disposal_emissions || 0) : 0;
-  const totalEmissions = transformationTotal + usageTotal + disposalTotal;
+  const manufacturingEmissions = selectedProduct ? quantity * (selectedProduct.manufacturing_emissions || 0) : 0;
+  const usageEmissions = selectedProduct ? quantity * (selectedProduct.usage_emissions || 0) : 0;
+  const disposalEmissions = selectedProduct ? quantity * (selectedProduct.disposal_emissions || 0) : 0;
+  const totalEmissions = manufacturingEmissions + usageEmissions + disposalEmissions;
 
   if (!isOpen) return null;
 
@@ -108,15 +193,25 @@ const ProductSaleModal = ({ isOpen, onClose, onSaleRecorded, preselectedProduct 
         <div className={`p-6 border-b ${isDark ? 'border-slate-700' : 'border-gray-200'}`}>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center">
-                <ShoppingBag className="w-5 h-5 text-white" />
+              <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
+                isEditMode 
+                  ? 'bg-gradient-to-br from-blue-500 to-blue-600' 
+                  : 'bg-gradient-to-br from-green-500 to-green-600'
+              }`}>
+                {isEditMode ? <Edit3 className="w-5 h-5 text-white" /> : <ShoppingBag className="w-5 h-5 text-white" />}
               </div>
               <div>
                 <h2 className={`text-lg font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                  Enregistrer des ventes
+                  {isEditMode 
+                    ? (language === 'fr' ? 'Modifier les ventes' : 'Verkäufe bearbeiten')
+                    : (language === 'fr' ? 'Enregistrer des ventes' : 'Verkäufe erfassen')
+                  }
                 </h2>
                 <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-                  Ventilation automatique dans le Scope 3 Aval
+                  {isEditMode 
+                    ? (language === 'fr' ? 'Ajustez le total des ventes' : 'Gesamtverkäufe anpassen')
+                    : (language === 'fr' ? 'Ventilation automatique Scope 3 Aval' : 'Automatische Scope 3 Downstream-Aufteilung')
+                  }
                 </p>
               </div>
             </div>
@@ -132,14 +227,51 @@ const ProductSaleModal = ({ isOpen, onClose, onSaleRecorded, preselectedProduct 
             <div className="flex items-center justify-center py-8">
               <div className="w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
             </div>
+          ) : showDeleteConfirm ? (
+            /* Delete Confirmation */
+            <div className="space-y-4">
+              <div className={`p-4 rounded-xl ${isDark ? 'bg-red-500/20 border border-red-500/30' : 'bg-red-50 border border-red-200'}`}>
+                <p className={`text-sm ${isDark ? 'text-red-200' : 'text-red-700'}`}>
+                  {language === 'fr' 
+                    ? `Supprimer toutes les ventes de "${selectedProduct?.name}" (${existingSale?.quantity} unités) et les activités associées ?`
+                    : `Alle Verkäufe von "${selectedProduct?.name}" (${existingSale?.quantity} Einheiten) und zugehörige Aktivitäten löschen?`
+                  }
+                </p>
+              </div>
+              <div className="flex gap-3">
+                <button
+                  onClick={() => setShowDeleteConfirm(false)}
+                  className={`flex-1 px-4 py-3 rounded-xl border ${
+                    isDark ? 'border-slate-600 hover:bg-slate-700 text-white' : 'border-gray-200 hover:bg-gray-50'
+                  }`}
+                >
+                  {language === 'fr' ? 'Annuler' : 'Abbrechen'}
+                </button>
+                <button
+                  onClick={handleDelete}
+                  disabled={submitting}
+                  className="flex-1 px-4 py-3 bg-red-500 text-white rounded-xl hover:bg-red-600 disabled:opacity-50 flex items-center justify-center gap-2"
+                >
+                  {submitting ? (
+                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  ) : (
+                    <Trash2 className="w-4 h-4" />
+                  )}
+                  {language === 'fr' ? 'Supprimer' : 'Löschen'}
+                </button>
+              </div>
+            </div>
           ) : products.length === 0 ? (
             <div className="text-center py-8">
               <Package className={`w-12 h-12 mx-auto mb-3 ${isDark ? 'text-slate-600' : 'text-gray-300'}`} />
               <p className={isDark ? 'text-slate-400' : 'text-gray-500'}>
-                Aucune fiche produit disponible.
+                {language === 'fr' ? 'Aucune fiche produit disponible.' : 'Keine Produktkarte verfügbar.'}
               </p>
               <p className={`text-sm mt-1 ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>
-                Créez d&apos;abord une fiche produit depuis le menu Produits.
+                {language === 'fr' 
+                  ? "Créez d'abord une fiche produit depuis le menu Produits."
+                  : 'Erstellen Sie zuerst eine Produktkarte im Menü Produkte.'
+                }
               </p>
             </div>
           ) : (
@@ -147,7 +279,7 @@ const ProductSaleModal = ({ isOpen, onClose, onSaleRecorded, preselectedProduct 
               {/* Product selection */}
               <div>
                 <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
-                  Produit *
+                  {language === 'fr' ? 'Produit' : 'Produkt'} *
                 </label>
                 <select
                   value={selectedProduct?.id || ''}
@@ -159,35 +291,52 @@ const ProductSaleModal = ({ isOpen, onClose, onSaleRecorded, preselectedProduct 
                   className={`w-full px-4 py-3 rounded-xl border transition-all focus:ring-2 focus:ring-blue-500 ${
                     isDark ? 'bg-slate-700 border-slate-600 text-white' : 'bg-white border-gray-200 text-gray-900'
                   } ${preselectedProduct ? 'opacity-75' : ''}`}
+                  data-testid="product-select"
                 >
-                  <option value="">Sélectionner un produit...</option>
+                  <option value="">{language === 'fr' ? 'Sélectionner un produit...' : 'Produkt auswählen...'}</option>
                   {products.map(p => (
                     <option key={p.id} value={p.id}>
-                      {p.name} ({(p.total_emissions_per_unit || 0).toFixed(2)} kgCO₂e/unité)
+                      {p.name} ({(p.total_emissions_per_unit || 0).toFixed(2)} kgCO₂e/{language === 'fr' ? 'unité' : 'Einheit'})
                     </option>
                   ))}
                 </select>
               </div>
 
+              {/* Mode indicator */}
+              {selectedProduct && isEditMode && (
+                <div className={`p-3 rounded-xl ${isDark ? 'bg-blue-500/20 border border-blue-500/30' : 'bg-blue-50 border border-blue-200'}`}>
+                  <div className="flex items-center gap-2">
+                    <Edit3 className="w-4 h-4 text-blue-500" />
+                    <span className={`text-sm ${isDark ? 'text-blue-300' : 'text-blue-700'}`}>
+                      {language === 'fr' 
+                        ? `Vente existante : ${existingSale?.quantity} unités. Modifiez le total ci-dessous.`
+                        : `Bestehender Verkauf: ${existingSale?.quantity} Einheiten. Ändern Sie die Gesamtzahl unten.`
+                      }
+                    </span>
+                  </div>
+                </div>
+              )}
+
               {/* Quantity and Year */}
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
-                    Quantité vendue *
+                    {language === 'fr' ? 'Total vendu' : 'Gesamtverkauf'} *
                   </label>
                   <input
                     type="number"
-                    min="1"
+                    min="0"
                     value={quantity}
-                    onChange={(e) => setQuantity(parseInt(e.target.value) || 1)}
+                    onChange={(e) => setQuantity(parseInt(e.target.value) || 0)}
                     className={`w-full px-4 py-3 rounded-xl border transition-all focus:ring-2 focus:ring-blue-500 ${
                       isDark ? 'bg-slate-700 border-slate-600 text-white' : 'bg-white border-gray-200 text-gray-900'
                     }`}
+                    data-testid="quantity-input"
                   />
                 </div>
                 <div>
                   <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
-                    Année de référence
+                    {language === 'fr' ? 'Année' : 'Jahr'}
                   </label>
                   <input
                     type="number"
@@ -198,19 +347,20 @@ const ProductSaleModal = ({ isOpen, onClose, onSaleRecorded, preselectedProduct 
                     className={`w-full px-4 py-3 rounded-xl border transition-all focus:ring-2 focus:ring-blue-500 ${
                       isDark ? 'bg-slate-700 border-slate-600 text-white' : 'bg-white border-gray-200 text-gray-900'
                     }`}
+                    data-testid="year-input"
                   />
                 </div>
               </div>
 
               {/* Emissions preview */}
-              {selectedProduct && (
+              {selectedProduct && quantity > 0 && (
                 <div className="space-y-3">
                   <p className={`text-sm font-medium ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
-                    Émissions générées par cette vente :
+                    {language === 'fr' ? 'Émissions totales :' : 'Gesamtemissionen:'}
                   </p>
                   
                   <div className="space-y-2">
-                    {transformationTotal > 0 && (
+                    {manufacturingEmissions > 0 && (
                       <div className={`flex items-center justify-between p-3 rounded-xl ${isDark ? 'bg-orange-500/20' : 'bg-orange-50'}`}>
                         <div className="flex items-center gap-2">
                           <Factory className="w-4 h-4 text-orange-500" />
@@ -219,35 +369,35 @@ const ProductSaleModal = ({ isOpen, onClose, onSaleRecorded, preselectedProduct 
                           </span>
                         </div>
                         <span className="font-medium text-orange-500">
-                          {(transformationTotal / 1000).toFixed(4)} tCO₂e
+                          {(manufacturingEmissions / 1000).toFixed(4)} tCO₂e
                         </span>
                       </div>
                     )}
                     
-                    {usageTotal > 0 && (
+                    {usageEmissions > 0 && (
                       <div className={`flex items-center justify-between p-3 rounded-xl ${isDark ? 'bg-green-500/20' : 'bg-green-50'}`}>
                         <div className="flex items-center gap-2">
                           <Leaf className="w-4 h-4 text-green-500" />
                           <span className={`text-sm ${isDark ? 'text-green-300' : 'text-green-700'}`}>
-                            Utilisation
+                            {language === 'fr' ? 'Utilisation' : 'Nutzung'}
                           </span>
                         </div>
                         <span className="font-medium text-green-500">
-                          {(usageTotal / 1000).toFixed(4)} tCO₂e
+                          {(usageEmissions / 1000).toFixed(4)} tCO₂e
                         </span>
                       </div>
                     )}
                     
-                    {disposalTotal > 0 && (
+                    {disposalEmissions > 0 && (
                       <div className={`flex items-center justify-between p-3 rounded-xl ${isDark ? 'bg-blue-500/20' : 'bg-blue-50'}`}>
                         <div className="flex items-center gap-2">
                           <Recycle className="w-4 h-4 text-blue-500" />
                           <span className={`text-sm ${isDark ? 'text-blue-300' : 'text-blue-700'}`}>
-                            Fin de vie
+                            {language === 'fr' ? 'Fin de vie' : 'Lebensende'}
                           </span>
                         </div>
                         <span className="font-medium text-blue-500">
-                          {(disposalTotal / 1000).toFixed(4)} tCO₂e
+                          {(disposalEmissions / 1000).toFixed(4)} tCO₂e
                         </span>
                       </div>
                     )}
@@ -264,7 +414,12 @@ const ProductSaleModal = ({ isOpen, onClose, onSaleRecorded, preselectedProduct 
                   
                   <div className={`flex items-center gap-2 text-xs ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
                     <ArrowRight className="w-3 h-3" />
-                    <span>Les émissions seront automatiquement ajoutées aux catégories Scope 3 Aval correspondantes</span>
+                    <span>
+                      {language === 'fr' 
+                        ? 'Les émissions seront automatiquement ventilées dans le Scope 3 Aval'
+                        : 'Emissionen werden automatisch in Scope 3 Downstream aufgeteilt'
+                      }
+                    </span>
                   </div>
                 </div>
               )}
@@ -273,28 +428,49 @@ const ProductSaleModal = ({ isOpen, onClose, onSaleRecorded, preselectedProduct 
         </div>
 
         {/* Footer */}
-        {products.length > 0 && (
+        {products.length > 0 && !showDeleteConfirm && (
           <div className={`p-6 border-t ${isDark ? 'border-slate-700' : 'border-gray-200'}`}>
             <div className="flex gap-3">
+              {/* Delete button (only in edit mode) */}
+              {isEditMode && existingSale && (
+                <button
+                  onClick={() => setShowDeleteConfirm(true)}
+                  className={`px-4 py-3 rounded-xl border transition-all ${
+                    isDark ? 'border-red-500/50 hover:bg-red-500/20 text-red-400' : 'border-red-200 hover:bg-red-50 text-red-600'
+                  }`}
+                  data-testid="delete-sale-btn"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              )}
+              
               <button
                 onClick={handleClose}
                 className={`flex-1 px-4 py-3 rounded-xl border transition-all ${
                   isDark ? 'border-slate-600 hover:bg-slate-700 text-white' : 'border-gray-200 hover:bg-gray-50 text-gray-900'
                 }`}
               >
-                Annuler
+                {language === 'fr' ? 'Annuler' : 'Abbrechen'}
               </button>
               <button
                 onClick={handleSubmit}
-                disabled={!selectedProduct || submitting}
-                className="flex-1 px-4 py-3 bg-green-500 text-white rounded-xl hover:bg-green-600 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+                disabled={!selectedProduct || quantity <= 0 || submitting}
+                className={`flex-1 px-4 py-3 text-white rounded-xl transition-all disabled:opacity-50 flex items-center justify-center gap-2 ${
+                  isEditMode ? 'bg-blue-500 hover:bg-blue-600' : 'bg-green-500 hover:bg-green-600'
+                }`}
+                data-testid="save-sale-btn"
               >
                 {submitting ? (
                   <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                ) : (
+                ) : isEditMode ? (
                   <Check className="w-5 h-5" />
+                ) : (
+                  <Plus className="w-5 h-5" />
                 )}
-                Enregistrer la vente
+                {isEditMode 
+                  ? (language === 'fr' ? 'Mettre à jour' : 'Aktualisieren')
+                  : (language === 'fr' ? 'Enregistrer' : 'Speichern')
+                }
               </button>
             </div>
           </div>
