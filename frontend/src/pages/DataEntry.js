@@ -814,6 +814,19 @@ const DataEntry = () => {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Sale Edit Modal (for editing/deleting linked sale activities) */}
+      <SaleEditModal
+        isOpen={showSaleEditModal}
+        onClose={() => {
+          setShowSaleEditModal(false);
+          setEditingSaleId(null);
+          setEditingProductId(null);
+        }}
+        saleId={editingSaleId}
+        productId={editingProductId}
+        onSaleUpdated={fetchData}
+      />
     </div>
   );
 };
