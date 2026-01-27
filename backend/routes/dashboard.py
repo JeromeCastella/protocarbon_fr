@@ -39,14 +39,25 @@ def get_default_categories():
 
 
 @router.get("/summary")
-async def get_dashboard_summary(current_user: dict = Depends(get_current_user)):
+async def get_dashboard_summary(
+    fiscal_year_id: Optional[str] = None,
+    current_user: dict = Depends(get_current_user)
+):
     """Get dashboard summary with emissions by scope"""
     # Get company info
     company = companies_collection.find_one({"tenant_id": current_user["id"]})
     excluded_categories = company.get("excluded_categories", []) if company else []
     
-    # Get all activities
-    activities = list(activities_collection.find({"tenant_id": current_user["id"]}))
+    # Build query - filter by fiscal year if specified
+    query = {"tenant_id": current_user["id"]}
+    
+    if fiscal_year_id:
+        fy = fiscal_years_collection.find_one({"_id": ObjectId(fiscal_year_id)})
+        if fy:
+            query["date"] = {"$gte": fy.get("start_date", ""), "$lte": fy.get("end_date", "")}
+    
+    # Get activities (filtered by fiscal year if specified)
+    activities = list(activities_collection.find(query))
     
     # Calculate emissions by scope
     scope_emissions = {
