@@ -8,6 +8,11 @@ from .auth import router as auth_router
 from .companies import router as companies_router
 from .activities import router as activities_router
 from .objectives import router as objectives_router
+from .dashboard import router as dashboard_router
+from .fiscal_years import router as fiscal_years_router
+from .products import router as products_router
+from .reference_data import router as reference_data_router
+from .admin import router as admin_router
 
 # Create main API router
 api_router = APIRouter(prefix="/api")
@@ -17,6 +22,11 @@ api_router.include_router(auth_router)
 api_router.include_router(companies_router)
 api_router.include_router(activities_router)
 api_router.include_router(objectives_router)
+api_router.include_router(dashboard_router)
+api_router.include_router(fiscal_years_router)
+api_router.include_router(products_router)
+api_router.include_router(reference_data_router)
+api_router.include_router(admin_router)
 
 # Export for use in main app
 __all__ = ["api_router"]
