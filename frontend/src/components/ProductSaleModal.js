@@ -144,7 +144,7 @@ const ProductSaleModal = ({ isOpen, onClose, onSaleRecorded, preselectedProduct 
         await axios.post(`${API_URL}/api/products/${selectedProduct.id}/sales`, {
           product_id: selectedProduct.id,
           quantity: quantity,
-          date: `${year}-01-01`
+          date: saleDate
         });
       }
       
@@ -176,7 +176,7 @@ const ProductSaleModal = ({ isOpen, onClose, onSaleRecorded, preselectedProduct 
   const handleClose = () => {
     setSelectedProduct(preselectedProduct || null);
     setQuantity(0);
-    setYear(new Date().getFullYear());
+    setSaleDate(currentFiscalYear?.start_date || '');
     setExistingSale(null);
     setIsEditMode(false);
     setShowDeleteConfirm(false);
