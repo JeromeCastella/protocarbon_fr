@@ -216,7 +216,13 @@
     "categories": "catégories",
     "quickActions": "Actions rapides",
     "importCSV": "Import CSV",
-    "exportData": "Exporter les données"
+    "exportData": "Exporter les données",
+    "category33": {
+      "title": "Catégorie 3.3 - Calcul automatique",
+      "message": "Cette catégorie représente les émissions liées à l'extraction, au transport et à la distribution des combustibles et de l'énergie consommés par votre organisation.",
+      "autoCalculated": "Ces émissions sont calculées automatiquement à partir de vos saisies dans les Scopes 1 et 2 (combustibles et électricité).",
+      "noAction": "Aucune saisie manuelle n'est nécessaire pour cette catégorie."
+    }
   },
   "activity": {
     "name": "Nom de l'activité",
