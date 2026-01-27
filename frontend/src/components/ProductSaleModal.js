@@ -346,7 +346,7 @@ const ProductSaleModal = ({ isOpen, onClose, onSaleRecorded, preselectedProduct 
                 </div>
               )}
 
-              {/* Quantity and Year */}
+              {/* Quantity and Date */}
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
@@ -365,18 +365,18 @@ const ProductSaleModal = ({ isOpen, onClose, onSaleRecorded, preselectedProduct 
                 </div>
                 <div>
                   <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
-                    {language === 'fr' ? 'Année' : 'Jahr'}
+                    {language === 'fr' ? 'Date' : 'Datum'}
                   </label>
                   <input
-                    type="number"
-                    min="2000"
-                    max="2100"
-                    value={year}
-                    onChange={(e) => setYear(parseInt(e.target.value) || new Date().getFullYear())}
+                    type="date"
+                    value={saleDate}
+                    min={currentFiscalYear?.start_date}
+                    max={currentFiscalYear?.end_date}
+                    onChange={(e) => setSaleDate(e.target.value)}
                     className={`w-full px-4 py-3 rounded-xl border transition-all focus:ring-2 focus:ring-blue-500 ${
                       isDark ? 'bg-slate-700 border-slate-600 text-white' : 'bg-white border-gray-200 text-gray-900'
                     }`}
-                    data-testid="year-input"
+                    data-testid="date-input"
                   />
                 </div>
               </div>
