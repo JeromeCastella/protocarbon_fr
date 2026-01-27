@@ -268,7 +268,7 @@ const AdminFactorsTab = ({ factors, subcategories, onRefetch }) => {
       onRefetch();
     } catch (error) {
       console.error('Failed to create new version:', error);
-      alert('Erreur: ' + (error.response?.data?.detail || error.message));
+      alert(t('errors.generic') + ': ' + (error.response?.data?.detail || error.message));
     }
   };
 
@@ -287,7 +287,7 @@ const AdminFactorsTab = ({ factors, subcategories, onRefetch }) => {
       setShowHistoryModal(true);
     } catch (error) {
       console.error('Failed to fetch history:', error);
-      alert('Erreur: ' + (error.response?.data?.detail || error.message));
+      alert(t('errors.generic') + ': ' + (error.response?.data?.detail || error.message));
     }
   };
 
@@ -304,7 +304,7 @@ const AdminFactorsTab = ({ factors, subcategories, onRefetch }) => {
       a.click();
     } catch (error) {
       console.error('Export failed:', error);
-      alert('Erreur lors de l\'export');
+      alert(t('errors.generic'));
     }
   };
 
@@ -315,10 +315,10 @@ const AdminFactorsTab = ({ factors, subcategories, onRefetch }) => {
       setShowImportModal(false);
       setImportData('');
       onRefetch();
-      alert('Import réussi !');
+      alert(t('admin.import.success'));
     } catch (error) {
       console.error('Import failed:', error);
-      alert('Erreur lors de l\'import: ' + error.message);
+      alert(t('errors.generic') + ': ' + error.message);
     }
   };
 
