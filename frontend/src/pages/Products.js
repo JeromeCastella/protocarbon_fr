@@ -301,36 +301,38 @@ const Products = () => {
                     )}
                   </div>
 
-                  {/* Total emissions */}
-                  <div className={`p-3 rounded-xl ${isDark ? 'bg-slate-700' : 'bg-gray-100'}`}>>
+                  {/* Total emissions per unit */}
+                  <div className={`p-3 rounded-xl ${isDark ? 'bg-slate-700' : 'bg-gray-100'}`}>
                     <div className="flex items-center justify-between">
                       <span className={`font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                        Total par unité
+                        {language === 'fr' ? 'Total par unité' : 'Gesamt pro Einheit'}
                       </span>
                       <span className="text-lg font-bold text-purple-500">
-                        {(product.total_emissions_per_unit || 0).toFixed(3)} kgCO₂e
+                        {activeTotal.toFixed(3)} kgCO₂e
                       </span>
                     </div>
                   </div>
 
-                  {/* Sales info */}
-                  {salesInfo.quantity > 0 && (
+                  {/* Sales info for current fiscal year */}
+                  {fyQuantity > 0 && (
                     <div className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-                      {salesInfo.quantity} unités vendues • {(salesInfo.emissions / 1000).toFixed(2)} tCO₂e générés
+                      <ShoppingBag className="w-4 h-4 inline mr-1" />
+                      {fyQuantity} {language === 'fr' ? 'unités vendues' : 'verkaufte Einheiten'}
+                      {currentFiscalYear && (
+                        <span className="opacity-75"> ({currentFiscalYear.name})</span>
+                      )}
                     </div>
                   )}
 
                   {/* Record Sale Button */}
-                  {isEnhanced && (
-                    <button
-                      onClick={() => handleRecordSale(product)}
-                      data-testid={`record-sale-${product.id}`}
-                      className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-xl hover:from-green-600 hover:to-green-700 transition-all"
-                    >
-                      <ShoppingBag className="w-5 h-5" />
-                      Enregistrer des ventes
-                    </button>
-                  )}
+                  <button
+                    onClick={() => handleRecordSale(product)}
+                    data-testid={`record-sale-${product.id}`}
+                    className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-xl hover:from-green-600 hover:to-green-700 transition-all"
+                  >
+                    <ShoppingBag className="w-5 h-5" />
+                    {language === 'fr' ? 'Enregistrer des ventes' : 'Verkäufe erfassen'}
+                  </button>
                 </div>
               </motion.div>
             );
@@ -358,6 +360,18 @@ const Products = () => {
         }}
         onSaleRecorded={fetchProducts}
         preselectedProduct={selectedProduct}
+      />
+
+      {/* Product Versions Modal */}
+      <ProductVersionsModal
+        isOpen={showVersionsModal}
+        onClose={() => {
+          setShowVersionsModal(false);
+          setSelectedProduct(null);
+        }}
+        productId={selectedProduct?.id}
+        productName={selectedProduct?.name}
+        onProfileUpdated={fetchProducts}
       />
     </div>
   );
