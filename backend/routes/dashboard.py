@@ -127,9 +127,20 @@ async def get_dashboard_summary(
 
 
 @router.get("/category-stats")
-async def get_category_stats(current_user: dict = Depends(get_current_user)):
+async def get_category_stats(
+    fiscal_year_id: Optional[str] = None,
+    current_user: dict = Depends(get_current_user)
+):
     """Get statistics by category"""
-    activities = list(activities_collection.find({"tenant_id": current_user["id"]}))
+    # Build query - filter by fiscal year if specified
+    query = {"tenant_id": current_user["id"]}
+    
+    if fiscal_year_id:
+        fy = fiscal_years_collection.find_one({"_id": ObjectId(fiscal_year_id)})
+        if fy:
+            query["date"] = {"$gte": fy.get("start_date", ""), "$lte": fy.get("end_date", "")}
+    
+    activities = list(activities_collection.find(query))
     
     stats = {}
     for activity in activities:
