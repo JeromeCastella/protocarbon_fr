@@ -107,8 +107,20 @@ const Products = () => {
             {t('products.title')}
           </h1>
           <p className={`mt-2 ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-            Gérez vos fiches produits et leurs impacts carbone sur tout le cycle de vie
+            {language === 'fr' 
+              ? 'Gérez vos fiches produits et leurs impacts carbone sur tout le cycle de vie'
+              : 'Verwalten Sie Ihre Produktkarten und deren CO₂-Auswirkungen über den gesamten Lebenszyklus'
+            }
           </p>
+          {/* Fiscal year indicator */}
+          {currentFiscalYear && (
+            <div className={`mt-2 inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm ${
+              isDark ? 'bg-purple-500/20 text-purple-300' : 'bg-purple-100 text-purple-700'
+            }`}>
+              <Clock className="w-4 h-4" />
+              {currentFiscalYear.name}
+            </div>
+          )}
         </div>
         <button
           onClick={() => {
@@ -119,7 +131,7 @@ const Products = () => {
           className="flex items-center gap-2 px-6 py-3 bg-blue-500 text-white rounded-xl hover:bg-blue-600 transition-all shadow-lg shadow-blue-500/30"
         >
           <Plus className="w-5 h-5" />
-          Créer une fiche produit
+          {language === 'fr' ? 'Créer une fiche produit' : 'Produktkarte erstellen'}
         </button>
       </div>
 
@@ -128,10 +140,13 @@ const Products = () => {
         <div className={`text-center py-16 rounded-2xl ${isDark ? 'bg-slate-800' : 'bg-white shadow-lg'}`}>
           <Package className={`w-16 h-16 mx-auto mb-4 ${isDark ? 'text-slate-600' : 'text-gray-300'}`} />
           <p className={`text-lg mb-2 ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-            Aucun produit défini
+            {language === 'fr' ? 'Aucun produit défini' : 'Keine Produkte definiert'}
           </p>
           <p className={`text-sm mb-6 ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>
-            Créez votre première fiche produit pour commencer à suivre les émissions de vos produits vendus.
+            {language === 'fr' 
+              ? 'Créez votre première fiche produit pour commencer à suivre les émissions de vos produits vendus.'
+              : 'Erstellen Sie Ihre erste Produktkarte, um die Emissionen Ihrer verkauften Produkte zu verfolgen.'
+            }
           </p>
           <button
             onClick={() => setShowWizard(true)}
