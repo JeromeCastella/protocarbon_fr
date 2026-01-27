@@ -24,7 +24,7 @@ Application de calcul d'empreinte carbone selon le protocole GHG avec interface 
 
 ## What's Been Implemented
 
-### 2026-01-27 (Session actuelle) - Nettoyage Backend (P0) + Refactoring Admin.js (P1) ✅
+### 2026-01-27 (Session actuelle) - Nettoyage Backend (P0) + Refactoring Admin.js (P1) + Traductions (P1) ✅
 - **Nettoyage complet de `server.py`** :
   - Réduction de 3556 lignes → 29 lignes (99% de réduction)
   - Le fichier ne contient plus que : FastAPI init, CORS, import du routeur modulaire, health check
@@ -37,10 +37,15 @@ Application de calcul d'empreinte carbone selon le protocole GHG avec interface 
     - `AdminHeader.jsx` (25 lignes) : En-tête de la page
     - `AdminTabs.jsx` (35 lignes) : Navigation par onglets
   - Nouveau hook `/app/frontend/src/hooks/useAdminData.js` (106 lignes) : Gestion des données admin
+- **Mise à jour complète des traductions FR/DE** :
+  - Fichiers `fr.json` et `de.json` enrichis avec ~300 nouvelles clés
+  - Sections ajoutées : `dashboard`, `admin`, `fiscalYear`, `errors`, `confirmations`
+  - Tous les composants Admin maintenant entièrement traduits
+  - Affichage dynamique des noms selon la langue (nom_fr/nom_de)
 - **Validation complète** :
   - 33 tests unitaires pytest backend passent
   - Tous les onglets Admin fonctionnent (Facteurs, Sous-catégories, Utilisateurs)
-  - Frontend et backend validés avec screenshots
+  - Interface testée en français et en allemand
 
 ### 2026-01-26 (Session précédente) - Migration Routes + Tests Unitaires
 - **Routes migrées vers architecture modulaire** :
