@@ -185,16 +185,72 @@ async def update_product(
 
 @router.delete("/{product_id}")
 async def delete_product(product_id: str, current_user: dict = Depends(get_current_user)):
-    """Delete a product"""
-    result = products_collection.delete_one({
+    """
+    Delete or archive a product.
+    - If the product has sales on any fiscal year → archive (soft delete)
+    - If the product has no sales → delete permanently
+    """
+    product = products_collection.find_one({
         "_id": ObjectId(product_id),
         "tenant_id": current_user["id"]
     })
     
-    if result.deleted_count == 0:
+    if not product:
         raise HTTPException(status_code=404, detail="Product not found")
     
-    return {"message": "Product deleted"}
+    # Check if product has any sales (activities linked to it)
+    sales_count = activities_collection.count_documents({
+        "product_id": product_id,
+        "tenant_id": current_user["id"]
+    })
+    
+    # Also check sales_history in the product document
+    sales_history = product.get("sales_history", [])
+    
+    if sales_count > 0 or len(sales_history) > 0:
+        # Archive the product (soft delete)
+        products_collection.update_one(
+            {"_id": ObjectId(product_id)},
+            {
+                "$set": {
+                    "archived": True,
+                    "archived_at": datetime.now(timezone.utc).isoformat()
+                }
+            }
+        )
+        return {
+            "message": "Product archived",
+            "archived": True,
+            "reason": f"Product has {sales_count} activities and {len(sales_history)} sales records"
+        }
+    else:
+        # No sales, delete permanently
+        products_collection.delete_one({"_id": ObjectId(product_id)})
+        return {
+            "message": "Product deleted",
+            "archived": False
+        }
+
+
+@router.put("/{product_id}/restore")
+async def restore_product(product_id: str, current_user: dict = Depends(get_current_user)):
+    """Restore an archived product"""
+    result = products_collection.update_one(
+        {
+            "_id": ObjectId(product_id),
+            "tenant_id": current_user["id"],
+            "archived": True
+        },
+        {
+            "$set": {"archived": False},
+            "$unset": {"archived_at": ""}
+        }
+    )
+    
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Archived product not found")
+    
+    return {"message": "Product restored"}
 
 
 @router.post("/{product_id}/sales")
