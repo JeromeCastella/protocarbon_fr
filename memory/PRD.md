@@ -24,7 +24,18 @@ Application de calcul d'empreinte carbone selon le protocole GHG avec interface 
 
 ## What's Been Implemented
 
-### 2026-01-26 (Session actuelle) - Migration Routes + Tests Unitaires
+### 2026-01-27 (Session actuelle) - Nettoyage Backend (P0 TERMINÉ ✅)
+- **Nettoyage complet de `server.py`** :
+  - Réduction de 3556 lignes → 29 lignes (99% de réduction)
+  - Le fichier ne contient plus que : FastAPI init, CORS, import du routeur modulaire, health check
+  - Suppression de tout le code mort (anciennes routes, modèles dupliqués, helpers)
+- **Validation complète** :
+  - 33 tests unitaires pytest passent
+  - Tous les endpoints API fonctionnent (login, dashboard, objectives, etc.)
+  - Frontend fonctionne correctement
+- **Documentation `ARCHITECTURE.md` mise à jour** avec la nouvelle structure
+
+### 2026-01-26 (Session précédente) - Migration Routes + Tests Unitaires
 - **Routes migrées vers architecture modulaire** :
   - `routes/auth.py` : Authentification (login, register, users)
   - `routes/companies.py` : Gestion entreprises (CRUD)
