@@ -385,6 +385,38 @@ const ProductSaleModal = ({ isOpen, onClose, onSaleRecorded, preselectedProduct 
                 </div>
               )}
 
+              {/* Active profile indicator */}
+              {selectedProduct && activeProfile && (
+                <div className={`p-3 rounded-xl flex items-center justify-between ${
+                  activeProfile.source === 'specific' 
+                    ? (isDark ? 'bg-purple-500/20 border border-purple-500/30' : 'bg-purple-50 border border-purple-200')
+                    : (isDark ? 'bg-slate-700/50' : 'bg-gray-50')
+                }`}>
+                  <div className="flex items-center gap-2">
+                    <History className={`w-4 h-4 ${activeProfile.source === 'specific' ? 'text-purple-500' : (isDark ? 'text-slate-400' : 'text-gray-500')}`} />
+                    <span className={`text-sm ${activeProfile.source === 'specific' ? (isDark ? 'text-purple-300' : 'text-purple-700') : (isDark ? 'text-slate-300' : 'text-gray-600')}`}>
+                      {activeProfile.source === 'specific'
+                        ? (language === 'fr' ? `Profil ${currentFiscalYear?.name}` : `Profil ${currentFiscalYear?.name}`)
+                        : (language === 'fr' ? 'Profil par défaut' : 'Standardprofil')
+                      }
+                    </span>
+                    <span className={`text-xs ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+                      ({(profileManufacturing + profileUsage + profileDisposal).toFixed(2)} kgCO₂e/{language === 'fr' ? 'unité' : 'Einheit'})
+                    </span>
+                  </div>
+                  <button
+                    onClick={() => setShowVersionsModal(true)}
+                    className={`px-2 py-1 text-xs rounded-lg flex items-center gap-1 transition-colors ${
+                      isDark ? 'hover:bg-slate-600 text-slate-300' : 'hover:bg-gray-200 text-gray-600'
+                    }`}
+                    data-testid="manage-versions-btn"
+                  >
+                    <Edit3 className="w-3 h-3" />
+                    {language === 'fr' ? 'Gérer' : 'Verwalten'}
+                  </button>
+                </div>
+              )}
+
               {/* Quantity and Date */}
               <div className="grid grid-cols-2 gap-4">
                 <div>
