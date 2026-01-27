@@ -1,17 +1,19 @@
 import React from 'react';
 import { useTheme } from '../../context/ThemeContext';
+import { useLanguage } from '../../context/LanguageContext';
 import axios from 'axios';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL || '';
 
 const AdminUsersTab = ({ users, currentUserId, onRefetch }) => {
   const { isDark } = useTheme();
+  const { t } = useLanguage();
 
   const handleToggleRole = async (userId, currentRole) => {
     const newRole = currentRole === 'admin' ? 'user' : 'admin';
     
     if (userId === currentUserId && newRole === 'user') {
-      if (!window.confirm('Vous allez retirer vos droits admin. Continuer ?')) return;
+      if (!window.confirm(t('confirmations.removeAdminSelf'))) return;
     }
     
     try {
@@ -19,7 +21,7 @@ const AdminUsersTab = ({ users, currentUserId, onRefetch }) => {
       onRefetch();
     } catch (error) {
       console.error('Failed to update user role:', error);
-      alert('Erreur lors de la mise à jour du rôle');
+      alert(t('errors.generic'));
     }
   };
 
@@ -28,11 +30,11 @@ const AdminUsersTab = ({ users, currentUserId, onRefetch }) => {
       <table className="w-full">
         <thead>
           <tr className={isDark ? 'bg-slate-700' : 'bg-gray-50'}>
-            <th className="text-left px-4 py-3 font-medium">Email</th>
-            <th className="text-left px-4 py-3 font-medium">Nom</th>
-            <th className="text-left px-4 py-3 font-medium">Rôle</th>
-            <th className="text-left px-4 py-3 font-medium">Date création</th>
-            <th className="text-right px-4 py-3 font-medium">Actions</th>
+            <th className="text-left px-4 py-3 font-medium">{t('admin.users.email')}</th>
+            <th className="text-left px-4 py-3 font-medium">{t('admin.users.name')}</th>
+            <th className="text-left px-4 py-3 font-medium">{t('admin.users.role')}</th>
+            <th className="text-left px-4 py-3 font-medium">{t('admin.users.createdAt')}</th>
+            <th className="text-right px-4 py-3 font-medium">{t('common.actions')}</th>
           </tr>
         </thead>
         <tbody>
@@ -50,10 +52,10 @@ const AdminUsersTab = ({ users, currentUserId, onRefetch }) => {
                     ? 'bg-amber-500/20 text-amber-500' 
                     : isDark ? 'bg-slate-600 text-slate-300' : 'bg-gray-100 text-gray-600'
                 }`}>
-                  {u.role === 'admin' ? 'Admin' : 'Utilisateur'}
+                  {u.role === 'admin' ? t('auth.admin') : t('auth.user')}
                 </span>
                 {u.id === currentUserId && (
-                  <span className={`ml-2 text-xs ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>(Vous)</span>
+                  <span className={`ml-2 text-xs ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>({t('auth.you')})</span>
                 )}
               </td>
               <td className="px-4 py-3 text-sm">
@@ -69,7 +71,7 @@ const AdminUsersTab = ({ users, currentUserId, onRefetch }) => {
                       : 'bg-green-500/10 text-green-500 hover:bg-green-500/20'
                   }`}
                 >
-                  {u.role === 'admin' ? 'Retirer admin' : 'Promouvoir admin'}
+                  {u.role === 'admin' ? t('auth.removeAdmin') : t('auth.promoteAdmin')}
                 </button>
               </td>
             </tr>
