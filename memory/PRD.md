@@ -276,4 +276,6 @@ Application de calcul d'empreinte carbone selon le protocole GHG avec interface 
 - `/app/frontend/src/components/FiscalYearSelector.js` - Sélecteur d'exercice
 - `/app/frontend/src/pages/FiscalYears.js` - Page gestion exercices
 - `/app/frontend/src/components/ProductWizard.js` - Wizard création produit
-- `/app/backend/server.py` - API complète (incl. endpoints admin)
+- `/app/frontend/src/components/SaleEditModal.js` - Modal édition/suppression vente groupée
+- `/app/backend/routes/products.py` - API ventes avec sale_id
+- `/app/backend/server.py` - Point d'entrée FastAPI
