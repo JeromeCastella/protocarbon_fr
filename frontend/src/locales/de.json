@@ -15,7 +15,41 @@
     "next": "Weiter",
     "previous": "Zurück",
     "export": "Exportieren",
-    "import": "Importieren"
+    "import": "Importieren",
+    "actions": "Aktionen",
+    "create": "Erstellen",
+    "archive": "Archivieren",
+    "archived": "Archiviert",
+    "replaced": "Ersetzt",
+    "version": "Version",
+    "history": "Verlauf",
+    "all": "Alle",
+    "none": "Keine",
+    "yes": "Ja",
+    "no": "Nein",
+    "or": "oder",
+    "and": "und",
+    "from": "Von",
+    "to": "Bis",
+    "since": "Seit",
+    "current": "Aktuell",
+    "total": "Gesamt",
+    "details": "Details",
+    "description": "Beschreibung",
+    "status": "Status",
+    "active": "Aktiv",
+    "inactive": "Inaktiv",
+    "name": "Name",
+    "code": "Code",
+    "order": "Reihenfolge",
+    "icon": "Symbol",
+    "year": "Jahr",
+    "date": "Datum",
+    "createdAt": "Erstellungsdatum",
+    "updatedAt": "Änderungsdatum",
+    "filter": "Filtern",
+    "noData": "Keine Daten",
+    "selectOption": "Auswählen..."
   },
   "auth": {
     "login": "Anmelden",
@@ -29,7 +63,13 @@
     "hasAccount": "Bereits ein Konto?",
     "createAccount": "Konto erstellen",
     "welcome": "Willkommen",
-    "welcomeBack": "Willkommen zurück"
+    "welcomeBack": "Willkommen zurück",
+    "role": "Rolle",
+    "admin": "Administrator",
+    "user": "Benutzer",
+    "you": "Sie",
+    "promoteAdmin": "Zum Admin befördern",
+    "removeAdmin": "Admin entfernen"
   },
   "nav": {
     "dashboard": "Dashboard",
@@ -62,15 +102,108 @@
   },
   "scope": {
     "perimeter": "Umfang der CO2-Bilanz",
-    "perimeterDesc": "Wählen Sie die Kategorien aus, die von Ihrer CO2-Bilanz ausgeschlossen werden sollen. Ausgeschlossene Kategorien werden nicht in der Dateneingabe angezeigt.",
+    "perimeterDesc": "Wählen Sie die Kategorien aus, die von Ihrer CO2-Bilanz ausgeschlossen werden sollen.",
     "scope1": "Scope 1",
     "scope1Title": "Direkte Emissionen",
     "scope2": "Scope 2",
     "scope2Title": "Indirekte Energie",
-    "scope3Amont": "Scope 3",
+    "scope3Amont": "Scope 3 Vorgelagert",
     "scope3AmontTitle": "Vorgelagert",
-    "scope3Aval": "Scope 3",
+    "scope3Aval": "Scope 3 Nachgelagert",
     "scope3AvalTitle": "Nachgelagert"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "tabs": {
+      "tracking": "Erfassungsfortschritt",
+      "results": "Ergebnisse",
+      "objectives": "Ziele"
+    },
+    "tracking": {
+      "title": "Fortschrittsverfolgung",
+      "subtitle": "Verfolgen Sie den Fortschritt Ihrer Emissionsdatenerfassung",
+      "progress": "Gesamtfortschritt",
+      "totalEmissions": "Gesamtemissionen",
+      "dataPoints": "Datenpunkte",
+      "categoriesCompleted": "Abgeschlossene Kategorien",
+      "entriesCount": "Anzahl der Einträge",
+      "incomplete": "Unvollständig",
+      "complete": "Vollständig",
+      "noEntries": "Keine Einträge",
+      "progressByScope": "Fortschritt nach Scope"
+    },
+    "results": {
+      "title": "Ergebnisse",
+      "subtitle": "Analyse Ihrer CO2-Emissionen",
+      "totalEmissions": "Gesamtemissionen",
+      "comparedToPrevious": "vs. vorheriges Geschäftsjahr",
+      "byScope": "Aufteilung nach Scope",
+      "byCategory": "Aufteilung nach Kategorie",
+      "topCategories": "Top emittierende Kategorien",
+      "evolution": "Emissionsentwicklung",
+      "comparison": "Vergleich zwischen Geschäftsjahren",
+      "currentFiscalYear": "Aktuelles Geschäftsjahr",
+      "previousFiscalYear": "Vorheriges Geschäftsjahr",
+      "noDataForPeriod": "Keine Daten für diesen Zeitraum"
+    },
+    "objectives": {
+      "title": "SBTi-Ziele",
+      "subtitle": "Definieren und verfolgen Sie Ihre Emissionsreduktionsziele",
+      "defineObjective": "Ziel definieren",
+      "editObjective": "Ziel bearbeiten",
+      "noObjective": "Kein Ziel definiert",
+      "noObjectiveDesc": "Definieren Sie ein Reduktionsziel, um Ihren CO2-Pfad zu verfolgen",
+      "referenceYear": "Referenzjahr",
+      "targetYear": "Zieljahr",
+      "baselineEmissions": "Referenzemissionen",
+      "targetEmissions": "Zielemissionen",
+      "currentEmissions": "Aktuelle Emissionen",
+      "reduction": "Reduktion",
+      "reductionTarget": "Reduktionsziel",
+      "trajectory": "Reduktionspfad",
+      "trajectoryDesc": "Geplante vs. tatsächliche Entwicklung Ihrer Emissionen",
+      "onTrack": "Auf Kurs",
+      "offTrack": "Vom Kurs abgekommen",
+      "progress": "Fortschritt zum Ziel",
+      "recommendations": "Empfehlungen",
+      "recommendationsDesc": "Empfohlene Maßnahmen zur Zielerreichung",
+      "sbtiNearTerm": "SBTi Near-term Ziele",
+      "sbtiNetZero": "SBTi Net-Zero Ziele",
+      "scope12": "Scope 1+2",
+      "scope3": "Scope 3",
+      "perYear": "pro Jahr",
+      "aligned": "Ausgerichtet auf 1,5°C-Pfad",
+      "targetLine": "Ziel",
+      "actualLine": "Ist",
+      "projectedLine": "Prognose"
+    },
+    "recalculate": {
+      "title": "Emissionen neu berechnen",
+      "description": "Bilanzen mit aktuellen Emissionsfaktoren neu berechnen",
+      "fiscalYear": "Neu zu berechnendes Geschäftsjahr",
+      "selectFiscalYear": "Geschäftsjahr auswählen",
+      "originalEmissions": "Ursprüngliche Emissionen",
+      "recalculatedEmissions": "Neu berechnete Emissionen",
+      "difference": "Differenz",
+      "recalculate": "Neu berechnen",
+      "noChange": "Keine Änderung",
+      "increase": "Zunahme",
+      "decrease": "Abnahme"
+    }
+  },
+  "fiscalYear": {
+    "title": "Geschäftsjahr",
+    "current": "Aktuelles Geschäftsjahr",
+    "previous": "Vorheriges Geschäftsjahr",
+    "select": "Geschäftsjahr auswählen",
+    "create": "Geschäftsjahr erstellen",
+    "close": "Abschließen",
+    "reopen": "Wiedereröffnen",
+    "duplicate": "Duplizieren",
+    "closed": "Abgeschlossen",
+    "open": "Offen",
+    "startDate": "Startdatum",
+    "endDate": "Enddatum"
   },
   "dataEntry": {
     "title": "Dateneingabe",
@@ -122,6 +255,85 @@
     "tags": "Tags",
     "region": "Region"
   },
+  "admin": {
+    "title": "Verwaltung",
+    "subtitle": "Verwaltung von Emissionsfaktoren, Unterkategorien und Benutzern",
+    "accessDenied": "Zugriff verweigert",
+    "accessDeniedDesc": "Diese Seite ist nur für Administratoren zugänglich.",
+    "tabs": {
+      "factors": "Faktoren",
+      "subcategories": "Unterkategorien",
+      "users": "Benutzer"
+    },
+    "factors": {
+      "title": "Emissionsfaktoren V2",
+      "add": "Faktor hinzufügen",
+      "edit": "Faktor bearbeiten",
+      "new": "Neuer Faktor V2",
+      "nameFr": "Name FR",
+      "nameDe": "Name DE",
+      "subcategory": "Unterkategorie",
+      "defaultUnit": "Standardeinheit",
+      "inputUnits": "Akzeptierte Eingabeeinheiten",
+      "addUnit": "Einheit hinzufügen",
+      "impacts": "Auswirkungen nach Scope",
+      "impactsRequired": "erforderliche Auswirkung(en)",
+      "selectSubcategoryFirst": "Wählen Sie zuerst eine Unterkategorie",
+      "impactsAutoGenerated": "Auswirkungen werden automatisch generiert",
+      "category": "Kategorie",
+      "valueKgCO2e": "Wert (kgCO2e)",
+      "fullUnit": "Vollständige Einheit",
+      "tagsSeparated": "Tags (durch Kommas getrennt)",
+      "multiImpact": "Multi-Impact",
+      "linkedCategories": "Verknüpfte Kategorien",
+      "scope1Direct": "Scope 1 - Direkte Emissionen",
+      "scope2Indirect": "Scope 2 - Indirekte Energie",
+      "scope33Upstream": "Scope 3.3 - Vorgelagerte Energie",
+      "scope3Other": "Scope 3 - Sonstige"
+    },
+    "subcategories": {
+      "title": "Unterkategorien",
+      "add": "Unterkategorie hinzufügen",
+      "edit": "Unterkategorie bearbeiten",
+      "new": "Neue Unterkategorie",
+      "linkedCategories": "Verknüpfte Kategorien (N-N-Beziehung)"
+    },
+    "users": {
+      "title": "Benutzer",
+      "email": "E-Mail",
+      "name": "Name",
+      "role": "Rolle",
+      "createdAt": "Erstellungsdatum"
+    },
+    "versioning": {
+      "title": "Neue Version",
+      "currentVersion": "Aktuelle Version",
+      "newVersion": "Neue Version",
+      "changeReason": "Änderungsgrund",
+      "changeReasonPlaceholder": "Z.B.: Jährliche Aktualisierung der BAFU-Faktoren 2025",
+      "isCorrection": "Fehlerkorrektur",
+      "isCorrectionDesc": "Ankreuzen, wenn diese Version einen Fehler korrigiert",
+      "validFromYear": "Gültigkeitsbeginn (Jahr)",
+      "impactValues": "Auswirkungswerte",
+      "newValue": "Neuer Wert",
+      "createVersion": "Version erstellen"
+    },
+    "history": {
+      "title": "Versionsverlauf",
+      "totalVersions": "Version(en)",
+      "changeLog": "Änderungsprotokoll",
+      "correction": "Korrektur",
+      "allVersions": "Alle Versionen",
+      "validFrom": "Gültig von",
+      "validTo": "bis"
+    },
+    "import": {
+      "title": "V2-Daten importieren",
+      "placeholder": "Fügen Sie hier das exportierte JSON ein...",
+      "replaceAll": "Alle vorhandenen Daten ersetzen",
+      "success": "Import erfolgreich!"
+    }
+  },
   "categories": {
     "combustion_mobile": "Mobile Verbrennung",
     "combustion_fixe": "Stationäre Verbrennung",
@@ -171,7 +383,9 @@
     "km": "km",
     "passager_km": "Passagier.km",
     "unit": "Einheit",
-    "euro": "€"
+    "euro": "€",
+    "tCO2e": "tCO2e",
+    "kgCO2e": "kgCO2e"
   },
   "gamification": {
     "milestone": "Meilenstein erreicht!",
@@ -181,5 +395,19 @@
     "almostThere": "Fast geschafft!",
     "firstEntry": "Erster Eintrag erstellt!",
     "scopeComplete": "Scope abgeschlossen!"
+  },
+  "errors": {
+    "generic": "Ein Fehler ist aufgetreten",
+    "notFound": "Nicht gefunden",
+    "unauthorized": "Nicht autorisiert",
+    "forbidden": "Zugriff verboten",
+    "validation": "Validierungsfehler",
+    "network": "Netzwerkfehler",
+    "timeout": "Zeitüberschreitung"
+  },
+  "confirmations": {
+    "delete": "Sind Sie sicher, dass Sie löschen möchten?",
+    "archive": "Dieses Element archivieren? Es bleibt für historische Daten verfügbar.",
+    "removeAdminSelf": "Sie werden Ihre Administratorrechte entfernen. Fortfahren?"
   }
 }
