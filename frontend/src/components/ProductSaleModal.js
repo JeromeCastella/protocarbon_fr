@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useTheme } from '../context/ThemeContext';
 import { useLanguage } from '../context/LanguageContext';
+import { useFiscalYear } from '../context/FiscalYearContext';
 import axios from 'axios';
 import { motion } from 'framer-motion';
 import { 
@@ -14,30 +15,41 @@ import {
   ArrowRight,
   Edit3,
   Plus,
-  Trash2
+  Trash2,
+  Calendar
 } from 'lucide-react';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL || '';
 
 /**
- * Modal pour gérer les ventes totales d'un produit.
- * - Si aucune vente n'existe : crée une nouvelle vente
+ * Modal pour gérer les ventes totales d'un produit par exercice fiscal.
+ * - Filtre les ventes par exercice fiscal courant
+ * - Si aucune vente n'existe pour cet exercice : crée une nouvelle vente
  * - Si une vente existe : permet de modifier le total (pas d'ajout de ligne)
  */
 const ProductSaleModal = ({ isOpen, onClose, onSaleRecorded, preselectedProduct = null }) => {
   const { isDark } = useTheme();
   const { language } = useLanguage();
+  const { currentFiscalYear } = useFiscalYear();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [quantity, setQuantity] = useState(0);
-  const [year, setYear] = useState(new Date().getFullYear());
+  const [saleDate, setSaleDate] = useState('');
   
   // État pour la vente existante
   const [existingSale, setExistingSale] = useState(null);
   const [isEditMode, setIsEditMode] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+
+  // Initialiser la date avec le milieu de l'exercice fiscal courant
+  useEffect(() => {
+    if (currentFiscalYear) {
+      // Utiliser la date de début de l'exercice par défaut
+      setSaleDate(currentFiscalYear.start_date || '');
+    }
+  }, [currentFiscalYear]);
 
   useEffect(() => {
     if (isOpen) {
@@ -51,22 +63,22 @@ const ProductSaleModal = ({ isOpen, onClose, onSaleRecorded, preselectedProduct 
     }
   }, [preselectedProduct]);
 
-  // Quand un produit est sélectionné, charger ses ventes existantes
+  // Quand un produit est sélectionné, charger ses ventes pour l'exercice courant
   useEffect(() => {
-    if (selectedProduct) {
+    if (selectedProduct && currentFiscalYear) {
       fetchProductSales(selectedProduct.id);
     } else {
       setExistingSale(null);
       setQuantity(0);
       setIsEditMode(false);
     }
-  }, [selectedProduct]);
+  }, [selectedProduct, currentFiscalYear]);
 
   const fetchProducts = async () => {
     setLoading(true);
     try {
       const response = await axios.get(`${API_URL}/api/products`);
-      // Inclure tous les produits (enhanced et simples)
+      // Inclure tous les produits (enhanced et simples, non archivés)
       const allProducts = response.data || [];
       setProducts(allProducts);
       
