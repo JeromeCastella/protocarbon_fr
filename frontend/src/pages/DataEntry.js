@@ -39,7 +39,9 @@ import {
   Table,
   ArrowRight,
   Package,
-  ShoppingBag
+  ShoppingBag,
+  RefreshCw,
+  Zap
 } from 'lucide-react';
 import ProductSaleModal from '../components/ProductSaleModal';
 import GuidedEntryModal from '../components/GuidedEntryModal';
