@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useTheme } from '../../context/ThemeContext';
+import { useLanguage } from '../../context/LanguageContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, Plus, Edit2, Trash2, Layers, X, Check } from 'lucide-react';
 import axios from 'axios';
@@ -18,6 +19,7 @@ const INITIAL_FORM = {
 
 const AdminSubcategoriesTab = ({ subcategories, onRefetch }) => {
   const { isDark } = useTheme();
+  const { t, language } = useLanguage();
   const [search, setSearch] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [editing, setEditing] = useState(null);
@@ -44,14 +46,14 @@ const AdminSubcategoriesTab = ({ subcategories, onRefetch }) => {
   };
 
   const handleDelete = async (subcatId) => {
-    if (!window.confirm('Supprimer cette sous-catégorie ?')) return;
+    if (!window.confirm(t('confirmations.delete'))) return;
     
     try {
       await axios.delete(`${API_URL}/api/admin/subcategories/${subcatId}`);
       onRefetch();
     } catch (error) {
       console.error('Failed to delete subcategory:', error);
-      alert('Erreur lors de la suppression');
+      alert(t('errors.generic'));
     }
   };
 
@@ -95,9 +97,9 @@ const AdminSubcategoriesTab = ({ subcategories, onRefetch }) => {
   }, {});
 
   const scopeLabels = {
-    scope1: 'Scope 1',
-    scope2: 'Scope 2',
-    scope3_amont: 'Scope 3 Amont',
+    scope1: t('scope.scope1'),
+    scope2: t('scope.scope2'),
+    scope3_amont: t('scope.scope3Amont'),
     scope3_aval: 'Scope 3 Aval'
   };
 
