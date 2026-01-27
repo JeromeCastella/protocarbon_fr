@@ -183,11 +183,17 @@ async def get_fiscal_comparison(current_user: dict = Depends(get_current_user)):
         fy_start = fy.get("start_date", "")
         fy_end = fy.get("end_date", "")
         
-        # Get activities for this fiscal year by date range
-        activities = list(activities_collection.find({
-            "tenant_id": current_user["id"],
-            "date": {"$gte": fy_start, "$lte": fy_end}
-        }))
+        # Get activities for this fiscal year by date range using $expr for ISO date comparison
+        query = {"tenant_id": current_user["id"]}
+        if fy_start and fy_end:
+            query["$expr"] = {
+                "$and": [
+                    {"$gte": [{"$substr": ["$date", 0, 10]}, fy_start]},
+                    {"$lte": [{"$substr": ["$date", 0, 10]}, fy_end]}
+                ]
+            }
+        
+        activities = list(activities_collection.find(query))
         
         scope_emissions = {"scope1": 0, "scope2": 0, "scope3_amont": 0, "scope3_aval": 0}
         
