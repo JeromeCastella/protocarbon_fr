@@ -420,10 +420,10 @@ const AdminFactorsTab = ({ factors, subcategories, onRefetch }) => {
                           <span className="text-sm">{imp.value} {imp.unit}</span>
                         </div>
                       ))}
-                      {impacts.length > 2 && <span className={`text-xs ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>+{impacts.length - 2} autre(s)</span>}
+                      {impacts.length > 2 && <span className={`text-xs ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>+{impacts.length - 2}</span>}
                       {isMultiImpact && (
                         <span className="inline-flex items-center gap-1 text-xs text-purple-500">
-                          <Sparkles className="w-3 h-3" />Multi-impact
+                          <Sparkles className="w-3 h-3" />{t('admin.factors.multiImpact')}
                         </span>
                       )}
                     </div>
@@ -435,7 +435,7 @@ const AdminFactorsTab = ({ factors, subcategories, onRefetch }) => {
                       </span>
                       {(factor.valid_from_year || factor.valid_from) && (
                         <span className={`text-xs ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-                          Depuis {factor.valid_from_year || factor.valid_from?.split('-')[0]}
+                          {t('common.since')} {factor.valid_from_year || factor.valid_from?.split('-')[0]}
                         </span>
                       )}
                     </div>
@@ -446,18 +446,18 @@ const AdminFactorsTab = ({ factors, subcategories, onRefetch }) => {
                   </td>
                   <td className="px-4 py-3 text-right">
                     <div className="flex items-center justify-end gap-1">
-                      <button onClick={() => handleViewHistory(factor.id)} className={`p-2 rounded-lg ${isDark ? 'hover:bg-slate-600' : 'hover:bg-gray-100'}`} title="Historique">
+                      <button onClick={() => handleViewHistory(factor.id)} className={`p-2 rounded-lg ${isDark ? 'hover:bg-slate-600' : 'hover:bg-gray-100'}`} title={t('common.history')}>
                         <History className="w-4 h-4" />
                       </button>
                       {!isArchived && !isReplaced && (
                         <>
-                          <button onClick={() => handleCreateNewVersion(factor)} className={`p-2 rounded-lg text-blue-500 ${isDark ? 'hover:bg-blue-500/20' : 'hover:bg-blue-100'}`} title="Nouvelle version">
+                          <button onClick={() => handleCreateNewVersion(factor)} className={`p-2 rounded-lg text-blue-500 ${isDark ? 'hover:bg-blue-500/20' : 'hover:bg-blue-100'}`} title={t('admin.versioning.newVersion')}>
                             <GitBranch className="w-4 h-4" />
                           </button>
-                          <button onClick={() => handleEditFactor(factor)} className={`p-2 rounded-lg ${isDark ? 'hover:bg-slate-600' : 'hover:bg-gray-100'}`} title="Modifier">
+                          <button onClick={() => handleEditFactor(factor)} className={`p-2 rounded-lg ${isDark ? 'hover:bg-slate-600' : 'hover:bg-gray-100'}`} title={t('common.edit')}>
                             <Edit2 className="w-4 h-4" />
                           </button>
-                          <button onClick={() => handleSoftDelete(factor.id)} className="p-2 rounded-lg text-amber-500 hover:bg-amber-500/10" title="Archiver">
+                          <button onClick={() => handleSoftDelete(factor.id)} className="p-2 rounded-lg text-amber-500 hover:bg-amber-500/10" title={t('common.archive')}>
                             <Archive className="w-4 h-4" />
                           </button>
                         </>
