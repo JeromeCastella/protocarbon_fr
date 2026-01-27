@@ -577,6 +577,16 @@ const ProductSaleModal = ({ isOpen, onClose, onSaleRecorded, preselectedProduct 
         )}
       </motion.div>
     </motion.div>
+    
+    {/* Product Versions Modal */}
+    <ProductVersionsModal
+      isOpen={showVersionsModal}
+      onClose={() => setShowVersionsModal(false)}
+      productId={selectedProduct?.id}
+      productName={selectedProduct?.name}
+      onProfileUpdated={handleProfileUpdated}
+    />
+    </>
   );
 };
 
