@@ -26,15 +26,92 @@ router = APIRouter(prefix="/products", tags=["Products"])
 @router.get("")
 async def get_products(
     include_archived: bool = False,
+    fiscal_year_id: Optional[str] = None,
     current_user: dict = Depends(get_current_user)
 ):
-    """Get all products for the current user (excludes archived by default)"""
+    """
+    Get all products for the current user.
+    If fiscal_year_id is provided, returns:
+    - Emissions from the profile for that fiscal year (or defaults if no profile)
+    - Sales filtered to that fiscal year only
+    """
     query = {"tenant_id": current_user["id"]}
     if not include_archived:
         query["archived"] = {"$ne": True}
     
     products = list(products_collection.find(query))
-    return [serialize_doc(p) for p in products]
+    result = []
+    
+    # Get fiscal year date range if provided
+    fy_start_date = None
+    fy_end_date = None
+    fy_name = None
+    if fiscal_year_id:
+        try:
+            fiscal_year = fiscal_years_collection.find_one({"_id": ObjectId(fiscal_year_id)})
+            if fiscal_year:
+                fy_start_date = fiscal_year.get("start_date")
+                fy_end_date = fiscal_year.get("end_date")
+                fy_name = fiscal_year.get("name")
+        except:
+            pass
+    
+    for product in products:
+        product_data = serialize_doc(product)
+        
+        if fiscal_year_id:
+            # Get the appropriate emission profile for this fiscal year
+            profiles = product.get("emission_profiles", [])
+            specific_profile = None
+            for profile in profiles:
+                if profile.get("fiscal_year_id") == fiscal_year_id:
+                    specific_profile = profile
+                    break
+            
+            # Use specific profile or defaults
+            if specific_profile:
+                product_data["active_manufacturing_emissions"] = specific_profile.get("manufacturing_emissions", 0)
+                product_data["active_usage_emissions"] = specific_profile.get("usage_emissions", 0)
+                product_data["active_disposal_emissions"] = specific_profile.get("disposal_emissions", 0)
+                product_data["profile_source"] = "specific"
+                product_data["profile_name"] = fy_name
+            else:
+                product_data["active_manufacturing_emissions"] = product.get("manufacturing_emissions", 0)
+                product_data["active_usage_emissions"] = product.get("usage_emissions", 0)
+                product_data["active_disposal_emissions"] = product.get("disposal_emissions", 0)
+                product_data["profile_source"] = "default"
+                product_data["profile_name"] = "Par défaut"
+            
+            # Calculate active total emissions per unit
+            product_data["active_total_emissions_per_unit"] = (
+                product_data["active_manufacturing_emissions"] +
+                product_data["active_usage_emissions"] +
+                product_data["active_disposal_emissions"]
+            )
+            
+            # Filter sales by fiscal year
+            sales_history = product.get("sales_history", [])
+            filtered_sales = []
+            if fy_start_date and fy_end_date:
+                for sale in sales_history:
+                    sale_date = sale.get("date", "")
+                    if fy_start_date <= sale_date <= fy_end_date:
+                        filtered_sales.append(sale)
+            
+            product_data["fiscal_year_sales"] = filtered_sales
+            product_data["fiscal_year_sales_quantity"] = sum(s.get("quantity", 0) for s in filtered_sales)
+            product_data["fiscal_year_sales_emissions"] = sum(s.get("total_emissions", 0) for s in filtered_sales)
+        else:
+            # No fiscal year filter - use defaults
+            product_data["active_manufacturing_emissions"] = product.get("manufacturing_emissions", 0)
+            product_data["active_usage_emissions"] = product.get("usage_emissions", 0)
+            product_data["active_disposal_emissions"] = product.get("disposal_emissions", 0)
+            product_data["active_total_emissions_per_unit"] = product.get("total_emissions_per_unit", 0)
+            product_data["profile_source"] = "default"
+        
+        result.append(product_data)
+    
+    return result
 
 
 @router.get("/archived")
