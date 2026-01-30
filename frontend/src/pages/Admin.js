@@ -10,7 +10,8 @@ import {
   AdminTabs, 
   AdminFactorsTab, 
   AdminSubcategoriesTab, 
-  AdminUsersTab 
+  AdminUsersTab,
+  AdminExportTab 
 } from '../components/admin';
 import { useAdminData } from '../hooks/useAdminData';
 
@@ -86,6 +87,11 @@ const Admin = () => {
               currentUserId={user?.id} 
               onRefetch={refetch} 
             />
+          )}
+
+          {/* Export Tab */}
+          {activeTab === 'export' && (
+            <AdminExportTab />
           )}
         </>
       )}
