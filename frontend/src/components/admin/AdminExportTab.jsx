@@ -110,15 +110,29 @@ const AdminExportTab = () => {
       color: 'blue'
     },
     { 
+      id: 'reference-data', 
+      label: language === 'fr' ? 'Données de référence' : 'Referenzdaten',
+      description: language === 'fr' ? 'Facteurs d\'émission + sous-catégories + conversions' : 'Emissionsfaktoren + Unterkategorien + Umrechnungen',
+      icon: FileCode,
+      color: 'orange'
+    },
+    { 
+      id: 'emission-factors', 
+      label: language === 'fr' ? 'Facteurs d\'émission' : 'Emissionsfaktoren',
+      description: language === 'fr' ? 'Tous les facteurs d\'émission V2' : 'Alle Emissionsfaktoren V2',
+      icon: Layers,
+      color: 'yellow'
+    },
+    { 
       id: 'activities', 
-      label: language === 'fr' ? 'Activités uniquement' : 'Nur Aktivitäten',
+      label: language === 'fr' ? 'Activités' : 'Aktivitäten',
       description: language === 'fr' ? 'Données des activités carbone' : 'Kohlenstoffaktivitätsdaten',
       icon: Activity,
       color: 'green'
     },
     { 
       id: 'products', 
-      label: language === 'fr' ? 'Produits uniquement' : 'Nur Produkte',
+      label: language === 'fr' ? 'Produits' : 'Produkte',
       description: language === 'fr' ? 'Catalogue des produits et émissions' : 'Produktkatalog und Emissionen',
       icon: Package,
       color: 'purple'
