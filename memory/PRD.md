@@ -243,6 +243,7 @@ Application de calcul d'empreinte carbone selon le protocole GHG avec interface 
 
 ### P1 - High Priority
 - [x] **Refactoring Frontend Admin.js** : 1915→94 lignes (6 composants extraits)
+- [x] **Export JSON complet** : Sauvegarde complète de la base de données avec filtre par exercice fiscal
 - [ ] Rapports PDF/Excel exportables
 - [ ] Import en masse CSV (bulk upload activities)
 - [ ] Objectifs long-term SBTi (Net-Zero 2050)
