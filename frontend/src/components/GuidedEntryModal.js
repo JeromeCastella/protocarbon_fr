@@ -152,12 +152,12 @@ const GuidedEntryModal = ({
   const fetchFactorsForSubcategory = async (subcatCode) => {
     try {
       setLoading(true);
-      const response = await axios.get(`${API_URL}/api/emission-factors/search?subcategory=${subcatCode}`);
+      const response = await axios.get(`${API_URL}/api/emission-factors?subcategory=${subcatCode}`);
       let allFactors = response.data || [];
       
       // Si pas de résultats, essayer avec la catégorie
       if (allFactors.length === 0) {
-        const catResponse = await axios.get(`${API_URL}/api/emission-factors/search?category=${category.code}`);
+        const catResponse = await axios.get(`${API_URL}/api/emission-factors/by-category/${category.code}`);
         allFactors = catResponse.data || [];
         
         // Filtrer par sous-catégorie dans le nom ou les tags
