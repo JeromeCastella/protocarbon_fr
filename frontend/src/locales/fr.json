@@ -269,7 +269,8 @@
     "tabs": {
       "factors": "Facteurs",
       "subcategories": "Sous-catégories",
-      "users": "Utilisateurs"
+      "users": "Utilisateurs",
+      "export": "Export"
     },
     "factors": {
       "title": "Facteurs d'émission V2",
