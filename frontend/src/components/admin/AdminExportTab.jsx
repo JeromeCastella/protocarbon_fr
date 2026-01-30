@@ -59,7 +59,7 @@ const AdminExportTab = () => {
       
       const data = await res.json();
       
-      // Create and download file using a more reliable method
+      // Create and download file
       const jsonString = JSON.stringify(data, null, 2);
       const blob = new Blob([jsonString], { type: 'application/json;charset=utf-8' });
       
@@ -70,20 +70,28 @@ const AdminExportTab = () => {
       const timestamp = new Date().toISOString().split('T')[0];
       const filename = `carbon_export_${exportType}_${fiscalYearName}_${timestamp}.json`;
       
-      // Use saveAs-style download for better browser compatibility
+      // Try multiple download methods for browser compatibility
       const url = window.URL.createObjectURL(blob);
+      
+      // Method 1: Modern browsers - use anchor element with download attribute
       const link = document.createElement('a');
-      link.style.display = 'none';
       link.href = url;
-      link.setAttribute('download', filename);
+      link.download = filename;
+      
+      // Some browsers need the link to be in the DOM
+      link.style.cssText = 'position:fixed;left:-9999px;top:-9999px;';
       document.body.appendChild(link);
+      
+      // Trigger download
       link.click();
       
-      // Cleanup after a short delay to ensure download starts
+      // Cleanup
       setTimeout(() => {
-        document.body.removeChild(link);
+        if (link.parentNode) {
+          document.body.removeChild(link);
+        }
         window.URL.revokeObjectURL(url);
-      }, 100);
+      }, 200);
       
       setResult({
         success: true,
