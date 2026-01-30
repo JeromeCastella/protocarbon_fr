@@ -147,31 +147,43 @@ const AdminExportTab = () => {
           {language === 'fr' ? 'Type d\'export' : 'Exporttyp'}
         </h3>
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {exportTypes.map(type => (
-            <button
-              key={type.id}
-              data-testid={`export-type-${type.id}`}
-              onClick={() => setExportType(type.id)}
-              className={`p-4 rounded-xl border-2 transition-all text-left ${
-                exportType === type.id
-                  ? `border-${type.color}-500 ${isDark ? 'bg-slate-700' : 'bg-blue-50'}`
-                  : isDark ? 'border-slate-600 hover:border-slate-500' : 'border-gray-200 hover:border-gray-300'
-              }`}
-            >
-              <div className="flex items-center gap-3 mb-2">
-                <div className={`p-2 rounded-lg bg-${type.color}-500/20`}>
-                  <type.icon className={`w-5 h-5 text-${type.color}-500`} />
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3">
+          {exportTypes.map(type => {
+            const isSelected = exportType === type.id;
+            const colorClasses = {
+              blue: { bg: 'bg-blue-500/20', text: 'text-blue-500', border: 'border-blue-500' },
+              orange: { bg: 'bg-orange-500/20', text: 'text-orange-500', border: 'border-orange-500' },
+              yellow: { bg: 'bg-yellow-500/20', text: 'text-yellow-500', border: 'border-yellow-500' },
+              green: { bg: 'bg-green-500/20', text: 'text-green-500', border: 'border-green-500' },
+              purple: { bg: 'bg-purple-500/20', text: 'text-purple-500', border: 'border-purple-500' }
+            };
+            const colors = colorClasses[type.color];
+            
+            return (
+              <button
+                key={type.id}
+                data-testid={`export-type-${type.id}`}
+                onClick={() => setExportType(type.id)}
+                className={`p-4 rounded-xl border-2 transition-all text-left ${
+                  isSelected
+                    ? `${colors.border} ${isDark ? 'bg-slate-700' : 'bg-blue-50'}`
+                    : isDark ? 'border-slate-600 hover:border-slate-500' : 'border-gray-200 hover:border-gray-300'
+                }`}
+              >
+                <div className="flex items-center gap-2 mb-2">
+                  <div className={`p-2 rounded-lg ${colors.bg}`}>
+                    <type.icon className={`w-4 h-4 ${colors.text}`} />
+                  </div>
+                  <span className={`font-medium text-sm ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                    {type.label}
+                  </span>
                 </div>
-                <span className={`font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                  {type.label}
-                </span>
-              </div>
-              <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-                {type.description}
-              </p>
-            </button>
-          ))}
+                <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+                  {type.description}
+                </p>
+              </button>
+            );
+          })}
         </div>
       </div>
 
