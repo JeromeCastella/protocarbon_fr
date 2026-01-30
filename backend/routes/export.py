@@ -170,3 +170,58 @@ async def export_products(current_user: dict = Depends(get_current_user)):
         },
         "products": [serialize_for_export(p) for p in products]
     }
+
+
+@router.get("/emission-factors")
+async def export_emission_factors(current_user: dict = Depends(get_current_user)):
+    """Export emission factors (global data)"""
+    emission_factors = list(emission_factors_collection.find({}))
+    
+    return {
+        "export_metadata": {
+            "exported_at": datetime.now(timezone.utc).isoformat(),
+            "type": "emission_factors",
+            "count": len(emission_factors)
+        },
+        "emission_factors": [serialize_for_export(ef) for ef in emission_factors]
+    }
+
+
+@router.get("/subcategories")
+async def export_subcategories(current_user: dict = Depends(get_current_user)):
+    """Export subcategories (global data)"""
+    subcategories = list(subcategories_collection.find({}))
+    
+    return {
+        "export_metadata": {
+            "exported_at": datetime.now(timezone.utc).isoformat(),
+            "type": "subcategories",
+            "count": len(subcategories)
+        },
+        "subcategories": [serialize_for_export(sc) for sc in subcategories]
+    }
+
+
+@router.get("/reference-data")
+async def export_reference_data(current_user: dict = Depends(get_current_user)):
+    """Export all reference data (emission factors + subcategories + unit conversions)"""
+    emission_factors = list(emission_factors_collection.find({}))
+    subcategories = list(subcategories_collection.find({}))
+    unit_conversions = list(unit_conversions_collection.find({}))
+    
+    return {
+        "export_metadata": {
+            "exported_at": datetime.now(timezone.utc).isoformat(),
+            "type": "reference_data",
+            "version": "1.0"
+        },
+        "emission_factors": [serialize_for_export(ef) for ef in emission_factors],
+        "subcategories": [serialize_for_export(sc) for sc in subcategories],
+        "unit_conversions": [serialize_for_export(uc) for uc in unit_conversions],
+        "statistics": {
+            "total_emission_factors": len(emission_factors),
+            "total_subcategories": len(subcategories),
+            "total_unit_conversions": len(unit_conversions)
+        }
+    }
+
