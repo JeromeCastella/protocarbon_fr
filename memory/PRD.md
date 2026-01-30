@@ -24,6 +24,21 @@ Application de calcul d'empreinte carbone selon le protocole GHG avec interface 
 
 ## What's Been Implemented
 
+### 2026-01-30 - Export JSON complet ✅
+- **Nouvel onglet Admin "Export"** :
+  - 3 types d'export : Sauvegarde complète, Activités uniquement, Produits uniquement
+  - Sélection par exercice fiscal (tous ou un exercice spécifique)
+  - Format JSON téléchargeable automatiquement
+- **Nouvelles APIs Backend** :
+  - `GET /api/export/full?fiscal_year_id=xxx` - Export complet filtré
+  - `GET /api/export/activities?fiscal_year_id=xxx` - Export activités seules
+  - `GET /api/export/products` - Export produits seuls
+- **Contenu de l'export** :
+  - Métadonnées d'export (date, utilisateur, version)
+  - Données entreprise, exercices fiscaux, activités, produits
+  - Facteurs d'émission, sous-catégories, conversions d'unités
+  - Objectifs carbone, statistiques
+
 ### 2026-01-27 (Session actuelle) - Gestion des ventes produits par exercice fiscal ✅
 - **Ventes liées par sale_id** :
   - Chaque vente génère un `sale_id` unique liant les 3 activités (transformation, utilisation, fin de vie)
