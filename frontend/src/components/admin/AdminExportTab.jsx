@@ -59,22 +59,31 @@ const AdminExportTab = () => {
       
       const data = await res.json();
       
-      // Create and download file
-      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
+      // Create and download file using a more reliable method
+      const jsonString = JSON.stringify(data, null, 2);
+      const blob = new Blob([jsonString], { type: 'application/json;charset=utf-8' });
       
       const fiscalYearName = selectedFiscalYear === 'all' 
-        ? 'all' 
-        : fiscalYears.find(fy => fy.id === selectedFiscalYear)?.name || selectedFiscalYear;
+        ? 'tous' 
+        : (fiscalYears.find(fy => fy.id === selectedFiscalYear)?.name || selectedFiscalYear).replace(/\s+/g, '_');
       
       const timestamp = new Date().toISOString().split('T')[0];
+      const filename = `carbon_export_${exportType}_${fiscalYearName}_${timestamp}.json`;
+      
+      // Use saveAs-style download for better browser compatibility
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.style.display = 'none';
       link.href = url;
-      link.download = `carbon_export_${exportType}_${fiscalYearName}_${timestamp}.json`;
+      link.setAttribute('download', filename);
       document.body.appendChild(link);
       link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(url);
+      
+      // Cleanup after a short delay to ensure download starts
+      setTimeout(() => {
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+      }, 100);
       
       setResult({
         success: true,
