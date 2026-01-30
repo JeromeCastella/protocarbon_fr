@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Download, FileJson, CheckCircle, AlertCircle, Loader2, Database, Package, Activity } from 'lucide-react';
+import { Download, FileJson, CheckCircle, AlertCircle, Loader2, Database, Package, Activity, Layers, FileCode } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import { useLanguage } from '../../context/LanguageContext';
 
