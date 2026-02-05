@@ -24,6 +24,35 @@ Application de calcul d'empreinte carbone selon le protocole GHG avec interface 
 
 ## What's Been Implemented
 
+### 2026-02-05 - Système d'authentification complet ✅
+- **Récupération de mot de passe** :
+  - Page `/forgot-password` pour demander un lien de réinitialisation
+  - Page `/reset-password` pour définir un nouveau mot de passe
+  - Emails HTML professionnels FR/DE via SMTP Infomaniak
+  - Tokens sécurisés (SHA256) avec expiration 1h
+- **Changement de mot de passe** :
+  - API `/api/auth/change-password` pour utilisateurs connectés
+  - Vérification du mot de passe actuel
+- **Vérification d'email** :
+  - Page `/verify-email` avec token sécurisé (24h)
+  - Email de bienvenue avec lien de confirmation
+  - Champ `email_verified` dans le profil utilisateur
+- **Indicateur de force du mot de passe** :
+  - Barre de progression visuelle (Faible → Excellent)
+  - Checklist des 5 critères (longueur, majuscule, minuscule, chiffre, spécial)
+- **Verrouillage de compte** :
+  - 5 tentatives échouées → blocage 15 minutes
+  - Email de notification de verrouillage
+  - API admin `/api/auth/users/{id}/unlock`
+- **Remember Me** :
+  - Option "Se souvenir de moi" sur la page de connexion
+  - Token étendu à 30 jours si activé
+
+### 2026-02-05 - Import en masse ✅
+- Import de **1190 facteurs d'émission** (BAFU 2024)
+- Import de **89 sous-catégories**
+- Correction de l'affichage des facteurs (support format V2 avec `name_fr`/`name_de` et `impacts[]`)
+
 ### 2026-01-30 - Export JSON complet ✅
 - **Nouvel onglet Admin "Export"** :
   - 5 types d'export : Sauvegarde complète, Données de référence, Facteurs d'émission, Activités, Produits
