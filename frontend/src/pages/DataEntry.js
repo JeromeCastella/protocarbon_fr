@@ -197,10 +197,16 @@ const DataEntry = () => {
   // Handle activity submission from the guided modal
   const handleActivitySubmit = async (activityData) => {
     try {
+      // Add fiscal year ID to associate activity with selected fiscal year
+      const dataWithFiscalYear = {
+        ...activityData,
+        fiscal_year_id: currentFiscalYear?.id
+      };
+      
       if (editingActivityData) {
-        await axios.put(`${API_URL}/api/activities/${editingActivityData.id}`, activityData);
+        await axios.put(`${API_URL}/api/activities/${editingActivityData.id}`, dataWithFiscalYear);
       } else {
-        await axios.post(`${API_URL}/api/activities`, activityData);
+        await axios.post(`${API_URL}/api/activities`, dataWithFiscalYear);
       }
       fetchData();
     } catch (error) {
