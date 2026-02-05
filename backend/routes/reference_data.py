@@ -108,24 +108,45 @@ async def get_emission_factors(
 
 @router.get("/emission-factors/search")
 async def search_emission_factors(
-    q: str,
+    q: Optional[str] = None,
     subcategory: Optional[str] = None,
+    category: Optional[str] = None,
     current_user: dict = Depends(get_current_user)
 ):
-    """Search emission factors by name"""
-    query = {
-        "deleted_at": None,
-        "$or": [
+    """Search emission factors by name, subcategory, or category (dynamic lookup)"""
+    query = {"deleted_at": None}
+    
+    if q:
+        query["$or"] = [
             {"name_fr": {"$regex": q, "$options": "i"}},
             {"name_de": {"$regex": q, "$options": "i"}},
             {"name": {"$regex": q, "$options": "i"}}
         ]
-    }
     
     if subcategory:
         query["subcategory"] = subcategory
+    elif category:
+        # Dynamic lookup: get subcategories for this category
+        subcats = list(subcategories_collection.find({"categories": category}))
+        subcat_codes = [s.get("code") for s in subcats]
+        if subcat_codes:
+            if "$or" in query:
+                # Combine with existing $or
+                existing_or = query.pop("$or")
+                query["$and"] = [
+                    {"$or": existing_or},
+                    {"$or": [
+                        {"subcategory": {"$in": subcat_codes}},
+                        {"category": category}
+                    ]}
+                ]
+            else:
+                query["$or"] = [
+                    {"subcategory": {"$in": subcat_codes}},
+                    {"category": category}
+                ]
     
-    factors = list(emission_factors_collection.find(query).limit(50))
+    factors = list(emission_factors_collection.find(query).limit(100))
     return [serialize_doc(f) for f in factors]
 
 
