@@ -134,14 +134,21 @@ async def get_factors_by_category(
     category: str,
     current_user: dict = Depends(get_current_user)
 ):
-    """Get emission factors by category"""
-    factors = list(emission_factors_collection.find({
+    """Get emission factors by category - looks up subcategories dynamically"""
+    # First, get all subcategories that belong to this category
+    subcats = list(subcategories_collection.find({"categories": category}))
+    subcat_codes = [s.get("code") for s in subcats]
+    
+    # Then get all factors that match any of these subcategories
+    query = {
         "deleted_at": None,
         "$or": [
-            {"category": category},
-            {"subcategory": category}
+            {"subcategory": {"$in": subcat_codes}},
+            {"category": category}
         ]
-    }))
+    }
+    
+    factors = list(emission_factors_collection.find(query))
     return [serialize_doc(f) for f in factors]
 
 
