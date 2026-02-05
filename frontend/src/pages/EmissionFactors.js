@@ -36,11 +36,44 @@ const EmissionFactors = () => {
     }
   };
 
+  // Helper to get factor name based on language
+  const getFactorName = (factor) => {
+    if (factor.name_fr || factor.name_de) {
+      return language === 'de' ? (factor.name_de || factor.name_fr) : (factor.name_fr || factor.name_de);
+    }
+    return factor.name || 'Sans nom';
+  };
+
+  // Helper to get primary impact (first one or scope2 preferred)
+  const getPrimaryImpact = (factor) => {
+    if (factor.impacts && factor.impacts.length > 0) {
+      // Prefer scope2 or scope1, otherwise first impact
+      const scope2 = factor.impacts.find(i => i.scope === 'scope2');
+      const scope1 = factor.impacts.find(i => i.scope === 'scope1');
+      return scope2 || scope1 || factor.impacts[0];
+    }
+    // Legacy format
+    return { scope: factor.scope, category: factor.category, value: factor.value, unit: factor.unit };
+  };
+
+  // Helper to get all scopes from impacts
+  const getFactorScopes = (factor) => {
+    if (factor.impacts && factor.impacts.length > 0) {
+      return [...new Set(factor.impacts.map(i => i.scope))];
+    }
+    return factor.scope ? [factor.scope] : [];
+  };
+
   const filteredFactors = factors.filter(factor => {
+    const name = getFactorName(factor);
     const matchesSearch = !searchTerm || 
-      factor.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       factor.tags?.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
-    const matchesScope = !selectedScope || factor.scope === selectedScope;
+    
+    // Check if any impact matches the selected scope
+    const scopes = getFactorScopes(factor);
+    const matchesScope = !selectedScope || scopes.some(s => s === selectedScope || s?.startsWith(selectedScope));
+    
     return matchesSearch && matchesScope;
   });
 
