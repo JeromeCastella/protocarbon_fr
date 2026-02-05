@@ -183,74 +183,82 @@ const EmissionFactors = () => {
               </h3>
             </div>
             <div className="divide-y divide-gray-200 dark:divide-slate-700">
-              {categoryFactors.map((factor, index) => (
-                <div
-                  key={factor.id}
-                  className={`px-6 py-4 ${isDark ? 'hover:bg-slate-700/50' : 'hover:bg-gray-50'} transition-colors`}
-                >
-                  <div className="flex items-start justify-between">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-3 mb-2">
-                        <h4 className={`font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                          {factor.name}
-                        </h4>
-                        <span className={`px-2 py-1 text-xs rounded-lg ${
-                          factor.scope === 'scope1' ? 'bg-blue-100 text-blue-600' :
-                          factor.scope === 'scope2' ? 'bg-cyan-100 text-cyan-600' :
-                          'bg-purple-100 text-purple-600'
-                        }`}>
-                          {factor.scope?.replace('_', ' ')}
-                        </span>
-                      </div>
-                      <div className="flex flex-wrap gap-4 text-sm">
-                        <div className="flex items-center gap-1">
-                          <Database className="w-4 h-4 text-green-500" />
-                          <span className={isDark ? 'text-slate-300' : 'text-gray-600'}>
-                            {factor.value} {factor.unit}
-                          </span>
-                        </div>
-                        {factor.region && (
-                          <div className="flex items-center gap-1">
-                            <MapPin className="w-4 h-4 text-orange-500" />
-                            <span className={isDark ? 'text-slate-400' : 'text-gray-500'}>
-                              {factor.region}
-                            </span>
-                          </div>
-                        )}
-                        <div className="flex items-center gap-1">
-                          <Info className="w-4 h-4 text-blue-500" />
-                          <span className={isDark ? 'text-slate-400' : 'text-gray-500'}>
-                            {factor.source}
-                          </span>
-                        </div>
-                      </div>
-                      {factor.tags && factor.tags.length > 0 && (
-                        <div className="flex flex-wrap gap-2 mt-3">
-                          {factor.tags.map(tag => (
-                            <span
-                              key={tag}
-                              className={`px-2 py-1 text-xs rounded-lg ${
-                                isDark ? 'bg-slate-700 text-slate-300' : 'bg-gray-100 text-gray-600'
-                              }`}
-                            >
-                              <Tag className="w-3 h-3 inline mr-1" />
-                              {tag}
+              {categoryFactors.map((factor, index) => {
+                const primaryImpact = getPrimaryImpact(factor);
+                const scopes = getFactorScopes(factor);
+                const factorName = getFactorName(factor);
+                
+                return (
+                  <div
+                    key={factor.id || index}
+                    className={`px-6 py-4 ${isDark ? 'hover:bg-slate-700/50' : 'hover:bg-gray-50'} transition-colors`}
+                  >
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-3 mb-2">
+                          <h4 className={`font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                            {factorName}
+                          </h4>
+                          {scopes.map(scope => (
+                            <span key={scope} className={`px-2 py-1 text-xs rounded-lg ${
+                              scope === 'scope1' ? 'bg-blue-100 text-blue-600' :
+                              scope === 'scope2' ? 'bg-cyan-100 text-cyan-600' :
+                              'bg-purple-100 text-purple-600'
+                            }`}>
+                              {scope?.replace('_', ' ')}
                             </span>
                           ))}
                         </div>
-                      )}
-                    </div>
-                    <div className="text-right">
-                      <p className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                        {factor.value}
-                      </p>
-                      <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-                        {factor.unit}
-                      </p>
+                        <div className="flex flex-wrap gap-4 text-sm">
+                          <div className="flex items-center gap-1">
+                            <Database className="w-4 h-4 text-green-500" />
+                            <span className={isDark ? 'text-slate-300' : 'text-gray-600'}>
+                              {primaryImpact?.value} {primaryImpact?.unit || factor.default_unit}
+                            </span>
+                          </div>
+                          {factor.region && (
+                            <div className="flex items-center gap-1">
+                              <MapPin className="w-4 h-4 text-orange-500" />
+                              <span className={isDark ? 'text-slate-400' : 'text-gray-500'}>
+                                {factor.region}
+                              </span>
+                            </div>
+                          )}
+                          <div className="flex items-center gap-1">
+                            <Info className="w-4 h-4 text-blue-500" />
+                            <span className={isDark ? 'text-slate-400' : 'text-gray-500'}>
+                              {factor.source}
+                            </span>
+                          </div>
+                        </div>
+                        {factor.tags && factor.tags.length > 0 && (
+                          <div className="flex flex-wrap gap-2 mt-3">
+                            {factor.tags.map(tag => (
+                              <span
+                                key={tag}
+                                className={`px-2 py-1 text-xs rounded-lg ${
+                                  isDark ? 'bg-slate-700 text-slate-300' : 'bg-gray-100 text-gray-600'
+                                }`}
+                              >
+                                <Tag className="w-3 h-3 inline mr-1" />
+                                {tag}
+                              </span>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                      <div className="text-right">
+                        <p className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                          {primaryImpact?.value}
+                        </p>
+                        <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+                          {primaryImpact?.unit || factor.default_unit}
+                        </p>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </motion.div>
         ))}
