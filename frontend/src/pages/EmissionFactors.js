@@ -78,7 +78,8 @@ const EmissionFactors = () => {
   });
 
   const groupedFactors = filteredFactors.reduce((acc, factor) => {
-    const category = factor.category || 'other';
+    // Use subcategory or first impact category
+    const category = factor.subcategory || factor.category || 'other';
     if (!acc[category]) acc[category] = [];
     acc[category].push(factor);
     return acc;
