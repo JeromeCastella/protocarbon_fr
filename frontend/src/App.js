@@ -4,6 +4,9 @@ import { useAuth } from './context/AuthContext';
 import { useTheme } from './context/ThemeContext';
 import { FiscalYearProvider } from './context/FiscalYearContext';
 import AuthPage from './pages/AuthPage';
+import ForgotPassword from './pages/ForgotPassword';
+import ResetPassword from './pages/ResetPassword';
+import VerifyEmail from './pages/VerifyEmail';
 import Dashboard from './pages/Dashboard';
 import GeneralInfo from './pages/GeneralInfo';
 import DataEntry from './pages/DataEntry';
@@ -29,7 +32,13 @@ function App() {
     <div className={isDark ? 'dark' : ''}>
       <FiscalYearProvider>
         <Routes>
+          {/* Auth routes */}
           <Route path="/auth" element={!isAuthenticated ? <AuthPage /> : <Navigate to="/" />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
+          <Route path="/verify-email" element={<VerifyEmail />} />
+          
+          {/* Protected routes */}
           <Route path="/" element={isAuthenticated ? <Layout /> : <Navigate to="/auth" />}>
             <Route index element={<Dashboard />} />
             <Route path="general-info" element={<GeneralInfo />} />
