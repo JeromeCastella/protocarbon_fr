@@ -172,11 +172,11 @@ const AuthPage = () => {
                 <div className="relative">
                   <Lock className={`absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 ${isDark ? 'text-slate-400' : 'text-gray-400'}`} />
                   <input
-                    type="password"
+                    type={showPassword ? 'text' : 'password'}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     data-testid="password-input"
-                    className={`w-full pl-12 pr-4 py-3 rounded-xl border transition-all focus:ring-2 focus:ring-blue-500 ${
+                    className={`w-full pl-12 pr-12 py-3 rounded-xl border transition-all focus:ring-2 focus:ring-blue-500 ${
                       isDark 
                         ? 'bg-slate-700 border-slate-600 text-white placeholder-slate-400' 
                         : 'bg-white border-gray-200 text-gray-900 placeholder-gray-400'
@@ -184,8 +184,41 @@ const AuthPage = () => {
                     placeholder={t('auth.password')}
                     required
                   />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className={`absolute right-4 top-1/2 -translate-y-1/2 ${isDark ? 'text-slate-400 hover:text-slate-300' : 'text-gray-400 hover:text-gray-600'}`}
+                  >
+                    {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                  </button>
                 </div>
+                {!isLogin && <PasswordStrength password={password} />}
               </div>
+
+              {/* Remember Me & Forgot Password (Login only) */}
+              {isLogin && (
+                <div className="flex items-center justify-between">
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={rememberMe}
+                      onChange={(e) => setRememberMe(e.target.checked)}
+                      data-testid="remember-me-checkbox"
+                      className="w-4 h-4 rounded border-gray-300 text-blue-500 focus:ring-blue-500"
+                    />
+                    <span className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+                      {language === 'fr' ? 'Se souvenir de moi' : 'Angemeldet bleiben'}
+                    </span>
+                  </label>
+                  <Link
+                    to="/forgot-password"
+                    data-testid="forgot-password-link"
+                    className="text-sm text-blue-500 hover:underline"
+                  >
+                    {language === 'fr' ? 'Mot de passe oublié ?' : 'Passwort vergessen?'}
+                  </Link>
+                </div>
+              )}
 
               <button
                 type="submit"
