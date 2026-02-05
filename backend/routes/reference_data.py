@@ -53,8 +53,10 @@ async def get_categories(response: Response):
 
 @router.get("/subcategories")
 async def get_subcategories(response: Response, category: Optional[str] = None):
-    """Get subcategories - cached for 1 hour"""
-    response.headers["Cache-Control"] = "public, max-age=3600"
+    """Get subcategories - no cache to ensure fresh data"""
+    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    response.headers["Pragma"] = "no-cache"
+    response.headers["Expires"] = "0"
     
     query = {}
     if category:
