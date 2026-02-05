@@ -85,9 +85,27 @@ async def create_activity(activity: ActivityCreate, current_user: dict = Depends
     activity_doc["company_id"] = current_user.get("company_id")
     activity_doc["created_at"] = datetime.now(timezone.utc).isoformat()
     
-    # Set date if not provided
+    # Set date based on fiscal year if provided, otherwise use today
     if not activity_doc.get("date"):
-        activity_doc["date"] = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+        if activity_doc.get("fiscal_year_id"):
+            # Get the fiscal year to determine an appropriate date
+            fy = fiscal_years_collection.find_one({"_id": ObjectId(activity_doc["fiscal_year_id"])})
+            if fy:
+                # Use the middle of the fiscal year as default date
+                start = fy.get("start_date", "")[:10]
+                end = fy.get("end_date", "")[:10]
+                if start and end:
+                    from datetime import datetime as dt
+                    start_dt = dt.strptime(start, "%Y-%m-%d")
+                    end_dt = dt.strptime(end, "%Y-%m-%d")
+                    mid_dt = start_dt + (end_dt - start_dt) / 2
+                    activity_doc["date"] = mid_dt.strftime("%Y-%m-%d")
+                else:
+                    activity_doc["date"] = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+            else:
+                activity_doc["date"] = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+        else:
+            activity_doc["date"] = datetime.now(timezone.utc).strftime("%Y-%m-%d")
     
     # Calculate emissions if emission factor is provided
     emissions = 0
