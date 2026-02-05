@@ -41,25 +41,47 @@ async def list_users(current_user: dict = Depends(require_admin)):
     return [serialize_doc(u) for u in users]
 
 
+from pydantic import BaseModel
+
+class RoleUpdate(BaseModel):
+    role: str
+
 @router.put("/users/{user_id}/role")
 async def update_user_role(
     user_id: str,
-    role: str,
+    role_update: RoleUpdate,
     current_user: dict = Depends(require_admin)
 ):
     """Update a user's role (admin only)"""
-    if role not in ["user", "admin"]:
+    if role_update.role not in ["user", "admin"]:
         raise HTTPException(status_code=400, detail="Invalid role")
     
     result = users_collection.update_one(
         {"_id": ObjectId(user_id)},
-        {"$set": {"role": role}}
+        {"$set": {"role": role_update.role}}
     )
     
     if result.matched_count == 0:
         raise HTTPException(status_code=404, detail="User not found")
     
-    return {"message": f"User role updated to {role}"}
+    return {"message": f"User role updated to {role_update.role}"}
+
+
+@router.delete("/users/{user_id}")
+async def delete_user(
+    user_id: str,
+    current_user: dict = Depends(require_admin)
+):
+    """Delete a user (admin only)"""
+    if user_id == current_user["id"]:
+        raise HTTPException(status_code=400, detail="Cannot delete yourself")
+    
+    result = users_collection.delete_one({"_id": ObjectId(user_id)})
+    
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    return {"message": "User deleted successfully"}
 
 
 # ==================== EMISSION FACTORS V2 ====================
