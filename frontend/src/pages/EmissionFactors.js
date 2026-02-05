@@ -150,15 +150,21 @@ const EmissionFactors = () => {
         </div>
         <div className={`p-4 rounded-xl ${isDark ? 'bg-slate-800' : 'bg-white shadow-lg'}`}>
           <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>Scope 1</p>
-          <p className={`text-2xl font-bold text-blue-500`}>{factors.filter(f => f.scope === 'scope1').length}</p>
+          <p className={`text-2xl font-bold text-blue-500`}>
+            {factors.filter(f => getFactorScopes(f).includes('scope1')).length}
+          </p>
         </div>
         <div className={`p-4 rounded-xl ${isDark ? 'bg-slate-800' : 'bg-white shadow-lg'}`}>
           <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>Scope 2</p>
-          <p className={`text-2xl font-bold text-cyan-500`}>{factors.filter(f => f.scope === 'scope2').length}</p>
+          <p className={`text-2xl font-bold text-cyan-500`}>
+            {factors.filter(f => getFactorScopes(f).includes('scope2')).length}
+          </p>
         </div>
         <div className={`p-4 rounded-xl ${isDark ? 'bg-slate-800' : 'bg-white shadow-lg'}`}>
           <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>Scope 3</p>
-          <p className={`text-2xl font-bold text-purple-500`}>{factors.filter(f => f.scope?.startsWith('scope3')).length}</p>
+          <p className={`text-2xl font-bold text-purple-500`}>
+            {factors.filter(f => getFactorScopes(f).some(s => s?.startsWith('scope3'))).length}
+          </p>
         </div>
       </div>
 
