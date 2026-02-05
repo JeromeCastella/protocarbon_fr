@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import { useLanguage } from '../context/LanguageContext';
 import { motion } from 'framer-motion';
-import { Leaf, Mail, Lock, User, ArrowRight, Globe } from 'lucide-react';
+import { Leaf, Mail, Lock, User, ArrowRight, Globe, Eye, EyeOff } from 'lucide-react';
+import PasswordStrength from '../components/PasswordStrength';
 
 const AuthPage = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -12,6 +14,8 @@ const AuthPage = () => {
   const [name, setName] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
   
   const { login, register } = useAuth();
   const { isDark, toggleTheme } = useTheme();
@@ -24,7 +28,7 @@ const AuthPage = () => {
 
     try {
       if (isLogin) {
-        await login(email, password);
+        await login(email, password, rememberMe);
       } else {
         await register(email, password, name, language);
       }
