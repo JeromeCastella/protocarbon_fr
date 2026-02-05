@@ -15,7 +15,7 @@ const API_URL = process.env.REACT_APP_BACKEND_URL || '';
 
 const EmissionFactors = () => {
   const { isDark } = useTheme();
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [factors, setFactors] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
