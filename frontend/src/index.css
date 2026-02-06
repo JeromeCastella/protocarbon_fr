@@ -97,3 +97,30 @@ input:focus, select:focus, textarea:focus {
 .badge-pulse {
   animation: badge-pulse 2s ease-in-out infinite;
 }
+
+
+/* Recharts - Remove focus outlines on SVG elements */
+.recharts-wrapper svg {
+  outline: none !important;
+}
+
+.recharts-wrapper svg *:focus {
+  outline: none !important;
+}
+
+.recharts-bar-rectangle path:focus,
+.recharts-bar-rectangle rect:focus,
+.recharts-rectangle:focus {
+  outline: none !important;
+}
+
+/* Remove blue selection on chart elements */
+.recharts-surface {
+  outline: none !important;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.recharts-layer path,
+.recharts-layer rect {
+  outline: none !important;
+}
