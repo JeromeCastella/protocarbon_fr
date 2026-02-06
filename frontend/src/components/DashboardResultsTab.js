@@ -430,7 +430,7 @@ const DashboardResultsTab = ({
         </motion.div>
       </div>
 
-      {/* Evolution Chart */}
+      {/* Evolution Chart - Stacked Area Chart */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -443,7 +443,7 @@ const DashboardResultsTab = ({
         
         <div className="h-72">
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart 
+            <AreaChart 
               data={evolutionData}
               margin={{ top: 10, right: 10, left: 10, bottom: 10 }}
             >
@@ -465,10 +465,34 @@ const DashboardResultsTab = ({
                 }}
               />
               <Legend />
-              <Bar dataKey="scope1" name="Scope 1" stackId="a" fill={SCOPE_COLORS.scope1} radius={[0, 0, 0, 0]} />
-              <Bar dataKey="scope2" name="Scope 2" stackId="a" fill={SCOPE_COLORS.scope2} radius={[0, 0, 0, 0]} />
-              <Bar dataKey="scope3" name="Scope 3" stackId="a" fill={SCOPE_COLORS.scope3} radius={[4, 4, 0, 0]} />
-            </BarChart>
+              <Area 
+                type="monotone" 
+                dataKey="scope1" 
+                name="Scope 1" 
+                stackId="1" 
+                stroke={SCOPE_COLORS.scope1} 
+                fill={SCOPE_COLORS.scope1}
+                fillOpacity={0.8}
+              />
+              <Area 
+                type="monotone" 
+                dataKey="scope2" 
+                name="Scope 2" 
+                stackId="1" 
+                stroke={SCOPE_COLORS.scope2} 
+                fill={SCOPE_COLORS.scope2}
+                fillOpacity={0.8}
+              />
+              <Area 
+                type="monotone" 
+                dataKey="scope3" 
+                name="Scope 3" 
+                stackId="1" 
+                stroke={SCOPE_COLORS.scope3} 
+                fill={SCOPE_COLORS.scope3}
+                fillOpacity={0.8}
+              />
+            </AreaChart>
           </ResponsiveContainer>
         </div>
       </motion.div>
