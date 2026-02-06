@@ -204,29 +204,31 @@ const DashboardResultsTab = ({
 
   return (
     <div className="space-y-6">
-      {/* KPI Cards - 3 cards */}
+      {/* KPI Cards - Horizontal layout like mockup */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {/* Total Emissions */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className={`p-5 rounded-2xl ${isDark ? 'bg-slate-800' : 'bg-white shadow-lg'}`}
+          className={`p-4 rounded-2xl ${isDark ? 'bg-slate-800' : 'bg-white shadow-lg'}`}
         >
-          <div className="flex items-center gap-3 mb-3">
-            <div className="p-2.5 rounded-xl bg-green-500/20">
-              <Leaf className="w-5 h-5 text-green-500" />
+          <div className="flex items-center gap-4">
+            <div className={`p-3 rounded-xl ${isDark ? 'bg-slate-700' : 'bg-slate-100'}`}>
+              <Leaf className={`w-6 h-6 ${isDark ? 'text-slate-300' : 'text-slate-600'}`} />
             </div>
-            <span className={`text-sm font-medium ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-              {language === 'fr' ? 'Émissions totales' : 'Gesamtemissionen'}
-            </span>
-          </div>
-          <div className="flex items-baseline gap-2">
-            <p className={`text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-              {formatEmissions(summary?.total_emissions || 0).value}
-            </p>
-            <span className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-              {formatEmissions(summary?.total_emissions || 0).unit}
-            </span>
+            <div className="flex-1">
+              <p className={`text-xs uppercase tracking-wide ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+                {language === 'fr' ? 'Émissions totales' : 'Gesamtemissionen'}
+              </p>
+              <div className="flex items-baseline gap-1.5 mt-1">
+                <span className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                  {formatEmissions(summary?.total_emissions || 0).value}
+                </span>
+                <span className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+                  {formatEmissions(summary?.total_emissions || 0).unit}
+                </span>
+              </div>
+            </div>
           </div>
         </motion.div>
 
@@ -235,25 +237,27 @@ const DashboardResultsTab = ({
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className={`p-5 rounded-2xl ${isDark ? 'bg-slate-800' : 'bg-white shadow-lg'}`}
+          className={`p-4 rounded-2xl ${isDark ? 'bg-slate-800' : 'bg-white shadow-lg'}`}
         >
-          <div className="flex items-center gap-3 mb-3">
-            <div className="p-2.5 rounded-xl bg-blue-500/20">
-              <DollarSign className="w-5 h-5 text-blue-500" />
+          <div className="flex items-center gap-4">
+            <div className="p-3 rounded-xl bg-emerald-500/20">
+              <DollarSign className="w-6 h-6 text-emerald-500" />
             </div>
-            <span className={`text-sm font-medium ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-              {language === 'fr' ? 'Émissions par kCHF' : 'Emissionen pro kCHF'}
-            </span>
-          </div>
-          <div className="flex items-baseline gap-2">
-            <p className={`text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-              {kpis?.emissions_per_revenue 
-                ? (kpis.emissions_per_revenue / 1000).toLocaleString('fr-FR', { maximumFractionDigits: 2 })
-                : '0'}
-            </p>
-            <span className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-              tCO₂e/kCHF
-            </span>
+            <div className="flex-1">
+              <p className={`text-xs uppercase tracking-wide ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+                {language === 'fr' ? 'Émissions par kCHF' : 'Emissionen pro kCHF'}
+              </p>
+              <div className="flex items-baseline gap-1.5 mt-1">
+                <span className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                  {kpis?.emissions_per_revenue 
+                    ? (kpis.emissions_per_revenue / 1000).toLocaleString('fr-FR', { maximumFractionDigits: 2 })
+                    : '0'}
+                </span>
+                <span className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+                  tCO₂e/kCHF
+                </span>
+              </div>
+            </div>
           </div>
         </motion.div>
 
@@ -262,40 +266,53 @@ const DashboardResultsTab = ({
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className={`p-5 rounded-2xl ${isDark ? 'bg-slate-800' : 'bg-white shadow-lg'}`}
+          className={`p-4 rounded-2xl ${isDark ? 'bg-slate-800' : 'bg-white shadow-lg'}`}
         >
-          <div className="flex items-center gap-3 mb-3">
-            <div className={`p-2.5 rounded-xl ${
+          <div className="flex items-center gap-4">
+            <div className={`p-3 rounded-xl ${
               (kpis?.year_over_year_change || 0) < 0 
                 ? 'bg-green-500/20' 
                 : (kpis?.year_over_year_change || 0) > 0 
                   ? 'bg-red-500/20' 
-                  : isDark ? 'bg-slate-700' : 'bg-gray-100'
+                  : 'bg-green-500/20'
             }`}>
               {(kpis?.year_over_year_change || 0) < 0 ? (
-                <TrendingDown className="w-5 h-5 text-green-500" />
+                <TrendingDown className="w-6 h-6 text-green-500" />
               ) : (kpis?.year_over_year_change || 0) > 0 ? (
-                <TrendingUp className="w-5 h-5 text-red-500" />
+                <TrendingUp className="w-6 h-6 text-red-500" />
               ) : (
-                <Minus className={`w-5 h-5 ${isDark ? 'text-slate-400' : 'text-gray-400'}`} />
+                <TrendingDown className="w-6 h-6 text-green-500" />
               )}
             </div>
-            <span className={`text-sm font-medium ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-              {language === 'fr' ? 'Variation N-1' : 'Veränderung N-1'}
-            </span>
-          </div>
-          <div className="flex items-baseline gap-2">
-            <p className={`text-3xl font-bold ${
-              (kpis?.year_over_year_change || 0) < 0 
-                ? 'text-green-500' 
-                : (kpis?.year_over_year_change || 0) > 0 
-                  ? 'text-red-500' 
-                  : isDark ? 'text-white' : 'text-gray-900'
-            }`}>
-              {kpis?.year_over_year_change !== null && kpis?.year_over_year_change !== undefined
-                ? `${kpis.year_over_year_change > 0 ? '+' : ''}${kpis.year_over_year_change}%`
-                : '-'}
-            </p>
+            <div className="flex-1">
+              <p className={`text-xs uppercase tracking-wide ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+                {language === 'fr' ? 'Variation N-1' : 'Veränderung N-1'}
+              </p>
+              <div className="flex items-center gap-2 mt-1">
+                <span className={`text-2xl font-bold ${
+                  (kpis?.year_over_year_change || 0) < 0 
+                    ? 'text-green-500' 
+                    : (kpis?.year_over_year_change || 0) > 0 
+                      ? 'text-red-500' 
+                      : 'text-green-500'
+                }`}>
+                  {kpis?.year_over_year_change !== null && kpis?.year_over_year_change !== undefined
+                    ? `${kpis.year_over_year_change > 0 ? '+' : ''}${Math.abs(kpis.year_over_year_change)}%`
+                    : '-'}
+                </span>
+                {kpis?.year_over_year_change !== null && kpis?.year_over_year_change !== undefined && (
+                  <span className={`text-xs px-2 py-0.5 rounded-full ${
+                    kpis.year_over_year_change < 0 
+                      ? 'bg-green-100 text-green-600' 
+                      : kpis.year_over_year_change > 0 
+                        ? 'bg-red-100 text-red-600'
+                        : 'bg-gray-100 text-gray-600'
+                  }`}>
+                    {kpis.year_over_year_change < 0 ? `↓ ${Math.abs(kpis.year_over_year_change)}%` : kpis.year_over_year_change > 0 ? `↑ ${kpis.year_over_year_change}%` : '0%'}
+                  </span>
+                )}
+              </div>
+            </div>
           </div>
         </motion.div>
       </div>
