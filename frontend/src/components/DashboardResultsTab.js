@@ -430,7 +430,7 @@ const DashboardResultsTab = ({
         </motion.div>
       </div>
 
-      {/* Evolution Chart - Stacked Area Chart */}
+      {/* Evolution Chart - Stacked Bar Chart */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -443,18 +443,20 @@ const DashboardResultsTab = ({
         
         <div className="h-72">
           <ResponsiveContainer width="100%" height="100%">
-            <AreaChart 
+            <BarChart 
               data={evolutionData}
-              margin={{ top: 10, right: 10, left: 10, bottom: 10 }}
+              margin={{ top: 10, right: 30, left: 10, bottom: 10 }}
             >
-              <CartesianGrid strokeDasharray="3 3" opacity={0.2} />
+              <CartesianGrid strokeDasharray="3 3" opacity={0.2} vertical={false} />
               <XAxis 
                 dataKey="year" 
                 tick={{ fill: isDark ? '#94a3b8' : '#6b7280' }}
+                axisLine={{ stroke: isDark ? '#475569' : '#e5e7eb' }}
               />
               <YAxis 
-                tickFormatter={(value) => `${value.toFixed(0)}t`}
+                tickFormatter={(value) => `${value.toFixed(0)}`}
                 tick={{ fill: isDark ? '#94a3b8' : '#6b7280' }}
+                axisLine={{ stroke: isDark ? '#475569' : '#e5e7eb' }}
               />
               <Tooltip 
                 formatter={(value, name) => [`${value.toFixed(1)} tCO₂e`, name]}
@@ -463,36 +465,34 @@ const DashboardResultsTab = ({
                   borderColor: isDark ? '#475569' : '#e5e7eb',
                   borderRadius: '8px'
                 }}
+                cursor={{ fill: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)' }}
               />
-              <Legend />
-              <Area 
-                type="monotone" 
+              <Legend 
+                wrapperStyle={{ paddingTop: '20px' }}
+                iconType="circle"
+              />
+              <Bar 
                 dataKey="scope1" 
                 name="Scope 1" 
-                stackId="1" 
-                stroke={SCOPE_COLORS.scope1} 
+                stackId="stack" 
                 fill={SCOPE_COLORS.scope1}
-                fillOpacity={0.8}
+                radius={[0, 0, 0, 0]}
               />
-              <Area 
-                type="monotone" 
+              <Bar 
                 dataKey="scope2" 
                 name="Scope 2" 
-                stackId="1" 
-                stroke={SCOPE_COLORS.scope2} 
+                stackId="stack" 
                 fill={SCOPE_COLORS.scope2}
-                fillOpacity={0.8}
+                radius={[0, 0, 0, 0]}
               />
-              <Area 
-                type="monotone" 
+              <Bar 
                 dataKey="scope3" 
                 name="Scope 3" 
-                stackId="1" 
-                stroke={SCOPE_COLORS.scope3} 
+                stackId="stack" 
                 fill={SCOPE_COLORS.scope3}
-                fillOpacity={0.8}
+                radius={[4, 4, 0, 0]}
               />
-            </AreaChart>
+            </BarChart>
           </ResponsiveContainer>
         </div>
       </motion.div>
