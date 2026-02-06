@@ -116,7 +116,8 @@ class TestActivities:
         assert response.status_code == 200
         data = response.json()
         assert "data" in data
-        assert "total" in data
+        assert "pagination" in data
+        assert "total" in data["pagination"]
 
 
 class TestProducts:
@@ -247,20 +248,31 @@ class TestAdminPanel:
 class TestExport:
     """Export functionality tests"""
     
-    def test_export_all_data(self, auth_headers):
-        """Test exporting all data"""
-        response = requests.get(f"{BASE_URL}/api/admin/export", headers=auth_headers)
+    def test_export_full_backup(self, auth_headers):
+        """Test exporting full backup"""
+        response = requests.get(f"{BASE_URL}/api/export/full", headers=auth_headers)
         assert response.status_code == 200
         data = response.json()
         # Export should contain various data types
         assert isinstance(data, dict)
+        assert "export_metadata" in data
+        assert "activities" in data
+        assert "products" in data
     
     def test_export_emission_factors(self, auth_headers):
         """Test exporting emission factors"""
-        response = requests.get(f"{BASE_URL}/api/admin/emission-factors-v2/export", headers=auth_headers)
+        response = requests.get(f"{BASE_URL}/api/export/emission-factors", headers=auth_headers)
         assert response.status_code == 200
         data = response.json()
-        assert "emission_factors" in data or isinstance(data, list)
+        assert "emission_factors" in data
+    
+    def test_export_reference_data(self, auth_headers):
+        """Test exporting reference data"""
+        response = requests.get(f"{BASE_URL}/api/export/reference-data", headers=auth_headers)
+        assert response.status_code == 200
+        data = response.json()
+        assert "emission_factors" in data
+        assert "subcategories" in data
 
 
 class TestObjectives:
