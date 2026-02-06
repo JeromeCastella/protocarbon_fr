@@ -53,6 +53,7 @@ import {
   ComposedChart,
   ReferenceLine
 } from 'recharts';
+import DashboardResultsTab from '../components/DashboardResultsTab';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL || '';
 
