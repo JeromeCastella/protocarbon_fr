@@ -24,6 +24,27 @@ Application de calcul d'empreinte carbone selon le protocole GHG avec interface 
 
 ## What's Been Implemented
 
+### 2026-02-05 - Debug global et complet ✅
+- **Tests automatisés créés** : 29 tests backend (pytest)
+  - Authentification (login, credentials invalides, current user)
+  - Dashboard (summary, KPIs, fiscal comparison, scope breakdown)
+  - Activités (liste, pagination)
+  - Produits (liste, détails, ventes, profils d'émission)
+  - Facteurs d'émission (liste, recherche, par catégorie)
+  - Données de référence (catégories, sous-catégories)
+  - Exercices fiscaux
+  - Admin (utilisateurs, sous-catégories, facteurs V2)
+  - Export (full, emission factors, reference data)
+  - Objectifs (get, trajectory, recommendations)
+- **Résultat** : 100% tests passés (29/29)
+- **Fichier de tests** : `/app/backend/tests/test_comprehensive_features.py`
+
+### 2026-02-05 - Corrections bugs ✅
+- **Association activités-exercice fiscal** : Les nouvelles saisies sont maintenant associées à l'exercice sélectionné
+- **Sous-catégories dynamiques** : Les modifications admin se reflètent dans la saisie guidée
+- **Gestion utilisateurs** : Bouton supprimer avec confirmation, promotion admin fonctionnelle
+- **URL email** : FRONTEND_URL configuré pour protocarbonfr.watted.ch
+
 ### 2026-02-05 - Système d'authentification complet ✅
 - **Récupération de mot de passe** :
   - Page `/forgot-password` pour demander un lien de réinitialisation
