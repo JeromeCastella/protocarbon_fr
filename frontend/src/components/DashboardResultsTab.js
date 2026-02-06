@@ -20,9 +20,7 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer,
-  Cell,
-  AreaChart,
-  Area
+  Cell
 } from 'recharts';
 
 // Chart colors
