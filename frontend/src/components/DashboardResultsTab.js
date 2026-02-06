@@ -297,7 +297,7 @@ const DashboardResultsTab = ({
                       : 'text-green-500'
                 }`}>
                   {kpis?.year_over_year_change !== null && kpis?.year_over_year_change !== undefined
-                    ? `${kpis.year_over_year_change > 0 ? '+' : ''}${Math.abs(kpis.year_over_year_change)}%`
+                    ? `${kpis.year_over_year_change < 0 ? '-' : kpis.year_over_year_change > 0 ? '+' : ''}${Math.abs(kpis.year_over_year_change)}%`
                     : '-'}
                 </span>
                 {kpis?.year_over_year_change !== null && kpis?.year_over_year_change !== undefined && (
