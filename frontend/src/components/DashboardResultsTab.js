@@ -181,7 +181,6 @@ const DashboardResultsTab = ({
   // Handle click on scope bar for drill-down
   const handleScopeClick = (entry, index) => {
     if (entry?.key && !drillDownScope) {
-      console.log('Drill down to:', entry.key);
       setDrillDownScope(entry.key);
     }
   };
