@@ -317,6 +317,7 @@ Application de calcul d'empreinte carbone selon le protocole GHG avec interface 
 - [x] Recalcul des émissions avec facteurs actuels
 - [x] **Nettoyage du backend** : server.py refactorisé (3556→29 lignes)
 - [x] **Gestion liée des ventes produits** : sale_id unique lie les 3 activités (transformation, utilisation, fin de vie)
+- [x] **Refonte onglet Résultats** : 3 KPI Cards, Scope Chart avec drill-down, Top 10, Évolution
 
 ### P1 - High Priority
 - [x] **Refactoring Frontend Admin.js** : 1915→94 lignes (6 composants extraits)
