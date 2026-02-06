@@ -348,7 +348,6 @@ const DashboardResultsTab = ({
               <BarChart 
                 data={drillDownScope ? categoryDrillDownData : scopeChartData}
                 margin={{ top: 10, right: 10, left: 10, bottom: 10 }}
-                onClick={(data) => !drillDownScope && data?.activePayload && handleScopeClick(data.activePayload[0]?.payload)}
               >
                 <CartesianGrid strokeDasharray="3 3" opacity={0.2} />
                 <XAxis 
@@ -368,6 +367,8 @@ const DashboardResultsTab = ({
                   dataKey="emissions" 
                   cursor={drillDownScope ? 'default' : 'pointer'}
                   radius={[4, 4, 0, 0]}
+                  onClick={(data, index) => handleScopeClick(data, index)}
+                  style={{ outline: 'none' }}
                 >
                   {(drillDownScope ? categoryDrillDownData : scopeChartData).map((entry, index) => (
                     <Cell 
@@ -375,6 +376,7 @@ const DashboardResultsTab = ({
                       fill={drillDownScope 
                         ? CATEGORY_COLORS[index % CATEGORY_COLORS.length] 
                         : entry.color}
+                      style={{ outline: 'none', cursor: drillDownScope ? 'default' : 'pointer' }}
                     />
                   ))}
                 </Bar>
