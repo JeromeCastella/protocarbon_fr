@@ -168,22 +168,14 @@ const DashboardResultsTab = ({
   
   // Evolution data for stacked chart (using fiscal comparison)
   const evolutionData = useMemo(() => {
-    if (!fiscalComparison?.length) {
-      console.log('No fiscal comparison data');
-      return [];
-    }
+    if (!fiscalComparison?.length) return [];
     
-    console.log('Fiscal comparison raw:', fiscalComparison);
-    
-    const data = fiscalComparison.map(fc => ({
+    return fiscalComparison.map(fc => ({
       year: fc.year || fc.name?.replace('Exercice ', ''),
       scope1: (fc.scope1 || 0) / 1000, // Convert to tonnes
       scope2: (fc.scope2 || 0) / 1000,
       scope3: ((fc.scope3_amont || 0) + (fc.scope3_aval || 0)) / 1000
     }));
-    
-    console.log('Evolution data transformed:', data);
-    return data;
   }, [fiscalComparison]);
   
   // Handle click on scope bar for drill-down
