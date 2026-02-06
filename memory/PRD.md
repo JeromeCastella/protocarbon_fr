@@ -24,6 +24,16 @@ Application de calcul d'empreinte carbone selon le protocole GHG avec interface 
 
 ## What's Been Implemented
 
+### 2026-02-06 - Refonte onglet "Résultats" du Dashboard ✅
+- **Implémentation complète du composant `DashboardResultsTab.js`** :
+  - **3 KPI Cards** : Émissions totales, Émissions par kCHF, Variation N-1 (avec couleur verte/rouge selon tendance)
+  - **Graphique "Émissions par Scope"** : Barres verticales avec drill-down par catégorie (clic sur une barre → affiche les sous-catégories)
+  - **Top 10 sous-catégories** : Liste avec barres horizontales colorées et valeurs alignées à droite
+  - **Graphique "Évolution des émissions"** : Barres empilées (Scope 1 orange, Scope 2 bleu, Scope 3 violet) par exercice fiscal
+- **Tests automatisés créés** : 20 tests backend pour les APIs dashboard (100% réussis)
+- **Fichier de tests** : `/app/backend/tests/test_dashboard_results.py`
+- **Design conforme à la maquette fournie par l'utilisateur**
+
 ### 2026-02-05 - Debug global et complet ✅
 - **Tests automatisés créés** : 29 tests backend (pytest)
   - Authentification (login, credentials invalides, current user)
