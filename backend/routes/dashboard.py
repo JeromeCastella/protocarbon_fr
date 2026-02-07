@@ -131,21 +131,11 @@ async def get_category_stats(
     current_user: dict = Depends(get_current_user)
 ):
     """Get statistics by category"""
-    # Build query - filter by fiscal year if specified
+    # Build query - filter by fiscal year if specified using fiscal_year_id
     query = {"tenant_id": current_user["id"]}
     
     if fiscal_year_id:
-        fy = fiscal_years_collection.find_one({"_id": ObjectId(fiscal_year_id)})
-        if fy:
-            start_date = fy.get("start_date", "")
-            end_date = fy.get("end_date", "")
-            if start_date and end_date:
-                query["$expr"] = {
-                    "$and": [
-                        {"$gte": [{"$substr": ["$date", 0, 10]}, start_date]},
-                        {"$lte": [{"$substr": ["$date", 0, 10]}, end_date]}
-                    ]
-                }
+        query["fiscal_year_id"] = fiscal_year_id
     
     activities = list(activities_collection.find(query))
     
