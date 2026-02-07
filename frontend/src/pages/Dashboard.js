@@ -204,7 +204,7 @@ const Dashboard = () => {
       
       const [summaryRes, kpisRes, comparisonRes, breakdownRes, activitiesRes, productsRes] = await Promise.all([
         axios.get(`${API_URL}/api/dashboard/summary${fyParam}`),
-        axios.get(`${API_URL}/api/dashboard/kpis`),
+        axios.get(`${API_URL}/api/dashboard/kpis${fyParam}`),
         axios.get(`${API_URL}/api/dashboard/fiscal-comparison`),
         axios.get(`${API_URL}/api/dashboard/scope-breakdown/${currentFiscalYear?.id || 'current'}`),
         axios.get(`${API_URL}/api/activities?limit=100${fyParamAmp}`).catch(() => ({ data: { data: [] } })),
