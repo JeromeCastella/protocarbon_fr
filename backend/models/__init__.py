@@ -207,9 +207,7 @@ class FiscalYearRectify(BaseModel):
     reason: str
 
 class FiscalYearDuplicate(BaseModel):
-    new_name: str
-    new_start_date: str
-    new_end_date: str
+    new_year: int  # Année du nouvel exercice
     duplicate_activities: bool = False
     activity_ids_to_duplicate: List[str] = []
 
