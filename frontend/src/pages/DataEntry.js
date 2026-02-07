@@ -50,6 +50,16 @@ const API_URL = process.env.REACT_APP_BACKEND_URL || '';
 // Categories that should open product sale modal instead of regular entry
 const PRODUCT_SALE_CATEGORIES = ['transformation_produits', 'utilisation_produits', 'fin_vie_produits'];
 
+// Virtual "Produits vendus" card that replaces the 3 separate product categories
+const PRODUITS_VENDUS_CARD = {
+  code: 'produits_vendus',
+  name_fr: 'Produits vendus',
+  name_de: 'Verkaufte Produkte',
+  scope: 'scope3_aval',
+  icon: 'package',
+  color: '#7c3aed' // Purple color
+};
+
 // Utility function to format emissions with appropriate unit
 const formatEmissions = (valueInKg) => {
   if (valueInKg === null || valueInKg === undefined) {
