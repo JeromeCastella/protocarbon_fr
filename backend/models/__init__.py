@@ -198,9 +198,7 @@ class CompanyUpdate(BaseModel):
 # ==================== FISCAL YEAR MODELS ====================
 
 class FiscalYearCreate(BaseModel):
-    name: str
-    start_date: str
-    end_date: str
+    year: int  # Année de l'exercice (ex: 2026) - génère automatiquement les dates
 
 class FiscalYearClose(BaseModel):
     pass
