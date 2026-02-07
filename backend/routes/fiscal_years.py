@@ -23,11 +23,27 @@ router = APIRouter(prefix="/fiscal-years", tags=["Fiscal Years"])
 
 @router.get("")
 async def get_fiscal_years(current_user: dict = Depends(get_current_user)):
-    """Get all fiscal years for the current user"""
+    """Get all fiscal years for the current user with activity counts"""
     fiscal_years = list(fiscal_years_collection.find({
         "tenant_id": current_user["id"]
     }).sort("start_date", -1))
-    return [serialize_doc(fy) for fy in fiscal_years]
+    
+    # Add activity count for each fiscal year
+    result = []
+    for fy in fiscal_years:
+        fy_data = serialize_doc(fy)
+        fy_id = str(fy["_id"])
+        
+        # Count activities for this fiscal year
+        activities_count = activities_collection.count_documents({
+            "tenant_id": current_user["id"],
+            "fiscal_year_id": fy_id
+        })
+        fy_data["activities_count"] = activities_count
+        
+        result.append(fy_data)
+    
+    return result
 
 
 @router.get("/current")
