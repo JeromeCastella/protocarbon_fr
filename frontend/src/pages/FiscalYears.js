@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useTheme } from '../context/ThemeContext';
 import { useFiscalYear } from '../context/FiscalYearContext';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -13,29 +13,17 @@ import {
   AlertTriangle,
   Check,
   X,
-  ChevronRight,
+  ChevronDown,
   FileText,
-  ArrowRight,
-  Info
+  MoreVertical,
+  RefreshCw
 } from 'lucide-react';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL || '';
 
-// Months for display
-const MONTHS = [
-  { value: 1, label: 'Janvier' },
-  { value: 2, label: 'Février' },
-  { value: 3, label: 'Mars' },
-  { value: 4, label: 'Avril' },
-  { value: 5, label: 'Mai' },
-  { value: 6, label: 'Juin' },
-  { value: 7, label: 'Juillet' },
-  { value: 8, label: 'Août' },
-  { value: 9, label: 'Septembre' },
-  { value: 10, label: 'Octobre' },
-  { value: 11, label: 'Novembre' },
-  { value: 12, label: 'Décembre' }
-];
+// Configuration des années
+const MIN_YEAR = 2020;
+const YEARS_AHEAD = 10;
 
 const FiscalYears = () => {
   const { isDark } = useTheme();
@@ -47,100 +35,65 @@ const FiscalYears = () => {
     closeFiscalYear, 
     rectifyFiscalYear,
     duplicateToNewYear,
-    getActivitiesForDuplication,
     refreshFiscalYears
   } = useFiscalYear();
   
+  // Modals state
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showCloseModal, setShowCloseModal] = useState(false);
   const [showRectifyModal, setShowRectifyModal] = useState(false);
-  const [showDuplicateModal, setShowDuplicateModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedFY, setSelectedFY] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [openMenuId, setOpenMenuId] = useState(null);
   
-  // Company fiscal year settings
-  const [companySettings, setCompanySettings] = useState({
-    fiscal_year_start_month: 1
-  });
-  
-  // Fetch company settings on mount
-  useEffect(() => {
-    const fetchCompanySettings = async () => {
-      try {
-        const response = await axios.get(`${API_URL}/api/companies`);
-        if (response.data) {
-          setCompanySettings({
-            fiscal_year_start_month: response.data.fiscal_year_start_month || 1
-          });
-        }
-      } catch (error) {
-        console.error('Failed to fetch company settings:', error);
-      }
-    };
-    fetchCompanySettings();
-  }, []);
-  
-  // Form states - simplified to just year
+  // Create form state
   const [createForm, setCreateForm] = useState({
-    year: new Date().getFullYear()
+    year: new Date().getFullYear() + 1,
+    duplicateFrom: null,
+    duplicateActivities: false
   });
   const [createError, setCreateError] = useState('');
+  
+  // Rectify form state
   const [rectifyReason, setRectifyReason] = useState('');
-  const [duplicateForm, setDuplicateForm] = useState({
-    new_name: '',
-    new_start_date: '',
-    new_end_date: '',
-    duplicate_activities: false,
-    selected_activity_ids: []
-  });
-  const [activitiesForDuplication, setActivitiesForDuplication] = useState(null);
+  
+  // Delete confirmation state
+  const [deleteStats, setDeleteStats] = useState(null);
+  const [deleteConfirmText, setDeleteConfirmText] = useState('');
+
+  // Calculate available years (those not already created)
+  const existingYears = useMemo(() => {
+    return new Set(fiscalYears.map(fy => fy.year || parseInt(fy.name?.replace('Exercice ', ''))));
+  }, [fiscalYears]);
+
+  const availableYears = useMemo(() => {
+    const currentYear = new Date().getFullYear();
+    const maxYear = currentYear + YEARS_AHEAD;
+    const years = [];
+    
+    for (let year = MIN_YEAR; year <= maxYear; year++) {
+      years.push({
+        year,
+        available: !existingYears.has(year)
+      });
+    }
+    
+    return years;
+  }, [existingYears]);
+
+  // Find first available year for default selection
+  useEffect(() => {
+    const firstAvailable = availableYears.find(y => y.available);
+    if (firstAvailable && showCreateModal) {
+      setCreateForm(prev => ({ ...prev, year: firstAvailable.year }));
+    }
+  }, [availableYears, showCreateModal]);
 
   const formatDate = (dateStr) => {
     if (!dateStr) return '';
     const date = new Date(dateStr);
-    return date.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
-  };
-
-  // Calculate fiscal year dates based on company settings and selected year
-  const calculateFiscalYearDates = (year) => {
-    const startMonth = companySettings.fiscal_year_start_month;
-    
-    // Start date: first day of the start month
-    const startDate = new Date(year, startMonth - 1, 1);
-    
-    // End date: last day of the month before start month of next year
-    let endDate;
-    if (startMonth === 1) {
-      // Calendar year: Jan 1 to Dec 31
-      endDate = new Date(year, 11, 31);
-    } else {
-      // Fiscal year spans two calendar years
-      // End is last day of (startMonth - 1) in year + 1
-      endDate = new Date(year + 1, startMonth - 1, 0); // Day 0 = last day of previous month
-    }
-    
-    // Format as ISO date strings (YYYY-MM-DD)
-    const formatISO = (d) => d.toISOString().split('T')[0];
-    
-    return {
-      start_date: formatISO(startDate),
-      end_date: formatISO(endDate)
-    };
-  };
-
-  // Get preview of fiscal year dates
-  const getFiscalYearPreview = (year) => {
-    const dates = calculateFiscalYearDates(year);
-    const startDate = new Date(dates.start_date);
-    const endDate = new Date(dates.end_date);
-    
-    const startMonthName = MONTHS.find(m => m.value === (startDate.getMonth() + 1))?.label;
-    const endMonthName = MONTHS.find(m => m.value === (endDate.getMonth() + 1))?.label;
-    
-    return {
-      start: `${startMonthName} ${startDate.getFullYear()}`,
-      end: `${endMonthName} ${endDate.getFullYear()}`
-    };
+    return date.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' });
   };
 
   const getStatusBadge = (status) => {
@@ -169,26 +122,48 @@ const FiscalYears = () => {
     }
   };
 
+  // Get activities count for a fiscal year
+  const getActivityCount = (fy) => {
+    return fy.activities_count || 0;
+  };
+
+  // Handle create fiscal year
   const handleCreate = async () => {
     if (!createForm.year) return;
+    
+    // Check if year is available
+    if (existingYears.has(createForm.year)) {
+      setCreateError(`Un exercice existe déjà pour l'année ${createForm.year}`);
+      return;
+    }
+    
     setLoading(true);
     setCreateError('');
+    
     try {
-      // Envoyer uniquement l'année, le backend génère automatiquement les dates
-      await createFiscalYear({
-        year: createForm.year
-      });
+      if (createForm.duplicateActivities && createForm.duplicateFrom) {
+        // Create via duplication
+        await duplicateToNewYear(createForm.duplicateFrom, {
+          new_year: createForm.year,
+          duplicate_activities: true,
+          activity_ids_to_duplicate: []
+        });
+      } else {
+        // Create empty fiscal year
+        await createFiscalYear({ year: createForm.year });
+      }
+      
       setShowCreateModal(false);
-      setCreateForm({ year: new Date().getFullYear() });
+      setCreateForm({ year: new Date().getFullYear() + 1, duplicateFrom: null, duplicateActivities: false });
     } catch (error) {
       console.error('Failed to create fiscal year:', error);
-      const errorMessage = error.response?.data?.detail || 'Erreur lors de la création';
-      setCreateError(errorMessage);
+      setCreateError(error.response?.data?.detail || 'Erreur lors de la création');
     } finally {
       setLoading(false);
     }
   };
 
+  // Handle close fiscal year
   const handleClose = async () => {
     if (!selectedFY) return;
     setLoading(true);
@@ -204,6 +179,7 @@ const FiscalYears = () => {
     }
   };
 
+  // Handle rectify fiscal year
   const handleRectify = async () => {
     if (!selectedFY || !rectifyReason) return;
     setLoading(true);
@@ -220,57 +196,113 @@ const FiscalYears = () => {
     }
   };
 
-  const openDuplicateModal = async (fy) => {
+  // Open delete modal and fetch stats
+  const openDeleteModal = async (fy) => {
     setSelectedFY(fy);
+    setDeleteConfirmText('');
+    setLoading(true);
+    
+    try {
+      // Fetch detailed stats for this fiscal year
+      const response = await axios.get(`${API_URL}/api/dashboard/summary?fiscal_year_id=${fy.id}`);
+      setDeleteStats({
+        activitiesCount: response.data?.activities_count || 0,
+        totalEmissions: response.data?.total_emissions || 0
+      });
+    } catch (error) {
+      console.error('Failed to fetch stats:', error);
+      setDeleteStats({ activitiesCount: 0, totalEmissions: 0 });
+    } finally {
+      setLoading(false);
+      setShowDeleteModal(true);
+    }
+  };
+
+  // Handle delete fiscal year
+  const handleDelete = async () => {
+    if (!selectedFY) return;
+    if (deleteConfirmText !== selectedFY.name) return;
+    
     setLoading(true);
     try {
-      const activities = await getActivitiesForDuplication(fy.id);
-      setActivitiesForDuplication(activities);
-      
-      // Pre-fill with next year dates
-      const startDate = new Date(fy.start_date);
-      const endDate = new Date(fy.end_date);
-      startDate.setFullYear(startDate.getFullYear() + 1);
-      endDate.setFullYear(endDate.getFullYear() + 1);
-      
-      const yearNum = startDate.getFullYear();
-      setDuplicateForm({
-        new_name: `Exercice ${yearNum}`,
-        new_start_date: startDate.toISOString().split('T')[0],
-        new_end_date: endDate.toISOString().split('T')[0],
-        duplicate_activities: false,
-        selected_activity_ids: []
-      });
-      
-      setShowDuplicateModal(true);
+      await axios.delete(`${API_URL}/api/fiscal-years/${selectedFY.id}`);
+      await refreshFiscalYears();
+      setShowDeleteModal(false);
+      setSelectedFY(null);
+      setDeleteStats(null);
+      setDeleteConfirmText('');
     } catch (error) {
-      console.error('Failed to get activities:', error);
+      console.error('Failed to delete fiscal year:', error);
+      alert(error.response?.data?.detail || 'Erreur lors de la suppression');
     } finally {
       setLoading(false);
     }
   };
 
-  const handleDuplicate = async () => {
-    if (!selectedFY || !duplicateForm.new_name || !duplicateForm.new_start_date || !duplicateForm.new_end_date) return;
-    setLoading(true);
-    try {
-      await duplicateToNewYear(selectedFY.id, {
-        new_name: duplicateForm.new_name,
-        new_start_date: duplicateForm.new_start_date,
-        new_end_date: duplicateForm.new_end_date,
-        duplicate_activities: duplicateForm.duplicate_activities,
-        activity_ids_to_duplicate: duplicateForm.selected_activity_ids
-      });
-      setShowDuplicateModal(false);
-      setSelectedFY(null);
-      setActivitiesForDuplication(null);
-    } catch (error) {
-      console.error('Failed to duplicate:', error);
-      alert(error.response?.data?.detail || 'Erreur lors de la duplication');
-    } finally {
-      setLoading(false);
+  // Get available actions for a fiscal year
+  const getAvailableActions = (fy) => {
+    const actions = [];
+    
+    if (fy.status === 'draft') {
+      actions.push({ key: 'close', label: 'Clôturer', icon: Lock, color: 'green' });
+    }
+    
+    if (fy.status === 'closed') {
+      actions.push({ key: 'rectify', label: 'Rectifier', icon: Unlock, color: 'orange' });
+    }
+    
+    if (fy.status === 'rectified') {
+      actions.push({ key: 'close', label: 'Re-clôturer', icon: Lock, color: 'green' });
+    }
+    
+    // Duplicate is always available
+    actions.push({ key: 'duplicate', label: 'Dupliquer vers...', icon: Copy, color: 'blue' });
+    
+    // Delete is always available with warning
+    actions.push({ key: 'delete', label: 'Supprimer', icon: Trash2, color: 'red' });
+    
+    return actions;
+  };
+
+  // Handle action click
+  const handleAction = (fy, action) => {
+    setOpenMenuId(null);
+    setSelectedFY(fy);
+    
+    switch (action) {
+      case 'close':
+        setShowCloseModal(true);
+        break;
+      case 'rectify':
+        setShowRectifyModal(true);
+        break;
+      case 'duplicate':
+        // Open create modal with duplication pre-selected
+        const nextYear = (fy.year || parseInt(fy.name?.replace('Exercice ', ''))) + 1;
+        const targetYear = availableYears.find(y => y.year >= nextYear && y.available)?.year || nextYear;
+        setCreateForm({
+          year: targetYear,
+          duplicateFrom: fy.id,
+          duplicateActivities: true
+        });
+        setShowCreateModal(true);
+        break;
+      case 'delete':
+        openDeleteModal(fy);
+        break;
+      default:
+        break;
     }
   };
+
+  // Sort fiscal years by year descending
+  const sortedFiscalYears = useMemo(() => {
+    return [...fiscalYears].sort((a, b) => {
+      const yearA = a.year || parseInt(a.name?.replace('Exercice ', ''));
+      const yearB = b.year || parseInt(b.name?.replace('Exercice ', ''));
+      return yearB - yearA;
+    });
+  }, [fiscalYears]);
 
   return (
     <div data-testid="fiscal-years-page" className="space-y-8">
@@ -278,529 +310,530 @@ const FiscalYears = () => {
       <div className="flex items-center justify-between">
         <div>
           <h1 className={`text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-            Exercices Fiscaux
+            Exercices fiscaux
           </h1>
-          <p className={`mt-2 ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-            Gérez vos périodes de bilan carbone
+          <p className={`mt-1 ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+            Gérez vos exercices fiscaux et leurs données
           </p>
         </div>
         <button
-          onClick={() => setShowCreateModal(true)}
-          data-testid="create-fiscal-year-btn"
-          className="flex items-center gap-2 px-6 py-3 bg-blue-500 text-white rounded-xl hover:bg-blue-600 transition-all shadow-lg shadow-blue-500/30"
+          onClick={() => {
+            setCreateForm({ 
+              year: availableYears.find(y => y.available)?.year || new Date().getFullYear(), 
+              duplicateFrom: null, 
+              duplicateActivities: false 
+            });
+            setCreateError('');
+            setShowCreateModal(true);
+          }}
+          className="flex items-center gap-2 px-4 py-2.5 bg-blue-500 hover:bg-blue-600 text-white rounded-xl transition-colors"
         >
           <Plus className="w-5 h-5" />
           Nouvel exercice
         </button>
       </div>
 
-      {/* Fiscal Years List */}
-      {fiscalYears.length === 0 ? (
-        <div className={`text-center py-16 rounded-2xl ${isDark ? 'bg-slate-800' : 'bg-white shadow-lg'}`}>
+      {/* Fiscal Years Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        {sortedFiscalYears.map((fy, index) => (
+          <motion.div
+            key={fy.id}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: index * 0.05 }}
+            className={`relative p-5 rounded-2xl border transition-all ${
+              currentFiscalYear?.id === fy.id
+                ? isDark 
+                  ? 'bg-blue-500/10 border-blue-500/50' 
+                  : 'bg-blue-50 border-blue-200'
+                : isDark 
+                  ? 'bg-slate-800 border-slate-700 hover:border-slate-600' 
+                  : 'bg-white border-gray-200 hover:border-gray-300'
+            }`}
+          >
+            {/* Current badge */}
+            {currentFiscalYear?.id === fy.id && (
+              <div className="absolute -top-2 -right-2 px-2 py-0.5 bg-blue-500 text-white text-xs font-medium rounded-full">
+                Actif
+              </div>
+            )}
+
+            {/* Header with menu */}
+            <div className="flex items-start justify-between mb-3">
+              <div 
+                className="cursor-pointer flex-1"
+                onClick={() => selectFiscalYear(fy)}
+              >
+                <h3 className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                  {fy.name}
+                </h3>
+                <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+                  {formatDate(fy.start_date)} → {formatDate(fy.end_date)}
+                </p>
+              </div>
+              
+              {/* Actions menu */}
+              <div className="relative">
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setOpenMenuId(openMenuId === fy.id ? null : fy.id);
+                  }}
+                  className={`p-1.5 rounded-lg transition-colors ${
+                    isDark ? 'hover:bg-slate-700' : 'hover:bg-gray-100'
+                  }`}
+                >
+                  <MoreVertical className={`w-5 h-5 ${isDark ? 'text-slate-400' : 'text-gray-500'}`} />
+                </button>
+                
+                <AnimatePresence>
+                  {openMenuId === fy.id && (
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.95 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.95 }}
+                      className={`absolute right-0 top-full mt-1 w-48 rounded-xl shadow-lg border z-50 overflow-hidden ${
+                        isDark ? 'bg-slate-800 border-slate-700' : 'bg-white border-gray-200'
+                      }`}
+                    >
+                      {getAvailableActions(fy).map((action) => (
+                        <button
+                          key={action.key}
+                          onClick={() => handleAction(fy, action.key)}
+                          className={`w-full flex items-center gap-3 px-4 py-2.5 text-left transition-colors ${
+                            action.color === 'red'
+                              ? 'text-red-500 hover:bg-red-500/10'
+                              : action.color === 'green'
+                              ? isDark ? 'text-green-400 hover:bg-green-500/10' : 'text-green-600 hover:bg-green-50'
+                              : action.color === 'orange'
+                              ? isDark ? 'text-orange-400 hover:bg-orange-500/10' : 'text-orange-600 hover:bg-orange-50'
+                              : isDark ? 'text-slate-300 hover:bg-slate-700' : 'text-gray-700 hover:bg-gray-50'
+                          }`}
+                        >
+                          <action.icon className="w-4 h-4" />
+                          <span className="text-sm font-medium">{action.label}</span>
+                        </button>
+                      ))}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            </div>
+
+            {/* Status and stats */}
+            <div className="flex items-center justify-between">
+              {getStatusBadge(fy.status)}
+              <span className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+                {getActivityCount(fy)} saisies
+              </span>
+            </div>
+
+            {/* Summary if closed */}
+            {fy.summary && (
+              <div className={`mt-3 pt-3 border-t ${isDark ? 'border-slate-700' : 'border-gray-100'}`}>
+                <p className={`text-sm font-medium ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
+                  {(fy.summary.total_emissions_tco2e || 0).toLocaleString('fr-FR', { maximumFractionDigits: 1 })} tCO₂e
+                </p>
+              </div>
+            )}
+          </motion.div>
+        ))}
+      </div>
+
+      {/* Empty state */}
+      {fiscalYears.length === 0 && (
+        <div className={`text-center py-16 rounded-2xl ${isDark ? 'bg-slate-800' : 'bg-gray-50'}`}>
           <Calendar className={`w-16 h-16 mx-auto mb-4 ${isDark ? 'text-slate-600' : 'text-gray-300'}`} />
-          <p className={`text-lg mb-2 ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-            Aucun exercice fiscal créé
-          </p>
-          <p className={`text-sm mb-6 ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>
-            Créez votre premier exercice pour commencer à suivre vos émissions par période.
+          <h3 className={`text-xl font-semibold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+            Aucun exercice fiscal
+          </h3>
+          <p className={`mb-6 ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+            Créez votre premier exercice fiscal pour commencer
           </p>
           <button
             onClick={() => setShowCreateModal(true)}
-            className="inline-flex items-center gap-2 px-6 py-3 bg-blue-500 text-white rounded-xl hover:bg-blue-600 transition-all"
+            className="px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-xl transition-colors"
           >
-            <Plus className="w-5 h-5" />
             Créer un exercice
           </button>
         </div>
-      ) : (
-        <div className="space-y-4">
-          {fiscalYears.map((fy, index) => (
-            <motion.div
-              key={fy.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.05 }}
-              className={`rounded-2xl overflow-hidden ${isDark ? 'bg-slate-800' : 'bg-white shadow-lg'} ${
-                currentFiscalYear?.id === fy.id ? 'ring-2 ring-blue-500' : ''
-              }`}
-            >
-              <div className="p-6">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-4">
-                    <div className={`w-14 h-14 rounded-xl flex items-center justify-center ${
-                      fy.status === 'closed' 
-                        ? 'bg-green-500/20' 
-                        : fy.status === 'rectified'
-                          ? 'bg-orange-500/20'
-                          : 'bg-blue-500/20'
-                    }`}>
-                      <Calendar className={`w-7 h-7 ${
-                        fy.status === 'closed' 
-                          ? 'text-green-500' 
-                          : fy.status === 'rectified'
-                            ? 'text-orange-500'
-                            : 'text-blue-500'
-                      }`} />
-                    </div>
-                    <div>
-                      <div className="flex items-center gap-3">
-                        <h3 className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                          {fy.name}
-                        </h3>
-                        {getStatusBadge(fy.status)}
-                        {currentFiscalYear?.id === fy.id && (
-                          <span className="px-2 py-0.5 rounded-full bg-blue-500 text-white text-xs">
-                            Actuel
-                          </span>
-                        )}
-                      </div>
-                      <p className={`mt-1 ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-                        {formatDate(fy.start_date)} → {formatDate(fy.end_date)}
-                      </p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-center gap-2">
-                    {fy.status === 'draft' || fy.status === 'rectified' ? (
-                      <>
-                        <button
-                          onClick={() => selectFiscalYear(fy)}
-                          className={`px-4 py-2 rounded-xl transition-all ${
-                            isDark ? 'hover:bg-slate-700' : 'hover:bg-gray-100'
-                          } ${isDark ? 'text-white' : 'text-gray-900'}`}
-                        >
-                          Sélectionner
-                        </button>
-                        <button
-                          onClick={() => {
-                            setSelectedFY(fy);
-                            setShowCloseModal(true);
-                          }}
-                          className="flex items-center gap-2 px-4 py-2 bg-green-500 text-white rounded-xl hover:bg-green-600 transition-all"
-                        >
-                          <Lock className="w-4 h-4" />
-                          Clôturer
-                        </button>
-                      </>
-                    ) : (
-                      <>
-                        <button
-                          onClick={() => {
-                            setSelectedFY(fy);
-                            setShowRectifyModal(true);
-                          }}
-                          className={`flex items-center gap-2 px-4 py-2 rounded-xl transition-all ${
-                            isDark ? 'bg-slate-700 hover:bg-slate-600 text-white' : 'bg-gray-100 hover:bg-gray-200 text-gray-900'
-                          }`}
-                        >
-                          <Unlock className="w-4 h-4" />
-                          Rectifier
-                        </button>
-                        <button
-                          onClick={() => openDuplicateModal(fy)}
-                          className="flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-xl hover:bg-blue-600 transition-all"
-                        >
-                          <Copy className="w-4 h-4" />
-                          Nouvel exercice
-                        </button>
-                      </>
-                    )}
-                  </div>
-                </div>
-                
-                {/* Summary if closed */}
-                {fy.status === 'closed' && fy.summary && (
-                  <div className={`mt-4 pt-4 border-t ${isDark ? 'border-slate-700' : 'border-gray-100'}`}>
-                    <div className="grid grid-cols-4 gap-4">
-                      <div className={`p-3 rounded-xl ${isDark ? 'bg-slate-700' : 'bg-gray-50'}`}>
-                        <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>Total émissions</p>
-                        <p className={`text-lg font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                          {fy.summary.total_emissions_tco2e?.toLocaleString()} tCO₂e
-                        </p>
-                      </div>
-                      <div className={`p-3 rounded-xl ${isDark ? 'bg-slate-700' : 'bg-gray-50'}`}>
-                        <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>Scope 1</p>
-                        <p className="text-lg font-bold text-blue-500">
-                          {(fy.summary.by_scope?.scope1 || 0).toLocaleString()} tCO₂e
-                        </p>
-                      </div>
-                      <div className={`p-3 rounded-xl ${isDark ? 'bg-slate-700' : 'bg-gray-50'}`}>
-                        <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>Scope 2</p>
-                        <p className="text-lg font-bold text-cyan-500">
-                          {(fy.summary.by_scope?.scope2 || 0).toLocaleString()} tCO₂e
-                        </p>
-                      </div>
-                      <div className={`p-3 rounded-xl ${isDark ? 'bg-slate-700' : 'bg-gray-50'}`}>
-                        <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>Activités</p>
-                        <p className={`text-lg font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                          {fy.summary.activities_count}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                )}
-                
-                {/* Rectifications history */}
-                {fy.rectifications && fy.rectifications.length > 0 && (
-                  <div className={`mt-4 pt-4 border-t ${isDark ? 'border-slate-700' : 'border-gray-100'}`}>
-                    <p className={`text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
-                      Historique des rectifications
-                    </p>
-                    <div className="space-y-2">
-                      {fy.rectifications.map((rect, i) => (
-                        <div key={i} className={`text-sm p-2 rounded-lg ${isDark ? 'bg-orange-500/10' : 'bg-orange-50'}`}>
-                          <span className={isDark ? 'text-orange-300' : 'text-orange-700'}>
-                            {new Date(rect.reopened_at).toLocaleDateString('fr-FR')} : {rect.reason}
-                          </span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-            </motion.div>
-          ))}
-        </div>
       )}
 
-      {/* Create Modal */}
+      {/* Click outside to close menu */}
+      {openMenuId && (
+        <div 
+          className="fixed inset-0 z-40" 
+          onClick={() => setOpenMenuId(null)}
+        />
+      )}
+
+      {/* ==================== CREATE MODAL ==================== */}
       <AnimatePresence>
         {showCreateModal && (
-          <Modal onClose={() => setShowCreateModal(false)} title="Créer un exercice fiscal">
-            <div className="space-y-4">
-              {/* Info about fiscal year configuration */}
-              <div className={`p-4 rounded-xl ${isDark ? 'bg-blue-500/20' : 'bg-blue-50'}`}>
-                <div className="flex items-start gap-3">
-                  <Info className="w-5 h-5 text-blue-500 mt-0.5" />
-                  <div>
-                    <p className={`text-sm ${isDark ? 'text-blue-300' : 'text-blue-700'}`}>
-                      Les dates sont calculées automatiquement selon la configuration de votre entreprise 
-                      (début en {MONTHS.find(m => m.value === companySettings.fiscal_year_start_month)?.label}).
-                    </p>
-                  </div>
-                </div>
-              </div>
-              
-              {/* Year selector */}
-              <div>
-                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
-                  Année de l&apos;exercice
-                </label>
-                <select
-                  value={createForm.year}
-                  onChange={(e) => {
-                    setCreateForm({ year: parseInt(e.target.value) });
-                    setCreateError('');
-                  }}
-                  data-testid="fiscal-year-select"
-                  className={`w-full px-4 py-3 rounded-xl border text-lg font-medium ${
-                    isDark ? 'bg-slate-700 border-slate-600 text-white' : 'bg-white border-gray-200'
-                  }`}
-                >
-                  {Array.from({ length: 10 }, (_, i) => new Date().getFullYear() - 5 + i).map(year => (
-                    <option key={year} value={year}>{year}</option>
-                  ))}
-                </select>
-              </div>
-              
-              {/* Error message */}
-              {createError && (
-                <div className={`p-4 rounded-xl ${isDark ? 'bg-red-500/20' : 'bg-red-50'}`}>
-                  <div className="flex items-start gap-3">
-                    <AlertTriangle className="w-5 h-5 text-red-500 mt-0.5" />
-                    <p className={`text-sm ${isDark ? 'text-red-300' : 'text-red-700'}`}>
-                      {createError}
-                    </p>
-                  </div>
-                </div>
-              )}
-              
-              {/* Preview of dates */}
-              <div className={`p-4 rounded-xl ${isDark ? 'bg-green-500/20' : 'bg-green-50'}`}>
-                <p className={`font-medium mb-1 ${isDark ? 'text-green-300' : 'text-green-700'}`}>
-                  Exercice {createForm.year}
-                </p>
-                <p className={`text-sm ${isDark ? 'text-green-300/80' : 'text-green-600'}`}>
-                  Du {getFiscalYearPreview(createForm.year).start} au {getFiscalYearPreview(createForm.year).end}
-                </p>
-              </div>
-              
-              <div className="flex gap-3 pt-4">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50"
+            onClick={() => setShowCreateModal(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              onClick={(e) => e.stopPropagation()}
+              className={`w-full max-w-md rounded-2xl shadow-xl ${isDark ? 'bg-slate-800' : 'bg-white'}`}
+            >
+              {/* Header */}
+              <div className={`flex items-center justify-between p-6 border-b ${isDark ? 'border-slate-700' : 'border-gray-100'}`}>
+                <h2 className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                  Créer un exercice
+                </h2>
                 <button
-                  onClick={() => {
-                    setShowCreateModal(false);
-                    setCreateError('');
-                  }}
-                  className={`flex-1 px-4 py-3 rounded-xl border ${
-                    isDark ? 'border-slate-600 hover:bg-slate-700 text-white' : 'border-gray-200 hover:bg-gray-50'
+                  onClick={() => setShowCreateModal(false)}
+                  className={`p-2 rounded-lg transition-colors ${isDark ? 'hover:bg-slate-700' : 'hover:bg-gray-100'}`}
+                >
+                  <X className={`w-5 h-5 ${isDark ? 'text-slate-400' : 'text-gray-500'}`} />
+                </button>
+              </div>
+
+              {/* Content */}
+              <div className="p-6 space-y-5">
+                {/* Year selector */}
+                <div>
+                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
+                    Année
+                  </label>
+                  <div className="relative">
+                    <select
+                      value={createForm.year}
+                      onChange={(e) => setCreateForm(prev => ({ ...prev, year: parseInt(e.target.value) }))}
+                      className={`w-full px-4 py-3 pr-10 rounded-xl border appearance-none transition-all focus:ring-2 focus:ring-blue-500 ${
+                        isDark 
+                          ? 'bg-slate-700 border-slate-600 text-white' 
+                          : 'bg-white border-gray-200 text-gray-900'
+                      }`}
+                    >
+                      {availableYears.map(({ year, available }) => (
+                        <option 
+                          key={year} 
+                          value={year} 
+                          disabled={!available}
+                          className={!available ? 'text-gray-400' : ''}
+                        >
+                          {year} {!available ? '(déjà créé)' : ''}
+                        </option>
+                      ))}
+                    </select>
+                    <ChevronDown className={`absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 pointer-events-none ${
+                      isDark ? 'text-slate-400' : 'text-gray-500'
+                    }`} />
+                  </div>
+                  <p className={`mt-1.5 text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+                    Période : 1er janvier {createForm.year} → 31 décembre {createForm.year}
+                  </p>
+                </div>
+
+                {/* Duplicate option */}
+                {fiscalYears.length > 0 && (
+                  <div className={`p-4 rounded-xl border ${isDark ? 'bg-slate-700/50 border-slate-600' : 'bg-gray-50 border-gray-200'}`}>
+                    <label className="flex items-center gap-3 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={createForm.duplicateActivities}
+                        onChange={(e) => setCreateForm(prev => ({ 
+                          ...prev, 
+                          duplicateActivities: e.target.checked,
+                          duplicateFrom: e.target.checked ? (prev.duplicateFrom || fiscalYears[0]?.id) : null
+                        }))}
+                        className="w-5 h-5 rounded border-gray-300 text-blue-500 focus:ring-blue-500"
+                      />
+                      <div>
+                        <span className={`font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                          Dupliquer les données depuis
+                        </span>
+                        <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+                          Copie toutes les activités d'un exercice existant
+                        </p>
+                      </div>
+                    </label>
+
+                    {createForm.duplicateActivities && (
+                      <div className="mt-3">
+                        <select
+                          value={createForm.duplicateFrom || ''}
+                          onChange={(e) => setCreateForm(prev => ({ ...prev, duplicateFrom: e.target.value }))}
+                          className={`w-full px-4 py-2.5 rounded-xl border transition-all focus:ring-2 focus:ring-blue-500 ${
+                            isDark 
+                              ? 'bg-slate-600 border-slate-500 text-white' 
+                              : 'bg-white border-gray-200 text-gray-900'
+                          }`}
+                        >
+                          {sortedFiscalYears.map(fy => (
+                            <option key={fy.id} value={fy.id}>
+                              {fy.name} ({getActivityCount(fy)} saisies)
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* Error message */}
+                {createError && (
+                  <div className="flex items-center gap-2 p-3 rounded-xl bg-red-500/10 text-red-500">
+                    <AlertTriangle className="w-5 h-5 flex-shrink-0" />
+                    <span className="text-sm">{createError}</span>
+                  </div>
+                )}
+              </div>
+
+              {/* Footer */}
+              <div className={`flex justify-end gap-3 p-6 border-t ${isDark ? 'border-slate-700' : 'border-gray-100'}`}>
+                <button
+                  onClick={() => setShowCreateModal(false)}
+                  className={`px-4 py-2.5 rounded-xl font-medium transition-colors ${
+                    isDark ? 'text-slate-300 hover:bg-slate-700' : 'text-gray-700 hover:bg-gray-100'
                   }`}
                 >
                   Annuler
                 </button>
                 <button
                   onClick={handleCreate}
-                  disabled={loading}
-                  data-testid="confirm-create-fiscal-year-btn"
-                  className="flex-1 px-4 py-3 bg-blue-500 text-white rounded-xl hover:bg-blue-600 disabled:opacity-50"
+                  disabled={loading || existingYears.has(createForm.year)}
+                  className="flex items-center gap-2 px-5 py-2.5 bg-blue-500 hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-xl font-medium transition-colors"
                 >
-                  {loading ? 'Création...' : 'Créer'}
+                  {loading ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
+                  Créer
                 </button>
               </div>
-            </div>
-          </Modal>
+            </motion.div>
+          </motion.div>
         )}
       </AnimatePresence>
 
-      {/* Close Confirmation Modal */}
+      {/* ==================== CLOSE MODAL ==================== */}
       <AnimatePresence>
         {showCloseModal && selectedFY && (
-          <Modal onClose={() => setShowCloseModal(false)} title="Clôturer l'exercice">
-            <div className="space-y-4">
-              <div className={`p-4 rounded-xl ${isDark ? 'bg-yellow-500/20' : 'bg-yellow-50'}`}>
-                <div className="flex items-start gap-3">
-                  <AlertTriangle className="w-5 h-5 text-yellow-500 mt-0.5" />
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50"
+            onClick={() => setShowCloseModal(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              onClick={(e) => e.stopPropagation()}
+              className={`w-full max-w-md rounded-2xl shadow-xl ${isDark ? 'bg-slate-800' : 'bg-white'}`}
+            >
+              <div className="p-6">
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="p-3 rounded-full bg-green-500/20">
+                    <Lock className="w-6 h-6 text-green-500" />
+                  </div>
                   <div>
-                    <p className={`font-medium ${isDark ? 'text-yellow-300' : 'text-yellow-700'}`}>
-                      Êtes-vous sûr de vouloir clôturer cet exercice ?
-                    </p>
-                    <p className={`text-sm mt-1 ${isDark ? 'text-yellow-300/70' : 'text-yellow-600'}`}>
-                      Les données seront verrouillées. Vous pourrez rectifier l&apos;exercice ultérieurement si nécessaire.
+                    <h2 className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                      Clôturer {selectedFY.name} ?
+                    </h2>
+                    <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+                      L'exercice sera verrouillé après clôture
                     </p>
                   </div>
                 </div>
-              </div>
-              <div className={`p-4 rounded-xl ${isDark ? 'bg-slate-700' : 'bg-gray-50'}`}>
-                <p className={`font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                  {selectedFY.name}
-                </p>
-                <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-                  {formatDate(selectedFY.start_date)} → {formatDate(selectedFY.end_date)}
-                </p>
-              </div>
-              <div className="flex gap-3 pt-4">
-                <button
-                  onClick={() => setShowCloseModal(false)}
-                  className={`flex-1 px-4 py-3 rounded-xl border ${
-                    isDark ? 'border-slate-600 hover:bg-slate-700 text-white' : 'border-gray-200 hover:bg-gray-50'
-                  }`}
-                >
-                  Annuler
-                </button>
-                <button
-                  onClick={handleClose}
-                  disabled={loading}
-                  className="flex-1 px-4 py-3 bg-green-500 text-white rounded-xl hover:bg-green-600 disabled:opacity-50 flex items-center justify-center gap-2"
-                >
-                  <Lock className="w-4 h-4" />
-                  {loading ? 'Clôture...' : 'Confirmer la clôture'}
-                </button>
-              </div>
-            </div>
-          </Modal>
-        )}
-      </AnimatePresence>
 
-      {/* Rectify Modal */}
-      <AnimatePresence>
-        {showRectifyModal && selectedFY && (
-          <Modal onClose={() => setShowRectifyModal(false)} title="Rectifier l'exercice">
-            <div className="space-y-4">
-              <div className={`p-4 rounded-xl ${isDark ? 'bg-orange-500/20' : 'bg-orange-50'}`}>
-                <div className="flex items-start gap-3">
-                  <AlertTriangle className="w-5 h-5 text-orange-500 mt-0.5" />
-                  <p className={`text-sm ${isDark ? 'text-orange-300' : 'text-orange-700'}`}>
-                    Cette action réouvrira l&apos;exercice clôturé pour permettre des modifications.
-                    Une justification est requise pour la traçabilité.
+                <div className={`p-4 rounded-xl mb-6 ${isDark ? 'bg-slate-700/50' : 'bg-gray-50'}`}>
+                  <p className={`text-sm ${isDark ? 'text-slate-300' : 'text-gray-600'}`}>
+                    La clôture calcule le bilan final et verrouille les modifications. 
+                    Vous pourrez rectifier l'exercice si nécessaire.
                   </p>
                 </div>
+
+                <div className="flex justify-end gap-3">
+                  <button
+                    onClick={() => setShowCloseModal(false)}
+                    className={`px-4 py-2.5 rounded-xl font-medium transition-colors ${
+                      isDark ? 'text-slate-300 hover:bg-slate-700' : 'text-gray-700 hover:bg-gray-100'
+                    }`}
+                  >
+                    Annuler
+                  </button>
+                  <button
+                    onClick={handleClose}
+                    disabled={loading}
+                    className="flex items-center gap-2 px-5 py-2.5 bg-green-500 hover:bg-green-600 disabled:opacity-50 text-white rounded-xl font-medium transition-colors"
+                  >
+                    {loading ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Check className="w-4 h-4" />}
+                    Clôturer
+                  </button>
+                </div>
               </div>
-              <div>
-                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
-                  Justification de la rectification *
-                </label>
-                <textarea
-                  value={rectifyReason}
-                  onChange={(e) => setRectifyReason(e.target.value)}
-                  placeholder="Ex: Correction d'une erreur de saisie sur les consommations électriques..."
-                  rows={4}
-                  className={`w-full px-4 py-3 rounded-xl border ${
-                    isDark ? 'bg-slate-700 border-slate-600 text-white' : 'bg-white border-gray-200'
-                  }`}
-                />
-                <p className={`text-xs mt-1 ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>
-                  Minimum 10 caractères requis
-                </p>
-              </div>
-              <div className="flex gap-3 pt-4">
-                <button
-                  onClick={() => {
-                    setShowRectifyModal(false);
-                    setRectifyReason('');
-                  }}
-                  className={`flex-1 px-4 py-3 rounded-xl border ${
-                    isDark ? 'border-slate-600 hover:bg-slate-700 text-white' : 'border-gray-200 hover:bg-gray-50'
-                  }`}
-                >
-                  Annuler
-                </button>
-                <button
-                  onClick={handleRectify}
-                  disabled={loading || rectifyReason.length < 10}
-                  className="flex-1 px-4 py-3 bg-orange-500 text-white rounded-xl hover:bg-orange-600 disabled:opacity-50 flex items-center justify-center gap-2"
-                >
-                  <Unlock className="w-4 h-4" />
-                  {loading ? 'Traitement...' : 'Rectifier'}
-                </button>
-              </div>
-            </div>
-          </Modal>
+            </motion.div>
+          </motion.div>
         )}
       </AnimatePresence>
 
-      {/* Duplicate Modal */}
+      {/* ==================== RECTIFY MODAL ==================== */}
       <AnimatePresence>
-        {showDuplicateModal && selectedFY && (
-          <Modal onClose={() => setShowDuplicateModal(false)} title="Créer un nouvel exercice">
-            <div className="space-y-4">
-              <div className={`p-4 rounded-xl ${isDark ? 'bg-blue-500/20' : 'bg-blue-50'}`}>
-                <p className={`text-sm ${isDark ? 'text-blue-300' : 'text-blue-700'}`}>
-                  Les fiches produits seront automatiquement reprises. 
-                  Vous pouvez également choisir de dupliquer certaines activités.
-                </p>
-              </div>
-              
-              <div>
-                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
-                  Nom du nouvel exercice
-                </label>
-                <input
-                  type="text"
-                  value={duplicateForm.new_name}
-                  onChange={(e) => setDuplicateForm({ ...duplicateForm, new_name: e.target.value })}
-                  className={`w-full px-4 py-3 rounded-xl border ${
-                    isDark ? 'bg-slate-700 border-slate-600 text-white' : 'bg-white border-gray-200'
-                  }`}
-                />
-              </div>
-              
-              <div className="grid grid-cols-2 gap-4">
-                <div>
+        {showRectifyModal && selectedFY && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50"
+            onClick={() => setShowRectifyModal(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              onClick={(e) => e.stopPropagation()}
+              className={`w-full max-w-md rounded-2xl shadow-xl ${isDark ? 'bg-slate-800' : 'bg-white'}`}
+            >
+              <div className="p-6">
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="p-3 rounded-full bg-orange-500/20">
+                    <Unlock className="w-6 h-6 text-orange-500" />
+                  </div>
+                  <div>
+                    <h2 className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                      Rectifier {selectedFY.name} ?
+                    </h2>
+                    <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+                      L'exercice sera rouvert pour modifications
+                    </p>
+                  </div>
+                </div>
+
+                <div className="mb-6">
                   <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
-                    Date de début
+                    Motif de rectification *
                   </label>
-                  <input
-                    type="date"
-                    value={duplicateForm.new_start_date}
-                    onChange={(e) => setDuplicateForm({ ...duplicateForm, new_start_date: e.target.value })}
-                    className={`w-full px-4 py-3 rounded-xl border ${
-                      isDark ? 'bg-slate-700 border-slate-600 text-white' : 'bg-white border-gray-200'
+                  <textarea
+                    value={rectifyReason}
+                    onChange={(e) => setRectifyReason(e.target.value)}
+                    placeholder="Ex: Correction des données de consommation électrique..."
+                    rows={3}
+                    className={`w-full px-4 py-3 rounded-xl border transition-all focus:ring-2 focus:ring-orange-500 ${
+                      isDark 
+                        ? 'bg-slate-700 border-slate-600 text-white placeholder-slate-400' 
+                        : 'bg-white border-gray-200 text-gray-900 placeholder-gray-400'
                     }`}
                   />
                 </div>
-                <div>
+
+                <div className="flex justify-end gap-3">
+                  <button
+                    onClick={() => { setShowRectifyModal(false); setRectifyReason(''); }}
+                    className={`px-4 py-2.5 rounded-xl font-medium transition-colors ${
+                      isDark ? 'text-slate-300 hover:bg-slate-700' : 'text-gray-700 hover:bg-gray-100'
+                    }`}
+                  >
+                    Annuler
+                  </button>
+                  <button
+                    onClick={handleRectify}
+                    disabled={loading || !rectifyReason.trim()}
+                    className="flex items-center gap-2 px-5 py-2.5 bg-orange-500 hover:bg-orange-600 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-xl font-medium transition-colors"
+                  >
+                    {loading ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Unlock className="w-4 h-4" />}
+                    Rectifier
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* ==================== DELETE MODAL ==================== */}
+      <AnimatePresence>
+        {showDeleteModal && selectedFY && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50"
+            onClick={() => setShowDeleteModal(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              onClick={(e) => e.stopPropagation()}
+              className={`w-full max-w-md rounded-2xl shadow-xl ${isDark ? 'bg-slate-800' : 'bg-white'}`}
+            >
+              <div className="p-6">
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="p-3 rounded-full bg-red-500/20">
+                    <AlertTriangle className="w-6 h-6 text-red-500" />
+                  </div>
+                  <div>
+                    <h2 className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                      Supprimer {selectedFY.name} ?
+                    </h2>
+                    <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+                      Cette action est irréversible
+                    </p>
+                  </div>
+                </div>
+
+                {/* Warning box with stats */}
+                <div className={`p-4 rounded-xl mb-5 border-2 border-red-500/30 ${isDark ? 'bg-red-500/10' : 'bg-red-50'}`}>
+                  <p className={`font-medium mb-2 ${isDark ? 'text-red-400' : 'text-red-600'}`}>
+                    Cette action supprimera définitivement :
+                  </p>
+                  <ul className={`space-y-1 text-sm ${isDark ? 'text-red-300' : 'text-red-700'}`}>
+                    <li>• <strong>{deleteStats?.activitiesCount || 0}</strong> activités saisies</li>
+                    <li>• <strong>{((deleteStats?.totalEmissions || 0) / 1000).toLocaleString('fr-FR', { maximumFractionDigits: 1 })}</strong> tCO₂e d'émissions</li>
+                  </ul>
+                </div>
+
+                {/* Confirmation input */}
+                <div className="mb-5">
                   <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
-                    Date de fin
+                    Pour confirmer, tapez <strong className="text-red-500">"{selectedFY.name}"</strong>
                   </label>
                   <input
-                    type="date"
-                    value={duplicateForm.new_end_date}
-                    onChange={(e) => setDuplicateForm({ ...duplicateForm, new_end_date: e.target.value })}
-                    className={`w-full px-4 py-3 rounded-xl border ${
-                      isDark ? 'bg-slate-700 border-slate-600 text-white' : 'bg-white border-gray-200'
+                    type="text"
+                    value={deleteConfirmText}
+                    onChange={(e) => setDeleteConfirmText(e.target.value)}
+                    placeholder={selectedFY.name}
+                    className={`w-full px-4 py-3 rounded-xl border transition-all focus:ring-2 focus:ring-red-500 ${
+                      isDark 
+                        ? 'bg-slate-700 border-slate-600 text-white placeholder-slate-500' 
+                        : 'bg-white border-gray-200 text-gray-900 placeholder-gray-400'
                     }`}
                   />
                 </div>
-              </div>
 
-              {/* Activities duplication option */}
-              {activitiesForDuplication && activitiesForDuplication.total_activities > 0 && (
-                <div className={`p-4 rounded-xl ${isDark ? 'bg-slate-700' : 'bg-gray-50'}`}>
-                  <label className="flex items-center gap-3 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={duplicateForm.duplicate_activities}
-                      onChange={(e) => setDuplicateForm({ 
-                        ...duplicateForm, 
-                        duplicate_activities: e.target.checked,
-                        selected_activity_ids: []
-                      })}
-                      className="w-5 h-5 rounded border-gray-300"
-                    />
-                    <div>
-                      <p className={`font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                        Dupliquer toutes les activités
-                      </p>
-                      <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-                        {activitiesForDuplication.total_activities} activités disponibles
-                      </p>
-                    </div>
-                  </label>
+                <div className="flex justify-end gap-3">
+                  <button
+                    onClick={() => { setShowDeleteModal(false); setDeleteConfirmText(''); }}
+                    className={`px-4 py-2.5 rounded-xl font-medium transition-colors ${
+                      isDark ? 'text-slate-300 hover:bg-slate-700' : 'text-gray-700 hover:bg-gray-100'
+                    }`}
+                  >
+                    Annuler
+                  </button>
+                  <button
+                    onClick={handleDelete}
+                    disabled={loading || deleteConfirmText !== selectedFY.name}
+                    className="flex items-center gap-2 px-5 py-2.5 bg-red-500 hover:bg-red-600 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-xl font-medium transition-colors"
+                  >
+                    {loading ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
+                    Supprimer
+                  </button>
                 </div>
-              )}
-
-              <div className="flex gap-3 pt-4">
-                <button
-                  onClick={() => {
-                    setShowDuplicateModal(false);
-                    setActivitiesForDuplication(null);
-                  }}
-                  className={`flex-1 px-4 py-3 rounded-xl border ${
-                    isDark ? 'border-slate-600 hover:bg-slate-700 text-white' : 'border-gray-200 hover:bg-gray-50'
-                  }`}
-                >
-                  Annuler
-                </button>
-                <button
-                  onClick={handleDuplicate}
-                  disabled={loading || !duplicateForm.new_name || !duplicateForm.new_start_date || !duplicateForm.new_end_date}
-                  className="flex-1 px-4 py-3 bg-blue-500 text-white rounded-xl hover:bg-blue-600 disabled:opacity-50 flex items-center justify-center gap-2"
-                >
-                  <ArrowRight className="w-4 h-4" />
-                  {loading ? 'Création...' : 'Créer le nouvel exercice'}
-                </button>
               </div>
-            </div>
-          </Modal>
+            </motion.div>
+          </motion.div>
         )}
       </AnimatePresence>
     </div>
-  );
-};
-
-// Modal component
-const Modal = ({ children, onClose, title }) => {
-  const { isDark } = useTheme();
-  
-  return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4"
-      onClick={onClose}
-    >
-      <motion.div
-        initial={{ scale: 0.95, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        exit={{ scale: 0.95, opacity: 0 }}
-        onClick={(e) => e.stopPropagation()}
-        className={`w-full max-w-lg rounded-2xl ${isDark ? 'bg-slate-800' : 'bg-white'} shadow-2xl overflow-hidden`}
-      >
-        <div className={`p-6 border-b ${isDark ? 'border-slate-700' : 'border-gray-200'}`}>
-          <div className="flex items-center justify-between">
-            <h2 className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-              {title}
-            </h2>
-            <button onClick={onClose} className={`p-2 rounded-lg ${isDark ? 'hover:bg-slate-700' : 'hover:bg-gray-100'}`}>
-              <X className="w-5 h-5" />
-            </button>
-          </div>
-        </div>
-        <div className="p-6">
-          {children}
-        </div>
-      </motion.div>
-    </motion.div>
   );
 };
 
