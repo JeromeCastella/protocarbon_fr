@@ -367,8 +367,10 @@ const DataEntry = () => {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {scopeCategories.map((category, index) => {
             const IconComponent = iconMap[category.icon] || Factory;
-            const catStats = categoryStats[category.code];
-            const count = catStats?.count || 0;
+            // For the merged "Produits vendus" card, use unique sale count
+            const count = category.code === 'produits_vendus' 
+              ? getProductSalesCount() 
+              : (categoryStats[category.code]?.count || 0);
             
             return (
               <motion.div
