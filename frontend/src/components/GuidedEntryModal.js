@@ -186,40 +186,58 @@ const GuidedEntryModal = ({
   };
 
   const extractAvailableUnits = (factorsList) => {
+    // Construire la liste des unités uniquement à partir des facteurs réellement compatibles
+    // Ne pas injecter des unités "globales" qui ne correspondent à aucun facteur concret
     const units = new Set();
     
     factorsList.forEach(f => {
-      // Format V2 : input_units
+      // Format V2 : input_units - unités directement supportées par le facteur
       if (f.input_units && Array.isArray(f.input_units)) {
         f.input_units.forEach(u => units.add(u));
+        
+        // Ajouter les unités des conversions spécifiques au facteur
+        if (f.unit_conversions) {
+          Object.keys(f.unit_conversions).forEach(key => {
+            const parts = key.split('_to_');
+            if (parts.length === 2) {
+              // Vérifier que la conversion part d'une unité supportée par ce facteur
+              if (f.input_units.includes(parts[0]) || f.input_units.includes(parts[1])) {
+                units.add(parts[0]);
+                units.add(parts[1]);
+              }
+            }
+          });
+        }
+        
+        // Ajouter les unités des conversions globales uniquement si elles partent d'une unité du facteur
+        unitConversions.forEach(conv => {
+          if (f.input_units.includes(conv.from_unit)) {
+            units.add(conv.to_unit);
+          }
+          if (f.input_units.includes(conv.to_unit)) {
+            units.add(conv.from_unit);
+          }
+        });
       }
       // Format V1 : extraire de l'unité (kgCO2e/L -> L)
       else if (f.unit) {
         const match = f.unit.match(/kgCO2e\/(.+)/);
         if (match) {
-          units.add(match[1]);
+          const baseUnit = match[1];
+          units.add(baseUnit);
+          
+          // Ajouter les unités des conversions globales qui partent de cette unité
+          unitConversions.forEach(conv => {
+            if (conv.from_unit === baseUnit) {
+              units.add(conv.to_unit);
+            }
+            if (conv.to_unit === baseUnit) {
+              units.add(conv.from_unit);
+            }
+          });
         } else {
           units.add(f.unit);
         }
-      }
-      // Ajouter les unités convertibles
-      if (f.unit_conversions) {
-        Object.keys(f.unit_conversions).forEach(key => {
-          const parts = key.split('_to_');
-          if (parts.length === 2) {
-            units.add(parts[0]);
-            units.add(parts[1]);
-          }
-        });
-      }
-    });
-    
-    // Ajouter les unités des conversions globales
-    unitConversions.forEach(conv => {
-      // Vérifier si une conversion existe pour nos unités
-      if (units.has(conv.from_unit) || units.has(conv.to_unit)) {
-        units.add(conv.from_unit);
-        units.add(conv.to_unit);
       }
     });
     
