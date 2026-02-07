@@ -165,9 +165,25 @@ const DataEntry = () => {
   );
   
   // Add the merged "Produits vendus" card if we're on scope3_aval
-  const scopeCategories = activeScope === 'scope3_aval' 
-    ? [...baseScopeCategories, PRODUITS_VENDUS_CARD]
-    : baseScopeCategories;
+  // Insert it after "actifs_loues_aval" to maintain proper GHG Protocol order
+  const scopeCategories = (() => {
+    if (activeScope !== 'scope3_aval') {
+      return baseScopeCategories;
+    }
+    
+    // Find the index of "actifs_loues_aval" to insert "Produits vendus" after it
+    const actifsLouesIndex = baseScopeCategories.findIndex(c => c.code === 'actifs_loues_aval');
+    
+    if (actifsLouesIndex !== -1) {
+      // Insert after "actifs_loues_aval"
+      const result = [...baseScopeCategories];
+      result.splice(actifsLouesIndex + 1, 0, PRODUITS_VENDUS_CARD);
+      return result;
+    }
+    
+    // Fallback: add at the end if "actifs_loues_aval" not found
+    return [...baseScopeCategories, PRODUITS_VENDUS_CARD];
+  })();
   
   // Calculate unique product sales count (by sale_id) for the merged card
   const getProductSalesCount = () => {
