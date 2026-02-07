@@ -49,14 +49,6 @@ const ProductSaleModal = ({ isOpen, onClose, onSaleRecorded, preselectedProduct 
   // Profil d'émissions actif
   const [activeProfile, setActiveProfile] = useState(null);
 
-  // Initialiser la date avec le milieu de l'exercice fiscal courant
-  useEffect(() => {
-    if (currentFiscalYear) {
-      // Utiliser la date de début de l'exercice par défaut
-      setSaleDate(currentFiscalYear.start_date || '');
-    }
-  }, [currentFiscalYear]);
-
   useEffect(() => {
     if (isOpen) {
       fetchProducts();
