@@ -652,19 +652,26 @@ async def record_product_sale(
     
     # Generate unique sale_id to link all activities from this sale
     sale_id = str(uuid.uuid4())
-    sale_date = sale.date or datetime.now(timezone.utc).strftime("%Y-%m-%d")
     
-    # Find the appropriate fiscal year for this sale date
-    fiscal_year_id = None
-    company_id = current_user.get("company_id")
-    if company_id:
-        fiscal_year = fiscal_years_collection.find_one({
-            "company_id": company_id,
-            "start_date": {"$lte": sale_date},
-            "end_date": {"$gte": sale_date}
-        })
+    # Determine fiscal year: use provided fiscal_year_id, or find by date, or use current
+    fiscal_year_id = sale.fiscal_year_id
+    fiscal_year = None
+    
+    if fiscal_year_id:
+        # Use the provided fiscal year ID
+        fiscal_year = fiscal_years_collection.find_one({"_id": ObjectId(fiscal_year_id)})
+    
+    if not fiscal_year:
+        # Fallback: find the most recent fiscal year for this tenant
+        fiscal_year = fiscal_years_collection.find_one(
+            {"tenant_id": current_user["id"]},
+            sort=[("start_date", -1)]
+        )
         if fiscal_year:
             fiscal_year_id = str(fiscal_year["_id"])
+    
+    # Generate date within the fiscal year range (use start_date of fiscal year)
+    sale_date = sale.date or (fiscal_year.get("start_date") if fiscal_year else datetime.now(timezone.utc).strftime("%Y-%m-%d"))
     
     # Get the appropriate emission profile for this fiscal year
     emission_profile = get_product_emissions_for_fiscal_year(product, fiscal_year_id)
