@@ -312,6 +312,7 @@ class ProductSale(BaseModel):
     quantity: int
     year: Optional[int] = None
     date: Optional[str] = None
+    fiscal_year_id: Optional[str] = None  # ID de l'exercice fiscal (prioritaire sur la date)
 
 class ProductSaleUpdate(BaseModel):
     """Model for updating a product sale and its linked activities"""
