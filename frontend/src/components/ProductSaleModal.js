@@ -16,7 +16,6 @@ import {
   Edit3,
   Plus,
   Trash2,
-  Calendar,
   History
 } from 'lucide-react';
 import ProductVersionsModal from './ProductVersionsModal';
