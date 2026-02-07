@@ -37,7 +37,6 @@ const ProductSaleModal = ({ isOpen, onClose, onSaleRecorded, preselectedProduct 
   const [submitting, setSubmitting] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [quantity, setQuantity] = useState(0);
-  const [saleDate, setSaleDate] = useState('');
   
   // État pour la vente existante
   const [existingSale, setExistingSale] = useState(null);
