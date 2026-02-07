@@ -276,21 +276,6 @@ const ProductSaleModal = ({ isOpen, onClose, onSaleRecorded, preselectedProduct 
 
         {/* Content */}
         <div className="p-6 space-y-6">
-          {/* Fiscal year indicator */}
-          {currentFiscalYear && (
-            <div className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm ${
-              isDark ? 'bg-slate-700/50 text-slate-300' : 'bg-gray-100 text-gray-600'
-            }`}>
-              <Calendar className="w-4 h-4" />
-              <span>
-                {language === 'fr' ? 'Exercice' : 'Geschäftsjahr'}: <strong>{currentFiscalYear.name}</strong>
-                <span className="ml-2 opacity-75">
-                  ({currentFiscalYear.start_date} → {currentFiscalYear.end_date})
-                </span>
-              </span>
-            </div>
-          )}
-
           {loading ? (
             <div className="flex items-center justify-center py-8">
               <div className="w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
