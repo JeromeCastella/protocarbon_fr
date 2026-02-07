@@ -66,15 +66,33 @@ async def get_fiscal_year(fiscal_year_id: str, current_user: dict = Depends(get_
 
 @router.post("")
 async def create_fiscal_year(fy: FiscalYearCreate, current_user: dict = Depends(get_current_user)):
-    """Create a new fiscal year"""
+    """Create a new fiscal year (one per calendar year)"""
     # Get company_id
     company = companies_collection.find_one({"tenant_id": current_user["id"]})
     company_id = str(company["_id"]) if company else None
     
+    # Check if fiscal year already exists for this year
+    existing = fiscal_years_collection.find_one({
+        "tenant_id": current_user["id"],
+        "year": fy.year
+    })
+    
+    if existing:
+        raise HTTPException(
+            status_code=400, 
+            detail=f"Un exercice fiscal existe déjà pour l'année {fy.year}"
+        )
+    
+    # Auto-generate dates (calendar year)
+    start_date = f"{fy.year}-01-01"
+    end_date = f"{fy.year}-12-31"
+    name = f"Exercice {fy.year}"
+    
     fy_doc = {
-        "name": fy.name,
-        "start_date": fy.start_date,
-        "end_date": fy.end_date,
+        "name": name,
+        "year": fy.year,
+        "start_date": start_date,
+        "end_date": end_date,
         "status": "draft",
         "tenant_id": current_user["id"],
         "company_id": company_id,
