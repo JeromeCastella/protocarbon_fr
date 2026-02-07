@@ -282,14 +282,13 @@ async def get_dashboard_kpis(
                     previous_fy = fy
                     break
     else:
-        # Find the most recent fiscal year with activities
+        # Find the most recent fiscal year with activities using fiscal_year_id
         for fy in fiscal_years:
-            fy_start = fy.get("start_date", "")
-            fy_end = fy.get("end_date", "")
+            fy_id = str(fy["_id"])
             
             activity_count = activities_collection.count_documents({
                 "tenant_id": current_user["id"],
-                "date": {"$gte": fy_start, "$lte": fy_end}
+                "fiscal_year_id": fy_id
             })
             
             if activity_count > 0:
@@ -305,32 +304,30 @@ async def get_dashboard_kpis(
                     current_fy = fy
                     break
     
-    # Calculate current emissions
+    # Calculate current emissions using fiscal_year_id
     current_emissions = 0
     current_activities_count = 0
     if current_fy:
-        start_date = current_fy.get("start_date", "")
-        end_date = current_fy.get("end_date", "")
+        current_fy_id = str(current_fy["_id"])
         
         activities = list(activities_collection.find({
             "tenant_id": current_user["id"],
-            "date": {"$gte": start_date, "$lte": end_date}
+            "fiscal_year_id": current_fy_id
         }))
         current_emissions = sum(a.get("emissions", 0) or 0 for a in activities)
         current_activities_count = len(activities)
     
-    # Calculate previous emissions
+    # Calculate previous emissions using fiscal_year_id
     previous_emissions = 0
     if previous_fy:
         if previous_fy.get("summary") and previous_fy["summary"].get("total_emissions_tco2e"):
             previous_emissions = previous_fy["summary"].get("total_emissions_tco2e", 0) * 1000
         else:
-            start_date = previous_fy.get("start_date", "")
-            end_date = previous_fy.get("end_date", "")
+            previous_fy_id = str(previous_fy["_id"])
             
             activities = list(activities_collection.find({
                 "tenant_id": current_user["id"],
-                "date": {"$gte": start_date, "$lte": end_date}
+                "fiscal_year_id": previous_fy_id
             }))
             previous_emissions = sum(a.get("emissions", 0) or 0 for a in activities)
     
