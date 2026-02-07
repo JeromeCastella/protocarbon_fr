@@ -157,9 +157,28 @@ const DataEntry = () => {
     { id: 'scope3_aval', name: t('scope.scope3Aval'), subtitle: t('scope.scope3AvalTitle'), color: 'bg-indigo-500' },
   ];
 
-  const scopeCategories = categories.filter(c => 
-    c.scope === activeScope && !excludedCategories.includes(c.code)
+  // Filter categories for the active scope, excluding product sale categories (they will be merged)
+  const baseScopeCategories = categories.filter(c => 
+    c.scope === activeScope && 
+    !excludedCategories.includes(c.code) &&
+    !PRODUCT_SALE_CATEGORIES.includes(c.code) // Exclude the 3 product categories
   );
+  
+  // Add the merged "Produits vendus" card if we're on scope3_aval
+  const scopeCategories = activeScope === 'scope3_aval' 
+    ? [...baseScopeCategories, PRODUITS_VENDUS_CARD]
+    : baseScopeCategories;
+  
+  // Calculate unique product sales count (by sale_id) for the merged card
+  const getProductSalesCount = () => {
+    const productSaleIds = new Set();
+    (activities || []).forEach(activity => {
+      if (PRODUCT_SALE_CATEGORIES.includes(activity.category_id) && activity.sale_id) {
+        productSaleIds.add(activity.sale_id);
+      }
+    });
+    return productSaleIds.size;
+  };
 
   // Category 3.3 message state
   const [showCategory33Message, setShowCategory33Message] = useState(false);
