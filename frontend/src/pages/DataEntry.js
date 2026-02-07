@@ -88,7 +88,7 @@ const iconMap = {
   thermometer: Thermometer, snowflake: Snowflake, 'shopping-cart': ShoppingCart,
   tool: Wrench, fuel: Fuel, trash: Trash2, plane: Plane, car: Car,
   building: Building, settings: Settings, power: Power, recycle: Recycle,
-  home: Home, store: Store, 'trending-up': TrendingUp,
+  home: Home, store: Store, 'trending-up': TrendingUp, package: Package
 };
 
 const DataEntry = () => {
