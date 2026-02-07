@@ -153,10 +153,11 @@ const ProductSaleModal = ({ isOpen, onClose, onSaleRecorded, preselectedProduct 
           quantity: quantity
         });
       } else {
-        // Créer une nouvelle vente
+        // Créer une nouvelle vente - envoyer l'ID de l'exercice fiscal courant
         await axios.post(`${API_URL}/api/products/${selectedProduct.id}/sales`, {
           product_id: selectedProduct.id,
-          quantity: quantity
+          quantity: quantity,
+          fiscal_year_id: currentFiscalYear?.id
         });
       }
       
