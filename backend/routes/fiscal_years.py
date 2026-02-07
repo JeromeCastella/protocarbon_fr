@@ -293,6 +293,7 @@ async def duplicate_fiscal_year(
                 if k not in ["_id", "created_at"]
             }
             new_activity["date"] = new_date
+            new_activity["fiscal_year_id"] = new_fy_id  # Associate with new fiscal year
             new_activity["created_at"] = datetime.now(timezone.utc).isoformat()
             new_activity["duplicated_from"] = str(activity["_id"])
             
