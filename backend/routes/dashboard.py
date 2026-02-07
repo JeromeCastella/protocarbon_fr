@@ -183,15 +183,12 @@ async def get_fiscal_comparison(current_user: dict = Depends(get_current_user)):
         fy_start = fy.get("start_date", "")
         fy_end = fy.get("end_date", "")
         
-        # Get activities for this fiscal year by date range using $expr for ISO date comparison
-        query = {"tenant_id": current_user["id"]}
-        if fy_start and fy_end:
-            query["$expr"] = {
-                "$and": [
-                    {"$gte": [{"$substr": ["$date", 0, 10]}, fy_start]},
-                    {"$lte": [{"$substr": ["$date", 0, 10]}, fy_end]}
-                ]
-            }
+        # Get activities for this fiscal year by fiscal_year_id (primary method)
+        # This correctly associates activities with their assigned fiscal year
+        query = {
+            "tenant_id": current_user["id"],
+            "fiscal_year_id": fy_id
+        }
         
         activities = list(activities_collection.find(query))
         
