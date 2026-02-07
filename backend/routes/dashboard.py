@@ -48,21 +48,12 @@ async def get_dashboard_summary(
     company = companies_collection.find_one({"tenant_id": current_user["id"]})
     excluded_categories = company.get("excluded_categories", []) if company else []
     
-    # Build query - filter by fiscal year if specified
+    # Build query - filter by fiscal year if specified using fiscal_year_id
     query = {"tenant_id": current_user["id"]}
     
     if fiscal_year_id:
-        fy = fiscal_years_collection.find_one({"_id": ObjectId(fiscal_year_id)})
-        if fy:
-            start_date = fy.get("start_date", "")
-            end_date = fy.get("end_date", "")
-            if start_date and end_date:
-                query["$expr"] = {
-                    "$and": [
-                        {"$gte": [{"$substr": ["$date", 0, 10]}, start_date]},
-                        {"$lte": [{"$substr": ["$date", 0, 10]}, end_date]}
-                    ]
-                }
+        # Use fiscal_year_id directly for correct filtering
+        query["fiscal_year_id"] = fiscal_year_id
     
     # Get activities (filtered by fiscal year if specified)
     activities = list(activities_collection.find(query))
