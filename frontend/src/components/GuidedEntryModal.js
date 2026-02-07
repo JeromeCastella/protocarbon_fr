@@ -272,28 +272,48 @@ const GuidedEntryModal = ({
         if (f.unit_conversions) {
           for (const key of Object.keys(f.unit_conversions)) {
             const parts = key.split('_to_');
-            if (parts.includes(unit)) return true;
+            // La conversion doit partir d'une unité supportée par le facteur
+            if (parts.length === 2) {
+              if ((parts[0] === unit && f.input_units.includes(parts[1])) ||
+                  (parts[1] === unit && f.input_units.includes(parts[0]))) {
+                return true;
+              }
+            }
           }
         }
+        
+        // Vérifier conversions globales - la conversion doit partir d'une unité du facteur
+        const canConvert = unitConversions.some(conv => {
+          // Si le facteur supporte from_unit et que l'unité sélectionnée est to_unit
+          if (f.input_units.includes(conv.from_unit) && conv.to_unit === unit) return true;
+          // Si le facteur supporte to_unit et que l'unité sélectionnée est from_unit
+          if (f.input_units.includes(conv.to_unit) && conv.from_unit === unit) return true;
+          return false;
+        });
+        
+        return canConvert;
       }
       
       // V1 : vérifier l'unité directe
       if (f.unit) {
         const factorUnit = f.unit.match(/kgCO2e\/(.+)/)?.[1] || f.unit;
         if (factorUnit === unit) return true;
+        
+        // Vérifier conversions globales pour V1
+        const canConvert = unitConversions.some(conv => {
+          if (conv.from_unit === factorUnit && conv.to_unit === unit) return true;
+          if (conv.to_unit === factorUnit && conv.from_unit === unit) return true;
+          return false;
+        });
+        
+        return canConvert;
       }
       
-      // Vérifier conversions globales
-      const canConvert = unitConversions.some(conv => {
-        const hasFrom = f.input_units?.includes(conv.from_unit) || f.input_units?.includes(conv.to_unit);
-        const targetMatch = conv.from_unit === unit || conv.to_unit === unit;
-        return hasFrom && targetMatch;
-      });
-      
-      return canConvert;
+      return false;
     });
     
-    setFilteredFactors(compatible.length > 0 ? compatible : factors);
+    // Ne plus retomber sur tous les facteurs - afficher liste vide si aucun compatible
+    setFilteredFactors(compatible);
   };
 
   const handleFactorSelect = (factor) => {
