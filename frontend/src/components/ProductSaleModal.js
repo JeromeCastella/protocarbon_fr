@@ -150,15 +150,13 @@ const ProductSaleModal = ({ isOpen, onClose, onSaleRecorded, preselectedProduct 
       if (isEditMode && existingSale?.sale_id) {
         // Mettre à jour la vente existante
         await axios.put(`${API_URL}/api/products/${selectedProduct.id}/sales/${existingSale.sale_id}`, {
-          quantity: quantity,
-          date: saleDate
+          quantity: quantity
         });
       } else {
         // Créer une nouvelle vente
         await axios.post(`${API_URL}/api/products/${selectedProduct.id}/sales`, {
           product_id: selectedProduct.id,
-          quantity: quantity,
-          date: saleDate
+          quantity: quantity
         });
       }
       
