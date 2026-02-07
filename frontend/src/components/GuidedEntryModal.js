@@ -704,9 +704,16 @@ const GuidedEntryModal = ({
                     )}
 
                     {showFactorList && filteredFactors.length === 0 && (
-                      <div className={`p-4 rounded-xl text-center ${isDark ? 'bg-slate-700' : 'bg-gray-100'}`}>
-                        <p className={isDark ? 'text-slate-400' : 'text-gray-500'}>
-                          {language === 'fr' ? 'Aucun facteur trouvé' : 'Kein Faktor gefunden'}
+                      <div className={`p-4 rounded-xl text-center ${isDark ? 'bg-amber-500/10 border border-amber-500/30' : 'bg-amber-50 border border-amber-200'}`}>
+                        <p className={`font-medium ${isDark ? 'text-amber-400' : 'text-amber-600'}`}>
+                          {language === 'fr' 
+                            ? `Aucun facteur compatible avec l'unité "${selectedUnit}"` 
+                            : `Kein kompatibler Faktor für die Einheit "${selectedUnit}"`}
+                        </p>
+                        <p className={`text-sm mt-1 ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+                          {language === 'fr' 
+                            ? 'Veuillez sélectionner une autre unité' 
+                            : 'Bitte wählen Sie eine andere Einheit'}
                         </p>
                       </div>
                     )}
