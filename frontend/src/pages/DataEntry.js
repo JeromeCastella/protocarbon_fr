@@ -5,8 +5,7 @@ import { useFiscalYear } from '../context/FiscalYearContext';
 import axios from 'axios';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
-  Plus, 
-  MessageSquare, 
+
   Upload, 
   Download,
   Truck,
@@ -314,20 +313,7 @@ const DataEntry = () => {
           </p>
         </div>
 
-        <div className="flex gap-3 mb-6">
-          <button
-            onClick={() => setShowModal(true)}
-            data-testid="add-element-btn"
-            className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl hover:bg-gray-50 dark:hover:bg-slate-700 transition-all"
-          >
-            <Plus className="w-4 h-4" />
-            {t('dataEntry.addElement')}
-          </button>
-          <button className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl hover:bg-gray-50 dark:hover:bg-slate-700 transition-all">
-            <MessageSquare className="w-4 h-4" />
-            {t('dataEntry.addComment')}
-          </button>
-        </div>
+        <div className="h-8"></div>
 
         {/* Scope Tabs */}
         <div className={`flex gap-2 p-1 rounded-xl mb-6 ${isDark ? 'bg-slate-800' : 'bg-gray-100'}`}>
