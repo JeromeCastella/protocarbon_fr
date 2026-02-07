@@ -197,14 +197,10 @@ async def rectify_fiscal_year(
 @router.post("/{fiscal_year_id}/duplicate")
 async def duplicate_fiscal_year(
     fiscal_year_id: str,
-    new_name: str,
-    new_start_date: str,
-    new_end_date: str,
-    duplicate_activities: bool = False,
-    activity_ids: List[str] = [],
+    data: FiscalYearDuplicate,
     current_user: dict = Depends(get_current_user)
 ):
-    """Duplicate a fiscal year, optionally with its activities"""
+    """Duplicate a fiscal year to a new year, optionally with its activities"""
     fy = fiscal_years_collection.find_one({
         "_id": ObjectId(fiscal_year_id),
         "tenant_id": current_user["id"]
@@ -213,9 +209,27 @@ async def duplicate_fiscal_year(
     if not fy:
         raise HTTPException(status_code=404, detail="Fiscal year not found")
     
+    # Check if target year already exists
+    existing = fiscal_years_collection.find_one({
+        "tenant_id": current_user["id"],
+        "year": data.new_year
+    })
+    
+    if existing:
+        raise HTTPException(
+            status_code=400, 
+            detail=f"Un exercice fiscal existe déjà pour l'année {data.new_year}"
+        )
+    
+    # Auto-generate dates for new year
+    new_start_date = f"{data.new_year}-01-01"
+    new_end_date = f"{data.new_year}-12-31"
+    new_name = f"Exercice {data.new_year}"
+    
     # Create new fiscal year
     new_fy = {
         "name": new_name,
+        "year": data.new_year,
         "start_date": new_start_date,
         "end_date": new_end_date,
         "status": "draft",
@@ -230,18 +244,17 @@ async def duplicate_fiscal_year(
     
     duplicated_activities = 0
     
-    if duplicate_activities:
-        # Get activities to duplicate
-        fy_start = fy.get("start_date", "")
-        fy_end = fy.get("end_date", "")
+    if data.duplicate_activities:
+        # Get activities to duplicate (by fiscal_year_id)
+        source_fy_id = str(fy["_id"])
         
         query = {
             "tenant_id": current_user["id"],
-            "date": {"$gte": fy_start, "$lte": fy_end}
+            "fiscal_year_id": source_fy_id
         }
         
-        if activity_ids:
-            query["_id"] = {"$in": [ObjectId(aid) for aid in activity_ids]}
+        if data.activity_ids_to_duplicate:
+            query["_id"] = {"$in": [ObjectId(aid) for aid in data.activity_ids_to_duplicate]}
         
         activities = list(activities_collection.find(query))
         
