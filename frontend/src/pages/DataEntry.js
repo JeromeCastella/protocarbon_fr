@@ -190,8 +190,8 @@ const DataEntry = () => {
       return;
     }
     
-    // Check if this is a product-related category
-    if (PRODUCT_SALE_CATEGORIES.includes(category.code)) {
+    // Check if this is the merged "Produits vendus" card or individual product category
+    if (category.code === 'produits_vendus' || PRODUCT_SALE_CATEGORIES.includes(category.code)) {
       setShowProductSaleModal(true);
       return;
     }
