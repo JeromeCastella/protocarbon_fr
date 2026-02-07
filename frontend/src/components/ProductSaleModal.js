@@ -190,7 +190,6 @@ const ProductSaleModal = ({ isOpen, onClose, onSaleRecorded, preselectedProduct 
   const handleClose = () => {
     setSelectedProduct(preselectedProduct || null);
     setQuantity(0);
-    setSaleDate(currentFiscalYear?.start_date || '');
     setExistingSale(null);
     setIsEditMode(false);
     setShowDeleteConfirm(false);
