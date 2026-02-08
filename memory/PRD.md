@@ -26,14 +26,26 @@ Application de calcul d'empreinte carbone selon le protocole GHG avec interface 
 
 ## What's Been Implemented
 
+### 2026-02-08 - Bug fix: Logique multi-impacts Scope 3/3.3 ✅ (P0)
+- **Problème** : La logique multi-impacts ne fonctionnait pas correctement pour les impacts Scope 3 et Scope 3.3. Les captures d'écran de l'utilisateur montraient que les impacts attendus n'étaient pas créés.
+- **Cause racine** : La fonction `normalize_scope()` convertissait incorrectement `scope3_amont` en `scope3_3`. En réalité, `scope3_amont` (Scope 3 Amont général - catégories 1-8) n'est PAS `scope3_3` (catégorie 3.3 spécifique - amont énergie).
+- **Solution** :
+  1. Suppression de `scope3_amont` de la liste de normalisation vers `scope3_3`
+  2. Ajout d'une logique spéciale pour la catégorie `activites_combustibles_energie` qui déclenche la règle `scope3_3`
+- **Fichiers modifiés** :
+  - `/app/backend/routes/activities.py` : `normalize_scope()` et `apply_business_rules()`
+  - `/app/frontend/src/components/GuidedEntryModal.js` : Même logique côté frontend
+- **Tests** : 9/9 tests passés (100%), fichier `/app/backend/tests/test_multi_impacts.py` créé
+
 ### 2026-02-08 - Multi-impacts GHG Protocol ✅ (P0 - MAJOR)
 - **Contexte** : Les facteurs d'émission peuvent avoir plusieurs impacts (ex: Diesel = Scope 1 + Scope 3.3). Avant, une seule activité était créée avec la somme des émissions, ce qui faussait la répartition par scope.
 - **Règles métier finales** :
   - Un facteur peut avoir jusqu'à 4 impacts : `scope1`, `scope2`, `scope3_3`, `scope3`
   - **Saisie Scope 1 ou 2** → inclure impacts `scope1`, `scope2`, `scope3_3`
-  - **Saisie Scope 3** → inclure uniquement impact `scope3`
+  - **Saisie Scope 3.3** (catégorie `activites_combustibles_energie`) → inclure uniquement `scope3_3`
+  - **Saisie Scope 3** (autres catégories) → inclure uniquement impact `scope3`
   - **Si value = 0** → ne pas créer de ligne
-  - Normalisation automatique des scopes (`scope3.3`, `scope3_amont`, `scope33` → `scope3_3`)
+  - Normalisation automatique des scopes (`scope3.3`, `scope33` → `scope3_3`) - NOTE: `scope3_amont` n'est PAS normalisé en `scope3_3`
 - **Solution implémentée** :
   1. **`apply_business_rules`** : Filtre les impacts selon le contexte de saisie
   2. **`normalize_scope`** : Normalise les différentes notations de scope
