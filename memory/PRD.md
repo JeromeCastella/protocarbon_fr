@@ -22,8 +22,33 @@ Application de calcul d'empreinte carbone selon le protocole GHG avec interface 
 - [x] Gamification (barres de progression)
 - [x] Structure GHG Protocol (Scope 1, 2, 3 Amont, 3 Aval)
 - [x] **Données contextuelles par exercice fiscal** (employees, revenue, surface_area, excluded_categories)
+- [x] **Support multi-impacts GHG Protocol** (création d'activités liées pour les facteurs multi-scopes)
 
 ## What's Been Implemented
+
+### 2026-02-08 - Multi-impacts GHG Protocol ✅ (P0 - MAJOR)
+- **Contexte** : Les facteurs d'émission peuvent avoir plusieurs impacts (ex: Diesel = Scope 1 + Scope 3.3). Avant, une seule activité était créée avec la somme des émissions, ce qui faussait la répartition par scope.
+- **Solution implémentée** :
+  1. **Règles métier GHG Protocol** (`apply_business_rules`) :
+     - Saisie Scope 1, 2 ou 3.3 → inclure les impacts Scope 1, 2 et 3.3
+     - Saisie Scope 3 (hors 3.3) → exclure les impacts Scope 1, 2 et 3.3
+  2. **Création multi-activités** : `POST /api/activities` crée N activités liées par un `group_id`
+  3. **Nouveaux endpoints de groupe** :
+     - `GET /api/activities/groups/{group_id}` : Récupérer un groupe
+     - `PUT /api/activities/groups/{group_id}` : Mise à jour groupée (quantité, commentaires, changement de facteur)
+     - `DELETE /api/activities/groups/{group_id}` : Suppression en cascade
+  4. **UI TableView** : Indicateurs visuels de groupe (🔗 2 pour principale, ↳ pour secondaires)
+- **Nouveaux champs MongoDB** :
+  - `group_id` : UUID liant les activités d'une même saisie
+  - `group_index` : 0 = principale, 1+ = secondaires
+  - `group_size` : Nombre d'activités dans le groupe
+  - `entry_scope` : Scope de saisie original
+  - `entry_category` : Catégorie de saisie originale
+- **Fichiers modifiés** :
+  - `/app/backend/models/__init__.py` : `ActivityCreate` + `ActivityGroupUpdate`
+  - `/app/backend/routes/activities.py` : Logique multi-impacts + endpoints groupe
+  - `/app/frontend/src/components/GuidedEntryModal.js` : Envoi de `entry_scope`, `entry_category`
+  - `/app/frontend/src/pages/DataEntry.js` : Gestion des groupes + UI
 
 ### 2026-02-08 - Bug fix: Édition d'activité Scope 3 ✅ (P0)
 - **Problème** : Lors de l'édition d'une activité depuis la TableView, le modal s'ouvrait à l'étape 3 (sélection du facteur) pour les activités Scope 3, au lieu de l'étape 4 (formulaire final) comme pour les Scopes 1 et 2.
