@@ -304,7 +304,7 @@ const FiscalYears = () => {
     return [...fiscalYears].sort((a, b) => {
       const yearA = a.year || parseInt(a.name?.replace('Exercice ', ''));
       const yearB = b.year || parseInt(b.name?.replace('Exercice ', ''));
-      return yearB - yearA;
+      return yearA - yearB;
     });
   }, [fiscalYears]);
 
