@@ -459,3 +459,144 @@ async def create_activities_bulk(
         created.append(serialize_doc(activity_doc))
     
     return {"created": len(created), "activities": created}
+
+
+# ==================== ENDPOINTS DE GROUPE (MULTI-IMPACTS) ====================
+
+@router.get("/groups/{group_id}")
+async def get_activity_group(
+    group_id: str,
+    current_user: dict = Depends(get_current_user)
+):
+    """Récupère toutes les activités d'un groupe multi-impacts"""
+    activities = list(activities_collection.find({
+        "group_id": group_id,
+        "tenant_id": current_user["id"]
+    }).sort("group_index", 1))
+    
+    if not activities:
+        raise HTTPException(status_code=404, detail="Groupe non trouvé")
+    
+    return {
+        "group_id": group_id,
+        "activities": [serialize_doc(a) for a in activities],
+        "count": len(activities)
+    }
+
+
+@router.put("/groups/{group_id}")
+async def update_activity_group(
+    group_id: str,
+    update: ActivityGroupUpdate,
+    current_user: dict = Depends(get_current_user)
+):
+    """
+    Met à jour toutes les activités d'un groupe multi-impacts.
+    
+    - Si changement de quantité : recalcule les émissions proportionnellement
+    - Si changement de facteur : supprime et recrée toutes les activités
+    - Si changement de commentaires : met à jour toutes les activités
+    """
+    
+    # Récupérer toutes les activités du groupe
+    activities = list(activities_collection.find({
+        "group_id": group_id,
+        "tenant_id": current_user["id"]
+    }).sort("group_index", 1))
+    
+    if not activities:
+        raise HTTPException(status_code=404, detail="Groupe non trouvé")
+    
+    main_activity = activities[0]
+    
+    # Si changement de facteur → supprimer et recréer tout le groupe
+    if update.emission_factor_id and update.emission_factor_id != main_activity.get("emission_factor_id"):
+        # Supprimer les anciennes activités
+        activities_collection.delete_many({
+            "group_id": group_id,
+            "tenant_id": current_user["id"]
+        })
+        
+        # Recréer avec le nouveau facteur
+        new_activity = ActivityCreate(
+            category_id=update.category_id or main_activity["entry_category"],
+            subcategory_id=update.subcategory_id or main_activity.get("subcategory_id"),
+            scope=main_activity["entry_scope"],
+            name=update.name or main_activity["name"],
+            quantity=update.quantity or main_activity["quantity"],
+            unit=update.unit or main_activity["unit"],
+            emission_factor_id=update.emission_factor_id,
+            entry_scope=main_activity["entry_scope"],
+            entry_category=main_activity["entry_category"],
+            fiscal_year_id=main_activity.get("fiscal_year_id"),
+            comments=update.comments if update.comments is not None else main_activity.get("comments")
+        )
+        return await create_activity(new_activity, current_user)
+    
+    # Si changement de quantité → mise à jour proportionnelle
+    update_fields = {"updated_at": datetime.now(timezone.utc).isoformat()}
+    
+    if update.quantity and update.quantity != main_activity["quantity"]:
+        ratio = update.quantity / main_activity["quantity"]
+        
+        for activity in activities:
+            new_emissions = activity["emissions"] * ratio
+            activities_collection.update_one(
+                {"_id": activity["_id"]},
+                {"$set": {
+                    "quantity": update.quantity,
+                    "emissions": new_emissions,
+                    "calculated_emissions": new_emissions,
+                    "updated_at": datetime.now(timezone.utc).isoformat()
+                }}
+            )
+    
+    # Mise à jour des champs simples
+    simple_updates = {}
+    if update.name is not None:
+        simple_updates["name"] = update.name
+    if update.comments is not None:
+        simple_updates["comments"] = update.comments
+    if update.unit is not None:
+        simple_updates["unit"] = update.unit
+    
+    if simple_updates:
+        simple_updates["updated_at"] = datetime.now(timezone.utc).isoformat()
+        activities_collection.update_many(
+            {"group_id": group_id, "tenant_id": current_user["id"]},
+            {"$set": simple_updates}
+        )
+    
+    # Retourner le groupe mis à jour
+    updated_activities = list(activities_collection.find({
+        "group_id": group_id,
+        "tenant_id": current_user["id"]
+    }).sort("group_index", 1))
+    
+    return {
+        "group_id": group_id,
+        "activities": [serialize_doc(a) for a in updated_activities],
+        "count": len(updated_activities)
+    }
+
+
+@router.delete("/groups/{group_id}")
+async def delete_activity_group(
+    group_id: str,
+    current_user: dict = Depends(get_current_user)
+):
+    """Supprime toutes les activités d'un groupe multi-impacts"""
+    
+    result = activities_collection.delete_many({
+        "group_id": group_id,
+        "tenant_id": current_user["id"]
+    })
+    
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Groupe non trouvé")
+    
+    return {
+        "message": f"Groupe supprimé ({result.deleted_count} activités)",
+        "deleted": result.deleted_count,
+        "group_id": group_id
+    }
