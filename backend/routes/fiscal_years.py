@@ -266,10 +266,15 @@ async def close_fiscal_year(fiscal_year_id: str, current_user: dict = Depends(ge
     scope_emissions = {"scope1": 0, "scope2": 0, "scope3_amont": 0, "scope3_aval": 0}
     
     for activity in activities:
-        scope = activity.get("scope", "scope1")
+        raw_scope = activity.get("scope", "scope1")
+        category = activity.get("category_id", "other")
         emissions = activity.get("emissions", 0) or 0
-        if scope in scope_emissions:
-            scope_emissions[scope] += emissions
+        
+        # Normaliser le scope pour le reporting (scope3_3 → scope3_amont, etc.)
+        normalized_scope = normalize_scope_for_reporting(raw_scope, category)
+        
+        if normalized_scope in scope_emissions:
+            scope_emissions[normalized_scope] += emissions
     
     total = sum(scope_emissions.values())
     
