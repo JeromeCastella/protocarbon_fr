@@ -82,9 +82,9 @@ async def get_dashboard_summary(
     current_user: dict = Depends(get_current_user)
 ):
     """Get dashboard summary with emissions by scope"""
-    # Get company info
-    company = companies_collection.find_one({"tenant_id": current_user["id"]})
-    excluded_categories = company.get("excluded_categories", []) if company else []
+    # Get context (from fiscal year or company fallback)
+    context = get_fiscal_year_context_with_fallback(fiscal_year_id, current_user["id"])
+    excluded_categories = context.get("excluded_categories", [])
     
     # Build query - filter by fiscal year if specified using fiscal_year_id
     query = {"tenant_id": current_user["id"]}
