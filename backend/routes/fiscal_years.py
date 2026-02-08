@@ -104,6 +104,33 @@ async def create_fiscal_year(fy: FiscalYearCreate, current_user: dict = Depends(
     end_date = f"{fy.year}-12-31"
     name = f"Exercice {fy.year}"
     
+    # Initialize context from previous fiscal year or company
+    context = {}
+    
+    # Try to get context from previous fiscal year (year - 1)
+    previous_fy = fiscal_years_collection.find_one({
+        "tenant_id": current_user["id"],
+        "year": fy.year - 1
+    })
+    
+    if previous_fy and previous_fy.get("context"):
+        # Copy context from previous year
+        prev_context = previous_fy["context"]
+        context = {
+            "employees": prev_context.get("employees"),
+            "revenue": prev_context.get("revenue"),
+            "surface_area": prev_context.get("surface_area"),
+            "excluded_categories": prev_context.get("excluded_categories", [])
+        }
+    elif company:
+        # Fallback to company values (first fiscal year)
+        context = {
+            "employees": company.get("employees"),
+            "revenue": company.get("revenue"),
+            "surface_area": company.get("surface_area"),
+            "excluded_categories": company.get("excluded_categories", [])
+        }
+    
     fy_doc = {
         "name": name,
         "year": fy.year,
@@ -112,6 +139,7 @@ async def create_fiscal_year(fy: FiscalYearCreate, current_user: dict = Depends(
         "status": "draft",
         "tenant_id": current_user["id"],
         "company_id": company_id,
+        "context": context,
         "created_at": datetime.now(timezone.utc).isoformat()
     }
     
