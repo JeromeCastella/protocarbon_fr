@@ -7,7 +7,6 @@ import {
   Building2, 
   MapPin, 
   Briefcase, 
-  Calendar, 
   Users, 
   Square, 
   DollarSign,
