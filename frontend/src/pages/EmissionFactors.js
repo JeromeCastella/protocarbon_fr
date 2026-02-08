@@ -43,7 +43,11 @@ const EmissionFactors = () => {
   const handleExportJSON = async () => {
     setExporting(true);
     try {
-      const response = await axios.get(`${API_URL}/api/export/emission-factors`);
+      // Get token from localStorage for authenticated request
+      const token = localStorage.getItem('token');
+      const headers = token ? { Authorization: `Bearer ${token}` } : {};
+      
+      const response = await axios.get(`${API_URL}/api/export/emission-factors`, { headers });
       const data = response.data;
       
       // Create blob and download
@@ -68,7 +72,11 @@ const EmissionFactors = () => {
   const handleExportCSV = async () => {
     setExporting(true);
     try {
-      const response = await axios.get(`${API_URL}/api/export/emission-factors`);
+      // Get token from localStorage for authenticated request
+      const token = localStorage.getItem('token');
+      const headers = token ? { Authorization: `Bearer ${token}` } : {};
+      
+      const response = await axios.get(`${API_URL}/api/export/emission-factors`, { headers });
       const factors = response.data.emission_factors || [];
       
       // Build CSV content
