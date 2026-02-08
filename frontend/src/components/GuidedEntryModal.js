@@ -278,29 +278,41 @@ const GuidedEntryModal = ({
     }
   }, [factorSearch]);
 
-  // Appliquer les règles métier pour filtrer les impacts selon le scope et la catégorie sélectionnés
+  // Normaliser les différentes notations de scope vers un format standard
+  const normalizeScope = (scope) => {
+    if (!scope) return '';
+    const scopeLower = scope.toLowerCase().trim();
+    
+    // Normalisation du Scope 3.3 (amont énergie)
+    if (['scope3_3', 'scope3.3', 'scope33', 'scope3_amont'].includes(scopeLower)) {
+      return 'scope3_3';
+    }
+    return scopeLower;
+  };
+
+  // Appliquer les règles métier pour filtrer les impacts selon le scope sélectionné
+  // Règles GHG Protocol :
+  // - Saisie Scope 1 ou 2 → inclure impacts scope1, scope2, scope3_3
+  // - Saisie Scope 3 → inclure uniquement impact scope3
+  // - Si value = 0 → exclure
   const applyBusinessRules = (impacts, selectedScope, selectedCategory) => {
     if (!impacts || impacts.length === 0) return impacts;
     
     const isScope3Entry = selectedScope?.startsWith('scope3');
-    const isEntryInScope33Category = selectedCategory === 'activites_combustibles_energie';
     
     return impacts.filter(impact => {
-      const impactScope = impact.scope;
-      const isImpactScope33 = impact.category === 'activites_combustibles_energie';
+      const impactScope = normalizeScope(impact.scope);
+      const impactValue = impact.value || 0;
       
-      if (isScope3Entry && !isEntryInScope33Category) {
-        // Saisie Scope 3 (hors catégorie 3.3): uniquement impacts Scope 3
-        // Exclure Scope 1, Scope 2, et les impacts amont énergie (Scope 3.3)
-        if (impactScope === 'scope1' || impactScope === 'scope2') return false;
-        if (isImpactScope33) return false;
-        return true;
+      // Exclure les impacts avec valeur = 0
+      if (impactValue === 0) return false;
+      
+      if (isScope3Entry) {
+        // Saisie Scope 3 : inclure uniquement scope3
+        return impactScope === 'scope3';
       } else {
-        // Saisie Scope 1, 2 ou catégorie 3.3: tous les impacts Scope 1/2 + Scope 3.3
-        if (impactScope === 'scope1' || impactScope === 'scope2') return true;
-        if (isImpactScope33) return true;
-        if (impactScope === selectedScope) return true;
-        return false;
+        // Saisie Scope 1 ou 2 : inclure scope1, scope2, scope3_3
+        return ['scope1', 'scope2', 'scope3_3'].includes(impactScope);
       }
     });
   };
