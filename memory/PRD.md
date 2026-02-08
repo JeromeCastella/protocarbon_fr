@@ -26,6 +26,19 @@ Application de calcul d'empreinte carbone selon le protocole GHG avec interface 
 
 ## What's Been Implemented
 
+### 2026-02-08 - UI: Affichage des lignes liées dans TableView ✅
+- **Demande** : Les activités indirectes (scope3_3 créées automatiquement) doivent être visibles dans la TableView Scope 3 Amont avec un style distinct.
+- **Spécifications** :
+  - Icône **↳** devant le nom
+  - Fond **gris clair** pour distinguer des lignes principales
+  - **Lecture seule** : pas de boutons d'action, juste le texte "Auto"
+  - **Total inclus** : ces lignes sont comptées dans le total
+- **Fichiers modifiés** :
+  - `/app/frontend/src/pages/DataEntry.js` : 
+    - `getScopeActivities()` : utilise maintenant `normalizeScope()` pour inclure les activités `scope3_3` et `scope3` dans leur scope parent
+    - Rendu des lignes : style distinct pour `isLinkedActivity` (group_index > 0)
+- **Résultat** : La TableView Scope 3 Amont affiche maintenant toutes les activités y compris les lignes liées avec le style demandé.
+
 ### 2026-02-08 - Bug fix DASHBOARD: Comptabilisation des scopes granulaires ✅ (P0)
 - **Problème** : Les émissions `scope3_3` et `scope3` n'étaient pas comptabilisées dans le dashboard. Le dictionnaire `scope_emissions` ne contenait que 4 clés (`scope1`, `scope2`, `scope3_amont`, `scope3_aval`) et les activités avec des scopes granulaires étaient ignorées.
 - **Cause racine** : Le code vérifiait `if scope in scope_emissions` mais les scopes `scope3_3` et `scope3` n'étaient pas des clés du dictionnaire.
