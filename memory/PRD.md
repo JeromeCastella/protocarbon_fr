@@ -28,16 +28,18 @@ Application de calcul d'empreinte carbone selon le protocole GHG avec interface 
 
 ### 2026-02-08 - Multi-impacts GHG Protocol ✅ (P0 - MAJOR)
 - **Contexte** : Les facteurs d'émission peuvent avoir plusieurs impacts (ex: Diesel = Scope 1 + Scope 3.3). Avant, une seule activité était créée avec la somme des émissions, ce qui faussait la répartition par scope.
+- **Règles métier finales** :
+  - Un facteur peut avoir jusqu'à 4 impacts : `scope1`, `scope2`, `scope3_3`, `scope3`
+  - **Saisie Scope 1 ou 2** → inclure impacts `scope1`, `scope2`, `scope3_3`
+  - **Saisie Scope 3** → inclure uniquement impact `scope3`
+  - **Si value = 0** → ne pas créer de ligne
+  - Normalisation automatique des scopes (`scope3.3`, `scope3_amont`, `scope33` → `scope3_3`)
 - **Solution implémentée** :
-  1. **Règles métier GHG Protocol** (`apply_business_rules`) :
-     - Saisie Scope 1, 2 ou 3.3 → inclure les impacts Scope 1, 2 et 3.3
-     - Saisie Scope 3 (hors 3.3) → exclure les impacts Scope 1, 2 et 3.3
-  2. **Création multi-activités** : `POST /api/activities` crée N activités liées par un `group_id`
-  3. **Nouveaux endpoints de groupe** :
-     - `GET /api/activities/groups/{group_id}` : Récupérer un groupe
-     - `PUT /api/activities/groups/{group_id}` : Mise à jour groupée (quantité, commentaires, changement de facteur)
-     - `DELETE /api/activities/groups/{group_id}` : Suppression en cascade
-  4. **UI TableView** : Indicateurs visuels de groupe (🔗 2 pour principale, ↳ pour secondaires)
+  1. **`apply_business_rules`** : Filtre les impacts selon le contexte de saisie
+  2. **`normalize_scope`** : Normalise les différentes notations de scope
+  3. **Création multi-activités** : `POST /api/activities` crée N activités liées par un `group_id`
+  4. **Endpoints de groupe** : GET/PUT/DELETE `/api/activities/groups/{group_id}`
+  5. **UI TableView** : Indicateurs visuels de groupe (🔗 2 pour principale, ↳ pour secondaires)
 - **Nouveaux champs MongoDB** :
   - `group_id` : UUID liant les activités d'une même saisie
   - `group_index` : 0 = principale, 1+ = secondaires
