@@ -120,15 +120,6 @@ const GuidedEntryModal = ({
     }
   };
 
-  const fetchUnitConversions = async () => {
-    try {
-      const response = await axios.get(`${API_URL}/api/unit-conversions`);
-      setUnitConversions(response.data || []);
-    } catch (error) {
-      console.error('Failed to fetch unit conversions:', error);
-    }
-  };
-
   const fetchFactorsForCategory = async () => {
     try {
       setLoading(true);
