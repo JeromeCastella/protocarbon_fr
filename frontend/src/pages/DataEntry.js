@@ -682,7 +682,12 @@ const DataEntry = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {getScopeActivities(tableViewScope).map((activity, index) => {
+                      {(() => {
+                        // Calculer le total une fois pour uniformiser l'unité dans toute la table
+                        const tableActivities = getScopeActivities(tableViewScope);
+                        const tableTotalEmissions = tableActivities.reduce((sum, a) => sum + (a.emissions || 0), 0);
+                        
+                        return tableActivities.map((activity, index) => {
                         const activityScope = activity.scope || 'scope1';
                         const scopeColor = 
                           activityScope === 'scope1' ? 'text-blue-500' :
