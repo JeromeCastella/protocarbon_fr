@@ -24,6 +24,15 @@ Application de calcul d'empreinte carbone selon le protocole GHG avec interface 
 
 ## What's Been Implemented
 
+### 2026-02-08 - Correction carte "Périmètre du bilan carbone" ✅
+- **Bug fix API** : Correction de l'endpoint `/api/company` → `/api/companies` dans le backend (`routes/companies.py`)
+- **Nouvelle interface Option A** : Deux boutons distincts sur la carte "Périmètre du bilan carbone" :
+  - **"🪄 Configuration guidée"** (bouton violet) → Ouvre le wizard interactif
+  - **"✏️ Configuration manuelle"** (bouton gris avec chevron) → Affiche/masque les checkboxes des catégories par scope
+- **Animation fluide** : Utilisation de `AnimatePresence` et `motion.div` pour l'affichage/masquage des checkboxes
+- **État par défaut** : Les checkboxes sont affichées par défaut (`showManualConfig: true`)
+- **Fichier modifié** : `/app/frontend/src/pages/GeneralInfo.js`
+
 ### 2026-02-06 - Refonte onglet "Résultats" du Dashboard ✅
 - **Implémentation complète du composant `DashboardResultsTab.js`** :
   - **3 KPI Cards** : Émissions totales, Émissions par kCHF, Variation N-1 (avec couleur verte/rouge selon tendance)
