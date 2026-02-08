@@ -8,7 +8,9 @@ import {
   Search, 
   Tag,
   MapPin,
-  Info
+  Info,
+  Download,
+  Loader2
 } from 'lucide-react';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL || '';
