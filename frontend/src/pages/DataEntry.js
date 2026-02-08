@@ -240,7 +240,7 @@ const DataEntry = () => {
   };
 
   // Open modal in edit mode with pre-filled data
-  const handleEditActivityInModal = (activity) => {
+  const handleEditActivityInModal = async (activity) => {
     // Check if this activity is part of a linked sale (has sale_id)
     if (activity.sale_id && activity.product_id) {
       // Open the Sale Edit Modal for grouped editing
@@ -250,12 +250,34 @@ const DataEntry = () => {
       return;
     }
     
-    // Regular activity - open the standard guided entry modal
-    const category = categories.find(c => c.code === activity.category_id);
+    // Déterminer l'activité à éditer (principale du groupe si multi-impacts)
+    let activityToEdit = activity;
+    
+    // Si l'activité fait partie d'un groupe et n'est pas la principale
+    if (activity.group_id && activity.group_index > 0) {
+      try {
+        // Charger le groupe complet pour récupérer l'activité principale
+        const response = await axios.get(`${API_URL}/api/activities/groups/${activity.group_id}`);
+        const mainActivity = response.data.activities.find(a => a.group_index === 0);
+        if (mainActivity) {
+          activityToEdit = {
+            ...mainActivity,
+            // Garder une référence au groupe complet pour l'affichage
+            _groupActivities: response.data.activities
+          };
+        }
+      } catch (error) {
+        console.error('Failed to load activity group:', error);
+      }
+    }
+    
+    // Utiliser entry_category pour trouver la catégorie de saisie originale
+    const categoryCode = activityToEdit.entry_category || activityToEdit.category_id;
+    const category = categories.find(c => c.code === categoryCode);
     if (!category) return;
 
     setSelectedCategory(category);
-    setEditingActivityData(activity);
+    setEditingActivityData(activityToEdit);
     setShowTableView(false);
     setShowModal(true);
   };
