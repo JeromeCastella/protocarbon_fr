@@ -270,13 +270,29 @@ const DataEntry = () => {
       };
       
       if (editingActivityData) {
-        await axios.put(`${API_URL}/api/activities/${editingActivityData.id}`, dataWithFiscalYear);
+        // Mode édition : utiliser l'endpoint de groupe si l'activité fait partie d'un groupe
+        const groupId = editingActivityData.group_id;
+        if (groupId) {
+          await axios.put(`${API_URL}/api/activities/groups/${groupId}`, dataWithFiscalYear);
+        } else {
+          await axios.put(`${API_URL}/api/activities/${editingActivityData.id}`, dataWithFiscalYear);
+        }
       } else {
-        await axios.post(`${API_URL}/api/activities`, dataWithFiscalYear);
+        // Création : peut retourner plusieurs activités si multi-impacts
+        const response = await axios.post(`${API_URL}/api/activities`, dataWithFiscalYear);
+        
+        // Log pour debug (multi-impacts)
+        if (response.data.count > 1) {
+          console.log(`Créé ${response.data.count} activités (groupe ${response.data.group_id})`);
+        }
       }
       fetchData();
     } catch (error) {
       console.error('Failed to save activity:', error);
+      // TODO: Afficher toast d'erreur avec le message
+      if (error.response?.data?.detail) {
+        alert(error.response.data.detail);
+      }
     }
   };
   
@@ -299,9 +315,20 @@ const DataEntry = () => {
     return list.sort((a, b) => (b.emissions || 0) - (a.emissions || 0));
   };
 
-  const handleDeleteActivity = async (activityId) => {
+  // Suppression d'une activité (gère les groupes)
+  const handleDeleteActivity = async (activity) => {
     try {
-      await axios.delete(`${API_URL}/api/activities/${activityId}`);
+      // Si l'activité fait partie d'un groupe multi-impacts
+      if (activity.group_id && activity.group_size > 1) {
+        const confirmDelete = window.confirm(
+          `Cette saisie contient ${activity.group_size} impacts liés.\nVoulez-vous supprimer les ${activity.group_size} activités ?`
+        );
+        if (!confirmDelete) return;
+        
+        await axios.delete(`${API_URL}/api/activities/groups/${activity.group_id}`);
+      } else {
+        await axios.delete(`${API_URL}/api/activities/${activity.id}`);
+      }
       fetchData();
     } catch (error) {
       console.error('Failed to delete activity:', error);
