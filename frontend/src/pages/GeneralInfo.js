@@ -552,8 +552,9 @@ const GeneralInfo = () => {
             </label>
             <input
               type="number"
-              value={company.employees}
+              value={company.employees === 0 ? '' : company.employees}
               onChange={(e) => setCompany({ ...company, employees: parseInt(e.target.value) || 0 })}
+              placeholder="0"
               data-testid="company-employees-input"
               className={`w-full px-4 py-3 rounded-xl border transition-all focus:ring-2 focus:ring-blue-500 ${
                 isDark 
@@ -571,8 +572,9 @@ const GeneralInfo = () => {
             </label>
             <input
               type="number"
-              value={company.surface_area}
+              value={company.surface_area === 0 ? '' : company.surface_area}
               onChange={(e) => setCompany({ ...company, surface_area: parseFloat(e.target.value) || 0 })}
+              placeholder="0"
               data-testid="company-surface-input"
               className={`w-full px-4 py-3 rounded-xl border transition-all focus:ring-2 focus:ring-blue-500 ${
                 isDark 
@@ -591,8 +593,9 @@ const GeneralInfo = () => {
               </label>
               <input
                 type="number"
-                value={company.revenue}
+                value={company.revenue === 0 ? '' : company.revenue}
                 onChange={(e) => setCompany({ ...company, revenue: parseFloat(e.target.value) || 0 })}
+                placeholder="0"
                 data-testid="company-revenue-input"
                 placeholder="ex: 1500"
                 className={`w-full px-4 py-3 rounded-xl border transition-all focus:ring-2 focus:ring-blue-500 ${
