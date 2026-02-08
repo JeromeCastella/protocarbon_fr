@@ -16,7 +16,7 @@ import {
   BarChart3,
   PieChart,
   Users,
-  DollarSign,
+  Banknote,
   Calendar,
   ArrowLeft,
   Minus,

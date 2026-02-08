@@ -9,7 +9,7 @@ import {
   Briefcase, 
   Users, 
   Square, 
-  DollarSign,
+  Banknote,
   Layers,
   Check,
   Save,
@@ -59,7 +59,7 @@ const GeneralInfo = () => {
 
   // Wizard state
   const [showWizard, setShowWizard] = useState(false);
-  const [showManualConfig, setShowManualConfig] = useState(true);
+  const [showManualConfig, setShowManualConfig] = useState(false);
   const [wizardStep, setWizardStep] = useState(0);
   const [wizardAnswers, setWizardAnswers] = useState({
     hasVehicles: null,
@@ -560,7 +560,7 @@ const GeneralInfo = () => {
           {isPrivateCompany && (
             <div>
               <label className={`flex items-center gap-2 text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
-                <DollarSign className="w-4 h-4" />
+                <Banknote className="w-4 h-4" />
                 {t('company.revenue')} (kCHF)
               </label>
               <input

@@ -102,7 +102,7 @@
   },
   "scope": {
     "perimeter": "Umfang der CO2-Bilanz",
-    "perimeterDesc": "Wählen Sie die Kategorien aus, die von Ihrer CO2-Bilanz ausgeschlossen werden sollen.",
+    "perimeterDesc": "Wählen Sie die Kategorien aus, die in Ihrer CO2-Bilanz enthalten sein sollen. Nicht ausgewählte Kategorien werden nicht in der Dateneingabe angezeigt. Wählen Sie die geführte Konfiguration, um Sie bei der ersten Eingabe zu unterstützen.",
     "scope1": "Scope 1",
     "scope1Title": "Direkte Emissionen",
     "scope2": "Scope 2",

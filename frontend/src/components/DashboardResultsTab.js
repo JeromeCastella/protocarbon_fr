@@ -4,7 +4,7 @@ import { useLanguage } from '../context/LanguageContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Leaf, 
-  DollarSign, 
+  Banknote, 
   TrendingUp, 
   TrendingDown, 
   Minus,
@@ -241,7 +241,7 @@ const DashboardResultsTab = ({
         >
           <div className="flex items-center gap-4">
             <div className="p-3 rounded-xl bg-emerald-500/20">
-              <DollarSign className="w-6 h-6 text-emerald-500" />
+              <Banknote className="w-6 h-6 text-emerald-500" />
             </div>
             <div className="flex-1">
               <p className={`text-xs uppercase tracking-wide ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>

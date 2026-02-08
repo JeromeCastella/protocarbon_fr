@@ -102,7 +102,7 @@
   },
   "scope": {
     "perimeter": "Périmètre du bilan carbone",
-    "perimeterDesc": "Sélectionnez les catégories à exclure de votre bilan carbone. Les catégories exclues n'apparaîtront pas dans la saisie de données.",
+    "perimeterDesc": "Sélectionnez les catégories à inclure de votre bilan carbone. Les catégories non-sélectionnées n'apparaîtront pas dans la saisie de données. Choisissez la configuration guidée pour vous aider lors de la première saisie.",
     "scope1": "Scope 1",
     "scope1Title": "Émissions directes",
     "scope2": "Scope 2",
