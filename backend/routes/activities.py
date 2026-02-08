@@ -148,6 +148,17 @@ async def create_activity_for_impact(
     if not activity_date:
         activity_date = datetime.now(timezone.utc).strftime("%Y-%m-%d")
     
+    # Déterminer le scope normalisé de l'impact
+    impact_scope = normalize_scope(impact.get("scope", activity.scope))
+    
+    # Déterminer la catégorie d'affichage selon le scope de l'impact
+    # Règle GHG Protocol : les impacts scope3_3 (amont énergie) vont dans 
+    # la catégorie "Activités liées aux combustibles et à l'énergie"
+    if impact_scope == 'scope3_3':
+        display_category = 'activites_combustibles_energie'
+    else:
+        display_category = activity.category_id
+    
     # Construire le document
     activity_doc = {
         # Groupement
@@ -157,11 +168,11 @@ async def create_activity_for_impact(
         
         # Contexte de saisie original
         "entry_scope": activity.entry_scope or activity.scope,
-        "entry_category": activity.entry_scope or activity.category_id,
+        "entry_category": activity.entry_category or activity.category_id,
         
         # Données de l'impact (scope normalisé)
-        "scope": normalize_scope(impact.get("scope", activity.scope)),
-        "category_id": activity.category_id,  # Utilise la catégorie de saisie
+        "scope": impact_scope,
+        "category_id": display_category,  # Catégorie d'affichage selon les règles GHG
         "subcategory_id": activity.subcategory_id,
         "impact_value": impact.get("value", 0),
         "impact_unit": impact.get("unit", "kgCO2e"),
