@@ -209,3 +209,21 @@ async def get_factors_valid_for_year(
     
     factors = list(emission_factors_collection.find(query))
     return [serialize_doc(f) for f in factors]
+
+
+
+# IMPORTANT: This route must be placed AFTER all other /emission-factors/* routes
+# because it uses a path parameter that would catch routes like /search, /by-category, etc.
+@router.get("/emission-factors/{factor_id}")
+async def get_emission_factor_by_id(
+    factor_id: str,
+    current_user: dict = Depends(get_current_user)
+):
+    """Get a specific emission factor by its ID"""
+    try:
+        factor = emission_factors_collection.find_one({"_id": ObjectId(factor_id)})
+        if not factor:
+            raise HTTPException(status_code=404, detail="Emission factor not found")
+        return serialize_doc(factor)
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Invalid factor ID: {str(e)}")
