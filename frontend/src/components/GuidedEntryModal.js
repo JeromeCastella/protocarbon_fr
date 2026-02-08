@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import axios from 'axios';
 import { 
-  X, Check, Search, ChevronRight, Info, Sparkles, AlertCircle
+  X, Check, Search, ChevronRight, Info, Sparkles, AlertCircle, RotateCcw, Loader2
 } from 'lucide-react';
 import { normalizeUnit, filterFactorsByUnitStrict, getAvailableUnitsFromFactors } from '../utils/units';
 
@@ -11,6 +11,7 @@ const API_URL = process.env.REACT_APP_BACKEND_URL || '';
 /**
  * Modal de saisie guidée pour les données d'activité
  * Parcours: Catégorie → Sous-catégorie → Unité → Facteur → Quantité
+ * En mode édition: va directement à l'étape 4 avec toutes les données pré-remplies
  */
 const GuidedEntryModal = ({
   isOpen,
@@ -44,19 +45,25 @@ const GuidedEntryModal = ({
   
   // Chargement
   const [loading, setLoading] = useState(false);
+  
+  // Mode édition
+  const [isEditMode, setIsEditMode] = useState(false);
 
-  // Reset quand on ouvre le modal
+  // Reset quand on ouvre le modal - différencier création et édition
   useEffect(() => {
     if (isOpen && category) {
-      resetState();
-      fetchSubcategories();
-      
-      // Si édition, pré-remplir
       if (editingActivity) {
-        prefillFromActivity(editingActivity);
+        // Mode édition : charger toutes les données et aller à l'étape 4
+        setIsEditMode(true);
+        loadForEditing(editingActivity);
+      } else {
+        // Mode création : reset et parcours normal
+        setIsEditMode(false);
+        resetState();
+        fetchSubcategories();
       }
     }
-  }, [isOpen, category]);
+  }, [isOpen, category, editingActivity?.id]);
 
   const resetState = () => {
     setStep(1);
@@ -72,32 +79,63 @@ const GuidedEntryModal = ({
     setShowFactorList(false);
   };
 
-  const prefillFromActivity = async (activity) => {
-    setQuantity(activity.quantity?.toString() || '');
-    setComments(activity.comments || '');
-    
-    if (activity.subcategory_id) {
-      // Charger les sous-catégories et sélectionner celle de l'activité
-      const res = await axios.get(`${API_URL}/api/subcategories?category=${category.code}`);
-      const subcats = res.data || [];
+  /**
+   * Charge toutes les données nécessaires pour le mode édition
+   * et passe directement à l'étape 4 (formulaire final)
+   */
+  const loadForEditing = async (activity) => {
+    setLoading(true);
+    try {
+      // 1. Charger les sous-catégories
+      const subcatsRes = await axios.get(`${API_URL}/api/subcategories?category=${category.code}`);
+      const subcats = subcatsRes.data || [];
+      setSubcategories(subcats);
+      
+      // 2. Sélectionner la sous-catégorie de l'activité
       const subcat = subcats.find(s => s.code === activity.subcategory_id);
-      if (subcat) {
-        setSelectedSubcategory(subcat);
-        setStep(2);
-      }
-    }
-    
-    if (activity.original_unit || activity.unit) {
-      setSelectedUnit(activity.original_unit || activity.unit);
-    }
-    
-    if (activity.emission_factor_id) {
-      // Charger le facteur
+      setSelectedSubcategory(subcat || null);
+      
+      // 3. Charger tous les facteurs d'émission
       const factorsRes = await axios.get(`${API_URL}/api/emission-factors/search?category=${category.code}`);
-      const factor = factorsRes.data?.find(f => f.id === activity.emission_factor_id);
-      if (factor) {
-        setSelectedFactor(factor);
-      }
+      const allFactors = factorsRes.data || [];
+      setFactors(allFactors);
+      
+      // 4. Sélectionner l'unité originale
+      const unit = activity.original_unit || activity.unit || '';
+      setSelectedUnit(unit);
+      
+      // 5. Extraire les unités disponibles depuis les facteurs
+      const units = getAvailableUnitsFromFactors(allFactors);
+      setAvailableUnits(units);
+      
+      // 6. Filtrer les facteurs compatibles avec l'unité
+      const compatible = filterFactorsByUnitStrict(allFactors, unit);
+      setFilteredFactors(compatible.length > 0 ? compatible : allFactors);
+      
+      // 7. Sélectionner le facteur d'émission de l'activité
+      const factor = allFactors.find(f => f.id === activity.emission_factor_id);
+      setSelectedFactor(factor || null);
+      
+      // 8. Pré-remplir quantité et commentaires
+      setQuantity(activity.quantity?.toString() || '');
+      setComments(activity.comments || '');
+      
+      // 9. Aller directement à l'étape 4 (formulaire final)
+      setStep(4);
+      setShowFactorList(false);
+      
+    } catch (error) {
+      console.error('Failed to load activity for editing:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Fonction pour revenir modifier un élément en mode édition
+  const goBackToStep = (targetStep) => {
+    setStep(targetStep);
+    if (targetStep === 3) {
+      setShowFactorList(true);
     }
   };
 
