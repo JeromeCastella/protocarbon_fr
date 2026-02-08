@@ -271,10 +271,10 @@ const DataEntry = () => {
   };
 
   const getScopeActivities = (scope) => {
-    if (scope === null) {
-      return activities;
-    }
-    return activities.filter(a => a.scope === scope);
+    const list = scope === null
+      ? [...activities]
+      : activities.filter(a => a.scope === scope);
+    return list.sort((a, b) => (b.emissions || 0) - (a.emissions || 0));
   };
 
   const handleDeleteActivity = async (activityId) => {
