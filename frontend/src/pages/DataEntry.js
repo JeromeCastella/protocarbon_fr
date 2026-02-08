@@ -692,15 +692,21 @@ const DataEntry = () => {
                         const scopeColor = 
                           activityScope === 'scope1' ? 'text-blue-500' :
                           activityScope === 'scope2' ? 'text-cyan-500' :
-                          activityScope?.includes('amont') ? 'text-purple-500' : 'text-indigo-500';
+                          activityScope === 'scope3_3' ? 'text-amber-500' :
+                          activityScope?.includes('amont') || activityScope === 'scope3' ? 'text-purple-500' : 'text-indigo-500';
                         const scopeBgColor = 
                           activityScope === 'scope1' ? 'bg-blue-500' :
                           activityScope === 'scope2' ? 'bg-cyan-500' :
-                          activityScope?.includes('amont') ? 'bg-purple-500' : 'bg-indigo-500';
+                          activityScope === 'scope3_3' ? 'bg-amber-500' :
+                          activityScope?.includes('amont') || activityScope === 'scope3' ? 'bg-purple-500' : 'bg-indigo-500';
                         
                         // Indicateurs de groupe multi-impacts
                         const isGrouped = activity.group_size > 1;
                         const isSecondary = activity.group_index > 0;
+                        
+                        // Une activité est "liée" si elle est secondaire dans un groupe
+                        // Ces lignes sont en lecture seule
+                        const isLinkedActivity = isSecondary;
                         
                         return (
                           <motion.tr
@@ -708,25 +714,32 @@ const DataEntry = () => {
                             initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: index * 0.02 }}
-                            className={`border-b ${isDark ? 'border-slate-700/50 hover:bg-slate-700/50' : 'border-gray-100 hover:bg-gray-50'} transition-colors ${isSecondary ? (isDark ? 'bg-slate-800/30' : 'bg-slate-50/50') : ''}`}
+                            className={`border-b ${isDark ? 'border-slate-700/50' : 'border-gray-100'} transition-colors ${
+                              isLinkedActivity 
+                                ? (isDark ? 'bg-slate-700/40' : 'bg-gray-100/80') 
+                                : (isDark ? 'hover:bg-slate-700/50' : 'hover:bg-gray-50')
+                            }`}
                           >
                             <td className="py-4 px-4">
                               <div className="flex items-center gap-2">
-                                {/* Indicateur de groupe multi-impacts */}
-                                {isGrouped && (
+                                {/* Indicateur de ligne liée (activité secondaire) */}
+                                {isLinkedActivity ? (
                                   <span 
-                                    className={`text-xs px-1.5 py-0.5 rounded ${
-                                      isSecondary 
-                                        ? (isDark ? 'bg-slate-600 text-slate-400' : 'bg-slate-200 text-slate-500')
-                                        : (isDark ? 'bg-blue-900/30 text-blue-400' : 'bg-blue-100 text-blue-600')
-                                    }`}
+                                    className={`text-sm font-medium ${isDark ? 'text-slate-500' : 'text-gray-400'}`}
+                                    title="Ligne créée automatiquement (amont énergie)"
+                                  >
+                                    ↳
+                                  </span>
+                                ) : isGrouped ? (
+                                  <span 
+                                    className={`text-xs px-1.5 py-0.5 rounded ${isDark ? 'bg-blue-900/30 text-blue-400' : 'bg-blue-100 text-blue-600'}`}
                                     title={`Groupe de ${activity.group_size} impacts`}
                                   >
-                                    {isSecondary ? '↳' : `🔗 ${activity.group_size}`}
+                                    🔗 {activity.group_size}
                                   </span>
-                                )}
+                                ) : null}
                                 <div>
-                                  <p className={`font-medium ${isDark ? 'text-white' : 'text-gray-900'} ${isSecondary ? 'opacity-70' : ''}`}>
+                                  <p className={`font-medium ${isDark ? 'text-white' : 'text-gray-900'} ${isLinkedActivity ? 'opacity-70' : ''}`}>
                                     {activity.name || activity.emission_factor_name || '—'}
                                   </p>
                                   {activity.comments && (
@@ -740,26 +753,35 @@ const DataEntry = () => {
                             {tableViewScope === null && (
                               <td className="py-4 px-4">
                                 <span className={`px-2 py-1 rounded-md text-xs font-medium text-white ${scopeBgColor}`}>
-                                  {scopeLabels[activityScope]?.name || activityScope}
+                                  {activityScope === 'scope3_3' ? 'Scope 3.3' : (scopeLabels[activityScope]?.name || activityScope)}
                                 </span>
                               </td>
                             )}
                             <td className="py-4 px-4">
-                              <span className={`text-sm ${isDark ? 'text-slate-300' : 'text-gray-600'}`}>
+                              <span className={`text-sm ${isDark ? 'text-slate-300' : 'text-gray-600'} ${isLinkedActivity ? 'opacity-70' : ''}`}>
                                 {getCategoryName(activity.category_id)}
                               </span>
                             </td>
                             <td className="py-4 px-4 text-right">
-                              <span className={`font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                              <span className={`font-medium ${isDark ? 'text-white' : 'text-gray-900'} ${isLinkedActivity ? 'opacity-70' : ''}`}>
                                 {activity.quantity?.toLocaleString()} {activity.original_unit || activity.unit}
                               </span>
                             </td>
                             <td className="py-4 px-4 text-right">
-                              <span className={`font-bold ${scopeColor}`}>
+                              <span className={`font-bold ${scopeColor} ${isLinkedActivity ? 'opacity-80' : ''}`}>
                                 {formatEmissionsForTable(activity.emissions, tableTotalEmissions)}
                               </span>
                             </td>
                             <td className="py-4 px-4 text-right">
+                              {/* Boutons d'action masqués pour les lignes liées (lecture seule) */}
+                              {isLinkedActivity ? (
+                                <span 
+                                  className={`text-xs ${isDark ? 'text-slate-500' : 'text-gray-400'}`}
+                                  title="Modifiable via l'activité principale"
+                                >
+                                  Auto
+                                </span>
+                              ) : (
                               <div className="flex items-center justify-end gap-2">
                                 <button
                                   onClick={() => handleEditActivityInModal(activity)}
