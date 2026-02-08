@@ -1019,15 +1019,16 @@ const GeneralInfo = () => {
                     <label
                       key={cat.code}
                       className={`flex items-center gap-3 p-4 rounded-xl cursor-pointer transition-all ${
-                        !company.excluded_categories?.includes(cat.code)
+                        !fiscalYearContext.excluded_categories?.includes(cat.code)
                           ? isDark ? 'bg-purple-500/20 border-2 border-purple-500' : 'bg-purple-50 border-2 border-purple-200'
                           : isDark ? 'bg-slate-700 border-2 border-slate-600' : 'bg-gray-50 border-2 border-gray-200'
-                      }`}
+                      } ${contextReadonly ? 'cursor-not-allowed opacity-60' : ''}`}
                     >
                       <input
                         type="checkbox"
-                        checked={!company.excluded_categories?.includes(cat.code)}
+                        checked={!fiscalYearContext.excluded_categories?.includes(cat.code)}
                         onChange={() => toggleCategory(cat.code)}
+                        disabled={contextReadonly}
                         className="w-5 h-5 rounded text-purple-500 focus:ring-purple-500"
                       />
                       <span className={isDark ? 'text-white' : 'text-gray-900'}>
@@ -1048,12 +1049,13 @@ const GeneralInfo = () => {
                       areProductCategoriesIncluded()
                         ? isDark ? 'bg-indigo-500/20 border-2 border-indigo-500' : 'bg-indigo-50 border-2 border-indigo-200'
                         : isDark ? 'bg-slate-700 border-2 border-slate-600' : 'bg-gray-50 border-2 border-gray-200'
-                    }`}
+                    } ${contextReadonly ? 'cursor-not-allowed opacity-60' : ''}`}
                   >
                     <input
                       type="checkbox"
                       checked={areProductCategoriesIncluded()}
                       onChange={toggleProductCategories}
+                      disabled={contextReadonly}
                       className="w-5 h-5 rounded text-indigo-500 focus:ring-indigo-500"
                     />
                     <div className="flex-1">
