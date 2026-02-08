@@ -779,9 +779,16 @@ const DataEntry = () => {
                             </td>
                           </motion.tr>
                         );
-                      })}
+                      });
+                      })()}
                     </tbody>
                     <tfoot>
+                      {(() => {
+                        // Recalculer le total pour le pied de table avec la même logique
+                        const footerActivities = getScopeActivities(tableViewScope);
+                        const footerTotalEmissions = footerActivities.reduce((sum, a) => sum + (a.emissions || 0), 0);
+                        
+                        return (
                       <tr className={`${isDark ? 'bg-slate-700/50' : 'bg-gray-50'}`}>
                         <td colSpan={tableViewScope === null ? 4 : 3} className={`py-4 px-4 font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
                           {tableViewScope === null ? 'Total général' : `Total ${scopeLabels[tableViewScope]?.name}`}
@@ -793,11 +800,13 @@ const DataEntry = () => {
                             tableViewScope === 'scope2' ? 'text-cyan-500' :
                             'text-purple-500'
                           }`}>
-                            {formatEmissions(getScopeActivities(tableViewScope).reduce((sum, a) => sum + (a.emissions || 0), 0)).value} {formatEmissions(getScopeActivities(tableViewScope).reduce((sum, a) => sum + (a.emissions || 0), 0)).unit}
+                            {formatEmissionsForTable(footerTotalEmissions, footerTotalEmissions)}
                           </span>
                         </td>
                         <td></td>
                       </tr>
+                        );
+                      })()}
                     </tfoot>
                   </table>
                 )}
