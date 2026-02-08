@@ -25,37 +25,59 @@ router = APIRouter(prefix="/activities", tags=["Activities"])
 
 # ==================== RÈGLES MÉTIER MULTI-IMPACTS ====================
 
+def normalize_scope(scope: str) -> str:
+    """Normalise les différentes notations de scope vers un format standard."""
+    if not scope:
+        return ''
+    
+    scope_lower = scope.lower().strip()
+    
+    # Normalisation du Scope 3.3 (amont énergie)
+    if scope_lower in ['scope3_3', 'scope3.3', 'scope33', 'scope3_amont']:
+        return 'scope3_3'
+    
+    return scope_lower
+
+
 def apply_business_rules(impacts: list, entry_scope: str, entry_category: str) -> list:
     """
     Filtre les impacts selon les règles GHG Protocol.
     
     Règles:
-    - Saisie Scope 1, 2 ou 3.3 → inclure Scope 1, 2 et 3.3 (amont énergie)
-    - Saisie Scope 3 (hors 3.3) → exclure Scope 1, 2 et 3.3
+    - Saisie Scope 1 ou Scope 2 → inclure impacts scope1, scope2, scope3_3
+    - Saisie Scope 3 → inclure uniquement impact scope3
+    - Si value = 0 → ne pas créer de ligne
+    
+    Les impacts sont identifiés par leur champ 'scope' uniquement :
+    - scope1 : Émissions directes
+    - scope2 : Émissions indirectes (électricité)
+    - scope3_3 : Amont énergie (catégorie 3.3 du GHG Protocol)
+    - scope3 : Autres émissions Scope 3
     """
     if not impacts:
         return impacts
     
+    # Déterminer si c'est une saisie Scope 3
     is_scope3_entry = entry_scope.startswith('scope3') if entry_scope else False
-    is_scope33_category = entry_category == 'activites_combustibles_energie'
     
     filtered = []
     for impact in impacts:
-        impact_scope = impact.get('scope', '')
-        is_impact_scope33 = impact.get('category') == 'activites_combustibles_energie'
+        # Normaliser le scope de l'impact
+        impact_scope = normalize_scope(impact.get('scope', ''))
+        impact_value = impact.get('value', 0)
         
-        if is_scope3_entry and not is_scope33_category:
-            # Saisie Scope 3 (hors 3.3) : exclure Scope 1, 2 et 3.3
-            if impact_scope in ['scope1', 'scope2']:
-                continue
-            if is_impact_scope33:
+        # Règle : Exclure les impacts avec valeur = 0
+        if impact_value == 0:
+            continue
+        
+        if is_scope3_entry:
+            # Saisie Scope 3 : inclure uniquement scope3
+            if impact_scope != 'scope3':
                 continue
         else:
-            # Saisie Scope 1, 2 ou 3.3 : inclure Scope 1, 2 et 3.3 uniquement
-            if impact_scope not in ['scope1', 'scope2'] and not is_impact_scope33:
-                # Exclure les autres Scope 3 sauf si c'est le même scope que la saisie
-                if impact_scope != entry_scope:
-                    continue
+            # Saisie Scope 1 ou 2 : inclure scope1, scope2, scope3_3
+            if impact_scope not in ['scope1', 'scope2', 'scope3_3']:
+                continue
         
         filtered.append(impact)
     
