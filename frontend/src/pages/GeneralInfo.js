@@ -195,8 +195,10 @@ const GeneralInfo = () => {
     }
   };
 
+  // Toggle category in fiscal year context (not company anymore)
   const toggleCategory = (categoryCode) => {
-    setCompany(prev => ({
+    if (contextReadonly) return;
+    setFiscalYearContext(prev => ({
       ...prev,
       excluded_categories: prev.excluded_categories?.includes(categoryCode)
         ? prev.excluded_categories.filter(c => c !== categoryCode)
@@ -206,11 +208,12 @@ const GeneralInfo = () => {
 
   // Toggle groupé pour les 3 catégories "Produits vendus" (3.10, 3.11, 3.12)
   const toggleProductCategories = () => {
+    if (contextReadonly) return;
     const allProductsIncluded = PRODUCT_CATEGORIES.every(
-      code => !company.excluded_categories?.includes(code)
+      code => !fiscalYearContext.excluded_categories?.includes(code)
     );
     
-    setCompany(prev => {
+    setFiscalYearContext(prev => {
       if (allProductsIncluded) {
         // Si toutes sont incluses, on les exclut toutes
         return {
@@ -232,7 +235,7 @@ const GeneralInfo = () => {
   // Vérifie si les catégories produits sont activées (pour l'affichage de la checkbox)
   const areProductCategoriesIncluded = () => {
     return PRODUCT_CATEGORIES.every(
-      code => !company.excluded_categories?.includes(code)
+      code => !fiscalYearContext.excluded_categories?.includes(code)
     );
   };
 
