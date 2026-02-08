@@ -507,3 +507,50 @@ async def delete_fiscal_year(fiscal_year_id: str, current_user: dict = Depends(g
         "message": "Fiscal year deleted",
         "deleted_activities": deleted_activities
     }
+
+
+@router.post("/migrate-context")
+async def migrate_fiscal_years_context(current_user: dict = Depends(get_current_user)):
+    """
+    Migration endpoint: Initialize context on existing fiscal years that don't have one.
+    Copies values from company document.
+    """
+    company = companies_collection.find_one({"tenant_id": current_user["id"]})
+    
+    if not company:
+        raise HTTPException(status_code=404, detail="Company not found")
+    
+    # Get context from company
+    company_context = {
+        "employees": company.get("employees"),
+        "revenue": company.get("revenue"),
+        "surface_area": company.get("surface_area"),
+        "excluded_categories": company.get("excluded_categories", [])
+    }
+    
+    # Find fiscal years without context
+    fiscal_years_without_context = list(fiscal_years_collection.find({
+        "tenant_id": current_user["id"],
+        "$or": [
+            {"context": {"$exists": False}},
+            {"context": None},
+            {"context": {}}
+        ]
+    }))
+    
+    migrated_count = 0
+    for fy in fiscal_years_without_context:
+        fiscal_years_collection.update_one(
+            {"_id": fy["_id"]},
+            {"$set": {
+                "context": company_context,
+                "context_migrated_at": datetime.now(timezone.utc).isoformat()
+            }}
+        )
+        migrated_count += 1
+    
+    return {
+        "message": "Migration completed",
+        "migrated_fiscal_years": migrated_count,
+        "company_context_used": company_context
+    }
