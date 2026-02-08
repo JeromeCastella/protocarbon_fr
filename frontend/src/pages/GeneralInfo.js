@@ -283,8 +283,8 @@ const GeneralInfo = () => {
           key: 'sellsProducts',
           icon: ShoppingCart,
           text: 'Vendez-vous des produits physiques ?',
-          hint: 'Produits manufacturés, biens de consommation...',
-          categories: ['transformation_produits']
+          hint: 'Ceci active les 3 catégories : transformation, utilisation et fin de vie des produits vendus',
+          categories: ['transformation_produits', 'utilisation_produits', 'fin_vie_produits']
         },
         {
           key: 'hasDownstreamTransport',
@@ -292,20 +292,6 @@ const GeneralInfo = () => {
           text: 'Faites-vous livrer vos produits aux clients ?',
           hint: 'Distribution, livraison finale...',
           categories: ['fret_aval']
-        },
-        {
-          key: 'hasProductUse',
-          icon: Zap,
-          text: 'Vos produits consomment-ils de l\'énergie lors de leur utilisation ?',
-          hint: 'Appareils électriques, véhicules, machines...',
-          categories: ['utilisation_produits']
-        },
-        {
-          key: 'hasEndOfLife',
-          icon: Recycle,
-          text: 'Vos produits génèrent-ils des émissions en fin de vie ?',
-          hint: 'Recyclage, incinération, mise en décharge...',
-          categories: ['fin_vie_produits']
         },
         {
           key: 'hasLeasedAssetsDownstream',
