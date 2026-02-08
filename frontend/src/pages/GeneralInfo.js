@@ -870,14 +870,32 @@ const GeneralInfo = () => {
             </h2>
           </div>
         </div>
+        
+        {/* Fiscal year indicator */}
+        {selectedFiscalYear?.id && (
+          <div className={`flex items-center gap-2 p-3 rounded-xl mb-4 ${isDark ? 'bg-purple-900/30 text-purple-300' : 'bg-purple-50 text-purple-700'}`}>
+            <Calendar className="w-4 h-4 flex-shrink-0" />
+            <span className="text-sm">
+              {language === 'fr' 
+                ? `Configuration du périmètre pour l'exercice ${selectedFiscalYear.year}` 
+                : `Perimeterkonfiguration für das Geschäftsjahr ${selectedFiscalYear.year}`}
+            </span>
+          </div>
+        )}
+        
         <p className={`mb-4 ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
           {t('scope.perimeterDesc')}
         </p>
         <div className="flex items-center gap-3 mb-6">
           <button
             onClick={openWizard}
+            disabled={contextReadonly || !selectedFiscalYear?.id}
             data-testid="wizard-config-btn"
-            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-purple-500 text-white hover:bg-purple-600 transition-all shadow-lg shadow-purple-500/30"
+            className={`flex items-center gap-2 px-4 py-2 rounded-xl transition-all ${
+              contextReadonly || !selectedFiscalYear?.id
+                ? 'bg-gray-400 text-white cursor-not-allowed'
+                : 'bg-purple-500 text-white hover:bg-purple-600 shadow-lg shadow-purple-500/30'
+            }`}
           >
             <Wand2 className="w-4 h-4" />
             Configuration guidée
@@ -899,6 +917,31 @@ const GeneralInfo = () => {
             Configuration manuelle
             {showManualConfig ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
           </button>
+          
+          {/* Save context button for perimeter */}
+          {showManualConfig && !contextReadonly && selectedFiscalYear?.id && (
+            <motion.button
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              onClick={handleSaveContext}
+              disabled={savingContext}
+              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-purple-500 text-white hover:bg-purple-600 transition-all ml-auto"
+            >
+              {savingContext ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : savedContext ? (
+                <>
+                  <Check className="w-4 h-4" />
+                  Sauvegardé
+                </>
+              ) : (
+                <>
+                  <Save className="w-4 h-4" />
+                  Sauvegarder
+                </>
+              )}
+            </motion.button>
+          )}
         </div>
 
 
