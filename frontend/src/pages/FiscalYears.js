@@ -225,8 +225,10 @@ const FiscalYears = () => {
     if (deleteConfirmText !== selectedFY.name) return;
     
     setLoading(true);
+    setDeleteError('');
     try {
-      await axios.delete(`${API_URL}/api/fiscal-years/${selectedFY.id}`);
+      const response = await axios.delete(`${API_URL}/api/fiscal-years/${selectedFY.id}`);
+      console.log('Delete response:', response.data);
       await refreshFiscalYears();
       setShowDeleteModal(false);
       setSelectedFY(null);
@@ -234,7 +236,7 @@ const FiscalYears = () => {
       setDeleteConfirmText('');
     } catch (error) {
       console.error('Failed to delete fiscal year:', error);
-      alert(error.response?.data?.detail || 'Erreur lors de la suppression');
+      setDeleteError(error.response?.data?.detail || 'Erreur lors de la suppression');
     } finally {
       setLoading(false);
     }
