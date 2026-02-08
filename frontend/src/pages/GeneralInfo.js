@@ -56,6 +56,7 @@ const GeneralInfo = () => {
 
   // Wizard state
   const [showWizard, setShowWizard] = useState(false);
+  const [showManualConfig, setShowManualConfig] = useState(true);
   const [wizardStep, setWizardStep] = useState(0);
   const [wizardAnswers, setWizardAnswers] = useState({
     hasVehicles: null,
