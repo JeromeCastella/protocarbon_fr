@@ -74,13 +74,13 @@ const EmissionFactors = () => {
     try {
       // Get token from localStorage for authenticated request
       const token = localStorage.getItem('token');
-      const headers = token ? { Authorization: `Bearer ${token}` } : {};
+      const authHeaders = token ? { Authorization: `Bearer ${token}` } : {};
       
-      const response = await axios.get(`${API_URL}/api/export/emission-factors`, { headers });
+      const response = await axios.get(`${API_URL}/api/export/emission-factors`, { headers: authHeaders });
       const factors = response.data.emission_factors || [];
       
       // Build CSV content
-      const headers = [
+      const csvHeaders = [
         'id',
         'name_fr',
         'name_de',
