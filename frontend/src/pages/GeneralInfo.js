@@ -689,86 +689,89 @@ const GeneralInfo = () => {
                 </div>
               </div>
 
-        {/* Scope 2 */}
-        <div className="mb-6">
-          <h3 className="text-cyan-500 font-semibold mb-3">{t('scope.scope2')} - {t('scope.scope2Title')}</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            {scopeCategories.scope2.map(cat => (
-              <label
-                key={cat.code}
-                className={`flex items-center gap-3 p-4 rounded-xl cursor-pointer transition-all ${
-                  !company.excluded_categories?.includes(cat.code)
-                    ? isDark ? 'bg-cyan-500/20 border-2 border-cyan-500' : 'bg-cyan-50 border-2 border-cyan-200'
-                    : isDark ? 'bg-slate-700 border-2 border-slate-600' : 'bg-gray-50 border-2 border-gray-200'
-                }`}
-              >
-                <input
-                  type="checkbox"
-                  checked={!company.excluded_categories?.includes(cat.code)}
-                  onChange={() => toggleCategory(cat.code)}
-                  className="w-5 h-5 rounded text-cyan-500 focus:ring-cyan-500"
-                />
-                <span className={isDark ? 'text-white' : 'text-gray-900'}>
-                  {language === 'fr' ? cat.name_fr : cat.name_de}
-                </span>
-              </label>
-            ))}
-          </div>
-        </div>
+              {/* Scope 2 */}
+              <div className="mb-6">
+                <h3 className="text-cyan-500 font-semibold mb-3">{t('scope.scope2')} - {t('scope.scope2Title')}</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  {scopeCategories.scope2.map(cat => (
+                    <label
+                      key={cat.code}
+                      className={`flex items-center gap-3 p-4 rounded-xl cursor-pointer transition-all ${
+                        !company.excluded_categories?.includes(cat.code)
+                          ? isDark ? 'bg-cyan-500/20 border-2 border-cyan-500' : 'bg-cyan-50 border-2 border-cyan-200'
+                          : isDark ? 'bg-slate-700 border-2 border-slate-600' : 'bg-gray-50 border-2 border-gray-200'
+                      }`}
+                    >
+                      <input
+                        type="checkbox"
+                        checked={!company.excluded_categories?.includes(cat.code)}
+                        onChange={() => toggleCategory(cat.code)}
+                        className="w-5 h-5 rounded text-cyan-500 focus:ring-cyan-500"
+                      />
+                      <span className={isDark ? 'text-white' : 'text-gray-900'}>
+                        {language === 'fr' ? cat.name_fr : cat.name_de}
+                      </span>
+                    </label>
+                  ))}
+                </div>
+              </div>
 
-        {/* Scope 3 Amont */}
-        <div className="mb-6">
-          <h3 className="text-purple-500 font-semibold mb-3">{t('scope.scope3Amont')} - {t('scope.scope3AmontTitle')}</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            {scopeCategories.scope3_amont.map(cat => (
-              <label
-                key={cat.code}
-                className={`flex items-center gap-3 p-4 rounded-xl cursor-pointer transition-all ${
-                  !company.excluded_categories?.includes(cat.code)
-                    ? isDark ? 'bg-purple-500/20 border-2 border-purple-500' : 'bg-purple-50 border-2 border-purple-200'
-                    : isDark ? 'bg-slate-700 border-2 border-slate-600' : 'bg-gray-50 border-2 border-gray-200'
-                }`}
-              >
-                <input
-                  type="checkbox"
-                  checked={!company.excluded_categories?.includes(cat.code)}
-                  onChange={() => toggleCategory(cat.code)}
-                  className="w-5 h-5 rounded text-purple-500 focus:ring-purple-500"
-                />
-                <span className={isDark ? 'text-white' : 'text-gray-900'}>
-                  {language === 'fr' ? cat.name_fr : cat.name_de}
-                </span>
-              </label>
-            ))}
-          </div>
-        </div>
+              {/* Scope 3 Amont */}
+              <div className="mb-6">
+                <h3 className="text-purple-500 font-semibold mb-3">{t('scope.scope3Amont')} - {t('scope.scope3AmontTitle')}</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  {scopeCategories.scope3_amont.map(cat => (
+                    <label
+                      key={cat.code}
+                      className={`flex items-center gap-3 p-4 rounded-xl cursor-pointer transition-all ${
+                        !company.excluded_categories?.includes(cat.code)
+                          ? isDark ? 'bg-purple-500/20 border-2 border-purple-500' : 'bg-purple-50 border-2 border-purple-200'
+                          : isDark ? 'bg-slate-700 border-2 border-slate-600' : 'bg-gray-50 border-2 border-gray-200'
+                      }`}
+                    >
+                      <input
+                        type="checkbox"
+                        checked={!company.excluded_categories?.includes(cat.code)}
+                        onChange={() => toggleCategory(cat.code)}
+                        className="w-5 h-5 rounded text-purple-500 focus:ring-purple-500"
+                      />
+                      <span className={isDark ? 'text-white' : 'text-gray-900'}>
+                        {language === 'fr' ? cat.name_fr : cat.name_de}
+                      </span>
+                    </label>
+                  ))}
+                </div>
+              </div>
 
-        {/* Scope 3 Aval */}
-        <div>
-          <h3 className="text-indigo-500 font-semibold mb-3">{t('scope.scope3Aval')} - {t('scope.scope3AvalTitle')}</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            {scopeCategories.scope3_aval.map(cat => (
-              <label
-                key={cat.code}
-                className={`flex items-center gap-3 p-4 rounded-xl cursor-pointer transition-all ${
-                  !company.excluded_categories?.includes(cat.code)
-                    ? isDark ? 'bg-indigo-500/20 border-2 border-indigo-500' : 'bg-indigo-50 border-2 border-indigo-200'
-                    : isDark ? 'bg-slate-700 border-2 border-slate-600' : 'bg-gray-50 border-2 border-gray-200'
-                }`}
-              >
-                <input
-                  type="checkbox"
-                  checked={!company.excluded_categories?.includes(cat.code)}
-                  onChange={() => toggleCategory(cat.code)}
-                  className="w-5 h-5 rounded text-indigo-500 focus:ring-indigo-500"
-                />
-                <span className={isDark ? 'text-white' : 'text-gray-900'}>
-                  {language === 'fr' ? cat.name_fr : cat.name_de}
-                </span>
-              </label>
-            ))}
-          </div>
-        </div>
+              {/* Scope 3 Aval */}
+              <div>
+                <h3 className="text-indigo-500 font-semibold mb-3">{t('scope.scope3Aval')} - {t('scope.scope3AvalTitle')}</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  {scopeCategories.scope3_aval.map(cat => (
+                    <label
+                      key={cat.code}
+                      className={`flex items-center gap-3 p-4 rounded-xl cursor-pointer transition-all ${
+                        !company.excluded_categories?.includes(cat.code)
+                          ? isDark ? 'bg-indigo-500/20 border-2 border-indigo-500' : 'bg-indigo-50 border-2 border-indigo-200'
+                          : isDark ? 'bg-slate-700 border-2 border-slate-600' : 'bg-gray-50 border-2 border-gray-200'
+                      }`}
+                    >
+                      <input
+                        type="checkbox"
+                        checked={!company.excluded_categories?.includes(cat.code)}
+                        onChange={() => toggleCategory(cat.code)}
+                        className="w-5 h-5 rounded text-indigo-500 focus:ring-indigo-500"
+                      />
+                      <span className={isDark ? 'text-white' : 'text-gray-900'}>
+                        {language === 'fr' ? cat.name_fr : cat.name_de}
+                      </span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </motion.div>
 
       {/* ==================== WIZARD MODAL ==================== */}
