@@ -814,9 +814,17 @@ const FiscalYears = () => {
                   />
                 </div>
 
+                {/* Error message */}
+                {deleteError && (
+                  <div className="mb-5 flex items-center gap-2 p-3 rounded-xl bg-red-500/20 text-red-500">
+                    <AlertTriangle className="w-5 h-5 flex-shrink-0" />
+                    <span className="text-sm">{deleteError}</span>
+                  </div>
+                )}
+
                 <div className="flex justify-end gap-3">
                   <button
-                    onClick={() => { setShowDeleteModal(false); setDeleteConfirmText(''); }}
+                    onClick={() => { setShowDeleteModal(false); setDeleteConfirmText(''); setDeleteError(''); }}
                     className={`px-4 py-2.5 rounded-xl font-medium transition-colors ${
                       isDark ? 'text-slate-300 hover:bg-slate-700' : 'text-gray-700 hover:bg-gray-100'
                     }`}
