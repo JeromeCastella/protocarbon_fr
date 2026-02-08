@@ -135,6 +135,38 @@ const GeneralInfo = () => {
     }));
   };
 
+  // Toggle groupé pour les 3 catégories "Produits vendus" (3.10, 3.11, 3.12)
+  const toggleProductCategories = () => {
+    const allProductsIncluded = PRODUCT_CATEGORIES.every(
+      code => !company.excluded_categories?.includes(code)
+    );
+    
+    setCompany(prev => {
+      if (allProductsIncluded) {
+        // Si toutes sont incluses, on les exclut toutes
+        return {
+          ...prev,
+          excluded_categories: [...(prev.excluded_categories || []), ...PRODUCT_CATEGORIES]
+        };
+      } else {
+        // Sinon, on les inclut toutes (retire des exclus)
+        return {
+          ...prev,
+          excluded_categories: (prev.excluded_categories || []).filter(
+            c => !PRODUCT_CATEGORIES.includes(c)
+          )
+        };
+      }
+    });
+  };
+
+  // Vérifie si les catégories produits sont activées (pour l'affichage de la checkbox)
+  const areProductCategoriesIncluded = () => {
+    return PRODUCT_CATEGORIES.every(
+      code => !company.excluded_categories?.includes(code)
+    );
+  };
+
   // ==================== WIZARD CONFIGURATION ====================
   
   const wizardSteps = [
