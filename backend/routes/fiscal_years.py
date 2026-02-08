@@ -270,6 +270,25 @@ async def duplicate_fiscal_year(
     new_end_date = f"{data.new_year}-12-31"
     new_name = f"Exercice {data.new_year}"
     
+    # Copy context from source fiscal year
+    source_context = fy.get("context", {})
+    new_context = {
+        "employees": source_context.get("employees"),
+        "revenue": source_context.get("revenue"),
+        "surface_area": source_context.get("surface_area"),
+        "excluded_categories": source_context.get("excluded_categories", [])
+    }
+    
+    # If source has no context, try company fallback
+    company = companies_collection.find_one({"tenant_id": current_user["id"]})
+    if not source_context and company:
+        new_context = {
+            "employees": company.get("employees"),
+            "revenue": company.get("revenue"),
+            "surface_area": company.get("surface_area"),
+            "excluded_categories": company.get("excluded_categories", [])
+        }
+    
     # Create new fiscal year
     new_fy = {
         "name": new_name,
@@ -279,6 +298,7 @@ async def duplicate_fiscal_year(
         "status": "draft",
         "tenant_id": current_user["id"],
         "company_id": fy.get("company_id"),
+        "context": new_context,
         "created_at": datetime.now(timezone.utc).isoformat(),
         "duplicated_from": fiscal_year_id
     }
