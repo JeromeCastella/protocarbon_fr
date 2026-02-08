@@ -378,10 +378,8 @@ const GeneralInfo = () => {
       hasBusinessTravel: null,
       hasCommuting: null,
       hasLeasedAssetsUpstream: null,
-      sellsProducts: null,
+      sellsProducts: null, // Couvre les 3 catégories produits
       hasDownstreamTransport: null,
-      hasProductUse: null,
-      hasEndOfLife: null,
       hasLeasedAssetsDownstream: null,
       hasFranchises: null,
       hasInvestments: null
