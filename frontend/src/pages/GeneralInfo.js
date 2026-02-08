@@ -29,7 +29,10 @@ import {
   Factory,
   ShoppingCart,
   Home,
-  Briefcase as BriefcaseIcon
+  Briefcase as BriefcaseIcon,
+  Pencil,
+  ChevronDown,
+  ChevronUp
 } from 'lucide-react';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL || '';
