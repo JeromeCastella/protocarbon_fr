@@ -76,11 +76,12 @@ const GeneralInfo = () => {
     hasFreight: null,
     hasBusinessTravel: null,
     hasCommuting: null,
-    sellsProducts: null,
-    hasDownstreamTransport: null,
-    hasProductUse: null,
-    hasEndOfLife: null
+    sellsProducts: null, // Couvre les 3 catégories: transformation, utilisation, fin de vie
+    hasDownstreamTransport: null
   });
+
+  // Codes des catégories "Produits vendus" groupées (3.10, 3.11, 3.12)
+  const PRODUCT_CATEGORIES = ['transformation_produits', 'utilisation_produits', 'fin_vie_produits'];
 
   useEffect(() => {
     fetchData();
