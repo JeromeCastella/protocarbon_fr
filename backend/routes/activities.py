@@ -218,21 +218,27 @@ async def create_activity(activity: ActivityCreate, current_user: dict = Depends
     Pour les facteurs multi-impacts, applique les règles métier GHG Protocol
     et crée une activité par impact filtré, liées par un group_id commun.
     """
+    import logging
+    logger = logging.getLogger(__name__)
     
     # Récupérer le facteur d'émission
     factor = None
     if activity.emission_factor_id:
         factor = emission_factors_collection.find_one({"_id": ObjectId(activity.emission_factor_id)})
+        logger.warning(f"DEBUG: Factor found: {factor is not None}, factor_id: {activity.emission_factor_id}")
     
     # Si pas de facteur ou facteur manuel, créer une activité simple
     if not factor:
+        logger.warning("DEBUG: No factor found, using create_single_activity")
         return await create_single_activity(activity, current_user)
     
     # Récupérer les impacts du facteur
     all_impacts = factor.get("impacts", [])
+    logger.warning(f"DEBUG: all_impacts count: {len(all_impacts)}")
     
     # Fallback si pas d'impacts structurés (ancien format de facteur)
     if not all_impacts:
+        logger.warning("DEBUG: No impacts, using fallback")
         all_impacts = [{
             "scope": factor.get("scope", activity.scope),
             "category": factor.get("category", activity.category_id),
@@ -244,9 +250,11 @@ async def create_activity(activity: ActivityCreate, current_user: dict = Depends
     # Déterminer le scope et la catégorie de saisie
     entry_scope = activity.entry_scope or activity.scope
     entry_category = activity.entry_category or activity.category_id
+    logger.warning(f"DEBUG: entry_scope={entry_scope}, entry_category={entry_category}")
     
     # Appliquer les règles métier pour filtrer les impacts
     filtered_impacts = apply_business_rules(all_impacts, entry_scope, entry_category)
+    logger.warning(f"DEBUG: filtered_impacts count: {len(filtered_impacts)}")
     
     # Si aucun impact applicable après filtrage
     if not filtered_impacts:
