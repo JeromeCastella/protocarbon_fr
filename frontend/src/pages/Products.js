@@ -269,7 +269,7 @@ const Products = () => {
                           </span>
                         </span>
                         <span className={isDark ? 'text-white' : 'text-gray-900'}>
-                          {activeManufacturing.toFixed(3)} kgCO₂e
+                          {activeManufacturing.toFixed(0)} kgCO₂e
                         </span>
                       </div>
                     )}
@@ -282,7 +282,7 @@ const Products = () => {
                           </span>
                         </span>
                         <span className={isDark ? 'text-white' : 'text-gray-900'}>
-                          {activeUsage.toFixed(3)} kgCO₂e
+                          {activeUsage.toFixed(0)} kgCO₂e
                         </span>
                       </div>
                     )}
@@ -295,7 +295,7 @@ const Products = () => {
                           </span>
                         </span>
                         <span className={isDark ? 'text-white' : 'text-gray-900'}>
-                          {activeDisposal.toFixed(3)} kgCO₂e
+                          {activeDisposal.toFixed(0)} kgCO₂e
                         </span>
                       </div>
                     )}
@@ -308,7 +308,7 @@ const Products = () => {
                         {language === 'fr' ? 'Total par unité' : 'Gesamt pro Einheit'}
                       </span>
                       <span className="text-lg font-bold text-purple-500">
-                        {activeTotal.toFixed(3)} kgCO₂e
+                        {activeTotal.toFixed(0)} kgCO₂e
                       </span>
                     </div>
                   </div>
