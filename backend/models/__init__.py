@@ -241,6 +241,9 @@ class ActivityCreate(BaseModel):
     comments: Optional[str] = None
     fiscal_year_id: Optional[str] = None
     subcategory_id: Optional[str] = None
+    # Nouveaux champs pour multi-impacts
+    entry_scope: Optional[str] = None      # Scope de saisie original
+    entry_category: Optional[str] = None   # Catégorie de saisie originale
 
 class ActivityUpdate(BaseModel):
     name: Optional[str] = None
@@ -253,6 +256,18 @@ class ActivityUpdate(BaseModel):
     source: Optional[str] = None
     comments: Optional[str] = None
     fiscal_year_id: Optional[str] = None
+    subcategory_id: Optional[str] = None
+    category_id: Optional[str] = None
+
+class ActivityGroupUpdate(BaseModel):
+    """Mise à jour d'un groupe d'activités multi-impacts"""
+    name: Optional[str] = None
+    quantity: Optional[float] = None
+    unit: Optional[str] = None
+    emission_factor_id: Optional[str] = None
+    comments: Optional[str] = None
+    subcategory_id: Optional[str] = None
+    category_id: Optional[str] = None
 
 # ==================== PRODUCT MODELS ====================
 
