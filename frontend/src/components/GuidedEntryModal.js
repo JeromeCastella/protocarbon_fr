@@ -97,30 +97,47 @@ const GuidedEntryModal = ({
       
       // 3. Charger tous les facteurs d'émission
       const factorsRes = await axios.get(`${API_URL}/api/emission-factors/search?category=${category.code}`);
-      const allFactors = factorsRes.data || [];
+      let allFactors = factorsRes.data || [];
+      
+      // 4. Chercher le facteur de l'activité dans les résultats
+      let factor = allFactors.find(f => f.id === activity.emission_factor_id);
+      
+      // 5. Si le facteur n'est pas trouvé (limite de 100 résultats dépassée), le récupérer par ID
+      if (!factor && activity.emission_factor_id) {
+        try {
+          const factorRes = await axios.get(`${API_URL}/api/emission-factors/${activity.emission_factor_id}`);
+          if (factorRes.data) {
+            factor = factorRes.data;
+            // Ajouter le facteur aux résultats pour qu'il soit disponible dans les listes
+            allFactors = [factor, ...allFactors];
+          }
+        } catch (err) {
+          console.warn('Could not fetch emission factor by ID:', err);
+        }
+      }
+      
       setFactors(allFactors);
       
-      // 4. Sélectionner l'unité originale
+      // 6. Sélectionner l'unité originale
       const unit = activity.original_unit || activity.unit || '';
       setSelectedUnit(unit);
       
-      // 5. Extraire les unités disponibles depuis les facteurs
+      // 7. Extraire les unités disponibles depuis les facteurs
       const units = getAvailableUnitsFromFactors(allFactors);
       setAvailableUnits(units);
       
-      // 6. Filtrer les facteurs compatibles avec l'unité
+      // 8. Filtrer les facteurs compatibles avec l'unité
       const compatible = filterFactorsByUnitStrict(allFactors, unit);
       setFilteredFactors(compatible.length > 0 ? compatible : allFactors);
       
-      // 7. Sélectionner le facteur d'émission de l'activité
-      const factor = allFactors.find(f => f.id === activity.emission_factor_id);
+      // 9. Sélectionner le facteur d'émission de l'activité
       setSelectedFactor(factor || null);
       
-      // 8. Pré-remplir quantité et commentaires
+      // 10. Pré-remplir quantité et commentaires
       setQuantity(activity.quantity?.toString() || '');
       setComments(activity.comments || '');
       
-      // 9. Aller directement à l'étape 4 (formulaire final)
+      // 11. Aller directement à l'étape 4 (formulaire final)
       setStep(4);
       setShowFactorList(false);
       
