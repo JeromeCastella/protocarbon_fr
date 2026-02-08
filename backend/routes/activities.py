@@ -32,8 +32,9 @@ def normalize_scope(scope: str) -> str:
     
     scope_lower = scope.lower().strip()
     
-    # Normalisation du Scope 3.3 (amont énergie)
-    if scope_lower in ['scope3_3', 'scope3.3', 'scope33', 'scope3_amont']:
+    # Normalisation du Scope 3.3 (amont énergie) - catégorie spécifique du GHG Protocol
+    # NOTE: scope3_amont (Scope 3 Amont) n'est PAS scope3_3 (catégorie 3.3)
+    if scope_lower in ['scope3_3', 'scope3.3', 'scope33']:
         return 'scope3_3'
     
     return scope_lower
