@@ -45,7 +45,8 @@ def apply_business_rules(impacts: list, entry_scope: str, entry_category: str) -
     
     Règles:
     - Saisie Scope 1 ou Scope 2 → inclure impacts scope1, scope2, scope3_3
-    - Saisie Scope 3 → inclure uniquement impact scope3
+    - Saisie Scope 3.3 (catégorie activites_combustibles_energie) → inclure uniquement scope3_3
+    - Saisie Scope 3 (autres catégories) → inclure uniquement scope3
     - Si value = 0 → ne pas créer de ligne
     
     Les impacts sont identifiés par leur champ 'scope' uniquement :
@@ -57,8 +58,23 @@ def apply_business_rules(impacts: list, entry_scope: str, entry_category: str) -
     if not impacts:
         return impacts
     
-    # Déterminer si c'est une saisie Scope 3
-    is_scope3_entry = entry_scope.startswith('scope3') if entry_scope else False
+    # Normaliser le scope de saisie
+    normalized_entry_scope = normalize_scope(entry_scope) if entry_scope else ''
+    
+    # Déterminer le type de saisie
+    is_scope1_or_2_entry = normalized_entry_scope in ['scope1', 'scope2']
+    
+    # Catégorie 3.3 du GHG Protocol : activités liées aux combustibles et à l'énergie
+    is_scope3_3_entry = (
+        entry_category == 'activites_combustibles_energie' or 
+        normalized_entry_scope == 'scope3_3'
+    )
+    
+    # Autres catégories Scope 3
+    is_scope3_entry = (
+        normalized_entry_scope.startswith('scope3') and 
+        not is_scope3_3_entry
+    )
     
     filtered = []
     for impact in impacts:
@@ -70,14 +86,21 @@ def apply_business_rules(impacts: list, entry_scope: str, entry_category: str) -
         if impact_value == 0:
             continue
         
-        if is_scope3_entry:
-            # Saisie Scope 3 : inclure uniquement scope3
-            if impact_scope != 'scope3':
-                continue
-        else:
+        if is_scope1_or_2_entry:
             # Saisie Scope 1 ou 2 : inclure scope1, scope2, scope3_3
             if impact_scope not in ['scope1', 'scope2', 'scope3_3']:
                 continue
+        elif is_scope3_3_entry:
+            # Saisie Scope 3.3 (amont énergie) : inclure uniquement scope3_3
+            if impact_scope != 'scope3_3':
+                continue
+        elif is_scope3_entry:
+            # Saisie Scope 3 (autres) : inclure uniquement scope3
+            if impact_scope != 'scope3':
+                continue
+        else:
+            # Fallback : inclure tous les impacts non-nuls
+            pass
         
         filtered.append(impact)
     
