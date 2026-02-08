@@ -460,8 +460,14 @@ const GuidedEntryModal = ({
           {/* Body - Scrollable */}
           <div className="flex-1 overflow-y-auto p-6">
             {loading ? (
-              <div className="flex items-center justify-center h-32">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+              <div className="flex flex-col items-center justify-center h-48">
+                <Loader2 className="w-10 h-10 text-blue-500 animate-spin mb-4" />
+                <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+                  {isEditMode 
+                    ? (language === 'fr' ? 'Chargement des données...' : 'Daten werden geladen...')
+                    : (language === 'fr' ? 'Chargement...' : 'Laden...')
+                  }
+                </p>
               </div>
             ) : (
               <div className="space-y-6">
