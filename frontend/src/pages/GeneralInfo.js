@@ -802,7 +802,36 @@ const GeneralInfo = () => {
               <div>
                 <h3 className="text-indigo-500 font-semibold mb-3">{t('scope.scope3Aval')} - {t('scope.scope3AvalTitle')}</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  {scopeCategories.scope3_aval.map(cat => (
+                  {/* Checkbox groupée "Produits vendus" pour les 3 catégories 3.10, 3.11, 3.12 */}
+                  <label
+                    className={`flex items-center gap-3 p-4 rounded-xl cursor-pointer transition-all md:col-span-2 ${
+                      areProductCategoriesIncluded()
+                        ? isDark ? 'bg-indigo-500/20 border-2 border-indigo-500' : 'bg-indigo-50 border-2 border-indigo-200'
+                        : isDark ? 'bg-slate-700 border-2 border-slate-600' : 'bg-gray-50 border-2 border-gray-200'
+                    }`}
+                  >
+                    <input
+                      type="checkbox"
+                      checked={areProductCategoriesIncluded()}
+                      onChange={toggleProductCategories}
+                      className="w-5 h-5 rounded text-indigo-500 focus:ring-indigo-500"
+                    />
+                    <div className="flex-1">
+                      <span className={`font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                        {language === 'fr' ? 'Produits vendus' : 'Verkaufte Produkte'}
+                      </span>
+                      <p className={`text-xs mt-0.5 ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+                        {language === 'fr' 
+                          ? 'Inclut : Transformation (3.10), Utilisation (3.11), Fin de vie (3.12)' 
+                          : 'Enthält: Verarbeitung (3.10), Nutzung (3.11), Lebensende (3.12)'}
+                      </p>
+                    </div>
+                  </label>
+                  
+                  {/* Autres catégories Scope 3 Aval (hors produits vendus) */}
+                  {scopeCategories.scope3_aval
+                    .filter(cat => !PRODUCT_CATEGORIES.includes(cat.code))
+                    .map(cat => (
                     <label
                       key={cat.code}
                       className={`flex items-center gap-3 p-4 rounded-xl cursor-pointer transition-all ${
