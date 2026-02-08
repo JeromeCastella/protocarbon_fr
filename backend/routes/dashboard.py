@@ -300,7 +300,7 @@ async def get_dashboard_kpis(
     fiscal_year_id: Optional[str] = None,
     current_user: dict = Depends(get_current_user)
 ):
-    """Get key performance indicators"""
+    """Get key performance indicators using fiscal year context"""
     company = companies_collection.find_one({"tenant_id": current_user["id"]})
     
     fiscal_years = list(fiscal_years_collection.find({
@@ -342,12 +342,14 @@ async def get_dashboard_kpis(
                     current_fy = fy
                     break
     
+    # Get context from current fiscal year (with fallback to company)
+    current_fy_id = str(current_fy["_id"]) if current_fy else None
+    context = get_fiscal_year_context_with_fallback(current_fy_id, current_user["id"])
+    
     # Calculate current emissions using fiscal_year_id
     current_emissions = 0
     current_activities_count = 0
     if current_fy:
-        current_fy_id = str(current_fy["_id"])
-        
         activities = list(activities_collection.find({
             "tenant_id": current_user["id"],
             "fiscal_year_id": current_fy_id
@@ -369,20 +371,24 @@ async def get_dashboard_kpis(
             }))
             previous_emissions = sum(a.get("emissions", 0) or 0 for a in activities)
     
-    # Calculate KPIs
+    # Calculate KPIs using fiscal year context
     variation_percent = 0
     variation_absolute = 0
     if previous_emissions > 0:
         variation_absolute = current_emissions - previous_emissions
         variation_percent = round((variation_absolute / previous_emissions) * 100, 1)
     
+    # Use context employees/revenue instead of company values
+    context_employees = context.get("employees") or 0
+    context_revenue = context.get("revenue") or 0
+    
     emissions_per_employee = None
-    if company and company.get("employees", 0) > 0 and current_emissions > 0:
-        emissions_per_employee = current_emissions / company["employees"]
+    if context_employees > 0 and current_emissions > 0:
+        emissions_per_employee = current_emissions / context_employees
     
     emissions_per_revenue = None
-    if company and company.get("revenue", 0) > 0 and current_emissions > 0:
-        revenue_kchf = company["revenue"] / 1000
+    if context_revenue > 0 and current_emissions > 0:
+        revenue_kchf = context_revenue / 1000
         emissions_per_revenue = current_emissions / revenue_kchf if revenue_kchf > 0 else None
     
     products_count = products_collection.count_documents({"tenant_id": current_user["id"]})
@@ -404,6 +410,8 @@ async def get_dashboard_kpis(
         "fiscal_years_count": len(fiscal_years),
         "current_fiscal_year": current_fy.get("name") if current_fy else None,
         "previous_fiscal_year": previous_fy.get("name") if previous_fy else None,
-        "employees": company.get("employees") if company else None,
-        "revenue": company.get("revenue") if company else None
+        # Return context values (from fiscal year or fallback)
+        "employees": context_employees if context_employees > 0 else None,
+        "revenue": context_revenue if context_revenue > 0 else None,
+        "surface_area": context.get("surface_area")
     }
