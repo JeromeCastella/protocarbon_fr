@@ -159,7 +159,7 @@ class TestMultiImpactsBusinessRules:
         """
         activity_data = {
             "category_id": "activites_combustibles_energie",
-            "subcategory_id": "electricite",
+            "subcategory_id": None,
             "scope": "scope3_amont",  # Parent scope
             "name": "TEST_Scope3_3_Hydro_Entry",
             "quantity": 1000,
@@ -178,8 +178,10 @@ class TestMultiImpactsBusinessRules:
         assert response.status_code == 200, f"Failed to create activity: {response.text}"
         result = response.json()
         
-        # Should return a single activity (scope3_3 only)
-        if "group_id" in result:
+        # When only 1 activity is created, API returns single activity object (not wrapped in group)
+        # Check if it's a single activity response (has 'id' but no 'activities' array)
+        if "activities" in result:
+            # Multi-activity response
             activities = result.get("activities", [])
             assert len(activities) == 1, f"Expected 1 activity for Scope 3.3 entry, got {len(activities)}"
             assert activities[0]["scope"] == "scope3_3", f"Expected scope3_3, got {activities[0]['scope']}"
@@ -192,15 +194,21 @@ class TestMultiImpactsBusinessRules:
             group_id = result["group_id"]
             requests.delete(f"{BASE_URL}/api/activities/groups/{group_id}", headers=self.headers)
         else:
-            # Single activity response
+            # Single activity response (when only 1 impact applies)
             assert result.get("scope") == "scope3_3", f"Expected scope3_3, got {result.get('scope')}"
             
             # Verify emissions
             expected_emissions = 1000 * 0.00388983
             assert abs(result["emissions"] - expected_emissions) < 0.001
             
-            # Cleanup
-            requests.delete(f"{BASE_URL}/api/activities/{result['id']}", headers=self.headers)
+            # Verify group_size is 1 (single activity)
+            assert result.get("group_size") == 1, f"Expected group_size=1, got {result.get('group_size')}"
+            
+            # Cleanup - use group endpoint if group_id exists, otherwise single delete
+            if result.get("group_id"):
+                requests.delete(f"{BASE_URL}/api/activities/groups/{result['group_id']}", headers=self.headers)
+            else:
+                requests.delete(f"{BASE_URL}/api/activities/{result['id']}", headers=self.headers)
     
     def test_scope3_generic_entry_creates_only_scope3_activity(self):
         """
@@ -230,8 +238,9 @@ class TestMultiImpactsBusinessRules:
         assert response.status_code == 200, f"Failed to create activity: {response.text}"
         result = response.json()
         
-        # Should return a single activity (scope3 only)
-        if "group_id" in result:
+        # When only 1 activity is created, API returns single activity object (not wrapped in group)
+        if "activities" in result:
+            # Multi-activity response
             activities = result.get("activities", [])
             assert len(activities) == 1, f"Expected 1 activity for Scope 3 generic entry, got {len(activities)}"
             assert activities[0]["scope"] == "scope3", f"Expected scope3, got {activities[0]['scope']}"
@@ -244,15 +253,21 @@ class TestMultiImpactsBusinessRules:
             group_id = result["group_id"]
             requests.delete(f"{BASE_URL}/api/activities/groups/{group_id}", headers=self.headers)
         else:
-            # Single activity response
+            # Single activity response (when only 1 impact applies)
             assert result.get("scope") == "scope3", f"Expected scope3, got {result.get('scope')}"
             
             # Verify emissions
             expected_emissions = 1000 * 0.0008832
             assert abs(result["emissions"] - expected_emissions) < 0.001
             
-            # Cleanup
-            requests.delete(f"{BASE_URL}/api/activities/{result['id']}", headers=self.headers)
+            # Verify group_size is 1 (single activity)
+            assert result.get("group_size") == 1, f"Expected group_size=1, got {result.get('group_size')}"
+            
+            # Cleanup - use group endpoint if group_id exists, otherwise single delete
+            if result.get("group_id"):
+                requests.delete(f"{BASE_URL}/api/activities/groups/{result['group_id']}", headers=self.headers)
+            else:
+                requests.delete(f"{BASE_URL}/api/activities/{result['id']}", headers=self.headers)
     
     def test_scope1_entry_creates_scope1_and_scope3_3_activities(self):
         """
