@@ -25,6 +25,20 @@ Application de calcul d'empreinte carbone selon le protocole GHG avec interface 
 
 ## What's Been Implemented
 
+### 2026-02-08 - Bug fix: Édition d'activité Scope 3 ✅ (P0)
+- **Problème** : Lors de l'édition d'une activité depuis la TableView, le modal s'ouvrait à l'étape 3 (sélection du facteur) pour les activités Scope 3, au lieu de l'étape 4 (formulaire final) comme pour les Scopes 1 et 2.
+- **Cause racine** : 
+  1. L'endpoint `/api/emission-factors/search` limite les résultats à 100 facteurs. Si le facteur de l'activité n'était pas dans ces 100 premiers, il n'était pas trouvé.
+  2. Quand `selectedFactor` est `null`, la condition `step >= 4 && selectedFactor` empêche l'affichage de l'étape 4, laissant apparaître l'étape 3.
+- **Solution** :
+  1. **Backend** : Ajout d'un nouvel endpoint `GET /api/emission-factors/{factor_id}` pour récupérer un facteur par son ID.
+  2. **Ordre des routes** : Positionnement de `/{factor_id}` EN DERNIER dans `reference_data.py` pour éviter les conflits avec `/search`, `/by-category`, etc.
+  3. **Frontend** : Dans `loadForEditing()` de `GuidedEntryModal.js`, si le facteur n'est pas trouvé dans les résultats de recherche, une requête supplémentaire récupère le facteur par son ID.
+- **Fichiers modifiés** :
+  - `/app/backend/routes/reference_data.py` : Nouvel endpoint `/{factor_id}` à la fin du fichier
+  - `/app/frontend/src/components/GuidedEntryModal.js` : Logique de fallback dans `loadForEditing`
+- **Tests effectués** : Édition réussie pour Scope 1 (Diesel) et Scope 3 (Alimentation) depuis la TableView
+
 ### 2026-02-08 - Bug fix: Matching strict unités/facteurs d'émission ✅
 - **Problème** : Le modal de saisie guidée proposait des facteurs incompatibles avec l'unité choisie (ex: facteurs en L quand l'utilisateur choisissait km)
 - **Cause** : La logique de conversion permettait des "sauts" entre dimensions (km → L via conversions globales)
