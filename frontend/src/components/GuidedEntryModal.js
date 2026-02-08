@@ -4,6 +4,7 @@ import axios from 'axios';
 import { 
   X, Check, Search, ChevronRight, Info, Sparkles, AlertCircle
 } from 'lucide-react';
+import { normalizeUnit, filterFactorsByUnitStrict, getAvailableUnitsFromFactors } from '../utils/units';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL || '';
 
@@ -40,9 +41,6 @@ const GuidedEntryModal = ({
   // Formulaire
   const [quantity, setQuantity] = useState('');
   const [comments, setComments] = useState('');
-  
-  // Conversions d'unités globales
-  const [unitConversions, setUnitConversions] = useState([]);
   
   // Chargement
   const [loading, setLoading] = useState(false);
