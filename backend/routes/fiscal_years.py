@@ -80,6 +80,96 @@ async def get_fiscal_year(fiscal_year_id: str, current_user: dict = Depends(get_
     return serialize_doc(fy)
 
 
+@router.put("/{fiscal_year_id}/context")
+async def update_fiscal_year_context(
+    fiscal_year_id: str,
+    context_update: FiscalYearContextUpdate,
+    current_user: dict = Depends(get_current_user)
+):
+    """
+    Update the context (employees, revenue, surface_area, excluded_categories) of a fiscal year.
+    These values are specific to each fiscal year and affect KPIs calculation.
+    """
+    fy = fiscal_years_collection.find_one({
+        "_id": ObjectId(fiscal_year_id),
+        "tenant_id": current_user["id"]
+    })
+    
+    if not fy:
+        raise HTTPException(status_code=404, detail="Fiscal year not found")
+    
+    # Check if fiscal year is closed
+    if fy.get("status") == "closed":
+        raise HTTPException(
+            status_code=400, 
+            detail="Cannot modify context of a closed fiscal year"
+        )
+    
+    # Get existing context or initialize empty
+    existing_context = fy.get("context", {})
+    
+    # Update only the fields that were provided
+    update_data = {}
+    if context_update.employees is not None:
+        update_data["context.employees"] = context_update.employees
+    if context_update.revenue is not None:
+        update_data["context.revenue"] = context_update.revenue
+    if context_update.surface_area is not None:
+        update_data["context.surface_area"] = context_update.surface_area
+    if context_update.excluded_categories is not None:
+        update_data["context.excluded_categories"] = context_update.excluded_categories
+    
+    if update_data:
+        update_data["updated_at"] = datetime.now(timezone.utc).isoformat()
+        fiscal_years_collection.update_one(
+            {"_id": ObjectId(fiscal_year_id)},
+            {"$set": update_data}
+        )
+    
+    updated_fy = fiscal_years_collection.find_one({"_id": ObjectId(fiscal_year_id)})
+    return serialize_doc(updated_fy)
+
+
+@router.get("/{fiscal_year_id}/context")
+async def get_fiscal_year_context(
+    fiscal_year_id: str,
+    current_user: dict = Depends(get_current_user)
+):
+    """
+    Get the context of a fiscal year with fallback to company values.
+    Returns employees, revenue, surface_area, excluded_categories.
+    """
+    fy = fiscal_years_collection.find_one({
+        "_id": ObjectId(fiscal_year_id),
+        "tenant_id": current_user["id"]
+    })
+    
+    if not fy:
+        raise HTTPException(status_code=404, detail="Fiscal year not found")
+    
+    # Get company for fallback values
+    company = companies_collection.find_one({"tenant_id": current_user["id"]})
+    
+    # Get context from fiscal year with fallback to company
+    fy_context = fy.get("context", {})
+    
+    context = {
+        "employees": fy_context.get("employees") if fy_context.get("employees") is not None else (company.get("employees") if company else None),
+        "revenue": fy_context.get("revenue") if fy_context.get("revenue") is not None else (company.get("revenue") if company else None),
+        "surface_area": fy_context.get("surface_area") if fy_context.get("surface_area") is not None else (company.get("surface_area") if company else None),
+        "excluded_categories": fy_context.get("excluded_categories") if fy_context.get("excluded_categories") is not None else (company.get("excluded_categories", []) if company else [])
+    }
+    
+    return {
+        "fiscal_year_id": fiscal_year_id,
+        "fiscal_year_name": fy.get("name"),
+        "fiscal_year_status": fy.get("status"),
+        "context": context,
+        "has_own_context": bool(fy_context),
+        "is_readonly": fy.get("status") == "closed"
+    }
+
+
 @router.post("")
 async def create_fiscal_year(fy: FiscalYearCreate, current_user: dict = Depends(get_current_user)):
     """Create a new fiscal year (one per calendar year)"""
