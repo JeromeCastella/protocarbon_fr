@@ -283,8 +283,9 @@ const GuidedEntryModal = ({
     if (!scope) return '';
     const scopeLower = scope.toLowerCase().trim();
     
-    // Normalisation du Scope 3.3 (amont énergie)
-    if (['scope3_3', 'scope3.3', 'scope33', 'scope3_amont'].includes(scopeLower)) {
+    // Normalisation du Scope 3.3 (amont énergie) - catégorie spécifique du GHG Protocol
+    // NOTE: scope3_amont (Scope 3 Amont) n'est PAS scope3_3 (catégorie 3.3)
+    if (['scope3_3', 'scope3.3', 'scope33'].includes(scopeLower)) {
       return 'scope3_3';
     }
     return scopeLower;
