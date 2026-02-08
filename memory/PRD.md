@@ -26,6 +26,19 @@ Application de calcul d'empreinte carbone selon le protocole GHG avec interface 
 
 ## What's Been Implemented
 
+### 2026-02-08 - Bug fix DASHBOARD: Comptabilisation des scopes granulaires ✅ (P0)
+- **Problème** : Les émissions `scope3_3` et `scope3` n'étaient pas comptabilisées dans le dashboard. Le dictionnaire `scope_emissions` ne contenait que 4 clés (`scope1`, `scope2`, `scope3_amont`, `scope3_aval`) et les activités avec des scopes granulaires étaient ignorées.
+- **Cause racine** : Le code vérifiait `if scope in scope_emissions` mais les scopes `scope3_3` et `scope3` n'étaient pas des clés du dictionnaire.
+- **Solution** : Ajout d'une fonction `normalize_scope_for_reporting()` qui mappe les scopes granulaires vers les scopes de reporting :
+  - `scope3_3` → `scope3_amont` (car 3.3 = amont énergie, toujours amont)
+  - `scope3` → `scope3_amont` ou `scope3_aval` selon la catégorie de l'activité
+- **Fichiers modifiés** :
+  - `/app/backend/routes/dashboard.py` : Ajout de `normalize_scope_for_reporting()` et des constantes `SCOPE3_AMONT_CATEGORIES`, `SCOPE3_AVAL_CATEGORIES`
+  - `/app/backend/routes/fiscal_years.py` : Import et utilisation de la fonction
+- **Tests** : 27/27 tests passés (100%)
+  - `/app/backend/tests/test_dashboard_scope_normalization.py`
+- **Résultat** : Les totaux du dashboard sont maintenant corrects. Une saisie de Chaudière mazout en Scope 1 augmente bien Scope 1 (+7.39 tCO2e) ET Scope 3 Amont (+2.93 tCO2e).
+
 ### 2026-02-08 - Bug fix COMPLET: Logique multi-impacts GHG Protocol ✅ (P0)
 - **Problème initial** : La logique multi-impacts ne fonctionnait pas correctement :
   1. Les activités `scope3_3` n'étaient pas créées pour les saisies Scope 1/2
