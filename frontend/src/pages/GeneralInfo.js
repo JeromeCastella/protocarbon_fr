@@ -32,7 +32,11 @@ import {
   Briefcase as BriefcaseIcon,
   Pencil,
   ChevronDown,
-  ChevronUp
+  ChevronUp,
+  Building,
+  Key,
+  Store,
+  PiggyBank
 } from 'lucide-react';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL || '';
@@ -161,7 +165,7 @@ const GeneralInfo = () => {
         {
           key: 'hasFugitiveEmissions',
           icon: Factory,
-          text: 'Utilisez-vous des gaz réfrigérants ou des procédés industriels ?',
+          text: 'Utilisez-vous des fluides réfrigérants ou des gaz fluorés ?',
           hint: 'Climatisation, réfrigération, procédés chimiques...',
           categories: ['emissions_fugitives', 'procedes_industriels']
         }
@@ -175,7 +179,7 @@ const GeneralInfo = () => {
         {
           key: 'usesElectricity',
           icon: Zap,
-          text: 'Consommez-vous de l\'électricité ?',
+          text: 'Etes-vous propriétaires des locaux consommant de l\'électricité ?',
           hint: 'Bureaux, ateliers, éclairage...',
           categories: ['electricite']
         },
@@ -196,21 +200,21 @@ const GeneralInfo = () => {
         {
           key: 'buysMaterials',
           icon: Package,
-          text: 'Achetez-vous des biens ou services ?',
+          text: 'Achetez-vous des biens ou services nécessaires à vos opérations susceptibles de générer des émissions significatives sur leur cycle de vie ?',
           hint: 'Matières premières, fournitures, services...',
           categories: ['achats_biens_services', 'biens_immobilises']
         },
         {
           key: 'hasWaste',
           icon: Trash2,
-          text: 'Générez-vous des déchets ?',
+          text: 'Générez-vous des déchets de manière significative ou des déchets spéciaux ?',
           hint: 'Déchets de production, emballages, papiers...',
           categories: ['dechets']
         },
         {
           key: 'hasFreight',
           icon: Truck,
-          text: 'Faites-vous transporter des marchandises (fret) ?',
+          text: 'Faites-vous transporter des marchandises (fret) par des prestataires externes ?',
           hint: 'Transport de matières premières, composants...',
           categories: ['fret_amont']
         },
@@ -227,6 +231,13 @@ const GeneralInfo = () => {
           text: 'Vos employés se déplacent-ils entre leur domicile et le travail ?',
           hint: 'Trajets quotidiens des employés',
           categories: ['deplacements_domicile_travail']
+        },
+        {
+          key: 'hasLeasedAssetsUpstream',
+          icon: Building,
+          text: 'Utilisez-vous des locaux, bâtiments, véhicules, machines ou équipements loués ?',
+          hint: 'Actifs que vous louez à un tiers pour votre usage',
+          categories: ['actifs_loues_amont']
         }
       ]
     },
@@ -262,6 +273,27 @@ const GeneralInfo = () => {
           text: 'Vos produits génèrent-ils des émissions en fin de vie ?',
           hint: 'Recyclage, incinération, mise en décharge...',
           categories: ['fin_vie_produits']
+        },
+        {
+          key: 'hasLeasedAssetsDownstream',
+          icon: Key,
+          text: 'Louez-vous à des clients des actifs (produits, équipements, véhicules, bâtiments) que vous possédez, et qui consomment de l\'énergie ou génèrent des émissions ?',
+          hint: 'Actifs mis en location à des tiers',
+          categories: ['actifs_loues_aval']
+        },
+        {
+          key: 'hasFranchises',
+          icon: Store,
+          text: 'Votre organisation exploite-t-elle un réseau de franchises (en tant que franchiseur) ?',
+          hint: 'Réseau de franchisés opérant sous votre marque',
+          categories: ['franchises']
+        },
+        {
+          key: 'hasInvestments',
+          icon: PiggyBank,
+          text: 'Votre organisation détient-elle des investissements financiers ou des participations susceptibles d\'être associés à des émissions ?',
+          hint: 'Actions, obligations, prêts, fonds, capital-risque...',
+          categories: ['investissements']
         }
       ]
     },
@@ -326,10 +358,14 @@ const GeneralInfo = () => {
       hasFreight: null,
       hasBusinessTravel: null,
       hasCommuting: null,
+      hasLeasedAssetsUpstream: null,
       sellsProducts: null,
       hasDownstreamTransport: null,
       hasProductUse: null,
-      hasEndOfLife: null
+      hasEndOfLife: null,
+      hasLeasedAssetsDownstream: null,
+      hasFranchises: null,
+      hasInvestments: null
     });
   };
 
@@ -612,7 +648,7 @@ const GeneralInfo = () => {
         transition={{ delay: 0.1 }}
         className={`p-6 rounded-2xl ${isDark ? 'bg-slate-800' : 'bg-white shadow-lg'}`}
       >
-        <div className="flex items-center justify-between mb-2">
+        <div className="flex items-center mb-2">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-purple-100 flex items-center justify-center">
               <Layers className="w-5 h-5 text-purple-600" />
@@ -621,37 +657,39 @@ const GeneralInfo = () => {
               {t('scope.perimeter')}
             </h2>
           </div>
-          <div className="flex items-center gap-3">
-            <button
-              onClick={openWizard}
-              data-testid="wizard-config-btn"
-              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-purple-500 text-white hover:bg-purple-600 transition-all shadow-lg shadow-purple-500/30"
-            >
-              <Wand2 className="w-4 h-4" />
-              Configuration guidée
-            </button>
-            <button
-              onClick={() => setShowManualConfig(!showManualConfig)}
-              data-testid="manual-config-btn"
-              className={`flex items-center gap-2 px-4 py-2 rounded-xl transition-all ${
-                showManualConfig
-                  ? isDark 
-                    ? 'bg-slate-600 text-white hover:bg-slate-500' 
-                    : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                  : isDark 
-                    ? 'bg-slate-700 text-slate-300 hover:bg-slate-600' 
-                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-              }`}
-            >
-              <Pencil className="w-4 h-4" />
-              Configuration manuelle
-              {showManualConfig ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-            </button>
-          </div>
         </div>
-        <p className={`mb-6 ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+        <p className={`mb-4 ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
           {t('scope.perimeterDesc')}
         </p>
+        <div className="flex items-center gap-3 mb-6">
+          <button
+            onClick={openWizard}
+            data-testid="wizard-config-btn"
+            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-purple-500 text-white hover:bg-purple-600 transition-all shadow-lg shadow-purple-500/30"
+          >
+            <Wand2 className="w-4 h-4" />
+            Configuration guidée
+          </button>
+          <button
+            onClick={() => setShowManualConfig(!showManualConfig)}
+            data-testid="manual-config-btn"
+            className={`flex items-center gap-2 px-4 py-2 rounded-xl transition-all ${
+              showManualConfig
+                ? isDark 
+                  ? 'bg-slate-600 text-white hover:bg-slate-500' 
+                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                : isDark 
+                  ? 'bg-slate-700 text-slate-300 hover:bg-slate-600' 
+                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+            }`}
+          >
+            <Pencil className="w-4 h-4" />
+            Configuration manuelle
+            {showManualConfig ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+          </button>
+        </div>
+
+
 
         {/* Manual Configuration Section */}
         <AnimatePresence>
