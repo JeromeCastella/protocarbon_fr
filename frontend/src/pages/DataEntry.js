@@ -327,10 +327,28 @@ const DataEntry = () => {
     setShowTableView(true);
   };
 
+  // Catégories Scope 3 Amont (pour le mapping de scope3 générique)
+  const SCOPE3_AMONT_CATEGORIES = new Set([
+    'biens_services_achetes', 'biens_equipement', 'activites_combustibles_energie',
+    'transport_distribution_amont', 'dechets_operations', 'deplacements_professionnels',
+    'deplacements_domicile_travail', 'actifs_loues_amont'
+  ]);
+
+  // Fonction pour normaliser le scope pour l'affichage (comme le backend)
+  const normalizeScope = (scope, categoryId) => {
+    if (!scope) return 'scope1';
+    if (['scope1', 'scope2', 'scope3_amont', 'scope3_aval'].includes(scope)) return scope;
+    if (scope === 'scope3_3') return 'scope3_amont'; // 3.3 = amont énergie
+    if (scope === 'scope3') {
+      return SCOPE3_AMONT_CATEGORIES.has(categoryId) ? 'scope3_amont' : 'scope3_aval';
+    }
+    return 'scope1';
+  };
+
   const getScopeActivities = (scope) => {
     const list = scope === null
       ? [...activities]
-      : activities.filter(a => a.scope === scope);
+      : activities.filter(a => normalizeScope(a.scope, a.category_id) === scope);
     return list.sort((a, b) => (b.emissions || 0) - (a.emissions || 0));
   };
 
