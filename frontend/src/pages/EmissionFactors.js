@@ -22,6 +22,7 @@ const EmissionFactors = () => {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedScope, setSelectedScope] = useState('');
+  const [exporting, setExporting] = useState(false);
 
   useEffect(() => {
     fetchFactors();
@@ -35,6 +36,109 @@ const EmissionFactors = () => {
       console.error('Failed to fetch emission factors:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  // Export emission factors to JSON file
+  const handleExportJSON = async () => {
+    setExporting(true);
+    try {
+      const response = await axios.get(`${API_URL}/api/export/emission-factors`);
+      const data = response.data;
+      
+      // Create blob and download
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `emission_factors_${new Date().toISOString().split('T')[0]}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Failed to export emission factors:', error);
+      alert('Erreur lors de l\'export des facteurs d\'émission');
+    } finally {
+      setExporting(false);
+    }
+  };
+
+  // Export emission factors to CSV file
+  const handleExportCSV = async () => {
+    setExporting(true);
+    try {
+      const response = await axios.get(`${API_URL}/api/export/emission-factors`);
+      const factors = response.data.emission_factors || [];
+      
+      // Build CSV content
+      const headers = [
+        'id',
+        'name_fr',
+        'name_de',
+        'subcategory',
+        'input_units',
+        'default_unit',
+        'impacts_count',
+        'impact_1_scope',
+        'impact_1_category',
+        'impact_1_value',
+        'impact_1_unit',
+        'impact_2_scope',
+        'impact_2_category',
+        'impact_2_value',
+        'impact_2_unit',
+        'source',
+        'region',
+        'year',
+        'tags'
+      ];
+      
+      const rows = factors.map(f => {
+        const impacts = f.impacts || [];
+        const impact1 = impacts[0] || {};
+        const impact2 = impacts[1] || {};
+        
+        return [
+          f.id || '',
+          `"${(f.name_fr || '').replace(/"/g, '""')}"`,
+          `"${(f.name_de || '').replace(/"/g, '""')}"`,
+          f.subcategory || '',
+          `"${(f.input_units || []).join(', ')}"`,
+          f.default_unit || '',
+          impacts.length,
+          impact1.scope || '',
+          impact1.category || '',
+          impact1.value || '',
+          impact1.unit || '',
+          impact2.scope || '',
+          impact2.category || '',
+          impact2.value || '',
+          impact2.unit || '',
+          `"${(f.source || '').replace(/"/g, '""')}"`,
+          f.region || '',
+          f.year || '',
+          `"${(f.tags || []).join(', ')}"`
+        ].join(',');
+      });
+      
+      const csvContent = [headers.join(','), ...rows].join('\n');
+      
+      // Create blob and download
+      const blob = new Blob(['\ufeff' + csvContent], { type: 'text/csv;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `emission_factors_${new Date().toISOString().split('T')[0]}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Failed to export emission factors:', error);
+      alert('Erreur lors de l\'export des facteurs d\'émission');
+    } finally {
+      setExporting(false);
     }
   };
 
