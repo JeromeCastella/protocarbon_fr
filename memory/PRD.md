@@ -26,16 +26,30 @@ Application de calcul d'empreinte carbone selon le protocole GHG avec interface 
 
 ## What's Been Implemented
 
-### 2026-02-08 - Bug fix: Logique multi-impacts Scope 3/3.3 ✅ (P0)
-- **Problème** : La logique multi-impacts ne fonctionnait pas correctement pour les impacts Scope 3 et Scope 3.3. Les captures d'écran de l'utilisateur montraient que les impacts attendus n'étaient pas créés.
-- **Cause racine** : La fonction `normalize_scope()` convertissait incorrectement `scope3_amont` en `scope3_3`. En réalité, `scope3_amont` (Scope 3 Amont général - catégories 1-8) n'est PAS `scope3_3` (catégorie 3.3 spécifique - amont énergie).
-- **Solution** :
+### 2026-02-08 - Bug fix COMPLET: Logique multi-impacts GHG Protocol ✅ (P0)
+- **Problème initial** : La logique multi-impacts ne fonctionnait pas correctement :
+  1. Les activités `scope3_3` n'étaient pas créées pour les saisies Scope 1/2
+  2. Les activités `scope3_3` apparaissaient dans la mauvaise catégorie (catégorie de saisie au lieu de `activites_combustibles_energie`)
+  3. Les saisies Scope 3 ne créaient aucune activité
+- **Causes racines** :
+  1. `normalize_scope()` convertissait incorrectement `scope3_amont` en `scope3_3`
+  2. `create_activity_for_impact()` assignait toujours `category_id` de la saisie, sans tenir compte du scope de l'impact
+- **Solution complète** :
   1. Suppression de `scope3_amont` de la liste de normalisation vers `scope3_3`
-  2. Ajout d'une logique spéciale pour la catégorie `activites_combustibles_energie` qui déclenche la règle `scope3_3`
+  2. Ajout dans `create_activity_for_impact()` : si `impact_scope == 'scope3_3'` alors `category_id = 'activites_combustibles_energie'`
+  3. Correction de `entry_category` (était `entry_scope` par erreur)
 - **Fichiers modifiés** :
-  - `/app/backend/routes/activities.py` : `normalize_scope()` et `apply_business_rules()`
-  - `/app/frontend/src/components/GuidedEntryModal.js` : Même logique côté frontend
-- **Tests** : 9/9 tests passés (100%), fichier `/app/backend/tests/test_multi_impacts.py` créé
+  - `/app/backend/routes/activities.py` : `normalize_scope()`, `apply_business_rules()`, `create_activity_for_impact()`
+  - `/app/frontend/src/components/GuidedEntryModal.js` : `normalizeScope()`, `applyBusinessRules()`, `scopeColors`
+- **Tests** : 18/18 tests passés (100%)
+  - `/app/backend/tests/test_multi_impacts.py`
+  - `/app/backend/tests/test_ghg_protocol_rules.py`
+- **Cas d'usage validés** :
+  | Saisie | Facteur | Résultat |
+  |--------|---------|----------|
+  | Scope 1 (combustion_fixe) | Chaudière mazout | scope1 → combustion_fixe (7.39 tCO2e) + scope3_3 → activites_combustibles_energie (2.93 tCO2e) |
+  | Scope 2 (electricite) | Gaz naturel | scope2 → electricite (43.27 tCO2e) + scope3_3 → activites_combustibles_energie (14.37 tCO2e) |
+  | Scope 3 (deplacements_professionnels) | Scooter EURO-5 | scope3 → deplacements_professionnels (96.85 tCO2e) |
 
 ### 2026-02-08 - Multi-impacts GHG Protocol ✅ (P0 - MAJOR)
 - **Contexte** : Les facteurs d'émission peuvent avoir plusieurs impacts (ex: Diesel = Scope 1 + Scope 3.3). Avant, une seule activité était créée avec la somme des émissions, ce qui faussait la répartition par scope.
