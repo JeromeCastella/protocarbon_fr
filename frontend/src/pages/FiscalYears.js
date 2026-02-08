@@ -61,6 +61,7 @@ const FiscalYears = () => {
   // Delete confirmation state
   const [deleteStats, setDeleteStats] = useState(null);
   const [deleteConfirmText, setDeleteConfirmText] = useState('');
+  const [deleteError, setDeleteError] = useState('');
 
   // Calculate available years (those not already created)
   const existingYears = useMemo(() => {
