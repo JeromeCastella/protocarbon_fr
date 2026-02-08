@@ -246,6 +246,44 @@ const EmissionFactors = () => {
           <option value="scope3_amont">Scope 3 Amont</option>
           <option value="scope3_aval">Scope 3 Aval</option>
         </select>
+        
+        {/* Export Buttons */}
+        <div className="flex gap-2">
+          <button
+            onClick={handleExportCSV}
+            disabled={exporting}
+            data-testid="export-csv-btn"
+            className={`flex items-center gap-2 px-4 py-3 rounded-xl border transition-all ${
+              isDark 
+                ? 'bg-slate-800 border-slate-700 text-white hover:bg-slate-700' 
+                : 'bg-white border-gray-200 text-gray-900 hover:bg-gray-50'
+            } ${exporting ? 'opacity-50 cursor-not-allowed' : ''}`}
+          >
+            {exporting ? (
+              <Loader2 className="w-4 h-4 animate-spin" />
+            ) : (
+              <Download className="w-4 h-4" />
+            )}
+            <span>Export CSV</span>
+          </button>
+          <button
+            onClick={handleExportJSON}
+            disabled={exporting}
+            data-testid="export-json-btn"
+            className={`flex items-center gap-2 px-4 py-3 rounded-xl border transition-all ${
+              isDark 
+                ? 'bg-slate-800 border-slate-700 text-white hover:bg-slate-700' 
+                : 'bg-white border-gray-200 text-gray-900 hover:bg-gray-50'
+            } ${exporting ? 'opacity-50 cursor-not-allowed' : ''}`}
+          >
+            {exporting ? (
+              <Loader2 className="w-4 h-4 animate-spin" />
+            ) : (
+              <Download className="w-4 h-4" />
+            )}
+            <span>Export JSON</span>
+          </button>
+        </div>
       </div>
 
       {/* Stats */}
