@@ -634,62 +634,6 @@ const GeneralInfo = () => {
         </div>
       </motion.div>
 
-      {/* Fiscal Year Configuration Card */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.05 }}
-        className={`p-6 rounded-2xl ${isDark ? 'bg-slate-800' : 'bg-white shadow-lg'}`}
-      >
-        <div className="flex items-center gap-3 mb-2">
-          <div className="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center">
-            <Calendar className="w-5 h-5 text-green-600" />
-          </div>
-          <h2 className={`text-xl font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-            Configuration de l&apos;année fiscale
-          </h2>
-        </div>
-        <p className={`mb-6 ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-          Définissez la période de vos exercices comptables. Cette configuration s&apos;applique à tous les exercices.
-        </p>
-
-        <div className="max-w-md">
-          {/* Start Month */}
-          <div>
-            <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
-              Mois de début de l&apos;exercice
-            </label>
-            <select
-              value={company.fiscal_year_start_month}
-              onChange={(e) => setCompany({ ...company, fiscal_year_start_month: parseInt(e.target.value) })}
-              data-testid="fiscal-year-month-select"
-              className={`w-full px-4 py-3 rounded-xl border transition-all focus:ring-2 focus:ring-blue-500 ${
-                isDark 
-                  ? 'bg-slate-700 border-slate-600 text-white' 
-                  : 'bg-white border-gray-200 text-gray-900'
-              }`}
-            >
-              {MONTHS.map(month => (
-                <option key={month.value} value={month.value}>{month.label}</option>
-              ))}
-            </select>
-          </div>
-        </div>
-
-        {/* Preview */}
-        <div className={`mt-6 p-4 rounded-xl ${isDark ? 'bg-green-500/20' : 'bg-green-50'} flex items-start gap-3`}>
-          <Info className="w-5 h-5 text-green-500 mt-0.5" />
-          <div>
-            <p className={`font-medium ${isDark ? 'text-green-300' : 'text-green-700'}`}>
-              Exemple pour l&apos;exercice 2024 :
-            </p>
-            <p className={`text-sm ${isDark ? 'text-green-300/80' : 'text-green-600'}`}>
-              {MONTHS.find(m => m.value === company.fiscal_year_start_month)?.label} 2024 → {MONTHS.find(m => m.value === endMonth)?.label} {company.fiscal_year_start_month === 1 ? '2024' : '2025'}
-            </p>
-          </div>
-        </div>
-      </motion.div>
-
       {/* Scope Perimeter Card */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
