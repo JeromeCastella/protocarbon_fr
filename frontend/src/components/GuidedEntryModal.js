@@ -293,12 +293,26 @@ const GuidedEntryModal = ({
   // Appliquer les règles métier pour filtrer les impacts selon le scope sélectionné
   // Règles GHG Protocol :
   // - Saisie Scope 1 ou 2 → inclure impacts scope1, scope2, scope3_3
-  // - Saisie Scope 3 → inclure uniquement impact scope3
+  // - Saisie Scope 3.3 (catégorie activites_combustibles_energie) → inclure uniquement scope3_3
+  // - Saisie Scope 3 (autres) → inclure uniquement impact scope3
   // - Si value = 0 → exclure
   const applyBusinessRules = (impacts, selectedScope, selectedCategory) => {
     if (!impacts || impacts.length === 0) return impacts;
     
-    const isScope3Entry = selectedScope?.startsWith('scope3');
+    const normalizedScope = normalizeScope(selectedScope);
+    const isScope1or2Entry = ['scope1', 'scope2'].includes(normalizedScope);
+    
+    // Catégorie 3.3 du GHG Protocol : activités liées aux combustibles et à l'énergie
+    const isScope3_3Entry = (
+      selectedCategory === 'activites_combustibles_energie' || 
+      normalizedScope === 'scope3_3'
+    );
+    
+    // Autres catégories Scope 3
+    const isScope3Entry = (
+      normalizedScope?.startsWith('scope3') && 
+      !isScope3_3Entry
+    );
     
     return impacts.filter(impact => {
       const impactScope = normalizeScope(impact.scope);
@@ -307,13 +321,19 @@ const GuidedEntryModal = ({
       // Exclure les impacts avec valeur = 0
       if (impactValue === 0) return false;
       
-      if (isScope3Entry) {
-        // Saisie Scope 3 : inclure uniquement scope3
-        return impactScope === 'scope3';
-      } else {
+      if (isScope1or2Entry) {
         // Saisie Scope 1 ou 2 : inclure scope1, scope2, scope3_3
         return ['scope1', 'scope2', 'scope3_3'].includes(impactScope);
+      } else if (isScope3_3Entry) {
+        // Saisie Scope 3.3 (amont énergie) : inclure uniquement scope3_3
+        return impactScope === 'scope3_3';
+      } else if (isScope3Entry) {
+        // Saisie Scope 3 (autres) : inclure uniquement scope3
+        return impactScope === 'scope3';
       }
+      
+      // Fallback : inclure tous les impacts non-nuls
+      return true;
     });
   };
 
