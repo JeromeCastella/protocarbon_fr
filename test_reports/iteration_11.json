@@ -1,0 +1,73 @@
+{
+  "summary": "Multi-impacts bug fix (P0) verified. Backend: 9/9 tests passed (100%). Frontend: GuidedEntryModal correctly displays multi-impacts with business rules applied. The fix correctly handles: (1) Scope 2 entry → creates scope2 + scope3_3 activities, (2) Scope 3.3 entry → creates only scope3_3 activity, (3) Scope 3 generic entry → creates only scope3 activity.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_multi_impacts.py",
+    "/app/test_reports/pytest/multi_impacts_results.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "Code review passed: normalize_scope() and apply_business_rules() functions correctly implement GHG Protocol rules",
+    "Backend and frontend logic are aligned - both use same business rules for multi-impacts filtering"
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_multi_impacts.py"
+  ],
+  "success_rate": {
+    "backend": "100% (9/9 tests passed)",
+    "frontend": "100% (multi-impacts display working correctly)"
+  },
+  "test_credentials": {
+    "email": "newtest@x.com",
+    "password": "test123"
+  },
+  "seed_data_creation": "None - used existing Hydroélectricité factor (ID: 698418f3c1a4e9f26cd27156)",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Multi-impacts bug fix verified. Test file /app/backend/tests/test_multi_impacts.py covers all business rules. Hydroélectricité factor has 3 impacts: scope2=0.0008832, scope3_3=0.00388983, scope3=0.0008832. Category 3.3 (activites_combustibles_energie) is auto-calculated from Scope 1/2 entries.",
+  "features_tested": {
+    "backend_api": {
+      "POST /api/activities": {
+        "scope2_entry": {
+          "status": "PASS",
+          "description": "Creates 2 activities (scope2 + scope3_3) for multi-impact factor",
+          "business_rule": "Scope 1/2 entry → include scope1, scope2, scope3_3 impacts"
+        },
+        "scope3_3_entry": {
+          "status": "PASS",
+          "description": "Creates 1 activity (scope3_3 only) for category activites_combustibles_energie",
+          "business_rule": "Scope 3.3 entry → include only scope3_3 impacts"
+        },
+        "scope3_generic_entry": {
+          "status": "PASS",
+          "description": "Creates 1 activity (scope3 only) for other Scope 3 categories",
+          "business_rule": "Scope 3 entry → include only scope3 impacts"
+        }
+      },
+      "GET /api/activities/groups/{group_id}": "PASS - Returns all activities in a group",
+      "DELETE /api/activities/groups/{group_id}": "PASS - Deletes all activities in a group"
+    },
+    "frontend_ui": {
+      "GuidedEntryModal": {
+        "multi_impacts_display": "PASS - Shows all impacts from factor with scope labels",
+        "business_rules_indicator": "PASS - Shows 'Règle métier appliquée' when impacts are filtered",
+        "emissions_calculation": "PASS - Correctly calculates emissions for each impact",
+        "scope3_3_auto_calculation": "PASS - Category 3.3 shows auto-calculation message"
+      }
+    }
+  },
+  "bug_fix_verification": {
+    "original_issue": "Multi-impacts logic not working correctly for Scope 3 and Scope 3.3 entries",
+    "root_cause": "normalize_scope() incorrectly converted 'scope3_amont' to 'scope3_3'. In reality, scope3_amont (Scope 3 Amont général) is NOT scope3_3 (catégorie 3.3 spécifique du GHG Protocol - amont énergie)",
+    "fix_applied": "Removed 'scope3_amont' from scope3_3 normalization list. Added special logic for category 'activites_combustibles_energie' to trigger scope3_3 rule",
+    "verification_status": "VERIFIED - All 3 test scenarios pass"
+  }
+}
