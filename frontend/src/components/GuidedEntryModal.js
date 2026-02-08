@@ -682,13 +682,107 @@ const GuidedEntryModal = ({
                 {/* Étape 4: Quantité et résultat */}
                 {step >= 4 && selectedFactor && (
                   <>
+                    {/* Résumé des sélections en mode édition */}
+                    {isEditMode && (
+                      <div className={`mb-4 p-4 rounded-xl ${isDark ? 'bg-slate-700/50 border border-slate-600' : 'bg-gray-50 border border-gray-200'}`}>
+                        <div className="flex items-center gap-2 mb-3">
+                          <Info className="w-4 h-4 text-blue-500" />
+                          <span className={`text-sm font-medium ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
+                            {language === 'fr' ? 'Éléments sélectionnés' : 'Ausgewählte Elemente'}
+                          </span>
+                        </div>
+                        <div className="space-y-2">
+                          {/* Sous-catégorie */}
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-2">
+                              <span className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+                                {language === 'fr' ? 'Sous-catégorie:' : 'Unterkategorie:'}
+                              </span>
+                              <span className={`text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                                {selectedSubcategory 
+                                  ? (language === 'fr' ? selectedSubcategory.name_fr : selectedSubcategory.name_de)
+                                  : '—'}
+                              </span>
+                            </div>
+                            {subcategories.length > 1 && (
+                              <button
+                                type="button"
+                                onClick={() => goBackToStep(1)}
+                                className={`flex items-center gap-1 text-xs px-2 py-1 rounded-lg transition-colors ${
+                                  isDark 
+                                    ? 'text-blue-400 hover:bg-slate-600' 
+                                    : 'text-blue-600 hover:bg-blue-50'
+                                }`}
+                              >
+                                <RotateCcw className="w-3 h-3" />
+                                {language === 'fr' ? 'Modifier' : 'Ändern'}
+                              </button>
+                            )}
+                          </div>
+                          {/* Unité */}
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-2">
+                              <span className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+                                {language === 'fr' ? 'Unité:' : 'Einheit:'}
+                              </span>
+                              <span className={`text-sm font-medium px-2 py-0.5 rounded ${isDark ? 'bg-slate-600 text-white' : 'bg-gray-200 text-gray-900'}`}>
+                                {selectedUnit || '—'}
+                              </span>
+                            </div>
+                            {availableUnits.length > 1 && (
+                              <button
+                                type="button"
+                                onClick={() => goBackToStep(2)}
+                                className={`flex items-center gap-1 text-xs px-2 py-1 rounded-lg transition-colors ${
+                                  isDark 
+                                    ? 'text-blue-400 hover:bg-slate-600' 
+                                    : 'text-blue-600 hover:bg-blue-50'
+                                }`}
+                              >
+                                <RotateCcw className="w-3 h-3" />
+                                {language === 'fr' ? 'Modifier' : 'Ändern'}
+                              </button>
+                            )}
+                          </div>
+                          {/* Facteur */}
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-2 flex-1 min-w-0">
+                              <span className={`text-sm flex-shrink-0 ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+                                {language === 'fr' ? 'Facteur:' : 'Faktor:'}
+                              </span>
+                              <span className={`text-sm font-medium truncate ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                                {selectedFactor ? getFactorName(selectedFactor) : '—'}
+                              </span>
+                            </div>
+                            {filteredFactors.length > 1 && (
+                              <button
+                                type="button"
+                                onClick={() => goBackToStep(3)}
+                                className={`flex items-center gap-1 text-xs px-2 py-1 rounded-lg transition-colors flex-shrink-0 ${
+                                  isDark 
+                                    ? 'text-blue-400 hover:bg-slate-600' 
+                                    : 'text-blue-600 hover:bg-blue-50'
+                                }`}
+                              >
+                                <RotateCcw className="w-3 h-3" />
+                                {language === 'fr' ? 'Modifier' : 'Ändern'}
+                              </button>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
                     <div className={`p-4 rounded-xl ${
                       isDark 
                         ? 'bg-gradient-to-r from-blue-500/20 to-green-500/20 border border-blue-500/30' 
                         : 'bg-gradient-to-r from-blue-50 to-green-50 border border-blue-200'
                     }`}>
                       <label className={`block text-sm font-medium mb-3 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
-                        {language === 'fr' ? '4. Quantité' : '4. Menge'}
+                        {isEditMode 
+                          ? (language === 'fr' ? 'Quantité' : 'Menge')
+                          : (language === 'fr' ? '4. Quantité' : '4. Menge')
+                        }
                       </label>
                       
                       <div className="flex items-center gap-4">
