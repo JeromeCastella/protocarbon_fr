@@ -21,8 +21,30 @@ Application de calcul d'empreinte carbone selon le protocole GHG avec interface 
 - [x] Mode clair/sombre
 - [x] Gamification (barres de progression)
 - [x] Structure GHG Protocol (Scope 1, 2, 3 Amont, 3 Aval)
+- [x] **Données contextuelles par exercice fiscal** (employees, revenue, surface_area, excluded_categories)
 
 ## What's Been Implemented
+
+### 2026-02-08 - Données contextuelles par exercice fiscal ✅ (MAJOR)
+- **Nouveau schéma MongoDB** : Ajout d'un objet `context` dans `fiscal_years` contenant :
+  - `employees` (int)
+  - `revenue` (float)
+  - `surface_area` (float)
+  - `excluded_categories` (list)
+- **Nouveaux endpoints API** :
+  - `GET /api/fiscal-years/{id}/context` : Récupère le context avec fallback sur company
+  - `PUT /api/fiscal-years/{id}/context` : Met à jour le context (bloqué si exercice clôturé)
+  - `POST /api/fiscal-years/migrate-context` : Migration des exercices existants
+- **Logique de création/duplication** :
+  - À la création d'un exercice : copie le context de l'exercice N-1, ou de company si premier exercice
+  - À la duplication : copie automatique du context source
+- **Frontend GeneralInfo.js refondu** :
+  - **Carte 1 "Identité de l'entreprise"** (bleu) : nom, localisation, secteur, type d'entité, consolidation → données stables
+  - **Carte 2 "Données de l'exercice [Année]"** (orange) : employés, CA, surface → données contextuelles
+  - **Carte 3 "Périmètre du bilan carbone"** : checkboxes liées au context de l'exercice
+- **KPIs dashboard** : Utilisent maintenant les données du context de l'exercice sélectionné
+- **Gestion readonly** : Exercices clôturés → context non modifiable
+- **Migration exécutée** : 4 exercices migrés avec les valeurs de company
 
 ### 2026-02-08 - Correction carte "Périmètre du bilan carbone" ✅
 - **Bug fix API** : Correction de l'endpoint `/api/company` → `/api/companies` dans le backend (`routes/companies.py`)
@@ -31,6 +53,11 @@ Application de calcul d'empreinte carbone selon le protocole GHG avec interface 
   - **"✏️ Configuration manuelle"** (bouton gris avec chevron) → Affiche/masque les checkboxes des catégories par scope
 - **Animation fluide** : Utilisation de `AnimatePresence` et `motion.div` pour l'affichage/masquage des checkboxes
 - **État par défaut** : Les checkboxes sont affichées par défaut (`showManualConfig: true`)
+- **Fichier modifié** : `/app/frontend/src/pages/GeneralInfo.js`
+
+### 2026-02-08 - Groupement catégories "Produits vendus" ✅
+- **Wizard** : Une seule question "Vendez-vous des produits physiques ?" qui active les 3 catégories (3.10, 3.11, 3.12)
+- **Configuration manuelle** : Une checkbox groupée "Produits vendus" qui contrôle les 3 catégories ensemble
 - **Fichier modifié** : `/app/frontend/src/pages/GeneralInfo.js`
 
 ### 2026-02-06 - Refonte onglet "Résultats" du Dashboard ✅
