@@ -49,21 +49,33 @@ const API_URL = process.env.REACT_APP_BACKEND_URL || '';
 const GeneralInfo = () => {
   const { isDark } = useTheme();
   const { t, language } = useLanguage();
+  const { selectedFiscalYear } = useFiscalYear();
+  
+  // Company identity (stable data)
   const [company, setCompany] = useState({
     name: '',
     location: '',
     sector: '',
     entity_type: 'private_company',
-    employees: 0,
-    surface_area: 0,
-    revenue: 0,
     consolidation_approach: 'operational_control',
-    excluded_categories: [],
     fiscal_year_start_month: 1
   });
+  
+  // Fiscal year context (data specific to the selected fiscal year)
+  const [fiscalYearContext, setFiscalYearContext] = useState({
+    employees: 0,
+    revenue: 0,
+    surface_area: 0,
+    excluded_categories: []
+  });
+  const [contextLoading, setContextLoading] = useState(false);
+  const [contextReadonly, setContextReadonly] = useState(false);
+  
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [savingContext, setSavingContext] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [savedContext, setSavedContext] = useState(false);
   const [categories, setCategories] = useState([]);
 
   // Wizard state
