@@ -1,0 +1,89 @@
+{
+  "summary": "P0 Multi-impacts bug fix verified. Backend: 18/18 tests passed (100%). Frontend: GuidedEntryModal correctly displays multi-impacts with GHG Protocol business rules. All 3 test scenarios pass: (1) Scope 1 entry → creates scope1 + scope3_3, (2) Scope 2 entry → creates scope2 + scope3_3, (3) Scope 3 entry → creates scope3 only. scope3_3 activities correctly assigned to category 'activites_combustibles_energie'.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_multi_impacts.py",
+    "/app/backend/tests/test_ghg_protocol_rules.py",
+    "/app/test_reports/pytest/multi_impacts_results.xml",
+    "/app/test_reports/pytest/ghg_protocol_results.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "Code review passed: normalize_scope() correctly handles scope3_3 normalization without converting scope3_amont",
+    "apply_business_rules() correctly filters impacts based on entry scope and category",
+    "create_activity_for_impact() correctly assigns category_id='activites_combustibles_energie' for scope3_3 impacts",
+    "Frontend GuidedEntryModal correctly mirrors backend business rules for multi-impacts display"
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_ghg_protocol_rules.py"
+  ],
+  "success_rate": {
+    "backend": "100% (18/18 tests passed - 9 from test_multi_impacts.py + 9 from test_ghg_protocol_rules.py)",
+    "frontend": "100% (multi-impacts display working correctly with business rules)"
+  },
+  "test_credentials": {
+    "email": "newtest@x.com",
+    "password": "test123"
+  },
+  "seed_data_creation": "None - used existing emission factors",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Multi-impacts P0 bug fix fully verified. Test files cover all GHG Protocol business rules. Key factors tested: Chaudière mazout (698418f3c1a4e9f26cd2735f), Gaz naturel (698418f3c1a4e9f26cd2715d), Scooter EURO-5 (698418f3c1a4e9f26cd27385).",
+  "features_tested": {
+    "backend_api": {
+      "POST /api/activities": {
+        "scope1_entry_chaudiere_mazout": {
+          "status": "PASS",
+          "description": "Creates 2 activities (scope1 + scope3_3) for Chaudière mazout factor",
+          "business_rule": "Scope 1 entry → include scope1, scope2, scope3_3 impacts",
+          "category_assignment": "scope1 → combustion_fixe, scope3_3 → activites_combustibles_energie"
+        },
+        "scope2_entry_gaz_naturel": {
+          "status": "PASS",
+          "description": "Creates 2 activities (scope2 + scope3_3) for Gaz naturel factor",
+          "business_rule": "Scope 2 entry → include scope1, scope2, scope3_3 impacts",
+          "category_assignment": "scope2 → electricite, scope3_3 → activites_combustibles_energie"
+        },
+        "scope3_entry_scooter": {
+          "status": "PASS",
+          "description": "Creates 1 activity (scope3 only) for Scooter EURO-5 factor",
+          "business_rule": "Scope 3 entry → include only scope3 impacts",
+          "category_assignment": "scope3 → deplacements_professionnels"
+        },
+        "zero_value_exclusion": {
+          "status": "PASS",
+          "description": "Scooter scope2=0 is correctly excluded from activity creation"
+        }
+      },
+      "GET /api/activities?category_id=activites_combustibles_energie": {
+        "status": "PASS",
+        "description": "scope3_3 activities appear when filtering by category"
+      }
+    },
+    "frontend_ui": {
+      "GuidedEntryModal": {
+        "multi_impacts_display": "PASS - Shows all impacts from factor with scope labels and color coding",
+        "business_rules_indicator": "PASS - Shows 'Règle métier appliquée (X impact(s) exclu(s))' when impacts are filtered",
+        "emissions_calculation": "PASS - Correctly calculates emissions for each included impact",
+        "scope1_entry_display": "PASS - Shows Scope 1 + Scope 3.3 impacts for Scope 1 entry",
+        "scope3_entry_display": "PASS - Shows only Scope 3 impact for Scope 3 entry"
+      }
+    }
+  },
+  "bug_fix_verification": {
+    "original_issue": "Multi-impacts logic not working correctly - scope3_3 activities not appearing in correct category",
+    "root_cause_1": "normalize_scope() incorrectly converted 'scope3_amont' to 'scope3_3'",
+    "root_cause_2": "scope3_3 activities were not assigned to 'activites_combustibles_energie' category",
+    "fix_applied_1": "Removed 'scope3_amont' from scope3_3 normalization list",
+    "fix_applied_2": "Added logic in create_activity_for_impact() to set category_id='activites_combustibles_energie' for scope3_3 impacts",
+    "verification_status": "VERIFIED - All test scenarios pass"
+  }
+}
