@@ -4,7 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import { useLanguage } from '../context/LanguageContext';
 import { motion } from 'framer-motion';
-import { Leaf, Mail, Lock, User, ArrowRight, Globe, Eye, EyeOff } from 'lucide-react';
+import { Leaf, Mail, Lock, User, ArrowRight, Globe, Eye, EyeOff, Moon, Sun } from 'lucide-react';
 import PasswordStrength from '../components/PasswordStrength';
 
 const AuthPage = () => {
@@ -95,7 +95,7 @@ const AuthPage = () => {
                 isDark ? 'bg-slate-800 text-white hover:bg-slate-700' : 'bg-white text-gray-600 hover:bg-gray-100 shadow-sm'
               }`}
             >
-              {isDark ? '☀️' : '🌙'}
+              {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
             </button>
           </div>
 

@@ -36,7 +36,9 @@ import {
   Building,
   Key,
   Store,
-  PiggyBank
+  Snowflake,
+  PiggyBank,
+  Wind
 } from 'lucide-react';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL || '';
@@ -69,8 +71,10 @@ const GeneralInfo = () => {
     hasVehicles: null,
     hasCombustion: null,
     hasFugitiveEmissions: null,
+    hasProcessEmissions: null,
     usesElectricity: null,
     usesHeating: null,
+    usesCooling: null,
     buysMaterials: null,
     hasWaste: null,
     hasFreight: null,
@@ -198,9 +202,16 @@ const GeneralInfo = () => {
         {
           key: 'hasFugitiveEmissions',
           icon: Factory,
-          text: 'Utilisez-vous des fluides réfrigérants ou des gaz fluorés ?',
-          hint: 'Climatisation, réfrigération, procédés chimiques...',
+          text: 'Avez-vous des fuites potentielles de fluides réfrigérants ?',
+          hint: 'Climatisation, réfrigération de machines...',
           categories: ['emissions_fugitives', 'procedes_industriels']
+        },
+        {
+          key: 'hasProcessEmisssions',
+          icon: Wind,
+          text: 'Avez-vous des fuites potentielles de gaz à effet de serre dans vos procédés ?',
+          hint: 'Procédés chimiques, solvants, gaz de procédés industriels...',
+          categories: ['procedes_industriels']
         }
       ]
     },
@@ -219,9 +230,16 @@ const GeneralInfo = () => {
         {
           key: 'usesHeating',
           icon: Flame,
-          text: 'Achetez-vous de la chaleur, vapeur ou froid ?',
+          text: 'Achetez-vous de la chaleur ou de la vapeur via un réseau ?',
           hint: 'Chauffage urbain, vapeur industrielle...',
           categories: ['chaleur_vapeur_froid']
+        },
+        {
+          key: 'usesCooling',
+          icon: Snowflake,
+          text: 'Achetez-vous du refroidissement via un réseau de froid ?',
+          hint: 'Refroidissement urbain, froid industriel...',
+          categories: ['refroidissement']
         }
       ]
     },
@@ -340,7 +358,7 @@ const GeneralInfo = () => {
     });
     
     // Always include energy upstream (3.3) if any scope 1 or 2 categories are selected
-    const scope1or2 = ['combustion_mobile', 'combustion_fixe', 'emissions_fugitives', 'procedes_industriels', 'electricite', 'chaleur_vapeur_froid'];
+    const scope1or2 = ['combustion_mobile', 'combustion_fixe', 'emissions_fugitives', 'procedes_industriels', 'electricite', 'chaleur_vapeur', 'refroidissement'];
     if (scope1or2.some(cat => selected.has(cat))) {
       selected.add('activites_combustibles_energie');
     }
@@ -370,8 +388,10 @@ const GeneralInfo = () => {
       hasVehicles: null,
       hasCombustion: null,
       hasFugitiveEmissions: null,
+      hasProcessEmissions: null,
       usesElectricity: null,
       usesHeating: null,
+      usesCooling: null,
       buysMaterials: null,
       hasWaste: null,
       hasFreight: null,
@@ -773,7 +793,7 @@ const GeneralInfo = () => {
 
               {/* Scope 3 Amont */}
               <div className="mb-6">
-                <h3 className="text-purple-500 font-semibold mb-3">{t('scope.scope3Amont')} - {t('scope.scope3AmontTitle')}</h3>
+                <h3 className="text-purple-500 font-semibold mb-3">{t('scope.scope3Amont')} </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   {scopeCategories.scope3_amont.map(cat => (
                     <label
@@ -800,7 +820,7 @@ const GeneralInfo = () => {
 
               {/* Scope 3 Aval */}
               <div>
-                <h3 className="text-indigo-500 font-semibold mb-3">{t('scope.scope3Aval')} - {t('scope.scope3AvalTitle')}</h3>
+                <h3 className="text-indigo-500 font-semibold mb-3">{t('scope.scope3Aval')} </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   {/* Checkbox groupée "Produits vendus" pour les 3 catégories 3.10, 3.11, 3.12 */}
                   <label
