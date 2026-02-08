@@ -428,6 +428,8 @@ const GuidedEntryModal = ({
   const scopeColors = {
     'scope1': { bg: 'bg-blue-500', text: 'text-blue-500', label: 'Scope 1' },
     'scope2': { bg: 'bg-cyan-500', text: 'text-cyan-500', label: 'Scope 2' },
+    'scope3_3': { bg: 'bg-amber-500', text: 'text-amber-500', label: 'Scope 3.3' },
+    'scope3': { bg: 'bg-purple-500', text: 'text-purple-500', label: 'Scope 3' },
     'scope3_amont': { bg: 'bg-purple-500', text: 'text-purple-500', label: 'Scope 3 Amont' },
     'scope3_aval': { bg: 'bg-indigo-500', text: 'text-indigo-500', label: 'Scope 3 Aval' }
   };
