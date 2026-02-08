@@ -201,6 +201,7 @@ const FiscalYears = () => {
   const openDeleteModal = async (fy) => {
     setSelectedFY(fy);
     setDeleteConfirmText('');
+    setDeleteError('');
     setLoading(true);
     
     try {
