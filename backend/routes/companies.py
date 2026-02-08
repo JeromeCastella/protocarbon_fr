@@ -14,7 +14,7 @@ from models import CompanyCreate, CompanyUpdate
 from services.auth import get_current_user
 from utils import serialize_doc
 
-router = APIRouter(prefix="/company", tags=["Company"])
+router = APIRouter(prefix="/companies", tags=["Company"])
 
 
 @router.post("")
