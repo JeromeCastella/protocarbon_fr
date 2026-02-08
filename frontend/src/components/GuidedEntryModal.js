@@ -50,7 +50,6 @@ const GuidedEntryModal = ({
     if (isOpen && category) {
       resetState();
       fetchSubcategories();
-      fetchUnitConversions();
       
       // Si édition, pré-remplir
       if (editingActivity) {
