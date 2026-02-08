@@ -130,7 +130,7 @@ const EmissionFactors = () => {
         ].join(',');
       });
       
-      const csvContent = [headers.join(','), ...rows].join('\n');
+      const csvContent = [csvHeaders.join(','), ...rows].join('\n');
       
       // Create blob and download
       const blob = new Blob(['\ufeff' + csvContent], { type: 'text/csv;charset=utf-8' });
