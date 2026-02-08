@@ -14,7 +14,7 @@ from config import (
     activities_collection,
     companies_collection
 )
-from models import FiscalYearCreate, FiscalYearDuplicate
+from models import FiscalYearCreate, FiscalYearDuplicate, FiscalYearContextUpdate
 from services.auth import get_current_user
 from utils import serialize_doc
 
