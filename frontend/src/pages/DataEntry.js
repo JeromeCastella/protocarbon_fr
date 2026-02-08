@@ -737,7 +737,7 @@ const DataEntry = () => {
                             </td>
                             <td className="py-4 px-4 text-right">
                               <span className={`font-bold ${scopeColor}`}>
-                                {formatEmissions(activity.emissions).value} {formatEmissions(activity.emissions).unit}
+                                {formatEmissionsForTable(activity.emissions, tableTotalEmissions)}
                               </span>
                             </td>
                             <td className="py-4 px-4 text-right">
