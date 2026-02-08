@@ -160,12 +160,15 @@ async def get_dashboard_summary(
     category_emissions = {}
     
     for activity in activities:
-        scope = activity.get("scope", "scope1")
-        emissions = activity.get("emissions", 0) or activity.get("calculated_emissions", 0) or 0
+        raw_scope = activity.get("scope", "scope1")
         category = activity.get("category_id", "other")
+        emissions = activity.get("emissions", 0) or activity.get("calculated_emissions", 0) or 0
         
-        if scope in scope_emissions:
-            scope_emissions[scope] += emissions
+        # Normaliser le scope pour le reporting (scope3_3 → scope3_amont, etc.)
+        normalized_scope = normalize_scope_for_reporting(raw_scope, category)
+        
+        if normalized_scope in scope_emissions:
+            scope_emissions[normalized_scope] += emissions
         
         if category not in category_emissions:
             category_emissions[category] = 0
