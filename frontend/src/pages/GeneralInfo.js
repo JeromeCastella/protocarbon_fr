@@ -120,7 +120,7 @@ const GeneralInfo = () => {
     setSaving(true);
     try {
       if (company.id) {
-        await axios.put(`${API_URL}/api/companies/${company.id}`, company);
+        await axios.put(`${API_URL}/api/companies`, company);
       } else {
         const response = await axios.post(`${API_URL}/api/companies`, company);
         setCompany(response.data);
