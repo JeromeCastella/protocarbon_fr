@@ -83,6 +83,28 @@ const formatEmissions = (valueInKg) => {
   }
 };
 
+/**
+ * Formatage des émissions pour la TableView avec uniformisation des unités
+ * L'unité est déterminée par le total (si >= 10t, tout en tonnes)
+ * Affiche toujours 2 décimales pour la cohérence
+ */
+const formatEmissionsForTable = (valueInKg, totalEmissionsKg) => {
+  if (valueInKg === null || valueInKg === undefined) {
+    return '0.00 kgCO₂e';
+  }
+  
+  // Décider de l'unité basé sur le total (même seuil que formatEmissions: 10 tonnes)
+  const totalTonnes = (totalEmissionsKg || 0) / 1000;
+  const useTonnes = totalTonnes >= 10;
+  
+  if (useTonnes) {
+    const tonnes = valueInKg / 1000;
+    return `${tonnes.toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} tCO₂e`;
+  } else {
+    return `${valueInKg.toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} kgCO₂e`;
+  }
+};
+
 const iconMap = {
   truck: Truck, flame: Flame, factory: Factory, wind: Wind, zap: Zap,
   thermometer: Thermometer, snowflake: Snowflake, 'shopping-cart': ShoppingCart,
