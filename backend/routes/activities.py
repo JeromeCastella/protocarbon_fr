@@ -133,13 +133,12 @@ async def create_activity_for_impact(
         
         # Contexte de saisie original
         "entry_scope": activity.entry_scope or activity.scope,
-        "entry_category": activity.entry_category or activity.category_id,
+        "entry_category": activity.entry_scope or activity.category_id,
         
         # Données de l'impact (scope normalisé)
         "scope": normalize_scope(impact.get("scope", activity.scope)),
-        "category_id": impact.get("category", activity.category_id),
+        "category_id": activity.category_id,  # Utilise la catégorie de saisie
         "subcategory_id": activity.subcategory_id,
-        "impact_type": impact.get("type", "direct"),
         "impact_value": impact.get("value", 0),
         "impact_unit": impact.get("unit", "kgCO2e"),
         
