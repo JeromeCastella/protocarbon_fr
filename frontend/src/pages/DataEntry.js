@@ -6,8 +6,6 @@ import axios from 'axios';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
 
-  Upload, 
-  Download,
   Truck,
   Flame,
   Factory,
@@ -126,7 +124,6 @@ const DataEntry = () => {
   const [showModal, setShowModal] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [excludedCategories, setExcludedCategories] = useState([]);
-  const fileInputRef = useRef(null);
 
   // Table view state
   const [showTableView, setShowTableView] = useState(false);
@@ -379,35 +376,6 @@ const DataEntry = () => {
     scope3_aval: { name: 'Scope 3 Aval', subtitle: 'Aval', color: 'indigo' },
   };
 
-  const handleFileUpload = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    const formData = new FormData();
-    formData.append('file', file);
-    try {
-      await axios.post(`${API_URL}/api/import/csv`, formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
-      });
-      fetchData();
-    } catch (error) {
-      console.error('Failed to import CSV:', error);
-    }
-  };
-
-  const handleExport = async () => {
-    try {
-      const response = await axios.get(`${API_URL}/api/export/csv`);
-      const blob = new Blob([response.data.csv_content], { type: 'text/csv' });
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = response.data.filename;
-      a.click();
-    } catch (error) {
-      console.error('Failed to export:', error);
-    }
-  };
-
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -584,41 +552,6 @@ const DataEntry = () => {
                 </div>
               );
             })}
-          </div>
-        </motion.div>
-
-        {/* Quick Actions */}
-        <motion.div
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.2 }}
-          className={`p-6 rounded-2xl ${isDark ? 'bg-slate-800' : 'bg-white shadow-lg'}`}
-        >
-          <h3 className={`font-semibold mb-4 ${isDark ? 'text-white' : 'text-gray-900'}`}>
-            {t('dataEntry.quickActions')}
-          </h3>
-          <div className="space-y-3">
-            <input type="file" ref={fileInputRef} onChange={handleFileUpload} accept=".csv" className="hidden" />
-            <button
-              onClick={() => fileInputRef.current?.click()}
-              data-testid="import-csv-btn"
-              className={`w-full flex items-center gap-3 p-3 rounded-xl border transition-all ${
-                isDark ? 'border-slate-700 hover:bg-slate-700' : 'border-gray-200 hover:bg-gray-50'
-              }`}
-            >
-              <Upload className="w-5 h-5 text-blue-500" />
-              <span className={isDark ? 'text-white' : 'text-gray-900'}>{t('dataEntry.importCSV')}</span>
-            </button>
-            <button
-              onClick={handleExport}
-              data-testid="export-data-btn"
-              className={`w-full flex items-center gap-3 p-3 rounded-xl border transition-all ${
-                isDark ? 'border-slate-700 hover:bg-slate-700' : 'border-gray-200 hover:bg-gray-50'
-              }`}
-            >
-              <Download className="w-5 h-5 text-green-500" />
-              <span className={isDark ? 'text-white' : 'text-gray-900'}>{t('dataEntry.exportData')}</span>
-            </button>
           </div>
         </motion.div>
       </div>
