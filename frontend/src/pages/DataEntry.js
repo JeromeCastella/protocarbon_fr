@@ -387,7 +387,7 @@ const DataEntry = () => {
             const count = category.code === 'produits_vendus' 
               ? getProductSalesCount() 
               : (categoryStats[category.code]?.count || 0);
-f            
+            
             return (
               <motion.div
                 key={category.code}
