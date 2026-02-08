@@ -212,19 +212,100 @@ async def get_activities(
 
 @router.post("")
 async def create_activity(activity: ActivityCreate, current_user: dict = Depends(get_current_user)):
-    """Create a new activity"""
+    """
+    Crée une ou plusieurs activités selon les impacts du facteur.
+    
+    Pour les facteurs multi-impacts, applique les règles métier GHG Protocol
+    et crée une activité par impact filtré, liées par un group_id commun.
+    """
+    
+    # Récupérer le facteur d'émission
+    factor = None
+    if activity.emission_factor_id:
+        factor = emission_factors_collection.find_one({"_id": ObjectId(activity.emission_factor_id)})
+    
+    # Si pas de facteur ou facteur manuel, créer une activité simple
+    if not factor:
+        return await create_single_activity(activity, current_user)
+    
+    # Récupérer les impacts du facteur
+    all_impacts = factor.get("impacts", [])
+    
+    # Fallback si pas d'impacts structurés (ancien format de facteur)
+    if not all_impacts:
+        all_impacts = [{
+            "scope": factor.get("scope", activity.scope),
+            "category": factor.get("category", activity.category_id),
+            "value": factor.get("value", 0),
+            "unit": factor.get("unit", "kgCO2e"),
+            "type": "direct"
+        }]
+    
+    # Déterminer le scope et la catégorie de saisie
+    entry_scope = activity.entry_scope or activity.scope
+    entry_category = activity.entry_category or activity.category_id
+    
+    # Appliquer les règles métier pour filtrer les impacts
+    filtered_impacts = apply_business_rules(all_impacts, entry_scope, entry_category)
+    
+    # Si aucun impact applicable après filtrage
+    if not filtered_impacts:
+        raise HTTPException(
+            status_code=400, 
+            detail="Aucun impact applicable pour ce facteur dans ce contexte de saisie. "
+                   "Vérifiez la compatibilité entre le scope de saisie et le facteur sélectionné."
+        )
+    
+    # Générer un group_id unique
+    group_id = f"grp_{uuid.uuid4().hex[:12]}"
+    group_size = len(filtered_impacts)
+    
+    # Créer une activité par impact filtré
+    created_activities = []
+    for index, impact in enumerate(filtered_impacts):
+        activity_doc = await create_activity_for_impact(
+            activity=activity,
+            current_user=current_user,
+            factor=factor,
+            impact=impact,
+            group_id=group_id,
+            group_index=index,
+            group_size=group_size
+        )
+        created_activities.append(activity_doc)
+    
+    # Retourner la réponse
+    # Si une seule activité, retourner le format simple pour compatibilité
+    if len(created_activities) == 1:
+        return created_activities[0]
+    
+    # Sinon, retourner le format groupe
+    return {
+        "group_id": group_id,
+        "activities": created_activities,
+        "count": len(created_activities)
+    }
+
+
+async def create_single_activity(activity: ActivityCreate, current_user: dict) -> dict:
+    """Crée une activité simple (sans facteur ou facteur manuel)"""
     activity_doc = activity.model_dump()
     activity_doc["tenant_id"] = current_user["id"]
     activity_doc["company_id"] = current_user.get("company_id")
     activity_doc["created_at"] = datetime.now(timezone.utc).isoformat()
     
-    # Set date based on fiscal year if provided, otherwise use today
+    # Champs de groupement (activité simple = pas de groupe)
+    activity_doc["group_id"] = None
+    activity_doc["group_index"] = 0
+    activity_doc["group_size"] = 1
+    activity_doc["entry_scope"] = activity.entry_scope or activity.scope
+    activity_doc["entry_category"] = activity.entry_category or activity.category_id
+    
+    # Set date based on fiscal year if provided
     if not activity_doc.get("date"):
         if activity_doc.get("fiscal_year_id"):
-            # Get the fiscal year to determine an appropriate date
             fy = fiscal_years_collection.find_one({"_id": ObjectId(activity_doc["fiscal_year_id"])})
             if fy:
-                # Use the middle of the fiscal year as default date
                 start = fy.get("start_date", "")[:10]
                 end = fy.get("end_date", "")[:10]
                 if start and end:
@@ -240,38 +321,14 @@ async def create_activity(activity: ActivityCreate, current_user: dict = Depends
         else:
             activity_doc["date"] = datetime.now(timezone.utc).strftime("%Y-%m-%d")
     
-    # Calculate emissions if emission factor is provided
+    # Calculate emissions for manual factor
     emissions = 0
-    factor_snapshot = None
-    
-    if activity.emission_factor_id:
-        factor = emission_factors_collection.find_one({"_id": ObjectId(activity.emission_factor_id)})
-        if factor:
-            # Create snapshot for immutability
-            factor_snapshot = create_factor_snapshot(factor)
-            
-            # Calculate emissions based on factor type
-            quantity = activity.quantity
-            
-            # Handle unit conversion
-            default_unit = factor.get("default_unit", activity.unit)
-            if activity.unit != default_unit:
-                unit_conversions = factor.get("unit_conversions", {})
-                conversion_key = f"{activity.unit}_to_{default_unit}"
-                if conversion_key in unit_conversions:
-                    quantity = quantity * unit_conversions[conversion_key]
-            
-            # Sum all impacts
-            impacts = factor.get("impacts", [])
-            for impact in impacts:
-                emissions += quantity * impact.get("value", 0)
-    
-    elif activity.manual_emission_factor:
+    if activity.manual_emission_factor:
         emissions = activity.quantity * activity.manual_emission_factor
     
     activity_doc["emissions"] = emissions
     activity_doc["calculated_emissions"] = emissions
-    activity_doc["factor_snapshot"] = factor_snapshot
+    activity_doc["factor_snapshot"] = None
     activity_doc["original_quantity"] = activity.quantity
     activity_doc["original_unit"] = activity.unit
     
