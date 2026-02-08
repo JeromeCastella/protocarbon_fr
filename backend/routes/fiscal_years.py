@@ -334,7 +334,10 @@ async def get_fiscal_year_activities(
 
 @router.delete("/{fiscal_year_id}")
 async def delete_fiscal_year(fiscal_year_id: str, current_user: dict = Depends(get_current_user)):
-    """Delete a fiscal year (only if draft and no activities)"""
+    """
+    Delete a fiscal year and all associated activities.
+    This is a destructive operation - all data will be permanently deleted.
+    """
     fy = fiscal_years_collection.find_one({
         "_id": ObjectId(fiscal_year_id),
         "tenant_id": current_user["id"]
@@ -343,24 +346,26 @@ async def delete_fiscal_year(fiscal_year_id: str, current_user: dict = Depends(g
     if not fy:
         raise HTTPException(status_code=404, detail="Fiscal year not found")
     
-    if fy.get("status") != "draft":
-        raise HTTPException(status_code=400, detail="Only draft fiscal years can be deleted")
-    
-    # Check for activities
-    fy_start = fy.get("start_date", "")
-    fy_end = fy.get("end_date", "")
-    
+    # Count activities to be deleted (for logging/audit)
     activities_count = activities_collection.count_documents({
         "tenant_id": current_user["id"],
-        "date": {"$gte": fy_start, "$lte": fy_end}
+        "fiscal_year_id": fiscal_year_id
     })
     
+    # Delete all activities associated with this fiscal year
     if activities_count > 0:
-        raise HTTPException(
-            status_code=400, 
-            detail=f"Cannot delete fiscal year with {activities_count} activities"
-        )
+        delete_result = activities_collection.delete_many({
+            "tenant_id": current_user["id"],
+            "fiscal_year_id": fiscal_year_id
+        })
+        deleted_activities = delete_result.deleted_count
+    else:
+        deleted_activities = 0
     
+    # Delete the fiscal year itself
     fiscal_years_collection.delete_one({"_id": ObjectId(fiscal_year_id)})
     
-    return {"message": "Fiscal year deleted"}
+    return {
+        "message": "Fiscal year deleted",
+        "deleted_activities": deleted_activities
+    }
