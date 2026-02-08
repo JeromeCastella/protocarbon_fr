@@ -534,8 +534,6 @@ async def update_activity_group(
         return await create_activity(new_activity, current_user)
     
     # Si changement de quantité → mise à jour proportionnelle
-    update_fields = {"updated_at": datetime.now(timezone.utc).isoformat()}
-    
     if update.quantity and update.quantity != main_activity["quantity"]:
         ratio = update.quantity / main_activity["quantity"]
         
