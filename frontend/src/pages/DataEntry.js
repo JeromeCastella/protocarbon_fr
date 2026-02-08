@@ -826,12 +826,12 @@ const DataEntry = () => {
                                     if (activity.sale_id && activity.product_id) {
                                       handleEditActivityInModal(activity);
                                     } else {
-                                      handleDeleteActivity(activity.id);
+                                      handleDeleteActivity(activity);
                                     }
                                   }}
                                   data-testid={`delete-activity-${activity.id}`}
                                   className={`p-2 rounded-lg transition-colors hover:bg-red-500/10`}
-                                  title={activity.sale_id ? "Gérer la vente" : "Supprimer"}
+                                  title={activity.sale_id ? "Gérer la vente" : (isGrouped ? `Supprimer le groupe (${activity.group_size} impacts)` : "Supprimer")}
                                 >
                                   <Trash2 className="w-4 h-4 text-red-500" />
                                 </button>
