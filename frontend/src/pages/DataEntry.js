@@ -747,24 +747,43 @@ const DataEntry = () => {
                           activityScope === 'scope2' ? 'bg-cyan-500' :
                           activityScope?.includes('amont') ? 'bg-purple-500' : 'bg-indigo-500';
                         
+                        // Indicateurs de groupe multi-impacts
+                        const isGrouped = activity.group_size > 1;
+                        const isSecondary = activity.group_index > 0;
+                        
                         return (
                           <motion.tr
                             key={activity.id}
                             initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: index * 0.02 }}
-                            className={`border-b ${isDark ? 'border-slate-700/50 hover:bg-slate-700/50' : 'border-gray-100 hover:bg-gray-50'} transition-colors`}
+                            className={`border-b ${isDark ? 'border-slate-700/50 hover:bg-slate-700/50' : 'border-gray-100 hover:bg-gray-50'} transition-colors ${isSecondary ? (isDark ? 'bg-slate-800/30' : 'bg-slate-50/50') : ''}`}
                           >
                             <td className="py-4 px-4">
-                              <div>
-                                <p className={`font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                                  {activity.name || activity.emission_factor_name || '—'}
-                                </p>
-                                {activity.comments && (
-                                  <p className={`text-xs mt-0.5 ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>
-                                    {activity.comments}
-                                  </p>
+                              <div className="flex items-center gap-2">
+                                {/* Indicateur de groupe multi-impacts */}
+                                {isGrouped && (
+                                  <span 
+                                    className={`text-xs px-1.5 py-0.5 rounded ${
+                                      isSecondary 
+                                        ? (isDark ? 'bg-slate-600 text-slate-400' : 'bg-slate-200 text-slate-500')
+                                        : (isDark ? 'bg-blue-900/30 text-blue-400' : 'bg-blue-100 text-blue-600')
+                                    }`}
+                                    title={`Groupe de ${activity.group_size} impacts`}
+                                  >
+                                    {isSecondary ? '↳' : `🔗 ${activity.group_size}`}
+                                  </span>
                                 )}
+                                <div>
+                                  <p className={`font-medium ${isDark ? 'text-white' : 'text-gray-900'} ${isSecondary ? 'opacity-70' : ''}`}>
+                                    {activity.name || activity.emission_factor_name || '—'}
+                                  </p>
+                                  {activity.comments && (
+                                    <p className={`text-xs mt-0.5 ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>
+                                      {activity.comments}
+                                    </p>
+                                  )}
+                                </div>
                               </div>
                             </td>
                             {tableViewScope === null && (
