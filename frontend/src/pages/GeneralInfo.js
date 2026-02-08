@@ -336,21 +336,6 @@ const GeneralInfo = () => {
     setShowWizard(true);
   };
 
-  // Calculate fiscal year end date based on start month
-  const getFiscalYearEndMonth = () => {
-    const startMonth = company.fiscal_year_start_month || 1;
-    
-    // End month is the month before start month
-    let endMonth = startMonth - 1;
-    if (endMonth < 1) {
-      endMonth = 12;
-    }
-    
-    return endMonth;
-  };
-
-  const endMonth = getFiscalYearEndMonth();
-  
   // Check if entity is private company (shows revenue and consolidation fields)
   const isPrivateCompany = company.entity_type === 'private_company';
 
