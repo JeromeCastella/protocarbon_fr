@@ -135,8 +135,8 @@ async def create_activity_for_impact(
         "entry_scope": activity.entry_scope or activity.scope,
         "entry_category": activity.entry_category or activity.category_id,
         
-        # Données de l'impact
-        "scope": impact.get("scope", activity.scope),
+        # Données de l'impact (scope normalisé)
+        "scope": normalize_scope(impact.get("scope", activity.scope)),
         "category_id": impact.get("category", activity.category_id),
         "subcategory_id": activity.subcategory_id,
         "impact_type": impact.get("type", "direct"),
