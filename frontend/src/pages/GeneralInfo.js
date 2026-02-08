@@ -434,17 +434,30 @@ const GeneralInfo = () => {
     return selected;
   };
 
-  const applyWizardResults = () => {
+  const applyWizardResults = async () => {
     const selectedCategories = getSelectedCategoriesFromWizard();
     const allCategoryCodes = categories.map(c => c.code);
     
     // Categories NOT selected by wizard should be excluded
     const newExcluded = allCategoryCodes.filter(code => !selectedCategories.has(code));
     
-    setCompany(prev => ({
+    // Update fiscal year context (not company)
+    setFiscalYearContext(prev => ({
       ...prev,
       excluded_categories: newExcluded
     }));
+    
+    // Save to backend
+    if (selectedFiscalYear?.id && !contextReadonly) {
+      try {
+        await axios.put(`${API_URL}/api/fiscal-years/${selectedFiscalYear.id}/context`, {
+          ...fiscalYearContext,
+          excluded_categories: newExcluded
+        });
+      } catch (error) {
+        console.error('Failed to save wizard results:', error);
+      }
+    }
     
     setShowWizard(false);
     setWizardStep(0);
