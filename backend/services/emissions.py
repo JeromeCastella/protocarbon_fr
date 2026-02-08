@@ -69,9 +69,7 @@ def calculate_emissions_for_activity(
         
         results["emissions_by_impact"].append({
             "scope": impact_scope,
-            "category": impact.get("category", ""),
-            "emissions": impact_emissions,
-            "type": impact.get("type", "direct")
+            "emissions": impact_emissions
         })
     
     return results
