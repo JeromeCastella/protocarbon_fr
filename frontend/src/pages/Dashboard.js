@@ -67,12 +67,12 @@ const formatEmissions = (valueInKg) => {
   
   if (tonnes >= 10) {
     return {
-      value: tonnes.toLocaleString('fr-FR', { maximumFractionDigits: 2 }),
+      value: tonnes.toLocaleString('fr-FR', { maximumFractionDigits: 0 }),
       unit: 'tCO₂e'
     };
   } else {
     return {
-      value: valueInKg.toLocaleString('fr-FR', { maximumFractionDigits: 2 }),
+      value: valueInKg.toLocaleString('fr-FR', { maximumFractionDigits: 0 }),
       unit: 'kgCO₂e'
     };
   }
