@@ -106,9 +106,17 @@ const GeneralInfo = () => {
   // Codes des catégories "Produits vendus" groupées (3.10, 3.11, 3.12)
   const PRODUCT_CATEGORIES = ['transformation_produits', 'utilisation_produits', 'fin_vie_produits'];
 
+  // Load company data on mount
   useEffect(() => {
     fetchData();
   }, []);
+
+  // Load fiscal year context when selected fiscal year changes
+  useEffect(() => {
+    if (selectedFiscalYear?.id) {
+      fetchFiscalYearContext(selectedFiscalYear.id);
+    }
+  }, [selectedFiscalYear?.id]);
 
   const fetchData = async () => {
     try {
@@ -118,9 +126,13 @@ const GeneralInfo = () => {
       ]);
       if (companyRes.data) {
         setCompany({
-          ...companyRes.data,
+          name: companyRes.data.name || '',
+          location: companyRes.data.location || '',
+          sector: companyRes.data.sector || '',
           entity_type: companyRes.data.entity_type || 'private_company',
-          fiscal_year_start_month: companyRes.data.fiscal_year_start_month || 1
+          consolidation_approach: companyRes.data.consolidation_approach || 'operational_control',
+          fiscal_year_start_month: companyRes.data.fiscal_year_start_month || 1,
+          id: companyRes.data.id
         });
       }
       setCategories(categoriesRes.data || []);
@@ -128,6 +140,25 @@ const GeneralInfo = () => {
       console.error('Failed to fetch data:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchFiscalYearContext = async (fiscalYearId) => {
+    setContextLoading(true);
+    try {
+      const response = await axios.get(`${API_URL}/api/fiscal-years/${fiscalYearId}/context`);
+      const ctx = response.data.context || {};
+      setFiscalYearContext({
+        employees: ctx.employees || 0,
+        revenue: ctx.revenue || 0,
+        surface_area: ctx.surface_area || 0,
+        excluded_categories: ctx.excluded_categories || []
+      });
+      setContextReadonly(response.data.is_readonly || false);
+    } catch (error) {
+      console.error('Failed to fetch fiscal year context:', error);
+    } finally {
+      setContextLoading(false);
     }
   };
 
@@ -146,6 +177,21 @@ const GeneralInfo = () => {
       console.error('Failed to save:', error);
     } finally {
       setSaving(false);
+    }
+  };
+
+  const handleSaveContext = async () => {
+    if (!selectedFiscalYear?.id || contextReadonly) return;
+    
+    setSavingContext(true);
+    try {
+      await axios.put(`${API_URL}/api/fiscal-years/${selectedFiscalYear.id}/context`, fiscalYearContext);
+      setSavedContext(true);
+      setTimeout(() => setSavedContext(false), 2000);
+    } catch (error) {
+      console.error('Failed to save fiscal year context:', error);
+    } finally {
+      setSavingContext(false);
     }
   };
 
