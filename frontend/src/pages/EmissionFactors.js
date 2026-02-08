@@ -89,13 +89,17 @@ const EmissionFactors = () => {
         'default_unit',
         'impacts_count',
         'impact_1_scope',
-        'impact_1_category',
         'impact_1_value',
         'impact_1_unit',
         'impact_2_scope',
-        'impact_2_category',
         'impact_2_value',
         'impact_2_unit',
+        'impact_3_scope',
+        'impact_3_value',
+        'impact_3_unit',
+        'impact_4_scope',
+        'impact_4_value',
+        'impact_4_unit',
         'source',
         'region',
         'year',
@@ -106,6 +110,8 @@ const EmissionFactors = () => {
         const impacts = f.impacts || [];
         const impact1 = impacts[0] || {};
         const impact2 = impacts[1] || {};
+        const impact3 = impacts[2] || {};
+        const impact4 = impacts[3] || {};
         
         return [
           f.id || '',
@@ -116,13 +122,17 @@ const EmissionFactors = () => {
           f.default_unit || '',
           impacts.length,
           impact1.scope || '',
-          impact1.category || '',
           impact1.value || '',
           impact1.unit || '',
           impact2.scope || '',
-          impact2.category || '',
           impact2.value || '',
           impact2.unit || '',
+          impact3.scope || '',
+          impact3.value || '',
+          impact3.unit || '',
+          impact4.scope || '',
+          impact4.value || '',
+          impact4.unit || '',
           `"${(f.source || '').replace(/"/g, '""')}"`,
           f.region || '',
           f.year || '',
