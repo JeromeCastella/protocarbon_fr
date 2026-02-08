@@ -25,6 +25,15 @@ Application de calcul d'empreinte carbone selon le protocole GHG avec interface 
 
 ## What's Been Implemented
 
+### 2026-02-08 - Bug fix: Matching strict unités/facteurs d'émission ✅
+- **Problème** : Le modal de saisie guidée proposait des facteurs incompatibles avec l'unité choisie (ex: facteurs en L quand l'utilisateur choisissait km)
+- **Cause** : La logique de conversion permettait des "sauts" entre dimensions (km → L via conversions globales)
+- **Solution** : Matching strict - seuls les facteurs dont `input_units` contient l'unité sélectionnée sont affichés
+- **Fichiers créés/modifiés** :
+  - `frontend/src/utils/units.js` : Nouveau fichier utilitaire avec `normalizeUnit`, `filterFactorsByUnitStrict`, `getAvailableUnitsFromFactors`
+  - `frontend/src/components/GuidedEntryModal.js` : Simplification de `extractAvailableUnits` et `handleUnitSelect`
+- **Code supprimé** : Appel à `/api/unit-conversions`, état `unitConversions`, fonction `fetchUnitConversions`
+
 ### 2026-02-08 - Données contextuelles par exercice fiscal ✅ (MAJOR)
 - **Nouveau schéma MongoDB** : Ajout d'un objet `context` dans `fiscal_years` contenant :
   - `employees` (int)
