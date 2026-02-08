@@ -22,6 +22,44 @@ from utils import serialize_doc
 router = APIRouter(prefix="/dashboard", tags=["Dashboard"])
 
 
+def get_fiscal_year_context_with_fallback(fiscal_year_id: str, tenant_id: str):
+    """
+    Helper function to get context from fiscal year with fallback to company.
+    Returns: dict with employees, revenue, surface_area, excluded_categories
+    """
+    company = companies_collection.find_one({"tenant_id": tenant_id})
+    
+    if fiscal_year_id:
+        try:
+            fy = fiscal_years_collection.find_one({"_id": ObjectId(fiscal_year_id)})
+            if fy:
+                fy_context = fy.get("context", {})
+                return {
+                    "employees": fy_context.get("employees") if fy_context.get("employees") is not None else (company.get("employees") if company else None),
+                    "revenue": fy_context.get("revenue") if fy_context.get("revenue") is not None else (company.get("revenue") if company else None),
+                    "surface_area": fy_context.get("surface_area") if fy_context.get("surface_area") is not None else (company.get("surface_area") if company else None),
+                    "excluded_categories": fy_context.get("excluded_categories") if fy_context.get("excluded_categories") is not None else (company.get("excluded_categories", []) if company else [])
+                }
+        except:
+            pass
+    
+    # Fallback to company only
+    if company:
+        return {
+            "employees": company.get("employees"),
+            "revenue": company.get("revenue"),
+            "surface_area": company.get("surface_area"),
+            "excluded_categories": company.get("excluded_categories", [])
+        }
+    
+    return {
+        "employees": None,
+        "revenue": None,
+        "surface_area": None,
+        "excluded_categories": []
+    }
+
+
 def get_default_categories():
     """Get default GHG categories structure"""
     return [
