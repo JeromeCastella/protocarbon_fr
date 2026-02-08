@@ -621,44 +621,73 @@ const GeneralInfo = () => {
               {t('scope.perimeter')}
             </h2>
           </div>
-          <button
-            onClick={openWizard}
-            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-purple-500 text-white hover:bg-purple-600 transition-all shadow-lg shadow-purple-500/30"
-          >
-            <Wand2 className="w-4 h-4" />
-            Configuration guidée
-          </button>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={openWizard}
+              data-testid="wizard-config-btn"
+              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-purple-500 text-white hover:bg-purple-600 transition-all shadow-lg shadow-purple-500/30"
+            >
+              <Wand2 className="w-4 h-4" />
+              Configuration guidée
+            </button>
+            <button
+              onClick={() => setShowManualConfig(!showManualConfig)}
+              data-testid="manual-config-btn"
+              className={`flex items-center gap-2 px-4 py-2 rounded-xl transition-all ${
+                showManualConfig
+                  ? isDark 
+                    ? 'bg-slate-600 text-white hover:bg-slate-500' 
+                    : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                  : isDark 
+                    ? 'bg-slate-700 text-slate-300 hover:bg-slate-600' 
+                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+              }`}
+            >
+              <Pencil className="w-4 h-4" />
+              Configuration manuelle
+              {showManualConfig ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+            </button>
+          </div>
         </div>
         <p className={`mb-6 ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
           {t('scope.perimeterDesc')}
         </p>
 
-        {/* Scope 1 */}
-        <div className="mb-6">
-          <h3 className="text-blue-500 font-semibold mb-3">{t('scope.scope1')} - {t('scope.scope1Title')}</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            {scopeCategories.scope1.map(cat => (
-              <label
-                key={cat.code}
-                className={`flex items-center gap-3 p-4 rounded-xl cursor-pointer transition-all ${
-                  !company.excluded_categories?.includes(cat.code)
-                    ? isDark ? 'bg-blue-500/20 border-2 border-blue-500' : 'bg-blue-50 border-2 border-blue-200'
-                    : isDark ? 'bg-slate-700 border-2 border-slate-600' : 'bg-gray-50 border-2 border-gray-200'
-                }`}
-              >
-                <input
-                  type="checkbox"
-                  checked={!company.excluded_categories?.includes(cat.code)}
-                  onChange={() => toggleCategory(cat.code)}
-                  className="w-5 h-5 rounded text-blue-500 focus:ring-blue-500"
-                />
-                <span className={isDark ? 'text-white' : 'text-gray-900'}>
-                  {language === 'fr' ? cat.name_fr : cat.name_de}
-                </span>
-              </label>
-            ))}
-          </div>
-        </div>
+        {/* Manual Configuration Section */}
+        <AnimatePresence>
+          {showManualConfig && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              {/* Scope 1 */}
+              <div className="mb-6">
+                <h3 className="text-blue-500 font-semibold mb-3">{t('scope.scope1')} - {t('scope.scope1Title')}</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  {scopeCategories.scope1.map(cat => (
+                    <label
+                      key={cat.code}
+                      className={`flex items-center gap-3 p-4 rounded-xl cursor-pointer transition-all ${
+                        !company.excluded_categories?.includes(cat.code)
+                          ? isDark ? 'bg-blue-500/20 border-2 border-blue-500' : 'bg-blue-50 border-2 border-blue-200'
+                          : isDark ? 'bg-slate-700 border-2 border-slate-600' : 'bg-gray-50 border-2 border-gray-200'
+                      }`}
+                    >
+                      <input
+                        type="checkbox"
+                        checked={!company.excluded_categories?.includes(cat.code)}
+                        onChange={() => toggleCategory(cat.code)}
+                        className="w-5 h-5 rounded text-blue-500 focus:ring-blue-500"
+                      />
+                      <span className={isDark ? 'text-white' : 'text-gray-900'}>
+                        {language === 'fr' ? cat.name_fr : cat.name_de}
+                      </span>
+                    </label>
+                  ))}
+                </div>
+              </div>
 
         {/* Scope 2 */}
         <div className="mb-6">
