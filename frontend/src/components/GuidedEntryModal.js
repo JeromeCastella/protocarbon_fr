@@ -376,7 +376,10 @@ const GuidedEntryModal = ({
       quantity: parseFloat(quantity),
       unit: selectedUnit || selectedFactor.default_unit || selectedFactor.input_units?.[0],
       emission_factor_id: selectedFactor.id,
-      comments: comments
+      comments: comments,
+      // Nouveaux champs pour multi-impacts
+      entry_scope: scope,           // Scope de saisie original
+      entry_category: category.code // Catégorie de saisie originale
     });
     
     onClose();
