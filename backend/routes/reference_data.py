@@ -106,6 +106,21 @@ async def get_emission_factors(
     return [serialize_doc(f) for f in factors]
 
 
+@router.get("/emission-factors/{factor_id}")
+async def get_emission_factor_by_id(
+    factor_id: str,
+    current_user: dict = Depends(get_current_user)
+):
+    """Get a specific emission factor by its ID"""
+    try:
+        factor = emission_factors_collection.find_one({"_id": ObjectId(factor_id)})
+        if not factor:
+            raise HTTPException(status_code=404, detail="Emission factor not found")
+        return serialize_doc(factor)
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Invalid factor ID: {str(e)}")
+
+
 @router.get("/emission-factors/search")
 async def search_emission_factors(
     q: Optional[str] = None,
