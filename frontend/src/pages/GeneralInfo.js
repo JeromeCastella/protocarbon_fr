@@ -80,8 +80,12 @@ const GeneralInfo = () => {
     hasFreight: null,
     hasBusinessTravel: null,
     hasCommuting: null,
+    hasLeasedAssetsUpstream: null,
     sellsProducts: null, // Couvre les 3 catégories: transformation, utilisation, fin de vie
-    hasDownstreamTransport: null
+    hasDownstreamTransport: null,
+    hasLeasedAssetsDownstream: null,
+    hasFranchises: null,
+    hasInvestments: null
   });
 
   // Codes des catégories "Produits vendus" groupées (3.10, 3.11, 3.12)
@@ -204,14 +208,14 @@ const GeneralInfo = () => {
           icon: Factory,
           text: 'Avez-vous des fuites potentielles de fluides réfrigérants ?',
           hint: 'Climatisation, réfrigération de machines...',
-          categories: ['emissions_fugitives', 'procedes_industriels']
+          categories: ['emissions_fugitives']
         },
         {
-          key: 'hasProcessEmisssions',
+          key: 'hasProcessEmissions',
           icon: Wind,
           text: 'Avez-vous des fuites potentielles de gaz à effet de serre dans vos procédés ?',
           hint: 'Procédés chimiques, solvants, gaz de procédés industriels...',
-          categories: ['procedes_industriels']
+          categories: ['emissions_procedes']
         }
       ]
     },
@@ -232,7 +236,7 @@ const GeneralInfo = () => {
           icon: Flame,
           text: 'Achetez-vous de la chaleur ou de la vapeur via un réseau ?',
           hint: 'Chauffage urbain, vapeur industrielle...',
-          categories: ['chaleur_vapeur_froid']
+          categories: ['chaleur_vapeur']
         },
         {
           key: 'usesCooling',
@@ -253,21 +257,21 @@ const GeneralInfo = () => {
           icon: Package,
           text: 'Achetez-vous des biens ou services nécessaires à vos opérations susceptibles de générer des émissions significatives sur leur cycle de vie ?',
           hint: 'Matières premières, fournitures, services...',
-          categories: ['achats_biens_services', 'biens_immobilises']
+          categories: ['biens_services_achetes', 'biens_equipement']
         },
         {
           key: 'hasWaste',
           icon: Trash2,
           text: 'Générez-vous des déchets de manière significative ou des déchets spéciaux ?',
           hint: 'Déchets de production, emballages, papiers...',
-          categories: ['dechets']
+          categories: ['dechets_operations']
         },
         {
           key: 'hasFreight',
           icon: Truck,
           text: 'Faites-vous transporter des marchandises (fret) par des prestataires externes ?',
           hint: 'Transport de matières premières, composants...',
-          categories: ['fret_amont']
+          categories: ['transport_distribution_amont']
         },
         {
           key: 'hasBusinessTravel',
@@ -309,7 +313,7 @@ const GeneralInfo = () => {
           icon: Truck,
           text: 'Faites-vous livrer vos produits aux clients ?',
           hint: 'Distribution, livraison finale...',
-          categories: ['fret_aval']
+          categories: ['transport_distribution_aval']
         },
         {
           key: 'hasLeasedAssetsDownstream',
@@ -358,7 +362,7 @@ const GeneralInfo = () => {
     });
     
     // Always include energy upstream (3.3) if any scope 1 or 2 categories are selected
-    const scope1or2 = ['combustion_mobile', 'combustion_fixe', 'emissions_fugitives', 'procedes_industriels', 'electricite', 'chaleur_vapeur', 'refroidissement'];
+    const scope1or2 = ['combustion_mobile', 'combustion_fixe', 'emissions_fugitives', 'emissions_procedes', 'electricite', 'chaleur_vapeur', 'refroidissement'];
     if (scope1or2.some(cat => selected.has(cat))) {
       selected.add('activites_combustibles_energie');
     }
@@ -640,7 +644,6 @@ const GeneralInfo = () => {
                 type="number"
                 value={company.revenue === 0 ? '' : company.revenue}
                 onChange={(e) => setCompany({ ...company, revenue: parseFloat(e.target.value) || 0 })}
-                placeholder="0"
                 data-testid="company-revenue-input"
                 placeholder="ex: 1500"
                 className={`w-full px-4 py-3 rounded-xl border transition-all focus:ring-2 focus:ring-blue-500 ${
