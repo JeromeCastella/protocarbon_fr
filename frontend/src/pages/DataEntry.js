@@ -817,6 +817,7 @@ const DataEntry = () => {
                                   </span>
                                 )}
                               </div>
+                              )}
                             </td>
                           </motion.tr>
                         );
