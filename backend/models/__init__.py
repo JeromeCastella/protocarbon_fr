@@ -197,6 +197,20 @@ class CompanyUpdate(BaseModel):
 
 # ==================== FISCAL YEAR MODELS ====================
 
+class FiscalYearContext(BaseModel):
+    """Données contextuelles évolutives par exercice fiscal"""
+    employees: Optional[int] = None
+    revenue: Optional[float] = None
+    surface_area: Optional[float] = None
+    excluded_categories: Optional[List[str]] = None
+
+class FiscalYearContextUpdate(BaseModel):
+    """Mise à jour des données contextuelles d'un exercice"""
+    employees: Optional[int] = None
+    revenue: Optional[float] = None
+    surface_area: Optional[float] = None
+    excluded_categories: Optional[List[str]] = None
+
 class FiscalYearCreate(BaseModel):
     year: int  # Année de l'exercice (ex: 2026) - génère automatiquement les dates
 
