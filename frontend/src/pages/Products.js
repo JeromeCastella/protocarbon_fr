@@ -99,6 +99,18 @@ const Products = () => {
     );
   }
 
+  // Empty state - no fiscal years
+  if (!fiscalYears || fiscalYears.length === 0) {
+    return (
+      <EmptyFiscalYearState 
+        contextMessage={language === 'fr' 
+          ? 'Créez un exercice fiscal pour pouvoir enregistrer des produits et suivre leurs ventes.'
+          : 'Erstellen Sie ein Geschäftsjahr, um Produkte zu erfassen und deren Verkäufe zu verfolgen.'
+        }
+      />
+    );
+  }
+
   return (
     <div data-testid="products-page" className="space-y-8">
       {/* Header */}
