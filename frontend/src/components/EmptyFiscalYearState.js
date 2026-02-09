@@ -70,7 +70,7 @@ const EmptyFiscalYearState = ({ contextMessage }) => {
 
         {/* CTA Button */}
         <Link
-          to="/general-info"
+          to="/fiscal-years"
           data-testid="create-fiscal-year-btn"
           className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl font-medium hover:from-blue-600 hover:to-blue-700 transition-all shadow-lg shadow-blue-500/30"
         >
@@ -80,9 +80,9 @@ const EmptyFiscalYearState = ({ contextMessage }) => {
 
         {/* Secondary link */}
         <p className={`mt-4 text-sm ${isDark ? 'text-slate-500' : 'text-gray-500'}`}>
-          {language === 'fr' ? 'Rendez-vous dans les ' : 'Gehen Sie zu den '}
-          <Link to="/general-info" className="text-blue-500 hover:underline">
-            {language === 'fr' ? 'informations générales' : 'allgemeinen Informationen'}
+          {language === 'fr' ? 'Rendez-vous dans ' : 'Gehen Sie zu '}
+          <Link to="/fiscal-years" className="text-blue-500 hover:underline">
+            {language === 'fr' ? 'Exercices' : 'Geschäftsjahre'}
           </Link>
         </p>
       </motion.div>
