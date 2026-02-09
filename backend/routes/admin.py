@@ -52,7 +52,7 @@ async def create_user(
     current_user: dict = Depends(require_admin)
 ):
     """Create a new user (admin only)"""
-    from services.auth import get_password_hash
+    from services.auth import hash_password
     
     # Check if email already exists
     existing = users_collection.find_one({"email": user_data.email.lower()})
@@ -70,7 +70,7 @@ async def create_user(
     # Create user document
     user_doc = {
         "email": user_data.email.lower(),
-        "password": get_password_hash(user_data.password),
+        "password": hash_password(user_data.password),
         "name": user_data.name,
         "role": user_data.role,
         "email_verified": True,  # Admin-created users are auto-verified
