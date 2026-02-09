@@ -444,7 +444,7 @@ const GuidedEntryModal = ({
         exit={{ opacity: 0 }}
         className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4"
         style={{ zIndex:60 }}
-        onClick={onClose}
+
       >
         <motion.div
           initial={{ scale: 0.95, opacity: 0 }}
