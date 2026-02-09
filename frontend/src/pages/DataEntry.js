@@ -115,7 +115,7 @@ const iconMap = {
 const DataEntry = () => {
   const { isDark } = useTheme();
   const { t, language } = useLanguage();
-  const { currentFiscalYear } = useFiscalYear();
+  const { currentFiscalYear, fiscalYears } = useFiscalYear();
   const [activeScope, setActiveScope] = useState('scope1');
   const [categories, setCategories] = useState([]);
   const [activities, setActivities] = useState([]);
