@@ -26,6 +26,21 @@ Application de calcul d'empreinte carbone selon le protocole GHG avec interface 
 
 ## What's Been Implemented
 
+### 2026-02-09 - UX: État vide généralisé sur toutes les pages ✅ (P0)
+- **Demande** : Afficher un état vide cohérent sur toutes les pages quand l'utilisateur n'a pas d'exercice fiscal, avec redirection vers la page "Exercices".
+- **Solution implémentée** :
+  - Modification du composant `EmptyFiscalYearState.js` : liens vers `/fiscal-years` au lieu de `/general-info`
+  - Intégration sur les pages `Dashboard.js`, `GeneralInfo.js`, `Products.js`
+  - Ajout de `fiscalYears` au destructuring de `useFiscalYear()` dans chaque page
+  - Messages contextuels personnalisés par page
+- **Fichiers modifiés** :
+  - `/app/frontend/src/components/EmptyFiscalYearState.js` : Liens vers `/fiscal-years`
+  - `/app/frontend/src/pages/Dashboard.js` : Import + condition + message contextuel
+  - `/app/frontend/src/pages/GeneralInfo.js` : Import + condition + message contextuel
+  - `/app/frontend/src/pages/Products.js` : Import + condition + message contextuel
+- **Tests** : Screenshots validés sur les 4 pages (Dashboard, General Info, Products, Data Entry) + redirection vers `/fiscal-years` vérifiée
+- **Résultat** : Expérience utilisateur cohérente pour les nouveaux utilisateurs sans exercice fiscal
+
 ### 2026-02-08 - UI: Affichage des lignes liées dans TableView ✅
 - **Demande** : Les activités indirectes (scope3_3 créées automatiquement) doivent être visibles dans la TableView Scope 3 Amont avec un style distinct.
 - **Spécifications** :
