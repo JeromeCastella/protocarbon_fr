@@ -6,6 +6,7 @@ import { useFiscalYear } from '../context/FiscalYearContext';
 import axios from 'axios';
 import { motion, AnimatePresence } from 'framer-motion';
 import ConfirmDialog from '../components/ConfirmDialog';
+import EmptyFiscalYearState from '../components/EmptyFiscalYearState';
 import { 
   Calendar,
   Truck,
