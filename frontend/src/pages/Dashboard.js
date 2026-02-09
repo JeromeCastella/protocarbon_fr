@@ -345,6 +345,15 @@ const Dashboard = () => {
     );
   }
 
+  // Empty state - no fiscal years
+  if (!fiscalYears || fiscalYears.length === 0) {
+    return (
+      <EmptyFiscalYearState 
+        contextMessage={t('dashboard.emptyMessage') || 'Le tableau de bord affichera vos émissions une fois que vous aurez créé un exercice fiscal et saisi des activités.'}
+      />
+    );
+  }
+
   // Tab definitions
   const tabs = [
     { id: 'suivi', label: 'Suivi de saisie', icon: ClipboardList },
