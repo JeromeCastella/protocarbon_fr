@@ -349,7 +349,7 @@ const Dashboard = () => {
   if (!fiscalYears || fiscalYears.length === 0) {
     return (
       <EmptyFiscalYearState 
-        contextMessage={t('dashboard.emptyMessage') || 'Le tableau de bord affichera vos émissions une fois que vous aurez créé un exercice fiscal et saisi des activités.'}
+        contextMessage="Le tableau de bord affichera vos émissions une fois que vous aurez créé un exercice fiscal et saisi des activités."
       />
     );
   }
