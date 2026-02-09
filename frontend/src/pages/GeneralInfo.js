@@ -532,6 +532,18 @@ const GeneralInfo = () => {
     );
   }
 
+  // Empty state - no fiscal years
+  if (!fiscalYears || fiscalYears.length === 0) {
+    return (
+      <EmptyFiscalYearState 
+        contextMessage={language === 'fr' 
+          ? 'Créez un exercice fiscal pour pouvoir configurer les données spécifiques à chaque période.'
+          : 'Erstellen Sie ein Geschäftsjahr, um periodenspezifische Daten konfigurieren zu können.'
+        }
+      />
+    );
+  }
+
   return (
     <div data-testid="general-info-page" className="space-y-8 max-w-4xl">
       {/* Header */}
