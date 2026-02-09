@@ -34,17 +34,64 @@ router = APIRouter(prefix="/admin", tags=["Admin"])
 
 # ==================== USER MANAGEMENT ====================
 
+from pydantic import BaseModel, EmailStr
+
+class UserCreate(BaseModel):
+    email: EmailStr
+    password: str
+    name: str = ""
+    role: str = "user"
+
+class RoleUpdate(BaseModel):
+    role: str
+
+
+@router.post("/users")
+async def create_user(
+    user_data: UserCreate,
+    current_user: dict = Depends(require_admin)
+):
+    """Create a new user (admin only)"""
+    from services.auth import get_password_hash
+    
+    # Check if email already exists
+    existing = users_collection.find_one({"email": user_data.email.lower()})
+    if existing:
+        raise HTTPException(status_code=400, detail="Un utilisateur avec cet email existe déjà")
+    
+    # Validate role
+    if user_data.role not in ["user", "admin"]:
+        raise HTTPException(status_code=400, detail="Rôle invalide. Utilisez 'user' ou 'admin'")
+    
+    # Validate password
+    if len(user_data.password) < 6:
+        raise HTTPException(status_code=400, detail="Le mot de passe doit contenir au moins 6 caractères")
+    
+    # Create user document
+    user_doc = {
+        "email": user_data.email.lower(),
+        "password": get_password_hash(user_data.password),
+        "name": user_data.name,
+        "role": user_data.role,
+        "email_verified": True,  # Admin-created users are auto-verified
+        "created_at": datetime.now(timezone.utc).isoformat(),
+        "created_by": current_user["id"]
+    }
+    
+    result = users_collection.insert_one(user_doc)
+    user_doc["id"] = str(result.inserted_id)
+    
+    # Remove password from response
+    del user_doc["password"]
+    
+    return serialize_doc(user_doc)
+
+
 @router.get("/users")
 async def list_users(current_user: dict = Depends(require_admin)):
     """List all users (admin only)"""
     users = list(users_collection.find({}, {"password": 0}))
     return [serialize_doc(u) for u in users]
-
-
-from pydantic import BaseModel
-
-class RoleUpdate(BaseModel):
-    role: str
 
 @router.put("/users/{user_id}/role")
 async def update_user_role(
