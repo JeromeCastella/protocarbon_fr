@@ -978,6 +978,19 @@ const DataEntry = () => {
         productId={editingProductId}
         onSaleUpdated={fetchData}
       />
+
+      {/* Dialog de confirmation (remplace window.confirm bloqué en sandbox) */}
+      <ConfirmDialog
+        isOpen={confirmDialog.isOpen}
+        onClose={() => setConfirmDialog({ ...confirmDialog, isOpen: false })}
+        onConfirm={confirmDialog.onConfirm}
+        title={confirmDialog.title}
+        message={confirmDialog.message}
+        confirmText="Supprimer"
+        cancelText="Annuler"
+        isDark={isDark}
+        variant="danger"
+      />
     </div>
   );
 };
