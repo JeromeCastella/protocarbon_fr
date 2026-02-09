@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import { useTheme } from '../context/ThemeContext';
 import { useLanguage } from '../context/LanguageContext';
 import { useFiscalYear } from '../context/FiscalYearContext';
@@ -6,7 +7,7 @@ import axios from 'axios';
 import { motion, AnimatePresence } from 'framer-motion';
 import ConfirmDialog from '../components/ConfirmDialog';
 import { 
-
+  Calendar,
   Truck,
   Flame,
   Factory,
@@ -38,7 +39,9 @@ import {
   ArrowRight,
   Package,
   ShoppingBag,
-  RefreshCw
+  RefreshCw,
+  FileText,
+  PlusCircle
 } from 'lucide-react';
 import ProductSaleModal from '../components/ProductSaleModal';
 import GuidedEntryModal from '../components/GuidedEntryModal';
