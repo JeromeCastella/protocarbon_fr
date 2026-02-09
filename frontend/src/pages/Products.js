@@ -30,7 +30,7 @@ const API_URL = process.env.REACT_APP_BACKEND_URL || '';
 const Products = () => {
   const { isDark } = useTheme();
   const { t, language } = useLanguage();
-  const { currentFiscalYear } = useFiscalYear();
+  const { currentFiscalYear, fiscalYears } = useFiscalYear();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showWizard, setShowWizard] = useState(false);

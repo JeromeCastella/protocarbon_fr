@@ -51,7 +51,7 @@ const API_URL = process.env.REACT_APP_BACKEND_URL || '';
 const GeneralInfo = () => {
   const { isDark } = useTheme();
   const { t, language } = useLanguage();
-  const { currentFiscalYear: selectedFiscalYear } = useFiscalYear();
+  const { currentFiscalYear: selectedFiscalYear, fiscalYears } = useFiscalYear();
   
   // Company identity (stable data)
   const [company, setCompany] = useState({
