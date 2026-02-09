@@ -1109,7 +1109,7 @@ const GeneralInfo = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
-
+            onClick={() => setShowWizard(false)}
           >
             <motion.div
               initial={{ scale: 0.95, opacity: 0 }}
@@ -1124,12 +1124,25 @@ const GeneralInfo = () => {
                   <div className="p-2 rounded-xl bg-purple-500/20">
                     <Wand2 className="w-6 h-6 text-purple-500" />
                   </div>
-                  <div>
+                  <div className="flex-1">
                     <h2 className="text-xl font-bold">{wizardSteps[wizardStep]?.title}</h2>
                     <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
                       {wizardSteps[wizardStep]?.subtitle}
                     </p>
                   </div>
+                  {/* Close button */}
+                  <button
+                    onClick={() => setShowWizard(false)}
+                    data-testid="close-wizard-btn"
+                    className={`p-2 rounded-xl transition-colors ${
+                      isDark 
+                        ? 'hover:bg-slate-700 text-slate-400 hover:text-white' 
+                        : 'hover:bg-gray-100 text-gray-400 hover:text-gray-600'
+                    }`}
+                    title={language === 'fr' ? 'Fermer' : 'Schließen'}
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
                 </div>
                 
                 {/* Progress bar */}
