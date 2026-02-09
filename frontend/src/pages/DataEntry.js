@@ -132,6 +132,14 @@ const DataEntry = () => {
   const [editingActivity, setEditingActivity] = useState(null);
   const [editingActivityData, setEditingActivityData] = useState(null);
 
+  // Confirm dialog state (remplace window.confirm qui est bloqué en sandbox)
+  const [confirmDialog, setConfirmDialog] = useState({
+    isOpen: false,
+    title: '',
+    message: '',
+    onConfirm: () => {},
+  });
+
   // Product sale modal state
   const [showProductSaleModal, setShowProductSaleModal] = useState(false);
 
