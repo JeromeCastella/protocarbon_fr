@@ -23,6 +23,7 @@ import {
 import ProductWizard from '../components/ProductWizard';
 import ProductSaleModal from '../components/ProductSaleModal';
 import ProductVersionsModal from '../components/ProductVersionsModal';
+import EmptyFiscalYearState from '../components/EmptyFiscalYearState';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL || '';
 

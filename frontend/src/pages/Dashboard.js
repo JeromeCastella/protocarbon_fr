@@ -54,6 +54,7 @@ import {
   ReferenceLine
 } from 'recharts';
 import DashboardResultsTab from '../components/DashboardResultsTab';
+import EmptyFiscalYearState from '../components/EmptyFiscalYearState';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL || '';
 
