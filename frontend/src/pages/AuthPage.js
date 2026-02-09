@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import { useLanguage } from '../context/LanguageContext';
-import { motion } from 'framer-motion';
-import { Leaf, Mail, Lock, User, ArrowRight, Globe, Eye, EyeOff, Moon, Sun } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Leaf, Mail, Lock, User, ArrowRight, Globe, Eye, EyeOff, Moon, Sun, CheckCircle, Sparkles } from 'lucide-react';
 import PasswordStrength from '../components/PasswordStrength';
 
 const AuthPage = () => {
@@ -16,6 +16,8 @@ const AuthPage = () => {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
+  const [showWelcomeModal, setShowWelcomeModal] = useState(false);
+  const [registeredName, setRegisteredName] = useState('');
   
   const { login, register } = useAuth();
   const { isDark, toggleTheme } = useTheme();
@@ -30,13 +32,22 @@ const AuthPage = () => {
       if (isLogin) {
         await login(email, password, rememberMe);
       } else {
+        // Store name for welcome modal
+        setRegisteredName(name);
         await register(email, password, name, language);
+        // Show welcome modal after successful registration
+        setShowWelcomeModal(true);
       }
     } catch (err) {
       setError(err.response?.data?.detail || 'Une erreur est survenue');
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleCloseWelcome = () => {
+    setShowWelcomeModal(false);
+    // User is already logged in and will be redirected by AuthContext
   };
 
   return (
