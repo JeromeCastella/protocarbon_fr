@@ -363,21 +363,31 @@ const DataEntry = () => {
 
   // Suppression d'une activité (gère les groupes)
   const handleDeleteActivity = async (activity) => {
-    try {
-      // Si l'activité fait partie d'un groupe multi-impacts
-      if (activity.group_id && activity.group_size > 1) {
-        const confirmDelete = window.confirm(
-          `Cette saisie contient ${activity.group_size} impacts liés.\nVoulez-vous supprimer les ${activity.group_size} activités ?`
-        );
-        if (!confirmDelete) return;
-        
-        await axios.delete(`${API_URL}/api/activities/groups/${activity.group_id}`);
-      } else {
-        await axios.delete(`${API_URL}/api/activities/${activity.id}`);
+    // Fonction de suppression effective
+    const performDelete = async () => {
+      try {
+        if (activity.group_id && activity.group_size > 1) {
+          await axios.delete(`${API_URL}/api/activities/groups/${activity.group_id}`);
+        } else {
+          await axios.delete(`${API_URL}/api/activities/${activity.id}`);
+        }
+        fetchData();
+      } catch (error) {
+        console.error('Failed to delete activity:', error);
       }
-      fetchData();
-    } catch (error) {
-      console.error('Failed to delete activity:', error);
+    };
+
+    // Si l'activité fait partie d'un groupe multi-impacts, demander confirmation
+    if (activity.group_id && activity.group_size > 1) {
+      setConfirmDialog({
+        isOpen: true,
+        title: 'Supprimer le groupe',
+        message: `Cette saisie contient ${activity.group_size} impacts liés. Voulez-vous supprimer les ${activity.group_size} activités ?`,
+        onConfirm: performDelete,
+      });
+    } else {
+      // Pour une activité simple, supprimer directement
+      await performDelete();
     }
   };
 
