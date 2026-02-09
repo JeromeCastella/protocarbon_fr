@@ -261,6 +261,91 @@ const AuthPage = () => {
           </div>
         </motion.div>
       </div>
+
+      {/* Welcome Modal after Registration */}
+      <AnimatePresence>
+        {showWelcomeModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4"
+            onClick={handleCloseWelcome}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              transition={{ type: "spring", duration: 0.5 }}
+              className={`w-full max-w-md rounded-2xl shadow-2xl overflow-hidden ${isDark ? 'bg-slate-800' : 'bg-white'}`}
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Header gradient */}
+              <div className="bg-gradient-to-r from-green-500 to-emerald-600 p-6 text-white text-center">
+                <motion.div
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ delay: 0.2, type: "spring" }}
+                  className="w-20 h-20 rounded-full bg-white/20 backdrop-blur flex items-center justify-center mx-auto mb-4"
+                >
+                  <CheckCircle className="w-12 h-12" />
+                </motion.div>
+                <motion.h2
+                  initial={{ y: 20, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: 0.3 }}
+                  className="text-2xl font-bold"
+                >
+                  {language === 'fr' ? 'Bienvenue sur Proto Carbon !' : 'Willkommen bei Proto Carbon!'}
+                </motion.h2>
+              </div>
+
+              {/* Content */}
+              <div className="p-6">
+                <motion.div
+                  initial={{ y: 20, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: 0.4 }}
+                >
+                  <p className={`text-center mb-6 ${isDark ? 'text-slate-300' : 'text-gray-600'}`}>
+                    {language === 'fr' 
+                      ? `Félicitations ${registeredName || ''} ! Votre compte a été créé avec succès.`
+                      : `Herzlichen Glückwunsch ${registeredName || ''}! Ihr Konto wurde erfolgreich erstellt.`
+                    }
+                  </p>
+
+                  {/* Next steps */}
+                  <div className={`rounded-xl p-4 mb-6 ${isDark ? 'bg-slate-700/50' : 'bg-blue-50'}`}>
+                    <div className="flex items-start gap-3">
+                      <Sparkles className={`w-5 h-5 mt-0.5 ${isDark ? 'text-blue-400' : 'text-blue-500'}`} />
+                      <div>
+                        <p className={`font-medium mb-1 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                          {language === 'fr' ? 'Prochaine étape' : 'Nächster Schritt'}
+                        </p>
+                        <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-600'}`}>
+                          {language === 'fr' 
+                            ? 'Créez votre premier exercice fiscal pour commencer à saisir vos données d\'émissions.'
+                            : 'Erstellen Sie Ihr erstes Geschäftsjahr, um mit der Eingabe Ihrer Emissionsdaten zu beginnen.'
+                          }
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <button
+                    onClick={handleCloseWelcome}
+                    data-testid="welcome-start-btn"
+                    className="w-full py-3 px-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-xl font-medium flex items-center justify-center gap-2 hover:from-green-600 hover:to-emerald-700 transition-all shadow-lg shadow-green-500/30"
+                  >
+                    {language === 'fr' ? 'Commencer' : 'Loslegen'}
+                    <ArrowRight className="w-5 h-5" />
+                  </button>
+                </motion.div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
