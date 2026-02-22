@@ -40,7 +40,8 @@ function App() {
           
           {/* Protected routes */}
           <Route path="/" element={isAuthenticated ? <Layout /> : <Navigate to="/auth" />}>
-            <Route index element={<Dashboard />} />
+            <Route index element={<Navigate to="/general-info" replace />} />
+            <Route path="dashboard" element={<Dashboard />} />
             <Route path="general-info" element={<GeneralInfo />} />
             <Route path="data-entry" element={<DataEntry />} />
             <Route path="products" element={<Products />} />

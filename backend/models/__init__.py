@@ -199,14 +199,14 @@ class CompanyUpdate(BaseModel):
 
 class FiscalYearContext(BaseModel):
     """Données contextuelles évolutives par exercice fiscal"""
-    employees: Optional[int] = None
+    employees: Optional[float] = None
     revenue: Optional[float] = None
     surface_area: Optional[float] = None
     excluded_categories: Optional[List[str]] = None
 
 class FiscalYearContextUpdate(BaseModel):
     """Mise à jour des données contextuelles d'un exercice"""
-    employees: Optional[int] = None
+    employees: Optional[float] = None
     revenue: Optional[float] = None
     surface_area: Optional[float] = None
     excluded_categories: Optional[List[str]] = None

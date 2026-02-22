@@ -455,11 +455,12 @@ const ProductWizard = ({ isOpen, onClose, onProductCreated, editingProduct = nul
                     type="number"
                     min="0.1"
                     step="0.1"
-                    value={formData.lifespan_years}
+                    value={formData.lifespan_years === 0 ? '' : formData.lifespan_years}
                     onChange={(e) => setFormData({ ...formData, lifespan_years: parseFloat(e.target.value) || 1 })}
                     className={`w-full px-4 py-3 rounded-xl border transition-all focus:ring-2 focus:ring-blue-500 ${
                       isDark ? 'bg-slate-700 border-slate-600 text-white' : 'bg-white border-gray-200 text-gray-900'
                     }`}
+                    placeholder="1"
                   />
                 </div>
                 
@@ -556,11 +557,12 @@ const ProductWizard = ({ isOpen, onClose, onProductCreated, editingProduct = nul
                               type="number"
                               min="0"
                               step="0.01"
-                              value={mat.weight_kg}
+                              value={mat.weight_kg === 0 ? '' : mat.weight_kg}
                               onChange={(e) => updateMaterial(index, 'weight_kg', parseFloat(e.target.value) || 0)}
                               className={`w-full px-3 py-2 rounded-lg border text-sm ${
                                 isDark ? 'bg-slate-600 border-slate-500 text-white' : 'bg-white border-gray-200'
                               }`}
+                              placeholder="0"
                             />
                           </div>
                           
@@ -594,11 +596,12 @@ const ProductWizard = ({ isOpen, onClose, onProductCreated, editingProduct = nul
                               type="number"
                               min="0"
                               max="100"
-                              value={mat.recyclability_percent}
+                              value={mat.recyclability_percent === 0 ? '' : mat.recyclability_percent}
                               onChange={(e) => updateMaterial(index, 'recyclability_percent', parseFloat(e.target.value) || 0)}
                               className={`w-full px-3 py-2 rounded-lg border text-sm ${
                                 isDark ? 'bg-slate-600 border-slate-500 text-white' : 'bg-white border-gray-200'
                               }`}
+                              placeholder="0"
                             />
                           </div>
                         </div>
@@ -641,7 +644,7 @@ const ProductWizard = ({ isOpen, onClose, onProductCreated, editingProduct = nul
                         type="number"
                         min="0"
                         step="0.01"
-                        value={formData.transformation.electricity_kwh}
+                        value={formData.transformation.electricity_kwh === 0 ? '' : formData.transformation.electricity_kwh}
                         onChange={(e) => setFormData({
                           ...formData,
                           transformation: { ...formData.transformation, electricity_kwh: parseFloat(e.target.value) || 0 }
@@ -649,6 +652,7 @@ const ProductWizard = ({ isOpen, onClose, onProductCreated, editingProduct = nul
                         className={`w-full px-3 py-2 rounded-lg border text-sm ${
                           isDark ? 'bg-slate-600 border-slate-500 text-white' : 'bg-white border-gray-200'
                         }`}
+                        placeholder="0"
                       />
                     </div>
                     <div>
@@ -688,7 +692,7 @@ const ProductWizard = ({ isOpen, onClose, onProductCreated, editingProduct = nul
                         type="number"
                         min="0"
                         step="0.01"
-                        value={formData.transformation.fuel_kwh}
+                        value={formData.transformation.fuel_kwh === 0 ? '' : formData.transformation.fuel_kwh}
                         onChange={(e) => setFormData({
                           ...formData,
                           transformation: { ...formData.transformation, fuel_kwh: parseFloat(e.target.value) || 0 }
@@ -750,7 +754,7 @@ const ProductWizard = ({ isOpen, onClose, onProductCreated, editingProduct = nul
                       <input
                         type="number"
                         min="1"
-                        value={formData.usage.cycles_per_year}
+                        value={formData.usage.cycles_per_year === 0 ? '' : formData.usage.cycles_per_year}
                         onChange={(e) => setFormData({
                           ...formData,
                           usage: { ...formData.usage, cycles_per_year: parseInt(e.target.value) || 1 }
@@ -758,6 +762,7 @@ const ProductWizard = ({ isOpen, onClose, onProductCreated, editingProduct = nul
                         className={`w-full px-3 py-2 rounded-lg border text-sm ${
                           isDark ? 'bg-slate-700 border-slate-600 text-white' : 'bg-white border-gray-200'
                         }`}
+                        placeholder="1"
                       />
                     </div>
                     <div className={`text-center px-4 py-2 rounded-lg ${isDark ? 'bg-slate-700' : 'bg-white'}`}>
@@ -784,7 +789,7 @@ const ProductWizard = ({ isOpen, onClose, onProductCreated, editingProduct = nul
                         type="number"
                         min="0"
                         step="0.001"
-                        value={formData.usage.electricity_kwh_per_cycle}
+                        value={formData.usage.electricity_kwh_per_cycle === 0 ? '' : formData.usage.electricity_kwh_per_cycle}
                         onChange={(e) => setFormData({
                           ...formData,
                           usage: { ...formData.usage, electricity_kwh_per_cycle: parseFloat(e.target.value) || 0 }
@@ -792,6 +797,7 @@ const ProductWizard = ({ isOpen, onClose, onProductCreated, editingProduct = nul
                         className={`w-full px-3 py-2 rounded-lg border text-sm ${
                           isDark ? 'bg-slate-600 border-slate-500 text-white' : 'bg-white border-gray-200'
                         }`}
+                        placeholder="0"
                       />
                     </div>
                     <div>
@@ -832,7 +838,7 @@ const ProductWizard = ({ isOpen, onClose, onProductCreated, editingProduct = nul
                         type="number"
                         min="0"
                         step="0.001"
-                        value={formData.usage.fuel_kwh_per_cycle}
+                        value={formData.usage.fuel_kwh_per_cycle === 0 ? '' : formData.usage.fuel_kwh_per_cycle}
                         onChange={(e) => setFormData({
                           ...formData,
                           usage: { ...formData.usage, fuel_kwh_per_cycle: parseFloat(e.target.value) || 0 }
@@ -840,6 +846,7 @@ const ProductWizard = ({ isOpen, onClose, onProductCreated, editingProduct = nul
                         className={`w-full px-3 py-2 rounded-lg border text-sm ${
                           isDark ? 'bg-slate-600 border-slate-500 text-white' : 'bg-white border-gray-200'
                         }`}
+                        placeholder="0"
                       />
                     </div>
                     <div>
@@ -880,7 +887,7 @@ const ProductWizard = ({ isOpen, onClose, onProductCreated, editingProduct = nul
                         type="number"
                         min="0"
                         step="0.001"
-                        value={formData.usage.carburant_l_per_cycle}
+                        value={formData.usage.carburant_l_per_cycle === 0 ? '' : formData.usage.carburant_l_per_cycle}
                         onChange={(e) => setFormData({
                           ...formData,
                           usage: { ...formData.usage, carburant_l_per_cycle: parseFloat(e.target.value) || 0 }
@@ -888,6 +895,7 @@ const ProductWizard = ({ isOpen, onClose, onProductCreated, editingProduct = nul
                         className={`w-full px-3 py-2 rounded-lg border text-sm ${
                           isDark ? 'bg-slate-600 border-slate-500 text-white' : 'bg-white border-gray-200'
                         }`}
+                        placeholder="0"
                       />
                     </div>
                     <div>
@@ -928,7 +936,7 @@ const ProductWizard = ({ isOpen, onClose, onProductCreated, editingProduct = nul
                         type="number"
                         min="0"
                         step="0.0001"
-                        value={formData.usage.refrigerant_kg_per_cycle}
+                        value={formData.usage.refrigerant_kg_per_cycle === 0 ? '' : formData.usage.refrigerant_kg_per_cycle}
                         onChange={(e) => setFormData({
                           ...formData,
                           usage: { ...formData.usage, refrigerant_kg_per_cycle: parseFloat(e.target.value) || 0 }
@@ -936,6 +944,7 @@ const ProductWizard = ({ isOpen, onClose, onProductCreated, editingProduct = nul
                         className={`w-full px-3 py-2 rounded-lg border text-sm ${
                           isDark ? 'bg-slate-600 border-slate-500 text-white' : 'bg-white border-gray-200'
                         }`}
+                        placeholder="0"
                       />
                     </div>
                     <div>

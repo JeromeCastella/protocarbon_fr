@@ -398,7 +398,7 @@ const ProductSaleModal = ({ isOpen, onClose, onSaleRecorded, preselectedProduct 
                 <input
                   type="number"
                   min="0"
-                  value={quantity}
+                  value={quantity === 0 ? '' : quantity}
                   onChange={(e) => setQuantity(parseInt(e.target.value) || 0)}
                   className={`w-full px-4 py-3 rounded-xl border transition-all focus:ring-2 focus:ring-blue-500 ${
                     isDark ? 'bg-slate-700 border-slate-600 text-white' : 'bg-white border-gray-200 text-gray-900'

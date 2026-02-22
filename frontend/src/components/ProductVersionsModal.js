@@ -276,9 +276,10 @@ const ProductVersionsModal = ({ isOpen, onClose, productId, productName, onProfi
                       type="number"
                       min="0"
                       step="0.01"
-                      value={formData.manufacturing_emissions}
+                      value={formData.manufacturing_emissions === 0 ? '' : formData.manufacturing_emissions}
                       onChange={(e) => setFormData(prev => ({ ...prev, manufacturing_emissions: parseFloat(e.target.value) || 0 }))}
                       className={`w-full px-4 py-3 rounded-xl border ${isDark ? 'bg-slate-700 border-slate-600 text-white' : 'bg-white border-gray-200'}`}
+                      placeholder="0"
                     />
                     <span className={`absolute right-3 top-1/2 -translate-y-1/2 text-xs ${isDark ? 'text-slate-400' : 'text-gray-400'}`}>
                       kgCO₂e
@@ -296,9 +297,10 @@ const ProductVersionsModal = ({ isOpen, onClose, productId, productName, onProfi
                       type="number"
                       min="0"
                       step="0.01"
-                      value={formData.usage_emissions}
+                      value={formData.usage_emissions === 0 ? '' : formData.usage_emissions}
                       onChange={(e) => setFormData(prev => ({ ...prev, usage_emissions: parseFloat(e.target.value) || 0 }))}
                       className={`w-full px-4 py-3 rounded-xl border ${isDark ? 'bg-slate-700 border-slate-600 text-white' : 'bg-white border-gray-200'}`}
+                      placeholder="0"
                     />
                     <span className={`absolute right-3 top-1/2 -translate-y-1/2 text-xs ${isDark ? 'text-slate-400' : 'text-gray-400'}`}>
                       kgCO₂e
@@ -316,9 +318,10 @@ const ProductVersionsModal = ({ isOpen, onClose, productId, productName, onProfi
                       type="number"
                       min="0"
                       step="0.01"
-                      value={formData.disposal_emissions}
+                      value={formData.disposal_emissions === 0 ? '' : formData.disposal_emissions}
                       onChange={(e) => setFormData(prev => ({ ...prev, disposal_emissions: parseFloat(e.target.value) || 0 }))}
                       className={`w-full px-4 py-3 rounded-xl border ${isDark ? 'bg-slate-700 border-slate-600 text-white' : 'bg-white border-gray-200'}`}
+                      placeholder="0"
                     />
                     <span className={`absolute right-3 top-1/2 -translate-y-1/2 text-xs ${isDark ? 'text-slate-400' : 'text-gray-400'}`}>
                       kgCO₂e

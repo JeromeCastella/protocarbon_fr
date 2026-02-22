@@ -807,8 +807,9 @@ const GeneralInfo = () => {
               </label>
               <input
                 type="number"
+                step="0.1"
                 value={fiscalYearContext.employees === 0 ? '' : fiscalYearContext.employees}
-                onChange={(e) => setFiscalYearContext({ ...fiscalYearContext, employees: parseInt(e.target.value) || 0 })}
+                onChange={(e) => setFiscalYearContext({ ...fiscalYearContext, employees: parseFloat(e.target.value) || 0 })}
                 placeholder="0"
                 disabled={contextReadonly || !selectedFiscalYear?.id}
                 data-testid="context-employees-input"

@@ -60,20 +60,7 @@ def get_fiscal_year_context_with_fallback(fiscal_year_id: str, tenant_id: str):
     }
 
 
-def get_default_categories():
-    """Get default GHG categories structure"""
-    return [
-        {"code": "scope1", "name_fr": "Scope 1 - Émissions directes", "name_de": "Scope 1 - Direkte Emissionen", 
-         "subcategories": ["combustion_stationnaire", "combustion_mobile", "emissions_process", "emissions_fugitives"]},
-        {"code": "scope2", "name_fr": "Scope 2 - Énergie indirecte", "name_de": "Scope 2 - Indirekte Energie",
-         "subcategories": ["electricite", "chaleur_vapeur"]},
-        {"code": "scope3_amont", "name_fr": "Scope 3 Amont", "name_de": "Scope 3 Upstream",
-         "subcategories": ["achats_biens_services", "biens_immobilisations", "energie_amont", "transport_amont", 
-                          "dechets", "deplacements_professionnels", "deplacements_domicile_travail", "actifs_loues_amont"]},
-        {"code": "scope3_aval", "name_fr": "Scope 3 Aval", "name_de": "Scope 3 Downstream",
-         "subcategories": ["transport_aval", "transformation_produits", "utilisation_produits", "fin_vie_produits",
-                          "actifs_loues_aval", "franchises", "investissements"]}
-    ]
+
 
 
 # Catégories Scope 3 Amont (pour le mapping de scope3 générique)
@@ -177,32 +164,34 @@ async def get_dashboard_summary(
     total_emissions = sum(scope_emissions.values())
     
     # Calculate scope completion
-    categories = get_default_categories()
+    # Use real categories from DB (same source as frontend), not the hardcoded list
+    real_categories = list(categories_collection.find({}))
     scope_completion = {}
-    
-    for cat in categories:
-        scope_code = cat["code"]
-        subcats = cat["subcategories"]
-        total_subcats = len(subcats)
-        
-        # Count categories with at least one activity
-        filled_subcats = 0
-        for subcat in subcats:
-            if subcat not in excluded_categories:
-                has_activity = any(
-                    a.get("subcategory_id") == subcat or a.get("category_id") == subcat 
-                    for a in activities if a.get("scope") == scope_code
-                )
-                if has_activity:
-                    filled_subcats += 1
-        
-        # Exclude excluded categories from total
-        effective_total = total_subcats - len([s for s in subcats if s in excluded_categories])
-        
+
+    for scope_code in ["scope1", "scope2", "scope3_amont", "scope3_aval"]:
+        # Only keep categories that belong to this scope and are not excluded
+        open_cats = [
+            c for c in real_categories
+            if c.get("scope") == scope_code
+            and c.get("code") not in excluded_categories
+        ]
+        effective_total = len(open_cats)
+
+        # Count how many of those categories have at least one activity
+        filled = 0
+        for cat in open_cats:
+            has_activity = any(
+                normalize_scope_for_reporting(a.get("scope", ""), a.get("category_id", "")) == scope_code
+                and a.get("category_id") == cat["code"]
+                for a in activities
+            )
+            if has_activity:
+                filled += 1
+
         scope_completion[scope_code] = {
-            "categories_filled": filled_subcats,
+            "categories_filled": filled,
             "total_categories": effective_total,
-            "percentage": round((filled_subcats / effective_total * 100) if effective_total > 0 else 0)
+            "percentage": round((filled / effective_total * 100) if effective_total > 0 else 0)
         }
     
     # Count products

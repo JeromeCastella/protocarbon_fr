@@ -272,7 +272,7 @@ const GuidedEntryModal = ({
       );
       setFilteredFactors(filtered);
     } else if (selectedUnit) {
-      filterFactorsByUnit(selectedUnit);
+      filterFactorsByUnitStrict(selectedUnit);
     } else {
       setFilteredFactors(factors);
     }
@@ -852,7 +852,7 @@ const GuidedEntryModal = ({
                           <div className="relative">
                             <input
                               type="number"
-                              value={quantity}
+                              value={quantity || ''}
                               onChange={(e) => setQuantity(e.target.value)}
                               data-testid="quantity-input"
                               required

@@ -656,7 +656,7 @@ const AdminFactorsTab = ({ factors, subcategories, onRefetch }) => {
                                   <input
                                     type="number"
                                     step="any"
-                                    value={impact.value}
+                                    value={impact.value === '0' ? '' : impact.value}
                                     onChange={(e) => updateImpactByKey(impact.impactKey, 'value', e.target.value)}
                                     className={`w-full px-3 py-2 rounded-lg border text-sm ${isDark ? 'bg-slate-700 border-slate-600 text-white' : 'bg-white border-gray-200'}`}
                                     placeholder="ex: 2.68"
@@ -793,7 +793,7 @@ const AdminFactorsTab = ({ factors, subcategories, onRefetch }) => {
                         <div className="grid grid-cols-2 gap-3">
                           <div>
                             <label className="text-xs text-gray-500">Nouvelle valeur *</label>
-                            <input type="number" step="any" value={impact.value} onChange={(e) => updateVersionImpact(i, 'value', e.target.value)} className={`w-full px-3 py-2 rounded-lg border text-sm ${isDark ? 'bg-slate-600 border-slate-500 text-white' : 'bg-white border-gray-200'}`} placeholder="2.68" />
+                            <input type="number" step="any" value={impact.value === '0' ? '' : impact.value} onChange={(e) => updateVersionImpact(i, 'value', e.target.value)} className={`w-full px-3 py-2 rounded-lg border text-sm ${isDark ? 'bg-slate-600 border-slate-500 text-white' : 'bg-white border-gray-200'}`} placeholder="2.68" />
                           </div>
                           <div>
                             <label className="text-xs text-gray-500">Unité</label>
