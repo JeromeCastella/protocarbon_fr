@@ -78,6 +78,8 @@ const GeneralInfo = () => {
   const [savingContext, setSavingContext] = useState(false);
   const [saved, setSaved] = useState(false);
   const [savedContext, setSavedContext] = useState(false);
+  const [savedPerimeter, setSavedPerimeter] = useState(false);
+  const [savedWizard, setSavedWizard] = useState(false);
   const [categories, setCategories] = useState([]);
 
   // Wizard state
@@ -198,40 +200,44 @@ const GeneralInfo = () => {
   };
 
   // Toggle category in fiscal year context (not company anymore)
-  const toggleCategory = (categoryCode) => {
+  const toggleCategory = async (categoryCode) => {
     if (contextReadonly) return;
-    setFiscalYearContext(prev => ({
-      ...prev,
-      excluded_categories: prev.excluded_categories?.includes(categoryCode)
-        ? prev.excluded_categories.filter(c => c !== categoryCode)
-        : [...(prev.excluded_categories || []), categoryCode]
-    }));
+    const newExcluded = fiscalYearContext.excluded_categories?.includes(categoryCode)
+      ? fiscalYearContext.excluded_categories.filter(c => c !== categoryCode)
+      : [...(fiscalYearContext.excluded_categories || []), categoryCode];
+
+    setFiscalYearContext(prev => ({ ...prev, excluded_categories: newExcluded }));
+    try {
+      await axios.put(`${API_URL}/api/fiscal-years/${selectedFiscalYear.id}/context`, {
+        ...fiscalYearContext, excluded_categories: newExcluded
+      });
+      setSavedPerimeter(true);
+      setTimeout(() => setSavedPerimeter(false), 2000);
+    } catch (error) {
+      console.error('Failed to auto-save category:', error);
+    }
   };
 
   // Toggle groupé pour les 3 catégories "Produits vendus" (3.10, 3.11, 3.12)
-  const toggleProductCategories = () => {
+  const toggleProductCategories = async () => {
     if (contextReadonly) return;
     const allProductsIncluded = PRODUCT_CATEGORIES.every(
       code => !fiscalYearContext.excluded_categories?.includes(code)
     );
-    
-    setFiscalYearContext(prev => {
-      if (allProductsIncluded) {
-        // Si toutes sont incluses, on les exclut toutes
-        return {
-          ...prev,
-          excluded_categories: [...(prev.excluded_categories || []), ...PRODUCT_CATEGORIES]
-        };
-      } else {
-        // Sinon, on les inclut toutes (retire des exclus)
-        return {
-          ...prev,
-          excluded_categories: (prev.excluded_categories || []).filter(
-            c => !PRODUCT_CATEGORIES.includes(c)
-          )
-        };
-      }
-    });
+    const newExcluded = allProductsIncluded
+      ? [...(fiscalYearContext.excluded_categories || []), ...PRODUCT_CATEGORIES]
+      : (fiscalYearContext.excluded_categories || []).filter(c => !PRODUCT_CATEGORIES.includes(c));
+
+    setFiscalYearContext(prev => ({ ...prev, excluded_categories: newExcluded }));
+    try {
+      await axios.put(`${API_URL}/api/fiscal-years/${selectedFiscalYear.id}/context`, {
+        ...fiscalYearContext, excluded_categories: newExcluded
+      });
+      setSavedPerimeter(true);
+      setTimeout(() => setSavedPerimeter(false), 2000);
+    } catch (error) {
+      console.error('Failed to auto-save categories:', error);
+    }
   };
 
   // Vérifie si les catégories produits sont activées (pour l'affichage de la checkbox)
@@ -463,6 +469,8 @@ const GeneralInfo = () => {
     
     setShowWizard(false);
     setWizardStep(0);
+    setSavedWizard(true);
+    setTimeout(() => setSavedWizard(false), 2000);
   };
 
   const resetWizard = () => {
@@ -897,28 +905,17 @@ const GeneralInfo = () => {
             </span>
           </div>
         )}
-        
+
+
+        {/* Boutons de sauvegarde - Perimetre */}
         <p className={`mb-4 ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
           {t('scope.perimeterDesc')}
         </p>
         <div className="flex items-center gap-3 mb-6">
           <button
-            onClick={openWizard}
-            disabled={contextReadonly || !selectedFiscalYear?.id}
-            data-testid="wizard-config-btn"
-            className={`flex items-center gap-2 px-4 py-2 rounded-xl transition-all ${
-              contextReadonly || !selectedFiscalYear?.id
-                ? 'bg-gray-400 text-white cursor-not-allowed'
-                : 'bg-purple-500 text-white hover:bg-purple-600 shadow-lg shadow-purple-500/30'
-            }`}
-          >
-            <Wand2 className="w-4 h-4" />
-            Configuration guidée
-          </button>
-          <button
             onClick={() => setShowManualConfig(!showManualConfig)}
             data-testid="manual-config-btn"
-            className={`flex items-center gap-2 px-4 py-2 rounded-xl transition-all ${
+            className={`flex items-center gap-2 px-4 py-2 rounded-xl transition-all ml-auto ${
               showManualConfig
                 ? isDark 
                   ? 'bg-slate-600 text-white hover:bg-slate-500' 
@@ -932,31 +929,33 @@ const GeneralInfo = () => {
             Configuration manuelle
             {showManualConfig ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
           </button>
+
+          <button
+            onClick={openWizard}
+            disabled={contextReadonly || !selectedFiscalYear?.id}
+            data-testid="wizard-config-btn"
+            className={`flex items-center gap-2 px-4 py-2 rounded-xl transition-all ${
+              contextReadonly || !selectedFiscalYear?.id
+                ? 'bg-gray-400 text-white cursor-not-allowed'
+                : savedWizard
+                ? 'bg-green-500 text-white'
+                : 'bg-purple-500 text-white hover:bg-purple-600 shadow-lg shadow-purple-500/30'
+            }`}
+          >
+            {savedWizard ? (
+              <>
+                <Check className="w-4 h-4" />
+                {t('common.success')}
+              </>
+            ) : (
+              <>
+                <Wand2 className="w-4 h-4" />
+                Configuration guidée
+              </>
+            )}
+          </button>
           
-          {/* Save context button for perimeter */}
-          {showManualConfig && !contextReadonly && selectedFiscalYear?.id && (
-            <motion.button
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              onClick={handleSaveContext}
-              disabled={savingContext}
-              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-purple-500 text-white hover:bg-purple-600 transition-all ml-auto"
-            >
-              {savingContext ? (
-                <Loader2 className="w-4 h-4 animate-spin" />
-              ) : savedContext ? (
-                <>
-                  <Check className="w-4 h-4" />
-                  Sauvegardé
-                </>
-              ) : (
-                <>
-                  <Save className="w-4 h-4" />
-                  Sauvegarder
-                </>
-              )}
-            </motion.button>
-          )}
+          
         </div>
 
 
@@ -1338,6 +1337,20 @@ const GeneralInfo = () => {
                 </div>
               </div>
             </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+      {/* Toast auto-save périmètre */}
+      <AnimatePresence>
+        {savedPerimeter && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+            className="fixed bottom-4 right-4 flex items-center gap-2 px-4 py-3 bg-green-500 text-white rounded-xl shadow-lg z-50"
+          >
+            <Check className="w-4 h-4" />
+            {t('common.success')}
           </motion.div>
         )}
       </AnimatePresence>

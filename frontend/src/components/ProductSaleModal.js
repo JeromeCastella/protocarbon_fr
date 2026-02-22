@@ -404,6 +404,7 @@ const ProductSaleModal = ({ isOpen, onClose, onSaleRecorded, preselectedProduct 
                     isDark ? 'bg-slate-700 border-slate-600 text-white' : 'bg-white border-gray-200 text-gray-900'
                   }`}
                   data-testid="quantity-input"
+                  placeholder="0"
                 />
               </div>
 

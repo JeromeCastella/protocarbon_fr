@@ -527,7 +527,7 @@ const GuidedEntryModal = ({
             ) : (
               <div className="space-y-6">
                 {/* Étape 1: Sous-catégories */}
-                {step === 1 && subcategories.length > 0 && (
+                {step >= 1 && subcategories.length > 0 && (
                   <div>
                     <label className={`block text-sm font-medium mb-3 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
                       {language === 'fr' ? '1. Choisir une sous-catégorie' : '1. Unterkategorie wählen'}
