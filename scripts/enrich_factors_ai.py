@@ -8,7 +8,7 @@ import os
 import sys
 sys.path.insert(0, '/app/backend')
 
-from emergentintegrations.llm.chat import Chat, Message
+from emergentintegrations.llm.chat import LlmChat
 
 EMERGENT_KEY = "sk-emergent-75eA3EbCd255bB1CeD"
 
