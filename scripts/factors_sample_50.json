@@ -1,0 +1,1499 @@
+[
+  {
+    "id": "698418f3c1a4e9f26cd27459",
+    "name_fr": "Véhicule articulé lourd | Gaz comprimé | 32t | EURO-6",
+    "name_de": "Schwere Sattelzüge | Komprimiertes Gas | 32t | EURO-6",
+    "subcategory": "route",
+    "input_units": [
+      "tkm"
+    ],
+    "default_unit": "tkm",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 74.1296206,
+        "unit": "kgCO2e/tkm"
+      },
+      {
+        "scope": "scope2",
+        "value": 0.0,
+        "unit": "kgCO2e/tkm"
+      },
+      {
+        "scope": "scope3_3",
+        "value": 28.8440111,
+        "unit": "kgCO2e/tkm"
+      },
+      {
+        "scope": "scope3",
+        "value": 56.9503752,
+        "unit": "kgCO2e/tkm"
+      }
+    ],
+    "tags": [
+      "poids_lourd",
+      "gaz",
+      "methane",
+      "route",
+      "mobitool"
+    ],
+    "source": "Mobitool",
+    "region": "Suisse"
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2740f",
+    "name_fr": "Camion | Pile à combustible électrique | 18t",
+    "name_de": "Lastwagen | Brennstoffzelle elektrisch | 18t",
+    "subcategory": "route",
+    "input_units": [
+      "tkm"
+    ],
+    "default_unit": "tkm",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 0.0,
+        "unit": "kgCO2e/tkm"
+      },
+      {
+        "scope": "scope2",
+        "value": 146.992918,
+        "unit": "kgCO2e/tkm"
+      },
+      {
+        "scope": "scope3_3",
+        "value": 0.0,
+        "unit": "kgCO2e/tkm"
+      },
+      {
+        "scope": "scope3",
+        "value": 146.992918,
+        "unit": "kgCO2e/tkm"
+      }
+    ],
+    "tags": [
+      "poids_lourd",
+      "hydrogene",
+      "route",
+      "mobitool"
+    ],
+    "source": "Mobitool",
+    "region": "Suisse"
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27401",
+    "name_fr": "Camion | Hybride diesel | 3.5t | EURO-6",
+    "name_de": "Lastwagen | Hybrid-Diesel | 3.5t | EURO-6",
+    "subcategory": "route",
+    "input_units": [
+      "tkm"
+    ],
+    "default_unit": "tkm",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 561.705686,
+        "unit": "kgCO2e/tkm"
+      },
+      {
+        "scope": "scope2",
+        "value": 0.0,
+        "unit": "kgCO2e/tkm"
+      },
+      {
+        "scope": "scope3_3",
+        "value": 122.219588,
+        "unit": "kgCO2e/tkm"
+      },
+      {
+        "scope": "scope3",
+        "value": 561.705686,
+        "unit": "kgCO2e/tkm"
+      }
+    ],
+    "tags": [
+      "utilitaire",
+      "fuel_routier",
+      "gasoil",
+      "gazole",
+      "route",
+      "mobitool"
+    ],
+    "source": "Mobitool",
+    "region": "Suisse"
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2745c",
+    "name_fr": "Véhicule articulé lourd | Hybride diesel | 40t | EURO-6",
+    "name_de": "Schwere Sattelzüge | Hybrid-Diesel | 40t | EURO-6",
+    "subcategory": "route",
+    "input_units": [
+      "tkm"
+    ],
+    "default_unit": "tkm",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 112.168818,
+        "unit": "kgCO2e/tkm"
+      },
+      {
+        "scope": "scope2",
+        "value": 0.0,
+        "unit": "kgCO2e/tkm"
+      },
+      {
+        "scope": "scope3_3",
+        "value": 24.4064232,
+        "unit": "kgCO2e/tkm"
+      },
+      {
+        "scope": "scope3",
+        "value": 84.54936,
+        "unit": "kgCO2e/tkm"
+      }
+    ],
+    "tags": [
+      "poids_lourd",
+      "fuel_routier",
+      "gasoil",
+      "route",
+      "mobitool"
+    ],
+    "source": "Mobitool",
+    "region": "Suisse"
+  },
+  {
+    "id": "698418f3c1a4e9f26cd273b8",
+    "name_fr": "Voiture de tourisme | Essence | Moyenne de la flotte",
+    "name_de": "Personenkraftwagen | Benzin | Flottendurchschnitt",
+    "subcategory": "route_transport_individuel",
+    "input_units": [
+      "pkm"
+    ],
+    "default_unit": "pkm",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 113.827081,
+        "unit": "kgCO2e/pkm"
+      },
+      {
+        "scope": "scope2",
+        "value": 0.0,
+        "unit": "kgCO2e/pkm"
+      },
+      {
+        "scope": "scope3_3",
+        "value": 30.4831154,
+        "unit": "kgCO2e/pkm"
+      },
+      {
+        "scope": "scope3",
+        "value": 113.827081,
+        "unit": "kgCO2e/pkm"
+      }
+    ],
+    "tags": [
+      "carburant_voiture",
+      "sans_plomb",
+      "route_transport_individuel",
+      "mobitool"
+    ],
+    "source": "Mobitool",
+    "region": "Suisse"
+  },
+  {
+    "id": "698418f3c1a4e9f26cd273b7",
+    "name_fr": "Voiture de tourisme | Diesel | Grand SUV | EURO-6d",
+    "name_de": "Personenkraftwagen | Diesel | Grosser SUV | EURO-6d",
+    "subcategory": "route_transport_individuel",
+    "input_units": [
+      "pkm"
+    ],
+    "default_unit": "pkm",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 201.84754,
+        "unit": "kgCO2e/pkm"
+      },
+      {
+        "scope": "scope2",
+        "value": 0.0,
+        "unit": "kgCO2e/pkm"
+      },
+      {
+        "scope": "scope3_3",
+        "value": 43.5890746,
+        "unit": "kgCO2e/pkm"
+      },
+      {
+        "scope": "scope3",
+        "value": 201.84754,
+        "unit": "kgCO2e/pkm"
+      }
+    ],
+    "tags": [
+      "fuel_routier",
+      "gasoil",
+      "gazole",
+      "route_transport_individuel",
+      "mobitool"
+    ],
+    "source": "Mobitool",
+    "region": "Suisse"
+  },
+  {
+    "id": "698418f3c1a4e9f26cd273bd",
+    "name_fr": "Voiture de tourisme | Gaz comprimé | Citadine | EURO-6d",
+    "name_de": "Personenkraftwagen | Komprimiertes Gas | Kompakt | EURO-6d",
+    "subcategory": "route_transport_individuel",
+    "input_units": [
+      "pkm"
+    ],
+    "default_unit": "pkm",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 79.711828,
+        "unit": "kgCO2e/pkm"
+      },
+      {
+        "scope": "scope2",
+        "value": 0.0,
+        "unit": "kgCO2e/pkm"
+      },
+      {
+        "scope": "scope3_3",
+        "value": 31.1290978,
+        "unit": "kgCO2e/pkm"
+      },
+      {
+        "scope": "scope3",
+        "value": 79.711828,
+        "unit": "kgCO2e/pkm"
+      }
+    ],
+    "tags": [
+      "gaz_naturel",
+      "methane",
+      "route_transport_individuel",
+      "mobitool"
+    ],
+    "source": "Mobitool",
+    "region": "Suisse"
+  },
+  {
+    "id": "698418f3c1a4e9f26cd273b4",
+    "name_fr": "Voiture de tourisme | Diesel | Citadine | EURO-6d",
+    "name_de": "Personenkraftwagen | Diesel | Kompakt | EURO-6d",
+    "subcategory": "route_transport_individuel",
+    "input_units": [
+      "pkm"
+    ],
+    "default_unit": "pkm",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 100.296914,
+        "unit": "kgCO2e/pkm"
+      },
+      {
+        "scope": "scope2",
+        "value": 0.0,
+        "unit": "kgCO2e/pkm"
+      },
+      {
+        "scope": "scope3_3",
+        "value": 21.6591675,
+        "unit": "kgCO2e/pkm"
+      },
+      {
+        "scope": "scope3",
+        "value": 100.296914,
+        "unit": "kgCO2e/pkm"
+      }
+    ],
+    "tags": [
+      "fuel_routier",
+      "gasoil",
+      "gazole",
+      "route_transport_individuel",
+      "mobitool"
+    ],
+    "source": "Mobitool",
+    "region": "Suisse"
+  },
+  {
+    "id": "698418f3c1a4e9f26cd273af",
+    "name_fr": "Autocar | Gaz comprimé | Double étage | EURO-6",
+    "name_de": "Reisebus | Komprimiertes Gas | Doppeldecker | EURO-6",
+    "subcategory": "route_transports_en_communs",
+    "input_units": [
+      "pkm"
+    ],
+    "default_unit": "pkm",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 24.694793,
+        "unit": "kgCO2e/pkm"
+      },
+      {
+        "scope": "scope2",
+        "value": 0.0,
+        "unit": "kgCO2e/pkm"
+      },
+      {
+        "scope": "scope3_3",
+        "value": 9.42269393,
+        "unit": "kgCO2e/pkm"
+      },
+      {
+        "scope": "scope3",
+        "value": 24.694793,
+        "unit": "kgCO2e/pkm"
+      }
+    ],
+    "tags": [
+      "gaz",
+      "methane",
+      "route_transports_en_communs",
+      "mobitool"
+    ],
+    "source": "Mobitool",
+    "region": "Suisse"
+  },
+  {
+    "id": "698418f3c1a4e9f26cd273ad",
+    "name_fr": "Autocar | Hybride diesel | Double étage | EURO-6",
+    "name_de": "Reisebus | Hybrid-Diesel | Doppeldecker | EURO-6",
+    "subcategory": "route_transports_en_communs",
+    "input_units": [
+      "pkm"
+    ],
+    "default_unit": "pkm",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 28.4466736,
+        "unit": "kgCO2e/pkm"
+      },
+      {
+        "scope": "scope2",
+        "value": 0.0,
+        "unit": "kgCO2e/pkm"
+      },
+      {
+        "scope": "scope3_3",
+        "value": 6.22701065,
+        "unit": "kgCO2e/pkm"
+      },
+      {
+        "scope": "scope3",
+        "value": 28.4466736,
+        "unit": "kgCO2e/pkm"
+      }
+    ],
+    "tags": [
+      "fuel_routier",
+      "gasoil",
+      "gazole",
+      "route_transports_en_communs",
+      "mobitool"
+    ],
+    "source": "Mobitool",
+    "region": "Suisse"
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2738d",
+    "name_fr": "Bus urbain (18m) | Diesel | Articulé | EURO-6",
+    "name_de": "Stadtbus (18m) | Diesel | Gelenkbusse | EURO-6",
+    "subcategory": "route_transports_en_communs",
+    "input_units": [
+      "pkm"
+    ],
+    "default_unit": "pkm",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 63.5330742,
+        "unit": "kgCO2e/pkm"
+      },
+      {
+        "scope": "scope2",
+        "value": 0.0,
+        "unit": "kgCO2e/pkm"
+      },
+      {
+        "scope": "scope3_3",
+        "value": 13.9074654,
+        "unit": "kgCO2e/pkm"
+      },
+      {
+        "scope": "scope3",
+        "value": 63.5330742,
+        "unit": "kgCO2e/pkm"
+      }
+    ],
+    "tags": [
+      "fuel_routier",
+      "gasoil",
+      "gazole",
+      "route_transports_en_communs",
+      "mobitool"
+    ],
+    "source": "Mobitool",
+    "region": "Suisse"
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2746b",
+    "name_fr": "Train Autriche | Mix électrique AT & diesel | locomotive électrique & diesel, y compris trajets de manœuvre",
+    "name_de": "Bahn Österreich | Strommix AT & Diesel | Elektro- & Diesellok, inkl. Rangierfahrten",
+    "subcategory": "ferroviaire",
+    "input_units": [
+      "tkm"
+    ],
+    "default_unit": "tkm",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 2.0900339,
+        "unit": "kgCO2e/tkm"
+      },
+      {
+        "scope": "scope2",
+        "value": 0.0,
+        "unit": "kgCO2e/tkm"
+      },
+      {
+        "scope": "scope3_3",
+        "value": 0.4575109,
+        "unit": "kgCO2e/tkm"
+      },
+      {
+        "scope": "scope3",
+        "value": 3.0249822,
+        "unit": "kgCO2e/tkm"
+      }
+    ],
+    "tags": [
+      "ferroviaire",
+      "mobitool"
+    ],
+    "source": "Mobitool",
+    "region": "Suisse"
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27463",
+    "name_fr": "Train Suisse | Diesel | Locomotive diesel avec filtre à particules",
+    "name_de": "Bahn Schweiz | Diesel | Diesellok mit Partikelfilter",
+    "subcategory": "ferroviaire",
+    "input_units": [
+      "tkm"
+    ],
+    "default_unit": "tkm",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 34.141429,
+        "unit": "kgCO2e/tkm"
+      },
+      {
+        "scope": "scope2",
+        "value": 0.0,
+        "unit": "kgCO2e/tkm"
+      },
+      {
+        "scope": "scope3_3",
+        "value": 8.4524211,
+        "unit": "kgCO2e/tkm"
+      },
+      {
+        "scope": "scope3",
+        "value": 34.141429,
+        "unit": "kgCO2e/tkm"
+      }
+    ],
+    "tags": [
+      "ferroviaire",
+      "mobitool"
+    ],
+    "source": "Mobitool",
+    "region": "Suisse"
+  },
+  {
+    "id": "698418f3c1a4e9f26cd273ed",
+    "name_fr": "Avion | Kérosène | en Europe, economy",
+    "name_de": "Flugzeug | Kerosen | innerhalb Europa, economy",
+    "subcategory": "aerien",
+    "input_units": [
+      "pkm"
+    ],
+    "default_unit": "pkm",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 235.51756,
+        "unit": "kgCO2e/pkm"
+      },
+      {
+        "scope": "scope2",
+        "value": 0.0,
+        "unit": "kgCO2e/pkm"
+      },
+      {
+        "scope": "scope3_3",
+        "value": 41.0544728,
+        "unit": "kgCO2e/pkm"
+      },
+      {
+        "scope": "scope3",
+        "value": 235.51756,
+        "unit": "kgCO2e/pkm"
+      }
+    ],
+    "tags": [
+      "carburant_avion",
+      "jet_fuel",
+      "aerien",
+      "mobitool"
+    ],
+    "source": "Mobitool",
+    "region": "Suisse"
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27479",
+    "name_fr": "Avion | Kérosène | Intercontinental, moyenne",
+    "name_de": "Flugzeug | Kerosen | Interkontinental, Durchschnitt",
+    "subcategory": "aerien",
+    "input_units": [
+      "tkm"
+    ],
+    "default_unit": "tkm",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 207.241725,
+        "unit": "kgCO2e/tkm"
+      },
+      {
+        "scope": "scope2",
+        "value": 0.0,
+        "unit": "kgCO2e/tkm"
+      },
+      {
+        "scope": "scope3_3",
+        "value": 28.1241686,
+        "unit": "kgCO2e/tkm"
+      },
+      {
+        "scope": "scope3",
+        "value": 1292.2689,
+        "unit": "kgCO2e/tkm"
+      }
+    ],
+    "tags": [
+      "carburant_avion",
+      "jet_fuel",
+      "aerien",
+      "mobitool"
+    ],
+    "source": "Mobitool",
+    "region": "Suisse"
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27160",
+    "name_fr": "Pompage-turbinage",
+    "name_de": "Pumpspeicher",
+    "subcategory": "electricite",
+    "input_units": [
+      "kWh"
+    ],
+    "default_unit": "kWh",
+    "impacts": [
+      {
+        "scope": "scope2",
+        "value": 0.00138329,
+        "unit": "kgCO2e/kWh"
+      },
+      {
+        "scope": "scope3_3",
+        "value": 0.13365184,
+        "unit": "kgCO2e/kWh"
+      },
+      {
+        "scope": "scope3",
+        "value": 0.00138329,
+        "unit": "kgCO2e/kWh"
+      }
+    ],
+    "tags": [
+      "electricite",
+      "bafu"
+    ],
+    "source": "BAFU",
+    "region": "Suisse"
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27161",
+    "name_fr": "Réseau (approche location-based)\"",
+    "name_de": "Netz (Location-based-Ansatz)",
+    "subcategory": "electricite",
+    "input_units": [
+      "kWh"
+    ],
+    "default_unit": "kWh",
+    "impacts": [
+      {
+        "scope": "scope2",
+        "value": 0.00487761,
+        "unit": "kgCO2e/kWh"
+      },
+      {
+        "scope": "scope3_3",
+        "value": 0.02175909,
+        "unit": "kgCO2e/kWh"
+      },
+      {
+        "scope": "scope3",
+        "value": 0.00487761,
+        "unit": "kgCO2e/kWh"
+      }
+    ],
+    "tags": [
+      "electricite",
+      "bafu"
+    ],
+    "source": "BAFU",
+    "region": "Suisse"
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2715f",
+    "name_fr": "Déchets",
+    "name_de": "Abfall",
+    "subcategory": "electricite",
+    "input_units": [
+      "kWh"
+    ],
+    "default_unit": "kWh",
+    "impacts": [
+      {
+        "scope": "scope2",
+        "value": 0.0,
+        "unit": "kgCO2e/kWh"
+      },
+      {
+        "scope": "scope3_3",
+        "value": 0.0,
+        "unit": "kgCO2e/kWh"
+      },
+      {
+        "scope": "scope3",
+        "value": 0.0,
+        "unit": "kgCO2e/kWh"
+      }
+    ],
+    "tags": [
+      "incineration",
+      "ordures",
+      "electricite",
+      "bafu"
+    ],
+    "source": "BAFU",
+    "region": "Suisse"
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2715b",
+    "name_fr": "Nucléaire",
+    "name_de": "Kernenergie",
+    "subcategory": "electricite",
+    "input_units": [
+      "kWh"
+    ],
+    "default_unit": "kWh",
+    "impacts": [
+      {
+        "scope": "scope2",
+        "value": 2.63e-05,
+        "unit": "kgCO2e/kWh"
+      },
+      {
+        "scope": "scope3_3",
+        "value": 0.01531023,
+        "unit": "kgCO2e/kWh"
+      },
+      {
+        "scope": "scope3",
+        "value": 2.631e-05,
+        "unit": "kgCO2e/kWh"
+      }
+    ],
+    "tags": [
+      "energie_atomique",
+      "electricite",
+      "bafu"
+    ],
+    "source": "BAFU",
+    "region": "Suisse"
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2715d",
+    "name_fr": "Gaz naturel",
+    "name_de": "Erdgas",
+    "subcategory": "electricite",
+    "input_units": [
+      "kWh"
+    ],
+    "default_unit": "kWh",
+    "impacts": [
+      {
+        "scope": "scope2",
+        "value": 0.43273224,
+        "unit": "kgCO2e/kWh"
+      },
+      {
+        "scope": "scope3_3",
+        "value": 0.14371469,
+        "unit": "kgCO2e/kWh"
+      },
+      {
+        "scope": "scope3",
+        "value": 0.43273224,
+        "unit": "kgCO2e/kWh"
+      }
+    ],
+    "tags": [
+      "gaz",
+      "methane",
+      "gnl",
+      "electricite",
+      "bafu"
+    ],
+    "source": "BAFU",
+    "region": "Suisse"
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27169",
+    "name_fr": "Coke de pétrole",
+    "name_de": "Petrolkoks",
+    "subcategory": "combustibles",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 2.9,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "tags": [
+      "combustibles",
+      "co2_emissionsfaktoren_des_treibhausgainventars_der_schweiz",
+      "comment:CH4 and N20 emissions added from the Latest Greenhouses Gas Inventory of Switzerland Tables"
+    ],
+    "source": "CO2-Emissionsfaktoren des Treibhausgainventars der Schweiz",
+    "region": "Suisse"
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27174",
+    "name_fr": "Méthane (biogène)",
+    "name_de": "Methan (biogen)",
+    "subcategory": "combustibles",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 28.0,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "tags": [
+      "ch4",
+      "combustibles",
+      "ar_5_chapter_8_anthropogenic_and_natural_radiative_forcing"
+    ],
+    "source": "AR 5 - Chapter 8: \"Anthropogenic and Natural Radiative Forcing\"",
+    "region": "Suisse"
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2716d",
+    "name_fr": "Déchets brûlés dans les UIOM (2022)",
+    "name_de": "Abfälle in KVA (2022)",
+    "subcategory": "combustibles",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 0.521,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "tags": [
+      "incineration",
+      "ordures",
+      "combustibles",
+      "co2_emissionsfaktoren_des_treibhausgainventars_der_schweiz",
+      "comment:47.8% Emission factor from Fossil (excluding biogene)"
+    ],
+    "source": "CO2-Emissionsfaktoren des Treibhausgainventars der Schweiz",
+    "region": "Suisse"
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27195",
+    "name_fr": "Gaz naturel moyen (à utiliser uniquement si le type de carburant est inconnu)",
+    "name_de": "Durchschnittliches Erdgas (nur verwenden, wenn die Kraftstoffart nicht bekannt ist)",
+    "subcategory": "combustibles",
+    "input_units": [
+      "L"
+    ],
+    "default_unit": "L",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 1.25,
+        "unit": "kgCO2e/litre"
+      }
+    ],
+    "tags": [
+      "gaz",
+      "methane",
+      "combustibles",
+      "mobitool_v3",
+      "comment:with 72.7% natural gas and 27.3% biomethane"
+    ],
+    "source": "mobitool v3",
+    "region": "Suisse"
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2735e",
+    "name_fr": "Four à accumulation électrique (électricité CH)",
+    "name_de": "Elektrospeicherofen (Strom CH)",
+    "subcategory": "combustibles",
+    "input_units": [
+      "MJ"
+    ],
+    "default_unit": "MJ",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 0.0171,
+        "unit": "kgCO2e/MJ"
+      },
+      {
+        "scope": "scope3_3",
+        "value": 0.0136,
+        "unit": "kgCO2e/MJ"
+      },
+      {
+        "scope": "scope3",
+        "value": 0.0136,
+        "unit": "kgCO2e/MJ"
+      }
+    ],
+    "tags": [
+      "combustibles",
+      "bafu"
+    ],
+    "source": "BAFU",
+    "region": "Suisse"
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27494",
+    "name_fr": "Béton maigre, NovoCon Sohlenbeton, 150 kg CEM II/C-M (F-T) (sans armature)",
+    "name_de": "Magerbeton, NovoCon Sohlenbeton, 150 kg CEM II/C-M (F-T) (ohne Bewehrung)",
+    "subcategory": "beton",
+    "input_units": [],
+    "default_unit": null,
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.066,
+        "unit": "kgCO2e/unknown"
+      }
+    ],
+    "tags": [
+      "beton",
+      "kbob",
+      "unit_unknown"
+    ],
+    "source": "KBOB",
+    "region": "Suisse"
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2749b",
+    "name_fr": "Béton pour bâtiment, zirkulit® NPK C, 300kg CEM II/B (sans armature)",
+    "name_de": "Hochbaubeton, zirkulit® NPK C, 300kg CEM II/B (ohne Bewehrung)",
+    "subcategory": "beton",
+    "input_units": [],
+    "default_unit": null,
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.102,
+        "unit": "kgCO2e/unknown"
+      }
+    ],
+    "tags": [
+      "beton",
+      "kbob",
+      "unit_unknown"
+    ],
+    "source": "KBOB",
+    "region": "Suisse"
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2749c",
+    "name_fr": "Béton pour bâtiment, Möckli Primärbeton, NPK A, 280 kg CEM II/B-LL (sans armature)",
+    "name_de": "Hochbaubeton, Möckli Primärbeton, NPK A, 280 kg CEM II/B-LL (ohne Bewehrung)",
+    "subcategory": "beton",
+    "input_units": [],
+    "default_unit": null,
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.0904,
+        "unit": "kgCO2e/unknown"
+      }
+    ],
+    "tags": [
+      "beton",
+      "kbob",
+      "unit_unknown"
+    ],
+    "source": "KBOB",
+    "region": "Suisse"
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2752d",
+    "name_fr": "Panneau de particules, colle UF, enduit, zone sèche",
+    "name_de": "Spanplatte, UF-gebunden, beschichtet, Trockenbereich",
+    "subcategory": "bois_et_produits_en_bois",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.735,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "tags": [
+      "bois_et_produits_en_bois",
+      "source_missing"
+    ],
+    "source": null,
+    "region": "Suisse"
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2751a",
+    "name_fr": "fascine Howolis Quickquader en laine de bois Lindner Suisse GmbH",
+    "name_de": "Holzwolle Quickquader-Faschine Howolis Lindner Suisse GmbH",
+    "subcategory": "bois_et_produits_en_bois",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.296,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "tags": [
+      "bois_et_produits_en_bois",
+      "source_missing"
+    ],
+    "source": null,
+    "region": "Suisse"
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27514",
+    "name_fr": "Bois lamellé-collé, colle UF, zone sèche, production Suisse",
+    "name_de": "Brettschichtholz, Produktion Schweiz",
+    "subcategory": "bois_et_produits_en_bois",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.253,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "tags": [
+      "bois_et_produits_en_bois",
+      "source_missing"
+    ],
+    "source": null,
+    "region": "Suisse"
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2727c",
+    "name_fr": "Elimination, bâtiment, porte intérieure, bois, vitrage, huisserie métallique (m2)",
+    "name_de": "Entsorgung, Gebäude, Innentüre, Holz, Glaseinsatz, Stahlzarge (m2)",
+    "subcategory": "building_elements_and_structures",
+    "input_units": [
+      "m2"
+    ],
+    "default_unit": "m2",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 6.54,
+        "unit": "kgCO2e/m2"
+      }
+    ],
+    "tags": [
+      "elimination_elements_techniques_du_batiment",
+      "building_elements_and_structures",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse"
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2723a",
+    "name_fr": "Elimination, panneau de façade, composite aluminium, 4 mm (m2)",
+    "name_de": "Entsorgung, Fassadenplatte, Aluverbund, 4 mm (m2)",
+    "subcategory": "building_elements_and_structures",
+    "input_units": [
+      "m2"
+    ],
+    "default_unit": "m2",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 7.65,
+        "unit": "kgCO2e/m2"
+      }
+    ],
+    "tags": [
+      "elimination_elements_techniques_du_batiment",
+      "building_elements_and_structures",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse"
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27297",
+    "name_fr": "Élimination, système de ventilation résidentiel, gaines en tôle, y compris l'évacuation de l'air de la cuisine (m2)",
+    "name_de": "Entsorgung, Lüftungsanlage Wohnen, Blechkanäle, inkl. Küchenabluft (m2)",
+    "subcategory": "building_elements_and_structures",
+    "input_units": [
+      "m2"
+    ],
+    "default_unit": "m2",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.298,
+        "unit": "kgCO2e/m2"
+      }
+    ],
+    "tags": [
+      "elimination_elements_techniques_du_batiment",
+      "building_elements_and_structures",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse"
+  },
+  {
+    "id": "698418f3c1a4e9f26cd274ff",
+    "name_fr": "Tôle d'aluminium, nue",
+    "name_de": "Aluminiumblech, blank",
+    "subcategory": "produits_en_metal",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 5.58,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "tags": [
+      "produits_en_metal",
+      "source_missing"
+    ],
+    "source": null,
+    "region": "Suisse"
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27502",
+    "name_fr": "Acier d'armature",
+    "name_de": "Armierungsstahl",
+    "subcategory": "produits_en_metal",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.785,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "tags": [
+      "produits_en_metal",
+      "source_missing"
+    ],
+    "source": null,
+    "region": "Suisse"
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27212",
+    "name_fr": "Elimination, gravier et sable (kg)",
+    "name_de": "Entsorgung, Kies und Sand (kg)",
+    "subcategory": "building_and_construction_materials",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.0128,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "tags": [
+      "elimination_materiaux_de_construction",
+      "building_and_construction_materials",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse"
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27203",
+    "name_fr": "Elimination, panneau trois plis (kg)",
+    "name_de": "Entsorgung, Dreischichtplatte (kg)",
+    "subcategory": "building_and_construction_materials",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.0555,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "tags": [
+      "elimination_materiaux_de_construction",
+      "building_and_construction_materials",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse"
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2757a",
+    "name_fr": "Parquet en liège, huilé et vitrifié, 5,3 mm",
+    "name_de": "Korkparkett geölt/versiegelt, 5.3 mm",
+    "subcategory": "revetements_de_sol",
+    "input_units": [
+      "m2"
+    ],
+    "default_unit": "m2",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 3.26,
+        "unit": "kgCO2e/m2"
+      }
+    ],
+    "tags": [
+      "revetements_de_sol",
+      "source_missing"
+    ],
+    "source": null,
+    "region": "Suisse"
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27575",
+    "name_fr": "Béton dur, 2 couches, 35 mm",
+    "name_de": "Hartbeton zweischichtig, 35 mm",
+    "subcategory": "revetements_de_sol",
+    "input_units": [
+      "m2"
+    ],
+    "default_unit": "m2",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 16.4,
+        "unit": "kgCO2e/m2"
+      }
+    ],
+    "tags": [
+      "revetements_de_sol",
+      "source_missing"
+    ],
+    "source": null,
+    "region": "Suisse"
+  },
+  {
+    "id": "698418f3c1a4e9f26cd272d3",
+    "name_fr": "Élimination, bâtiment, plâtre minéral, à l'élimination finale {CH}",
+    "name_de": "Entsorgung, Gebäude, mineralischer Gips, zur endgültigen Entsorgung {CH}",
+    "subcategory": "construction_waste",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.00394351,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "tags": [
+      "dechets_de_construction",
+      "construction_waste",
+      "uvek_database"
+    ],
+    "source": "UVEK Database",
+    "region": "Suisse"
+  },
+  {
+    "id": "698418f3c1a4e9f26cd272ca",
+    "name_fr": "Élimination, bâtiment, béton, non armé, à l'élimination finale {CH}",
+    "name_de": "Entsorgung, Gebäude, Beton, nicht bewehrt, zur endgültigen Entsorgung {CH}",
+    "subcategory": "construction_waste",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.00876995,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "tags": [
+      "dechets_de_construction",
+      "construction_waste",
+      "uvek_database"
+    ],
+    "source": "UVEK Database",
+    "region": "Suisse"
+  },
+  {
+    "id": "698418f3c1a4e9f26cd272b0",
+    "name_fr": "Démontage, écran LCD, manuellement, à l'usine {CH}",
+    "name_de": "Demontage, LCD-Bildschirm, manuell, im Werk {CH}",
+    "subcategory": "electronics_waste",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 1.31457309,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "tags": [
+      "dechets_electroniques",
+      "electronics_waste",
+      "uvek_database"
+    ],
+    "source": "UVEK Database",
+    "region": "Suisse"
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27305",
+    "name_fr": "Élimination, batteries Li-ions, hydrométallurgique {GLO}",
+    "name_de": "Entsorgung, Li-Ionen-Batterien, hydrometallurgisch {GLO}",
+    "subcategory": "electronics_waste",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.54075992,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "tags": [
+      "dechets_electroniques",
+      "electronics_waste",
+      "uvek_database"
+    ],
+    "source": "UVEK Database",
+    "region": "Suisse"
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2735a",
+    "name_fr": "Traitement, effluent de production de panneaux de fibres souples, vers le traitement des eaux usées, classe 3 {CH}",
+    "name_de": "Behandlung, Abwasser aus der Weichfaserplattenproduktion, zur Abwasserbehandlung, Klasse 3 {CH}",
+    "subcategory": "wastewater_treatment",
+    "input_units": [
+      "m3"
+    ],
+    "default_unit": "m3",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.91031543,
+        "unit": "kgCO2e/m3"
+      }
+    ],
+    "tags": [
+      "eaux_usees",
+      "wastewater_treatment",
+      "uvek_database"
+    ],
+    "source": "UVEK Database",
+    "region": "Suisse"
+  },
+  {
+    "id": "698418f3c1a4e9f26cd271be",
+    "name_fr": "Location de personnel et personnel temporaire, à l'exclusion du domaine des TIC",
+    "name_de": "Personalverleih und temporäres Personal, exkl. Bereich IKT",
+    "subcategory": "services",
+    "input_units": [
+      "kCHF"
+    ],
+    "default_unit": "kCHF",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 115.471207,
+        "unit": "kgCO2e/parkCHF"
+      }
+    ],
+    "tags": [
+      "services",
+      "environmental_impacts_of_swiss_consumption_and_production"
+    ],
+    "source": "Environmental Impacts of Swiss Consumption and Production",
+    "region": "Suisse"
+  },
+  {
+    "id": "698418f3c1a4e9f26cd271bb",
+    "name_fr": "Travail d'information",
+    "name_de": "Informationsarbeit",
+    "subcategory": "services",
+    "input_units": [
+      "kCHF"
+    ],
+    "default_unit": "kCHF",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 115.471207,
+        "unit": "kgCO2e/parkCHF"
+      }
+    ],
+    "tags": [
+      "services",
+      "environmental_impacts_of_swiss_consumption_and_production"
+    ],
+    "source": "Environmental Impacts of Swiss Consumption and Production",
+    "region": "Suisse"
+  },
+  {
+    "id": "698418f3c1a4e9f26cd271c2",
+    "name_fr": "Formation et perfectionnement",
+    "name_de": "Aus- und Weiterbildung",
+    "subcategory": "services",
+    "input_units": [
+      "kCHF"
+    ],
+    "default_unit": "kCHF",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 108.075772,
+        "unit": "kgCO2e/parkCHF"
+      }
+    ],
+    "tags": [
+      "services",
+      "environmental_impacts_of_swiss_consumption_and_production"
+    ],
+    "source": "Environmental Impacts of Swiss Consumption and Production",
+    "region": "Suisse"
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27186",
+    "name_fr": "Diesel moyen (à utiliser uniquement si le type de carburant est inconnu)",
+    "name_de": "Durchschnittlicher Diesel (nur verwenden, wenn die Kraftstoffart unbekannt ist)",
+    "subcategory": "carburants",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 2.96,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "tags": [
+      "fuel_routier",
+      "gasoil",
+      "gazole",
+      "carburants",
+      "mobitool_v3",
+      "comment:with 94.1% diesel and 5.9% biodiesel"
+    ],
+    "source": "mobitool v3",
+    "region": "Suisse"
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27188",
+    "name_fr": "Gaz naturel moyen (à utiliser uniquement si le type de carburant est inconnu)",
+    "name_de": "Durchschnittliches Erdgas (nur verwenden, wenn die Kraftstoffart nicht bekannt ist)",
+    "subcategory": "carburants",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 1.95,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "tags": [
+      "gaz",
+      "methane",
+      "carburants",
+      "mobitool_v3",
+      "comment:with 72.7% natural gas and 27.3% biomethane"
+    ],
+    "source": "mobitool v3",
+    "region": "Suisse"
+  }
+]
