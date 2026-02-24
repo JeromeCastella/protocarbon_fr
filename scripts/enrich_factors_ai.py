@@ -72,10 +72,10 @@ def enrich_factor(factor: dict) -> dict:
     
     prompt = ENRICHMENT_PROMPT + json.dumps(factor_context, ensure_ascii=False, indent=2)
     
-    chat = Chat(
+    chat = LlmChat(
         api_key=EMERGENT_KEY,
         model="gpt-4o-mini",
-        system="Tu es un assistant expert en bilan carbone. Réponds uniquement en JSON valide."
+        system_message="Tu es un assistant expert en bilan carbone. Réponds uniquement en JSON valide."
     )
     
     response = chat.send_message(prompt)
