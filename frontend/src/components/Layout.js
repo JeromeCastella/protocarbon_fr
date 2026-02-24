@@ -67,9 +67,9 @@ const Layout = () => {
           <FiscalYearSelector onCreateNew={() => navigate('/fiscal-years')} />
         </div>
 
-        {/* Navigation */}
+        {/* Navigation principale */}
         <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
-          {navItems.map(({ path, icon: Icon, label }) => (
+          {mainNavItems.map(({ path, icon: Icon, label }) => (
             <NavLink
               key={path}
               to={path}
@@ -88,35 +88,66 @@ const Layout = () => {
               <span className="font-medium">{label}</span>
             </NavLink>
           ))}
+          
+          {/* Séparateur + Section Support */}
+          <div className={`my-4 border-t ${isDark ? 'border-slate-700' : 'border-gray-200'}`} />
+          
+          {supportNavItems.map(({ path, icon: Icon, label }) => (
+            <NavLink
+              key={path}
+              to={path}
+              data-testid={`nav-${path.slice(1)}`}
+              className={({ isActive }) => `
+                flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200
+                ${isActive 
+                  ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/30' 
+                  : isDark 
+                    ? 'text-slate-300 hover:bg-slate-700' 
+                    : 'text-gray-600 hover:bg-gray-100'
+                }
+              `}
+            >
+              <Icon className="w-5 h-5" />
+              <span className="font-medium">{label}</span>
+            </NavLink>
+          ))}
         </nav>
 
-        {/* Bottom section */}
+        {/* Section Préférences (Langue + Thème côte à côte) */}
+        <div className={`px-4 py-3 border-t ${isDark ? 'border-slate-700' : 'border-gray-200'}`}>
+          <div className="flex gap-2">
+            {/* Language toggle */}
+            <button
+              onClick={toggleLanguage}
+              data-testid="language-toggle"
+              className={`flex-1 flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl transition-all ${
+                isDark 
+                  ? 'bg-slate-700/50 text-slate-300 hover:bg-slate-700' 
+                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+              }`}
+            >
+              <Globe className="w-4 h-4" />
+              <span className="text-sm font-medium">{language === 'fr' ? 'FR' : 'DE'}</span>
+            </button>
+
+            {/* Theme toggle */}
+            <button
+              onClick={toggleTheme}
+              data-testid="theme-toggle"
+              className={`flex-1 flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl transition-all ${
+                isDark 
+                  ? 'bg-slate-700/50 text-slate-300 hover:bg-slate-700' 
+                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+              }`}
+            >
+              {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+              <span className="text-sm font-medium">{isDark ? (language === 'fr' ? 'Clair' : 'Hell') : (language === 'fr' ? 'Sombre' : 'Dunkel')}</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Section Profil utilisateur */}
         <div className={`p-4 border-t ${isDark ? 'border-slate-700' : 'border-gray-200'}`}>
-          {/* Language toggle */}
-          <button
-            onClick={toggleLanguage}
-            data-testid="language-toggle"
-            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl mb-2 transition-all ${
-              isDark ? 'text-slate-300 hover:bg-slate-700' : 'text-gray-600 hover:bg-gray-100'
-            }`}
-          >
-            <Globe className="w-5 h-5" />
-            <span className="font-medium">{language === 'fr' ? 'Français' : 'Deutsch'}</span>
-          </button>
-
-          {/* Theme toggle */}
-          <button
-            onClick={toggleTheme}
-            data-testid="theme-toggle"
-            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl mb-4 transition-all ${
-              isDark ? 'text-slate-300 hover:bg-slate-700' : 'text-gray-600 hover:bg-gray-100'
-            }`}
-          >
-            {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-            <span className="font-medium">{isDark ? t('nav.lightMode') : t('nav.darkMode')}</span>
-          </button>
-
-          {/* User info */}
           <div className={`p-4 rounded-xl ${isDark ? 'bg-slate-700/50' : 'bg-gray-100'}`}>
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white font-bold">
@@ -129,6 +160,7 @@ const Layout = () => {
               <button
                 onClick={logout}
                 data-testid="logout-btn"
+                title={language === 'fr' ? 'Déconnexion' : 'Abmelden'}
                 className={`p-2 rounded-lg transition-colors ${isDark ? 'hover:bg-slate-600' : 'hover:bg-gray-200'}`}
               >
                 <LogOut className="w-5 h-5" />
