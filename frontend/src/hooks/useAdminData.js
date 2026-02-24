@@ -1,7 +1,7 @@
 /**
  * Hook personnalisé pour la gestion des données admin
  */
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import axios from 'axios';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL || '';
@@ -11,11 +11,14 @@ export const useAdminData = (isAdmin) => {
   const [factors, setFactors] = useState([]);
   const [subcategories, setSubcategories] = useState([]);
   const [users, setUsers] = useState([]);
+  const isInitialLoad = useRef(true);
 
   const fetchData = useCallback(async () => {
     if (!isAdmin) return;
     
-    setLoading(true);
+    if (isInitialLoad.current) {
+      setLoading(true);
+    }  
     try {
       const [factorsRes, usersRes, subcatsRes] = await Promise.all([
         axios.get(`${API_URL}/api/admin/emission-factors-v2`),
@@ -30,6 +33,7 @@ export const useAdminData = (isAdmin) => {
       console.error('Failed to fetch admin data:', error);
     } finally {
       setLoading(false);
+      isInitialLoad.current = false;
     }
   }, [isAdmin]);
 

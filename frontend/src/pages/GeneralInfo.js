@@ -21,7 +21,6 @@ import {
   ChevronLeft,
   Car,
   Flame,
-  Zap,
   Package,
   Truck,
   Plane,
@@ -91,10 +90,8 @@ const GeneralInfo = () => {
     hasCombustion: null,
     hasFugitiveEmissions: null,
     hasProcessEmissions: null,
-    usesElectricity: null,
     usesHeating: null,
     usesCooling: null,
-    buysMaterials: null,
     hasWaste: null,
     hasFreight: null,
     hasBusinessTravel: null,
@@ -297,13 +294,6 @@ const GeneralInfo = () => {
       subtitle: 'Identifions vos achats d\'énergie',
       questions: [
         {
-          key: 'usesElectricity',
-          icon: Zap,
-          text: 'Etes-vous propriétaires des locaux consommant de l\'électricité ?',
-          hint: 'Bureaux, ateliers, éclairage...',
-          categories: ['electricite']
-        },
-        {
           key: 'usesHeating',
           icon: Flame,
           text: 'Achetez-vous de la chaleur ou de la vapeur via un réseau ?',
@@ -324,13 +314,7 @@ const GeneralInfo = () => {
       title: 'Scope 3 Amont - Chaîne de valeur',
       subtitle: 'Émissions liées à vos achats et activités',
       questions: [
-        {
-          key: 'buysMaterials',
-          icon: Package,
-          text: 'Achetez-vous des biens ou services nécessaires à vos opérations susceptibles de générer des émissions significatives sur leur cycle de vie ?',
-          hint: 'Matières premières, fournitures, services...',
-          categories: ['biens_services_achetes', 'biens_equipement']
-        },
+
         {
           key: 'hasWaste',
           icon: Trash2,
@@ -363,7 +347,7 @@ const GeneralInfo = () => {
           key: 'hasLeasedAssetsUpstream',
           icon: Building,
           text: 'Utilisez-vous des locaux, bâtiments, véhicules, machines ou équipements loués ?',
-          hint: 'Actifs que vous louez à un tiers pour votre usage',
+          hint: "Si vous louez vos locaux sans avoir le détail des charges énergétiques, ou si vous louez des véhicules, machines ou équipements, les émissions associées iront dans cette catégorie.",
           categories: ['actifs_loues_amont']
         }
       ]
@@ -432,7 +416,12 @@ const GeneralInfo = () => {
         }
       });
     });
-    
+
+    // Electricity is always active (every company uses it)
+    selected.add('electricite');
+    // Purchased goods/services and equipment are always active
+    selected.add('biens_services_achetes');
+    selected.add('biens_equipement');
     // Always include energy upstream (3.3) if any scope 1 or 2 categories are selected
     const scope1or2 = ['combustion_mobile', 'combustion_fixe', 'emissions_fugitives', 'emissions_procedes', 'electricite', 'chaleur_vapeur', 'refroidissement'];
     if (scope1or2.some(cat => selected.has(cat))) {
@@ -480,10 +469,8 @@ const GeneralInfo = () => {
       hasCombustion: null,
       hasFugitiveEmissions: null,
       hasProcessEmissions: null,
-      usesElectricity: null,
       usesHeating: null,
       usesCooling: null,
-      buysMaterials: null,
       hasWaste: null,
       hasFreight: null,
       hasBusinessTravel: null,
