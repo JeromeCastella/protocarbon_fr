@@ -66,7 +66,7 @@ async def enrich_factor(factor: dict, semaphore: asyncio.Semaphore) -> dict:
             api_key=ANTHROPIC_KEY,
             session_id=f"enrich-{uuid.uuid4()}",
             system_message="Tu es un assistant expert en bilan carbone. Réponds uniquement en JSON valide."
-        ).with_model("anthropic", "claude-3-5-haiku-20241022")
+        ).with_model("anthropic", "claude-haiku-4-5-20251001")
         
         user_message = UserMessage(text=prompt)
         response = await chat.send_message(user_message)
