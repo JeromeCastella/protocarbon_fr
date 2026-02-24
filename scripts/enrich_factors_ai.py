@@ -4,11 +4,10 @@ Enrich 50 sample emission factors using AI (GPT-4o-mini via Emergent)
 Sprint 1 - POC validation
 """
 import json
-import os
-import sys
-sys.path.insert(0, '/app/backend')
+import asyncio
+import uuid
 
-from emergentintegrations.llm.chat import LlmChat
+from emergentintegrations.llm.chat import LlmChat, UserMessage
 
 EMERGENT_KEY = "sk-emergent-75eA3EbCd255bB1CeD"
 
@@ -56,7 +55,7 @@ IMPORTANT:
 Facteur à enrichir:
 """
 
-def enrich_factor(factor: dict) -> dict:
+async def enrich_factor(factor: dict) -> dict:
     """Enrich a single factor using AI."""
     
     # Prepare context for the AI
@@ -72,13 +71,18 @@ def enrich_factor(factor: dict) -> dict:
     
     prompt = ENRICHMENT_PROMPT + json.dumps(factor_context, ensure_ascii=False, indent=2)
     
+    # Create chat instance with unique session ID
     chat = LlmChat(
         api_key=EMERGENT_KEY,
-        model="gpt-4o-mini",
+        session_id=f"enrich-{uuid.uuid4()}",
         system_message="Tu es un assistant expert en bilan carbone. Réponds uniquement en JSON valide."
-    )
+    ).with_model("openai", "gpt-4o-mini")
     
-    response = chat.send_message(prompt)
+    # Create user message
+    user_message = UserMessage(text=prompt)
+    
+    # Send message and get response
+    response = await chat.send_message(user_message)
     
     # Parse JSON response
     try:
@@ -97,7 +101,7 @@ def enrich_factor(factor: dict) -> dict:
         print(f"  Response was: {response[:200]}...")
         return None
 
-def main():
+async def main():
     # Load sample factors
     with open("/app/scripts/factors_sample_50.json", "r", encoding="utf-8") as f:
         factors = json.load(f)
@@ -112,7 +116,7 @@ def main():
         print(f"\n[{i+1}/{len(factors)}] {factor.get('name_fr', 'Unknown')[:50]}...")
         
         try:
-            enrichment = enrich_factor(factor)
+            enrichment = await enrich_factor(factor)
             
             if enrichment:
                 # Merge enrichment with original factor
@@ -142,4 +146,4 @@ def main():
     print(f"📄 Output saved to: {output_path}")
 
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())
