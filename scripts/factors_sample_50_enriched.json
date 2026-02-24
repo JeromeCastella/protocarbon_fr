@@ -38,7 +38,24 @@
       "mobitool"
     ],
     "source": "Mobitool",
-    "region": "Suisse"
+    "region": "Suisse",
+    "name_simple_fr": "Camion lourd au gaz",
+    "name_simple_de": "Schwerer Gas-Lkw",
+    "description_fr": "Un camion léger, souvent utilisé pour transporter des marchandises lourdes. Exemple: camion Scania au gaz comprimé.",
+    "description_de": "Ein leichter Lastwagen, der häufig zum Transport schwerer Güter verwendet wird. Beispiel: Scania-Lkw mit komprimiertem Gas.",
+    "search_tags": [
+      "camion",
+      "poids lourd",
+      "véhicule",
+      "truck",
+      "transport",
+      "gaz",
+      "methane",
+      "road"
+    ],
+    "usage_hint_fr": "Utilisez ce facteur pour le transport de marchandises.",
+    "usage_hint_de": "Verwenden Sie diesen Faktor für den Gütertransport.",
+    "popularity_score": 70
   },
   {
     "id": "698418f3c1a4e9f26cd2740f",
@@ -78,7 +95,22 @@
       "mobitool"
     ],
     "source": "Mobitool",
-    "region": "Suisse"
+    "region": "Suisse",
+    "name_simple_fr": "Camion à hydrogène (18t)",
+    "name_simple_de": "Wasserstoff-Lkw (18t)",
+    "description_fr": "Camion de 18 tonnes alimenté par hydrogène. Utilisé pour le transport de marchandises, exemple : camion Tesla à hydrogène.",
+    "description_de": "18-Tonnen-Lkw, der mit Wasserstoff betrieben wird. Wird für den Gütertransport verwendet, z.B. Wasserstoff-Lkw von Tesla.",
+    "search_tags": [
+      "camion",
+      "poids lourd",
+      "hydrogène",
+      "transport",
+      "vehicle",
+      "Lkw"
+    ],
+    "usage_hint_fr": "Utiliser pour évaluer le transport de marchandises.",
+    "usage_hint_de": "Verwenden Sie es zur Bewertung des Gütertransports.",
+    "popularity_score": 50
   },
   {
     "id": "698418f3c1a4e9f26cd27401",
@@ -120,7 +152,21 @@
       "mobitool"
     ],
     "source": "Mobitool",
-    "region": "Suisse"
+    "region": "Suisse",
+    "name_simple_fr": "Camion hybride",
+    "name_simple_de": "Hybrid-Lkw",
+    "description_fr": "Camion de 3.5 tonnes utilisant un moteur hybride diesel, idéal pour le transport local. Exemple : camion de livraison.",
+    "description_de": "3,5-Tonnen-Lkw mit Hybrid-Dieselmotor, ideal für lokalen Transport. Beispiel: Lieferwagen.",
+    "search_tags": [
+      "camion",
+      "utilitaire",
+      "véhicule",
+      "transport",
+      "hybride"
+    ],
+    "usage_hint_fr": "Utilisez pour le transport de marchandises légères.",
+    "usage_hint_de": "Verwenden Sie es für den Transport leichter Waren.",
+    "popularity_score": 70
   },
   {
     "id": "698418f3c1a4e9f26cd2745c",
@@ -161,7 +207,24 @@
       "mobitool"
     ],
     "source": "Mobitool",
-    "region": "Suisse"
+    "region": "Suisse",
+    "name_simple_fr": "Camion lourd hybride",
+    "name_simple_de": "Hybrid-Lkw",
+    "description_fr": "Camion de 40 tonnes, comme un Scania ou Volvo, utilisant une technologie hybride diesel. Idéal pour le transport routier.",
+    "description_de": "40-Tonnen-Lkw, wie Scania oder Volvo, der Hybrid-Diesel-Technologie nutzt. Ideal für den Straßentransport.",
+    "search_tags": [
+      "camion",
+      "poids lourd",
+      "véhicule",
+      "hybride",
+      "transport routier",
+      "truck",
+      "lkw",
+      "diesel"
+    ],
+    "usage_hint_fr": "Utilisez ce facteur pour calculer les trajets longue distance en camion.",
+    "usage_hint_de": "Verwenden Sie diesen Faktor für die Berechnung von Langstreckentransporten mit Lkw.",
+    "popularity_score": 70
   },
   {
     "id": "698418f3c1a4e9f26cd273b8",
@@ -201,7 +264,25 @@
       "mobitool"
     ],
     "source": "Mobitool",
-    "region": "Suisse"
+    "region": "Suisse",
+    "name_simple_fr": "Voiture essence (moyenne)",
+    "name_simple_de": "Benzin-Pkw (Durchschnitt)",
+    "description_fr": "Voiture de tourisme essence moyenne, comme une Volkswagen Golf. Consommation typique de 6 à 8 litres aux 100 km.",
+    "description_de": "Durchschnittlicher Benzin-Pkw, wie ein Volkswagen Golf. Typischer Verbrauch von 6 bis 8 Litern pro 100 km.",
+    "search_tags": [
+      "voiture",
+      "auto",
+      "véhicule",
+      "car",
+      "essence",
+      "tourisme",
+      "mobilité",
+      "PKW",
+      "Volkswagen"
+    ],
+    "usage_hint_fr": "Utilisez ce facteur pour les trajets en voiture personnelle.",
+    "usage_hint_de": "Verwenden Sie diesen Faktor für Fahrten mit dem Privatwagen.",
+    "popularity_score": 90
   },
   {
     "id": "698418f3c1a4e9f26cd273b7",
@@ -242,7 +323,23 @@
       "mobitool"
     ],
     "source": "Mobitool",
-    "region": "Suisse"
+    "region": "Suisse",
+    "name_simple_fr": "SUV diesel",
+    "name_simple_de": "Diesel SUV",
+    "description_fr": "Un grand SUV diesel, comme un VW Touareg ou un BMW X5, consomme généralement 8-12 L/100 km.",
+    "description_de": "Ein großer Diesel-SUV, wie der VW Touareg oder der BMW X5, verbraucht normalerweise 8-12 L/100 km.",
+    "search_tags": [
+      "voiture",
+      "SUV",
+      "diesel",
+      "auto",
+      "gasoil",
+      "vehicle",
+      "car"
+    ],
+    "usage_hint_fr": "Utilisez ce facteur pour des trajets en SUV diesel.",
+    "usage_hint_de": "Verwenden Sie diesen Faktor für Fahrten mit einem Diesel-SUV.",
+    "popularity_score": 70
   },
   {
     "id": "698418f3c1a4e9f26cd273bd",
@@ -872,7 +969,21 @@
       "comment:with 72.7% natural gas and 27.3% biomethane"
     ],
     "source": "mobitool v3",
-    "region": "Suisse"
+    "region": "Suisse",
+    "name_simple_fr": "Gaz naturel moyen",
+    "name_simple_de": "Durchschnittliches Erdgas",
+    "description_fr": "Utilisé pour le chauffage et les voitures. Ex : VW Passat au gaz naturel.",
+    "description_de": "Wird zum Heizen und für Autos verwendet. Z.B.: VW Passat mit Erdgas.",
+    "search_tags": [
+      "gaz",
+      "carburant",
+      "mobilité",
+      "chauffage",
+      "methane"
+    ],
+    "usage_hint_fr": "Utilisez-le si vous ne connaissez pas le carburant.",
+    "usage_hint_de": "Verwenden Sie es, wenn Sie den Kraftstoff nicht kennen.",
+    "popularity_score": 70
   },
   {
     "id": "698418f3c1a4e9f26cd2735e",
@@ -905,7 +1016,24 @@
       "bafu"
     ],
     "source": "BAFU",
-    "region": "Suisse"
+    "region": "Suisse",
+    "name_simple_fr": "Four électrique à accumulation",
+    "name_simple_de": "Elektrischer Speicherofen",
+    "description_fr": "Utilisé pour le chauffage, comme les modèles d'Evenia ou de Stiebel Eltron, ces fours consomment beaucoup d'électricité.",
+    "description_de": "Wird zur Heizung verwendet, z.B. Modelle von Evenia oder Stiebel Eltron, diese Öfen verbrauchen viel Strom.",
+    "search_tags": [
+      "four",
+      "chauffage",
+      "électricité",
+      "stroom",
+      "heizung",
+      "accumulation",
+      "appareil électrique",
+      "warmgerät"
+    ],
+    "usage_hint_fr": "Idéal pour chauffer des espaces durant l'hiver.",
+    "usage_hint_de": "Ideal zum Heizen von Räumen im Winter.",
+    "popularity_score": 65
   },
   {
     "id": "698418f3c1a4e9f26cd27494",
@@ -927,7 +1055,21 @@
       "unit_unknown"
     ],
     "source": "KBOB",
-    "region": "Suisse"
+    "region": "Suisse",
+    "name_simple_fr": "Béton léger",
+    "name_simple_de": "Leichtbeton",
+    "description_fr": "Béton utilisé pour des constructions légères comme des dalles de sol. Exemples : maisons, allées.",
+    "description_de": "Beton für leichte Konstruktionen wie Bodenplatten. Beispiele: Häuser, Wege.",
+    "search_tags": [
+      "béton",
+      "construction",
+      "matériau",
+      "construction légère",
+      "lightweight concrete"
+    ],
+    "usage_hint_fr": "Utilisé lors de la construction ou rénovation.",
+    "usage_hint_de": "Verwendet beim Bau oder Renovierung.",
+    "popularity_score": 50
   },
   {
     "id": "698418f3c1a4e9f26cd2749b",
@@ -949,7 +1091,21 @@
       "unit_unknown"
     ],
     "source": "KBOB",
-    "region": "Suisse"
+    "region": "Suisse",
+    "name_simple_fr": "Béton pour construction",
+    "name_simple_de": "Beton für Bau",
+    "description_fr": "Béton utilisé dans les bâtiments, comme pour les fondations ou murs. Par exemple, béton standard sans renfort.",
+    "description_de": "Beton, der in Gebäuden verwendet wird, z.B. für Fundamente oder Wände. Beispielsweise Standardbeton ohne Verstärkung.",
+    "search_tags": [
+      "béton",
+      "construction",
+      "matériaux de construction",
+      "building",
+      "material"
+    ],
+    "usage_hint_fr": "Utilisez ce facteur pour évaluer l'impact des constructions.",
+    "usage_hint_de": "Verwenden Sie diesen Faktor zur Bewertung der Auswirkungen von Bauten.",
+    "popularity_score": 70
   },
   {
     "id": "698418f3c1a4e9f26cd2749c",
@@ -971,7 +1127,21 @@
       "unit_unknown"
     ],
     "source": "KBOB",
-    "region": "Suisse"
+    "region": "Suisse",
+    "name_simple_fr": "Béton standard",
+    "name_simple_de": "Standardbeton",
+    "description_fr": "Utilisé pour la construction de bâtiments, comme les maisons. Exemple: 1 m³ équivaut à environ 2400 kg.",
+    "description_de": "Verwendet für den Bau von Gebäuden, wie z.B. Häuser. Beispiel: 1 m³ entspricht etwa 2400 kg.",
+    "search_tags": [
+      "béton",
+      "construction",
+      "matériaux",
+      "beton",
+      "building"
+    ],
+    "usage_hint_fr": "À utiliser pour le calcul des bâtiments en béton.",
+    "usage_hint_de": "Zur Berechnung von Betongebäuden verwenden.",
+    "popularity_score": 70
   },
   {
     "id": "698418f3c1a4e9f26cd2752d",
@@ -994,7 +1164,22 @@
       "source_missing"
     ],
     "source": null,
-    "region": "Suisse"
+    "region": "Suisse",
+    "name_simple_fr": "Panneau de particules (sec)",
+    "name_simple_de": "Spanplatte (trocken)",
+    "description_fr": "Panneaux utilisés pour le mobilier comme les tables IKEA. Émis environ 0,735 kg CO2 par kg.",
+    "description_de": "Platten für Möbel wie Tische von IKEA. Emissionen von ca. 0,735 kg CO2 pro kg.",
+    "search_tags": [
+      "panneaux",
+      "bois",
+      "mobilier",
+      "matériaux",
+      "furniture",
+      "platten"
+    ],
+    "usage_hint_fr": "Utiliser pour évaluer le mobilier et les constructions légères.",
+    "usage_hint_de": "Verwenden, um Möbel und leichte Konstruktionen zu bewerten.",
+    "popularity_score": 60
   },
   {
     "id": "698418f3c1a4e9f26cd2751a",
@@ -1017,7 +1202,21 @@
       "source_missing"
     ],
     "source": null,
-    "region": "Suisse"
+    "region": "Suisse",
+    "name_simple_fr": "Fascine en laine de bois",
+    "name_simple_de": "Holzwolle-Faschine",
+    "description_fr": "Matériau isolant utilisé pour divers projets, comme l'isolation des murs. Exemple : laine de bois de Lindner.",
+    "description_de": "Isoliermaterial, das für verschiedene Projekte verwendet wird, zum Beispiel für die Wanddämmung. Beispiel: Holzwolle von Lindner.",
+    "search_tags": [
+      "fascine",
+      "chaud",
+      "isolant",
+      "bois",
+      "material"
+    ],
+    "usage_hint_fr": "À utiliser pour des projets de construction éco-responsables.",
+    "usage_hint_de": "Für umweltfreundliche Bauprojekte verwenden.",
+    "popularity_score": 50
   },
   {
     "id": "698418f3c1a4e9f26cd27514",
@@ -1040,7 +1239,22 @@
       "source_missing"
     ],
     "source": null,
-    "region": "Suisse"
+    "region": "Suisse",
+    "name_simple_fr": "Bois collé",
+    "name_simple_de": "Klebstoffholz",
+    "description_fr": "Matériau courant pour la construction, utilisé dans des meubles ou des structures. Exemple : poutres en bois collé.",
+    "description_de": "Häufiges Baumaterial für den Bau, verwendet in Möbeln oder Strukturen. Beispiel: verleimtes Holzträger.",
+    "search_tags": [
+      "bois",
+      "construction",
+      "matériau",
+      "poutre",
+      "furniture",
+      "wood"
+    ],
+    "usage_hint_fr": "Utiliser pour les projets de construction ou de rénovation.",
+    "usage_hint_de": "Verwenden für Bau- oder Renovierungsprojekte.",
+    "popularity_score": 70
   },
   {
     "id": "698418f3c1a4e9f26cd2727c",
@@ -1064,7 +1278,24 @@
       "kbob"
     ],
     "source": "KBOB",
-    "region": "Suisse"
+    "region": "Suisse",
+    "name_simple_fr": "Déchets de portes en bois",
+    "name_simple_de": "Abfall von Holztüren",
+    "description_fr": "Élimination de portes intérieures en bois, comme les modèles de marque IKEA ou Leroy Merlin, nécessitant environ 6,54 kg de CO2 par m².",
+    "description_de": "Entsorgung von Innentüren aus Holz, wie Modelle von IKEA oder Leroy Merlin, mit etwa 6,54 kg CO2 pro m².",
+    "search_tags": [
+      "bâtiment",
+      "portes",
+      "déchets",
+      "élimination",
+      "bois",
+      "building",
+      "waste",
+      "wood"
+    ],
+    "usage_hint_fr": "Utilisez ce facteur pour évaluer l'impact des rénovations.",
+    "usage_hint_de": "Verwenden Sie diesen Faktor zur Bewertung der Renovierungsauswirkungen.",
+    "popularity_score": 50
   },
   {
     "id": "698418f3c1a4e9f26cd2723a",
@@ -1088,7 +1319,24 @@
       "kbob"
     ],
     "source": "KBOB",
-    "region": "Suisse"
+    "region": "Suisse",
+    "name_simple_fr": "Élimination panneau façade alu",
+    "name_simple_de": "Entsorgung Alu-Fassadenplatte",
+    "description_fr": "Panneaux en aluminium de façade. Exemples : façades d'immeubles modernes. Évalue l'impact carbone lors de leur élimination.",
+    "description_de": "Aluminium-Fassadenplatten. Beispiele: Fassaden von modernen Gebäuden. Bewertet den CO2-Ausstoß bei der Entsorgung.",
+    "search_tags": [
+      "panneau",
+      "façade",
+      "alu",
+      "construction",
+      "bâtiment",
+      "entretien",
+      "dispose",
+      "recycle"
+    ],
+    "usage_hint_fr": "Utilisez ce facteur lors de la planification d'élimination.",
+    "usage_hint_de": "Verwenden Sie diesen Faktor bei der Entsorgungsplanung.",
+    "popularity_score": 50
   },
   {
     "id": "698418f3c1a4e9f26cd27297",
@@ -1112,7 +1360,24 @@
       "kbob"
     ],
     "source": "KBOB",
-    "region": "Suisse"
+    "region": "Suisse",
+    "name_simple_fr": "Ventilation résidentielle en métal",
+    "name_simple_de": "Lüftungssystem aus Metall für Wohnungen",
+    "description_fr": "Système de ventilation en tôle pour maisons, comme ceux utilisés pour évacuer l'air de la cuisine.",
+    "description_de": "Belüftungssystem aus Blech für Wohnhäuser, wie sie zur Absaugung von Küchenluft verwendet werden.",
+    "search_tags": [
+      "ventilation",
+      "maison",
+      "air",
+      "système",
+      "bâtiment",
+      "lufthäuser",
+      "küche",
+      "lüftung"
+    ],
+    "usage_hint_fr": "Utilisez ce facteur pour des rénovations ou nouvelles constructions.",
+    "usage_hint_de": "Verwenden Sie diesen Faktor für Renovierungen oder Neubauten.",
+    "popularity_score": 50
   },
   {
     "id": "698418f3c1a4e9f26cd274ff",
@@ -1135,7 +1400,23 @@
       "source_missing"
     ],
     "source": null,
-    "region": "Suisse"
+    "region": "Suisse",
+    "name_simple_fr": "Tôle d'aluminium",
+    "name_simple_de": "Aluminiumblech",
+    "description_fr": "Matériau utilisé dans les voitures ou les emballages. Exemples : carrosseries de véhicules ou canettes.",
+    "description_de": "Material, das in Autos oder Verpackungen verwendet wird. Beispiele: Fahrzeugkarosserien oder Dosen.",
+    "search_tags": [
+      "aluminium",
+      "tôle",
+      "métal",
+      "materials",
+      "canettes",
+      "carrosserie",
+      "vehicle parts"
+    ],
+    "usage_hint_fr": "Utilisez ce facteur pour évaluer les matériaux en aluminium.",
+    "usage_hint_de": "Verwenden Sie diesen Faktor zur Bewertung von Aluminiumprodukten.",
+    "popularity_score": 50
   },
   {
     "id": "698418f3c1a4e9f26cd27502",
@@ -1158,7 +1439,23 @@
       "source_missing"
     ],
     "source": null,
-    "region": "Suisse"
+    "region": "Suisse",
+    "name_simple_fr": "Acier pour construction",
+    "name_simple_de": "Baustahl",
+    "description_fr": "Acier utilisé pour renforcer les bâtiments, comme celui des barres dans les fondations. Exemple : projets de construction ou rénovation.",
+    "description_de": "Stahl, der zum Verstärken von Gebäuden verwendet wird, wie z. B. Stäbe in Fundamenten. Beispiel: Bau- oder Renovierungsprojekte.",
+    "search_tags": [
+      "acier",
+      "construction",
+      "bâtiment",
+      "renovation",
+      "metal",
+      "steel",
+      "armierungsstahl"
+    ],
+    "usage_hint_fr": "Utiliser pour les projets de construction.",
+    "usage_hint_de": "Verwenden für Bauprojekte.",
+    "popularity_score": 70
   },
   {
     "id": "698418f3c1a4e9f26cd27212",
@@ -1182,7 +1479,24 @@
       "kbob"
     ],
     "source": "KBOB",
-    "region": "Suisse"
+    "region": "Suisse",
+    "name_simple_fr": "Déchets de gravier et sable",
+    "name_simple_de": "Gravel- und Sandabfall",
+    "description_fr": "Utilisé pour éliminer les déchets de gravier et de sable lors de chantiers, comme ceux de grandes marques de construction.",
+    "description_de": "Verwendet zur Beseitigung von Kies- und Sandabfällen auf Baustellen, z.B. von großen Bauunternehmen.",
+    "search_tags": [
+      "déchet",
+      "gravillon",
+      "chantier",
+      "construction",
+      "sable",
+      "material",
+      "disposal",
+      "elimination"
+    ],
+    "usage_hint_fr": "À utiliser pour des projets de construction et d'aménagement.",
+    "usage_hint_de": "Für Bau- und Entwicklungsprojekte verwenden.",
+    "popularity_score": 60
   },
   {
     "id": "698418f3c1a4e9f26cd27203",
@@ -1206,7 +1520,24 @@
       "kbob"
     ],
     "source": "KBOB",
-    "region": "Suisse"
+    "region": "Suisse",
+    "name_simple_fr": "Élimination panneau bois",
+    "name_simple_de": "Entsorgung Holzplatte",
+    "description_fr": "L'élimination des panneaux de bois trois plis, par exemple, ceux utilisés pour des meubles ou des constructions.",
+    "description_de": "Die Entsorgung von Dreischichtplatten, wie sie zum Beispiel in Möbeln oder Bauten verwendet werden.",
+    "search_tags": [
+      "panneau",
+      "bois",
+      "construction",
+      "élimination",
+      "matériaux",
+      "wood",
+      "disposal",
+      "building"
+    ],
+    "usage_hint_fr": "Utilisez ce facteur pour les déchets de construction.",
+    "usage_hint_de": "Verwenden Sie diesen Faktor für Bauabfälle.",
+    "popularity_score": 50
   },
   {
     "id": "698418f3c1a4e9f26cd2757a",
@@ -1229,7 +1560,24 @@
       "source_missing"
     ],
     "source": null,
-    "region": "Suisse"
+    "region": "Suisse",
+    "name_simple_fr": "Parquet en liège",
+    "name_simple_de": "Korkparkett",
+    "description_fr": "Sol en liège huilé et vitrifié, confortable et doux sous les pieds. Parfait pour les pièces à vivre.",
+    "description_de": "Geölter und versiegelter Korkboden, bequem und weich unter den Füßen. Ideal für Wohnräume.",
+    "search_tags": [
+      "parquet",
+      "sol",
+      "revêtement",
+      "floor",
+      "belag",
+      "construction",
+      "eco",
+      "durabilité"
+    ],
+    "usage_hint_fr": "Utilisez pour les rénovations de maison.",
+    "usage_hint_de": "Verwenden Sie es für Renovierungsarbeiten.",
+    "popularity_score": 60
   },
   {
     "id": "698418f3c1a4e9f26cd27575",
@@ -1252,7 +1600,24 @@
       "source_missing"
     ],
     "source": null,
-    "region": "Suisse"
+    "region": "Suisse",
+    "name_simple_fr": "Béton durable (sol intérieur)",
+    "name_simple_de": "Haltbarer Beton (Innenboden)",
+    "description_fr": "Béton utilisé pour des sols intérieurs, comme dans les garages ou les entrepôts. Environ 16,4 kg CO2 par m².",
+    "description_de": "Beton, der für Innenböden verwendet wird, wie in Garagen oder Lagerräumen. Etwa 16,4 kg CO2 pro m².",
+    "search_tags": [
+      "béton",
+      "sol",
+      "revêtement",
+      "dallage",
+      "flooring",
+      "Innenboden",
+      "Bodenbelag",
+      "construcion"
+    ],
+    "usage_hint_fr": "Utilisez ce facteur pour des projets de construction intérieure.",
+    "usage_hint_de": "Verwenden Sie diesen Faktor für Innenbauprojekte.",
+    "popularity_score": 50
   },
   {
     "id": "698418f3c1a4e9f26cd272d3",
@@ -1276,7 +1641,23 @@
       "uvek_database"
     ],
     "source": "UVEK Database",
-    "region": "Suisse"
+    "region": "Suisse",
+    "name_simple_fr": "Déchets plâtre bâtiment",
+    "name_simple_de": "Gipsabfälle Gebäude",
+    "description_fr": "Déchets de plâtre issus de la démolition ou construction. Exemples: plaques de plâtre des murs ou plafonds.",
+    "description_de": "Gipsabfälle aus Abbruch- oder Neubau. Beispiele: Gipsplatten von Wänden oder Decken.",
+    "search_tags": [
+      "déchet",
+      "plâtre",
+      "construction",
+      "gips",
+      "démolition",
+      "building waste",
+      "construction waste"
+    ],
+    "usage_hint_fr": "Utilisez pour le recyclage des déchets de plâtre.",
+    "usage_hint_de": "Verwenden Sie für das Recycling von Gipsabfällen.",
+    "popularity_score": 50
   },
   {
     "id": "698418f3c1a4e9f26cd272ca",
@@ -1300,7 +1681,21 @@
       "uvek_database"
     ],
     "source": "UVEK Database",
-    "region": "Suisse"
+    "region": "Suisse",
+    "name_simple_fr": "Déchets de béton non armé",
+    "name_simple_de": "Nicht bewehrte Betondeponie",
+    "description_fr": "Béton non armé issu de chantiers. Exemples : dalles, murs. Utilisé pour l'élimination finale.",
+    "description_de": "Unbewehrter Beton von Baustellen. Beispiele: Platten, Wände. Für die endgültige Entsorgung.",
+    "search_tags": [
+      "béton",
+      "déchets",
+      "construction",
+      "déconstruction",
+      "bâtiment"
+    ],
+    "usage_hint_fr": "Utilisez ce facteur pour évaluer l'impact des déchets de béton.",
+    "usage_hint_de": "Verwenden Sie diesen Faktor zur Bewertung der Auswirkungen von Betonabfällen.",
+    "popularity_score": 50
   },
   {
     "id": "698418f3c1a4e9f26cd272b0",
@@ -1324,7 +1719,23 @@
       "uvek_database"
     ],
     "source": "UVEK Database",
-    "region": "Suisse"
+    "region": "Suisse",
+    "name_simple_fr": "Démontage écran LCD",
+    "name_simple_de": "Demontage LCD-Bildschirm",
+    "description_fr": "Démontage d'écrans LCD en usine, par exemple pour récupération des matériaux. Environ 1,31 kg CO2 par kg d'appareil.",
+    "description_de": "Demontage von LCD-Bildschirmen in der Fabrik, z. B. zur Materialrückgewinnung. Ungefähr 1,31 kg CO2 pro kg Gerät.",
+    "search_tags": [
+      "démontage",
+      "écran",
+      "LCD",
+      "déchets électroniques",
+      "recyclage",
+      "electronics waste",
+      "recovery"
+    ],
+    "usage_hint_fr": "Utilisez ce facteur pour évaluer les déchets électroniques.",
+    "usage_hint_de": "Verwenden Sie diesen Faktor zur Bewertung von Elektronikabfällen.",
+    "popularity_score": 50
   },
   {
     "id": "698418f3c1a4e9f26cd27305",
@@ -1348,7 +1759,21 @@
       "uvek_database"
     ],
     "source": "UVEK Database",
-    "region": "Suisse"
+    "region": "Suisse",
+    "name_simple_fr": "Recyclage de batteries",
+    "name_simple_de": "Recycling von Batterien",
+    "description_fr": "Le traitement des batteries au lithium-ion, comme celles d'ordinateur ou de voiture électrique, pour récupérer les matériaux.",
+    "description_de": "Die Verarbeitung von Lithium-Ionen-Batterien, z. B. aus Computern oder Elektroautos, zur Rückgewinnung von Materialien.",
+    "search_tags": [
+      "batteries",
+      "recyclage",
+      "déchets électroniques",
+      "électronique",
+      "lithium-ion"
+    ],
+    "usage_hint_fr": "Utiliser pour évaluer le recyclage des batteries.",
+    "usage_hint_de": "Verwendung zur Bewertung des Recyclings von Batterien.",
+    "popularity_score": 50
   },
   {
     "id": "698418f3c1a4e9f26cd2735a",
@@ -1372,7 +1797,21 @@
       "uvek_database"
     ],
     "source": "UVEK Database",
-    "region": "Suisse"
+    "region": "Suisse",
+    "name_simple_fr": "Eaux usées de panneaux de fibres",
+    "name_simple_de": "Abwasser von Faserplatten",
+    "description_fr": "Les eaux usées issues de la production de panneaux de fibres, souvent présentes dans les meubles IKEA ou des cloisons en bois.",
+    "description_de": "Abwasser aus der Produktion von Faserplatten, oft in IKEA-Möbeln oder Holztrennwänden vorkommend.",
+    "search_tags": [
+      "eaux usées",
+      "déchets",
+      "panneaux de fibres",
+      "traitement des eaux",
+      "environment"
+    ],
+    "usage_hint_fr": "À utiliser pour évaluer l'impact des usines de panneaux de fibres.",
+    "usage_hint_de": "Zur Bewertung der Auswirkungen von Faserplattenfabriken verwenden.",
+    "popularity_score": 30
   },
   {
     "id": "698418f3c1a4e9f26cd271be",
@@ -1395,7 +1834,21 @@
       "environmental_impacts_of_swiss_consumption_and_production"
     ],
     "source": "Environmental Impacts of Swiss Consumption and Production",
-    "region": "Suisse"
+    "region": "Suisse",
+    "name_simple_fr": "Location de personnel",
+    "name_simple_de": "Personalverleih",
+    "description_fr": "Engager du personnel temporaire pour divers travaux, par exemple des intérimaires dans le secteur de la construction.",
+    "description_de": "Temporäre Arbeitskräfte für verschiedene Aufgaben einstellen, z. B. Zeitarbeitskräfte im Bauwesen.",
+    "search_tags": [
+      "intérim",
+      "locaux",
+      "travailleurs",
+      "services",
+      "personal"
+    ],
+    "usage_hint_fr": "Utilisez ce facteur pour évaluer des services temporaires.",
+    "usage_hint_de": "Verwenden Sie diesen Faktor zur Bewertung von Temporärdiensten.",
+    "popularity_score": 70
   },
   {
     "id": "698418f3c1a4e9f26cd271bb",
@@ -1418,7 +1871,24 @@
       "environmental_impacts_of_swiss_consumption_and_production"
     ],
     "source": "Environmental Impacts of Swiss Consumption and Production",
-    "region": "Suisse"
+    "region": "Suisse",
+    "name_simple_fr": "Services d'information",
+    "name_simple_de": "Informationsdienste",
+    "description_fr": "Travaux liés à la diffusion d'informations, comme la publicité ou la formation, par exemple pour des entreprises locales.",
+    "description_de": "Arbeiten, die mit der Verbreitung von Informationen zu tun haben, z.B. Werbung oder Schulungen, beispielsweise für lokale Unternehmen.",
+    "search_tags": [
+      "services",
+      "information",
+      "publicité",
+      "formation",
+      "services d'information",
+      "Umwelt",
+      "Werbung",
+      "Ausbildung"
+    ],
+    "usage_hint_fr": "Utilisez ce facteur pour évaluer les services d'information.",
+    "usage_hint_de": "Verwenden Sie diesen Faktor zur Bewertung von Informationsdiensten.",
+    "popularity_score": 70
   },
   {
     "id": "698418f3c1a4e9f26cd271c2",
@@ -1441,7 +1911,21 @@
       "environmental_impacts_of_swiss_consumption_and_production"
     ],
     "source": "Environmental Impacts of Swiss Consumption and Production",
-    "region": "Suisse"
+    "region": "Suisse",
+    "name_simple_fr": "Formation professionnelle",
+    "name_simple_de": "Berufsausbildung",
+    "description_fr": "Coûts liés à la formation en entreprise, par exemple pour les stages et séminaires.",
+    "description_de": "Kosten für betriebliche Weiterbildung, z.B. für Praktika und Seminare.",
+    "search_tags": [
+      "formation",
+      "stage",
+      "séminaire",
+      "Weiterbildung",
+      "Training"
+    ],
+    "usage_hint_fr": "Utilisez lors de l'évaluation des formations en entreprise.",
+    "usage_hint_de": "Verwenden Sie bei der Bewertung von Unternehmensschulungen.",
+    "popularity_score": 70
   },
   {
     "id": "698418f3c1a4e9f26cd27186",
@@ -1468,7 +1952,23 @@
       "comment:with 94.1% diesel and 5.9% biodiesel"
     ],
     "source": "mobitool v3",
-    "region": "Suisse"
+    "region": "Suisse",
+    "name_simple_fr": "Diesel moyen",
+    "name_simple_de": "Durchschnittlicher Diesel",
+    "description_fr": "Carburant utilisé dans de nombreux véhicules, comme les berlines ou fourgons. Par exemple, un véhicule Peugeot ou un Renault.",
+    "description_de": "Kraftstoff, der in vielen Fahrzeugen wie Limousinen oder Transportern verwendet wird. Zum Beispiel in einem Peugeot oder Renault.",
+    "search_tags": [
+      "diesel",
+      "gasoil",
+      "carburant",
+      "auto",
+      "vehicle",
+      "musiktool_v3",
+      "dieselmedium"
+    ],
+    "usage_hint_fr": "À utiliser si le type de carburant est inconnu.",
+    "usage_hint_de": "Verwenden, wenn die Kraftstoffart unbekannt ist.",
+    "popularity_score": 75
   },
   {
     "id": "698418f3c1a4e9f26cd27188",
@@ -1494,6 +1994,22 @@
       "comment:with 72.7% natural gas and 27.3% biomethane"
     ],
     "source": "mobitool v3",
-    "region": "Suisse"
+    "region": "Suisse",
+    "name_simple_fr": "Gaz naturel moyen",
+    "name_simple_de": "Durchschnittliches Erdgas",
+    "description_fr": "Carburant courant utilisé dans les chauffages et certaines voitures. Exemples : chaudières à gaz, véhicules au gaz.",
+    "description_de": "Verbreiteter Kraftstoff, der in Heizungen und einigen Autos verwendet wird. Beispiele: Gasheizungen, Gasmobile.",
+    "search_tags": [
+      "gaz",
+      "carburant",
+      "énergie",
+      "vehicle",
+      "heating",
+      "auto",
+      "bagnole"
+    ],
+    "usage_hint_fr": "Utilisez-le lorsque vous ne connaissez pas le carburant exact.",
+    "usage_hint_de": "Verwenden Sie es, wenn Sie den genauen Kraftstofftyp nicht kennen.",
+    "popularity_score": 70
   }
 ]
