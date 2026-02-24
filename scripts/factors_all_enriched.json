@@ -1,8 +1,8 @@
 [
   {
     "id": "698418f3c1a4e9f26cd27156",
-    "name_fr": "Hydroélectricité",
-    "name_de": "Wasserkraft",
+    "name_fr": "Électricité hydraulique",
+    "name_de": "Wasserkraft-Strom",
     "subcategory": "electricite",
     "input_units": [
       "kWh"
@@ -17,11 +17,6 @@
       {
         "scope": "scope3_3",
         "value": 0.00388983,
-        "unit": "kgCO2e/kWh"
-      },
-      {
-        "scope": "scope3",
-        "value": 0.0008832,
         "unit": "kgCO2e/kWh"
       }
     ],
@@ -50,12 +45,29 @@
         "is_correction": false
       }
     ],
-    "valid_from_year": 2024
+    "valid_from_year": 2024,
+    "name_simple_fr": "Électricité des barrages",
+    "name_simple_de": "Strom aus Wasserkraft",
+    "description_fr": "Électricité produite par des barrages et centrales hydrauliques. Source d'énergie renouvelable très courante en Suisse.",
+    "description_de": "Strom aus Staudämmen und Wasserkraftwerken. In der Schweiz eine sehr häufige erneuerbare Energiequelle.",
+    "search_tags": [
+      "barrage",
+      "hydroélectricité",
+      "eau",
+      "renewable energy",
+      "hydraulique",
+      "centrale",
+      "électricité verte",
+      "hydro"
+    ],
+    "usage_hint_fr": "À utiliser si votre électricité provient de sources hydrauliques.",
+    "usage_hint_de": "Verwenden Sie diesen Wert für Strom aus Wasserkraftquellen.",
+    "popularity_score": 85
   },
   {
     "id": "698418f3c1a4e9f26cd27157",
-    "name_fr": "Solaire",
-    "name_de": "Solar",
+    "name_fr": "Électricité solaire",
+    "name_de": "Solarstrom",
     "subcategory": "electricite",
     "input_units": [
       "kWh"
@@ -71,17 +83,19 @@
         "scope": "scope3_3",
         "value": 0.03412399,
         "unit": "kgCO2e/kWh"
-      },
-      {
-        "scope": "scope3",
-        "value": 0.0,
-        "unit": "kgCO2e/kWh"
       }
     ],
     "unit_conversions": {},
     "tags": [
+      "solaire",
       "photovoltaique",
-      "electricite"
+      "electricite",
+      "renouvelable",
+      "panneaux solaires",
+      "PV",
+      "énergie verte",
+      "production électricité",
+      "solar panels"
     ],
     "source": "BAFU",
     "region": "Suisse",
@@ -102,12 +116,29 @@
         "is_correction": false
       }
     ],
-    "valid_from_year": 2024
+    "valid_from_year": 2024,
+    "name_simple_fr": "Électricité solaire",
+    "name_simple_de": "Solarstrom",
+    "description_fr": "Électricité produite par panneaux solaires. Très peu d'émissions en utilisation, mais consommation carbone pour la fabrication.",
+    "description_de": "Von Solarpanels erzeugte Elektrizität. Sehr geringe Emissionen bei der Nutzung, aber Kohlenstoffverbrauch bei der Herstellung.",
+    "search_tags": [
+      "solaire",
+      "photovoltaïque",
+      "panneaux solaires",
+      "PV",
+      "énergie renouvelable",
+      "électricité verte",
+      "solar",
+      "renewable energy"
+    ],
+    "usage_hint_fr": "À utiliser pour l'électricité de vos panneaux solaires ou contrat solaire.",
+    "usage_hint_de": "Für Strom von Ihren Solarpanels oder Solarvertrag verwenden.",
+    "popularity_score": 65
   },
   {
     "id": "698418f3c1a4e9f26cd27158",
-    "name_fr": "Éolien",
-    "name_de": "Wind",
+    "name_fr": "Électricité éolienne",
+    "name_de": "Windkraft-Strom",
     "subcategory": "electricite",
     "input_units": [
       "kWh"
@@ -122,11 +153,6 @@
       {
         "scope": "scope3_3",
         "value": 0.01932796,
-        "unit": "kgCO2e/kWh"
-      },
-      {
-        "scope": "scope3",
-        "value": 0.0,
         "unit": "kgCO2e/kWh"
       }
     ],
@@ -154,12 +180,29 @@
         "is_correction": false
       }
     ],
-    "valid_from_year": 2024
+    "valid_from_year": 2024,
+    "name_simple_fr": "Vent",
+    "name_simple_de": "Wind",
+    "description_fr": "Électricité produite par des éoliennes. Très faibles émissions de CO2. Utilisée pour les consommations électriques.",
+    "description_de": "Strom aus Windkraftanlagen. Sehr geringe CO2-Emissionen. Für Stromverbrauch.",
+    "search_tags": [
+      "éolienne",
+      "wind",
+      "wind power",
+      "électricité verte",
+      "renouvelable",
+      "énergie propre",
+      "windenergie",
+      "grüner strom"
+    ],
+    "usage_hint_fr": "Appliquez ce facteur pour toute électricité certifiée d'origine éolienne.",
+    "usage_hint_de": "Nutzen Sie diesen Faktor für zertifizierten Windstrom.",
+    "popularity_score": 65
   },
   {
     "id": "698418f3c1a4e9f26cd27159",
-    "name_fr": "Biomasse",
-    "name_de": "Biomasse",
+    "name_fr": "Électricité biomasse",
+    "name_de": "Biomasse-Strom",
     "subcategory": "electricite",
     "input_units": [
       "kWh"
@@ -174,11 +217,6 @@
       {
         "scope": "scope3_3",
         "value": 0.13366619,
-        "unit": "kgCO2e/kWh"
-      },
-      {
-        "scope": "scope3",
-        "value": 0.00787935,
         "unit": "kgCO2e/kWh"
       }
     ],
@@ -209,11 +247,30 @@
         "is_correction": false
       }
     ],
-    "valid_from_year": 2024
+    "valid_from_year": 2024,
+    "name_simple_fr": "Électricité biomasse",
+    "name_simple_de": "Biomasse-Strom",
+    "description_fr": "Électricité produite à partir de bois, biogaz ou déchets organiques. Moins polluante que le charbon mais plus que le solaire.",
+    "description_de": "Strom aus Holz, Biogas oder organischen Abfällen. Weniger Verschmutzung als Kohle, aber mehr als Solarenergie.",
+    "search_tags": [
+      "biomasse",
+      "bioenergie",
+      "bois énergie",
+      "biogaz",
+      "électricité verte",
+      "énergie renouvelable",
+      "waste energy",
+      "déchets organiques",
+      "bois",
+      "biofuel electricity"
+    ],
+    "usage_hint_fr": "Utilisez ce facteur si votre électricité provient de biomasse ou biogaz certifiés.",
+    "usage_hint_de": "Verwenden Sie diesen Faktor, wenn Ihr Strom aus zertifizierter Biomasse oder Biogas stammt.",
+    "popularity_score": 35
   },
   {
     "id": "698418f3c1a4e9f26cd2715a",
-    "name_fr": "Géothermie (proxy par l’éolien)",
+    "name_fr": "Géothermie (proxy par l'éolien)",
     "name_de": "Geothermie (Proxy durch Wind)",
     "subcategory": "electricite",
     "input_units": [
@@ -229,11 +286,6 @@
       {
         "scope": "scope3_3",
         "value": 0.01932796,
-        "unit": "kgCO2e/kWh"
-      },
-      {
-        "scope": "scope3",
-        "value": 0.0,
         "unit": "kgCO2e/kWh"
       }
     ],
@@ -261,12 +313,30 @@
         "is_correction": false
       }
     ],
-    "valid_from_year": 2024
+    "valid_from_year": 2024,
+    "name_simple_fr": "Chaleur géothermique",
+    "name_simple_de": "Geothermische Wärme",
+    "description_fr": "Énergie extraite de la chaleur souterraine pour le chauffage. Très peu d'émissions car utilise la chaleur naturelle du sol.",
+    "description_de": "Energie aus der Erdwärme für Heizung. Sehr niedrige Emissionen, da natürliche Bodenwärme genutzt wird.",
+    "search_tags": [
+      "géothermie",
+      "geothermie",
+      "chaleur souterraine",
+      "pompe chaleur",
+      "énergie renouvelable",
+      "chauffage",
+      "ground source",
+      "heat pump",
+      "bafu"
+    ],
+    "usage_hint_fr": "Pour les bâtiments avec système de chauffage géothermique ou pompe à chaleur.",
+    "usage_hint_de": "Für Gebäude mit Geothermie-Heizung oder Wärmepumpen-Systemen.",
+    "popularity_score": 32
   },
   {
     "id": "698418f3c1a4e9f26cd2715b",
-    "name_fr": "Nucléaire",
-    "name_de": "Kernenergie",
+    "name_fr": "Électricité nucléaire",
+    "name_de": "Atomstrom",
     "subcategory": "electricite",
     "input_units": [
       "kWh"
@@ -281,11 +351,6 @@
       {
         "scope": "scope3_3",
         "value": 0.01531023,
-        "unit": "kgCO2e/kWh"
-      },
-      {
-        "scope": "scope3",
-        "value": 2.631e-05,
         "unit": "kgCO2e/kWh"
       }
     ],
@@ -314,7 +379,26 @@
         "is_correction": false
       }
     ],
-    "valid_from_year": 2024
+    "valid_from_year": 2024,
+    "name_simple_fr": "Électricité nucléaire",
+    "name_simple_de": "Atomstrom",
+    "description_fr": "Électricité produite par centrales nucléaires. Très faible émission directe mais inclut la construction et gestion des déchets.",
+    "description_de": "Strom aus Kernkraftwerken. Sehr geringe direkte Emissionen, aber Bau und Abfallwirtschaft einbegriffen.",
+    "search_tags": [
+      "nucléaire",
+      "atomique",
+      "énergie atomique",
+      "centrale nucléaire",
+      "électricité bas-carbone",
+      "nuclear",
+      "atom",
+      "power plant",
+      "énergie verte",
+      "électricité renouvelable"
+    ],
+    "usage_hint_fr": "Pour l'électricité achetée en Suisse ou région avec centrales nucléaires.",
+    "usage_hint_de": "Für Strom aus der Schweiz oder Regionen mit Atomkraftwerken.",
+    "popularity_score": 75
   },
   {
     "id": "698418f3c1a4e9f26cd2715c",
@@ -1868,8 +1952,8 @@
   },
   {
     "id": "698418f3c1a4e9f26cd2717e",
-    "name_fr": "HFC-245eb",
-    "name_de": "HFC-245eb",
+    "name_fr": "Gaz réfrigérant HFC-245eb",
+    "name_de": "Kühlmittel HFC-245eb",
     "subcategory": "refrigerants",
     "input_units": [
       "kg"
@@ -1907,7 +1991,27 @@
         "is_correction": false
       }
     ],
-    "valid_from_year": 2018
+    "valid_from_year": 2018,
+    "name_simple_fr": "Gaz réfrigérant HFC-245eb",
+    "name_simple_de": "Kühlmittel HFC-245eb",
+    "description_fr": "Gaz fluoré utilisé dans les systèmes de refroidissement et climatisation. Très polluant pour le climat: 1 kg équivaut à 290 kg de CO2.",
+    "description_de": "Fluoriertes Gas in Kühl- und Klimasystemen. Sehr klimaschädlich: 1 kg entspricht 290 kg CO2.",
+    "search_tags": [
+      "refrigerant",
+      "HFC",
+      "climatisation",
+      "refroidissement",
+      "gaz_fluore",
+      "fuite_climatisation",
+      "air_conditioning_gas",
+      "cooling_gas",
+      "hydrofluorocarbon"
+    ],
+    "usage_hint_fr": "Utilisez pour les fuites de climatisation ou refroidissement industriel.",
+    "usage_hint_de": "Verwenden Sie für Klimaanlage- oder Kühlverluste im Industrie.",
+    "popularity_score": 15,
+    "original_name_fr": "HFC-245eb",
+    "original_name_de": "HFC-245eb"
   },
   {
     "id": "698418f3c1a4e9f26cd2717f",
@@ -4076,8 +4180,8 @@
   },
   {
     "id": "698418f3c1a4e9f26cd271b1",
-    "name_fr": "Maintenance SW et HW",
-    "name_de": "SW-Pflege und HW Wartung",
+    "name_fr": "Entretien logiciels et matériels",
+    "name_de": "Software- und Hardware-Wartung",
     "subcategory": "services",
     "input_units": [
       "kCHF"
@@ -4087,7 +4191,7 @@
       {
         "scope": "scope3",
         "value": 92.8236326,
-        "unit": "kgCO2e/parkCHF"
+        "unit": "kgCO2e/kCHF"
       }
     ],
     "unit_conversions": {},
@@ -4114,7 +4218,24 @@
         "is_correction": false
       }
     ],
-    "valid_from_year": 2011
+    "valid_from_year": 2011,
+    "name_simple_fr": "Maintenance informatique",
+    "name_simple_de": "IT-Wartung",
+    "description_fr": "Émissions liées à la maintenance des systèmes informatiques: mises à jour logicielles, réparations matérielles, support technique et remplacement de composants.",
+    "description_de": "Emissionen aus der Wartung von IT-Systemen: Software-Updates, Hardware-Reparaturen, technischer Support und Komponentenaustausch.",
+    "search_tags": [
+      "IT",
+      "maintenance informatique",
+      "software",
+      "hardware",
+      "support technique",
+      "réparation ordinateur",
+      "services informatiques",
+      "infrastructure IT"
+    ],
+    "usage_hint_fr": "Utilisez pour les dépenses de maintenance et support IT des ordinateurs et serveurs.",
+    "usage_hint_de": "Verwenden Sie dies für IT-Wartungs- und Support-Ausgaben von Computern und Servern.",
+    "popularity_score": 35
   },
   {
     "id": "698418f3c1a4e9f26cd271b2",
@@ -6580,8 +6701,8 @@
   },
   {
     "id": "698418f3c1a4e9f26cd271ec",
-    "name_fr": "Elimination, feuilles d'étanchéité et de protection, pare-vapeur bitume (kg)",
-    "name_de": "Entsorgung, Dichtungsbahnen und Schutzfolien, Dampfbremse Bitumen (kg)",
+    "name_fr": "Élimination de pare-vapeur bitume",
+    "name_de": "Entsorgung von Bitumen-Dampfbremsen",
     "subcategory": "insulation_and_waterproofing",
     "input_units": [
       "kg"
@@ -6619,7 +6740,26 @@
         "is_correction": false
       }
     ],
-    "valid_from_year": 2022
+    "valid_from_year": 2022,
+    "description_fr": "Traitement de fin de vie des membranes d'étanchéité bitumineuses utilisées en toiture ou isolation. Inclut le transport et l'élimination.",
+    "description_de": "Behandlung von Bitumen-Dichtungsbahnen am Ende ihrer Lebensdauer. Umfasst Transport und Entsorgung von Dachbahnen.",
+    "search_tags": [
+      "pare-vapeur",
+      "bitume",
+      "membrane étanchéité",
+      "toiture",
+      "élimination déchet construction",
+      "dichtungsbahn",
+      "dampfbremse",
+      "bauabfall",
+      "rückbau",
+      "end of life"
+    ],
+    "usage_hint_fr": "À utiliser pour l'élimination de membranes bitumineuses usagées en fin de vie du bâtiment.",
+    "usage_hint_de": "Für die Entsorgung von gebrauchten Bitumen-Dichtungsbahnen am Ende der Gebäudenutzung verwenden.",
+    "popularity_score": 22,
+    "name_simple_fr": "Élimination de pare-vapeur bitume",
+    "name_simple_de": "Entsorgung von Bitumen-Dampfbremsen"
   },
   {
     "id": "698418f3c1a4e9f26cd271ed",
@@ -8773,8 +8913,8 @@
   },
   {
     "id": "698418f3c1a4e9f26cd2721f",
-    "name_fr": "Elimination, protection de fouille, paroi de pieux forés, ancrée (m2)",
-    "name_de": "Entsorgung, Baugrubensicherung, Bohrpfahlwand, verankert (m2)",
+    "name_fr": "Démolition de paroi de pieux forés ancrée",
+    "name_de": "Abbruch von verankerter Bohrpfahlwand",
     "subcategory": "building_elements_and_structures",
     "input_units": [
       "m2"
@@ -8812,7 +8952,45 @@
         "is_correction": false
       }
     ],
-    "valid_from_year": 2022
+    "valid_from_year": 2022,
+    "description_fr": "Élimination d'une paroi de soutènement en pieux forés avec ancrages. Typique pour les fouilles profondes en construction.",
+    "description_de": "Entsorgung einer verankerten Bohrpfahlwand zur Baugrubensicherung. Typisch für tiefe Aushubgruben im Hochbau.",
+    "search_tags": [
+      "demolition",
+      "paroi pieux",
+      "fouille",
+      "soutènement",
+      "ancrages",
+      "déconstruction",
+      "excavation",
+      "pieux forés",
+      "génie civil",
+      "terrassement"
+    ],
+    "usage_hint_fr": "Utilisez pour la démolition de parois de soutènement en pieux forés avec ancrages.",
+    "usage_hint_de": "Verwenden Sie für den Abbruch von verankerten Bohrpfahlwänden.",
+    "popularity_score": 25,
+    "original_data": {
+      "name_fr": "Elimination, protection de fouille, paroi de pieux forés, ancrée (m2)",
+      "name_de": "Entsorgung, Baugrubensicherung, Bohrpfahlwand, verankert (m2)",
+      "subcategory": "building_elements_and_structures",
+      "input_units": [
+        "m2"
+      ],
+      "impacts": [
+        {
+          "scope": "scope3",
+          "value": 40.4,
+          "unit": "kgCO2e/m2"
+        }
+      ],
+      "tags": [
+        "elimination_elements_techniques_du_batiment",
+        "building_elements_and_structures",
+        "kbob"
+      ],
+      "source": "KBOB"
+    }
   },
   {
     "id": "698418f3c1a4e9f26cd27220",
@@ -10794,8 +10972,8 @@
   },
   {
     "id": "698418f3c1a4e9f26cd2724e",
-    "name_fr": "Mix d'élimination, mur de bottes de paille (kg)",
-    "name_de": "Entsorgungsmix, Strohballenwand (kg)",
+    "name_fr": "Élimination mur de paille",
+    "name_de": "Entsorgung Strohballenwand",
     "subcategory": "building_and_construction_materials",
     "input_units": [
       "kg"
@@ -10833,7 +11011,44 @@
         "is_correction": false
       }
     ],
-    "valid_from_year": 2022
+    "valid_from_year": 2022,
+    "description_fr": "Émissions liées au traitement et recyclage en fin de vie d'un mur en bottes de paille. Matériau naturel avec très faible impact environnemental.",
+    "description_de": "Emissionen aus Behandlung und Recycling von Strohballenwänden am Ende der Lebensdauer. Naturmaterial mit sehr geringer Umweltauswirkung.",
+    "search_tags": [
+      "paille",
+      "straw",
+      "élimination",
+      "déconstruction",
+      "matériau naturel",
+      "construction écologique",
+      "fin de vie",
+      "recyclage",
+      "déchets construction"
+    ],
+    "usage_hint_fr": "Utilisez pour des projets de construction écologique avec murs en bottes de paille.",
+    "usage_hint_de": "Verwenden Sie für ökologische Bauprojekte mit Strohballenwänden.",
+    "popularity_score": 15,
+    "original_data": {
+      "name_fr": "Mix d'élimination, mur de bottes de paille (kg)",
+      "name_de": "Entsorgungsmix, Strohballenwand (kg)",
+      "subcategory": "building_and_construction_materials",
+      "input_units": [
+        "kg"
+      ],
+      "impacts": [
+        {
+          "scope": "scope3",
+          "value": 0.0,
+          "unit": "kgCO2e/kg"
+        }
+      ],
+      "tags": [
+        "elimination_materiaux_de_construction",
+        "building_and_construction_materials",
+        "kbob"
+      ],
+      "source": "KBOB"
+    }
   },
   {
     "id": "698418f3c1a4e9f26cd2724f",
@@ -13503,8 +13718,8 @@
   },
   {
     "id": "698418f3c1a4e9f26cd2728d",
-    "name_fr": "Elimination, registre de terre court vers système de ventilation bureau (0.27 m/m2 SRE) (m2)",
-    "name_de": "Entsorgung, Erdregister kurz zu Lüftungsanlage Büro (0.27 m/m2 EBF) (m2)",
+    "name_fr": "Élimination d'un registre de terre court",
+    "name_de": "Entsorgung, Erdregister kurz",
     "subcategory": "special_waste_types",
     "input_units": [
       "m2"
@@ -13542,7 +13757,26 @@
         "is_correction": false
       }
     ],
-    "valid_from_year": 2022
+    "valid_from_year": 2022,
+    "name_simple_fr": "Élimination registre de terre",
+    "name_simple_de": "Entsorgung Erdregister",
+    "description_fr": "Traitement et élimination d'un registre de terre court (0.27 m/m2 SRE) dans un système de ventilation de bureau. Déchet technique spécialisé.",
+    "description_de": "Behandlung und Entsorgung eines kurzen Erdregisters (0,27 m/m2 EBF) in einer Bürolüftungsanlage. Spezialisierter technischer Abfall.",
+    "search_tags": [
+      "registre de terre",
+      "earth register",
+      "ventilation bureau",
+      "déchet spécialisé",
+      "office ventilation",
+      "technical waste",
+      "système de ventilation",
+      "elimination"
+    ],
+    "usage_hint_fr": "Pour le remplacement/retrait d'équipements de ventilation bureau avec registres.",
+    "usage_hint_de": "Für den Austausch/die Demontage von Bürolüftungsgeräten mit Erdregistern.",
+    "popularity_score": 15,
+    "original_name_fr": "Elimination, registre de terre court vers système de ventilation bureau (0.27 m/m2 SRE) (m2)",
+    "original_name_de": "Entsorgung, Erdregister kurz zu Lüftungsanlage Büro (0.27 m/m2 EBF) (m2)"
   },
   {
     "id": "698418f3c1a4e9f26cd2728e",
@@ -15351,8 +15585,8 @@
   },
   {
     "id": "698418f3c1a4e9f26cd272b8",
-    "name_fr": "Élimination, filtre à air, dans la soupape d'échappement {CH}",
-    "name_de": "Entsorgung, Luftfilter, im Abluftventil {CH}",
+    "name_fr": "Filtre à air usagé - élimination",
+    "name_de": "Gebrauchter Luftfilter - Entsorgung",
     "subcategory": "construction_waste",
     "input_units": [
       "p"
@@ -15390,7 +15624,24 @@
         "is_correction": false
       }
     ],
-    "valid_from_year": 2024
+    "valid_from_year": 2024,
+    "description_fr": "Élimination d'un filtre à air usé de ventilation ou moteur. Comprend le traitement des déchets en Suisse.",
+    "description_de": "Entsorgung eines gebrauchten Luftfilters aus Lüftung oder Motor. Umfasst die Abfallbehandlung in der Schweiz.",
+    "search_tags": [
+      "filtre air",
+      "air filter",
+      "élimination filtre",
+      "déchets construction",
+      "waste disposal",
+      "ventilation",
+      "recyclage",
+      "traitement déchet"
+    ],
+    "usage_hint_fr": "Utilisez pour l'élimination d'un filtre à air usagé lors du remplacement.",
+    "usage_hint_de": "Verwenden Sie für die Entsorgung eines gebrauchten Luftfilters beim Austausch.",
+    "popularity_score": 15,
+    "name_simple_fr": "Filtre à air usagé - élimination",
+    "name_simple_de": "Gebrauchter Luftfilter - Entsorgung"
   },
   {
     "id": "698418f3c1a4e9f26cd272b9",
@@ -17802,8 +18053,8 @@
   },
   {
     "id": "698418f3c1a4e9f26cd272f1",
-    "name_fr": "Élimination, contrôle et câblage, unité centrale {CH}",
-    "name_de": "Entsorgung, Steuerung und Verkabelung, Zentraleinheit {CH}",
+    "name_fr": "Traitement câblage et contrôle central",
+    "name_de": "Entsorgung Verkabelung und Steuerung",
     "subcategory": "construction_waste",
     "input_units": [
       "p"
@@ -17841,7 +18092,25 @@
         "is_correction": false
       }
     ],
-    "valid_from_year": 2024
+    "valid_from_year": 2024,
+    "name_simple_fr": "Traitement câblage et contrôle",
+    "name_simple_de": "Entsorgung Verkabelung und Steuerung",
+    "description_fr": "Gestion et élimination des câbles électriques, armoires de commande et unités centrales après construction ou démolition.",
+    "description_de": "Verwertung von Stromkabeln, Schaltschränken und Zentralgeräten nach Baufertigstellung oder Abriss.",
+    "search_tags": [
+      "déchet construction",
+      "câble électrique",
+      "armoire électrique",
+      "unité centrale",
+      "construction waste",
+      "electrical waste",
+      "control panel",
+      "élimination déchet",
+      "recyclage câble"
+    ],
+    "usage_hint_fr": "Utilisez pour les projets de construction ou rénovation avec installation électrique.",
+    "usage_hint_de": "Verwenden Sie für Bauprojekte mit elektrischen Installationen.",
+    "popularity_score": 28
   },
   {
     "id": "698418f3c1a4e9f26cd272f2",
@@ -20342,8 +20611,8 @@
   },
   {
     "id": "698418f3c1a4e9f26cd2732c",
-    "name_fr": "Élimination, équipement de ventilation, KWLC 1200 {CH}",
-    "name_de": "Entsorgung, Lüftungsanlage, KWLC 1200 {CH}",
+    "name_fr": "Recyclage équipement ventilation",
+    "name_de": "Recycling Lüftungsanlage",
     "subcategory": "construction_waste",
     "input_units": [
       "p"
@@ -20353,7 +20622,9 @@
       {
         "scope": "scope3",
         "value": 3.39780594,
-        "unit": "kgCO2e/p"
+        "unit": "kgCO2e/p",
+        "description_fr": "3,4 kg CO2 pour éliminer 1 unité de ventilation",
+        "description_de": "3,4 kg CO2 für die Entsorgung einer Lüftungsanlage"
       }
     ],
     "unit_conversions": {},
@@ -20381,7 +20652,27 @@
         "is_correction": false
       }
     ],
-    "valid_from_year": 2024
+    "valid_from_year": 2024,
+    "name_simple_fr": "Élimination système de ventilation",
+    "name_simple_de": "Entsorgung Lüftungssystem",
+    "description_fr": "Recyclage ou élimination d'une unité de ventilation résidentielle (KWLC 1200). Inclut le transport et le traitement du déchet de construction.",
+    "description_de": "Recycling oder Entsorgung einer Wohnungslüftungsanlage (KWLC 1200). Umfasst Transport und Abfallbehandlung.",
+    "search_tags": [
+      "ventilation",
+      "recyclage",
+      "déchet construction",
+      "équipement éliminé",
+      "KWLC",
+      "VMC",
+      "end of life",
+      "waste disposal",
+      "construction waste"
+    ],
+    "usage_hint_fr": "À utiliser quand vous éliminez une ventilation résidentielle en fin de vie",
+    "usage_hint_de": "Verwenden Sie dies bei der Entsorgung einer alten Wohnungslüftung",
+    "popularity_score": 15,
+    "original_name_fr": "Élimination, équipement de ventilation, KWLC 1200 {CH}",
+    "original_name_de": "Entsorgung, Lüftungsanlage, KWLC 1200 {CH}"
   },
   {
     "id": "698418f3c1a4e9f26cd2732d",
@@ -22858,8 +23149,8 @@
   },
   {
     "id": "698418f3c1a4e9f26cd27365",
-    "name_fr": "Chaudière, bûches de bois avec filtre à particules",
-    "name_de": "Heizkessel Stückholz mit Partikelfilter",
+    "name_fr": "Chauffage bois avec filtre à particules",
+    "name_de": "Holzheizung mit Partikelfilter",
     "subcategory": "combustibles",
     "input_units": [
       "MJ"
@@ -22906,7 +23197,49 @@
         "is_correction": false
       }
     ],
-    "valid_from_year": 2024
+    "valid_from_year": 2024,
+    "name_simple_fr": "Chauffage au bois (filtré)",
+    "name_simple_de": "Holzheizung (gefiltert)",
+    "description_fr": "Chaudière utilisant des bûches de bois pour chauffer un bâtiment. Le filtre à particules réduit la pollution de l'air.",
+    "description_de": "Heizkessel, der Holzscheite zur Gebäudeheizung nutzt. Der Partikelfilter reduziert die Luftverschmutzung.",
+    "search_tags": [
+      "bois",
+      "chauffage bois",
+      "chaudière bois",
+      "bûches",
+      "wood heating",
+      "pellets bois",
+      "combustible bois",
+      "énergie bois"
+    ],
+    "usage_hint_fr": "Utilisez pour les chauffages au bois avec système de filtration.",
+    "usage_hint_de": "Verwenden Sie für Holzheizungen mit Filtersystem.",
+    "popularity_score": 45,
+    "original_data": {
+      "name_fr": "Chaudière, bûches de bois avec filtre à particules",
+      "name_de": "Heizkessel Stückholz mit Partikelfilter",
+      "subcategory": "combustibles",
+      "input_units": [
+        "MJ"
+      ],
+      "impacts": [
+        {
+          "scope": "scope1",
+          "value": 0.0046,
+          "unit": "kgCO2e/MJ"
+        },
+        {
+          "scope": "scope3_3",
+          "value": 0.0044,
+          "unit": "kgCO2e/MJ"
+        }
+      ],
+      "tags": [
+        "combustibles",
+        "bafu"
+      ],
+      "source": "BAFU"
+    }
   },
   {
     "id": "698418f3c1a4e9f26cd27366",
@@ -25622,8 +25955,8 @@
   },
   {
     "id": "698418f3c1a4e9f26cd27397",
-    "name_fr": "Bus urbain (13m) | Batterie électrique (charge au dépôt) | À un seul étage",
-    "name_de": "Stadtbus (13m) | Batterieelektrisch (Aufladen im Depot) | Eindecker",
+    "name_fr": "Bus électrique urbain",
+    "name_de": "Stadtbus elektrisch",
     "subcategory": "route_transports_en_communs",
     "input_units": [
       "pkm"
@@ -25676,7 +26009,33 @@
         "is_correction": false
       }
     ],
-    "valid_from_year": 2023
+    "valid_from_year": 2023,
+    "description_fr": "Bus électrique à batterie circulant en ville. Comprend l'électricité du réseau pour la recharge au dépôt. Par voyageur transporté.",
+    "description_de": "Elektrischer Stadtbus mit Batterie. Umfasst Netzstrom zum Aufladen im Depot. Pro beförderte Person.",
+    "search_tags": [
+      "bus électrique",
+      "electric bus",
+      "batterie",
+      "transport urbain",
+      "transports en commun",
+      "pkm",
+      "bus 13m",
+      "mobilité urbaine"
+    ],
+    "usage_hint_fr": "Utilisez pour vos trajets en bus électrique urbain, par personne-km.",
+    "usage_hint_de": "Verwenden Sie für Ihre Fahrten mit städtischem Elektrobus pro Personen-km.",
+    "popularity_score": 72,
+    "name_simple_fr": "Bus électrique urbain",
+    "name_simple_de": "Stadtbus elektrisch",
+    "enrichment_metadata": {
+      "removed_technical_details": [
+        "13m",
+        "Batterie électrique",
+        "Charge au dépôt",
+        "À un seul étage"
+      ],
+      "clarification": "Facteur simplifié en supprimant les spécifications techniques pour plus de clarté"
+    }
   },
   {
     "id": "698418f3c1a4e9f26cd27398",
@@ -29234,8 +29593,8 @@
   },
   {
     "id": "698418f3c1a4e9f26cd273d4",
-    "name_fr": "Voiture de tourisme | Batterie électrique | Berline",
-    "name_de": "Personenkraftwagen | Batterieelektrisch | Mittel",
+    "name_fr": "Voiture électrique berline",
+    "name_de": "Elektrisches Personenauto Limousine",
     "subcategory": "route_transport_individuel",
     "input_units": [
       "pkm"
@@ -29289,7 +29648,26 @@
         "is_correction": false
       }
     ],
-    "valid_from_year": 2023
+    "valid_from_year": 2023,
+    "description_fr": "Voiture de tourisme électrique de taille moyenne. Émissions liées à la production d'électricité pour la recharge.",
+    "description_de": "Mittleres Elektroauto. Emissionen stammen aus der Stromerzeugung zum Aufladen der Batterie.",
+    "search_tags": [
+      "voiture électrique",
+      "EV",
+      "berline électrique",
+      "auto électrique",
+      "voiture de tourisme électrique",
+      "batterie",
+      "recharge électrique",
+      "emission electricity",
+      "personenkraftwagen",
+      "pkm"
+    ],
+    "usage_hint_fr": "Utilisez pour les trajets en voiture électrique personnelle (trajets domicile-travail, déplacements professionnels)",
+    "usage_hint_de": "Nutzen Sie für Fahrten mit privatem Elektroauto (Pendlerverkehr, Geschäftsfahrten)",
+    "popularity_score": 82,
+    "notes_fr": "Les émissions proviennent du mix électrique suisse (hydraulique + nucléaire principalement). Très inférieur aux véhicules à essence.",
+    "notes_de": "Emissionen stammen aus dem Schweizer Strommix (hauptsächlich Wasserkraft und Kernenergie). Deutlich niedriger als Benzinfahrzeuge."
   },
   {
     "id": "698418f3c1a4e9f26cd273d5",
@@ -31819,8 +32197,8 @@
   },
   {
     "id": "698418f3c1a4e9f26cd27400",
-    "name_fr": "Camion | Gaz comprimé | 26t | EURO-6",
-    "name_de": "Lastwagen | Komprimiertes Gas | 26t | EURO-6",
+    "name_fr": "Camion gaz 26 tonnes",
+    "name_de": "Lastwagen Gas 26 Tonnen",
     "subcategory": "route",
     "input_units": [
       "tkm"
@@ -31875,7 +32253,26 @@
         "is_correction": false
       }
     ],
-    "valid_from_year": 2023
+    "valid_from_year": 2023,
+    "description_fr": "Gros camion de transport alimenté au gaz naturel comprimé. Utilisé pour livrer marchandises lourdes sur route.",
+    "description_de": "Großer Lastwagen mit Erdgasantrieb. Wird für den Transport schwerer Güter auf der Straße eingesetzt.",
+    "search_tags": [
+      "camion",
+      "poids lourd",
+      "gaz naturel",
+      "CNG",
+      "transport marchandises",
+      "26 tonnes",
+      "carburant alternatif",
+      "logistique",
+      "livraison",
+      "tkm"
+    ],
+    "usage_hint_fr": "Pour les trajets de fret par camion au gaz. Mesurer en tonnes × km.",
+    "usage_hint_de": "Für Gütertransporte mit Gaslastwagen. In Tonnen × km messen.",
+    "popularity_score": 45,
+    "name_simple_fr": "Camion gaz 26 tonnes",
+    "name_simple_de": "Lastwagen Gas 26 Tonnen"
   },
   {
     "id": "698418f3c1a4e9f26cd27401",
@@ -35697,7 +36094,27 @@
         "is_correction": false
       }
     ],
-    "valid_from_year": 2023
+    "valid_from_year": 2023,
+    "name_simple_fr": "Camion lourd à hydrogène 40 tonnes",
+    "name_simple_de": "Schwerer Lastwagen mit Wasserstoff 40 Tonnen",
+    "description_fr": "Camion articulé de 40 tonnes utilisant une pile à combustible hydrogène pour la propulsion. Zéro émission directe, mais impact selon la production d'hydrogène.",
+    "description_de": "40-Tonnen-Sattelzug mit Wasserstoffbrennstoffzelle. Keine direkten Emissionen, Auswirkungen hängen von der Wasserstoffproduktion ab.",
+    "search_tags": [
+      "hydrogène",
+      "pile à combustible",
+      "poids lourd",
+      "camion 40t",
+      "h2",
+      "fuel cell",
+      "transport marchandises",
+      "zéro émission directe",
+      "articulé",
+      "mobitool"
+    ],
+    "usage_hint_fr": "Pour le transport de marchandises longue distance avec camion à hydrogène.",
+    "usage_hint_de": "Für den Fernverkehrstransport mit Wasserstoff-Lastwagen.",
+    "popularity_score": 15,
+    "enrichment_notes": "Facteur très spécialisé. Les émissions proviennent principalement de la production d'hydrogène (scope 2). Technologie en développement en Suisse."
   },
   {
     "id": "698418f3c1a4e9f26cd27441",
@@ -39047,8 +39464,8 @@
   },
   {
     "id": "698418f3c1a4e9f26cd2747a",
-    "name_fr": "Hélicoptère, monomoteur | Kérosène | par heure de vol",
-    "name_de": "Helikopter, einmotorig | Kerosen | pro Flugstunde",
+    "name_fr": "Hélicoptère monomoteur",
+    "name_de": "Hubschrauber mit einem Motor",
     "subcategory": "aerien",
     "input_units": [
       "h"
@@ -39063,16 +39480,6 @@
       {
         "scope": "scope2",
         "value": 0.0,
-        "unit": "kgCO2e/h"
-      },
-      {
-        "scope": "scope3_3",
-        "value": 162092.65,
-        "unit": "kgCO2e/h"
-      },
-      {
-        "scope": "scope3",
-        "value": 590897.6,
         "unit": "kgCO2e/h"
       }
     ],
@@ -39102,7 +39509,26 @@
         "is_correction": false
       }
     ],
-    "valid_from_year": 2023
+    "valid_from_year": 2023,
+    "name_simple_fr": "Hélicoptère léger",
+    "name_simple_de": "Leichter Hubschrauber",
+    "description_fr": "Petit hélicoptère à essence pour transport, surveillance ou missions spécialisées. Très consommateur de carburant.",
+    "description_de": "Kleiner Hubschrauber mit Benzinmotor für Transport, Überwachung oder Spezialaufträge. Sehr hoher Treibstoffverbrauch.",
+    "search_tags": [
+      "hélicoptère",
+      "helicoptère",
+      "vol",
+      "aérien",
+      "kérosène",
+      "petit avion",
+      "aviation légère",
+      "helicopter",
+      "kerosene",
+      "airborne"
+    ],
+    "usage_hint_fr": "Pour trajets aériens courts ou survols spécialisés (médical, secours).",
+    "usage_hint_de": "Für kurze Flüge oder Spezialaufgaben (Rettung, Überwachung).",
+    "popularity_score": 15
   },
   {
     "id": "698418f3c1a4e9f26cd2747b",
@@ -41320,8 +41746,8 @@
   },
   {
     "id": "698418f3c1a4e9f26cd274b1",
-    "name_fr": "Brique en argile légère",
-    "name_de": "Leichtlehmstein",
+    "name_fr": "Brique légère en argile",
+    "name_de": "Leichter Lehmziegel",
     "subcategory": "pierres_de_taille",
     "input_units": [],
     "default_unit": null,
@@ -41357,7 +41783,24 @@
         "is_correction": false
       }
     ],
-    "valid_from_year": 2022
+    "valid_from_year": 2022,
+    "name_simple_fr": "Brique légère en argile",
+    "name_simple_de": "Leichter Lehmziegel",
+    "description_fr": "Brique de construction poreuse et légère en argile. Utilisée pour remplissage, isolation thermique et construction de murs intérieurs.",
+    "description_de": "Poröser und leichter Lehmziegel zur Konstruktion. Für Ausfachung, Wärmeisolation und Innenwandbau.",
+    "search_tags": [
+      "brique",
+      "argile",
+      "léger",
+      "clay brick",
+      "matériau construction",
+      "isolation",
+      "mur",
+      "porosité"
+    ],
+    "usage_hint_fr": "Utilisez ce facteur pour briques creuses ou légères en argile cuite.",
+    "usage_hint_de": "Verwenden Sie diesen Faktor für leichte oder poröse Lehmziegel.",
+    "popularity_score": 35
   },
   {
     "id": "698418f3c1a4e9f26cd274b2",
@@ -43738,8 +44181,8 @@
   },
   {
     "id": "698418f3c1a4e9f26cd274eb",
-    "name_fr": "Cadre de fenêtre bois-métal, Saphir intégral 55/55, G. Baumgartner AG 2",
-    "name_de": "Fensterrahmen Holz-Metall, Saphir integral 55/55, G. Baumgartner AG 2,6",
+    "name_fr": "Fenêtre bois-métal standard",
+    "name_de": "Fenster Holz-Metall Standard",
     "subcategory": "fenetre_et_facades_verre_metal",
     "input_units": [
       "m2"
@@ -43776,7 +44219,38 @@
         "is_correction": false
       }
     ],
-    "valid_from_year": 2022
+    "valid_from_year": 2022,
+    "description_fr": "Cadre de fenêtre combinant bois et métal. Utilisé pour fenêtres de bâtiments résidentiels ou commerciaux.",
+    "description_de": "Fensterrahmen aus Holz und Metall kombiniert. Für Wohn- oder Geschäftsgebäudefenster.",
+    "search_tags": [
+      "fenêtre",
+      "window",
+      "cadre",
+      "frame",
+      "bois-métal",
+      "hybrid",
+      "construction",
+      "bâtiment",
+      "menuiserie",
+      "vitrage"
+    ],
+    "usage_hint_fr": "Utiliser pour les fenêtres bois-métal dans vos bâtiments.",
+    "usage_hint_de": "Für Holz-Metall-Fenster in Ihren Gebäuden verwenden.",
+    "popularity_score": 45,
+    "name_simple_fr": "Fenêtre bois-métal standard",
+    "name_simple_de": "Fenster Holz-Metall Standard",
+    "enriched_data": {
+      "product_type": "fenêtre",
+      "materials": [
+        "bois",
+        "métal"
+      ],
+      "typical_use": "bâtiment résidentiel et commercial",
+      "unit_explained_fr": "m² = mètres carrés de surface vitrée",
+      "unit_explained_de": "m² = Quadratmeter Glashfläche",
+      "emission_explanation_fr": "38 kg CO2e par m² inclut la fabrication et le transport du cadre",
+      "emission_explanation_de": "38 kg CO2e pro m² beinhaltet Herstellung und Transport des Rahmens"
+    }
   },
   {
     "id": "698418f3c1a4e9f26cd274ec",
@@ -45376,8 +45850,8 @@
   },
   {
     "id": "698418f3c1a4e9f26cd27512",
-    "name_fr": "Bois lamellé-collé, colle MF, zone humide, production Suisse",
-    "name_de": "Brettschichtholz, Produktion Schweiz",
+    "name_fr": "Bois lamellé-collé suisse",
+    "name_de": "Schweizer Brettschichtholz",
     "subcategory": "bois_et_produits_en_bois",
     "input_units": [
       "kg"
@@ -45414,7 +45888,44 @@
         "is_correction": false
       }
     ],
-    "valid_from_year": 2022
+    "valid_from_year": 2022,
+    "description_fr": "Bois de construction fabriqué en Suisse par collage de lames. Utilisé pour charpentes, poutres et structures de bâtiments.",
+    "description_de": "In der Schweiz hergestelltes Konstruktionsholz aus verleimten Holzschichten. Verwendet für Dachstühle, Balken und Gebäudestrukturen.",
+    "search_tags": [
+      "bois lamellé",
+      "brettschichtholz",
+      "glulam",
+      "poutre bois",
+      "construction bois",
+      "bois collé",
+      "matériau construction",
+      "charpente"
+    ],
+    "usage_hint_fr": "Utilisez ce facteur pour les matériaux de charpente et structures en bois lamellé suisse.",
+    "usage_hint_de": "Verwenden Sie diesen Faktor für Dachstuhl- und Konstruktionsmaterialien aus Schweizer Brettschichtholz.",
+    "popularity_score": 35,
+    "name_simple_fr": "Bois lamellé suisse",
+    "name_simple_de": "Schweizer Brettschichtholz",
+    "original_data": {
+      "name_fr": "Bois lamellé-collé, colle MF, zone humide, production Suisse",
+      "name_de": "Brettschichtholz, Produktion Schweiz",
+      "subcategory": "bois_et_produits_en_bois",
+      "input_units": [
+        "kg"
+      ],
+      "impacts": [
+        {
+          "scope": "scope3",
+          "value": 0.253,
+          "unit": "kgCO2e/kg"
+        }
+      ],
+      "tags": [
+        "bois_et_produits_en_bois",
+        "source_missing"
+      ],
+      "source": null
+    }
   },
   {
     "id": "698418f3c1a4e9f26cd27513",
@@ -47386,7 +47897,44 @@
         "is_correction": false
       }
     ],
-    "valid_from_year": 2022
+    "valid_from_year": 2022,
+    "name_simple_fr": "Membrane d'étanchéité bitumineuse",
+    "name_simple_de": "Bitumen-Dichtungsbahn",
+    "description_fr": "Feuille de protection imperméable pour toitures et terrasses. Utilisée pour empêcher l'infiltration d'eau dans les constructions.",
+    "description_de": "Wasserdichte Schutzfolie für Dächer und Terrassen. Verhindert Wassereindringung in Gebäuden.",
+    "search_tags": [
+      "étanchéité toiture",
+      "bitume",
+      "membrane",
+      "protection toiture",
+      "Sopralen",
+      "roofing membrane",
+      "dichtungsbahn",
+      "imperméabilisation"
+    ],
+    "usage_hint_fr": "Utilisez pour les projets de toiture ou terrassement",
+    "usage_hint_de": "Verwenden Sie für Dach- oder Terrassen-Projekte",
+    "popularity_score": 35,
+    "original_data": {
+      "name_fr": "Feuille d'étanchéité à base de bitume élastomèren Sopralen Jardin EP 5 ard flam",
+      "name_de": "Elastomerbitumen-Dichtungsbahn Sopralen Jardin EP 5 ard flam",
+      "subcategory": "les_detancheite_et_feuilles_de_protection",
+      "input_units": [
+        "kg"
+      ],
+      "impacts": [
+        {
+          "scope": "scope3",
+          "value": 3.07,
+          "unit": "kgCO2e/kg"
+        }
+      ],
+      "tags": [
+        "les_detancheite_et_feuilles_de_protection",
+        "source_missing"
+      ],
+      "source": null
+    }
   },
   {
     "id": "698418f3c1a4e9f26cd27542",
@@ -49324,8 +49872,8 @@
   },
   {
     "id": "698418f3c1a4e9f26cd27570",
-    "name_fr": "Revêtement coulé à 2 comp., industrie (résine époxy), 2,25 mm",
-    "name_de": "2K-Fliessbelag Industrie (Epoxidharz), 2.25 mm",
+    "name_fr": "Revêtement époxy coulé (2 composants)",
+    "name_de": "Gegossener Epoxidharz-Belag (2K)",
     "subcategory": "revetements_de_sol",
     "input_units": [
       "m2"
@@ -49362,7 +49910,28 @@
         "is_correction": false
       }
     ],
-    "valid_from_year": 2022
+    "valid_from_year": 2022,
+    "description_fr": "Revêtement de sol industriel en résine époxy à 2 composants. Utilisé pour les entrepôts, usines, garages et zones exigeant une surface durable.",
+    "description_de": "Industrieller Bodenwerkstoff aus 2-komponentigem Epoxidharz. Verwendet in Lagerhallen, Fabriken, Garagen und anspruchsvollen Bereichen.",
+    "search_tags": [
+      "époxy",
+      "revêtement sol",
+      "2K",
+      "résine",
+      "sol industriel",
+      "coating",
+      "flooring",
+      "epoxy resin",
+      "béton revêtu"
+    ],
+    "usage_hint_fr": "À utiliser pour les sols coulés à base de résine époxy en 2 composants, épaisseur 2,25 mm.",
+    "usage_hint_de": "Für gegossene Bodensysteme aus 2K-Epoxidharz, Dicke 2,25 mm verwenden.",
+    "popularity_score": 25,
+    "enrichment_notes": {
+      "complexity_level": "expert",
+      "target_audience": "bâtiment/construction",
+      "simplification_applied": "Suppression de la mention '2,25 mm' du nom simple pour clarté"
+    }
   },
   {
     "id": "698418f3c1a4e9f26cd27571",
@@ -51546,7 +52115,26 @@
         "is_correction": false
       }
     ],
-    "valid_from_year": 2022
+    "valid_from_year": 2022,
+    "name_simple_fr": "Peinture poudre sur acier",
+    "name_simple_de": "Pulverlack auf Stahl",
+    "description_fr": "Revêtement protecteur appliqué par pulvérisation sur surface acier. Utilisé pour protéger et peindre mobilier, machines, structures métalliques.",
+    "description_de": "Schutzschicht auf Stahloberflächen durch Pulverbeschichtung. Verwendet für Möbel, Maschinen, Metallkonstruktionen.",
+    "search_tags": [
+      "peinture",
+      "poudre",
+      "coating",
+      "surface",
+      "protection",
+      "acier",
+      "spray",
+      "revêtement métallique",
+      "finition",
+      "peinture industrielle"
+    ],
+    "usage_hint_fr": "Utilisez pour peindre/protéger des surfaces en acier brut",
+    "usage_hint_de": "Verwenden Sie für Anstrich/Schutz von Stahlteilen",
+    "popularity_score": 35
   },
   {
     "id": "698418f3c1a4e9f26cd275a5",
@@ -53148,8 +53736,8 @@
   },
   {
     "id": "698418f3c1a4e9f26cd275cb",
-    "name_fr": "Collecteurs solaires plan, eau chaude immeuble locatif",
-    "name_de": "Flachkollektor für Warmwasser MFH",
+    "name_fr": "Panneaux solaires thermiques pour eau chaude",
+    "name_de": "Solarthermie-Kollektoren für Warmwasser",
     "subcategory": "installations_de_chauffage",
     "input_units": [
       "m2"
@@ -53187,7 +53775,24 @@
         "is_correction": false
       }
     ],
-    "valid_from_year": 2022
+    "valid_from_year": 2022,
+    "description_fr": "Panneaux solaires qui chauffent l'eau sanitaire d'un immeuble. Inclut fabrication, transport et installation.",
+    "description_de": "Solarkollektoren zur Warmwasserbereitung in Mehrfamilienhäusern. Umfasst Herstellung, Transport und Montage.",
+    "search_tags": [
+      "panneau solaire thermique",
+      "collecteur solaire plan",
+      "eau chaude sanitaire",
+      "solar thermal",
+      "solarthermie",
+      "chauffage solaire",
+      "MFH",
+      "immeuble"
+    ],
+    "usage_hint_fr": "Utilise ce facteur pour chaque m² de panneau solaire installé.",
+    "usage_hint_de": "Verwende diesen Faktor für jeden m² installierte Solarthermie.",
+    "popularity_score": 42,
+    "name_simple_fr": "Panneaux solaires thermiques",
+    "name_simple_de": "Solarthermie-Kollektoren"
   },
   {
     "id": "698418f3c1a4e9f26cd275cc",
