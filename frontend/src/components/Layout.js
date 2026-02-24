@@ -30,12 +30,12 @@ const Layout = () => {
   const navigate = useNavigate();
 
   const navItems = [
+    { path: '/dashboard', icon: LayoutDashboard, label: t('nav.dashboard') },
     { path: '/general-info', icon: Settings, label: t('nav.generalInfo') },
     { path: '/fiscal-years', icon: Calendar, label: 'Exercices' },
     { path: '/data-entry', icon: FileInput, label: t('nav.dataEntry') },
     { path: '/products', icon: Package, label: t('nav.products') },
-    { path: '/emission-factors', icon: Database, label: t('nav.emissionFactors') },
-    { path: '/dashboard', icon: LayoutDashboard, label: t('nav.dashboard') },
+    { path: '/assistance', icon: HelpCircle, label: language === 'fr' ? 'Assistance' : 'Hilfe' },
     // Admin link - only shown if user is admin
     ...(user?.role === 'admin' ? [{ path: '/admin', icon: Shield, label: t('nav.admin') || 'Administration' }] : []),
   ];
