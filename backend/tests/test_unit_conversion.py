@@ -370,62 +370,63 @@ class TestEndToEndConversion:
         if fy_response.status_code == 200 and fy_response.json():
             self.fiscal_year_id = fy_response.json()[0].get("id")
     
-    def test_mj_to_kwh_emissions_calculation(self):
+    def test_gj_to_mj_emissions_calculation(self):
         """
-        Create entry with MJ unit for kWh-based factor
-        Verify emissions are calculated correctly based on kWh conversion
+        Create entry with GJ unit for MJ-based factor
+        Verify emissions are calculated correctly based on conversion
         
         Example:
-        - User inputs: 1000 MJ
-        - Conversion: 1000 MJ * 0.2778 = 277.8 kWh
-        - If factor is 0.5 kgCO2e/kWh → emissions = 277.8 * 0.5 = 138.9 kgCO2e
+        - User inputs: 1 GJ
+        - Conversion: 1 GJ * 1000 = 1000 MJ
+        - If factor is 0.05 kgCO2e/MJ → emissions = 1000 * 0.05 = 50 kgCO2e
         """
-        # First, find a kWh-based emission factor
+        # First, find an MJ-based emission factor
         factors_response = requests.get(
-            f"{BASE_URL}/api/emission-factors/search?category=combustion_fixe"
+            f"{BASE_URL}/api/emission-factors/search?category=combustion_fixe",
+            headers=self.headers
         )
         
         if factors_response.status_code != 200:
             pytest.skip("Could not fetch emission factors")
         
         factors = factors_response.json()
-        kwh_factor = None
+        mj_factor = None
         
         for f in factors:
             input_units = f.get("input_units", [])
-            if "kWh" in input_units:
-                kwh_factor = f
+            if "MJ" in input_units:
+                mj_factor = f
                 break
         
-        if not kwh_factor:
-            pytest.skip("No kWh-based emission factor found")
+        if not mj_factor:
+            pytest.skip("No MJ-based emission factor found")
         
         # Get the factor's impact value for emission calculation
-        impacts = kwh_factor.get("impacts", [])
+        impacts = mj_factor.get("impacts", [])
         if not impacts:
             pytest.skip("Factor has no impacts")
         
         # Calculate expected emissions
-        original_qty_mj = 1000  # User enters 1000 MJ
-        mj_to_kwh_factor = 0.2778
-        converted_qty_kwh = original_qty_mj * mj_to_kwh_factor  # 277.8 kWh
+        original_qty_gj = 1  # User enters 1 GJ
+        gj_to_mj_factor = 1000  # 1 GJ = 1000 MJ
+        converted_qty_mj = original_qty_gj * gj_to_mj_factor  # 1000 MJ
         
-        # Sum all impact values for total emission factor per kWh
-        total_impact_per_kwh = sum(impact.get("value", 0) for impact in impacts)
-        expected_emissions = converted_qty_kwh * total_impact_per_kwh
+        # Sum all impact values for total emission factor per MJ
+        total_impact_per_mj = sum(impact.get("value", 0) for impact in impacts)
+        expected_emissions = converted_qty_mj * total_impact_per_mj
         
-        # Create activity with MJ input
+        # Create activity with GJ input
         activity_data = {
             "category_id": "combustion_fixe",
             "subcategory_id": "combustibles",
             "scope": "scope1",
-            "name": "TEST_MJ_to_kWh_Conversion",
-            "quantity": converted_qty_kwh,  # Pre-converted by frontend
-            "unit": "kWh",
-            "original_quantity": original_qty_mj,
-            "original_unit": "MJ",
-            "conversion_factor": mj_to_kwh_factor,
-            "emission_factor_id": kwh_factor["id"],
+            "name": "TEST_GJ_to_MJ_Conversion",
+            "quantity": converted_qty_mj,  # Pre-converted by frontend
+            "unit": "MJ",
+            "original_quantity": original_qty_gj,
+            "original_unit": "GJ",
+            "conversion_factor": gj_to_mj_factor,
+            "emission_factor_id": mj_factor["id"],
             "entry_scope": "scope1",
             "entry_category": "combustion_fixe",
             "fiscal_year_id": self.fiscal_year_id
@@ -447,15 +448,15 @@ class TestEndToEndConversion:
         # Sum emissions from all created activities
         total_emissions = sum(a.get("emissions", 0) for a in activities)
         
-        # Verify emissions are calculated based on converted kWh value
+        # Verify emissions are calculated based on converted MJ value
         # Allow for some floating point tolerance
         assert abs(total_emissions - expected_emissions) < 0.1, \
             f"Emissions mismatch: expected {expected_emissions:.2f}, got {total_emissions:.2f}"
         
         print(f"✓ End-to-end conversion test passed:")
-        print(f"  - Original: {original_qty_mj} MJ")
-        print(f"  - Converted: {converted_qty_kwh:.2f} kWh")
-        print(f"  - Impact factor: {total_impact_per_kwh} kgCO2e/kWh")
+        print(f"  - Original: {original_qty_gj} GJ")
+        print(f"  - Converted: {converted_qty_mj:.2f} MJ")
+        print(f"  - Impact factor: {total_impact_per_mj} kgCO2e/MJ")
         print(f"  - Expected emissions: {expected_emissions:.2f} kgCO2e")
         print(f"  - Actual emissions: {total_emissions:.2f} kgCO2e")
         
