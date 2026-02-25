@@ -74,6 +74,7 @@ const GuidedEntryModal = ({
     setStep(1);
     setSelectedSubcategory(null);
     setSelectedUnit('');
+    setIsConvertedUnit(false);
     setSelectedFactor(null);
     setFactorSearch('');
     setQuantity('');
@@ -81,6 +82,8 @@ const GuidedEntryModal = ({
     setFactors([]);
     setFilteredFactors([]);
     setAvailableUnits([]);
+    setNativeUnits([]);
+    setConvertedUnits([]);
     setShowFactorList(false);
   };
 
