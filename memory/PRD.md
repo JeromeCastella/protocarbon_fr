@@ -15,22 +15,26 @@ Calculateur d'empreinte carbone avec tableau de bord, objectifs et panneau d'adm
 - Page Assistance (FAQ + explorateur de facteurs)
 - Menu latéral réorganisé en sections logiques
 - Recherche fuzzy (Fuse.js) sur les facteurs d'émission
-- FactorCard avec tooltips au survol de la carte entière (corrigé 2025-02-25)
-- Boutons "Modifier" sur les étapes condensées du modal pour revenir en arrière (corrigé 2025-02-25)
-- Enrichissement IA POC sur 33 facteurs (name_simple_fr, search_tags, etc.)
+- FactorCard avec tooltips au survol de la carte entière
+- Boutons "Modifier" sur les étapes condensées du modal
+- Enrichissement IA POC sur 33 facteurs
 - Multi-impacts GHG Protocol (Scope 1, 2, 3, 3.3)
-- Administration (partielle)
+- **Conversion d'unités** (implémenté 2025-02-25) :
+  - 5 dimensions : énergie, distance, masse, volume, monétaire
+  - API `/api/units/dimensions`
+  - Unités natives + unités convertibles affichées séparément à l'étape 2
+  - Indicateur "Équivalent" à l'étape 4 quand conversion active
+  - Stockage Option C : quantity + unit (converti) + original_quantity + original_unit + conversion_factor
+  - Backend routes/units.py, Frontend utils/units.js refactorisé
 
 ## Backlog priorisé
-
-### P0
-- Conversion d'unités (Sprint 3) : modèles backend, API dimensions, mise à jour Activity, UI dans le modal
 
 ### P1
 - Enrichissement IA des 1158 facteurs restants (script enrich_all_factors.py cassé - rate limiting)
 
 ### P2
-- Admin: AdminUnitsTab.jsx, champs enrichis dans AdminFactorsTab.jsx
+- Admin: AdminUnitsTab.jsx pour gérer dimensions et conversions
+- Admin: champs enrichis dans AdminFactorsTab.jsx
 
 ### P3
 - Refactoring GuidedEntryModal.js (800+ lignes)
