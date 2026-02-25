@@ -647,24 +647,56 @@ const GuidedEntryModal = ({
                         )}
                       </div>
                     ) : (
-                      <div className="flex flex-wrap gap-2">
-                        {availableUnits.map(unit => (
-                          <button
-                            key={unit}
-                            type="button"
-                            onClick={() => handleUnitSelect(unit)}
-                            data-testid={`unit-${unit}`}
-                            className={`px-4 py-2 rounded-lg font-medium transition-all ${
-                              selectedUnit === unit
-                                ? 'bg-blue-500 text-white'
-                                : isDark 
-                                  ? 'bg-slate-700 hover:bg-slate-600 text-white' 
-                                  : 'bg-gray-100 hover:bg-gray-200 text-gray-900'
-                            }`}
-                          >
-                            {formatUnitWithCode(unit, language, true)}
-                          </button>
-                        ))}
+                      <div>
+                        {/* Unités natives du facteur */}
+                        <div className="flex flex-wrap gap-2">
+                          {nativeUnits.map(unit => (
+                            <button
+                              key={unit}
+                              type="button"
+                              onClick={() => handleUnitSelect(unit)}
+                              data-testid={`unit-${unit}`}
+                              className={`px-4 py-2 rounded-lg font-medium transition-all ${
+                                selectedUnit === unit
+                                  ? 'bg-blue-500 text-white'
+                                  : isDark 
+                                    ? 'bg-slate-700 hover:bg-slate-600 text-white' 
+                                    : 'bg-gray-100 hover:bg-gray-200 text-gray-900'
+                              }`}
+                            >
+                              {formatUnitWithCode(unit, language, true)}
+                            </button>
+                          ))}
+                        </div>
+                        {/* Unités convertibles (même dimension) */}
+                        {convertedUnits.length > 0 && (
+                          <div className="mt-3">
+                            <p className={`text-xs mb-2 ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>
+                              {language === 'fr' 
+                                ? 'Autres unités (conversion automatique)' 
+                                : 'Andere Einheiten (automatische Konvertierung)'}
+                            </p>
+                            <div className="flex flex-wrap gap-2">
+                              {convertedUnits.map(unit => (
+                                <button
+                                  key={unit}
+                                  type="button"
+                                  onClick={() => handleUnitSelect(unit)}
+                                  data-testid={`unit-${unit}`}
+                                  className={`px-4 py-2 rounded-lg font-medium transition-all border border-dashed ${
+                                    selectedUnit === unit
+                                      ? 'bg-blue-500 text-white border-blue-500'
+                                      : isDark 
+                                        ? 'bg-slate-800 hover:bg-slate-700 text-slate-300 border-slate-600' 
+                                        : 'bg-white hover:bg-gray-50 text-gray-700 border-gray-300'
+                                  }`}
+                                >
+                                  {formatUnitWithCode(unit, language, true)}
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+                        )}
                       </div>
                     )}
                   </div>
