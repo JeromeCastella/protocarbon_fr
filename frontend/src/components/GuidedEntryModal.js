@@ -245,11 +245,12 @@ const GuidedEntryModal = ({
     }
   };
 
-  // Extraction des unités disponibles - MATCHING STRICT
-  // Seules les input_units des facteurs sont proposées, sans conversions
+  // Extraction des unités disponibles avec conversions
   const extractAvailableUnits = (factorsList) => {
-    const units = getAvailableUnitsFromFactors(factorsList);
-    setAvailableUnits(units);
+    const result = getAvailableUnitsWithConversions(factorsList);
+    setNativeUnits(result.native);
+    setConvertedUnits(result.converted);
+    setAvailableUnits(result.all);
   };
 
   const handleSubcategorySelect = (subcat) => {
