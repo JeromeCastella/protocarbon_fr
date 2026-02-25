@@ -575,25 +575,34 @@ const GuidedEntryModal = ({
                     <label className={`block text-sm font-medium mb-3 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
                       {language === 'fr' ? '2. Unité de saisie' : '2. Eingabeeinheit'}
                     </label>
-                    <div className="flex flex-wrap gap-2">
-                      {availableUnits.map(unit => (
-                        <button
-                          key={unit}
-                          type="button"
-                          onClick={() => handleUnitSelect(unit)}
-                          data-testid={`unit-${unit}`}
-                          className={`px-4 py-2 rounded-lg font-medium transition-all ${
-                            selectedUnit === unit
-                              ? 'bg-blue-500 text-white'
-                              : isDark 
-                                ? 'bg-slate-700 hover:bg-slate-600 text-white' 
-                                : 'bg-gray-100 hover:bg-gray-200 text-gray-900'
-                          }`}
-                        >
-                          {formatUnitWithCode(unit, language, true)}
-                        </button>
-                      ))}
-                    </div>
+                    {/* Affichage condensé si étape 3+ et unité sélectionnée */}
+                    {step >= 3 && selectedUnit ? (
+                      <div className={`p-3 rounded-xl border ${isDark ? 'bg-blue-500/20 border-blue-500/50' : 'bg-blue-50 border-blue-200'}`}>
+                        <span className={`font-medium ${isDark ? 'text-blue-300' : 'text-blue-700'}`}>
+                          ✓ {formatUnitWithCode(selectedUnit, language, true)}
+                        </span>
+                      </div>
+                    ) : (
+                      <div className="flex flex-wrap gap-2">
+                        {availableUnits.map(unit => (
+                          <button
+                            key={unit}
+                            type="button"
+                            onClick={() => handleUnitSelect(unit)}
+                            data-testid={`unit-${unit}`}
+                            className={`px-4 py-2 rounded-lg font-medium transition-all ${
+                              selectedUnit === unit
+                                ? 'bg-blue-500 text-white'
+                                : isDark 
+                                  ? 'bg-slate-700 hover:bg-slate-600 text-white' 
+                                  : 'bg-gray-100 hover:bg-gray-200 text-gray-900'
+                            }`}
+                          >
+                            {formatUnitWithCode(unit, language, true)}
+                          </button>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 )}
 
