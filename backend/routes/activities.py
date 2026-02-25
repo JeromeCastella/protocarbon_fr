@@ -123,8 +123,13 @@ async def create_activity_for_impact(
     quantity = activity.quantity
     default_unit = factor.get("default_unit", activity.unit)
     
-    # Conversion d'unité si nécessaire
-    if activity.unit != default_unit:
+    # Utiliser la conversion fournie par le frontend si disponible
+    if activity.original_quantity is not None and activity.conversion_factor is not None:
+        # Le frontend a déjà converti : quantity est en unité de base du facteur
+        # On stocke les infos originales pour traçabilité
+        pass
+    elif activity.unit != default_unit:
+        # Fallback : conversion via unit_conversions du facteur
         unit_conversions = factor.get("unit_conversions", {})
         conversion_key = f"{activity.unit}_to_{default_unit}"
         if conversion_key in unit_conversions:
