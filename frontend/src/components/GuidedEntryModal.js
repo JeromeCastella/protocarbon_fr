@@ -517,7 +517,7 @@ const GuidedEntryModal = ({
           </div>
 
           {/* Body - Scrollable */}
-          <div className="flex-1 overflow-y-auto p-6">
+          <div className="flex-1 overflow-y-auto p-6 flex flex-col min-h-0">
             {loading ? (
               <div className="flex flex-col items-center justify-center h-48">
                 <Loader2 className="w-10 h-10 text-blue-500 animate-spin mb-4" />
