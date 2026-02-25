@@ -32,7 +32,10 @@ const GuidedEntryModal = ({
   
   // Unités disponibles (provenant des facteurs)
   const [availableUnits, setAvailableUnits] = useState([]);
+  const [nativeUnits, setNativeUnits] = useState([]);
+  const [convertedUnits, setConvertedUnits] = useState([]);
   const [selectedUnit, setSelectedUnit] = useState('');
+  const [isConvertedUnit, setIsConvertedUnit] = useState(false);
   
   // Facteurs d'émission
   const [factors, setFactors] = useState([]);
