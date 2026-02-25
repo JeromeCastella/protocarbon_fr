@@ -1,0 +1,5783 @@
+[
+  {
+    "id": "698418f3c1a4e9f26cd27156",
+    "name_fr": "Hydroélectricité",
+    "name_de": "Wasserkraft",
+    "subcategory": "electricite",
+    "input_units": [
+      "kWh"
+    ],
+    "default_unit": "kWh",
+    "impacts": [
+      {
+        "scope": "scope2",
+        "value": 0.0008832,
+        "unit": "kgCO2e/kWh"
+      },
+      {
+        "scope": "scope3_3",
+        "value": 0.00388983,
+        "unit": "kgCO2e/kWh"
+      },
+      {
+        "scope": "scope3",
+        "value": 0.0008832,
+        "unit": "kgCO2e/kWh"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "barrage",
+      "hydraulique",
+      "electricite"
+    ],
+    "source": "BAFU",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.319281+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.319306+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024,
+    "name_simple_fr": "Électricité hydraulique",
+    "name_simple_de": "Wasserkraft-Strom",
+    "description_fr": "Électricité produite par des barrages ou centrales au fil de l'eau. Très peu polluante. Exemple: consommation électrique d'un bureau alimenté par des barrages alpins.",
+    "description_de": "Strom aus Wasserkraftwerken mit Staudämmen oder Laufwasserkraftwerken. Sehr wenig Verschmutzung. Beispiel: Stromverbrauch eines Büros aus Alpenstaudämmen.",
+    "search_tags": [
+      "électricité verte",
+      "hydropower",
+      "barrage",
+      "énergie renouvelable",
+      "strom aus wasser",
+      "centrale hydraulique",
+      "kWh propre",
+      "électricité bas carbone"
+    ],
+    "usage_hint_fr": "Consommation électrique d'un bâtiment ou site alimenté par hydroélectricité",
+    "usage_hint_de": "Stromverbrauch von Gebäuden oder Standorten mit Wasserkraftversorgung",
+    "popularity_score": 85
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27157",
+    "name_fr": "Solaire",
+    "name_de": "Solar",
+    "subcategory": "electricite",
+    "input_units": [
+      "kWh"
+    ],
+    "default_unit": "kWh",
+    "impacts": [
+      {
+        "scope": "scope2",
+        "value": 0.0,
+        "unit": "kgCO2e/kWh"
+      },
+      {
+        "scope": "scope3_3",
+        "value": 0.03412399,
+        "unit": "kgCO2e/kWh"
+      },
+      {
+        "scope": "scope3",
+        "value": 0.0,
+        "unit": "kgCO2e/kWh"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "photovoltaique",
+      "electricite"
+    ],
+    "source": "BAFU",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.319859+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.319871+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024,
+    "name_simple_fr": "Électricité solaire",
+    "name_simple_de": "Solarstrom",
+    "description_fr": "Électricité produite par panneaux solaires. Impact très faible en exploitation. Inclut fabrication et installation des panneaux.",
+    "description_de": "Strom aus Solaranlagen. Sehr geringe Auswirkungen im Betrieb. Umfasst Herstellung und Installation der Paneele.",
+    "search_tags": [
+      "photovoltaïque",
+      "PV",
+      "panneau solaire",
+      "électricité verte",
+      "renewable energy",
+      "solar panel",
+      "énergie renouvelable",
+      "énergies alternatives"
+    ],
+    "usage_hint_fr": "Électricité produite localement ou achetée d'un producteur solaire.",
+    "usage_hint_de": "Lokal erzeugter oder von Solarerzeuger gekaufter Strom.",
+    "popularity_score": 72
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27158",
+    "name_fr": "Éolien",
+    "name_de": "Wind",
+    "subcategory": "electricite",
+    "input_units": [
+      "kWh"
+    ],
+    "default_unit": "kWh",
+    "impacts": [
+      {
+        "scope": "scope2",
+        "value": 0.0,
+        "unit": "kgCO2e/kWh"
+      },
+      {
+        "scope": "scope3_3",
+        "value": 0.01932796,
+        "unit": "kgCO2e/kWh"
+      },
+      {
+        "scope": "scope3",
+        "value": 0.0,
+        "unit": "kgCO2e/kWh"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "eolienne",
+      "electricite"
+    ],
+    "source": "BAFU",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.320221+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.320231+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024,
+    "name_simple_fr": "Électricité éolienne",
+    "name_simple_de": "Windstrom",
+    "description_fr": "Électricité produite par des éoliennes. Émissions très faibles, principalement liées à la fabrication et l'installation des turbines.",
+    "description_de": "Strom aus Windkraftanlagen. Sehr geringe Emissionen, hauptsächlich durch Herstellung und Installation der Turbinen.",
+    "search_tags": [
+      "éolien",
+      "vent",
+      "wind",
+      "turbine",
+      "électricité verte",
+      "renouvelable",
+      "énergie propre",
+      "green energy"
+    ],
+    "usage_hint_fr": "Quand votre électricité provient de parcs éoliens.",
+    "usage_hint_de": "Wenn Ihr Strom aus Windkraftanlagen stammt.",
+    "popularity_score": 75
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27159",
+    "name_fr": "Biomasse",
+    "name_de": "Biomasse",
+    "subcategory": "electricite",
+    "input_units": [
+      "kWh"
+    ],
+    "default_unit": "kWh",
+    "impacts": [
+      {
+        "scope": "scope2",
+        "value": 0.00787935,
+        "unit": "kgCO2e/kWh"
+      },
+      {
+        "scope": "scope3_3",
+        "value": 0.13366619,
+        "unit": "kgCO2e/kWh"
+      },
+      {
+        "scope": "scope3",
+        "value": 0.00787935,
+        "unit": "kgCO2e/kWh"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "bioenergie",
+      "bois_energie",
+      "biogaz",
+      "electricite",
+      "bafu"
+    ],
+    "source": "BAFU",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.320536+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.320545+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024,
+    "name_simple_fr": "Électricité issue du bois",
+    "name_simple_de": "Strom aus Holz",
+    "description_fr": "Électricité produite à partir de bois ou déchets de bois. Exemple: chaufferie collective alimentée par sciures ou plaquettes forestières.",
+    "description_de": "Strom aus Holz oder Holzabfällen. Beispiel: Heizwerk gespeist durch Sägespäne oder Holzschnitzel.",
+    "search_tags": [
+      "biomass",
+      "electricity",
+      "wood",
+      "énergie renouvelable",
+      "bois énergie",
+      "déchets bois",
+      "combustible biomasse",
+      "chaufferie bois"
+    ],
+    "usage_hint_fr": "Utilisez ce facteur pour l'électricité issue de centrales de biomasse bois.",
+    "usage_hint_de": "Verwenden Sie diesen Faktor für Strom aus Holzbiomasse-Kraftwerken.",
+    "popularity_score": 45
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2715a",
+    "name_fr": "Géothermie (proxy par l’éolien)",
+    "name_de": "Geothermie (Proxy durch Wind)",
+    "subcategory": "electricite",
+    "input_units": [
+      "kWh"
+    ],
+    "default_unit": "kWh",
+    "impacts": [
+      {
+        "scope": "scope2",
+        "value": 0.0,
+        "unit": "kgCO2e/kWh"
+      },
+      {
+        "scope": "scope3_3",
+        "value": 0.01932796,
+        "unit": "kgCO2e/kWh"
+      },
+      {
+        "scope": "scope3",
+        "value": 0.0,
+        "unit": "kgCO2e/kWh"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "electricite",
+      "bafu"
+    ],
+    "source": "BAFU",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.320791+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.320798+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024,
+    "name_simple_fr": "Géothermie",
+    "name_simple_de": "Geothermie",
+    "description_fr": "Électricité produite par la chaleur interne de la Terre. Très peu d'émissions directes, surtout liées à la fabrication des installations.",
+    "description_de": "Strom aus Erdwärmekraftwerken. Kaum direkte Emissionen, hauptsächlich aus der Herstellung der Anlagen.",
+    "search_tags": [
+      "énergie géothermale",
+      "chaleur souterraine",
+      "ENR thermique",
+      "geothermal",
+      "renewable heat",
+      "chaleur renouvelable",
+      "électricité verte",
+      "énergie bas-carbone"
+    ],
+    "usage_hint_fr": "Pour l'électricité issue de centrales géothermales ou pompes à chaleur",
+    "usage_hint_de": "Für Strom aus Geothermie-Kraftwerken oder Wärmepumpen",
+    "popularity_score": 35
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2715b",
+    "name_fr": "Nucléaire",
+    "name_de": "Kernenergie",
+    "subcategory": "electricite",
+    "input_units": [
+      "kWh"
+    ],
+    "default_unit": "kWh",
+    "impacts": [
+      {
+        "scope": "scope2",
+        "value": 2.63e-05,
+        "unit": "kgCO2e/kWh"
+      },
+      {
+        "scope": "scope3_3",
+        "value": 0.01531023,
+        "unit": "kgCO2e/kWh"
+      },
+      {
+        "scope": "scope3",
+        "value": 2.631e-05,
+        "unit": "kgCO2e/kWh"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "energie_atomique",
+      "electricite",
+      "bafu"
+    ],
+    "source": "BAFU",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.321061+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.321069+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024,
+    "name_simple_fr": "Électricité nucléaire",
+    "name_simple_de": "Kernenergie-Strom",
+    "description_fr": "Électricité produite par les centrales nucléaires suisses. Très faible émission CO2. Exemple: alimenter une maison",
+    "description_de": "Strom aus Schweizer Kernkraftwerken. Sehr niedrige CO2-Emissionen. Beispiel: Stromversorgung eines Hauses",
+    "search_tags": [
+      "nucléaire",
+      "nuclear",
+      "énergie atomique",
+      "électricité bas-carbone",
+      "kWh",
+      "BAFU",
+      "Suisse",
+      "centrales nucléaires"
+    ],
+    "usage_hint_fr": "Pour l'électricité achetée aux fournisseurs suisses utilisant le nucléaire",
+    "usage_hint_de": "Für von Schweizer Anbietern bezogene Kernenergie",
+    "popularity_score": 85
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2715c",
+    "name_fr": "Pétrole",
+    "name_de": "Erdöl",
+    "subcategory": "electricite",
+    "input_units": [
+      "kWh"
+    ],
+    "default_unit": "kWh",
+    "impacts": [
+      {
+        "scope": "scope2",
+        "value": 0.57621999,
+        "unit": "kgCO2e/kWh"
+      },
+      {
+        "scope": "scope3_3",
+        "value": 0.23876697,
+        "unit": "kgCO2e/kWh"
+      },
+      {
+        "scope": "scope3",
+        "value": 0.57621999,
+        "unit": "kgCO2e/kWh"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "electricite",
+      "bafu"
+    ],
+    "source": "BAFU",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.321321+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.321330+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2715d",
+    "name_fr": "Gaz naturel",
+    "name_de": "Erdgas",
+    "subcategory": "electricite",
+    "input_units": [
+      "kWh"
+    ],
+    "default_unit": "kWh",
+    "impacts": [
+      {
+        "scope": "scope2",
+        "value": 0.43273224,
+        "unit": "kgCO2e/kWh"
+      },
+      {
+        "scope": "scope3_3",
+        "value": 0.14371469,
+        "unit": "kgCO2e/kWh"
+      },
+      {
+        "scope": "scope3",
+        "value": 0.43273224,
+        "unit": "kgCO2e/kWh"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "gaz",
+      "methane",
+      "gnl",
+      "electricite",
+      "bafu"
+    ],
+    "source": "BAFU",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.321597+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.321603+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024,
+    "name_simple_fr": "Chauffage au gaz naturel",
+    "name_simple_de": "Erdgasheizung",
+    "description_fr": "Émissions liées à la consommation de gaz naturel pour le chauffage des bâtiments ou la production d'énergie thermique. Ex: chauffage de bureau, chaudière.",
+    "description_de": "Emissionen aus Erdgasverbrauch zum Heizen von Gebäuden oder zur Wärmeerzeugung. Bsp: Büroheizung, Heizkessel.",
+    "search_tags": [
+      "gaz naturel",
+      "natural gas",
+      "chauffage",
+      "heating",
+      "combustion",
+      "énergie thermique",
+      "thermal energy",
+      "chaudière",
+      "boiler",
+      "gaz"
+    ],
+    "usage_hint_fr": "Utilisez ce facteur pour vos factures de gaz naturel en kWh",
+    "usage_hint_de": "Nutzen Sie diesen Faktor für Ihre Erdgasrechnungen in kWh",
+    "popularity_score": 92
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2715e",
+    "name_fr": "Charbon",
+    "name_de": "Kohle",
+    "subcategory": "electricite",
+    "input_units": [
+      "kWh"
+    ],
+    "default_unit": "kWh",
+    "impacts": [
+      {
+        "scope": "scope2",
+        "value": 0.96405117,
+        "unit": "kgCO2e/kWh"
+      },
+      {
+        "scope": "scope3_3",
+        "value": 0.09735318,
+        "unit": "kgCO2e/kWh"
+      },
+      {
+        "scope": "scope3",
+        "value": 0.96405117,
+        "unit": "kgCO2e/kWh"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "electricite",
+      "bafu"
+    ],
+    "source": "BAFU",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.321814+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.321820+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024,
+    "name_simple_fr": "Électricité au charbon",
+    "name_simple_de": "Kohle-Strom",
+    "description_fr": "Électricité produite à partir de charbon brûlé. Très polluante : 1 kWh émet ~1 kg de CO2. Utilisée surtout pour les chauffages industriels.",
+    "description_de": "Strom aus Kohleverbrennung. Sehr umweltschädlich: 1 kWh erzeugt ~1 kg CO2. Wird hauptsächlich für industrielle Heizungen verwendet.",
+    "search_tags": [
+      "charbon",
+      "kohle",
+      "électricité charbon",
+      "coal power",
+      "fossile",
+      "lignite",
+      "énergie grise",
+      "très polluant"
+    ],
+    "usage_hint_fr": "Données industrielles anciennes ou zones minières. Extrêmement rare en Suisse.",
+    "usage_hint_de": "Alte Industriedaten oder Bergbaugebiete. In der Schweiz äußerst selten.",
+    "popularity_score": 15
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2715f",
+    "name_fr": "Déchets",
+    "name_de": "Abfall",
+    "subcategory": "electricite",
+    "input_units": [
+      "kWh"
+    ],
+    "default_unit": "kWh",
+    "impacts": [
+      {
+        "scope": "scope2",
+        "value": 0.0,
+        "unit": "kgCO2e/kWh"
+      },
+      {
+        "scope": "scope3_3",
+        "value": 0.0,
+        "unit": "kgCO2e/kWh"
+      },
+      {
+        "scope": "scope3",
+        "value": 0.0,
+        "unit": "kgCO2e/kWh"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "incineration",
+      "ordures",
+      "electricite",
+      "bafu"
+    ],
+    "source": "BAFU",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.322058+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.322066+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27160",
+    "name_fr": "Pompage-turbinage",
+    "name_de": "Pumpspeicher",
+    "subcategory": "electricite",
+    "input_units": [
+      "kWh"
+    ],
+    "default_unit": "kWh",
+    "impacts": [
+      {
+        "scope": "scope2",
+        "value": 0.00138329,
+        "unit": "kgCO2e/kWh"
+      },
+      {
+        "scope": "scope3_3",
+        "value": 0.13365184,
+        "unit": "kgCO2e/kWh"
+      },
+      {
+        "scope": "scope3",
+        "value": 0.00138329,
+        "unit": "kgCO2e/kWh"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "electricite",
+      "bafu"
+    ],
+    "source": "BAFU",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.322329+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.322336+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024,
+    "name_simple_fr": "Électricité stockée en montagne",
+    "name_simple_de": "Bergstrom-Speicherung",
+    "description_fr": "Électricité produite en stockant l'eau dans des réservoirs en montagne. Utilisée quand on a besoin d'électricité rapidement (barrages de montagne).",
+    "description_de": "Strom aus Wasserkraftwerken mit Speicherung in Bergbecken. Wird bei Bedarf schnell zur Verfügung gestellt (Alpenstaudämme).",
+    "search_tags": [
+      "pompage-turbinage",
+      "stockage energie",
+      "barrage montagne",
+      "hydro storage",
+      "energie renouvelable",
+      "accumulation",
+      "bafu",
+      "pumpspeicher",
+      "reservoir"
+    ],
+    "usage_hint_fr": "Pour l'électricité stockée en réservoirs alpins ou équivalents.",
+    "usage_hint_de": "Für Strom aus Alpenstaudämmen oder gleichwertigen Speicherkraftwerken.",
+    "popularity_score": 45,
+    "additional_info": {
+      "note_fr": "Facteur très spécifique à la Suisse. Émissions Scope 2 très faibles (électricité), Scope 3 plus élevé (impacts construction/entretien des installations).",
+      "note_de": "Sehr spezifisch für die Schweiz. Scope 2-Emissionen niedrig (Strom), Scope 3 höher (Bau/Wartungsbelastung)."
+    }
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27161",
+    "name_fr": "Réseau (approche location-based)\"",
+    "name_de": "Netz (Location-based-Ansatz)",
+    "subcategory": "electricite",
+    "input_units": [
+      "kWh"
+    ],
+    "default_unit": "kWh",
+    "impacts": [
+      {
+        "scope": "scope2",
+        "value": 0.00487761,
+        "unit": "kgCO2e/kWh"
+      },
+      {
+        "scope": "scope3_3",
+        "value": 0.02175909,
+        "unit": "kgCO2e/kWh"
+      },
+      {
+        "scope": "scope3",
+        "value": 0.00487761,
+        "unit": "kgCO2e/kWh"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "electricite",
+      "bafu"
+    ],
+    "source": "BAFU",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.322568+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.322574+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024,
+    "name_simple_fr": "Électricité du réseau suisse",
+    "name_simple_de": "Schweizer Netzstrom",
+    "description_fr": "Émissions liées à l'électricité consommée depuis le réseau national. Inclut toutes les sources d'énergie (hydraulique, nucléaire, gaz, etc.).",
+    "description_de": "Emissionen des Stroms aus dem nationalen Stromnetz. Berücksichtigt alle Energiequellen (Wasser, Kernkraft, Gas, etc.).",
+    "search_tags": [
+      "électricité",
+      "réseau",
+      "grid",
+      "location-based",
+      "kWh",
+      "courant électrique",
+      "consommation électrique",
+      "mix énergétique",
+      "Strom",
+      "BAFU"
+    ],
+    "usage_hint_fr": "Pour toute consommation d'électricité du réseau public suisse",
+    "usage_hint_de": "Für jeden Stromverbrauch aus dem Schweizer öffentlichen Netz",
+    "popularity_score": 95
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27162",
+    "name_fr": "Consumption based - CH",
+    "name_de": "Consumption based - CH",
+    "subcategory": "electricite",
+    "input_units": [
+      "kWh"
+    ],
+    "default_unit": "kWh",
+    "impacts": [
+      {
+        "scope": "scope2",
+        "value": 0.12287918,
+        "unit": "kgCO2e/kWh"
+      },
+      {
+        "scope": "scope3_3",
+        "value": 0.03818995,
+        "unit": "kgCO2e/kWh"
+      },
+      {
+        "scope": "scope3",
+        "value": 0.12287918,
+        "unit": "kgCO2e/kWh"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "electricite",
+      "bafu"
+    ],
+    "source": "BAFU",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.322784+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.322790+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024,
+    "name_simple_fr": "Électricité consommée en Suisse",
+    "name_simple_de": "Verbrauchter Strom in der Schweiz",
+    "description_fr": "Émissions de CO2 de l'électricité que vous achetez en Suisse. Inclut la production (centrales, panneaux solaires) et le transport jusqu'à votre prise.",
+    "description_de": "CO2-Emissionen des in der Schweiz gekauften Stroms. Umfasst Erzeugung (Kraftwerke, Solarpanels) und Transport bis zur Steckdose.",
+    "search_tags": [
+      "électricité",
+      "courant électrique",
+      "kWh",
+      "electricity",
+      "consommation électrique",
+      "énergie",
+      "Swiss power",
+      "scope 2",
+      "scope 3"
+    ],
+    "usage_hint_fr": "Pour chaque kWh d'électricité achetée auprès de votre fournisseur",
+    "usage_hint_de": "Für jede kWh Strom, die Sie von Ihrem Energieversorger kaufen",
+    "popularity_score": 95,
+    "notes_additionnelles": {
+      "scope2_value": 0.12287918,
+      "scope2_unit": "kgCO2e/kWh",
+      "scope3_3_value": 0.03818995,
+      "scope3_3_unit": "kgCO2e/kWh",
+      "total_value": 0.17106913,
+      "total_unit": "kgCO2e/kWh",
+      "source": "BAFU",
+      "example_fr": "1000 kWh consommés = ~171 kg CO2e (0.17 tonne)",
+      "example_de": "1000 kWh Verbrauch = ~171 kg CO2e (0,17 Tonne)"
+    }
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27163",
+    "name_fr": "Essence",
+    "name_de": "Benzin",
+    "subcategory": "carburants",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 3.15,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "carburant_voiture",
+      "sans_plomb",
+      "carburants",
+      "co2_emissionsfaktoren_des_treibhausgainventars_der_schweiz",
+      "comment:CH4 and N20 emissions added from the Latest Greenhouses Gas Inventory of Switzerland Tables"
+    ],
+    "source": "CO2-Emissionsfaktoren des Treibhausgainventars der Schweiz",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.323095+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.323105+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27164",
+    "name_fr": "Diesel",
+    "name_de": "Diesel",
+    "subcategory": "carburants",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 3.15,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "fuel_routier",
+      "gasoil",
+      "gazole",
+      "carburants",
+      "co2_emissionsfaktoren_des_treibhausgainventars_der_schweiz",
+      "comment:CH4 and N20 emissions added from the Latest Greenhouses Gas Inventory of Switzerland Tables"
+    ],
+    "source": "CO2-Emissionsfaktoren des Treibhausgainventars der Schweiz",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.323426+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.323434+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024,
+    "name_simple_fr": "Carburant diesel",
+    "name_simple_de": "Dieselkraftstoff",
+    "description_fr": "Carburant utilisé pour les voitures, camions et engins. 1 kg de diesel produit 3,15 kg de CO2. Équivalent à ~1,3 litre.",
+    "description_de": "Kraftstoff für Autos, Lastwagen und Maschinen. 1 kg Diesel erzeugt 3,15 kg CO2. Entspricht etwa 1,3 Litern.",
+    "search_tags": [
+      "diesel",
+      "carburant",
+      "fuel",
+      "camion",
+      "véhicule",
+      "transport",
+      "fossile",
+      "pétrole"
+    ],
+    "usage_hint_fr": "Pour vos trajets professionnels en voiture ou camion diesel",
+    "usage_hint_de": "Für geschäftliche Fahrten mit Dieselauto oder Lastwagen",
+    "popularity_score": 92
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27165",
+    "name_fr": "Kérosène",
+    "name_de": "Flugpetrol",
+    "subcategory": "carburants",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 3.14,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "carburant_avion",
+      "jet_fuel",
+      "carburants",
+      "co2_emissionsfaktoren_des_treibhausgainventars_der_schweiz",
+      "comment:CH4 and N20 emissions added from the Latest Greenhouses Gas Inventory of Switzerland Tables"
+    ],
+    "source": "CO2-Emissionsfaktoren des Treibhausgainventars der Schweiz",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.323759+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.323769+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024,
+    "name_simple_fr": "Carburant avion",
+    "name_simple_de": "Flugzeugtreibstoff",
+    "description_fr": "Carburant utilisé par les avions commerciaux et privés. Exemple: vol Zurich-Paris consomme env. 500 kg de kérosène.",
+    "description_de": "Treibstoff für kommerzielle und private Flugzeuge. Beispiel: Flug Zürich-Paris verbraucht ca. 500 kg Kerosin.",
+    "search_tags": [
+      "kérosène",
+      "jet fuel",
+      "carburant aviation",
+      "vol avion",
+      "emissions aériennes",
+      "flugzeugtreibstoff",
+      "aviation fuel",
+      "kerosene"
+    ],
+    "usage_hint_fr": "Utilisez pour vos vols d'affaires ou déplacements professionnels.",
+    "usage_hint_de": "Nutzen Sie für Geschäftsflüge oder berufliche Reisen.",
+    "popularity_score": 75
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27166",
+    "name_fr": "Fioul léger",
+    "name_de": "Heizöl extraleicht",
+    "subcategory": "combustibles",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 3.16,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "huile_de_chauffage",
+      "mazout",
+      "combustibles",
+      "co2_emissionsfaktoren_des_treibhausgainventars_der_schweiz",
+      "comment:CH4 and N20 emissions added from the Latest Greenhouses Gas Inventory of Switzerland Tables"
+    ],
+    "source": "CO2-Emissionsfaktoren des Treibhausgainventars der Schweiz",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.324061+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.324069+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024,
+    "description_fr": "Carburant liquide pour chauffage domestique et industriel. Combustion pour produire de la chaleur dans les chaudières.",
+    "description_de": "Flüssiger Brennstoff für Heizung in Häusern und Industrie. Verbrennung in Kesseln zur Wärmeerzeugung.",
+    "search_tags": [
+      "fioul",
+      "heating oil",
+      "chauffage",
+      "combustible liquide",
+      "HEL",
+      "mazout",
+      "combustion",
+      "énergie thermique"
+    ],
+    "usage_hint_fr": "Chauffage des bâtiments, installations industrielles avec chaudière fioul.",
+    "usage_hint_de": "Gebäudeheizung, Industrieanlagen mit Ölkessel.",
+    "popularity_score": 72
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27167",
+    "name_fr": "Huile lourde",
+    "name_de": "Scheröl",
+    "subcategory": "combustibles",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 3.17,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "fuel_lourd",
+      "hfo",
+      "combustibles",
+      "co2_emissionsfaktoren_des_treibhausgainventars_der_schweiz",
+      "comment:CH4 and N20 emissions added from the Latest Greenhouses Gas Inventory of Switzerland Tables"
+    ],
+    "source": "CO2-Emissionsfaktoren des Treibhausgainventars der Schweiz",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.324347+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.324354+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27168",
+    "name_fr": "LPG",
+    "name_de": "LPG",
+    "subcategory": "combustibles",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 3.01,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "gaz_en_bouteille",
+      "gpl",
+      "combustibles",
+      "co2_emissionsfaktoren_des_treibhausgainventars_der_schweiz",
+      "comment:CH4 and N20 emissions added from the Latest Greenhouses Gas Inventory of Switzerland Tables"
+    ],
+    "source": "CO2-Emissionsfaktoren des Treibhausgainventars der Schweiz",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.324613+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.324620+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024,
+    "name_simple_fr": "Gaz de pétrole liquéfié (GPL)",
+    "name_simple_de": "Flüssiggas (LPG)",
+    "description_fr": "Combustible gazeux utilisé pour le chauffage, la cuisine ou les véhicules. Chaque kg produit 3 kg de CO2.",
+    "description_de": "Brennstoff für Heizung, Kochen oder Fahrzeuge. Pro kg entstehen 3 kg CO2.",
+    "search_tags": [
+      "gpl",
+      "lpg",
+      "gaz propane",
+      "propane",
+      "combustible gaz",
+      "butane",
+      "carburant propane",
+      "chauffage gaz",
+      "propane heating"
+    ],
+    "usage_hint_fr": "Pour les installations de chauffage, cuisines professionnelles, véhicules GPL.",
+    "usage_hint_de": "Für Heizanlagen, gewerbliche Küchen, LPG-Fahrzeuge.",
+    "popularity_score": 65
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27169",
+    "name_fr": "Coke de pétrole",
+    "name_de": "Petrolkoks",
+    "subcategory": "combustibles",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 2.9,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "combustibles",
+      "co2_emissionsfaktoren_des_treibhausgainventars_der_schweiz",
+      "comment:CH4 and N20 emissions added from the Latest Greenhouses Gas Inventory of Switzerland Tables"
+    ],
+    "source": "CO2-Emissionsfaktoren des Treibhausgainventars der Schweiz",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.324898+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.324906+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024,
+    "name_simple_fr": "Coke de pétrole",
+    "name_simple_de": "Petrolkoks",
+    "description_fr": "Résidu solide issu du raffinage du pétrole. Utilisé comme combustible dans l'industrie lourde (cimenteries, sidérurgie). Très carboné.",
+    "description_de": "Fester Rückstand aus der Ölraffination. Als Brennstoff in der Schwerindustrie (Zementfabriken, Stahlwerke) verwendet. Sehr kohlenstoffhaltig.",
+    "search_tags": [
+      "petrolkoks",
+      "petroleum coke",
+      "combustible industriel",
+      "raffinage",
+      "résidu pétrolier",
+      "industrie lourde",
+      "cimenterie",
+      "combustion"
+    ],
+    "usage_hint_fr": "Utilisez ce facteur si votre entreprise brûle du coke de pétrole comme source d'énergie.",
+    "usage_hint_de": "Verwenden Sie diesen Faktor, wenn Ihr Unternehmen Petrolkoks als Energiequelle verbrennt.",
+    "popularity_score": 35
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2716a",
+    "name_fr": "Charbon bitumineux",
+    "name_de": "Steinkohle",
+    "subcategory": "combustibles",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 2.37,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "combustibles",
+      "co2_emissionsfaktoren_des_treibhausgainventars_der_schweiz",
+      "comment:CH4 and N20 emissions added from the Latest Greenhouses Gas Inventory of Switzerland Tables"
+    ],
+    "source": "CO2-Emissionsfaktoren des Treibhausgainventars der Schweiz",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.325144+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.325151+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024,
+    "name_simple_fr": "Charbon",
+    "name_simple_de": "Steinkohle",
+    "description_fr": "Charbon utilisé pour le chauffage ou la production d'énergie. Combustible fossile très polluant. Exemple: chauffage d'un bâtiment industriel.",
+    "description_de": "Steinkohle zur Wärmeerzeugung oder Stromerzeugung. Sehr umweltschädlicher fossiler Brennstoff. Beispiel: Heizung eines Industriegebäudes.",
+    "search_tags": [
+      "charbon",
+      "houille",
+      "steinkohle",
+      "coal",
+      "combustible fossile",
+      "chauffage charbon",
+      "énergie charbon",
+      "carburant charbon"
+    ],
+    "usage_hint_fr": "Utilisez ce facteur si vous chauffez avec du charbon.",
+    "usage_hint_de": "Nutzen Sie diesen Faktor, wenn Sie mit Kohle heizen.",
+    "popularity_score": 35,
+    "note_fr": "Émission très élevée: 1 kg de charbon = 2,37 kg CO2e. C'est l'un des combustibles les plus polluants.",
+    "note_de": "Sehr hohe Emissionen: 1 kg Kohle = 2,37 kg CO2e. Es ist einer der schmutzigsten Brennstoffe."
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2716b",
+    "name_fr": "Lignite",
+    "name_de": "Braunkohle",
+    "subcategory": "combustibles",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 2.26,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "combustibles",
+      "co2_emissionsfaktoren_des_treibhausgainventars_der_schweiz",
+      "comment:CH4 and N20 emissions added from the Latest Greenhouses Gas Inventory of Switzerland Tables"
+    ],
+    "source": "CO2-Emissionsfaktoren des Treibhausgainventars der Schweiz",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.325397+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.325403+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2716c",
+    "name_fr": "gaz naturel",
+    "name_de": "Erdgas",
+    "subcategory": "combustibles",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 2.71,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "gaz",
+      "methane",
+      "gnl",
+      "combustibles",
+      "co2_emissionsfaktoren_des_treibhausgainventars_der_schweiz",
+      "comment:CH4 and N20 emissions added from the Latest Greenhouses Gas Inventory of Switzerland Tables"
+    ],
+    "source": "CO2-Emissionsfaktoren des Treibhausgainventars der Schweiz",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.325660+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.325667+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024,
+    "name_simple_fr": "Gaz naturel",
+    "name_simple_de": "Erdgas",
+    "description_fr": "Combustible fossile utilisé pour le chauffage des bâtiments, l'eau chaude ou la cuisine. Exemple: chauffage d'un bureau ou d'un appartement.",
+    "description_de": "Fossiler Brennstoff für Gebäudeheizung, Warmwasser oder Kochen. Beispiel: Beheizung eines Büros oder einer Wohnung.",
+    "search_tags": [
+      "chauffage",
+      "heating",
+      "combustion",
+      "fossil fuel",
+      "energy",
+      "gaz",
+      "consommation",
+      "kwh",
+      "énergie thermique"
+    ],
+    "usage_hint_fr": "Consommation de gaz dans les bureaux, usines ou logements",
+    "usage_hint_de": "Gasverbrauch in Büros, Fabriken oder Wohnungen",
+    "popularity_score": 92
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2716d",
+    "name_fr": "Déchets brûlés dans les UIOM (2022)",
+    "name_de": "Abfälle in KVA (2022)",
+    "subcategory": "combustibles",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 0.521,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "incineration",
+      "ordures",
+      "combustibles",
+      "co2_emissionsfaktoren_des_treibhausgainventars_der_schweiz",
+      "comment:47.8% Emission factor from Fossil (excluding biogene)"
+    ],
+    "source": "CO2-Emissionsfaktoren des Treibhausgainventars der Schweiz",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.325929+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.325936+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024,
+    "name_simple_fr": "Incinération des déchets",
+    "name_simple_de": "Müllverbrennung",
+    "description_fr": "Émissions produites quand les déchets sont brûlés dans une usine d'incinération. Inclut plastiques, papier, bois et autres matières combustibles.",
+    "description_de": "Emissionen bei der Verbrennung von Abfällen in einer Müllverbrennungsanlage. Umfasst Kunststoffe, Papier, Holz und andere brennbare Materialien.",
+    "search_tags": [
+      "déchets",
+      "incinération",
+      "UIOM",
+      "KVA",
+      "combustion",
+      "waste burning",
+      "usine incinération",
+      "brûlage"
+    ],
+    "usage_hint_fr": "Utilisez pour les déchets envoyés à l'incinération.",
+    "usage_hint_de": "Verwenden Sie für Abfälle, die zur Verbrennung gehen.",
+    "popularity_score": 72
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2716e",
+    "name_fr": "Huiles usagées",
+    "name_de": "Altöle",
+    "subcategory": "combustibles",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 2.1,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "combustibles",
+      "co2_emissionsfaktoren_des_treibhausgainventars_der_schweiz",
+      "comment:92.7% Emission factor from Fossil (excluding biogene)"
+    ],
+    "source": "CO2-Emissionsfaktoren des Treibhausgainventars der Schweiz",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.326182+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.326189+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2716f",
+    "name_fr": "Plastiques",
+    "name_de": "Kunststoffe",
+    "subcategory": "combustibles",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 1.53,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "combustibles",
+      "co2_emissionsfaktoren_des_treibhausgainventars_der_schweiz",
+      "comment:76.6% Emission factor from Fossil (excluding biogene)"
+    ],
+    "source": "CO2-Emissionsfaktoren des Treibhausgainventars der Schweiz",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.326418+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.326425+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024,
+    "name_simple_fr": "Combustion de plastiques",
+    "name_simple_de": "Kunststoffverbrennung",
+    "description_fr": "Émissions lors de la combustion de déchets plastiques. Exemple: incinération de sacs, films ou emballages plastiques.",
+    "description_de": "Emissionen bei der Verbrennung von Kunststoffabfällen. Beispiel: Verbrennung von Säcken, Folien oder Kunststoffverpackungen.",
+    "search_tags": [
+      "plastique",
+      "incinération",
+      "déchets plastiques",
+      "combustion",
+      "polyéthylène",
+      "polypropylène",
+      "plastic waste",
+      "burning"
+    ],
+    "usage_hint_fr": "Lorsque votre entreprise brûle/incinère des déchets plastiques.",
+    "usage_hint_de": "Wenn Ihr Unternehmen Kunststoffabfälle verbrennt/inzinert.",
+    "popularity_score": 45
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27170",
+    "name_fr": "Solvants",
+    "name_de": "Lösungsmittel",
+    "subcategory": "combustibles",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 1.49,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "combustibles",
+      "co2_emissionsfaktoren_des_treibhausgainventars_der_schweiz",
+      "comment:89.7% Emission factor from Fossil (excluding biogene)"
+    ],
+    "source": "CO2-Emissionsfaktoren des Treibhausgainventars der Schweiz",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.326668+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.326675+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024,
+    "name_simple_fr": "Solvants et diluants",
+    "name_simple_de": "Lösungsmittel und Verdünner",
+    "description_fr": "Produits chimiques liquides utilisés pour diluer, nettoyer ou traiter (peintures, vernis, nettoyage industriel).",
+    "description_de": "Chemische Flüssigkeiten zum Verdünnen, Reinigen oder Behandeln (Farben, Lacke, Industriereinigung).",
+    "search_tags": [
+      "solvants",
+      "diluants",
+      "nettoyants chimiques",
+      "peintures",
+      "vernis",
+      "solvents",
+      "thinners",
+      "cleaning agents",
+      "produits de nettoyage"
+    ],
+    "usage_hint_fr": "Pour les activités de peinture, revêtement, nettoyage ou dégraissage industriel.",
+    "usage_hint_de": "Für Mal-, Beschichtungs-, Reinigungs- oder Entfettungsarbeiten.",
+    "popularity_score": 58
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27171",
+    "name_fr": "Sciure imprégnée",
+    "name_de": "Imprägniertes Sägemehl",
+    "subcategory": "combustibles",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 0.275,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "residus_de_bois",
+      "combustibles",
+      "co2_emissionsfaktoren_des_treibhausgainventars_der_schweiz",
+      "comment:27% Emission factor from Fossil (excluding biogene)"
+    ],
+    "source": "CO2-Emissionsfaktoren des Treibhausgainventars der Schweiz",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.326921+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.326930+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27172",
+    "name_fr": "Pneus usagés",
+    "name_de": "Altpneu",
+    "subcategory": "combustibles",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 1.62,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "caoutchouc",
+      "combustibles",
+      "co2_emissionsfaktoren_des_treibhausgainventars_der_schweiz",
+      "comment:73% Emission factor from Fossil (excluding biogene)"
+    ],
+    "source": "CO2-Emissionsfaktoren des Treibhausgainventars der Schweiz",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.327208+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.327220+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024,
+    "name_simple_fr": "Incinération de pneus usagés",
+    "name_simple_de": "Verbrennung von Altpneufen",
+    "description_fr": "Émissions de CO2 produites par la combustion de pneus usagés pour récupérer l'énergie. Ex: pneus de voiture brûlés dans des installations spécialisées.",
+    "description_de": "CO2-Emissionen durch die Verbrennung alter Reifen zur Energierückgewinnung. Beispiel: Autoreifen in Spezialanlagen verbrannt.",
+    "search_tags": [
+      "pneu",
+      "tyre",
+      "combustion",
+      "incinération",
+      "énergie",
+      "déchets",
+      "fuel",
+      "recyclage énergétique"
+    ],
+    "usage_hint_fr": "Quand vous éliminez des pneus usagés par combustion énergétique.",
+    "usage_hint_de": "Wenn Sie alte Reifen durch Energieverbrennung entsorgen.",
+    "popularity_score": 35
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27173",
+    "name_fr": "CO2 de combustion",
+    "name_de": "CO2 aus Verbrennung",
+    "subcategory": "combustibles",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 1.0,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "co2",
+      "combustibles",
+      "ar_5_chapter_8_anthropogenic_and_natural_radiative_forcing"
+    ],
+    "source": "AR 5 - Chapter 8: \"Anthropogenic and Natural Radiative Forcing\"",
+    "region": "Suisse",
+    "year": 2018,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.327550+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.327562+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2018,
+    "description_fr": "Émissions de CO2 produites lors de la combustion de carburants (pétrole, gaz, charbon). Ex: chauffage au mazout, essence pour véhicules.",
+    "description_de": "CO2-Emissionen bei der Verbrennung von Brennstoffen (Öl, Gas, Kohle). Beispiele: Ölheizung, Benzin für Fahrzeuge.",
+    "search_tags": [
+      "combustion",
+      "fuel",
+      "carburant",
+      "mazout",
+      "essence",
+      "gaz naturel",
+      "carbon dioxide",
+      "scope 1",
+      "émissions directes"
+    ],
+    "usage_hint_fr": "Pour les carburants fossiles brûlés directement par votre entreprise",
+    "usage_hint_de": "Für fossile Brennstoffe, die direkt von Ihrem Unternehmen verbrannt werden",
+    "popularity_score": 95
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27174",
+    "name_fr": "Méthane (biogène)",
+    "name_de": "Methan (biogen)",
+    "subcategory": "combustibles",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 28.0,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "ch4",
+      "combustibles",
+      "ar_5_chapter_8_anthropogenic_and_natural_radiative_forcing"
+    ],
+    "source": "AR 5 - Chapter 8: \"Anthropogenic and Natural Radiative Forcing\"",
+    "region": "Suisse",
+    "year": 2018,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.327882+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.327896+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2018
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27175",
+    "name_fr": "Émissions de protoxyde d'azote",
+    "name_de": "Stickstoffoxid-Emissionen",
+    "subcategory": "combustibles",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 265.0,
+        "unit": "kgCO2e/kg",
+        "description_fr": "Potentiel de réchauffement climatique très élevé (265x celui du CO2 sur 100 ans)",
+        "description_de": "Sehr hohes Treibhauspotential (265x höher als CO2 über 100 Jahre)"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "n2o",
+      "combustibles",
+      "ar_5_chapter_8_anthropogenic_and_natural_radiative_forcing"
+    ],
+    "source": "AR 5 - Chapter 8: Anthropogenic and Natural Radiative Forcing",
+    "region": "Suisse",
+    "year": 2018,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.328195+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.328202+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2018,
+    "description_fr": "Gaz polluant produit par les processus de combustion ou les réactions chimiques. Ex: moteurs, chauffage au gaz, procédés industriels.",
+    "description_de": "Umweltschädliches Gas aus Verbrennungs- oder chemischen Prozessen. Bsp: Motoren, Gasheizung, industrielle Verfahren.",
+    "search_tags": [
+      "N2O",
+      "protoxyde azote",
+      "lachgas",
+      "gaz hilarant",
+      "émissions combustion",
+      "procédés chimiques",
+      "nitrous oxide",
+      "air pollutant"
+    ],
+    "usage_hint_fr": "Calculez pour les appareils de chauffage, moteurs et processus industriels.",
+    "usage_hint_de": "Berechnen Sie für Heizgeräte, Motoren und industrielle Prozesse.",
+    "popularity_score": 45
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27176",
+    "name_fr": "HFC-32",
+    "name_de": "HFC-32",
+    "subcategory": "refrigerants",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 677.0,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "gaz_fluores",
+      "refrigerants",
+      "ar_5_chapter_8_anthropogenic_and_natural_radiative_forcing"
+    ],
+    "source": "AR 5 - Chapter 8: \"Anthropogenic and Natural Radiative Forcing\"",
+    "region": "Suisse",
+    "year": 2018,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.328448+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.328454+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2018,
+    "name_simple_fr": "Gaz réfrigérant HFC-32",
+    "name_simple_de": "Kältemittel HFC-32",
+    "description_fr": "Gaz utilisé dans les climatiseurs et pompes à chaleur. Contribue fortement à l'effet de serre s'il s'échappe de l'équipement.",
+    "description_de": "Gas in Klimaanlagen und Wärmepumpen. Trägt stark zum Treibhauseffekt bei, wenn es aus dem Gerät austritt.",
+    "search_tags": [
+      "réfrigérant",
+      "climatisation",
+      "pompe chaleur",
+      "HFC",
+      "fréon",
+      "refrigerant",
+      "air conditioning",
+      "gaz fluoré"
+    ],
+    "usage_hint_fr": "Utilisez lors de fuites ou maintenance de systèmes de refroidissement.",
+    "usage_hint_de": "Bei Lecks oder Wartung von Kühlsystemen verwenden.",
+    "popularity_score": 42
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27177",
+    "name_fr": "HFC-41",
+    "name_de": "HFC-41",
+    "subcategory": "refrigerants",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 116.0,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "gaz_fluores",
+      "refrigerants",
+      "ar_5_chapter_8_anthropogenic_and_natural_radiative_forcing"
+    ],
+    "source": "AR 5 - Chapter 8: \"Anthropogenic and Natural Radiative Forcing\"",
+    "region": "Suisse",
+    "year": 2018,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.328700+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.328706+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2018,
+    "name_simple_fr": "Réfrigérant HFC-41",
+    "name_simple_de": "Kühlmittel HFC-41",
+    "description_fr": "Gaz réfrigérant utilisé dans les systèmes de refroidissement et climatisation. Très polluant pour l'atmosphère. Exemple: climatisation de bureaux.",
+    "description_de": "Kühlgas in Kühl- und Klimaanlagen. Sehr schädlich für die Atmosphäre. Beispiel: Büroklimageräte.",
+    "search_tags": [
+      "HFC",
+      "réfrigérant",
+      "climatisation",
+      "refroidissement",
+      "gaz",
+      "fluoré",
+      "CFC",
+      "HCFC",
+      "refrigerant"
+    ],
+    "usage_hint_fr": "Pour les fuites ou recharges de systèmes de climatisation/refroidissement",
+    "usage_hint_de": "Für Lecks oder Nachfüllungen von Klima-/Kühlsystemen",
+    "popularity_score": 35
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27178",
+    "name_fr": "HFC-143",
+    "name_de": "HFC-143",
+    "subcategory": "refrigerants",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 328.0,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "gaz_fluores",
+      "refrigerants",
+      "ar_5_chapter_8_anthropogenic_and_natural_radiative_forcing"
+    ],
+    "source": "AR 5 - Chapter 8: \"Anthropogenic and Natural Radiative Forcing\"",
+    "region": "Suisse",
+    "year": 2018,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.328960+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.328968+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2018
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27179",
+    "name_fr": "HFC-152",
+    "name_de": "HFC-152",
+    "subcategory": "refrigerants",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 16.0,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "gaz_fluores",
+      "refrigerants",
+      "ar_5_chapter_8_anthropogenic_and_natural_radiative_forcing"
+    ],
+    "source": "AR 5 - Chapter 8: \"Anthropogenic and Natural Radiative Forcing\"",
+    "region": "Suisse",
+    "year": 2018,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.329221+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.329227+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2018,
+    "name_simple_fr": "Gaz réfrigérant HFC-152",
+    "name_simple_de": "Kältemittel HFC-152",
+    "description_fr": "Gaz utilisé dans les systèmes de refroidissement et climatisation. Contribue au réchauffement climatique s'il s'échappe lors de fuites ou maintenance.",
+    "description_de": "Gas für Kühl- und Klimatisierungssysteme. Trägt zur Erderwärmung bei, wenn es durch Undichtheiten oder Wartung entweicht.",
+    "search_tags": [
+      "réfrigérant",
+      "climatisation",
+      "refroidissement",
+      "HFC",
+      "gaz fluoré",
+      "fuite réfrigérant",
+      "maintenance climatisation",
+      "air conditionné"
+    ],
+    "usage_hint_fr": "Quantifiez les fuites ou recharges de vos systèmes de climatisation.",
+    "usage_hint_de": "Erfassen Sie Lecks oder Nachfüllungen Ihrer Klimasysteme.",
+    "popularity_score": 62
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2717a",
+    "name_fr": "HFC-152a",
+    "name_de": "HFC-152a",
+    "subcategory": "refrigerants",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 138.0,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "gaz_fluores",
+      "refrigerants",
+      "ar_5_chapter_8_anthropogenic_and_natural_radiative_forcing"
+    ],
+    "source": "AR 5 - Chapter 8: \"Anthropogenic and Natural Radiative Forcing\"",
+    "region": "Suisse",
+    "year": 2018,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.329456+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.329461+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2018,
+    "name_simple_fr": "Gaz réfrigérant HFC-152a",
+    "name_simple_de": "Kältemittel HFC-152a",
+    "description_fr": "Gaz utilisé dans les systèmes de climatisation et réfrigération. Contribue au réchauffement climatique s'il s'échappe. Exemple: fuite de climatiseur de voiture.",
+    "description_de": "Gas für Klimaanlagen und Kühlsysteme. Trägt zur Erderwärmung bei, wenn es entweicht. Beispiel: Leck in der Autoklimaanlage.",
+    "search_tags": [
+      "HFC",
+      "réfrigérant",
+      "climatisation",
+      "fluide frigorigène",
+      "coolant",
+      "gaz réfrigérant",
+      "hydrofluorocarbone",
+      "climatiseur",
+      "air conditioner"
+    ],
+    "usage_hint_fr": "Emissions de systèmes de climatisation ou réfrigération en cas de fuite.",
+    "usage_hint_de": "Emissionen aus Klimaanlage oder Kühlanlage bei Leckagen.",
+    "popularity_score": 35
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2717b",
+    "name_fr": "HFC-161",
+    "name_de": "HFC-161",
+    "subcategory": "refrigerants",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 4.0,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "gaz_fluores",
+      "refrigerants",
+      "ar_5_chapter_8_anthropogenic_and_natural_radiative_forcing"
+    ],
+    "source": "AR 5 - Chapter 8: Anthropogenic and Natural Radiative Forcing",
+    "region": "Suisse",
+    "year": 2018,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.329696+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.329702+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2018,
+    "name_simple_fr": "Réfrigérant HFC-161",
+    "name_simple_de": "Kältemittel HFC-161",
+    "description_fr": "Gaz réfrigérant utilisé dans les systèmes de refroidissement. Très polluant pour le climat. Exemple: climatiseurs anciens, congélateurs industriels.",
+    "description_de": "Kühlgas in Kühlsystemen verwendet. Sehr klimaschädlich. Beispiel: alte Klimaanlagen, industrielle Gefriergeräte.",
+    "search_tags": [
+      "HFC-161",
+      "réfrigérant",
+      "gaz fluoré",
+      "climatisation",
+      "refroidissement",
+      "hydrofluorocarbure",
+      "refrigerant",
+      "cooling",
+      "F-gas"
+    ],
+    "usage_hint_fr": "Pour les émissions de gaz réfrigérants échappés des systèmes de climatisation.",
+    "usage_hint_de": "Für Emissionen aus Kältemitteln, die aus Klimasystemen austreten.",
+    "popularity_score": 25
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2717c",
+    "name_fr": "HFC-245ca",
+    "name_de": "HFC-245ca",
+    "subcategory": "refrigerants",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 716.0,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "gaz_fluores",
+      "refrigerants",
+      "ar_5_chapter_8_anthropogenic_and_natural_radiative_forcing"
+    ],
+    "source": "AR 5 - Chapter 8: \"Anthropogenic and Natural Radiative Forcing\"",
+    "region": "Suisse",
+    "year": 2018,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.329955+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.329962+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2018
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2717d",
+    "name_fr": "HFC-245ea",
+    "name_de": "HFC-245ea",
+    "subcategory": "refrigerants",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 235.0,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "gaz_fluores",
+      "refrigerants",
+      "ar_5_chapter_8_anthropogenic_and_natural_radiative_forcing"
+    ],
+    "source": "AR 5 - Chapter 8: \"Anthropogenic and Natural Radiative Forcing\"",
+    "region": "Suisse",
+    "year": 2018,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.330217+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.330224+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2018,
+    "name_simple_fr": "Gaz réfrigérant HFC-245ea",
+    "name_simple_de": "Kältemittel HFC-245ea",
+    "description_fr": "Gaz utilisé dans les systèmes de refroidissement et climatisation. Très polluant s'il s'échappe. Exemple: fuite de climatiseur automobile.",
+    "description_de": "Gas für Kühl- und Klimaanlagen. Sehr umweltschädlich bei Lecks. Beispiel: Autoklimaanlage-Leck.",
+    "search_tags": [
+      "HFC",
+      "réfrigérant",
+      "climatisation",
+      "refroidissement",
+      "gaz fluoré",
+      "fréon",
+      "potentiel de réchauffement",
+      "GWP"
+    ],
+    "usage_hint_fr": "Relevez les fuites ou remplacements de gaz réfrigérant en kg",
+    "usage_hint_de": "Erfassen Sie Kältemittellecks oder Austausch in kg",
+    "popularity_score": 45
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2717e",
+    "name_fr": "HFC-245eb",
+    "name_de": "HFC-245eb",
+    "subcategory": "refrigerants",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 290.0,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "gaz_fluores",
+      "refrigerants",
+      "ar_5_chapter_8_anthropogenic_and_natural_radiative_forcing"
+    ],
+    "source": "AR 5 - Chapter 8: \"Anthropogenic and Natural Radiative Forcing\"",
+    "region": "Suisse",
+    "year": 2018,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.330452+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.330458+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2018,
+    "name_simple_fr": "Gaz réfrigérant HFC-245eb",
+    "name_simple_de": "Kältemittel HFC-245eb",
+    "description_fr": "Gaz utilisé dans les systèmes de refroidissement et climatisation. Très polluant s'il s'échappe. Exemple: fuite dans une machine frigorifique.",
+    "description_de": "Gas in Kühl- und Klimaanlagen. Sehr umweltschädlich bei Lecks. Beispiel: Leck in einer Kühlmaschine.",
+    "search_tags": [
+      "réfrigérant",
+      "HFC",
+      "climatisation",
+      "refroidissement",
+      "fuite gaz",
+      "refrigerant",
+      "cooling",
+      "HCFC",
+      "émissions indirectes"
+    ],
+    "usage_hint_fr": "Lors de fuites ou recharges de systèmes de refroidissement.",
+    "usage_hint_de": "Bei Lecks oder Nachfüllungen von Kühlsystemen.",
+    "popularity_score": 35
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2717f",
+    "name_fr": "HFC-245fa",
+    "name_de": "HFC-245fa",
+    "subcategory": "refrigerants",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 858.0,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "gaz_fluores",
+      "refrigerants",
+      "ar_5_chapter_8_anthropogenic_and_natural_radiative_forcing"
+    ],
+    "source": "AR 5 - Chapter 8: \"Anthropogenic and Natural Radiative Forcing\"",
+    "region": "Suisse",
+    "year": 2018,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.330693+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.330698+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2018
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27180",
+    "name_fr": "HFC-263fb",
+    "name_de": "HFC-263fb",
+    "subcategory": "refrigerants",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 76.0,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "gaz_fluores",
+      "refrigerants",
+      "ar_5_chapter_8_anthropogenic_and_natural_radiative_forcing"
+    ],
+    "source": "AR 5 - Chapter 8: \"Anthropogenic and Natural Radiative Forcing\"",
+    "region": "Suisse",
+    "year": 2018,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.330980+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.330988+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2018,
+    "name_simple_fr": "Gaz réfrigérant HFC-263fb",
+    "name_simple_de": "Kühlmittel HFC-263fb",
+    "description_fr": "Gaz utilisé dans les systèmes de refroidissement et climatisation. Très polluant s'il s'échappe dans l'atmosphère.",
+    "description_de": "Gas für Kühl- und Klimaanlagen. Sehr schädlich für die Atmosphäre bei Freisetzung.",
+    "search_tags": [
+      "HFC",
+      "réfrigérant",
+      "climatisation",
+      "refroidissement",
+      "fluide frigorigène",
+      "cooling gas",
+      "CFC",
+      "ozone"
+    ],
+    "usage_hint_fr": "Pour les fuites de gaz des climatiseurs et frigos professionnels.",
+    "usage_hint_de": "Für Gaslecks in Klima- und Kühlgeräten.",
+    "popularity_score": 35
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27181",
+    "name_fr": "HFC-272ca",
+    "name_de": "HFC-272ca",
+    "subcategory": "refrigerants",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 144.0,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "gaz_fluores",
+      "refrigerants",
+      "ar_5_chapter_8_anthropogenic_and_natural_radiative_forcing"
+    ],
+    "source": "AR 5 - Chapter 8: \"Anthropogenic and Natural Radiative Forcing\"",
+    "region": "Suisse",
+    "year": 2018,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.331291+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.331299+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2018,
+    "name_simple_fr": "Fluide réfrigérant HFC-272ca",
+    "name_simple_de": "Kältemittel HFC-272ca",
+    "description_fr": "Gaz utilisé dans les systèmes de refroidissement et climatisation. Chaque kg émis équivaut à 144 kg de CO2. Courant dans les anciennes installations.",
+    "description_de": "Gas in Kühl- und Klimaanlagen. Jedes kg entspricht 144 kg CO2. Häufig in älteren Anlagen.",
+    "search_tags": [
+      "réfrigérant",
+      "fluide frigorigène",
+      "climatisation",
+      "HFC",
+      "refroidissement",
+      "gaz fluoré",
+      "potentiel réchauffement",
+      "refrigerant",
+      "air conditioning",
+      "cooling"
+    ],
+    "usage_hint_fr": "Fuites ou recharges des systèmes de clim et froid.",
+    "usage_hint_de": "Lecks oder Nachladungen von Klima- und Kühlsystemen.",
+    "popularity_score": 42
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27182",
+    "name_fr": "HFC-365mfc",
+    "name_de": "HFC-365mfc",
+    "subcategory": "refrigerants",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 804.0,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "gaz_fluores",
+      "refrigerants",
+      "ar_5_chapter_8_anthropogenic_and_natural_radiative_forcing"
+    ],
+    "source": "AR 5 - Chapter 8: \"Anthropogenic and Natural Radiative Forcing\"",
+    "region": "Suisse",
+    "year": 2018,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.331560+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.331567+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2018,
+    "name_simple_fr": "Réfrigérant HFC-365mfc",
+    "name_simple_de": "Kühlmittel HFC-365mfc",
+    "description_fr": "Gaz réfrigérant utilisé dans les systèmes de climatisation et de refroidissement industriel. Très polluant: 1 kg équivaut à 804 kg de CO2.",
+    "description_de": "Kühlgas für Klimaanlagen und industrielle Kühlsysteme. Sehr umweltschädlich: 1 kg entspricht 804 kg CO2.",
+    "search_tags": [
+      "HFC-365mfc",
+      "réfrigérant",
+      "gaz fluoré",
+      "climatisation",
+      "système de refroidissement",
+      "hydrofluorocarbone",
+      "refrigerant",
+      "fluorinated gas",
+      "air conditioning",
+      "gaz synthétique"
+    ],
+    "usage_hint_fr": "À utiliser pour quantifier les fuites de gaz réfrigérant en kg.",
+    "usage_hint_de": "Verwenden Sie es zur Quantifizierung von Kühlmittellecks in kg.",
+    "popularity_score": 25
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27183",
+    "name_fr": "Essence moyenne (à n'utiliser que si le type de carburant est inconnu)",
+    "name_de": "Durchschnittsbenzin (nur verwenden, wenn die Kraftstoffart unbekannt ist)",
+    "subcategory": "carburants",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 3.06,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "carburant_voiture",
+      "sans_plomb",
+      "carburants",
+      "mobitool_v3",
+      "comment:with 97.4% gasoline and 2.6% bioethanol"
+    ],
+    "source": "mobitool v3",
+    "region": "Suisse",
+    "year": 2023,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.331844+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.331851+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2023,
+    "updated_at": "2026-02-07T05:44:50.837047+00:00"
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27184",
+    "name_fr": "Essence standard (E10)",
+    "name_de": "Standard-Benzin (E10)",
+    "subcategory": "carburants",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 2.83,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "carburant_voiture",
+      "sans_plomb",
+      "carburants",
+      "mobitool_v3",
+      "comment:with 90% gasoline and 10% bioethanol"
+    ],
+    "source": "mobitool v3",
+    "region": "Suisse",
+    "year": 2023,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.332084+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.332091+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2023,
+    "name_simple_fr": "Essence pour voitures",
+    "name_simple_de": "Benzin für Autos",
+    "description_fr": "Carburant essence courant avec 10% de bioéthanol. Utilisé dans la plupart des voitures particulières. Génère 2,83 kg CO2e par kg consommé.",
+    "description_de": "Übliches Benzin mit 10% Bioethanol. Wird in den meisten Privatwagen verwendet. Erzeugt 2,83 kg CO2e pro kg verbraucht.",
+    "search_tags": [
+      "carburant",
+      "essence",
+      "benzin",
+      "E10",
+      "voiture",
+      "automobile",
+      "carburant fossile",
+      "fuel",
+      "petrol",
+      "transport routier"
+    ],
+    "usage_hint_fr": "Pour les trajets en voiture particulière essence",
+    "usage_hint_de": "Für Fahrten mit privatem Benzinauto",
+    "popularity_score": 92
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27185",
+    "name_fr": "Bioéthanol (E85)",
+    "name_de": "Bioethanol (E85)",
+    "subcategory": "carburants",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 0.471,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "biocarburant",
+      "carburants",
+      "mobitool_v3",
+      "comment:with 15% gasoline and 85% bioethanol"
+    ],
+    "source": "mobitool v3",
+    "region": "Suisse",
+    "year": 2023,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.332295+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.332301+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2023,
+    "name_simple_fr": "Carburant E85 (bioéthanol)",
+    "name_simple_de": "Kraftstoff E85 (Bioethanol)",
+    "description_fr": "Essence contenant 85% de bioéthanol (alcool végétal). Utilisé dans les véhicules compatibles pour réduire les émissions fossiles.",
+    "description_de": "Benzin mit 85% Bioethanol (pflanzlicher Alkohol). Wird in kompatiblen Fahrzeugen zur Senkung fossiler Emissionen verwendet.",
+    "search_tags": [
+      "E85",
+      "bioéthanol",
+      "essence verte",
+      "carburant écologique",
+      "bioethanol",
+      "renewable fuel",
+      "alcool carburant",
+      "FFV"
+    ],
+    "usage_hint_fr": "Pour les véhicules E85 (Flex-Fuel). Moins polluant que l'essence ordinaire.",
+    "usage_hint_de": "Für E85-Fahrzeuge (Flex-Fuel). Weniger umweltschädlich als Normalbenzin.",
+    "popularity_score": 45
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27186",
+    "name_fr": "Diesel moyen (à utiliser uniquement si le type de carburant est inconnu)",
+    "name_de": "Durchschnittlicher Diesel (nur verwenden, wenn die Kraftstoffart unbekannt ist)",
+    "subcategory": "carburants",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 2.96,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "fuel_routier",
+      "gasoil",
+      "gazole",
+      "carburants",
+      "mobitool_v3",
+      "comment:with 94.1% diesel and 5.9% biodiesel"
+    ],
+    "source": "mobitool v3",
+    "region": "Suisse",
+    "year": 2023,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.332553+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.332559+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2023,
+    "name_simple_fr": "Diesel moyen",
+    "name_simple_de": "Durchschnittlicher Diesel",
+    "description_fr": "Émissions du carburant diesel standard pour véhicules. À utiliser seulement si le type exact de diesel est inconnu.",
+    "description_de": "Emissionen von Standard-Dieselkraftstoff für Fahrzeuge. Nur verwenden, wenn der genaue Dieseltyp unbekannt ist.",
+    "search_tags": [
+      "diesel",
+      "fuel",
+      "carburant",
+      "moyen",
+      "average",
+      "transport",
+      "véhicule",
+      "combustible",
+      "scope1"
+    ],
+    "usage_hint_fr": "Quand le type de diesel n'est pas précisé ou mélange de sources",
+    "usage_hint_de": "Wenn die Dieselsorte nicht bekannt oder gemischt ist",
+    "popularity_score": 65
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27187",
+    "name_fr": "Diesel (B7)",
+    "name_de": "Diesel (B7)",
+    "subcategory": "carburants",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 2.93,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "fuel_routier",
+      "gasoil",
+      "gazole",
+      "carburants",
+      "mobitool_v3",
+      "comment:with 93% diesel and 7% biodiesel"
+    ],
+    "source": "mobitool v3",
+    "region": "Suisse",
+    "year": 2023,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.332774+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.332780+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2023
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27188",
+    "name_fr": "Gaz naturel moyen (à utiliser uniquement si le type de carburant est inconnu)",
+    "name_de": "Durchschnittliches Erdgas (nur verwenden, wenn die Kraftstoffart nicht bekannt ist)",
+    "subcategory": "carburants",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 1.95,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "gaz",
+      "methane",
+      "carburants",
+      "mobitool_v3",
+      "comment:with 72.7% natural gas and 27.3% biomethane"
+    ],
+    "source": "mobitool v3",
+    "region": "Suisse",
+    "year": 2023,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.333003+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.333010+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2023,
+    "name_simple_fr": "Gaz naturel (type inconnu)",
+    "name_simple_de": "Erdgas (Typ unbekannt)",
+    "description_fr": "Émissions du gaz naturel utilisé pour le chauffage ou l'énergie. À utiliser uniquement si vous ne connaissez pas le type exact de gaz.",
+    "description_de": "Emissionen von Erdgas für Heizung oder Energieerzeugung. Verwenden Sie dies nur, wenn Sie die genaue Gasart nicht kennen.",
+    "search_tags": [
+      "gaz naturel",
+      "natural gas",
+      "chauffage",
+      "énergie",
+      "heating",
+      "carburant",
+      "combustible",
+      "moyenne"
+    ],
+    "usage_hint_fr": "Chauffage ou énergie si le type exact n'est pas identifié",
+    "usage_hint_de": "Heizung oder Energie, wenn der genaue Typ nicht bekannt ist",
+    "popularity_score": 65
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27189",
+    "name_fr": "Essence",
+    "name_de": "Benzin",
+    "subcategory": "carburants",
+    "input_units": [
+      "L"
+    ],
+    "default_unit": "L",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 2.32,
+        "unit": "kgCO2e/litre"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "carburant_voiture",
+      "sans_plomb",
+      "carburants",
+      "co2_emissionsfaktoren_des_treibhausgainventars_der_schweiz",
+      "comment:CH4 and N20 emissions added from the Latest Greenhouses Gas Inventory of Switzerland Tables"
+    ],
+    "source": "CO2-Emissionsfaktoren des Treibhausgainventars der Schweiz",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.333268+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.333275+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024,
+    "name_simple_fr": "Essence pour voiture",
+    "name_simple_de": "Benzin für Autos",
+    "description_fr": "Émissions de CO2 quand vous remplissez le réservoir d'une voiture à essence. Environ 2,3 kg de CO2 par litre consommé.",
+    "description_de": "CO2-Emissionen beim Tanken eines Benzinautos. Etwa 2,3 kg CO2 pro verbrauchtem Liter.",
+    "search_tags": [
+      "essence",
+      "benzin",
+      "carburant",
+      "petrol",
+      "voiture",
+      "déplacement",
+      "trajet",
+      "litre"
+    ],
+    "usage_hint_fr": "Pour vos trajets professionnels en voiture personnelle ou flottes automobiles.",
+    "usage_hint_de": "Für berufliche Autofahrten mit Privatwagen oder Firmenfahrzeugen.",
+    "popularity_score": 92
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2718a",
+    "name_fr": "Carburant diesel",
+    "name_de": "Dieselkraftstoff",
+    "subcategory": "carburants",
+    "input_units": [
+      "L"
+    ],
+    "default_unit": "L",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 2.62,
+        "unit": "kgCO2e/litre"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "fuel_routier",
+      "gasoil",
+      "gazole",
+      "carburants",
+      "co2_emissionsfaktoren_des_treibhausgainventars_der_schweiz",
+      "comment:CH4 and N20 emissions added from the Latest Greenhouses Gas Inventory of Switzerland Tables"
+    ],
+    "source": "CO2-Emissionsfaktoren des Treibhausgainventars der Schweiz",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.333544+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.333553+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024,
+    "name_simple_fr": "Diesel",
+    "name_simple_de": "Diesel",
+    "description_fr": "Émissions de CO2 du carburant diesel utilisé pour les véhicules utilitaires, camions et voitures diesel. 1 litre produit ~2,6 kg de CO2.",
+    "description_de": "CO2-Emissionen aus Dieselkraftstoff für Nutzfahrzeuge, Lastwagen und Dieselautos. 1 Liter erzeugt ca. 2,6 kg CO2.",
+    "search_tags": [
+      "diesel",
+      "carburant",
+      "carburants",
+      "fuel",
+      "transport",
+      "camion",
+      "véhicule utilitaire",
+      "scope 1",
+      "combustion"
+    ],
+    "usage_hint_fr": "Utilisez pour les véhicules diesel (camions, voitures, bus) de votre flotte.",
+    "usage_hint_de": "Verwenden Sie für Dieselfahrzeuge (Lastwagen, Autos, Busse) Ihrer Flotte.",
+    "popularity_score": 95
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2718b",
+    "name_fr": "Kérosène",
+    "name_de": "Flugpetrol",
+    "subcategory": "carburants",
+    "input_units": [
+      "L"
+    ],
+    "default_unit": "L",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 2.51,
+        "unit": "kgCO2e/litre"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "carburant_avion",
+      "jet_fuel",
+      "carburants",
+      "co2_emissionsfaktoren_des_treibhausgainventars_der_schweiz",
+      "comment:CH4 and N20 emissions added from the Latest Greenhouses Gas Inventory of Switzerland Tables"
+    ],
+    "source": "CO2-Emissionsfaktoren des Treibhausgainventars der Schweiz",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.333795+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.333801+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2718c",
+    "name_fr": "Fioul domestique léger",
+    "name_de": "Leichtes Heizöl",
+    "subcategory": "combustibles",
+    "input_units": [
+      "L"
+    ],
+    "default_unit": "L",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 2.65,
+        "unit": "kgCO2e/litre"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "huile_de_chauffage",
+      "mazout",
+      "combustibles",
+      "co2_emissionsfaktoren_des_treibhausgainventars_der_schweiz",
+      "comment:CH4 and N20 emissions added from the Latest Greenhouses Gas Inventory of Switzerland Tables"
+    ],
+    "source": "CO2-Emissionsfaktoren des Treibhausgainventars der Schweiz",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.334053+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.334060+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024,
+    "name_simple_fr": "Fioul de chauffage",
+    "name_simple_de": "Heizöl",
+    "description_fr": "Combustible liquide utilisé pour chauffer les bâtiments. Chaque litre brûlé émet 2,65 kg CO2e. Courant dans les chaufferies anciennes.",
+    "description_de": "Flüssiger Brennstoff zum Heizen von Gebäuden. Pro Liter entstehen 2,65 kg CO2e. Häufig in älteren Heizanlagen.",
+    "search_tags": [
+      "fioul",
+      "heating oil",
+      "chauffage",
+      "combustible",
+      "HEL",
+      "Heizöl",
+      "énergie fossile",
+      "fuel oil"
+    ],
+    "usage_hint_fr": "Utiliser pour les chaudières au fioul domestique",
+    "usage_hint_de": "Für Ölheizungen verwenden",
+    "popularity_score": 65
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2718d",
+    "name_fr": "Huile lourde",
+    "name_de": "Scheröl",
+    "subcategory": "combustibles",
+    "input_units": [
+      "L"
+    ],
+    "default_unit": "L",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 3.04,
+        "unit": "kgCO2e/litre"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "fuel_lourd",
+      "hfo",
+      "combustibles",
+      "co2_emissionsfaktoren_des_treibhausgainventars_der_schweiz",
+      "comment:CH4 and N20 emissions added from the Latest Greenhouses Gas Inventory of Switzerland Tables"
+    ],
+    "source": "CO2-Emissionsfaktoren des Treibhausgainventars der Schweiz",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.334315+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.334321+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024,
+    "name_simple_fr": "Fioul lourd",
+    "name_simple_de": "Heizöl Schwer",
+    "description_fr": "Carburant dense utilisé pour chauffer les bâtiments ou alimenter les moteurs industriels. Exemple : chauffage de grandes installations.",
+    "description_de": "Dichter Brennstoff zur Gebäudeheizung oder für Industriemotoren. Beispiel: Beheizung großer Anlagen.",
+    "search_tags": [
+      "fioul",
+      "fuel oil",
+      "heating oil",
+      "chauffage",
+      "combustible",
+      "heavy oil",
+      "Heizöl",
+      "Schweröl",
+      "énergie thermique"
+    ],
+    "usage_hint_fr": "Chauffage de bâtiments, installations industrielles avec chaudières fioul",
+    "usage_hint_de": "Gebäudeheizung, industrielle Anlagen mit Ölkesseln",
+    "popularity_score": 68
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2718e",
+    "name_fr": "LPG",
+    "name_de": "LPG",
+    "subcategory": "combustibles",
+    "input_units": [
+      "L"
+    ],
+    "default_unit": "L",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 1.63,
+        "unit": "kgCO2e/litre"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "gaz_en_bouteille",
+      "gpl",
+      "combustibles",
+      "co2_emissionsfaktoren_des_treibhausgainventars_der_schweiz",
+      "comment:CH4 and N20 emissions added from the Latest Greenhouses Gas Inventory of Switzerland Tables"
+    ],
+    "source": "CO2-Emissionsfaktoren des Treibhausgainventars der Schweiz",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.334576+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.334584+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2718f",
+    "name_fr": "gaz naturel",
+    "name_de": "Erdgas",
+    "subcategory": "combustibles",
+    "input_units": [
+      "L"
+    ],
+    "default_unit": "L",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 0.0021,
+        "unit": "kgCO2e/litre"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "gaz",
+      "methane",
+      "combustibles",
+      "co2_emissionsfaktoren_des_treibhausgainventars_der_schweiz",
+      "comment:CH4 and N20 emissions added from the Latest Greenhouses Gas Inventory of Switzerland Tables"
+    ],
+    "source": "CO2-Emissionsfaktoren des Treibhausgainventars der Schweiz",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.334833+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.334840+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024,
+    "name_simple_fr": "Gaz naturel",
+    "name_simple_de": "Erdgas",
+    "description_fr": "Énergie fossile pour chauffage ou cuisson. Exemple: chauffer un bâtiment ou alimenter une chaudière.",
+    "description_de": "Fossiler Brennstoff zum Heizen oder Kochen. Beispiel: Gebäudebeheizung oder Kesselbefeuerung.",
+    "search_tags": [
+      "gaz naturel",
+      "natural gas",
+      "methane",
+      "chauffage",
+      "energy",
+      "combustible fossile",
+      "fuel",
+      "Erdgas",
+      "thermique"
+    ],
+    "usage_hint_fr": "Utilisez ce facteur pour vos dépenses en gaz naturel (factures énergétiques).",
+    "usage_hint_de": "Verwenden Sie diesen Faktor für Ihre Erdgasausgaben (Energierechnungen).",
+    "popularity_score": 92,
+    "original_data": {
+      "subcategory": "combustibles",
+      "input_units": [
+        "L"
+      ],
+      "impacts": [
+        {
+          "scope": "scope1",
+          "value": 0.0021,
+          "unit": "kgCO2e/litre"
+        }
+      ],
+      "source": "CO2-Emissionsfaktoren des Treibhausgainventars der Schweiz"
+    }
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27190",
+    "name_fr": "Essence moyenne (à n'utiliser que si le type de carburant est inconnu)",
+    "name_de": "Durchschnittsbenzin (nur verwenden, wenn die Kraftstoffart unbekannt ist)",
+    "subcategory": "combustibles",
+    "input_units": [
+      "L"
+    ],
+    "default_unit": "L",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 2.29,
+        "unit": "kgCO2e/litre"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "carburant_voiture",
+      "sans_plomb",
+      "combustibles",
+      "mobitool_v3",
+      "comment:with 97.4% gasoline and 2.6% bioethanol"
+    ],
+    "source": "mobitool v3",
+    "region": "Suisse",
+    "year": 2023,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.343188+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.343202+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2023,
+    "name_simple_fr": "Essence (type inconnu)",
+    "name_simple_de": "Benzin (Typ unbekannt)",
+    "description_fr": "Émissions moyennes de l'essence. À utiliser uniquement si vous ne connaissez pas le type exact de carburant (sans plomb 95, 98, etc.).",
+    "description_de": "Durchschnittliche Emissionen von Benzin. Nur verwenden, wenn Sie die genaue Kraftstoffart nicht kennen (bleifreies Benzin 95, 98, etc.).",
+    "search_tags": [
+      "carburant",
+      "fuel",
+      "voiture essence",
+      "petrol",
+      "gasoline",
+      "combustible moyen",
+      "essence générique"
+    ],
+    "usage_hint_fr": "Utilisez si le type d'essence exact est inconnu",
+    "usage_hint_de": "Verwenden Sie, wenn die genaue Benzinsorte unbekannt ist",
+    "popularity_score": 65,
+    "scope": "scope1",
+    "value": 2.29,
+    "unit": "kgCO2e/litre"
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27191",
+    "name_fr": "Essence standard (E10)",
+    "name_de": "Standard-Benzin (E10)",
+    "subcategory": "combustibles",
+    "input_units": [
+      "L"
+    ],
+    "default_unit": "L",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 2.12,
+        "unit": "kgCO2e/litre"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "carburant_voiture",
+      "sans_plomb",
+      "combustibles",
+      "mobitool_v3",
+      "comment:with 90% gasoline and 10% bioethanol"
+    ],
+    "source": "mobitool v3",
+    "region": "Suisse",
+    "year": 2023,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.343536+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.343544+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2023
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27192",
+    "name_fr": "Bioéthanol (E85)",
+    "name_de": "Bioethanol (E85)",
+    "subcategory": "combustibles",
+    "input_units": [
+      "L"
+    ],
+    "default_unit": "L",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 0.353,
+        "unit": "kgCO2e/litre"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "biocarburant",
+      "combustibles",
+      "mobitool_v3",
+      "comment:with 15% gasoline and 85% bioethanol"
+    ],
+    "source": "mobitool v3",
+    "region": "Suisse",
+    "year": 2023,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.343816+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.343822+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2023,
+    "name_simple_fr": "Carburant E85 bio",
+    "name_simple_de": "Biokraftstoff E85",
+    "description_fr": "Essence contenant 85% d'éthanol issu de plantes (maïs, betterave). Moins polluant que l'essence classique pour les voitures compatibles.",
+    "description_de": "Benzin mit 85% Ethanol aus Pflanzen (Mais, Zuckerrüben). Weniger Emissionen als Normalbenzin für kompatible Fahrzeuge.",
+    "search_tags": [
+      "E85",
+      "bioéthanol",
+      "carburant bio",
+      "essence verte",
+      "bioethanol",
+      "biofuel",
+      "ethanol fuel",
+      "combustible renouvelable",
+      "flexfuel"
+    ],
+    "usage_hint_fr": "Véhicules flexfuel E85. Calculer émissions carburant.",
+    "usage_hint_de": "Flexfuel-Fahrzeuge E85. Kraftstoffemissionen berechnen.",
+    "popularity_score": 42
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27193",
+    "name_fr": "Diesel moyen (à utiliser uniquement si le type de carburant est inconnu)",
+    "name_de": "Durchschnittlicher Diesel (nur verwenden, wenn die Kraftstoffart unbekannt ist)",
+    "subcategory": "combustibles",
+    "input_units": [
+      "L"
+    ],
+    "default_unit": "L",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 2.46,
+        "unit": "kgCO2e/litre"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "fuel_routier",
+      "gasoil",
+      "gazole",
+      "combustibles",
+      "mobitool_v3",
+      "comment:with 94.1% diesel and 5.9% biodiesel"
+    ],
+    "source": "mobitool v3",
+    "region": "Suisse",
+    "year": 2023,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.344105+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.344113+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2023,
+    "name_simple_fr": "Diesel standard",
+    "name_simple_de": "Standard-Diesel",
+    "description_fr": "Carburant diesel pour véhicules automobiles. À utiliser quand le type exact de diesel n'est pas connu (agricole, routier, etc.).",
+    "description_de": "Dieselkraftstoff für Fahrzeuge. Verwenden, wenn der genaue Dieseltyp unbekannt ist (landwirtschaftlich, straßentauglich, etc.).",
+    "search_tags": [
+      "diesel",
+      "carburant",
+      "fuel",
+      "combustible",
+      "véhicule",
+      "auto",
+      "défaut",
+      "standard",
+      "fossile",
+      "CO2"
+    ],
+    "usage_hint_fr": "Quand vous ne connaissez pas le type exact de diesel utilisé",
+    "usage_hint_de": "Wenn Sie die genaue Dieselsorte nicht kennen",
+    "popularity_score": 75
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27194",
+    "name_fr": "Diesel (B7)",
+    "name_de": "Diesel (B7)",
+    "subcategory": "combustibles",
+    "input_units": [
+      "L"
+    ],
+    "default_unit": "L",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 2.43,
+        "unit": "kgCO2e/litre"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "fuel_routier",
+      "gasoil",
+      "gazole",
+      "combustibles",
+      "mobitool_v3",
+      "comment:with 93% diesel and 7% biodiesel"
+    ],
+    "source": "mobitool v3",
+    "region": "Suisse",
+    "year": 2023,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.344343+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.344350+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2023,
+    "name_simple_fr": "Diesel standard",
+    "name_simple_de": "Standard-Diesel",
+    "description_fr": "Carburant diesel courant utilisé pour les véhicules lourds, camions et tracteurs. Produit ~2,4 kg CO2 par litre brûlé.",
+    "description_de": "Gängiger Dieselkraftstoff für schwere Fahrzeuge, Lastwagen und Traktoren. Erzeugt ~2,4 kg CO2 pro Liter verbrannt.",
+    "search_tags": [
+      "diesel",
+      "carburant diesel",
+      "fuel",
+      "combustible",
+      "véhicule lourd",
+      "camion",
+      "tracteur",
+      "B7",
+      "Diesel-Kraftstoff",
+      "transport"
+    ],
+    "usage_hint_fr": "Calculer les émissions des camions, tracteurs et machines diesel",
+    "usage_hint_de": "Emissionen von Lastwagen, Traktoren und Dieselmaschinen berechnen",
+    "popularity_score": 85
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27195",
+    "name_fr": "Gaz naturel moyen (à utiliser uniquement si le type de carburant est inconnu)",
+    "name_de": "Durchschnittliches Erdgas (nur verwenden, wenn die Kraftstoffart nicht bekannt ist)",
+    "subcategory": "combustibles",
+    "input_units": [
+      "L"
+    ],
+    "default_unit": "L",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 1.25,
+        "unit": "kgCO2e/litre"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "gaz",
+      "methane",
+      "combustibles",
+      "mobitool_v3",
+      "comment:with 72.7% natural gas and 27.3% biomethane"
+    ],
+    "source": "mobitool v3",
+    "region": "Suisse",
+    "year": 2023,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.344564+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.344571+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2023
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27196",
+    "name_fr": "Alimentation et boissons",
+    "name_de": "Nahrungsmittel und Getränke",
+    "subcategory": "alimentation",
+    "input_units": [
+      "kCHF"
+    ],
+    "default_unit": "kCHF",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 472.45102,
+        "unit": "kgCO2e/parkCHF"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "alimentation",
+      "environmental_impacts_of_swiss_consumption_and_production"
+    ],
+    "source": "Environmental Impacts of Swiss Consumption and Production",
+    "region": "Suisse",
+    "year": 2011,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.344800+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.344806+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2011,
+    "name_simple_fr": "Nourriture et boissons",
+    "name_simple_de": "Lebensmittel und Getränke",
+    "description_fr": "Émissions liées à la production, transport et distribution des aliments consommés. Inclut viande, fruits, légumes, produits laitiers, boissons.",
+    "description_de": "Emissionen aus Produktion, Transport und Vertrieb von Lebensmitteln. Umfasst Fleisch, Obst, Gemüse, Milchprodukte, Getränke.",
+    "search_tags": [
+      "alimentation",
+      "nourriture",
+      "repas",
+      "food",
+      "nutrition",
+      "restauration",
+      "boissons",
+      "provisions",
+      "consommation alimentaire",
+      "supply chain alimentaire"
+    ],
+    "usage_hint_fr": "Utilisez si vous achetez de la nourriture pour vos collaborateurs ou clients.",
+    "usage_hint_de": "Verwenden Sie, wenn Sie Lebensmittel für Mitarbeiter oder Kunden kaufen.",
+    "popularity_score": 85
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27197",
+    "name_fr": "Textiles",
+    "name_de": "Textilien",
+    "subcategory": "vetements_et_textiles",
+    "input_units": [
+      "kCHF"
+    ],
+    "default_unit": "kCHF",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 364.494337,
+        "unit": "kgCO2e/parkCHF"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "vetements_et_textiles",
+      "environmental_impacts_of_swiss_consumption_and_production"
+    ],
+    "source": "Environmental Impacts of Swiss Consumption and Production",
+    "region": "Suisse",
+    "year": 2011,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.345072+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.345079+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2011,
+    "name_simple_fr": "Vêtements et textiles",
+    "name_simple_de": "Kleidung und Textilien",
+    "description_fr": "Émissions liées à la fabrication, transport et fin de vie des vêtements, chaussures et tissus. Exemple: 1000 CHF de vêtements = 364 kg CO2e.",
+    "description_de": "Emissionen aus Herstellung, Transport und Entsorgung von Kleidung, Schuhen und Stoffen. Beispiel: 1000 CHF Kleidung = 364 kg CO2e.",
+    "search_tags": [
+      "vêtements",
+      "clothing",
+      "textiles",
+      "mode",
+      "chaussures",
+      "shoes",
+      "fibres",
+      "coton",
+      "habillement",
+      "apparel"
+    ],
+    "usage_hint_fr": "Pour évaluer l'impact des dépenses en vêtements et textiles",
+    "usage_hint_de": "Zur Bewertung der Auswirkungen von Kleidungs- und Textilausgaben",
+    "popularity_score": 75
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27198",
+    "name_fr": "Vêtements",
+    "name_de": "Bekleidung",
+    "subcategory": "vetements_et_textiles",
+    "input_units": [
+      "kCHF"
+    ],
+    "default_unit": "kCHF",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 368.580191,
+        "unit": "kgCO2e/parkCHF"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "vetements_et_textiles",
+      "environmental_impacts_of_swiss_consumption_and_production"
+    ],
+    "source": "Environmental Impacts of Swiss Consumption and Production",
+    "region": "Suisse",
+    "year": 2011,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.345345+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.345355+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2011,
+    "name_simple_fr": "Vêtements et textiles",
+    "name_simple_de": "Kleidung und Textilien",
+    "description_fr": "Emissions liées à la fabrication, transport et fin de vie des vêtements. Inclut t-shirts, pantalons, chaussures, accessoires.",
+    "description_de": "Emissionen aus Herstellung, Transport und Entsorgung von Kleidung. Umfasst T-Shirts, Hosen, Schuhe und Zubehör.",
+    "search_tags": [
+      "vêtements",
+      "textiles",
+      "clothing",
+      "fashion",
+      "apparel",
+      "habits",
+      "chaussures",
+      "textile footprint"
+    ],
+    "usage_hint_fr": "Budgets d'achat de vêtements et accessoires pour collaborateurs",
+    "usage_hint_de": "Budgets für Kleidung und Accessoires von Mitarbeitenden",
+    "popularity_score": 65
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27199",
+    "name_fr": "Combustibles",
+    "name_de": "Brennstoffe",
+    "subcategory": "produits",
+    "input_units": [
+      "kCHF"
+    ],
+    "default_unit": "kCHF",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 1224.35106,
+        "unit": "kgCO2e/parkCHF"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "produits",
+      "environmental_impacts_of_swiss_consumption_and_production"
+    ],
+    "source": "Environmental Impacts of Swiss Consumption and Production",
+    "region": "Suisse",
+    "year": 2011,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.345610+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.345616+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2011
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2719a",
+    "name_fr": "Produits chimiques",
+    "name_de": "Chemikalien",
+    "subcategory": "produits_chimiques_et_combustibles",
+    "input_units": [
+      "kCHF"
+    ],
+    "default_unit": "kCHF",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 290.439405,
+        "unit": "kgCO2e/kCHF"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "produits_chimiques_et_combustibles",
+      "environmental_impacts_of_swiss_consumption_and_production"
+    ],
+    "source": "Environmental Impacts of Swiss Consumption and Production",
+    "region": "Suisse",
+    "year": 2011,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.345848+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.345854+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2011,
+    "name_simple_fr": "Achats de produits chimiques",
+    "name_simple_de": "Chemikalien kaufen",
+    "description_fr": "Émissions liées à l'achat de produits chimiques (solvants, détergents, engrais, additifs industriels). Exprimé par CHF dépensé.",
+    "description_de": "Emissionen beim Kauf von Chemikalien (Lösungsmittel, Reinigungsmittel, Dünger, Industrieadditive). Pro CHF ausgegeben.",
+    "search_tags": [
+      "chimie",
+      "chemicals",
+      "produits chimiques",
+      "solvants",
+      "additifs",
+      "approvisionnement chimique",
+      "matières premières chimiques",
+      "scope 3",
+      "achat"
+    ],
+    "usage_hint_fr": "Utilisez pour évaluer vos achats de produits chimiques en CHF",
+    "usage_hint_de": "Nutzen Sie für Chemikalien-Ausgaben in CHF",
+    "popularity_score": 52,
+    "notes_fr": "Scope 3: émissions indirectes liées aux produits chimiques achetés auprès de fournisseurs",
+    "notes_de": "Scope 3: indirekte Emissionen aus dem Kauf von Chemikalien bei Lieferanten"
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2719b",
+    "name_fr": "Armes, munitions, explosifs",
+    "name_de": "Waffen, Munition, Sprengstoffe",
+    "subcategory": "equipements_et_technologies",
+    "input_units": [
+      "kCHF"
+    ],
+    "default_unit": "kCHF",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 275.338068,
+        "unit": "kgCO2e/parkCHF"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "equipements_et_technologies",
+      "environmental_impacts_of_swiss_consumption_and_production"
+    ],
+    "source": "Environmental Impacts of Swiss Consumption and Production",
+    "region": "Suisse",
+    "year": 2011,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.346223+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.346239+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2011,
+    "name_simple_fr": "Armes et munitions",
+    "name_simple_de": "Waffen und Munition",
+    "description_fr": "Émissions liées à la fabrication d'armes, munitions et explosifs. Inclut l'extraction de matériaux et la production industrielle.",
+    "description_de": "Emissionen aus Herstellung von Waffen, Munition und Sprengstoff. Umfasst Rohstoffabbau und industrielle Produktion.",
+    "search_tags": [
+      "munitions",
+      "armement",
+      "armes",
+      "explosifs",
+      "weapons",
+      "ammunition",
+      "defense",
+      "militaire"
+    ],
+    "usage_hint_fr": "À utiliser pour les achats ou investissements en équipements militaires et de défense.",
+    "usage_hint_de": "Für Käufe oder Investitionen in Militär- und Verteidigungsausrüstung verwenden.",
+    "popularity_score": 15
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2719c",
+    "name_fr": "Machines et appareils",
+    "name_de": "Maschinen und Apparate",
+    "subcategory": "equipements_et_technologies",
+    "input_units": [
+      "kCHF"
+    ],
+    "default_unit": "kCHF",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 275.338068,
+        "unit": "kgCO2e/parkCHF"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "equipements_et_technologies",
+      "environmental_impacts_of_swiss_consumption_and_production"
+    ],
+    "source": "Environmental Impacts of Swiss Consumption and Production",
+    "region": "Suisse",
+    "year": 2011,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.346663+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.346672+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2011,
+    "name_simple_fr": "Achat de machines et appareils",
+    "name_simple_de": "Kauf von Maschinen und Geräten",
+    "description_fr": "Émissions liées à la fabrication et l'importation de machines (imprimantes, serveurs, équipements de production). Basé sur le coût d'achat.",
+    "description_de": "Emissionen aus Herstellung und Import von Maschinen (Drucker, Server, Produktionsgeräte). Basierend auf Kaufkosten.",
+    "search_tags": [
+      "machines",
+      "appareils",
+      "équipements",
+      "achat matériel",
+      "equipment",
+      "manufacturing",
+      "industrie",
+      "production",
+      "importation",
+      "technology"
+    ],
+    "usage_hint_fr": "Utilisez pour tous les achats de machines, équipements et appareils professionnels.",
+    "usage_hint_de": "Verwenden Sie für alle Käufe von Maschinen, Ausrüstungen und Fachgeräten.",
+    "popularity_score": 72
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2719d",
+    "name_fr": "Produits médicaux et pharmaceutiques",
+    "name_de": "Medizinische Produkte und Pharmabereich",
+    "subcategory": "produits",
+    "input_units": [
+      "kCHF"
+    ],
+    "default_unit": "kCHF",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 290.439405,
+        "unit": "kgCO2e/parkCHF"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "produits",
+      "environmental_impacts_of_swiss_consumption_and_production"
+    ],
+    "source": "Environmental Impacts of Swiss Consumption and Production",
+    "region": "Suisse",
+    "year": 2011,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.346977+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.346987+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2011
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2719e",
+    "name_fr": "Services de transport, biens et marchandises",
+    "name_de": "Transportdienstleistungen, Güter und Waren",
+    "subcategory": "services",
+    "input_units": [
+      "kCHF"
+    ],
+    "default_unit": "kCHF",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 437.737561,
+        "unit": "kgCO2e/parkCHF"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "services",
+      "environmental_impacts_of_swiss_consumption_and_production"
+    ],
+    "source": "Environmental Impacts of Swiss Consumption and Production",
+    "region": "Suisse",
+    "year": 2011,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.347347+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.347355+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2011,
+    "name_simple_fr": "Livraison de marchandises",
+    "name_simple_de": "Warenlieferung",
+    "description_fr": "Émissions générées par le transport de vos biens et produits. Inclut camions, trains, avions cargo. Exemple: livraison de fournitures de bureau.",
+    "description_de": "Emissionen durch den Transport Ihrer Waren und Produkte. Umfasst Lastwagen, Züge, Frachtflugzeuge. Beispiel: Lieferung von Büromaterial.",
+    "search_tags": [
+      "transport marchandises",
+      "logistique",
+      "livraison",
+      "fret",
+      "shipping",
+      "cargo",
+      "supply chain",
+      "distribution",
+      "freight",
+      "goods transport"
+    ],
+    "usage_hint_fr": "À utiliser pour les frais de transport de matériaux, stocks ou produits finis.",
+    "usage_hint_de": "Für Transportkosten von Materialien, Lagerbeständen oder Fertigprodukten verwenden.",
+    "popularity_score": 78
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2719f",
+    "name_fr": "DL en rapport avec le transport de personnes, les hôtels, etc.",
+    "name_de": "DL im Zusammenhang mit Personentransporten, Hotels, usw.",
+    "subcategory": "services",
+    "input_units": [
+      "kCHF"
+    ],
+    "default_unit": "kCHF",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 246.598384,
+        "unit": "kgCO2e/parkCHF"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "services",
+      "environmental_impacts_of_swiss_consumption_and_production"
+    ],
+    "source": "Environmental Impacts of Swiss Consumption and Production",
+    "region": "Suisse",
+    "year": 2011,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.347596+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.347603+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2011,
+    "name_simple_fr": "Émissions des voyages et hébergements",
+    "name_simple_de": "Emissionen von Reisen und Unterkunft",
+    "description_fr": "Émissions générées par les déplacements professionnels (avion, train, voiture) et les nuits d'hôtel. Exemple: un vol Paris-Zurich ou 3 nuits en hôtel.",
+    "description_de": "Emissionen von Geschäftsreisen (Flug, Zug, Auto) und Hotelübernachtungen. Beispiel: Flug Paris-Zürich oder 3 Nächte im Hotel.",
+    "search_tags": [
+      "voyages professionnels",
+      "travel",
+      "hôtel",
+      "hotel",
+      "déplacements",
+      "business travel",
+      "hébergement",
+      "accommodation",
+      "séjours"
+    ],
+    "usage_hint_fr": "Utilisez pour évaluer les émissions de vos déplacements et voyages d'affaires",
+    "usage_hint_de": "Verwenden Sie zur Bewertung der Emissionen Ihrer Geschäftsreisen",
+    "popularity_score": 78
+  },
+  {
+    "id": "698418f3c1a4e9f26cd271a0",
+    "name_fr": "Véhicules",
+    "name_de": "Fahrzeuge",
+    "subcategory": "equipements_et_technologies",
+    "input_units": [
+      "kCHF"
+    ],
+    "default_unit": "kCHF",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 190.120565,
+        "unit": "kgCO2e/parkCHF"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "equipements_et_technologies",
+      "environmental_impacts_of_swiss_consumption_and_production"
+    ],
+    "source": "Environmental Impacts of Swiss Consumption and Production",
+    "region": "Suisse",
+    "year": 2011,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.347849+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.347855+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2011
+  },
+  {
+    "id": "698418f3c1a4e9f26cd271a1",
+    "name_fr": "Groupes électrogènes",
+    "name_de": "Stromerzeugungsaggregate",
+    "subcategory": "equipements_et_technologies",
+    "input_units": [
+      "kCHF"
+    ],
+    "default_unit": "kCHF",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 478.832992,
+        "unit": "kgCO2e/parkCHF"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "equipements_et_technologies",
+      "environmental_impacts_of_swiss_consumption_and_production"
+    ],
+    "source": "Environmental Impacts of Swiss Consumption and Production",
+    "region": "Suisse",
+    "year": 2011,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.348104+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.348112+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2011,
+    "name_simple_fr": "Générateurs électriques",
+    "name_simple_de": "Stromgeneratoren",
+    "description_fr": "Équipements qui produisent de l'électricité de secours ou autonome (diesel, essence). Utilisés sur chantiers, événements ou en cas de panne.",
+    "description_de": "Geräte zur eigenständigen Stromerzeugung (Diesel, Benzin). Einsatz auf Baustellen, Events oder als Notstromlösung.",
+    "search_tags": [
+      "générateur",
+      "electrogène",
+      "groupe électrogène",
+      "stromgenerator",
+      "diesel generator",
+      "secours électrique",
+      "énergie autonome",
+      "backup power"
+    ],
+    "usage_hint_fr": "Lors de l'achat ou location de générateurs pour chantiers/événements",
+    "usage_hint_de": "Bei Kauf oder Miete von Generatoren für Baustellen/Events",
+    "popularity_score": 42
+  },
+  {
+    "id": "698418f3c1a4e9f26cd271a2",
+    "name_fr": "Autres véhicules et matériel de transport",
+    "name_de": "Übrige Fahrzeuge und Transportmittel",
+    "subcategory": "equipements_et_technologies",
+    "input_units": [
+      "kCHF"
+    ],
+    "default_unit": "kCHF",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 190.120565,
+        "unit": "kgCO2e/parkCHF"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "equipements_et_technologies",
+      "environmental_impacts_of_swiss_consumption_and_production"
+    ],
+    "source": "Environmental Impacts of Swiss Consumption and Production",
+    "region": "Suisse",
+    "year": 2011,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.348357+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.348363+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2011,
+    "name_simple_fr": "Transport spécialisé",
+    "name_simple_de": "Spezialtransport",
+    "description_fr": "Émissions des véhicules moins courants: chariots élévateurs, remorques, bateaux, avions privés ou équipements de chantier.",
+    "description_de": "Emissionen von selteneren Fahrzeugen: Gabelstapler, Anhänger, Boote, Privatflugzeuge oder Baustellen­ausrüstung.",
+    "search_tags": [
+      "véhicule spécialisé",
+      "transport matériel",
+      "équipement roulant",
+      "fork lift",
+      "specialized vehicles",
+      "material handling",
+      "transport equipment",
+      "machinery",
+      "heavy equipment"
+    ],
+    "usage_hint_fr": "Achat ou location d'équipements de transport non-standard pour votre activité.",
+    "usage_hint_de": "Kauf oder Leasing von Spezial-Transportmitteln für Ihre Geschäftstätigkeit.",
+    "popularity_score": 42
+  },
+  {
+    "id": "698418f3c1a4e9f26cd271a3",
+    "name_fr": "Trains et locomotives",
+    "name_de": "Züge und Lokomotiven",
+    "subcategory": "equipements_et_technologies",
+    "input_units": [
+      "kCHF"
+    ],
+    "default_unit": "kCHF",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 211.57433,
+        "unit": "kgCO2e/parkCHF"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "equipements_et_technologies",
+      "environmental_impacts_of_swiss_consumption_and_production"
+    ],
+    "source": "Environmental Impacts of Swiss Consumption and Production",
+    "region": "Suisse",
+    "year": 2011,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.348587+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.348593+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2011,
+    "description_fr": "Émissions liées à la fabrication et l'entretien des trains, locomotives et wagons. Inclut la production des matériaux et composants.",
+    "description_de": "Emissionen aus Herstellung und Wartung von Zügen, Lokomotiven und Güterwagen. Umfasst Materialproduktion und Komponenten.",
+    "search_tags": [
+      "trains",
+      "locomotives",
+      "railway equipment",
+      "rolling stock",
+      "équipement ferroviaire",
+      "matériel roulant",
+      "wagons",
+      "TGV"
+    ],
+    "usage_hint_fr": "Pour les entreprises ferroviaires ou avec parc de trains/locomotives",
+    "usage_hint_de": "Für Eisenbahnunternehmen oder mit eigenem Zugpark",
+    "popularity_score": 35
+  },
+  {
+    "id": "698418f3c1a4e9f26cd271a4",
+    "name_fr": "Systèmes aéronautiques",
+    "name_de": "Luftfahrtsysteme",
+    "subcategory": "equipements_et_technologies",
+    "input_units": [
+      "kCHF"
+    ],
+    "default_unit": "kCHF",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 211.57433,
+        "unit": "kgCO2e/parkCHF"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "equipements_et_technologies",
+      "environmental_impacts_of_swiss_consumption_and_production"
+    ],
+    "source": "Environmental Impacts of Swiss Consumption and Production",
+    "region": "Suisse",
+    "year": 2011,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.348814+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.348819+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2011
+  },
+  {
+    "id": "698418f3c1a4e9f26cd271a5",
+    "name_fr": "Biens et services liés au sport et aux loisirs",
+    "name_de": "Güter und Dienstleistungen im Zusammenhang mit Sport und Erholung",
+    "subcategory": "equipements_et_technologies",
+    "input_units": [
+      "kCHF"
+    ],
+    "default_unit": "kCHF",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 121.869924,
+        "unit": "kgCO2e/parkCHF"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "equipements_et_technologies",
+      "environmental_impacts_of_swiss_consumption_and_production"
+    ],
+    "source": "Environmental Impacts of Swiss Consumption and Production",
+    "region": "Suisse",
+    "year": 2011,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.349041+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.349047+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2011,
+    "name_simple_fr": "Équipements de sport et loisirs",
+    "name_simple_de": "Sport- und Freizeitausrüstung",
+    "description_fr": "Émissions liées à l'achat d'équipements sportifs (vélos, skis, raquettes) et de loisirs (jeux, appareils de fitness).",
+    "description_de": "Emissionen beim Kauf von Sportgeräten (Fahrräder, Skier, Schläger) und Freizeitausrüstung (Spiele, Fitnessgeräte).",
+    "search_tags": [
+      "sport",
+      "équipements",
+      "loisirs",
+      "recreation",
+      "equipment",
+      "fitness",
+      "outdoor gear",
+      "articles de sport"
+    ],
+    "usage_hint_fr": "Pour les dépenses en équipements sportifs ou de loisirs de l'entreprise.",
+    "usage_hint_de": "Für Unternehmensausgaben für Sport- oder Freizeitausrüstung.",
+    "popularity_score": 35
+  },
+  {
+    "id": "698418f3c1a4e9f26cd271a6",
+    "name_fr": "Publications, y compris les services d'agence",
+    "name_de": "Publikationen inkl. Agenturleistungen",
+    "subcategory": "services",
+    "input_units": [
+      "kCHF"
+    ],
+    "default_unit": "kCHF",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 204.162768,
+        "unit": "kgCO2e/parkCHF"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "services",
+      "environmental_impacts_of_swiss_consumption_and_production"
+    ],
+    "source": "Environmental Impacts of Swiss Consumption and Production",
+    "region": "Suisse",
+    "year": 2011,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.349295+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.349302+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2011,
+    "name_simple_fr": "Imprimés et services de communication",
+    "name_simple_de": "Druck und Kommunikationsdienstleistungen",
+    "description_fr": "Emissions liées à la création et impression de brochures, journaux, publicités, ainsi qu'aux agences de communication et design.",
+    "description_de": "Emissionen aus Druck und Herstellung von Broschüren, Zeitungen, Werbematerialien sowie Kommunikations- und Designagenturen.",
+    "search_tags": [
+      "imprimerie",
+      "brochures",
+      "publicité",
+      "agence communication",
+      "print",
+      "publications",
+      "design",
+      "marketing"
+    ],
+    "usage_hint_fr": "Pour les dépenses en imprimés, brochures, publicités ou services d'agence.",
+    "usage_hint_de": "Für Ausgaben für Druckprodukte, Broschüren, Werbung oder Agenturdienstleistungen.",
+    "popularity_score": 68
+  },
+  {
+    "id": "698418f3c1a4e9f26cd271a7",
+    "name_fr": "Documents de sécurité",
+    "name_de": "Sicherheitsdokumente",
+    "subcategory": "services",
+    "input_units": [
+      "kCHF"
+    ],
+    "default_unit": "kCHF",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 422.17644,
+        "unit": "kgCO2e/parkCHF"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "services",
+      "environmental_impacts_of_swiss_consumption_and_production"
+    ],
+    "source": "Environmental Impacts of Swiss Consumption and Production",
+    "region": "Suisse",
+    "year": 2011,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.349522+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.349527+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2011
+  },
+  {
+    "id": "698418f3c1a4e9f26cd271a8",
+    "name_fr": "Bureautique",
+    "name_de": "Bürotechnik",
+    "subcategory": "equipements_et_technologies",
+    "input_units": [
+      "kCHF"
+    ],
+    "default_unit": "kCHF",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 280.341897,
+        "unit": "kgCO2e/parkCHF"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "equipements_et_technologies",
+      "environmental_impacts_of_swiss_consumption_and_production"
+    ],
+    "source": "Environmental Impacts of Swiss Consumption and Production",
+    "region": "Suisse",
+    "year": 2011,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.349753+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.349759+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2011,
+    "name_simple_fr": "Équipements de bureau",
+    "name_simple_de": "Büroausstattung",
+    "description_fr": "Ordinateurs, imprimantes, écrans et mobilier. Inclut la fabrication et l'utilisation de ces appareils au bureau.",
+    "description_de": "Computer, Drucker, Bildschirme und Möbel. Umfasst Herstellung und Nutzung dieser Geräte im Büro.",
+    "search_tags": [
+      "informatique",
+      "ordinateur",
+      "imprimante",
+      "équipement informatique",
+      "office equipment",
+      "IT",
+      "mobilier bureau",
+      "écran",
+      "peripheriques"
+    ],
+    "usage_hint_fr": "Calculez le coût d'achat annuel de vos équipements informatiques et mobilier.",
+    "usage_hint_de": "Berechnen Sie die jährlichen Anschaffungskosten für IT und Mobiliar.",
+    "popularity_score": 75
+  },
+  {
+    "id": "698418f3c1a4e9f26cd271a9",
+    "name_fr": "Équipements d'impression",
+    "name_de": "Printgeräte",
+    "subcategory": "equipements_et_technologies",
+    "input_units": [
+      "kCHF"
+    ],
+    "default_unit": "kCHF",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 280.341897,
+        "unit": "kgCO2e/parkCHF"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "equipements_et_technologies",
+      "environmental_impacts_of_swiss_consumption_and_production"
+    ],
+    "source": "Environmental Impacts of Swiss Consumption and Production",
+    "region": "Suisse",
+    "year": 2011,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.349987+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.349993+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2011,
+    "name_simple_fr": "Imprimantes et photocopieurs",
+    "name_simple_de": "Drucker und Kopierer",
+    "description_fr": "Émissions liées à la fabrication et l'utilisation des imprimantes, photocopieurs et équipements d'impression dans votre entreprise.",
+    "description_de": "Emissionen aus Herstellung und Betrieb von Druckern, Kopierern und Druckgeräten in Ihrem Unternehmen.",
+    "search_tags": [
+      "imprimante",
+      "photocopie",
+      "printer",
+      "printing equipment",
+      "équipement bureautique",
+      "copier",
+      "office equipment",
+      "matériel d'impression"
+    ],
+    "usage_hint_fr": "À utiliser pour valoriser vos dépenses en imprimantes et copieurs.",
+    "usage_hint_de": "Für Ausgaben bei Druckern und Kopierern verwenden.",
+    "popularity_score": 65
+  },
+  {
+    "id": "698418f3c1a4e9f26cd271aa",
+    "name_fr": "Equipement de bureau et de locaux de l'administration civile",
+    "name_de": "Büro- und Raumausstattung zivile Verwaltung",
+    "subcategory": "equipements_et_technologies",
+    "input_units": [
+      "kCHF"
+    ],
+    "default_unit": "kCHF",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 280.341897,
+        "unit": "kgCO2e/parkCHF"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "equipements_et_technologies",
+      "environmental_impacts_of_swiss_consumption_and_production"
+    ],
+    "source": "Environmental Impacts of Swiss Consumption and Production",
+    "region": "Suisse",
+    "year": 2011,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.350217+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.350224+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2011,
+    "name_simple_fr": "Mobilier et équipements de bureau",
+    "name_simple_de": "Büromöbel und -ausrüstung",
+    "description_fr": "Émissions liées à l'achat de meubles, ordinateurs, imprimantes et équipements pour les locaux administratifs. Inclut la fabrication et le transport.",
+    "description_de": "Emissionen aus dem Kauf von Möbeln, Computern, Druckern und Ausrüstungen für Verwaltungsräume. Herstellung und Transport inbegriffen.",
+    "search_tags": [
+      "mobilier",
+      "furniture",
+      "bureau",
+      "équipements",
+      "ordinateurs",
+      "imprimantes",
+      "administration",
+      "office equipment"
+    ],
+    "usage_hint_fr": "À utiliser lors de l'achat ou du renouvellement de meubles et équipements de bureau.",
+    "usage_hint_de": "Bei Kauf oder Erneuerung von Büromöbeln und -ausrüstung verwenden.",
+    "popularity_score": 72
+  },
+  {
+    "id": "698418f3c1a4e9f26cd271ab",
+    "name_fr": "Fournitures de bureau et consommables généraux et domestiques",
+    "name_de": "Büromaterial und allgemeines Verbrauchs- und Hausdienstmaterial",
+    "subcategory": "equipements_et_technologies",
+    "input_units": [
+      "kCHF"
+    ],
+    "default_unit": "kCHF",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 422.17644,
+        "unit": "kgCO2e/parkCHF"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "equipements_et_technologies",
+      "environmental_impacts_of_swiss_consumption_and_production"
+    ],
+    "source": "Environmental Impacts of Swiss Consumption and Production",
+    "region": "Suisse",
+    "year": 2011,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.350479+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.350486+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2011
+  },
+  {
+    "id": "698418f3c1a4e9f26cd271ac",
+    "name_fr": "Services postaux",
+    "name_de": "Postdienste",
+    "subcategory": "services",
+    "input_units": [
+      "kCHF"
+    ],
+    "default_unit": "kCHF",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 133.058479,
+        "unit": "kgCO2e/parkCHF"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "services",
+      "environmental_impacts_of_swiss_consumption_and_production"
+    ],
+    "source": "Environmental Impacts of Swiss Consumption and Production",
+    "region": "Suisse",
+    "year": 2011,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.350699+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.350705+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2011,
+    "name_simple_fr": "Envois postaux",
+    "name_simple_de": "Postversand",
+    "description_fr": "Émissions liées à l'acheminement de courriers et colis. Inclut le transport par camion, train et avion selon la destination.",
+    "description_de": "Emissionen aus dem Versand von Briefen und Paketen. Umfasst Transport per Lastwagen, Bahn und Flugzeug je nach Ziel.",
+    "search_tags": [
+      "poste",
+      "courrier",
+      "colis",
+      "mail",
+      "parcels",
+      "logistique postale",
+      "livraison",
+      "transport lettres",
+      "services postaux"
+    ],
+    "usage_hint_fr": "À utiliser pour tous les envois postaux et colis de l'entreprise.",
+    "usage_hint_de": "Für alle Postversände und Pakete des Unternehmens nutzen.",
+    "popularity_score": 65,
+    "scope": "scope3",
+    "value_kgco2e_per_kchf": 133.06,
+    "unit_reference": "kCHF dépensés",
+    "note_fr": "Facteur basé sur les dépenses postales en francs suisses",
+    "note_de": "Faktor basiert auf Postausgaben in Schweizer Franken"
+  },
+  {
+    "id": "698418f3c1a4e9f26cd271ad",
+    "name_fr": "Services de courrier",
+    "name_de": "Kurierdienste",
+    "subcategory": "services",
+    "input_units": [
+      "kCHF"
+    ],
+    "default_unit": "kCHF",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 133.058479,
+        "unit": "kgCO2e/parkCHF"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "services",
+      "environmental_impacts_of_swiss_consumption_and_production"
+    ],
+    "source": "Environmental Impacts of Swiss Consumption and Production",
+    "region": "Suisse",
+    "year": 2011,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.350913+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.350919+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2011,
+    "name_simple_fr": "Livraisons par coursier",
+    "name_simple_de": "Kurierlieferungen",
+    "description_fr": "Émissions liées aux services de livraison express et courrier (lettres, colis, documents urgents). Inclut le transport routier.",
+    "description_de": "Emissionen von Express- und Kurierdiensten (Briefe, Pakete, dringende Dokumente). Umfasst den Strassentransport.",
+    "search_tags": [
+      "courrier",
+      "livraison",
+      "express",
+      "colis",
+      "logistique",
+      "DHL",
+      "La Poste",
+      "parcel delivery",
+      "messenger service",
+      "transport express"
+    ],
+    "usage_hint_fr": "Quand votre entreprise envoie des courriers ou colis via des services de livraison.",
+    "usage_hint_de": "Wenn Ihr Unternehmen Briefe oder Pakete per Kurierdienst versendet.",
+    "popularity_score": 72,
+    "impact_scope": "scope3",
+    "impact_value": 133.06,
+    "impact_unit": "kgCO2e par 1000 CHF dépensés"
+  },
+  {
+    "id": "698418f3c1a4e9f26cd271ae",
+    "name_fr": "Matériel informatique",
+    "name_de": "Hardware",
+    "subcategory": "equipements_et_technologies",
+    "input_units": [
+      "kCHF"
+    ],
+    "default_unit": "kCHF",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 280.341897,
+        "unit": "kgCO2e/parkCHF"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "equipements_et_technologies",
+      "environmental_impacts_of_swiss_consumption_and_production"
+    ],
+    "source": "Environmental Impacts of Swiss Consumption and Production",
+    "region": "Suisse",
+    "year": 2011,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.351233+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.351250+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2011
+  },
+  {
+    "id": "698418f3c1a4e9f26cd271af",
+    "name_fr": "Logiciels et licences",
+    "name_de": "Software und Lizenzen",
+    "subcategory": "services",
+    "input_units": [
+      "kCHF"
+    ],
+    "default_unit": "kCHF",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 92.8236326,
+        "unit": "kgCO2e/parkCHF"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "services",
+      "environmental_impacts_of_swiss_consumption_and_production"
+    ],
+    "source": "Environmental Impacts of Swiss Consumption and Production",
+    "region": "Suisse",
+    "year": 2011,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.351664+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.351673+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2011,
+    "name_simple_fr": "Logiciels achetés",
+    "name_simple_de": "Gekaufte Software",
+    "description_fr": "Émissions liées à l'achat de logiciels, applications, licences numériques et services cloud (Microsoft 365, Adobe, etc.).",
+    "description_de": "Emissionen beim Kauf von Software, Apps, digitalen Lizenzen und Cloud-Diensten (Microsoft 365, Adobe, etc.).",
+    "search_tags": [
+      "software",
+      "licences",
+      "applications",
+      "cloud",
+      "SaaS",
+      "digital services",
+      "logiciels informatiques",
+      "abonnements",
+      "Microsoft 365",
+      "Adobe"
+    ],
+    "usage_hint_fr": "Dépenses en logiciels, abonnements cloud, licences IT",
+    "usage_hint_de": "Ausgaben für Software, Cloud-Abos, IT-Lizenzen",
+    "popularity_score": 45
+  },
+  {
+    "id": "698418f3c1a4e9f26cd271b0",
+    "name_fr": "Télécommunications",
+    "name_de": "Telekommunikation",
+    "subcategory": "equipements_et_technologies",
+    "input_units": [
+      "kCHF"
+    ],
+    "default_unit": "kCHF",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 133.058479,
+        "unit": "kgCO2e/parkCHF"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "equipements_et_technologies",
+      "environmental_impacts_of_swiss_consumption_and_production"
+    ],
+    "source": "Environmental Impacts of Swiss Consumption and Production",
+    "region": "Suisse",
+    "year": 2011,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.351989+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.351997+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2011,
+    "name_simple_fr": "Appels et données télécom",
+    "name_simple_de": "Telefon- und Datendienste",
+    "description_fr": "Émissions liées aux appels téléphoniques, SMS, internet mobile et services cloud. Exemple: utiliser le téléphone ou envoyer des emails génère du CO2.",
+    "description_de": "Emissionen aus Telefonanrufen, SMS, mobilem Internet und Cloud-Diensten. Beispiel: Telefonieren oder E-Mails versenden erzeugt CO2.",
+    "search_tags": [
+      "telecom",
+      "telecommunications",
+      "appels",
+      "internet mobile",
+      "data center",
+      "serveurs",
+      "cloud",
+      "numérique",
+      "ICT"
+    ],
+    "usage_hint_fr": "Pour estimer l'impact des services télécom de l'entreprise",
+    "usage_hint_de": "Zur Schätzung der Telekommunikations-Auswirkungen",
+    "popularity_score": 62
+  },
+  {
+    "id": "698418f3c1a4e9f26cd271b1",
+    "name_fr": "Maintenance SW et HW",
+    "name_de": "SW-Pflege und HW Wartung",
+    "subcategory": "services",
+    "input_units": [
+      "kCHF"
+    ],
+    "default_unit": "kCHF",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 92.8236326,
+        "unit": "kgCO2e/parkCHF"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "services",
+      "environmental_impacts_of_swiss_consumption_and_production"
+    ],
+    "source": "Environmental Impacts of Swiss Consumption and Production",
+    "region": "Suisse",
+    "year": 2011,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.352251+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.352257+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2011,
+    "name_simple_fr": "Entretien informatique",
+    "name_simple_de": "IT-Wartung und Instandhaltung",
+    "description_fr": "Émissions liées à la maintenance de vos équipements informatiques (ordinateurs, serveurs, logiciels). Inclut réparations et mises à jour.",
+    "description_de": "Emissionen aus der Wartung von IT-Geräten (Computer, Server, Software) wie Reparaturen und Updates.",
+    "search_tags": [
+      "maintenance informatique",
+      "IT support",
+      "maintenance HW SW",
+      "réparation ordinateur",
+      "support technique",
+      "software maintenance",
+      "hardware repairs",
+      "services IT"
+    ],
+    "usage_hint_fr": "Utilisez ce facteur pour vos dépenses en maintenance IT et support technique.",
+    "usage_hint_de": "Verwenden Sie diesen Faktor für IT-Wartungs- und Supportausgaben.",
+    "popularity_score": 62
+  },
+  {
+    "id": "698418f3c1a4e9f26cd271b2",
+    "name_fr": "Systèmes de reconnaissance et d'évaluation",
+    "name_de": "Aufklärungs- und Auswertesysteme",
+    "subcategory": "logiciels",
+    "input_units": [
+      "kCHF"
+    ],
+    "default_unit": "kCHF",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 280.341897,
+        "unit": "kgCO2e/parkCHF"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "logiciels",
+      "environmental_impacts_of_swiss_consumption_and_production"
+    ],
+    "source": "Environmental Impacts of Swiss Consumption and Production",
+    "region": "Suisse",
+    "year": 2011,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.352536+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.352544+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2011
+  },
+  {
+    "id": "698418f3c1a4e9f26cd271b3",
+    "name_fr": "Systèmes de commandement et d'informatique",
+    "name_de": "Führungs- und Informatiksysteme",
+    "subcategory": "logiciels",
+    "input_units": [
+      "kCHF"
+    ],
+    "default_unit": "kCHF",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 92.8236326,
+        "unit": "kgCO2e/parkCHF"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "logiciels",
+      "environmental_impacts_of_swiss_consumption_and_production"
+    ],
+    "source": "Environmental Impacts of Swiss Consumption and Production",
+    "region": "Suisse",
+    "year": 2011,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.352802+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.352809+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2011,
+    "name_simple_fr": "Logiciels et systèmes informatiques",
+    "name_simple_de": "Software und IT-Systeme",
+    "description_fr": "Émissions liées aux logiciels, serveurs et systèmes informatiques utilisés pour gérer l'entreprise (ERP, CRM, cloud).",
+    "description_de": "Emissionen von Software, Servern und IT-Systemen zur Verwaltung des Unternehmens (ERP, CRM, Cloud).",
+    "search_tags": [
+      "software",
+      "IT",
+      "informatique",
+      "cloud",
+      "serveurs",
+      "données",
+      "digital",
+      "computing",
+      "système information",
+      "ERP"
+    ],
+    "usage_hint_fr": "À utiliser pour évaluer l'impact des licences logiciels et services IT.",
+    "usage_hint_de": "Für die Bewertung von Softwarelizenzen und IT-Dienstleistungen verwenden.",
+    "popularity_score": 65
+  },
+  {
+    "id": "698418f3c1a4e9f26cd271b4",
+    "name_fr": "Systèmes d'instruction (simulateurs)",
+    "name_de": "Ausbildungssysteme (Simulatoren)",
+    "subcategory": "logiciels",
+    "input_units": [
+      "kCHF"
+    ],
+    "default_unit": "kCHF",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 280.341897,
+        "unit": "kgCO2e/parkCHF"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "logiciels",
+      "environmental_impacts_of_swiss_consumption_and_production"
+    ],
+    "source": "Environmental Impacts of Swiss Consumption and Production",
+    "region": "Suisse",
+    "year": 2011,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.353069+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.353076+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2011,
+    "name_simple_fr": "Simulateurs de formation",
+    "name_simple_de": "Trainings-Simulatoren",
+    "description_fr": "Émissions liées aux logiciels de simulation utilisés pour former les employés. Ex: simulateurs de vol, simulateurs industriels.",
+    "description_de": "Emissionen von Simulationssoftware für Mitarbeiterschulungen. Bsp: Flugsimulatoren, Industriesimulatoren.",
+    "search_tags": [
+      "simulation",
+      "formation",
+      "training",
+      "e-learning",
+      "logiciel",
+      "software",
+      "instruction",
+      "pilot training"
+    ],
+    "usage_hint_fr": "Déclarez le coût d'achat ou d'utilisation des logiciels de simulateurs.",
+    "usage_hint_de": "Geben Sie Kosten für Simulationssoftware-Lizenzgebühren an.",
+    "popularity_score": 35
+  },
+  {
+    "id": "698418f3c1a4e9f26cd271b5",
+    "name_fr": "Logiciels pour systèmes militaires (y compris les licences)",
+    "name_de": "Software für militärische Systeme (inkl. Lizenzen)",
+    "subcategory": "logiciels",
+    "input_units": [
+      "kCHF"
+    ],
+    "default_unit": "kCHF",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 92.8236326,
+        "unit": "kgCO2e/parkCHF"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "logiciels",
+      "environmental_impacts_of_swiss_consumption_and_production"
+    ],
+    "source": "Environmental Impacts of Swiss Consumption and Production",
+    "region": "Suisse",
+    "year": 2011,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.353300+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.353306+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2011
+  },
+  {
+    "id": "698418f3c1a4e9f26cd271b6",
+    "name_fr": "Service d'exploitation et de maintenance de biens, civil",
+    "name_de": "Dienstleistung für Betrieb und Unterhalt von Gütern, zivil",
+    "subcategory": "services",
+    "input_units": [
+      "kCHF"
+    ],
+    "default_unit": "kCHF",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 115.471207,
+        "unit": "kgCO2e/parkCHF"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "services",
+      "environmental_impacts_of_swiss_consumption_and_production"
+    ],
+    "source": "Environmental Impacts of Swiss Consumption and Production",
+    "region": "Suisse",
+    "year": 2011,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.353517+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.353523+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2011,
+    "name_simple_fr": "Entretien et maintenance de bâtiments",
+    "name_simple_de": "Gebäudewartung und Instandhaltung",
+    "description_fr": "Émissions générées par l'entretien régulier des bâtiments, locaux et infrastructures: nettoyage, réparations, chauffage, électricité.",
+    "description_de": "Emissionen aus der regelmäßigen Wartung von Gebäuden, Räumlichkeiten und Infrastruktur: Reinigung, Reparaturen, Heizung, Strom.",
+    "search_tags": [
+      "maintenance bâtiment",
+      "facility management",
+      "exploitation immobilière",
+      "entretien infrastructure",
+      "cleaning services",
+      "building maintenance",
+      "facility services",
+      "maintenance opérationnelle"
+    ],
+    "usage_hint_fr": "Utilisez ce facteur pour les frais d'entretien régulier de vos locaux.",
+    "usage_hint_de": "Nutzen Sie diesen Faktor für regelmäßige Wartungsausgaben Ihrer Gebäude.",
+    "popularity_score": 72
+  },
+  {
+    "id": "698418f3c1a4e9f26cd271b7",
+    "name_fr": "Service d'exploitation et d'entretien de biens, militaire",
+    "name_de": "Dienstleistung für Betrieb und Unterhalt von Gütern, militärisch",
+    "subcategory": "services",
+    "input_units": [
+      "kCHF"
+    ],
+    "default_unit": "kCHF",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 115.471207,
+        "unit": "kgCO2e/parkCHF"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "services",
+      "environmental_impacts_of_swiss_consumption_and_production"
+    ],
+    "source": "Environmental Impacts of Swiss Consumption and Production",
+    "region": "Suisse",
+    "year": 2011,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.353743+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.353752+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2011,
+    "name_simple_fr": "Maintenance militaire",
+    "name_simple_de": "Militärische Instandhaltung",
+    "description_fr": "Émissions liées à l'entretien et la réparation d'équipements militaires. Inclut carburant, pièces détachées et services associés.",
+    "description_de": "Emissionen aus Wartung und Reparatur von Militärausrüstung. Umfasst Kraftstoff, Ersatzteile und zugehörige Dienstleistungen.",
+    "search_tags": [
+      "militaire",
+      "équipement",
+      "entretien",
+      "maintenance",
+      "réparation",
+      "army",
+      "defence",
+      "military equipment",
+      "upkeep"
+    ],
+    "usage_hint_fr": "Utilisez si votre entreprise fournit des services d'entretien militaire.",
+    "usage_hint_de": "Verwenden Sie, wenn Ihr Unternehmen Militärwartungsdienste erbringt.",
+    "popularity_score": 15
+  },
+  {
+    "id": "698418f3c1a4e9f26cd271b8",
+    "name_fr": "Services de conseil et de soutien dans le domaine spécialisé, à l'exclusion des TIC",
+    "name_de": "Beratungs- und Unterstützungs-DL im Fachbereich, exkl. IKT",
+    "subcategory": "services",
+    "input_units": [
+      "kCHF"
+    ],
+    "default_unit": "kCHF",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 115.471207,
+        "unit": "kgCO2e/kCHF"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "services",
+      "environmental_impacts_of_swiss_consumption_and_production"
+    ],
+    "source": "Environmental Impacts of Swiss Consumption and Production",
+    "region": "Suisse",
+    "year": 2011,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.354007+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.354014+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2011,
+    "name_simple_fr": "Conseil spécialisé (hors informatique)",
+    "name_simple_de": "Spezialisierte Beratung (ohne IT)",
+    "description_fr": "Services de conseil fournis par des experts (juridique, RH, management, ingénierie...) sauf services informatiques.",
+    "description_de": "Beratungsdienstleistungen von Fachexperten (Recht, HR, Management, Technik...) ohne IT-Services.",
+    "search_tags": [
+      "conseil",
+      "consulting",
+      "services professionnels",
+      "expertise",
+      "advisory",
+      "coaching",
+      "audit",
+      "ingénierie"
+    ],
+    "usage_hint_fr": "Utiliser pour tous les achats de conseil externe non informatique.",
+    "usage_hint_de": "Für externe Beratungskäufe ohne IT verwenden.",
+    "popularity_score": 68
+  },
+  {
+    "id": "698418f3c1a4e9f26cd271b9",
+    "name_fr": "Services informatiques dans le domaine des TIC, à l'exclusion de la location de services",
+    "name_de": "Informatikdienstleistungen im Bereich IKT, exkl. Personalverleih",
+    "subcategory": "services",
+    "input_units": [
+      "kCHF"
+    ],
+    "default_unit": "kCHF",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 92.8236326,
+        "unit": "kgCO2e/parkCHF"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "services",
+      "environmental_impacts_of_swiss_consumption_and_production"
+    ],
+    "source": "Environmental Impacts of Swiss Consumption and Production",
+    "region": "Suisse",
+    "year": 2011,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.354250+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.354257+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2011
+  }
+]
