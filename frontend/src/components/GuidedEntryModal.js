@@ -870,6 +870,18 @@ const GuidedEntryModal = ({
                         </div>
                       </div>
 
+                      {/* Indicateur de conversion d'unité */}
+                      {convertedQty && quantity && (
+                        <div className={`mt-3 px-3 py-2 rounded-lg flex items-center gap-2 ${
+                          isDark ? 'bg-blue-500/10 border border-blue-500/20' : 'bg-blue-50 border border-blue-100'
+                        }`} data-testid="conversion-indicator">
+                          <Info className={`w-4 h-4 flex-shrink-0 ${isDark ? 'text-blue-400' : 'text-blue-500'}`} />
+                          <span className={`text-sm ${isDark ? 'text-blue-300' : 'text-blue-700'}`}>
+                            {language === 'fr' ? 'Équivalent' : 'Entspricht'} : {convertedQty.value.toFixed(2)} {getUnitLabel(convertedQty.unit, language)}
+                          </span>
+                        </div>
+                      )}
+
                       {/* Détail multi-impacts */}
                       {quantity && emissions && emissions.length > 0 && (
                         <div className={`mt-4 pt-4 border-t ${isDark ? 'border-slate-600' : 'border-gray-200'}`}>
