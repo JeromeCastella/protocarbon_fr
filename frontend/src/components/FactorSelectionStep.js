@@ -155,7 +155,7 @@ const FactorSelectionStep = ({
       
       {/* Selected factor confirmation */}
       {selectedFactor && (
-        <div className={`mt-4 p-4 rounded-xl ${
+        <div className={`mt-4 p-4 rounded-xl flex-shrink-0 ${
           isDark 
             ? 'bg-green-500/10 border border-green-500/30' 
             : 'bg-green-50 border border-green-200'
