@@ -188,23 +188,22 @@ class TestActivityWithConversion:
             else:
                 self.fiscal_year_id = None
         
-        # Get an emission factor for energy (kWh-based)
+        # Get an emission factor for energy (MJ or kWh-based)
         factors_response = requests.get(
-            f"{BASE_URL}/api/emission-factors/search?category=combustion_fixe"
+            f"{BASE_URL}/api/emission-factors/search?category=combustion_fixe",
+            headers=self.headers  # Need auth for this endpoint
         )
         
         self.emission_factor = None
         if factors_response.status_code == 200:
             factors = factors_response.json()
             for f in factors:
-                if f.get("input_units") and "kWh" in f.get("input_units", []):
+                input_units = f.get("input_units", [])
+                # Look for energy-based factors (MJ, kWh)
+                if any(u in input_units for u in ["MJ", "kWh", "MWh", "GJ"]):
                     self.emission_factor = f
                     break
-                # Also check for MJ
-                if f.get("input_units") and "MJ" in f.get("input_units", []):
-                    self.emission_factor = f
-                    break
-            # Fallback to first factor with any energy unit
+            # Fallback to first factor
             if not self.emission_factor and factors:
                 self.emission_factor = factors[0]
     
