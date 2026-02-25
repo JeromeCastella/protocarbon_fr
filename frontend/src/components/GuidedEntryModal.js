@@ -536,27 +536,36 @@ const GuidedEntryModal = ({
                     <label className={`block text-sm font-medium mb-3 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
                       {language === 'fr' ? '1. Choisir une sous-catégorie' : '1. Unterkategorie wählen'}
                     </label>
-                    <div className="grid grid-cols-2 gap-2">
-                      {subcategories.map(subcat => (
-                        <button
-                          key={subcat.code}
-                          type="button"
-                          onClick={() => handleSubcategorySelect(subcat)}
-                          data-testid={`subcat-${subcat.code}`}
-                          className={`p-4 rounded-xl text-left transition-all border ${
-                            selectedSubcategory?.code === subcat.code
-                              ? 'bg-blue-500 text-white border-blue-500'
-                              : isDark 
-                                ? 'bg-slate-700 hover:bg-slate-600 text-white border-slate-600' 
-                                : 'bg-white hover:bg-gray-50 text-gray-900 border-gray-200'
-                          }`}
-                        >
-                          <span className="font-medium">
-                            {language === 'fr' ? subcat.name_fr : subcat.name_de}
-                          </span>
-                        </button>
-                      ))}
-                    </div>
+                    {/* Affichage condensé si étape 3+ et sous-catégorie sélectionnée */}
+                    {step >= 3 && selectedSubcategory ? (
+                      <div className={`p-3 rounded-xl border ${isDark ? 'bg-blue-500/20 border-blue-500/50' : 'bg-blue-50 border-blue-200'}`}>
+                        <span className={`font-medium ${isDark ? 'text-blue-300' : 'text-blue-700'}`}>
+                          ✓ {language === 'fr' ? selectedSubcategory.name_fr : selectedSubcategory.name_de}
+                        </span>
+                      </div>
+                    ) : (
+                      <div className="grid grid-cols-2 gap-2">
+                        {subcategories.map(subcat => (
+                          <button
+                            key={subcat.code}
+                            type="button"
+                            onClick={() => handleSubcategorySelect(subcat)}
+                            data-testid={`subcat-${subcat.code}`}
+                            className={`p-4 rounded-xl text-left transition-all border ${
+                              selectedSubcategory?.code === subcat.code
+                                ? 'bg-blue-500 text-white border-blue-500'
+                                : isDark 
+                                  ? 'bg-slate-700 hover:bg-slate-600 text-white border-slate-600' 
+                                  : 'bg-white hover:bg-gray-50 text-gray-900 border-gray-200'
+                            }`}
+                          >
+                            <span className="font-medium">
+                              {language === 'fr' ? subcat.name_fr : subcat.name_de}
+                            </span>
+                          </button>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 )}
 
