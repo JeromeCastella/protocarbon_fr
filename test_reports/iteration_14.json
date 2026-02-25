@@ -1,0 +1,96 @@
+{
+  "summary": "Frontend UX fixes verified: (1) Tooltip now appears on hovering entire FactorCard component (not just info icon), (2) 'Modifier' buttons work correctly - clicking them resets subsequent selections as expected.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/frontend/src/components/FactorCard.js",
+    "/app/frontend/src/components/GuidedEntryModal.js"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "FactorCard.js lines 40-43: onMouseEnter/onMouseLeave correctly moved to wrapper div for full-card hover tooltip",
+    "GuidedEntryModal.js lines 154-168: goBackToStep() function correctly resets selections when navigating backwards",
+    "GuidedEntryModal.js lines 549-569: Subcategory condensed view correctly shows 'Modifier' button (data-testid='change-subcategory-btn') only when subcategories.length > 1",
+    "GuidedEntryModal.js lines 602-623: Unit condensed view correctly shows 'Modifier' button (data-testid='change-unit-btn') only when availableUnits.length > 1"
+  ],
+  "updated_files": [],
+  "success_rate": {
+    "backend": "N/A (frontend only testing requested)",
+    "frontend": "100%"
+  },
+  "test_credentials": {
+    "email": "newtest@x.com",
+    "password": "test123"
+  },
+  "seed_data_creation": "None",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "UX fixes for GuidedEntryModal verified. Both fixes work as expected.",
+  "features_tested": {
+    "fix_1_tooltip_on_card_hover": {
+      "description": "Tooltip appears when hovering over entire FactorCard, not just info icon",
+      "status": "PASS",
+      "verification": "Hovered over 'Gaz naturel moyen' card, tooltip appeared showing: 'Utilisé pour le chauffage et les voitures. Ex : VW Passat au gaz naturel.'",
+      "code_change_verified": "FactorCard.js lines 40-43: onMouseEnter/onMouseLeave on wrapper div"
+    },
+    "fix_2_modifier_button_subcategory": {
+      "description": "In creation mode at step 3+, 'Modifier' button appears on condensed subcategory display when multiple subcategories exist",
+      "status": "PASS",
+      "verification": "Tested with 'Biens et services achetés' category (35 subcategories). 'Modifier' button (data-testid='change-subcategory-btn') visible at step 3",
+      "reset_behavior": "Clicking 'Modifier' returns to step 1, resets unit and factor selections (verified: 35 subcategory buttons visible, 0 factor cards)"
+    },
+    "fix_2_modifier_button_unit": {
+      "description": "In creation mode at step 3+, 'Modifier' button appears on condensed unit display when multiple units exist",
+      "status": "PASS",
+      "verification": "Tested with 'Combustion fixe > Combustibles' (3 units: litres, mégajoules, kilogrammes). 'Modifier' button (data-testid='change-unit-btn') visible at step 3",
+      "reset_behavior": "Clicking 'Modifier' returns to step 2, resets factor selection (verified: 3 unit buttons visible, 0 factor cards)"
+    },
+    "fix_2_modifier_hidden_when_single_option": {
+      "description": "'Modifier' buttons correctly hidden when only 1 option available",
+      "status": "PASS",
+      "verification_subcategory": "Combustion fixe has only 1 subcategory ('Combustibles'), no 'Modifier' button shown - correct behavior",
+      "verification_unit": "Alimentation has only 1 unit ('milliers de CHF'), no 'Modifier' button shown - correct behavior"
+    },
+    "end_to_end_modal_flow": {
+      "description": "Complete flow: subcategory -> unit -> factor -> quantity -> submit",
+      "status": "PASS",
+      "verification": "Modal works end-to-end, submit button enabled after completing all steps"
+    }
+  },
+  "test_scenarios_executed": [
+    {
+      "name": "Scope 1 - Combustion fixe (single subcategory, multiple units)",
+      "steps": [
+        "Open modal for Combustion fixe category",
+        "Select 'Combustibles' subcategory (only option)",
+        "Select 'litres (L)' unit",
+        "Verify 'Modifier' button visible for unit (3 units available)",
+        "Verify 'Modifier' button NOT visible for subcategory (only 1 option)",
+        "Hover over FactorCard - tooltip appears",
+        "Click 'Modifier' for unit - returns to step 2, factor reset"
+      ],
+      "result": "PASS"
+    },
+    {
+      "name": "Scope 3 Amont - Biens et services achetés (multiple subcategories)",
+      "steps": [
+        "Switch to Scope 3 Amont tab",
+        "Open modal for 'Biens et services achetés' category",
+        "Verify 35 subcategories displayed",
+        "Select 'Alimentation' subcategory",
+        "Select 'milliers de CHF' unit (only option)",
+        "Verify 'Modifier' button visible for subcategory (35 options)",
+        "Verify 'Modifier' button NOT visible for unit (only 1 option)",
+        "Click 'Modifier' for subcategory - returns to step 1, unit and factor reset"
+      ],
+      "result": "PASS"
+    }
+  ]
+}
