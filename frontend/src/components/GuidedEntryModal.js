@@ -160,13 +160,13 @@ const GuidedEntryModal = ({
   const goBackToStep = (targetStep) => {
     setStep(targetStep);
     if (targetStep <= 1) {
-      // Retour à la sous-catégorie : reset unité et facteur
       setSelectedUnit('');
+      setIsConvertedUnit(false);
       setSelectedFactor(null);
       setShowFactorList(false);
     } else if (targetStep <= 2) {
-      // Retour à l'unité : reset facteur
       setSelectedFactor(null);
+      setIsConvertedUnit(false);
       setShowFactorList(false);
     } else if (targetStep === 3) {
       setShowFactorList(true);
