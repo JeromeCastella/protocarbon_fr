@@ -96,6 +96,15 @@ class EmissionFactorV2Create(BaseModel):
     source: str = "OFEV"
     region: str = "Suisse"
     year: int = 2024
+    # Champs enrichis pour UX simplifiée
+    name_simple_fr: Optional[str] = None
+    name_simple_de: Optional[str] = None
+    description_fr: Optional[str] = None
+    description_de: Optional[str] = None
+    search_tags: List[str] = []
+    usage_hint_fr: Optional[str] = None
+    usage_hint_de: Optional[str] = None
+    popularity_score: int = 50
 
 class EmissionFactorV2Update(BaseModel):
     name_fr: Optional[str] = None
@@ -109,6 +118,15 @@ class EmissionFactorV2Update(BaseModel):
     source: Optional[str] = None
     region: Optional[str] = None
     year: Optional[int] = None
+    # Champs enrichis pour UX simplifiée
+    name_simple_fr: Optional[str] = None
+    name_simple_de: Optional[str] = None
+    description_fr: Optional[str] = None
+    description_de: Optional[str] = None
+    search_tags: Optional[List[str]] = None
+    usage_hint_fr: Optional[str] = None
+    usage_hint_de: Optional[str] = None
+    popularity_score: Optional[int] = None
 
 # ==================== VERSIONING MODELS ====================
 
