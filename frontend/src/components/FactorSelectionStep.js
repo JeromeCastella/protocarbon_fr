@@ -66,9 +66,9 @@ const FactorSelectionStep = ({
   }
 
   return (
-    <div className="space-y-4">
+    <div className="flex flex-col h-full min-h-0">
       {/* Header with count */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between flex-shrink-0">
         <label className={`block text-sm font-medium ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
           {language === 'fr' 
             ? '3. Sélectionner le facteur d\'émission' 
@@ -80,7 +80,7 @@ const FactorSelectionStep = ({
       </div>
       
       {/* Search bar */}
-      <div className="relative">
+      <div className="relative mt-4 flex-shrink-0">
         <Search className={`absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 ${
           isDark ? 'text-slate-400' : 'text-gray-400'
         }`} />
