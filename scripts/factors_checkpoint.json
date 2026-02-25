@@ -11406,5 +11406,5640 @@
     "usage_hint_fr": "Travaux de fouille profonde avec soutènement par pieux forés.",
     "usage_hint_de": "Tiefgrabungsarbeiten mit Bohrpfahlsicherung.",
     "popularity_score": 35
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2721e",
+    "name_fr": "Elimination, protection de fouille, paroi de pieux forés, non ancrée (m2)",
+    "name_de": "Entsorgung, Baugrubensicherung, Bohrpfahlwand, unverankert (m2)",
+    "subcategory": "building_elements_and_structures",
+    "input_units": [
+      "m2"
+    ],
+    "default_unit": "m2",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 61.1,
+        "unit": "kgCO2e/m2"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_elements_techniques_du_batiment",
+      "building_elements_and_structures",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.385876+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.385883+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Démolition paroi de pieux (m2)",
+    "name_simple_de": "Rückbau Bohrpfahlwand (m2)",
+    "description_fr": "Coût environnemental de l'élimination d'une paroi de soutènement en pieux forés sans ancrages. Exemple: désamiantage et déconstruction d'une paroi de fondation.",
+    "description_de": "Umweltbelastung beim Abriss einer Stützwand aus Bohrpfählen ohne Verankerung. Beispiel: Rückbau einer Gründungswand.",
+    "search_tags": [
+      "démolition",
+      "paroi soutènement",
+      "pieux forés",
+      "déconstruction",
+      "waste",
+      "demolition wall",
+      "pile wall",
+      "rückbau",
+      "entsorgung",
+      "baugrube"
+    ],
+    "usage_hint_fr": "Lors de la démolition de bâtiments avec fondations profondes.",
+    "usage_hint_de": "Beim Abriss von Gebäuden mit Tiefgründungen.",
+    "popularity_score": 35
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2721f",
+    "name_fr": "Elimination, protection de fouille, paroi de pieux forés, ancrée (m2)",
+    "name_de": "Entsorgung, Baugrubensicherung, Bohrpfahlwand, verankert (m2)",
+    "subcategory": "building_elements_and_structures",
+    "input_units": [
+      "m2"
+    ],
+    "default_unit": "m2",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 40.4,
+        "unit": "kgCO2e/m2"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_elements_techniques_du_batiment",
+      "building_elements_and_structures",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.386113+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.386119+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Paroi de pieux forés ancrée",
+    "name_simple_de": "Verankerte Bohrpfahlwand",
+    "description_fr": "Structures de soutènement pour excavations profondes. Utilisées pour stabiliser les fouilles dans la construction souterraine (parkings, caves, fondations).",
+    "description_de": "Stützstrukturen für tiefe Aushubgruben. Verwendet zur Stabilisierung von Baugruben im Untergrundbereich (Parkplätze, Keller, Fundamente).",
+    "search_tags": [
+      "pieux forés",
+      "bohrpfähle",
+      "paroi de soutènement",
+      "excavation",
+      "fondation profonde",
+      "ancrée",
+      "struts",
+      "diaphragm wall",
+      "géotechnique"
+    ],
+    "usage_hint_fr": "Pour les projets avec excavations >3m ou structures souterraines",
+    "usage_hint_de": "Für Projekte mit Aushubgruben >3m oder unterirdischen Strukturen",
+    "popularity_score": 62
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27220",
+    "name_fr": "Mise en décharge, protection de fouille, paroi clouée (m2)",
+    "name_de": "Entsorgung, Baugrubensicherung, Nagelwand (m2)",
+    "subcategory": "building_elements_and_structures",
+    "input_units": [
+      "m2"
+    ],
+    "default_unit": "m2",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 8.87,
+        "unit": "kgCO2e/m2"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_elements_techniques_du_batiment",
+      "building_elements_and_structures",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.386451+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.386460+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27221",
+    "name_fr": "Mise au rebut, sécurisation de fouille, paroi rugueuse, en porte-à-faux (m2)",
+    "name_de": "Entsorgung, Baugrubensicherung, Rühlwand, auskragend (m2)",
+    "subcategory": "building_elements_and_structures",
+    "input_units": [
+      "m2"
+    ],
+    "default_unit": "m2",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 14.4,
+        "unit": "kgCO2e/m2"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_elements_techniques_du_batiment",
+      "building_elements_and_structures",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.386721+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.386728+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Démolition de paroi en porte-à-faux",
+    "name_simple_de": "Abriss von auskragender Wand",
+    "description_fr": "Destruction et élimination d'une paroi de construction qui dépasse sans support. Exemple: mur en surplomb lors d'une démolition de bâtiment.",
+    "description_de": "Abriss und Entsorgung einer überhängenden Bauwand ohne Unterstützung. Beispiel: Überhangwand beim Gebäudeabriss.",
+    "search_tags": [
+      "démolition",
+      "paroi auskragend",
+      "déconstruction",
+      "rebut construction",
+      "waste management",
+      "abriss",
+      "sécurisation fouille",
+      "déchets bâtiment"
+    ],
+    "usage_hint_fr": "Utilisez pour les travaux de démolition impliquant des murs en surplomb.",
+    "usage_hint_de": "Verwenden Sie für Abbrucharbeiten mit überhängenden Wänden.",
+    "popularity_score": 28
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27222",
+    "name_fr": "Elimination des déchets, protection de fouille, paroi de Rühl, moulurée (m2)",
+    "name_de": "Entsorgung, Baugrubensicherung, Rühlwand, gespriesst (m2)",
+    "subcategory": "building_elements_and_structures",
+    "input_units": [
+      "m2"
+    ],
+    "default_unit": "m2",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 8.34,
+        "unit": "kgCO2e/m2"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_elements_techniques_du_batiment",
+      "building_elements_and_structures",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.387149+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.387161+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Démolition de parois de fouille",
+    "name_simple_de": "Entsorgung von Baugrubenwänden",
+    "description_fr": "Élimination et recyclage des parois provisoires qui protègent les excavations de chantier. Exemple: murs de soutènement temporaires lors de terrassements.",
+    "description_de": "Entsorgung und Recycling von provisorischen Wänden, die Baugruben schützen. Beispiel: temporäre Stützmauern bei Erdarbeiten.",
+    "search_tags": [
+      "paroi de fouille",
+      "Baugrubensicherung",
+      "excavation walls",
+      "démolition",
+      "déchets de chantier",
+      "protection de fouille",
+      "déconstruction",
+      "Rühlwand"
+    ],
+    "usage_hint_fr": "Projets de construction avec excavations profondes nécessitant des parois de soutien.",
+    "usage_hint_de": "Bauprojekte mit tiefen Aushubarbeiten und Stützwänden.",
+    "popularity_score": 42
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27223",
+    "name_fr": "Mise au rebut, protection de fouille, paroi de Rühl, ancrée (m2)",
+    "name_de": "Entsorgung, Baugrubensicherung, Rühlwand, verankert (m2)",
+    "subcategory": "building_elements_and_structures",
+    "input_units": [
+      "m2"
+    ],
+    "default_unit": "m2",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 9.63,
+        "unit": "kgCO2e/m2"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_elements_techniques_du_batiment",
+      "building_elements_and_structures",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.387476+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.387486+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27224",
+    "name_fr": "Mise au rebut, protection de fouille, paroi moulée, 400mm (m2)",
+    "name_de": "Entsorgung, Baugrubensicherung, Schlitzwand, 400mm (m2)",
+    "subcategory": "building_elements_and_structures",
+    "input_units": [
+      "m2"
+    ],
+    "default_unit": "m2",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 30.6,
+        "unit": "kgCO2e/m2"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_elements_techniques_du_batiment",
+      "building_elements_and_structures",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.387771+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.387778+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Démolition paroi moulée 400mm",
+    "name_simple_de": "Abbruch Schlitzwand 400mm",
+    "description_fr": "Émissions liées à la démolition et élimination d'une paroi de soutènement en béton armé de 400mm d'épaisseur, utilisée pour la protection de fouilles de construction.",
+    "description_de": "Emissionen beim Abriss und der Entsorgung einer 400mm dicken Stahlbetonwand zur Baugrubensicherung.",
+    "search_tags": [
+      "démolition",
+      "paroi soutènement",
+      "fouille",
+      "béton armé",
+      "waste disposal",
+      "schlitzwand",
+      "déchets construction",
+      "déconstruction"
+    ],
+    "usage_hint_fr": "Pour tout projet de démolition incluant des parois de fouille en béton.",
+    "usage_hint_de": "Bei Abbruchprojekten mit Baugrubensicherungswänden.",
+    "popularity_score": 35,
+    "additional_info": {
+      "scope": "scope3",
+      "value": 30.6,
+      "unit": "kgCO2e/m2",
+      "source": "KBOB",
+      "category": "Éléments de bâtiment et structures",
+      "phase_du_cycle_de_vie": "Fin de vie (démolition/élimination)"
+    }
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27225",
+    "name_fr": "Elimination, protection de fouille, paroi moulée, 800mm (m2)",
+    "name_de": "Entsorgung, Baugrubensicherung, Schlitzwand, 800mm (m2)",
+    "subcategory": "building_elements_and_structures",
+    "input_units": [
+      "m2"
+    ],
+    "default_unit": "m2",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 60.4,
+        "unit": "kgCO2e/m2"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_elements_techniques_du_batiment",
+      "building_elements_and_structures",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.388035+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.388042+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Paroi de soutènement 800mm",
+    "name_simple_de": "Stützwand 800mm",
+    "description_fr": "Émissions liées à la construction et l'élimination d'une paroi moulée de 800mm d'épaisseur pour protéger une fouille de chantier.",
+    "description_de": "Emissionen für Bau und Entsorgung einer 800mm dicken Schlitzwand zum Schutz einer Baugrube.",
+    "search_tags": [
+      "paroi moulée",
+      "fouille",
+      "soutènement",
+      "excavation",
+      "diaphragm wall",
+      "baugrube",
+      "construction",
+      "terrassement"
+    ],
+    "usage_hint_fr": "Pour les grands chantiers avec excavation profonde en zone urbaine.",
+    "usage_hint_de": "Für große Baustellen mit tiefer Aushubung in städtischen Gebieten.",
+    "popularity_score": 35
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27226",
+    "name_fr": "Mise en décharge, protection de fouille, palplanches, en porte-à-faux (m2)",
+    "name_de": "Entsorgung, Baugrubensicherung, Spundwand, auskragend (m2)",
+    "subcategory": "building_elements_and_structures",
+    "input_units": [
+      "m2"
+    ],
+    "default_unit": "m2",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 1.07,
+        "unit": "kgCO2e/m2",
+        "description_fr": "Émissions indirectes (transport, fabrication) par m² de palplanche mise en place"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_elements_techniques_du_batiment",
+      "building_elements_and_structures",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.388312+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.388325+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Palplanches de protection de fouille",
+    "name_simple_de": "Spundwände für Baugruben",
+    "description_fr": "Structures métalliques enfoncées dans le sol pour sécuriser les excavations sur chantier. Utilisé lors de creusements profonds pour éviter les effondrements.",
+    "description_de": "Metallische Strukturen, die in den Boden gerammt werden, um Baugruben zu sichern. Verwendet bei tiefen Aushubarbeiten, um Einstürze zu vermeiden.",
+    "search_tags": [
+      "palplanche",
+      "spundwand",
+      "fouille",
+      "excavation",
+      "protection chantier",
+      "étaiement",
+      "paroi de soutènement",
+      "sheet piling",
+      "construction"
+    ],
+    "usage_hint_fr": "Pour les chantiers avec excavation profonde nécessitant une protection.",
+    "usage_hint_de": "Für Baustellen mit tiefer Aushubung, die Schutz benötigen.",
+    "popularity_score": 35
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27227",
+    "name_fr": "Mise en décharge, protection de fouille, palplanches, étayées (m2)",
+    "name_de": "Entsorgung, Baugrubensicherung, Spundwand, gespriesst (m2)",
+    "subcategory": "building_elements_and_structures",
+    "input_units": [
+      "m2"
+    ],
+    "default_unit": "m2",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.585,
+        "unit": "kgCO2e/m2"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_elements_techniques_du_batiment",
+      "building_elements_and_structures",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.388586+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.388593+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27228",
+    "name_fr": "Mise en décharge, protection de fouille, palplanches, ancrées (m2)",
+    "name_de": "Entsorgung, Baugrubensicherung, Spundwand, verankert (m2)",
+    "subcategory": "building_elements_and_structures",
+    "input_units": [
+      "m2"
+    ],
+    "default_unit": "m2",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 2.52,
+        "unit": "kgCO2e/m2"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_elements_techniques_du_batiment",
+      "building_elements_and_structures",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.388828+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.388834+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Palplanche ancrée en décharge",
+    "name_simple_de": "Verankerte Spundwand auf Deponie",
+    "description_fr": "Structures métalliques enfoncées dans le sol pour sécuriser les fouilles de construction. Utilisé pour les excavations profondes et les travaux de terrassement.",
+    "description_de": "Metallische Strukturen, die in den Boden getrieben werden, um Baugruben zu sichern. Verwendet für tiefe Ausgrabungen und Erdarbeiten.",
+    "search_tags": [
+      "palplanche",
+      "spundwand",
+      "fouille",
+      "excavation",
+      "terrassement",
+      "protection fouille",
+      "ancrage",
+      "construction souterraine",
+      "sheet piling",
+      "baugrube"
+    ],
+    "usage_hint_fr": "Lors de travaux de fouille avec besoin d'étaiement ou d'ancrage profond.",
+    "usage_hint_de": "Bei Ausschachtungsarbeiten mit Abstützungs- oder Tiefankerungsbedarf.",
+    "popularity_score": 42
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27229",
+    "name_fr": "Mise en décharge, fondations profondes, micropieux forés (m)",
+    "name_de": "Entsorgung, Tiefgründung, Mikrobohrpfahl (m)",
+    "subcategory": "building_elements_and_structures",
+    "input_units": [
+      "m"
+    ],
+    "default_unit": "m",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.0,
+        "unit": "kgCO2e/m"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_elements_techniques_du_batiment",
+      "building_elements_and_structures",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.389105+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.389112+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Fondations profondes et micropieux",
+    "name_simple_de": "Tiefgründungen und Mikropfähle",
+    "description_fr": "Émissions liées aux travaux de fondation profonde (pieux forés, micropieux). Utilisé pour les bâtiments sur terrains instables ou en zones urbaines denses.",
+    "description_de": "Emissionen aus Tiefgründungsarbeiten (Bohrpfähle, Mikropfähle). Verwendet für Gebäude auf instabilem Untergrund oder in dichten städtischen Gebieten.",
+    "search_tags": [
+      "fondations",
+      "pieux",
+      "micropieux",
+      "forés",
+      "tiefgründung",
+      "bohrpfahl",
+      "deep foundations",
+      "construction géotechnique"
+    ],
+    "usage_hint_fr": "Pour bâtiments sur terrain difficile ou zones urbaines denses.",
+    "usage_hint_de": "Für Gebäude auf schwierigem Gelände oder in dichten städtischen Gebieten.",
+    "popularity_score": 35
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2722a",
+    "name_fr": "Mise en décharge, fondations profondes, pieux forés sur place, 700 mm (m)",
+    "name_de": "Entsorgung, Tiefgründung, Ortbetonbohrpfahl, 700 mm (m)",
+    "subcategory": "building_elements_and_structures",
+    "input_units": [
+      "m"
+    ],
+    "default_unit": "m",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.0,
+        "unit": "kgCO2e/m"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_elements_techniques_du_batiment",
+      "building_elements_and_structures",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.389399+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.389407+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Pieu foré 700mm en décharge",
+    "name_simple_de": "Bohrpfahl 700mm Entsorgung",
+    "description_fr": "Émissions liées à l'élimination en décharge de fondations profondes (pieux forés sur place) de 700mm de diamètre utilisés dans la construction.",
+    "description_de": "Emissionen aus der Deponierung von Tiefgründungen (Ortbetonbohrpfähle) mit 700mm Durchmesser im Bauwesen.",
+    "search_tags": [
+      "pieu",
+      "fondation",
+      "bohrpfahl",
+      "décharge",
+      "construction",
+      "deep foundation",
+      "700mm",
+      "élimination"
+    ],
+    "usage_hint_fr": "Pour les projets de construction avec fondations profondes forées.",
+    "usage_hint_de": "Für Bauprojekte mit Tiefgründungen und Bohrpfählen.",
+    "popularity_score": 35,
+    "scope": "scope3",
+    "value": 0.0,
+    "unit": "kgCO2e/m",
+    "input_unit": "m",
+    "category": "building_elements_and_structures"
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2722b",
+    "name_fr": "Mise en décharge, fondation profonde, pieu foré en place, 900 mm (m)",
+    "name_de": "Entsorgung, Tiefgründung, Ortbetonbohrpfahl, 900 mm (m)",
+    "subcategory": "building_elements_and_structures",
+    "input_units": [
+      "m"
+    ],
+    "default_unit": "m",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.0,
+        "unit": "kgCO2e/m"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_elements_techniques_du_batiment",
+      "building_elements_and_structures",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.389673+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.389680+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2722c",
+    "name_fr": "Mise au rebut, fondation profonde, pieu foré en béton sur place, 1200 mm (m)",
+    "name_de": "Entsorgung, Tiefgründung, Ortbetonbohrpfahl, 1200 mm (m)",
+    "subcategory": "building_elements_and_structures",
+    "input_units": [
+      "m"
+    ],
+    "default_unit": "m",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.0,
+        "unit": "kgCO2e/m"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_elements_techniques_du_batiment",
+      "building_elements_and_structures",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.390051+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.390064+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Destruction de pieu foré en béton",
+    "name_simple_de": "Entsorgung Bohrpfahl aus Beton",
+    "description_fr": "Émissions liées à la destruction et évacuation d'un pieu foré (fondation profonde) de 1,2 m de diamètre. Typique pour démolition de bâtiments.",
+    "description_de": "Emissionen beim Abriss und der Entsorgung eines Bohrpfahls (Tiefgründung) mit 1,2 m Durchmesser. Typisch für Gebäudeabbruch.",
+    "search_tags": [
+      "pieu",
+      "fondation",
+      "béton",
+      "démolition",
+      "déconstruction",
+      "deep foundation",
+      "pile",
+      "bohrpfahl",
+      "entsorgung beton",
+      "abbruch"
+    ],
+    "usage_hint_fr": "Utilisez ce facteur lors du calcul des émissions de démolition ou déconstruction de bâtiments.",
+    "usage_hint_de": "Nutzen Sie diesen Faktor bei der Berechnung von Emissionen beim Gebäudeabbruch.",
+    "popularity_score": 25
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2722d",
+    "name_fr": "Mise en décharge, fondation profonde, pieu de refoulement en béton coulé sur place 560/480 mm (m)",
+    "name_de": "Entsorgung, Tiefgründung, Ortbetonverdrängungspfahl 560/480 mm (m)",
+    "subcategory": "building_elements_and_structures",
+    "input_units": [
+      "m"
+    ],
+    "default_unit": "m",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.0,
+        "unit": "kgCO2e/m"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_elements_techniques_du_batiment",
+      "building_elements_and_structures",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.390462+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.390476+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Pieux de fondation en béton (560/480 mm)",
+    "name_simple_de": "Betonfundamentpfähle (560/480 mm)",
+    "description_fr": "Émissions pour installer des pieux enfoncés profondément dans le sol pour stabiliser les bâtiments. Utilisé pour les constructions sur terrain mou ou instable.",
+    "description_de": "Emissionen für tiefe Fundierungen mit Betonstützen im Boden. Verwendet bei Bauvorhaben auf weichem oder instabilem Untergrund.",
+    "search_tags": [
+      "fondation",
+      "pieux",
+      "béton",
+      "deep foundation",
+      "Gründung",
+      "construction",
+      "géotechnique",
+      "structures souterraines",
+      "displacement piles",
+      "refoulement"
+    ],
+    "usage_hint_fr": "Pour des projets de construction avec fondations profondes.",
+    "usage_hint_de": "Für Bauprojekte mit Tiefgründungen.",
+    "popularity_score": 35
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2722e",
+    "name_fr": "Mise en décharge, fondation profonde, pieu de refoulement en béton coulé sur place 660/580 mm (m)",
+    "name_de": "Entsorgung, Tiefgründung, Ortbetonverdrängungspfahl 660/580 mm (m)",
+    "subcategory": "building_elements_and_structures",
+    "input_units": [
+      "m"
+    ],
+    "default_unit": "m",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.0,
+        "unit": "kgCO2e/m"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_elements_techniques_du_batiment",
+      "building_elements_and_structures",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.390737+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.390743+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Pieux de fondation en béton",
+    "name_simple_de": "Betonpfähle für Fundamentierung",
+    "description_fr": "Émissions pour installer des pieux enfoncés dans le sol pour stabiliser les bâtiments. Exemple: fondations de tours ou bâtiments sur terrain instable.",
+    "description_de": "Emissionen für das Einbringen von Betonpfählen zur Bodenstabilisierung. Beispiel: Hochhausfundamente oder Bauten auf instabilem Untergrund.",
+    "search_tags": [
+      "fondation",
+      "pieu",
+      "béton coulé",
+      "deep foundation",
+      "Gründung",
+      "Tiefgründung",
+      "Entsorgung",
+      "construction",
+      "génie civil"
+    ],
+    "usage_hint_fr": "Projets de construction avec fondations profondes sur sols faibles ou en montagne.",
+    "usage_hint_de": "Bauprojekte mit Tiefgründungen auf schwachen Böden oder in Berggebieten.",
+    "popularity_score": 35
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2722f",
+    "name_fr": "Mise en décharge, fondation profonde, colonne vibrante (m)",
+    "name_de": "Entsorgung, Tiefgründung, Rüttelstopfsäule (m)",
+    "subcategory": "building_elements_and_structures",
+    "input_units": [
+      "m"
+    ],
+    "default_unit": "m",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.0,
+        "unit": "kgCO2e/m"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_elements_techniques_du_batiment",
+      "building_elements_and_structures",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.391028+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.391036+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27230",
+    "name_fr": "Mise en décharge, fondations profondes, pieu en béton préfabriqué (m)",
+    "name_de": "Entsorgung, Tiefgründung, Vorgefertigter Betonpfahl (m)",
+    "subcategory": "building_elements_and_structures",
+    "input_units": [
+      "m"
+    ],
+    "default_unit": "m",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.0,
+        "unit": "kgCO2e/m"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_elements_techniques_du_batiment",
+      "building_elements_and_structures",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.391323+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.391330+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Pieux en béton préfabriqué",
+    "name_simple_de": "Vorgefertigte Betonpfähle",
+    "description_fr": "Éléments de fondation profonde en béton fabriqués en usine pour stabiliser les bâtiments sur terrain instable ou en profondeur.",
+    "description_de": "Vorgefertigte Betonfundamentelemente für tiefe Gründungen zur Stabilisierung von Gebäuden auf instabilem Untergrund.",
+    "search_tags": [
+      "fondation",
+      "pieu",
+      "béton",
+      "deep foundation",
+      "prefab",
+      "construction",
+      "génie civil",
+      "piquet",
+      "ancrage",
+      "terre"
+    ],
+    "usage_hint_fr": "Quantifier les fondations profondes lors de nouveaux projets de construction ou rénovation.",
+    "usage_hint_de": "Tiefgründungen bei neuen Bau- oder Renovierungsprojekten berechnen.",
+    "popularity_score": 45
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27231",
+    "name_fr": "Élimination, assèchement, hauteur de pompage 2,5 m (m3)",
+    "name_de": "Entsorgung, Wasserhaltung, Pumphöhe 2.5 m (m3)",
+    "subcategory": "special_waste_types",
+    "input_units": [
+      "m3"
+    ],
+    "default_unit": "m3",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.0,
+        "unit": "kgCO2e/m3"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_speciaux",
+      "special_waste_types",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.391630+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.391638+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Pompage d'eau usée (2,5 m)",
+    "name_simple_de": "Abwasserpumpen (2,5 m)",
+    "description_fr": "Émissions liées au pompage et l'élimination de l'eau usée ou de chantier sur 2,5 mètres de hauteur. Exemple: évacuation d'eau de construction.",
+    "description_de": "Emissionen beim Pumpen und Entsorgung von Abwasser oder Baustellen-wasser über 2,5 Meter Höhe. Beispiel: Abwasserableitung.",
+    "search_tags": [
+      "pompage",
+      "eau usée",
+      "assèchement",
+      "évacuation eau",
+      "water pumping",
+      "hauteur",
+      "construction",
+      "chantier"
+    ],
+    "usage_hint_fr": "Pour les projets de construction avec évacuation d'eau ou assèchement",
+    "usage_hint_de": "Für Bauprojekte mit Wasserpumpen oder Entwässerung",
+    "popularity_score": 25
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27232",
+    "name_fr": "Élimination des déchets, assèchement, hauteur de pompage 5 m (m3)",
+    "name_de": "Entsorgung, Wasserhaltung, Pumphöhe 5 m (m3)",
+    "subcategory": "special_waste_types",
+    "input_units": [
+      "m3"
+    ],
+    "default_unit": "m3",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.0,
+        "unit": "kgCO2e/m3"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_speciaux",
+      "special_waste_types",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.391938+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.391946+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Évacuation des eaux de chantier",
+    "name_simple_de": "Bauwasserpumpen",
+    "description_fr": "Pompage et élimination des eaux d'infiltration sur chantier (fondations, excavations). Exemple: 100 m³ d'eau à évacuer sur 5 mètres de hauteur.",
+    "description_de": "Pumpen und Entsorgung von Baugrubenwasser (Fundamente, Aushub). Beispiel: 100 m³ Wasser 5 Meter hochpumpen.",
+    "search_tags": [
+      "pompage eau",
+      "eaux chantier",
+      "assèchement",
+      "déwatering",
+      "eaux d'excavation",
+      "pompes construction",
+      "gestion eau souterraine",
+      "hauteur pompage"
+    ],
+    "usage_hint_fr": "Chantiers avec fouilles profondes ou nappes phréatiques.",
+    "usage_hint_de": "Baustellen mit Tiefbau oder Grundwasserauftreten.",
+    "popularity_score": 35
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27233",
+    "name_fr": "Élimination des déchets, maintien de l'eau, hauteur de pompage 7.5 m (m3)",
+    "name_de": "Entsorgung, Wasserhaltung, Pumphöhe 7.5 m (m3)",
+    "subcategory": "special_waste_types",
+    "input_units": [
+      "m3"
+    ],
+    "default_unit": "m3",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.0,
+        "unit": "kgCO2e/m3"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_speciaux",
+      "special_waste_types",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.392258+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.392271+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27234",
+    "name_fr": "Élimination des déchets, drainage, hauteur de pompage 10 m (m3)",
+    "name_de": "Entsorgung, Wasserhaltung, Pumphöhe 10 m (m3)",
+    "subcategory": "special_waste_types",
+    "input_units": [
+      "m3"
+    ],
+    "default_unit": "m3",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.0,
+        "unit": "kgCO2e/m3"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_speciaux",
+      "special_waste_types",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.392547+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.392554+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Évacuation des eaux usées",
+    "name_simple_de": "Abwasserentsorgung",
+    "description_fr": "Émissions liées au traitement et à l'évacuation des eaux usées, y compris le pompage jusqu'à 10 mètres de hauteur.",
+    "description_de": "Emissionen aus der Behandlung und Entsorgung von Abwasser, einschließlich Pumpen bis 10 m Höhe.",
+    "search_tags": [
+      "eaux usées",
+      "wastewater",
+      "drainage",
+      "pompage",
+      "traitement eau",
+      "eau de drainage",
+      "assainissement",
+      "évacuation"
+    ],
+    "usage_hint_fr": "Utilisez pour les entreprises avec gestion d'eau usée importante.",
+    "usage_hint_de": "Für Unternehmen mit großen Abwassermengen verwenden.",
+    "popularity_score": 45
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27235",
+    "name_fr": "Elimination, mortier, enduits (kg)",
+    "name_de": "Entsorgung, Mörtel, Putze (kg)",
+    "subcategory": "mineral_construction_materials",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.0129,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_mineraux",
+      "mineral_construction_materials",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.392827+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.392834+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Déchets de mortier et enduits",
+    "name_simple_de": "Entsorgung von Mörtel und Putz",
+    "description_fr": "CO2 généré par l'élimination des résidus de mortier, enduits et plâtre provenant de travaux de construction ou rénovation.",
+    "description_de": "CO2-Emissionen durch die Entsorgung von Mörtel-, Putz- und Gipsresten aus Bau- oder Renovierungsarbeiten.",
+    "search_tags": [
+      "mortier",
+      "enduits",
+      "plâtre",
+      "déchets construction",
+      "mortar",
+      "putz",
+      "entsorgung",
+      "construction waste",
+      "résidus minéraux"
+    ],
+    "usage_hint_fr": "Lors de travaux de rénovation ou démolition avec résidus minéraux.",
+    "usage_hint_de": "Bei Renovierungs- oder Abbrucharbeiten mit mineralischen Resten.",
+    "popularity_score": 45
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27236",
+    "name_fr": "Elimination, mortier, enduits (kg)",
+    "name_de": "Entsorgung, Mörtel, Putze (kg)",
+    "subcategory": "mineral_construction_materials",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.0129,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_mineraux",
+      "mineral_construction_materials",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.393188+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.393198+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27237",
+    "name_fr": "Elimination, mortier, enduits (kg)",
+    "name_de": "Entsorgung, Mörtel, Putze (kg)",
+    "subcategory": "mineral_construction_materials",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.0129,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_mineraux",
+      "mineral_construction_materials",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.393444+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.393450+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Élimination de mortier et enduits",
+    "name_simple_de": "Entsorgung von Mörtel und Putz",
+    "description_fr": "Émissions liées au traitement des déchets de mortier et d'enduits provenant de démolition ou rénovation. Exemple: débris de façade ou joints.",
+    "description_de": "Emissionen aus der Entsorgung von Mörtel- und Putzabfällen aus Abriss oder Sanierung. Beispiel: Fassaden- oder Fugenschutt.",
+    "search_tags": [
+      "mortier",
+      "enduits",
+      "déchets construction",
+      "démolition",
+      "façade",
+      "plâtre",
+      "waste disposal",
+      "renovation",
+      "bauschutt",
+      "altlasten"
+    ],
+    "usage_hint_fr": "À utiliser lors de travaux de démolition ou rénovation avec élimination de matériaux.",
+    "usage_hint_de": "Bei Abriss- oder Renovierungsarbeiten mit Entsorgung von Baumaterialien verwenden.",
+    "popularity_score": 52
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27238",
+    "name_fr": "Elimination, matériaux de construction, minéraux, non spécifiques (kg)",
+    "name_de": "Entsorgung, Baumaterialien, mineralisch, unspezifisch (kg)",
+    "subcategory": "building_and_construction_materials",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.0128,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_materiaux_de_construction",
+      "building_and_construction_materials",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.393808+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.393827+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Élimination de débris de construction",
+    "name_simple_de": "Entsorgung von Bauschutt",
+    "description_fr": "Émissions liées au traitement des déchets de construction (béton, briques, pierre). Comptabilisez le poids total des matériaux éliminés.",
+    "description_de": "Emissionen aus der Behandlung von Bauschutt (Beton, Ziegel, Stein). Erfassen Sie das Gesamtgewicht der entsorgten Materialien.",
+    "search_tags": [
+      "déchets construction",
+      "débris bâtiment",
+      "matériaux minéraux",
+      "élimination béton",
+      "construction waste",
+      "building rubble",
+      "mineral waste",
+      "Bauschutt"
+    ],
+    "usage_hint_fr": "Utilisez lors de rénovations, démolitions ou chantiers de construction.",
+    "usage_hint_de": "Verwenden Sie bei Renovierungen, Abrissen oder Baustellen.",
+    "popularity_score": 72,
+    "additional_info": {
+      "scope_explained_fr": "Scope 3 = Émissions indirectes (transport et traitement des déchets)",
+      "scope_explained_de": "Scope 3 = Indirekte Emissionen (Abfalltransport und -behandlung)",
+      "typical_use_case_fr": "Bâtiment, génie civil, rénovation",
+      "typical_use_case_de": "Hochbau, Tiefbau, Sanierung",
+      "note_fr": "Facteur faible: 0.0128 kgCO2e par kg. Les minéraux sont peu énergivores à éliminer.",
+      "note_de": "Niedriger Faktor: 0,0128 kgCO2e pro kg. Mineralien sind energiearm zu entsorgen."
+    }
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27239",
+    "name_fr": "Elimination, matériaux de construction, minéraux, non spécifiques (kg)",
+    "name_de": "Entsorgung, Baumaterialien, mineralisch, unspezifisch (kg)",
+    "subcategory": "building_and_construction_materials",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.0128,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_materiaux_de_construction",
+      "building_and_construction_materials",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.394267+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.394276+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2723a",
+    "name_fr": "Elimination, panneau de façade, composite aluminium, 4 mm (m2)",
+    "name_de": "Entsorgung, Fassadenplatte, Aluverbund, 4 mm (m2)",
+    "subcategory": "building_elements_and_structures",
+    "input_units": [
+      "m2"
+    ],
+    "default_unit": "m2",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 7.65,
+        "unit": "kgCO2e/m2"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_elements_techniques_du_batiment",
+      "building_elements_and_structures",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.394576+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.394584+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Élimination panneau composite alu 4mm",
+    "name_simple_de": "Entsorgung Aluverbundplatte 4mm",
+    "description_fr": "Émissions liées au recyclage ou à l'élimination de panneaux de façade en composite aluminium. Utilisé pour les revêtements de bâtiments.",
+    "description_de": "Emissionen beim Recycling oder der Entsorgung von Aluminiumverbund-Fassadenplatten. Wird für Gebäudeverkleidungen verwendet.",
+    "search_tags": [
+      "façade",
+      "composite aluminium",
+      "aluverbund",
+      "panneaux",
+      "recyclage",
+      "entsorgung",
+      "elimination",
+      "revêtement",
+      "building cladding",
+      "disposal"
+    ],
+    "usage_hint_fr": "Calculer l'impact fin de vie des façades en composite alu",
+    "usage_hint_de": "Auswirkungen am Ende des Lebenszyklus berechnen",
+    "popularity_score": 35
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2723b",
+    "name_fr": "Elimination, protection solaire, stores à projection motorisés (m2)",
+    "name_de": "Entsorgung, Sonnenschutz, Ausstellstoren motorisiert (m2)",
+    "subcategory": "building_elements_and_structures",
+    "input_units": [
+      "m2"
+    ],
+    "default_unit": "m2",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 1.91,
+        "unit": "kgCO2e/m2"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_elements_techniques_du_batiment",
+      "building_elements_and_structures",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.394849+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.394858+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Stores motorisés (élimination)",
+    "name_simple_de": "Motorisierte Aussenrollos (Entsorgung)",
+    "description_fr": "Émissions liées au recyclage ou à la destruction de stores électriques extérieurs. Exemple: démontage et traitement en fin de vie d'un store de 10m² pour une facade.",
+    "description_de": "Emissionen beim Recycling oder der Entsorgung von motorisierten Aussenrollos. Beispiel: Rückbau und Behandlung eines 10m² grossen Aussenrollos am Ende seiner Lebensdauer.",
+    "search_tags": [
+      "stores électriques",
+      "motorized blinds",
+      "Sonnenschutz motorisiert",
+      "fin de vie",
+      "recyclage stores",
+      "projection motorisée",
+      "external shading",
+      "demolition"
+    ],
+    "usage_hint_fr": "Utilisez pour éliminer des stores motorisés existants",
+    "usage_hint_de": "Verwenden Sie für die Entsorgung bestehender motorisierter Rollos",
+    "popularity_score": 35
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2723c",
+    "name_fr": "Elimination, bâtiment, cadres de fenêtres, aluminium (m2)",
+    "name_de": "Entsorgung, Gebäude, Fensterrahmen, Aluminium (m2)",
+    "subcategory": "building_elements_and_structures",
+    "input_units": [
+      "m2"
+    ],
+    "default_unit": "m2",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 14.9,
+        "unit": "kgCO2e/m2"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_elements_techniques_du_batiment",
+      "building_elements_and_structures",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.395224+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.395233+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Recyclage cadres fenêtres aluminium",
+    "name_simple_de": "Entsorgung Aluminiumfensterrahmen",
+    "description_fr": "Émissions liées au traitement et recyclage des cadres de fenêtres en aluminium en fin de vie. Inclut le transport et le traitement des déchets.",
+    "description_de": "Emissionen aus der Behandlung und dem Recycling von Aluminiumfensterrahmen am Ende ihrer Lebensdauer. Umfasst Transport und Abfallbehandlung.",
+    "search_tags": [
+      "fenêtres",
+      "aluminium",
+      "recyclage",
+      "déchet",
+      "end-of-life",
+      "cadres",
+      "élimination",
+      "démolition",
+      "fenster"
+    ],
+    "usage_hint_fr": "Utilisez pour calculer l'impact du recyclage des fenêtres existantes lors de rénovations.",
+    "usage_hint_de": "Verwenden Sie für die Berechnung der Auswirkungen beim Recycling bestehender Fenster bei Renovierungen.",
+    "popularity_score": 62,
+    "additional_info": {
+      "scope": "scope3",
+      "value_per_unit": 14.9,
+      "unit": "kgCO2e/m2",
+      "source": "KBOB",
+      "category": "Élements de construction - Fin de vie"
+    }
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2723d",
+    "name_fr": "Elimination, bâtiment, cadre de fenêtre aluminium, WICLINE 75evo, fabriqué avec Hydro CIRCAL 75R (m2)",
+    "name_de": "Entsorgung, Gebäude, Fensterrahmen Aluminium, WICLINE 75evo, hergestellt mit Hydro CIRCAL 75R (m2)",
+    "subcategory": "building_elements_and_structures",
+    "input_units": [
+      "m2"
+    ],
+    "default_unit": "m2",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 5.98,
+        "unit": "kgCO2e/m2"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_elements_techniques_du_batiment",
+      "building_elements_and_structures",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.395542+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.395549+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2723e",
+    "name_fr": "Mise au rebut, panneaux de façade HPL (m2)",
+    "name_de": "Entsorgung, HPL-Fassadenplatten (m2)",
+    "subcategory": "building_elements_and_structures",
+    "input_units": [
+      "m2"
+    ],
+    "default_unit": "m2",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 12.6,
+        "unit": "kgCO2e/m2"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_elements_techniques_du_batiment",
+      "building_elements_and_structures",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.395820+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.395827+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Recyclage panneaux HPL",
+    "name_simple_de": "Recycling von HPL-Platten",
+    "description_fr": "Émissions liées à la destruction et au traitement des panneaux de façade HPL (matériau composite). Exemple: démolition d'une façade de 100 m2.",
+    "description_de": "Emissionen beim Abbau und der Entsorgung von HPL-Fassadenplatten (Verbundmaterial). Beispiel: Abriss einer 100 m2 großen Fassade.",
+    "search_tags": [
+      "HPL",
+      "panneaux façade",
+      "éboulis",
+      "déconstruction",
+      "composite",
+      "demolition",
+      "waste",
+      "recyclage",
+      "high pressure laminate",
+      "façade"
+    ],
+    "usage_hint_fr": "Lors de la démolition ou rénovation de bâtiments avec façades HPL",
+    "usage_hint_de": "Bei Abriss oder Renovierung von Gebäuden mit HPL-Fassaden",
+    "popularity_score": 42
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2723f",
+    "name_fr": "Elimination, double vitrage isolant, coefficient Ug 1.1 W/m2K, épaisseur 18 mm (m2)",
+    "name_de": "Entsorgung, Isolierverglasung 2-fach, Ug-Wert 1.1 W/m2K, Dicke 18 mm (m2)",
+    "subcategory": "glass_and_windows",
+    "input_units": [
+      "m2"
+    ],
+    "default_unit": "m2",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 2.85,
+        "unit": "kgCO2e/m2"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_verres_et_fenetres",
+      "glass_and_windows",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.396184+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.396193+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Élimination vitre isolante double",
+    "name_simple_de": "Entsorgung Isolierglas doppelt",
+    "description_fr": "Émissions liées au recyclage/élimination d'une vitre isolante double couche (18mm). Exemple: enlever les anciennes fenêtres d'une maison lors d'une rénovation.",
+    "description_de": "Emissionen beim Recyceln/Entsorgen einer doppelt isolierten Glasscheibe (18mm). Beispiel: alte Fenster bei einer Hausrenovation entfernen.",
+    "search_tags": [
+      "vitre",
+      "fenêtre",
+      "double vitrage",
+      "isolation",
+      "recyclage",
+      "élimination",
+      "glass disposal",
+      "Fenster",
+      "Entsorgung",
+      "Glas"
+    ],
+    "usage_hint_fr": "Lors de rénovation/remplacement de fenêtres existantes",
+    "usage_hint_de": "Bei Sanierung/Austausch vorhandener Fenster",
+    "popularity_score": 45
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27240",
+    "name_fr": "Elimination, double vitrage isolant, float/ESG, coefficient Ug 1.1 W/m2K, épaisseur 24 mm (m2)",
+    "name_de": "Entsorgung, Isolierverglasung 2-fach, Float/ESG, Ug-Wert 1.1 W/m2K, Dicke 24 mm (m2)",
+    "subcategory": "glass_and_windows",
+    "input_units": [
+      "m2"
+    ],
+    "default_unit": "m2",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 3.61,
+        "unit": "kgCO2e/m2"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_verres_et_fenetres",
+      "glass_and_windows",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.396547+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.396563+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Élimination double vitrage isolant",
+    "name_simple_de": "Entsorgung Isolierverglasung",
+    "description_fr": "Émissions liées au recyclage/élimination d'une vitre double isolante (24mm). Exemple: enlever les fenêtres d'un petit immeuble.",
+    "description_de": "Emissionen beim Recycling/Entsorgung von Isolierfenstern (24mm). Beispiel: Fenster eines kleinen Hauses entfernen.",
+    "search_tags": [
+      "fenêtre",
+      "double vitrage",
+      "recyclage verre",
+      "isolation thermique",
+      "Ug 1.1",
+      "déchets construction",
+      "glass disposal",
+      "window waste"
+    ],
+    "usage_hint_fr": "Rénovation/démolition avec changement de fenêtres",
+    "usage_hint_de": "Sanierung/Abriss mit Fensterwechsel",
+    "popularity_score": 42
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27241",
+    "name_fr": "Elimination, double vitrage isolant, float/ESG/VSG, coefficient Ug 1.1 W/m2K (m2)",
+    "name_de": "Entsorgung, Isolierverglasung 2-fach, Float/ESG/VSG, Ug-Wert 1.1 W/m2K (m2)",
+    "subcategory": "glass_and_windows",
+    "input_units": [
+      "m2"
+    ],
+    "default_unit": "m2",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 6.68,
+        "unit": "kgCO2e/m2"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_verres_et_fenetres",
+      "glass_and_windows",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.396967+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.396977+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27242",
+    "name_fr": "Elimination, triple vitrage isolant, coefficient Ug 0.6 W/m2K, épaisseur 40 mm (m2)",
+    "name_de": "Entsorgung, Isolierverglasung 3-fach, Ug-Wert 0.6 W/m2K, Dicke 40 mm (m2)",
+    "subcategory": "glass_and_windows",
+    "input_units": [
+      "m2"
+    ],
+    "default_unit": "m2",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 5.71,
+        "unit": "kgCO2e/m2"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_verres_et_fenetres",
+      "glass_and_windows",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.397291+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.397299+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Élimination triple vitrage isolant 40mm",
+    "name_simple_de": "Entsorgung Dreifach-Isolierglas 40mm",
+    "description_fr": "Traitement des déchets de triple vitrage performant (très isolant). Utilisé pour fenêtres modernes réduisant les pertes de chaleur.",
+    "description_de": "Entsorgung von hochwertigem Dreifach-Isolierglas. Verwendet für moderne Fenster mit sehr guter Wärmeisolation.",
+    "search_tags": [
+      "vitrage",
+      "triple glass",
+      "isolation thermique",
+      "fenêtres",
+      "Ug 0.6",
+      "recyclage verre",
+      "waste glass",
+      "déchets construction"
+    ],
+    "usage_hint_fr": "Lors du recyclage/élimination de fenêtres à triple vitrage",
+    "usage_hint_de": "Bei Recycling/Entsorgung von Dreifach-Verglasung",
+    "popularity_score": 42
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27243",
+    "name_fr": "Elimination, triple vitrage isolant, valeur Ug 0.6 W/m2K, épaisseur 40 mm (m2)",
+    "name_de": "Entsorgung, Isolierverglasung 3-fach, Ug-Wert 0.6 W/m2K, Dicke 40 mm (m2)",
+    "subcategory": "glass_and_windows",
+    "input_units": [
+      "m2"
+    ],
+    "default_unit": "m2",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 5.71,
+        "unit": "kgCO2e/m2"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_verres_et_fenetres",
+      "glass_and_windows",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.397572+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.397580+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Élimination vitrage isolant triple",
+    "name_simple_de": "Entsorgung Isolierglas 3-fach",
+    "description_fr": "Émissions liées au recyclage/traitement en fin de vie d'une vitre isolante triple vitrage haute performance (40mm). Ex: remplacement de fenêtres anciennes.",
+    "description_de": "Emissionen beim Recycling/Entsorgung von hochisoliertem Dreifachglas (40mm) am Lebenzyklusende. Bsp: Fensteraustausch.",
+    "search_tags": [
+      "vitrage",
+      "triple vitrage",
+      "fenêtre",
+      "isolation",
+      "Ug 0.6",
+      "récyclage verre",
+      "triple glazing",
+      "window disposal",
+      "Dreifachglas",
+      "Fensterentsorgung"
+    ],
+    "usage_hint_fr": "Calculer l'impact du remplacement/rénovation de fenêtres.",
+    "usage_hint_de": "Berechnen Sie die Auswirkung von Fensterersatz/Renovierung.",
+    "popularity_score": 45
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27244",
+    "name_fr": "Elimination, triple vitrage isolant, valeur Ug 0.6 W/m2K, épaisseur 40 mm (m2)",
+    "name_de": "Entsorgung, Isolierverglasung 3-fach, Ug-Wert 0.6 W/m2K, Dicke 40 mm (m2)",
+    "subcategory": "glass_and_windows",
+    "input_units": [
+      "m2"
+    ],
+    "default_unit": "m2",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 5.71,
+        "unit": "kgCO2e/m2"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_verres_et_fenetres",
+      "glass_and_windows",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.397819+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.397827+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27245",
+    "name_fr": "Elimination, triple vitrage isolant, float/ESG/VSG, coefficient Ug 0.6 W/m2K (m2)",
+    "name_de": "Entsorgung, Isolierverglasung 3-fach, Float/ESG/VSG, Ug-Wert 0.6 W/m2K (m2)",
+    "subcategory": "glass_and_windows",
+    "input_units": [
+      "m2"
+    ],
+    "default_unit": "m2",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 8.79,
+        "unit": "kgCO2e/m2"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_verres_et_fenetres",
+      "glass_and_windows",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.398069+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.398075+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Élimination triple vitrage isolant",
+    "name_simple_de": "Entsorgung Dreifach-Isolierglas",
+    "description_fr": "Recyclage ou élimination de fenêtres avec triple vitrage haute performance (Ug=0.6). Inclut le verre et la structure.",
+    "description_de": "Recycling oder Entsorgung von Hochleistungs-Dreifachverglasungsfenstern (Ug=0,6). Inklusive Glas und Rahmen.",
+    "search_tags": [
+      "triple vitrage",
+      "triple glazing",
+      "Dreifachverglasung",
+      "fenêtre isolante",
+      "recyclage verre",
+      "glass disposal",
+      "Ug 0.6",
+      "fenêtre performance",
+      "window waste"
+    ],
+    "usage_hint_fr": "Lors du démontage ou remplacement de fenêtres triple vitrage",
+    "usage_hint_de": "Bei Demontage oder Austausch von Dreifach-Isolierglasfenstern",
+    "popularity_score": 45,
+    "scope": "scope3",
+    "value": 8.79,
+    "unit": "kgCO2e/m2"
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27246",
+    "name_fr": "Elimination, triple vitrage isolant, float/ESG/VSG, valeur Ug 0.6 W/m2K (m2)",
+    "name_de": "Entsorgung, Isolierverglasung 3-fach, Float/ESG/VSG, Ug-Wert 0.6 W/m2K (m2)",
+    "subcategory": "glass_and_windows",
+    "input_units": [
+      "m2"
+    ],
+    "default_unit": "m2",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 8.79,
+        "unit": "kgCO2e/m2"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_verres_et_fenetres",
+      "glass_and_windows",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.398370+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.398377+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Élimination triple vitrage isolant",
+    "name_simple_de": "Entsorgung Dreifach-Isolierglas",
+    "description_fr": "Déchets de vitrages isolants haute performance (3 couches). Utilisé pour fenêtres très isolantes. Exemple: dépose de fenêtres modernes.",
+    "description_de": "Abfall von hochleistungs-Isolierverglasungen (3 Schichten). Für sehr isolierende Fenster. Beispiel: Rückbau moderner Fenster.",
+    "search_tags": [
+      "fenêtre",
+      "vitrage",
+      "triple glazing",
+      "isolant",
+      "déchets verre",
+      "Dreifachverglasung",
+      "Fensterrückbau",
+      "Isolierglas",
+      "Entsorgung"
+    ],
+    "usage_hint_fr": "Lors du recyclage/élimination de fenêtres triple vitrage",
+    "usage_hint_de": "Bei Recycling/Entsorgung von Dreifach-Isolierfenstern",
+    "popularity_score": 35
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27247",
+    "name_fr": "Elimination, protection solaire, stores à lamelles motorisés (m2)",
+    "name_de": "Entsorgung, Sonnenschutz, Lamellenstoren motorisiert (m2)",
+    "subcategory": "building_elements_and_structures",
+    "input_units": [
+      "m2"
+    ],
+    "default_unit": "m2",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 1.47,
+        "unit": "kgCO2e/m2"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_elements_techniques_du_batiment",
+      "building_elements_and_structures",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.398641+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.398648+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Stores motorisés (élimination)",
+    "name_simple_de": "Motorisierte Lamellenstoren (Entsorgung)",
+    "description_fr": "Émissions liées à la fin de vie et recyclage des stores à lamelles motorisés. Inclut démontage, transport et traitement des matériaux.",
+    "description_de": "Emissionen am Ende der Lebensdauer motorisierter Lamellenstoren. Einschliesslich Demontage, Transport und Materialbehandlung.",
+    "search_tags": [
+      "stores motorisés",
+      "lamellenstoren",
+      "élimination stores",
+      "fin de vie",
+      "motorised blinds",
+      "disposal",
+      "recycling",
+      "déconstruction",
+      "démontage"
+    ],
+    "usage_hint_fr": "Rénovation ou démolition de bâtiments avec stores motorisés",
+    "usage_hint_de": "Sanierung oder Abriss von Gebäuden mit motorisierten Storen",
+    "popularity_score": 35
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27248",
+    "name_fr": "Elimination, panneau support d'enduit lié à la résine synthétique (m2)",
+    "name_de": "Entsorgung, Putzträgerplatte kunstharzgebunden (m2)",
+    "subcategory": "building_elements_and_structures",
+    "input_units": [
+      "m2"
+    ],
+    "default_unit": "m2",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.0807,
+        "unit": "kgCO2e/m2"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_elements_techniques_du_batiment",
+      "building_elements_and_structures",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.398890+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.398908+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27249",
+    "name_fr": "Elimination, panneau support d'enduit à liant minéral (m2)",
+    "name_de": "Entsorgung, Putzträgerplatte mineralisch gebunden (m2)",
+    "subcategory": "building_elements_and_structures",
+    "input_units": [
+      "m2"
+    ],
+    "default_unit": "m2",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.185,
+        "unit": "kgCO2e/m2"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_elements_techniques_du_batiment",
+      "building_elements_and_structures",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.399353+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.399366+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Élimination de panneau d'enduit minéral",
+    "name_simple_de": "Entsorgung Putzträgerplatte mineralisch",
+    "description_fr": "Émissions liées au traitement des déchets de panneaux de base pour enduit (minéral). Exemple: démolition ou rénovation de façade avec revêtement d'enduit.",
+    "description_de": "Emissionen aus der Entsorgung von Putzträgerplatten mit mineralischem Bindemittel. Beispiel: Abbruch oder Sanierung einer Fassade mit Putzbelag.",
+    "search_tags": [
+      "panneau enduit",
+      "putzträgerplatte",
+      "déchet construction",
+      "façade minérale",
+      "démolition enduit",
+      "construction waste",
+      "disposal",
+      "building demolition"
+    ],
+    "usage_hint_fr": "Utilisez pour calculer les émissions de fin de vie des panneaux d'enduit minéraux lors de rénovations.",
+    "usage_hint_de": "Verwenden Sie für End-of-Life-Emissionen mineralischer Putzträgerplatten bei Renovierungen.",
+    "popularity_score": 42
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2724a",
+    "name_fr": "Elimination, protection solaire, volets roulants motorisés (m2)",
+    "name_de": "Entsorgung, Sonnenschutz, Rollladen motorisiert (m2)",
+    "subcategory": "building_elements_and_structures",
+    "input_units": [
+      "m2"
+    ],
+    "default_unit": "m2",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.695,
+        "unit": "kgCO2e/m2"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_elements_techniques_du_batiment",
+      "building_elements_and_structures",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.399745+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.399756+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Volets roulants motorisés",
+    "name_simple_de": "Motorisierte Rollläden",
+    "description_fr": "Émissions liées à la fabrication et élimination de volets roulants électriques. Inclut le moteur, l'aluminium et les matériaux de structure.",
+    "description_de": "Emissionen aus Herstellung und Entsorgung von elektrischen Rollläden. Umfasst Motor, Aluminium und Strukturmaterialien.",
+    "search_tags": [
+      "volets",
+      "rollläden",
+      "motorisés",
+      "motorized shutters",
+      "protection solaire",
+      "sonnenschutz",
+      "éléments de façade",
+      "fenêtres",
+      "éclairage"
+    ],
+    "usage_hint_fr": "Calculer l'impact carbone des volets roulants électriques installés à votre bâtiment.",
+    "usage_hint_de": "Berechnen Sie den CO2-Fußabdruck der installierten elektrischen Rollläden.",
+    "popularity_score": 35
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2724b",
+    "name_fr": "Elimination, non-tissé aérogel (kg)",
+    "name_de": "Entsorgung, Aerogel-Vlies (kg)",
+    "subcategory": "insulation_and_waterproofing",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.289,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_materiel_disolation",
+      "insulation_and_waterproofing",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.400071+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.400079+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Traitement aérogel isolant",
+    "name_simple_de": "Entsorgung von Aerogel-Isolierung",
+    "description_fr": "Émissions liées à l'élimination ou au recyclage de mousse isolante ultra-légère. Utilisée dans l'isolation thermique haute performance des bâtiments.",
+    "description_de": "Emissionen aus der Entsorgung oder dem Recycling von ultraleichtem Isolierschaum. Wird für hochleistungsfähige Wärmeisolierung in Gebäuden verwendet.",
+    "search_tags": [
+      "aérogel",
+      "aerogel",
+      "isolation",
+      "mousse isolante",
+      "élimination isolant",
+      "déchet construction",
+      "insulation waste",
+      "thermal insulation",
+      "non-tissé",
+      "traitement déchet"
+    ],
+    "usage_hint_fr": "Lors du recyclage ou destruction d'isolants aérogel en fin de vie",
+    "usage_hint_de": "Beim Recycling oder der Entsorgung von Aerogel-Isolierstoffen",
+    "popularity_score": 28
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2724c",
+    "name_fr": "Elimination, matériaux de construction, minéraux, non spécifiques (kg)",
+    "name_de": "Entsorgung, Baumaterialien, mineralisch, unspezifisch (kg)",
+    "subcategory": "building_and_construction_materials",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.0128,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_materiaux_de_construction",
+      "building_and_construction_materials",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.400358+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.400366+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2724d",
+    "name_fr": "Élimination, isolation en fibres de lin (kg)",
+    "name_de": "Entsorgung, Flachsfaser-Dämmung (kg)",
+    "subcategory": "insulation_and_waterproofing",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.235,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_materiel_disolation",
+      "insulation_and_waterproofing",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.400831+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.400859+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Élimination laine de lin",
+    "name_simple_de": "Entsorgung Leinenfasern",
+    "description_fr": "Émissions liées au traitement des fibres de lin usagées. Exemple: enlever l'isolation en lin d'une paroi lors d'une rénovation.",
+    "description_de": "Emissionen aus der Verarbeitung von gebrauchten Leinenfasern. Beispiel: Leinendämmung beim Umbau entfernen.",
+    "search_tags": [
+      "élimination isolant",
+      "fibres lin recyclage",
+      "déchets isolation",
+      "lin décommissionnement",
+      "removal insulation",
+      "waste management",
+      "end of life",
+      "Entsorgung Dämmung"
+    ],
+    "usage_hint_fr": "Lors de rénovations ou démolitions avec isolants en lin",
+    "usage_hint_de": "Bei Renovationen oder Abrissen mit Leinendämmung",
+    "popularity_score": 35
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2724e",
+    "name_fr": "Élimination mur en paille",
+    "name_de": "Entsorgung Strohballenwand",
+    "subcategory": "building_and_construction_materials",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.0,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_materiaux_de_construction",
+      "building_and_construction_materials",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.401433+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.401442+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "description_fr": "Émissions liées au traitement des déchets de murs en bottes de paille. Inclut le tri, transport et élimination finale.",
+    "description_de": "Emissionen aus der Behandlung von Strohballenwand-Abfällen. Umfasst Sortierung, Transport und Endlagerung.",
+    "search_tags": [
+      "paille",
+      "straw",
+      "construction",
+      "déchets",
+      "élimination",
+      "mur",
+      "bio-sourcé",
+      "waste",
+      "KBOB"
+    ],
+    "usage_hint_fr": "Pour les projets de construction utilisant des murs en bottes de paille.",
+    "usage_hint_de": "Für Bauprojekte mit Strohballenwänden.",
+    "popularity_score": 25,
+    "notes": "Émissions très faibles (0 kgCO2e/kg) car la paille est biodégradable et peut être compostée. Facteur pertinent surtout pour l'ACV complète de bâtiments écologiques."
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2724f",
+    "name_fr": "Tri et élimination des déchets",
+    "name_de": "Entsorgung, Abfalltrennsystem (Stk.)",
+    "subcategory": "special_waste_types",
+    "input_units": [
+      "p"
+    ],
+    "default_unit": "p",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 8.13,
+        "unit": "kgCO2e/piece"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_speciaux",
+      "special_waste_types",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.401748+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.401757+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_de": "Abfallentsorgung und -trennung",
+    "description_fr": "Émissions générées par le tri, le transport et le traitement des déchets. Inclut les systèmes de séparation papier/plastique/verre.",
+    "description_de": "Emissionen aus Sortierung, Transport und Behandlung von Abfällen. Umfasst Trennsysteme für Papier, Kunststoff und Glas.",
+    "search_tags": [
+      "déchets",
+      "tri",
+      "élimination",
+      "waste management",
+      "recycling",
+      "poubelle",
+      "ordures",
+      "traitement"
+    ],
+    "usage_hint_fr": "Pour chaque unité/système de tri utilisé en entreprise ou domicile.",
+    "usage_hint_de": "Für jede im Betrieb oder Haushalt verwendete Sortier-/Entsorgungsanlage.",
+    "popularity_score": 72
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27250",
+    "name_fr": "Elimination, plan de travail acier chromé, standard (m2)",
+    "name_de": "Entsorgung, Arbeitsplatte Chromstahl, Standard (m2)",
+    "subcategory": "furniture_and_fixtures",
+    "input_units": [
+      "m2"
+    ],
+    "default_unit": "m2",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 1.05,
+        "unit": "kgCO2e/m2"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_mobilier_et_sols",
+      "furniture_and_fixtures",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.402016+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.402023+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27251",
+    "name_fr": "Elimination, plan de travail composite (à base d'hydroxyde d'aluminium) (m2)",
+    "name_de": "Entsorgung, Arbeitsplatte Kompositwerkstoff (auf Aluminiumhydroxidbasis) (m2)",
+    "subcategory": "furniture_and_fixtures",
+    "input_units": [
+      "m2"
+    ],
+    "default_unit": "m2",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 19.3,
+        "unit": "kgCO2e/m2"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_mobilier_et_sols",
+      "furniture_and_fixtures",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.402250+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.402256+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Recyclage plan de travail composite",
+    "name_simple_de": "Entsorgung Composite-Arbeitsplatte",
+    "description_fr": "Émissions liées à l'élimination et au recyclage d'un plan de travail en matériau composite contenant de l'aluminium. Exemple: débarrassage d'une cuisine.",
+    "description_de": "Emissionen bei Entsorgung und Recycling einer Composite-Arbeitsplatte mit Aluminium. Beispiel: Küchenabbruch.",
+    "search_tags": [
+      "plan de travail",
+      "composite",
+      "entsorgung",
+      "recycling",
+      "aluminum hydroxide",
+      "disposal",
+      "kitchen",
+      "furniture waste",
+      "déchet mobilier"
+    ],
+    "usage_hint_fr": "Utilisez pour le remplacement/démolition de plans de travail composites",
+    "usage_hint_de": "Nutzen Sie bei Austausch/Abriss von Composite-Arbeitsplatten",
+    "popularity_score": 35
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27252",
+    "name_fr": "Elimination, plan de travail revêtu de résine synthétique (m2)",
+    "name_de": "Entsorgung, Arbeitsplatte kunstharzbeschichtet (m2)",
+    "subcategory": "furniture_and_fixtures",
+    "input_units": [
+      "m2"
+    ],
+    "default_unit": "m2",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 1.2,
+        "unit": "kgCO2e/m2"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_mobilier_et_sols",
+      "furniture_and_fixtures",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.402505+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.402512+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Élimination plan de travail en résine",
+    "name_simple_de": "Entsorgung kunstharz Arbeitsplatte",
+    "description_fr": "Émissions liées au traitement des déchets d'un plan de travail de cuisine ou bureau recouvert de résine synthétique. Par exemple: recyclage ou incinération d'une vieille cuisine.",
+    "description_de": "Emissionen aus der Entsorgung von Küchenarbeitsplatten mit Kunstharzbeschichtung. Beispiel: Recycling oder Verbrennung einer alten Küchenzeile.",
+    "search_tags": [
+      "plan de travail",
+      "arbeitsplatte",
+      "résine synthétique",
+      "disposal",
+      "entsorgung",
+      "déchet cuisine",
+      "kitchen waste",
+      "meuble cuisine",
+      "worktop",
+      "laminate"
+    ],
+    "usage_hint_fr": "Utilisez pour l'élimination de plans de travail en fin de vie",
+    "usage_hint_de": "Verwenden Sie bei der Entsorgung alter Arbeitsplatten",
+    "popularity_score": 42
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27253",
+    "name_fr": "Elimination, plan de travail en bois massif (m2)",
+    "name_de": "Entsorgung, Arbeitsplatte Massivholz (m2)",
+    "subcategory": "furniture_and_fixtures",
+    "input_units": [
+      "m2"
+    ],
+    "default_unit": "m2",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.92,
+        "unit": "kgCO2e/m2"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_mobilier_et_sols",
+      "furniture_and_fixtures",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.402778+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.402786+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27254",
+    "name_fr": "Elimination, matériaux de construction, minéraux, non spécifiques (kg)",
+    "name_de": "Entsorgung, Baumaterialien, mineralisch, unspezifisch (kg)",
+    "subcategory": "building_and_construction_materials",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.0128,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_materiaux_de_construction",
+      "building_and_construction_materials",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.403134+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.403143+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Élimination de débris de construction",
+    "name_simple_de": "Entsorgung von Bauschutt",
+    "description_fr": "Émissions liées à l'élimination ou au recyclage de matériaux minéraux de construction (béton, brique, pierre) sans spécification précise du type.",
+    "description_de": "Emissionen bei der Entsorgung oder dem Recycling von mineralischen Baumaterialien (Beton, Ziegel, Stein) ohne genaue Typbezeichnung.",
+    "search_tags": [
+      "débris construction",
+      "déchet minéral",
+      "élimination béton",
+      "construction waste",
+      "mineral waste",
+      "brique",
+      "pierre",
+      "recyclage construction"
+    ],
+    "usage_hint_fr": "Utilisez ce facteur pour les débris de construction minéraux génériques lors de rénovations ou démolitions.",
+    "usage_hint_de": "Verwenden Sie diesen Faktor für generische mineralische Bauabfälle bei Renovierungen oder Abrissen.",
+    "popularity_score": 65
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27255",
+    "name_fr": "Elimination, hotte aspirante (pcs.)",
+    "name_de": "Entsorgung, Dampfabzug (Stk.)",
+    "subcategory": "special_waste_types",
+    "input_units": [
+      "p"
+    ],
+    "default_unit": "p",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 17.1,
+        "unit": "kgCO2e/piece"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_speciaux",
+      "special_waste_types",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.403501+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.403516+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Hotte aspirante (élimination)",
+    "name_simple_de": "Dunstabzugshaube (Entsorgung)",
+    "description_fr": "Émissions liées à l'élimination d'une hotte aspirante usagée. Inclut démontage, transport et recyclage des matériaux.",
+    "description_de": "Emissionen beim Entsorgen einer alten Dunstabzugshaube. Umfasst Abbau, Transport und Recycling der Materialien.",
+    "search_tags": [
+      "hotte",
+      "aspirante",
+      "extraction",
+      "déchets",
+      "élimination",
+      "kitchen hood",
+      "cooking hood",
+      "recycling",
+      "end of life"
+    ],
+    "usage_hint_fr": "Lors du remplacement ou fin de vie d'une hotte de cuisine",
+    "usage_hint_de": "Bei Austausch oder Entsorgung einer Küchenhaube",
+    "popularity_score": 35
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27256",
+    "name_fr": "Elimination, cuisine, bois massif, 16 pièces (pcs.)",
+    "name_de": "Entsorgung, Küche, Massivholz, 16-teilig (Stk.)",
+    "subcategory": "furniture_and_fixtures",
+    "input_units": [
+      "p"
+    ],
+    "default_unit": "p",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 51.4,
+        "unit": "kgCO2e/piece"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_mobilier_et_sols",
+      "furniture_and_fixtures",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.403965+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.403980+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Élimination cuisine en bois massif",
+    "name_simple_de": "Entsorgung Massivholzküche",
+    "description_fr": "Émissions liées à l'élimination (recyclage, incinération, mise en décharge) d'une cuisine en bois massif de 16 éléments. Inclut le transport et le traitement des déchets.",
+    "description_de": "Emissionen aus der Entsorgung (Recycling, Verbrennung, Deponierung) einer 16-teiligen Massivholzküche. Umfasst Transport und Abfallbehandlung.",
+    "search_tags": [
+      "élimination meuble",
+      "fin de vie cuisine",
+      "déchet bois massif",
+      "recycling furniture",
+      "kitchen disposal",
+      "Abfallbehandlung",
+      "Entsorgung Möbel",
+      "end of life"
+    ],
+    "usage_hint_fr": "Quand vous éliminez une cuisine en bois massif complète",
+    "usage_hint_de": "Bei der Entsorgung einer vollständigen Massivholzküche",
+    "popularity_score": 35
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27257",
+    "name_fr": "Elimination, cuisine, métal, 16 pièces (pcs.)",
+    "name_de": "Entsorgung, Küche, Metall, 16-teilig (Stk.)",
+    "subcategory": "furniture_and_fixtures",
+    "input_units": [
+      "p"
+    ],
+    "default_unit": "p",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 51.0,
+        "unit": "kgCO2e/piece"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_mobilier_et_sols",
+      "furniture_and_fixtures",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.404432+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.404442+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27258",
+    "name_fr": "Elimination, cuisine, panneau de particules, 16 pièces (pcs.)",
+    "name_de": "Entsorgung, Küche, Spanplatte, 16-teilig (Stk.)",
+    "subcategory": "furniture_and_fixtures",
+    "input_units": [
+      "p"
+    ],
+    "default_unit": "p",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 74.9,
+        "unit": "kgCO2e/piece"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_mobilier_et_sols",
+      "furniture_and_fixtures",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.404739+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.404749+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Élimination meuble cuisine en aggloméré",
+    "name_simple_de": "Entsorgung Küchenmöbel aus Spanplatte",
+    "description_fr": "Émissions liées au traitement et à l'élimination d'un meuble de cuisine en panneau de particules (16 éléments). Inclut transport et traitement des déchets.",
+    "description_de": "Emissionen bei der Behandlung und Entsorgung eines Küchenmöbels aus Spanplatte (16-teilig). Umfasst Transport und Abfallbehandlung.",
+    "search_tags": [
+      "meuble cuisine",
+      "aggloméré",
+      "spanplatte",
+      "waste disposal",
+      "élimination déchet",
+      "furniture disposal",
+      "déchets bois",
+      "particleboard"
+    ],
+    "usage_hint_fr": "Quand vous jetez/recyclez un meuble de cuisine ancien",
+    "usage_hint_de": "Beim Entsorgen/Recyceln alter Küchenmöbel",
+    "popularity_score": 35
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27259",
+    "name_fr": "Élimination d'un évier en acier chromé",
+    "name_de": "Entsorgung einer Chromstahlspüle",
+    "subcategory": "furniture_and_fixtures",
+    "input_units": [
+      "p"
+    ],
+    "default_unit": "p",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 4.93,
+        "unit": "kgCO2e/piece"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_mobilier_et_sols",
+      "furniture_and_fixtures",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.404987+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.404993+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "description_fr": "Émissions générées par le recyclage ou l'élimination d'un évier en acier chromé usagé. Inclut le transport et le traitement en fin de vie.",
+    "description_de": "Emissionen durch Recycling oder Entsorgung einer gebrauchten Chromstahlspüle. Umfasst Transport und Behandlung am Ende der Lebensdauer.",
+    "search_tags": [
+      "évier",
+      "sink",
+      "acier chromé",
+      "élimination",
+      "recyclage",
+      "end of life",
+      "déchet",
+      "kitchen sink",
+      "disposal",
+      "waste"
+    ],
+    "usage_hint_fr": "À utiliser lors du remplacement ou de l'élimination d'un évier chromé.",
+    "usage_hint_de": "Verwenden Sie dies beim Austausch oder der Entsorgung einer Chromstahlspüle.",
+    "popularity_score": 35
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2725a",
+    "name_fr": "Elimination, évier matériau composite (à base de poudre de roche) (pcs.)",
+    "name_de": "Entsorgung, Spüle Kompositwerkstoff (auf Gesteinsmehlbasis) (Stk.)",
+    "subcategory": "furniture_and_fixtures",
+    "input_units": [
+      "p"
+    ],
+    "default_unit": "p",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.179,
+        "unit": "kgCO2e/piece"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_mobilier_et_sols",
+      "furniture_and_fixtures",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.405253+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.405261+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2725b",
+    "name_fr": "Elimination, façade, poteaux-traverses, alu/verre (m2)",
+    "name_de": "Entsorgung, Fassade, Pfosten-Riegel, Alu/Glas (m2)",
+    "subcategory": "building_elements_and_structures",
+    "input_units": [
+      "m2"
+    ],
+    "default_unit": "m2",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 13.1,
+        "unit": "kgCO2e/m2"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_elements_techniques_du_batiment",
+      "building_elements_and_structures",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.405570+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.405577+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Démolition façade aluminium-verre",
+    "name_simple_de": "Entsorgung Alu-Glas-Fassade",
+    "description_fr": "Émissions liées à la démolition et élimination d'une façade composée de cadres en aluminium et de panneaux de verre. Inclut le transport et le traitement des matériaux.",
+    "description_de": "Emissionen beim Abriss und der Entsorgung einer Fassade mit Aluminiumprofilen und Glaspaneelen. Umfasst Transport und Materialbehandlung.",
+    "search_tags": [
+      "façade",
+      "demolition",
+      "aluminum",
+      "verre",
+      "curtain wall",
+      "poteaux-traverses",
+      "deconstruction",
+      "waste"
+    ],
+    "usage_hint_fr": "Utilisez pour des travaux de démolition ou rénovation de façades modernes.",
+    "usage_hint_de": "Nutzen Sie dies für Abriss- oder Renovierungsarbeiten an modernen Fassaden.",
+    "popularity_score": 45
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2725c",
+    "name_fr": "Elimination, matériaux de construction, minéraux, non spécifiques (kg)",
+    "name_de": "Entsorgung, Baumaterialien, mineralisch, unspezifisch (kg)",
+    "subcategory": "building_and_construction_materials",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.0128,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_materiaux_de_construction",
+      "building_and_construction_materials",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.405926+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.405937+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Élimination de déchets minéraux de construction",
+    "name_simple_de": "Entsorgung von mineralischen Bauresten",
+    "description_fr": "Émissions liées à l'élimination (mise en décharge, recyclage, incinération) de matériaux de construction minéraux génériques comme béton, briques ou tuiles.",
+    "description_de": "Emissionen bei der Entsorgung (Deponierung, Recycling, Verbrennung) von allgemeinen mineralischen Baumaterialien wie Beton, Ziegeln oder Dachziegeln.",
+    "search_tags": [
+      "déchets construction",
+      "matériaux minéraux",
+      "déchets bâtiment",
+      "béton élimination",
+      "construction waste",
+      "mineral waste",
+      "déconstruction",
+      "démolition"
+    ],
+    "usage_hint_fr": "Lors de démolitions, rénovations ou élimination de matériaux de construction minéraux.",
+    "usage_hint_de": "Bei Abriss, Renovierung oder Entsorgung von mineralischen Baumaterialien.",
+    "popularity_score": 65
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2725d",
+    "name_fr": "Elimination, fibrociment (kg)",
+    "name_de": "Entsorgung, Faserzement (kg)",
+    "subcategory": "building_and_construction_materials",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.0133,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_materiaux_de_construction",
+      "building_and_construction_materials",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.406285+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.406294+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Élimination de fibrociment",
+    "name_simple_de": "Entsorgung von Faserzement",
+    "description_fr": "Émissions liées à l'élimination (recyclage ou mise en décharge) de fibrociment, matériau contenant des fibres minérales utilisé en construction.",
+    "description_de": "Emissionen aus der Entsorgung (Recycling oder Deponierung) von Faserzement, einem faserhaltigem Material aus dem Bauwesen.",
+    "search_tags": [
+      "fibrociment",
+      "faserzement",
+      "amiante",
+      "construction",
+      "déchets",
+      "élimination",
+      "recyclage",
+      "matériaux"
+    ],
+    "usage_hint_fr": "Travaux de démolition ou rénovation de toitures/façades anciennes.",
+    "usage_hint_de": "Bei Abriss oder Sanierung alter Dächer/Fassaden.",
+    "popularity_score": 42
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2725e",
+    "name_fr": "Elimination, briques (kg)",
+    "name_de": "Entsorgung, Ziegel (kg)",
+    "subcategory": "building_and_construction_materials",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.0128,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_materiaux_de_construction",
+      "building_and_construction_materials",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.406546+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.406555+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2725f",
+    "name_fr": "Elimination, mortier, enduits (kg)",
+    "name_de": "Entsorgung, Mörtel, Putze (kg)",
+    "subcategory": "mineral_construction_materials",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.0129,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_mineraux",
+      "mineral_construction_materials",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.406792+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.406798+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Mortier et enduits à éliminer",
+    "name_simple_de": "Mörtel und Putze zur Entsorgung",
+    "description_fr": "Émissions liées à l'élimination de mortier, enduits ou plâtre provenant de démolition ou rénovation de bâtiments.",
+    "description_de": "Emissionen aus der Entsorgung von Mörtel, Putzen oder Gips aus Abriss oder Gebäudesanierung.",
+    "search_tags": [
+      "déchet construction",
+      "demolition",
+      "mortier",
+      "enduit",
+      "plâtre",
+      "waste",
+      "construction waste",
+      "disposal",
+      "renovation"
+    ],
+    "usage_hint_fr": "Pour les projets de rénovation ou démolition avec évacuation de matériaux.",
+    "usage_hint_de": "Bei Renovierungs- oder Abrissprojekten mit Materialentsorgung.",
+    "popularity_score": 45
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27260",
+    "name_fr": "Elimination, façade, minéral, calcaire (m2)",
+    "name_de": "Entsorgung, Fassade, mineralisch, Kalkstein (m2)",
+    "subcategory": "building_elements_and_structures",
+    "input_units": [
+      "m2"
+    ],
+    "default_unit": "m2",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 1.0,
+        "unit": "kgCO2e/m2"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_elements_techniques_du_batiment",
+      "building_elements_and_structures",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.407027+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.407033+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Démolition de façade en calcaire",
+    "name_simple_de": "Entsorgung Kalksteinfassade",
+    "description_fr": "Émissions liées à la démolition et l'élimination d'une façade en pierre calcaire. Inclut transport et traitement des déchets de construction.",
+    "description_de": "Emissionen beim Abriss und der Entsorgung einer Kalksteinfassade. Umfasst Transport und Behandlung von Bauschutt.",
+    "search_tags": [
+      "démolition façade",
+      "calcaire élimination",
+      "déconstruction bâtiment",
+      "mineral waste",
+      "façade pierre",
+      "construction waste",
+      "abbau fassade",
+      "bauschutt"
+    ],
+    "usage_hint_fr": "Travaux de rénovation/démolition de façade en pierre calcaire",
+    "usage_hint_de": "Renovierungs- oder Abbrucharbeiten an Kalksteinfassaden",
+    "popularity_score": 35
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27261",
+    "name_fr": "Elimination, métaux non ferreux (kg)",
+    "name_de": "Entsorgung, Nichteisenmetalle (kg)",
+    "subcategory": "metal_materials",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.00798,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_metaux",
+      "metal_materials",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.407273+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.407279+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Recyclage des métaux non-ferreux",
+    "name_simple_de": "Recycling von Nichteisenmetallen",
+    "description_fr": "Émissions liées à l'élimination de métaux comme l'aluminium, le cuivre ou le zinc. Exemple: recycler 1 kg d'aluminium génère ~8g de CO2.",
+    "description_de": "Emissionen bei der Entsorgung von Metallen wie Aluminium, Kupfer oder Zink. Beispiel: 1 kg Aluminium recyceln erzeugt ~8g CO2.",
+    "search_tags": [
+      "aluminium",
+      "cuivre",
+      "zinc",
+      "métaux",
+      "recyclage",
+      "non-ferreux",
+      "entsorgung",
+      "metalle",
+      "scrap metal",
+      "déchets métalliques"
+    ],
+    "usage_hint_fr": "Pour les déchets d'aluminium, cuivre, zinc ou laiton de votre entreprise.",
+    "usage_hint_de": "Für Aluminium-, Kupfer-, Zink- oder Messingabfälle Ihres Unternehmens.",
+    "popularity_score": 42
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27262",
+    "name_fr": "Elimination, acier d'armature (kg)",
+    "name_de": "Entsorgung, Armierungsstahl (kg)",
+    "subcategory": "metal_materials",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.0124,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_metaux",
+      "metal_materials",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.407514+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.407521+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27263",
+    "name_fr": "Elimination, acier (kg)",
+    "name_de": "Entsorgung, Stahl (kg)",
+    "subcategory": "metal_materials",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.00699,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_metaux",
+      "metal_materials",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.407822+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.407839+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Recyclage de l'acier",
+    "name_simple_de": "Stahlrecycling",
+    "description_fr": "Émissions liées à l'élimination ou recyclage de déchets d'acier. Ex: tuyaux, ferrailles, structures métalliques usagées.",
+    "description_de": "Emissionen bei der Entsorgung oder dem Recycling von Stahlabfällen. Beispiele: Rohre, Schrott, alte Metallkonstruktionen.",
+    "search_tags": [
+      "acier",
+      "steel",
+      "recyclage",
+      "recycling",
+      "ferraille",
+      "scrap",
+      "déchet métal",
+      "metal waste",
+      "élimination",
+      "disposal"
+    ],
+    "usage_hint_fr": "Quand vous éliminez ou recyclez des produits en acier",
+    "usage_hint_de": "Wenn Sie Stahlprodukte entsorgen oder recyceln",
+    "popularity_score": 62
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27264",
+    "name_fr": "Elimination, matériaux composites, organique-minéral (kg)",
+    "name_de": "Entsorgung, Verbundmaterialien, organisch-mineralisch (kg)",
+    "subcategory": "synthetic_and_composite_materials",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.0363,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_materiaux_synthetiques",
+      "synthetic_and_composite_materials",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.408276+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.408295+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Élimination matériaux composites",
+    "name_simple_de": "Entsorgung von Verbundmaterialien",
+    "description_fr": "Émissions générées par l'élimination (incinération, mise en décharge) de matériaux combinant fibres et résine. Ex: panneaux isolants, pales d'éoliennes.",
+    "description_de": "Emissionen bei der Entsorgung von Materialien aus Fasern und Harz. Beispiele: Dämmpaneele, Windkraftflügel.",
+    "search_tags": [
+      "composite",
+      "recyclage",
+      "incineration",
+      "entsorgung",
+      "fiber reinforced",
+      "frp",
+      "déchet composite",
+      "abfallbehandlung"
+    ],
+    "usage_hint_fr": "Pour les déchets de matériaux composites de votre entreprise",
+    "usage_hint_de": "Für Verbundmaterialabfälle Ihres Unternehmens",
+    "popularity_score": 35
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27265",
+    "name_fr": "Elimination, panneau de particules, 10% de liant (kg)",
+    "name_de": "Entsorgung, Spanplatte, 10% Bindemittel (kg)",
+    "subcategory": "building_and_construction_materials",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.08,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_materiaux_de_construction",
+      "building_and_construction_materials",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.408578+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.408585+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Élimination panneau de particules",
+    "name_simple_de": "Entsorgung Spanplatte",
+    "description_fr": "Émissions générées par le traitement et l'élimination des panneaux de particules (agglomérés) après déconstruction ou fin de vie du bâtiment.",
+    "description_de": "Emissionen aus Behandlung und Entsorgung von Spanplatten nach Gebäudeabbruch oder Lebensende.",
+    "search_tags": [
+      "panneau particules",
+      "aggloméré",
+      "déchet construction",
+      "particleboard",
+      "disposal",
+      "end of life",
+      "liant",
+      "démolition"
+    ],
+    "usage_hint_fr": "Lors du calcul des émissions de fin de vie des matériaux de construction.",
+    "usage_hint_de": "Bei der Berechnung der Emissionen am Lebensende von Baustoffen.",
+    "popularity_score": 45
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27266",
+    "name_fr": "Elimination, adhésifs, mastics, peintures (kg)",
+    "name_de": "Entsorgung, Kleb-, Dichtstoffe, Anstriche (kg)",
+    "subcategory": "special_waste_types",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.187,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_speciaux",
+      "special_waste_types",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.408851+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.408858+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27267",
+    "name_fr": "Elimination, feuilles d'étanchéité et de protection, EPDM (kg)",
+    "name_de": "Entsorgung, Dichtungsbahnen und Schutzfolien, EPDM (kg)",
+    "subcategory": "insulation_and_waterproofing",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 3.1,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_materiel_disolation",
+      "insulation_and_waterproofing",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.409086+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.409101+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Élimination de membranes EPDM",
+    "name_simple_de": "Entsorgung von EPDM-Membranen",
+    "description_fr": "Émissions liées au recyclage ou à l'incinération de feuilles d'étanchéité en caoutchouc synthétique EPDM utilisées en toiture ou isolation.",
+    "description_de": "Emissionen aus Recycling oder Verbrennung von EPDM-Gummidichtungsbahnen, die bei Dachdeckung oder Isolierung verwendet werden.",
+    "search_tags": [
+      "EPDM",
+      "membrane étanchéité",
+      "feuille protection",
+      "waterproofing",
+      "elimination déchet",
+      "synthetic rubber",
+      "toiture",
+      "roofing waste"
+    ],
+    "usage_hint_fr": "Utilisez pour les déchets de membranes EPDM en fin de vie d'un bâtiment.",
+    "usage_hint_de": "Verwenden Sie für Abfallmengen von EPDM-Membranen am Ende der Lebensdauer.",
+    "popularity_score": 42
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27268",
+    "name_fr": "Elimination, feuilles d'étanchéité et de protection, polyoléfine (kg)",
+    "name_de": "Entsorgung, Dichtungsbahnen und Schutzfolien, Polyolefin (kg)",
+    "subcategory": "insulation_and_waterproofing",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 2.67,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_materiel_disolation",
+      "insulation_and_waterproofing",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.409323+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.409329+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Élimination de films plastiques de toiture",
+    "name_simple_de": "Entsorgung von Kunststoffdachfolien",
+    "description_fr": "Émissions liées au recyclage ou à l'élimination de films plastiques (polyoléfine) utilisés pour l'étanchéité et la protection des toitures et isolations.",
+    "description_de": "Emissionen aus dem Recycling oder der Entsorgung von Kunststofffolien (Polyolefin) für Dachabdichtung und Isolationsschutz.",
+    "search_tags": [
+      "film étanchéité",
+      "feuille protection",
+      "polyoléfine",
+      "déchet toiture",
+      "waterproofing membrane",
+      "plastic disposal",
+      "HDPE",
+      "déchets construction",
+      "membrane",
+      "roofing waste"
+    ],
+    "usage_hint_fr": "Utilisez lors de la fin de vie de couches d'étanchéité en plastique",
+    "usage_hint_de": "Bei Entsorgung von Kunststoff-Abdichtungsschichten anwenden",
+    "popularity_score": 42
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27269",
+    "name_fr": "Elimination, papier kraft (kg)",
+    "name_de": "Entsorgung, Kraft-Papier (kg)",
+    "subcategory": "special_waste_types",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.0586,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_speciaux",
+      "special_waste_types",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.409601+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.409617+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Élimination de papier kraft",
+    "name_simple_de": "Entsorgung von Kraftpapier",
+    "description_fr": "Émissions produites lors du recyclage ou de l'élimination du papier kraft (cartons, emballages). Exemple: boîtes de livraison, sachets en papier épais.",
+    "description_de": "Emissionen aus dem Recycling oder der Entsorgung von Kraftpapier (Kartons, Verpackungen). Beispiel: Versandkartons, dicke Papiersäcke.",
+    "search_tags": [
+      "papier kraft",
+      "kraft paper",
+      "carton",
+      "emballage papier",
+      "recyclage papier",
+      "élimination",
+      "waste paper",
+      "packaging",
+      "déchets papier"
+    ],
+    "usage_hint_fr": "Utilisez-le pour les emballages en papier fort que vous éliminez.",
+    "usage_hint_de": "Verwenden Sie es für dicke Papierverpackungen zur Entsorgung.",
+    "popularity_score": 45
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2726a",
+    "name_fr": "Elimination, panneau de liège (kg)",
+    "name_de": "Entsorgung, Korkplatte (kg)",
+    "subcategory": "building_and_construction_materials",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.0392,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_materiaux_de_construction",
+      "building_and_construction_materials",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.409889+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.409896+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2726b",
+    "name_fr": "Elimination, matériau d'isolation organique, polystyrène (kg)",
+    "name_de": "Entsorgung, Dämmstoff, organisch, Polystyrol (kg)",
+    "subcategory": "insulation_and_waterproofing",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 3.09,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_materiel_disolation",
+      "insulation_and_waterproofing",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.410197+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.410209+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Recyclage polystyrène",
+    "name_simple_de": "Polystyrol-Recycling",
+    "description_fr": "Émissions liées à l'élimination ou recyclage du polystyrène (mousse isolante). Ex: vieux panneaux isolants d'une rénovation.",
+    "description_de": "Emissionen aus Entsorgung oder Recycling von Polystyrol (Schaumisolierung). Bsp: alte Dämmplatten einer Renovierung.",
+    "search_tags": [
+      "polystyrène",
+      "styrofoam",
+      "mousse isolante",
+      "isolation",
+      "recyclage",
+      "déchet construction",
+      "EPS",
+      "demolition"
+    ],
+    "usage_hint_fr": "Lors d'une rénovation ou démolition avec élimination d'isolant.",
+    "usage_hint_de": "Bei Renovierung oder Abriss mit Isolationsentfernung.",
+    "popularity_score": 45
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2726c",
+    "name_fr": "Elimination, tuiles en céramique (m2)",
+    "name_de": "Entsorgung, Keramikziegel (m2)",
+    "subcategory": "building_and_construction_materials",
+    "input_units": [
+      "m2"
+    ],
+    "default_unit": "m2",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 4.15,
+        "unit": "kgCO2e/m2"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_materiaux_de_construction",
+      "building_and_construction_materials",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.410593+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.410602+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Élimination tuiles céramique",
+    "name_simple_de": "Entsorgung Keramikziegel",
+    "description_fr": "Émissions générées par le recyclage ou l'élimination de tuiles en céramique usagées, par exemple lors de rénovations de toitures ou démolition de bâtiments.",
+    "description_de": "Emissionen beim Recycling oder der Beseitigung von gebrauchten Keramikziegeln, z.B. bei Dachsanierungen oder Gebäudeabbruch.",
+    "search_tags": [
+      "tuiles",
+      "céramique",
+      "toiture",
+      "déconstruction",
+      "recyclage matériaux",
+      "ceramic tiles",
+      "roof disposal",
+      "déchet construction",
+      "démolition",
+      "rénovation"
+    ],
+    "usage_hint_fr": "Utiliser pour les projets de rénovation ou démolition impliquant des toitures en tuiles.",
+    "usage_hint_de": "Verwenden Sie dies für Renovierungs- oder Abbruchprojekte mit Ziegeldächern.",
+    "popularity_score": 45,
+    "additional_info_fr": "Scope 3 - Émissions indirectes liées au traitement des déchets.",
+    "additional_info_de": "Scope 3 - Indirekte Emissionen durch Abfallbehandlung.",
+    "impact_value": 4.15,
+    "impact_unit": "kgCO2e/m2"
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2726d",
+    "name_fr": "Elimination, tuiles en pierre artificielle (m2)",
+    "name_de": "Entsorgung, Kunststeinziegel (m2)",
+    "subcategory": "building_and_construction_materials",
+    "input_units": [
+      "m2"
+    ],
+    "default_unit": "m2",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 5.92,
+        "unit": "kgCO2e/m2"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_materiaux_de_construction",
+      "building_and_construction_materials",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.410983+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.410995+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Démolition de tuiles synthétiques",
+    "name_simple_de": "Entsorgung von Kunststeinziegeln",
+    "description_fr": "Émissions liées à l'élimination et au traitement des tuiles en pierre artificielle en fin de vie. Comprend le transport et le traitement en déchetterie.",
+    "description_de": "Emissionen aus der Entsorgung von Kunststeinziegeln am Ende ihrer Lebensdauer. Umfasst Transport und Behandlung in Entsorgungsanlagen.",
+    "search_tags": [
+      "tuiles",
+      "toiture",
+      "démolition",
+      "déconstruction",
+      "pierre artificielle",
+      "kunststeinziegel",
+      "fin de vie",
+      "waste",
+      "recyclage",
+      "élimination"
+    ],
+    "usage_hint_fr": "Lors du démantèlement ou rénovation de toitures avec tuiles synthétiques",
+    "usage_hint_de": "Bei Abbruch oder Sanierung von Dächern mit Kunststeinziegeln",
+    "popularity_score": 45
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2726e",
+    "name_fr": "Elimination, tuiles en pierre naturelle (m2)",
+    "name_de": "Entsorgung, Natursteinziegel (m2)",
+    "subcategory": "building_and_construction_materials",
+    "input_units": [
+      "m2"
+    ],
+    "default_unit": "m2",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.519,
+        "unit": "kgCO2e/m2"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_materiaux_de_construction",
+      "building_and_construction_materials",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.411495+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.411506+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2726f",
+    "name_fr": "Elimination, tuyaux en plastique, ABS (kg)",
+    "name_de": "Entsorgung, Kunststoff-Rohre, ABS (kg)",
+    "subcategory": "plastic_and_rubber_materials",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 2.75,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_plastiques",
+      "plastic_and_rubber_materials",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.411839+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.411848+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Recyclage tuyaux plastique ABS",
+    "name_simple_de": "Recycling ABS-Kunststoffrohre",
+    "description_fr": "Émissions liées à l'élimination et au recyclage de tuyaux en plastique ABS. Exemple: tuyaux d'évacuation, gaines techniques usagés.",
+    "description_de": "Emissionen bei der Entsorgung und dem Recycling von ABS-Kunststoffrohren. Beispiel: alte Ablauf- oder technische Rohre.",
+    "search_tags": [
+      "ABS",
+      "tuyaux plastique",
+      "entsorgung",
+      "plastic pipes",
+      "recycling",
+      "élimination",
+      "kunststoff",
+      "déchets"
+    ],
+    "usage_hint_fr": "Lors du recyclage/élimination de tuyauterie en plastique usagée",
+    "usage_hint_de": "Bei Entsorgung/Recycling von alten Kunststoffrohren",
+    "popularity_score": 35
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27270",
+    "name_fr": "Elimination, tuyaux en plastique, PVC (kg)",
+    "name_de": "Entsorgung, Kunststoff-Rohre, PVC (kg)",
+    "subcategory": "plastic_and_rubber_materials",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 2.1,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_plastiques",
+      "plastic_and_rubber_materials",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.412728+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.412743+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Recyclage tuyaux PVC",
+    "name_simple_de": "Recycling von PVC-Rohren",
+    "description_fr": "Émissions liées à l'élimination ou au recyclage des tuyaux en plastique (PVC). Exemple: Tuyaux d'évacuation, canalisations après déconstruction.",
+    "description_de": "Emissionen beim Recycling oder der Entsorgung von Kunststoffrohren (PVC). Beispiel: Abwasserrohre, Rohrleitungen nach Abriss.",
+    "search_tags": [
+      "PVC",
+      "tuyaux plastique",
+      "recyclage plastique",
+      "élimination PVC",
+      "plastic pipes",
+      "canalisations",
+      "déchets PVC",
+      "end-of-life",
+      "déconstruction"
+    ],
+    "usage_hint_fr": "Utilisez pour les tuyaux PVC après fin de vie ou déconstruction.",
+    "usage_hint_de": "Verwenden Sie diesen Wert für PVC-Rohre am Ende ihrer Lebensdauer.",
+    "popularity_score": 45
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27271",
+    "name_fr": "Elimination, peinture, 1 couche (m2)",
+    "name_de": "Entsorgung, Farbe, 1 Schicht (m2)",
+    "subcategory": "special_waste_types",
+    "input_units": [
+      "m2"
+    ],
+    "default_unit": "m2",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.0468,
+        "unit": "kgCO2e/m2"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_speciaux",
+      "special_waste_types",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.413063+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.413071+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Élimination peinture (1 couche)",
+    "name_simple_de": "Farbentsorgung (1 Schicht)",
+    "description_fr": "Déchets de peinture après travaux de rénovation ou peinture neuve. Inclut le traitement et l'élimination responsable.",
+    "description_de": "Farbabfälle nach Renovierungs- oder Neuanstricharbeiten. Umfasst die verantwortungsvolle Behandlung und Entsorgung.",
+    "search_tags": [
+      "peinture",
+      "déchet peinture",
+      "élimination peinture",
+      "paint waste",
+      "rénovation",
+      "couche peinture",
+      "traitement déchet",
+      "surface peinte"
+    ],
+    "usage_hint_fr": "Mesurez la surface peinte en m² lors de travaux de peinture ou rénovation.",
+    "usage_hint_de": "Messen Sie die gestrichene Fläche in m² bei Maler- oder Renovierungsarbeiten.",
+    "popularity_score": 45
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27272",
+    "name_fr": "Elimination, plastiques d'hydrocarbures purs (kg)",
+    "name_de": "Entsorgung, Kunststoffe aus reinen Kohlenwasserstoffen (kg)",
+    "subcategory": "plastic_and_rubber_materials",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 2.92,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_plastiques",
+      "plastic_and_rubber_materials",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.413323+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.413330+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27273",
+    "name_fr": "Elimination, matières plastiques, contenant de l'azote (kg)",
+    "name_de": "Entsorgung, Kunststoffe, stickstoffhaltig (kg)",
+    "subcategory": "plastic_and_rubber_materials",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 2.62,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_plastiques",
+      "plastic_and_rubber_materials",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.413542+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.413548+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Recyclage plastique avec azote",
+    "name_simple_de": "Recycling von stickstoffhaltigem Kunststoff",
+    "description_fr": "Émissions générées par l'élimination ou le recyclage de plastiques contenant de l'azote (ex: certaines mousses, revêtements). À utiliser pour les déchets plastiques spécialisés.",
+    "description_de": "Emissionen aus der Entsorgung oder dem Recycling von stickstoffhaltigen Kunststoffen (z.B. bestimmte Schäume, Beschichtungen). Für spezialisierte Kunststoffabfälle verwenden.",
+    "search_tags": [
+      "plastique azote",
+      "déchets plastiques",
+      "recyclage plastique",
+      "mousse polyuréthane",
+      "elimination dechets",
+      "nitrogen plastic",
+      "kunststoff entsorgung",
+      "polyurethane"
+    ],
+    "usage_hint_fr": "Déchets plastiques spécialisés contenant de l'azote (mousses, isolants)",
+    "usage_hint_de": "Spezialisierte Kunststoffabfälle mit Stickstoff (Schäume, Dämmstoffe)",
+    "popularity_score": 42
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27274",
+    "name_fr": "Jeter du polystyrène",
+    "name_de": "Polystyrol entsorgen",
+    "subcategory": "insulation_and_waterproofing",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 3.08,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_materiel_disolation",
+      "insulation_and_waterproofing",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.413767+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.413772+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "description_fr": "Émissions liées à l'élimination/recyclage du polystyrène (mousse isolante blanche). Exemple: déchets de chantier ou ancienne isolation.",
+    "description_de": "Emissionen bei der Entsorgung/dem Recycling von Polystyrol (weisse Isolierschaum). Beispiel: Bauschutt oder alte Dämmung.",
+    "search_tags": [
+      "polystyrène",
+      "styrofoam",
+      "isolation",
+      "déchet",
+      "recyclage",
+      "mousse",
+      "EPS",
+      "XPS"
+    ],
+    "usage_hint_fr": "Utilisez quand vous avez du polystyrène à éliminer",
+    "usage_hint_de": "Verwenden Sie, wenn Sie Polystyrol entsorgen müssen",
+    "popularity_score": 45,
+    "scope": "scope3",
+    "emission_factor": 3.08,
+    "emission_unit": "kgCO2e/kg",
+    "input_unit": "kg"
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27275",
+    "name_fr": "Elimination, plan de travail acier chromé, haut de gamme (m2)",
+    "name_de": "Entsorgung, Arbeitsplatte Chromstahl, High-End (m2)",
+    "subcategory": "furniture_and_fixtures",
+    "input_units": [
+      "m2"
+    ],
+    "default_unit": "m2",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.447,
+        "unit": "kgCO2e/m2"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_mobilier_et_sols",
+      "furniture_and_fixtures",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.413991+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.413996+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27276",
+    "name_fr": "Elimination, porte extérieure, aluminium, vitre (m2)",
+    "name_de": "Entsorgung, Aussentüre, Aluminium, Glaseinsatz (m2)",
+    "subcategory": "building_elements_and_structures",
+    "input_units": [
+      "m2"
+    ],
+    "default_unit": "m2",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 14.8,
+        "unit": "kgCO2e/m2"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_elements_techniques_du_batiment",
+      "building_elements_and_structures",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.414238+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.414244+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Élimination porte aluminium vitrée",
+    "name_simple_de": "Entsorgung Aluminiumtür mit Glas",
+    "description_fr": "Émissions liées au recyclage/élimination d'une porte extérieure en aluminium avec vitrage. Concerne les portes d'entrée, baies vitrées.",
+    "description_de": "Emissionen beim Recycling/Entsorgung einer Außentür aus Aluminium mit Verglasung. Betrifft Eingangstüren, Glasschiebetüren.",
+    "search_tags": [
+      "porte extérieure",
+      "aluminium",
+      "vitrée",
+      "door disposal",
+      "fenêtre",
+      "baie vitrée",
+      "entsorgung tür",
+      "déchets construction",
+      "fin de vie"
+    ],
+    "usage_hint_fr": "Entrez la surface en m² de portes aluminium à éliminer en fin de vie",
+    "usage_hint_de": "Fläche in m² von entsorgten Aluminiumtüren eingeben",
+    "popularity_score": 35
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27277",
+    "name_fr": "Elimination, porte extérieure, aluminium, panneau (m2)",
+    "name_de": "Entsorgung, Aussentüre, Aluminium, Paneelfüllung (m2)",
+    "subcategory": "building_elements_and_structures",
+    "input_units": [
+      "m2"
+    ],
+    "default_unit": "m2",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 10.0,
+        "unit": "kgCO2e/m2"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_elements_techniques_du_batiment",
+      "building_elements_and_structures",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.414476+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.414482+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Élimination porte aluminium",
+    "name_simple_de": "Entsorgung Aluminiumtür",
+    "description_fr": "Émissions générées par le recyclage ou l'élimination d'une porte extérieure en aluminium. Inclut le transport et le traitement des matériaux.",
+    "description_de": "Emissionen beim Recycling oder der Entsorgung einer Außentür aus Aluminium. Umfasst Transport und Materialbehandlung.",
+    "search_tags": [
+      "porte extérieure",
+      "aluminium",
+      "élimination",
+      "disposal",
+      "door recycling",
+      "déconstruction",
+      "waste",
+      "déchets bâtiment"
+    ],
+    "usage_hint_fr": "Calculer l'impact de la démolition ou rénovation de portes",
+    "usage_hint_de": "Berechnen Sie die Auswirkungen des Rückbaus von Türen",
+    "popularity_score": 35
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27278",
+    "name_fr": "Elimination, bâtiment, porte extérieure, bois (m2)",
+    "name_de": "Entsorgung, Gebäude, Aussentüre, Holz (m2)",
+    "subcategory": "building_elements_and_structures",
+    "input_units": [
+      "m2"
+    ],
+    "default_unit": "m2",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 7.65,
+        "unit": "kgCO2e/m2"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_elements_techniques_du_batiment",
+      "building_elements_and_structures",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.414708+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.414714+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Élimination porte bois extérieure",
+    "name_simple_de": "Entsorgung Holzaussentür",
+    "description_fr": "Émissions liées au recyclage ou à l'élimination d'une porte extérieure en bois. Exemple: déconstruction d'un bâtiment ou rénovation.",
+    "description_de": "Emissionen beim Recycling oder der Beseitigung einer Holzaussentür. Beispiel: Gebäudeabriss oder Renovierung.",
+    "search_tags": [
+      "porte bois",
+      "door disposal",
+      "élimination bâtiment",
+      "déconstruction",
+      "fin de vie",
+      "wooden door",
+      "Holztür Entsorgung",
+      "Abbruch",
+      "Recycling"
+    ],
+    "usage_hint_fr": "Utilisez lors de la déconstruction ou fin de vie d'une porte.",
+    "usage_hint_de": "Verwenden Sie beim Abriss oder Ende der Lebensdauer einer Tür.",
+    "popularity_score": 35
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27279",
+    "name_fr": "Elimination, porte intérieure, aluminium, vitrage (m2)",
+    "name_de": "Entsorgung, Innentüre, Aluminium, Glaseinsatz (m2)",
+    "subcategory": "building_elements_and_structures",
+    "input_units": [
+      "m2"
+    ],
+    "default_unit": "m2",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 8.71,
+        "unit": "kgCO2e/m2"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_elements_techniques_du_batiment",
+      "building_elements_and_structures",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.414931+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.414937+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2727a",
+    "name_fr": "Mise au rebut, bâtiment, porte fonctionnelle, bois, cadre en bois (m2)",
+    "name_de": "Entsorgung, Gebäude, Funktionstüre, Holz, Holzrahmen (m2)",
+    "subcategory": "building_elements_and_structures",
+    "input_units": [
+      "m2"
+    ],
+    "default_unit": "m2",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 6.87,
+        "unit": "kgCO2e/m2"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_elements_techniques_du_batiment",
+      "building_elements_and_structures",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.415211+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.415219+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Élimination de portes en bois",
+    "name_simple_de": "Entsorgung von Holztüren",
+    "description_fr": "Émissions liées au recyclage ou à l'élimination de portes en bois provenant de bâtiments. Exemples: démolition, dépose lors de rénovations.",
+    "description_de": "Emissionen beim Recycling oder der Entsorgung von Holztüren aus Gebäuden. Beispiele: Abriss, Ausbau bei Sanierungen.",
+    "search_tags": [
+      "porte bois",
+      "wooden door",
+      "waste disposal",
+      "déconstruction",
+      "déchets construction",
+      "élimination",
+      "recyclage bois",
+      "end of life"
+    ],
+    "usage_hint_fr": "Lors de rénovations ou démolitions avec enlèvement de portes en bois.",
+    "usage_hint_de": "Bei Renovierungen oder Abriss mit Entfernung von Holztüren.",
+    "popularity_score": 35
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2727b",
+    "name_fr": "Elimination, bâtiment, porte fonctionnelle, bois, huisserie en acier (m2)",
+    "name_de": "Entsorgung, Gebäude, Funktionstüre, Holz, Stahlzarge (m2)",
+    "subcategory": "building_elements_and_structures",
+    "input_units": [
+      "m2"
+    ],
+    "default_unit": "m2",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 6.47,
+        "unit": "kgCO2e/m2"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_elements_techniques_du_batiment",
+      "building_elements_and_structures",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.415496+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.415505+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Démolition porte bois avec cadre acier",
+    "name_simple_de": "Entsorgung Holztür mit Stahlrahmen",
+    "description_fr": "Émissions liées à la destruction et recyclage d'une porte en bois avec encadrement en acier lors de la rénovation ou démolition d'un bâtiment.",
+    "description_de": "Emissionen bei Entsorgung einer Holztür mit Stahlzarge während Renovierung oder Gebäudeabriss.",
+    "search_tags": [
+      "porte",
+      "huisserie",
+      "door",
+      "démolition",
+      "déconstruction",
+      "cadre acier",
+      "disposal",
+      "bâtiment",
+      "rénovation"
+    ],
+    "usage_hint_fr": "Calculez la surface totale des portes à éliminer lors d'une rénovation",
+    "usage_hint_de": "Berechnen Sie die Gesamtfläche der zu entsorgenden Türen",
+    "popularity_score": 35,
+    "additional_context_fr": "Facteur rare, spécifique aux projets de rénovation ou démolition. Multiply by m² of doors to be removed.",
+    "additional_context_de": "Seltener Faktor, spezifisch für Renovierungs- oder Abbauprojekte."
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2727c",
+    "name_fr": "Elimination, bâtiment, porte intérieure, bois, vitrage, huisserie métallique (m2)",
+    "name_de": "Entsorgung, Gebäude, Innentüre, Holz, Glaseinsatz, Stahlzarge (m2)",
+    "subcategory": "building_elements_and_structures",
+    "input_units": [
+      "m2"
+    ],
+    "default_unit": "m2",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 6.54,
+        "unit": "kgCO2e/m2"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_elements_techniques_du_batiment",
+      "building_elements_and_structures",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.415885+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.415895+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Démolition porte intérieure bois",
+    "name_simple_de": "Entsorgung Innentür aus Holz",
+    "description_fr": "Émissions liées à l'élimination d'une porte intérieure en bois avec vitre et cadre métallique. Exemple: démolition d'une porte de bureau ou de chambre.",
+    "description_de": "Emissionen aus der Entsorgung einer Innentür aus Holz mit Glaseinsatz und Stahlrahmen. Beispiel: Abriss einer Büro- oder Zimmertür.",
+    "search_tags": [
+      "porte intérieure",
+      "démolition",
+      "bois",
+      "vitre",
+      "huisserie",
+      "door removal",
+      "interior door",
+      "élimination",
+      "déconstruction",
+      "recyclage"
+    ],
+    "usage_hint_fr": "Utilisez ce facteur pour calculer l'impact de la démolition de portes en bois.",
+    "usage_hint_de": "Nutzen Sie diesen Faktor für die Berechnung der Auswirkungen des Abrisses von Holztüren.",
+    "popularity_score": 45
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2727d",
+    "name_fr": "Mise au rebut, bâtiment, porte intérieure, bois, huisserie en acier (m2)",
+    "name_de": "Entsorgung, Gebäude, Innentüre, Holz, Stahlzarge (m2)",
+    "subcategory": "building_elements_and_structures",
+    "input_units": [
+      "m2"
+    ],
+    "default_unit": "m2",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 5.0,
+        "unit": "kgCO2e/m2"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_elements_techniques_du_batiment",
+      "building_elements_and_structures",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.416172+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.416179+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2727e",
+    "name_fr": "Mise au rebut, élargissement du cadre, PVC (m2)",
+    "name_de": "Entsorgung, Rahmenverbreiterung, PVC (m2)",
+    "subcategory": "building_elements_and_structures",
+    "input_units": [
+      "m2"
+    ],
+    "default_unit": "m2",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 30.1,
+        "unit": "kgCO2e/m2"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_elements_techniques_du_batiment",
+      "building_elements_and_structures",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.416441+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.416448+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Élimination de PVC (par m²)",
+    "name_simple_de": "PVC-Entsorgung (pro m²)",
+    "description_fr": "Émissions liées à l'élimination en fin de vie d'une surface de PVC. Ex: vieux revêtements de sol, cadres de fenêtres ou panneaux muraux.",
+    "description_de": "Emissionen aus der Entsorgung von PVC-Flächen am Ende ihrer Lebensdauer. Z.B. alte Bodenbeläge, Fensterrahmen oder Wandpaneele.",
+    "search_tags": [
+      "PVC",
+      "déchet",
+      "élimination",
+      "fin de vie",
+      "recycling",
+      "waste disposal",
+      "entsorgung",
+      "abfall",
+      "revêtement"
+    ],
+    "usage_hint_fr": "Utilisez ce facteur pour calculer les émissions de vos démolitions ou rénovations de bâtiments.",
+    "usage_hint_de": "Verwenden Sie diesen Faktor für Emissionen von Abbruch- oder Renovierungsarbeiten.",
+    "popularity_score": 42
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2727f",
+    "name_fr": "Mise au rebut, élargissement du cadre, panneau de particules (m2)",
+    "name_de": "Entsorgung, Rahmenverbreiterung, Spanplatte (m2)",
+    "subcategory": "building_elements_and_structures",
+    "input_units": [
+      "m2"
+    ],
+    "default_unit": "m2",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 6.59,
+        "unit": "kgCO2e/m2"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_elements_techniques_du_batiment",
+      "building_elements_and_structures",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.416678+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.416684+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Panneau de particules (mise au rebut)",
+    "name_simple_de": "Spanplatte (Entsorgung)",
+    "description_fr": "Émissions liées à l'élimination d'un panneau de particules. Exemple: recycler ou incinérer 1 m² de panneau génère 6,59 kg CO₂.",
+    "description_de": "Emissionen aus der Entsorgung einer Spanplatte. Beispiel: 1 m² Spanplatte recyceln oder verbrennen erzeugt 6,59 kg CO₂.",
+    "search_tags": [
+      "particleboard",
+      "spanplatte",
+      "élimination",
+      "déchet",
+      "construction",
+      "panneaux",
+      "bois reconstitué",
+      "recycling",
+      "entsorgung"
+    ],
+    "usage_hint_fr": "Lors de rénovations ou démolitions impliquant des panneaux de particules.",
+    "usage_hint_de": "Bei Renovierungen oder Abrissen mit Spanplatten.",
+    "popularity_score": 45
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27280",
+    "name_fr": "Élimination pare-vapeur bitume",
+    "name_de": "Entsorgung Bitumen-Dampfbremse",
+    "subcategory": "insulation_and_waterproofing",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 2.33,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_materiel_disolation",
+      "insulation_and_waterproofing",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.416943+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.416949+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "description_fr": "Émissions liées au recyclage ou à l'élimination des films bitumés utilisés comme pare-vapeur dans l'isolation thermique des bâtiments.",
+    "description_de": "Emissionen beim Recycling oder der Entsorgung von Bitumenfolien, die als Dampfbremse in der Wärmeisolation von Gebäuden verwendet werden.",
+    "search_tags": [
+      "pare-vapeur",
+      "bitume",
+      "élimination",
+      "déconstruction",
+      "fin de vie",
+      "vapour barrier",
+      "Dampfbremse",
+      "Entsorgung",
+      "Renovation",
+      "Abbruch"
+    ],
+    "usage_hint_fr": "À utiliser lors de la déconstruction ou rénovation de bâtiments.",
+    "usage_hint_de": "Bei Abriss oder Sanierung von Gebäuden verwenden.",
+    "popularity_score": 45
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27281",
+    "name_fr": "Elimination, matériau d'isolation, minéral (kg)",
+    "name_de": "Entsorgung, Dämmstoff, mineralisch (kg)",
+    "subcategory": "insulation_and_waterproofing",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.0596,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_materiel_disolation",
+      "insulation_and_waterproofing",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.417216+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.417223+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022
   }
 ]
