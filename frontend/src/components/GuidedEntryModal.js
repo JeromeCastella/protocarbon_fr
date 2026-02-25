@@ -5,6 +5,7 @@ import {
   X, Check, Search, ChevronRight, Info, Sparkles, AlertCircle, RotateCcw, Loader2
 } from 'lucide-react';
 import { normalizeUnit, filterFactorsByUnitStrict, getAvailableUnitsFromFactors } from '../utils/units';
+import FactorSelectionStep from './FactorSelectionStep';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL || '';
 
