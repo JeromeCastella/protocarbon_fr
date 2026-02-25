@@ -425,6 +425,14 @@ const GuidedEntryModal = ({
   const handleSubmit = async () => {
     if (!selectedFactor || !quantity) return;
     
+    const qty = parseFloat(quantity);
+    const factorNativeUnit = findFactorNativeUnit(selectedFactor, selectedUnit);
+    const needsConversion = selectedUnit && selectedUnit !== factorNativeUnit;
+    
+    // Si conversion nécessaire, envoyer la quantité convertie + les infos originales
+    const convertedQtyValue = needsConversion ? convertUnit(qty, selectedUnit, factorNativeUnit) : qty;
+    const conversionFactor = needsConversion ? convertedQtyValue / qty : null;
+    
     await onSubmit({
       category_id: category.code,
       subcategory_id: selectedSubcategory?.code,
@@ -432,13 +440,15 @@ const GuidedEntryModal = ({
       name: language === 'fr' 
         ? (selectedFactor.name_fr || selectedFactor.name) 
         : (selectedFactor.name_de || selectedFactor.name),
-      quantity: parseFloat(quantity),
-      unit: selectedUnit || selectedFactor.default_unit || selectedFactor.input_units?.[0],
+      quantity: convertedQtyValue,           // Quantité convertie (pour calcul)
+      unit: factorNativeUnit,                // Unité du facteur
+      original_quantity: qty,                // Valeur saisie par l'utilisateur
+      original_unit: selectedUnit || factorNativeUnit,  // Unité saisie
+      conversion_factor: conversionFactor,   // Facteur de conversion (pour audit)
       emission_factor_id: selectedFactor.id,
       comments: comments,
-      // Nouveaux champs pour multi-impacts
-      entry_scope: scope,           // Scope de saisie original
-      entry_category: category.code // Catégorie de saisie originale
+      entry_scope: scope,
+      entry_category: category.code
     });
     
     onClose();
