@@ -262,6 +262,10 @@ class ActivityCreate(BaseModel):
     # Nouveaux champs pour multi-impacts
     entry_scope: Optional[str] = None      # Scope de saisie original
     entry_category: Optional[str] = None   # Catégorie de saisie originale
+    # Champs pour conversion d'unités
+    original_quantity: Optional[float] = None   # Quantité saisie par l'utilisateur
+    original_unit: Optional[str] = None         # Unité saisie par l'utilisateur
+    conversion_factor: Optional[float] = None   # Facteur de conversion appliqué
 
 class ActivityUpdate(BaseModel):
     name: Optional[str] = None
@@ -276,6 +280,10 @@ class ActivityUpdate(BaseModel):
     fiscal_year_id: Optional[str] = None
     subcategory_id: Optional[str] = None
     category_id: Optional[str] = None
+    # Champs pour conversion d'unités
+    original_quantity: Optional[float] = None
+    original_unit: Optional[str] = None
+    conversion_factor: Optional[float] = None
 
 class ActivityGroupUpdate(BaseModel):
     """Mise à jour d'un groupe d'activités multi-impacts"""
