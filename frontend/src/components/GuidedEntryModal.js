@@ -590,14 +590,16 @@ const GuidedEntryModal = ({
 
                 {/* Étape 3: Facteur d'émission - Nouveau composant amélioré */}
                 {step >= 3 && (
-                  <FactorSelectionStep
-                    factors={filteredFactors}
-                    selectedFactor={selectedFactor}
-                    onSelectFactor={handleFactorSelect}
-                    selectedUnit={selectedUnit}
-                    language={language}
-                    isDark={isDark}
-                  />
+                  <div className="flex-1 flex flex-col min-h-0">
+                    <FactorSelectionStep
+                      factors={filteredFactors}
+                      selectedFactor={selectedFactor}
+                      onSelectFactor={handleFactorSelect}
+                      selectedUnit={selectedUnit}
+                      language={language}
+                      isDark={isDark}
+                    />
+                  </div>
                 )}
 
                 {/* Étape 4: Quantité et résultat */}
