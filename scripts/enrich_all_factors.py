@@ -89,7 +89,7 @@ async def main():
     import requests
     
     print("Fetching all factors from API...")
-    API_URL = 'https://ecotracker-39.preview.emergentagent.com'
+    API_URL = 'https://impact-measure-5.preview.emergentagent.com'
     
     # Login
     login_resp = requests.post(

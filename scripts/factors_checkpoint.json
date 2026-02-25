@@ -17041,5 +17041,5709 @@
       }
     ],
     "valid_from_year": 2022
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27282",
+    "name_fr": "Elimination, tuyaux en plastique, PE ou PP (kg)",
+    "name_de": "Entsorgung, Kunststoffrohre, PE oder PP (kg)",
+    "subcategory": "plastic_and_rubber_materials",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 2.37,
+        "unit": "kgCO2e/kg",
+        "description_fr": "Émissions pour éliminer 1 kg de tuyaux plastique"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_plastiques",
+      "plastic_and_rubber_materials",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.417536+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.417549+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Recyclage tuyaux plastique PE/PP",
+    "name_simple_de": "Recycling von Kunststoffrohren PE/PP",
+    "description_fr": "Émissions liées à l'élimination ou au recyclage de tuyaux en plastique (polyéthylène ou polypropylène). Exemple: tuyaux d'eau, de drainage ou de canalisation.",
+    "description_de": "Emissionen aus der Entsorgung oder dem Recycling von Kunststoffrohren (Polyethylen oder Polypropylen). Beispiel: Wasser-, Entwässerungs- oder Abwasserleitungen.",
+    "search_tags": [
+      "tuyaux plastique",
+      "PE PP",
+      "polyéthylène polypropylène",
+      "élimination déchets",
+      "recyclage tuyaux",
+      "plastic pipes",
+      "canalisation",
+      "waste disposal"
+    ],
+    "usage_hint_fr": "À utiliser lors de la fin de vie de tuyaux en plastique d'un bâtiment ou installation.",
+    "usage_hint_de": "Verwenden Sie dies beim Lebensende von Kunststoffrohren in einem Gebäude oder einer Anlage.",
+    "popularity_score": 45
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27283",
+    "name_fr": "Radiateurs - élimination",
+    "name_de": "Heizkörper - Entsorgung",
+    "subcategory": "building_elements_and_structures",
+    "input_units": [
+      "m2"
+    ],
+    "default_unit": "m2",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.0221,
+        "unit": "kgCO2e/m2"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_elements_techniques_du_batiment",
+      "building_elements_and_structures",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.417866+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.417874+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "description_fr": "Émissions liées au recyclage ou à l'élimination de radiateurs en fin de vie. Mesuré par surface de radiateur.",
+    "description_de": "Emissionen beim Recycling oder der Entsorgung von Heizkörpern am Ende ihrer Lebensdauer. Gemessen pro Heizkörperfläche.",
+    "search_tags": [
+      "radiateur",
+      "chauffage",
+      "recyclage",
+      "fin de vie",
+      "déchet",
+      "heating",
+      "disposal",
+      "scrap metal",
+      "élimination"
+    ],
+    "usage_hint_fr": "Calculez lors du remplacement ou démolition de radiateurs.",
+    "usage_hint_de": "Nutzen Sie diesen Faktor beim Austausch oder Abriss von Heizkörpern.",
+    "popularity_score": 35,
+    "additional_info": {
+      "scope": "scope3",
+      "value": 0.0221,
+      "unit": "kgCO2e/m2",
+      "source": "KBOB",
+      "subcategory": "Éléments et structures du bâtiment",
+      "note_fr": "Facteur très spécifique au bâtiment. Les émissions sont faibles car le radiateur est partiellement recyclable.",
+      "note_de": "Sehr spezifischer Faktor für Gebäude. Die Emissionen sind gering, da der Heizkörper teilweise recycelbar ist."
+    }
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27284",
+    "name_fr": "Elimination, livraison par plafond chauffant (sans plafond en plâtre ou métallique) (m2)",
+    "name_de": "Entsorgung, Abgabe über Heizkühldecke (ohne Gips- oder Metalldecke) (m2)",
+    "subcategory": "building_elements_and_structures",
+    "input_units": [
+      "m2"
+    ],
+    "default_unit": "m2",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.134,
+        "unit": "kgCO2e/m2"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_elements_techniques_du_batiment",
+      "building_elements_and_structures",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.418125+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.418134+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Démolition plafond chauffant",
+    "name_simple_de": "Entsorgung Heizkühldecke",
+    "description_fr": "Émissions liées à l'élimination d'un plafond chauffant/refroidissant sans éléments en plâtre ou métal. Par m² de surface.",
+    "description_de": "Emissionen bei der Entsorgung einer Heiz-/Kühldecke ohne Gips- oder Metallelemente. Pro m² Fläche.",
+    "search_tags": [
+      "plafond chauffant",
+      "decke entsorgung",
+      "heating ceiling",
+      "démolition",
+      "recyclage bâtiment",
+      "déconstruction",
+      "ceiling disposal",
+      "scope 3"
+    ],
+    "usage_hint_fr": "Calculer les émissions de fin de vie d'un plafond actif existant",
+    "usage_hint_de": "Emissionen beim Abriss einer aktiven Decke berechnen",
+    "popularity_score": 35
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27285",
+    "name_fr": "Elimination, évacuation par le chauffage au sol (m2)",
+    "name_de": "Entsorgung, Abgabe über Fussbodenheizung (m2)",
+    "subcategory": "building_elements_and_structures",
+    "input_units": [
+      "m2"
+    ],
+    "default_unit": "m2",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 2.04,
+        "unit": "kgCO2e/m2"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_elements_techniques_du_batiment",
+      "building_elements_and_structures",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.418375+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.418381+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27286",
+    "name_fr": "Elimination, système d'évacuation d'air cuisine et salle de bain (m2)",
+    "name_de": "Entsorgung, Abluftanlage Küche und Bad (m2)",
+    "subcategory": "building_elements_and_structures",
+    "input_units": [
+      "m2"
+    ],
+    "default_unit": "m2",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.125,
+        "unit": "kgCO2e/m2"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_elements_techniques_du_batiment",
+      "building_elements_and_structures",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.418603+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.418608+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Évacuation d'air cuisine et salle de bain",
+    "name_simple_de": "Abluftanlage Küche und Bad",
+    "description_fr": "Émissions liées à l'installation et l'élimination des systèmes d'évacuation d'air. Exemple: hotte de cuisine, ventilation salle de bain.",
+    "description_de": "Emissionen aus Installation und Entsorgung von Abluftsystemen. Beispiel: Dunstabzugshaube, Badlüftung.",
+    "search_tags": [
+      "ventilation",
+      "hotte",
+      "extraction air",
+      "Dunstabzug",
+      "Lüftung",
+      "air evacuation",
+      "Küchenlüftung",
+      "Bad Ventilation",
+      "ductwork"
+    ],
+    "usage_hint_fr": "Utilisez pour les projets de construction avec équipements de ventilation.",
+    "usage_hint_de": "Verwenden Sie für Bauprojekte mit Lüftungsanlagen.",
+    "popularity_score": 65
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27287",
+    "name_fr": "Élimination, bureau, installation complexe, y compris les appareils et les conduites (m2)",
+    "name_de": "Entsorgung, Büro, aufwändige Installation, inkl. Apparate und Leitungen (m2)",
+    "subcategory": "furniture_and_fixtures",
+    "input_units": [
+      "m2"
+    ],
+    "default_unit": "m2",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 3.76,
+        "unit": "kgCO2e/m2"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_mobilier_et_sols",
+      "furniture_and_fixtures",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.418836+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.418843+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Démolition bureau avec installations",
+    "name_simple_de": "Büroabbruch mit Installationen",
+    "description_fr": "Émissions liées à la démolition et l'élimination d'un bureau complet avec appareils, tuyauteries et équipements techniques intégrés.",
+    "description_de": "Emissionen beim Abriss und der Entsorgung eines kompletten Büros mit Geräten, Rohren und integrierten technischen Einrichtungen.",
+    "search_tags": [
+      "démolition",
+      "déconstruction",
+      "élimination",
+      "bureau",
+      "déchets",
+      "installations",
+      "abriss",
+      "disposal",
+      "end of life",
+      "appareils"
+    ],
+    "usage_hint_fr": "Utilisez pour la fin de vie d'espaces de bureaux complexes avec installations permanentes.",
+    "usage_hint_de": "Verwenden Sie für das Ende von Büroräumen mit komplexen dauerhaften Installationen.",
+    "popularity_score": 35
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27288",
+    "name_fr": "Élimination, bureau, installation simple, y compris appareils et conduites (m2)",
+    "name_de": "Entsorgung, Büro, einfache Installation, inkl. Apparate und Leitungen (m2)",
+    "subcategory": "furniture_and_fixtures",
+    "input_units": [
+      "m2"
+    ],
+    "default_unit": "m2",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 1.15,
+        "unit": "kgCO2e/m2"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_mobilier_et_sols",
+      "furniture_and_fixtures",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.419131+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.419138+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Démolition de bureau standard",
+    "name_simple_de": "Büroabriss Standard",
+    "description_fr": "Émissions liées au démantèlement et à l'élimination d'un bureau type (murs, installations électriques, tuyauteries, équipements intégrés).",
+    "description_de": "Emissionen beim Rückbau und der Entsorgung eines Standard-Büros (Wände, Elektroinstallationen, Rohrleitungen, integrierte Ausrüstungen).",
+    "search_tags": [
+      "démolition",
+      "déchets",
+      "élimination",
+      "déconstruction",
+      "abriss",
+      "entsorgung",
+      "disposal",
+      "office waste",
+      "renovation",
+      "fin de vie"
+    ],
+    "usage_hint_fr": "Utilisez pour les rénovations, démolitions ou changements d'espace bureau.",
+    "usage_hint_de": "Verwenden Sie für Renovierungen, Abrisse oder Büroflächenumgestaltungen.",
+    "popularity_score": 45
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27289",
+    "name_fr": "Elimination, ventilateurs individuels modèle fenêtre 10-30 m3/h, sans montage (pcs.)",
+    "name_de": "Entsorgung, Einzelraumlüfer Fenstermodell 10-30 m3/h, ohne Montage (Stk.)",
+    "subcategory": "special_waste_types",
+    "input_units": [
+      "p"
+    ],
+    "default_unit": "p",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 5.49,
+        "unit": "kgCO2e/piece"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_speciaux",
+      "special_waste_types",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.419405+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.419413+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2728a",
+    "name_fr": "Elimination, installations électriques Habitat (m2)",
+    "name_de": "Entsorgung, Elektroanlagen Wohnen (m2)",
+    "subcategory": "electrical_components",
+    "input_units": [
+      "m2"
+    ],
+    "default_unit": "m2",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 3.42,
+        "unit": "kgCO2e/m2"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_equipements_electriques",
+      "electrical_components",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.419734+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.419753+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Démantèlement installations électriques",
+    "name_simple_de": "Rückbau von Elektroinstallationen",
+    "description_fr": "Émissions liées à l'élimination et au recyclage des installations électriques d'un bâtiment résidentiel (câbles, tableaux, prises, etc.).",
+    "description_de": "Emissionen beim Rückbau und Recycling von Elektroinstallationen eines Wohngebäudes (Kabel, Schaltschränke, Steckdosen usw.).",
+    "search_tags": [
+      "démolition électrique",
+      "recyclage câbles",
+      "décommissioning",
+      "déconstruction",
+      "electrical waste",
+      "fin de vie",
+      "installations électriques",
+      "habitat",
+      "m2 surface"
+    ],
+    "usage_hint_fr": "Utilisez pour les projets de rénovation ou démolition de bâtiments résidentiels.",
+    "usage_hint_de": "Verwenden Sie dies für Renovierungs- oder Abrissprojekte von Wohngebäuden.",
+    "popularity_score": 42
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2728b",
+    "name_fr": "Démontage équipements électriques bureau",
+    "name_de": "Entsorgung Elektrogeräte Büro",
+    "subcategory": "electrical_components",
+    "input_units": [
+      "m2"
+    ],
+    "default_unit": "m2",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 1.48,
+        "unit": "kgCO2e/m2"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_equipements_electriques",
+      "electrical_components",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.420138+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.420149+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "description_fr": "Émissions liées au recyclage et élimination des installations électriques d'un bureau (câbles, prises, panneaux). Par m² de surface occupée.",
+    "description_de": "Emissionen durch Entsorgung und Recycling von Elektroinstallationen im Büro (Kabel, Steckdosen, Schaltungen). Pro m² Bürofläche.",
+    "search_tags": [
+      "déchets électroniques",
+      "recyclage électrique",
+      "fin de vie équipements",
+      "electrical waste",
+      "e-waste",
+      "installations bureau",
+      "office equipment disposal",
+      "démantèlement"
+    ],
+    "usage_hint_fr": "Calculer l'impact de la fin de vie des installations électriques lors d'une rénovation de bureau.",
+    "usage_hint_de": "Emissionen bei Entsorgung von Elektroinstallationen während Bürorenovation berechnen.",
+    "popularity_score": 35
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2728c",
+    "name_fr": "Elimination, poêle électrique à accumulation 5kW (kg)",
+    "name_de": "Entsorgung, Elektrospeicherofen 5kW (kg)",
+    "subcategory": "special_waste_types",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.297,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_speciaux",
+      "special_waste_types",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.420431+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.420439+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Élimination d'un radiateur électrique 5kW",
+    "name_simple_de": "Entsorgung eines 5kW Elektroheizers",
+    "description_fr": "Impact carbone du recyclage ou de l'élimination d'un radiateur électrique à accumulation de 5 kilowatts en fin de vie.",
+    "description_de": "CO2-Bilanz des Recyclings oder der Entsorgung eines 5kW Elektrospeicherheizers am Ende seiner Lebensdauer.",
+    "search_tags": [
+      "radiateur électrique",
+      "poêle accumulation",
+      "élimination déchet",
+      "end-of-life",
+      "recycling",
+      "stockage thermique",
+      "5kW"
+    ],
+    "usage_hint_fr": "Utilisez lors du renouvellement de radiateurs électriques",
+    "usage_hint_de": "Bei der Entsorgung alter Elektroheizer verwenden",
+    "popularity_score": 28
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2728d",
+    "name_fr": "Elimination, registre de terre court vers système de ventilation bureau (0.27 m/m2 SRE) (m2)",
+    "name_de": "Entsorgung, Erdregister kurz zu Lüftungsanlage Büro (0.27 m/m2 EBF) (m2)",
+    "subcategory": "special_waste_types",
+    "input_units": [
+      "m2"
+    ],
+    "default_unit": "m2",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 2.81,
+        "unit": "kgCO2e/m2"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_speciaux",
+      "special_waste_types",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.420682+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.420689+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2728e",
+    "name_fr": "Elimination, registre de terre long vers système de ventilation bureau (0.67 m/m2 EBF) (m2)",
+    "name_de": "Entsorgung, Erdregister lang zu Lüftungsanlage Büro (0.67 m/m2 EBF) (m2)",
+    "subcategory": "special_waste_types",
+    "input_units": [
+      "m2"
+    ],
+    "default_unit": "m2",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 7.03,
+        "unit": "kgCO2e/m2"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_speciaux",
+      "special_waste_types",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.420940+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.420947+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Évacuation air vicié bureau",
+    "name_simple_de": "Abluftanlage Büro",
+    "description_fr": "Système d'extraction d'air usé dans les bureaux. Mesure l'impact de l'installation et du fonctionnement des conduits de ventilation.",
+    "description_de": "Abluftanlage in Büros. Misst die Auswirkungen der Installation und des Betriebs von Lüftungskanälen.",
+    "search_tags": [
+      "ventilation",
+      "air extraction",
+      "conduit air",
+      "système extraction",
+      "abluft",
+      "lüftung",
+      "scope 3",
+      "déchets spéciaux"
+    ],
+    "usage_hint_fr": "Utilisez pour les installations de ventilation/extraction dans vos bureaux",
+    "usage_hint_de": "Verwenden Sie für Lüftungs-/Absauganlagen in Ihren Büros",
+    "popularity_score": 25
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2728f",
+    "name_fr": "Evacuation, registre de terre pour système de ventilation du logement (m2)",
+    "name_de": "Entsorgung, Erdregister zu Lüftungsanlage Wohnen (m2)",
+    "subcategory": "special_waste_types",
+    "input_units": [
+      "m2"
+    ],
+    "default_unit": "m2",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 1.62,
+        "unit": "kgCO2e/m2"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_speciaux",
+      "special_waste_types",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.421185+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.421192+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Élimination de registres de terre (ventilation)",
+    "name_simple_de": "Entsorgung von Erdregistern (Lüftung)",
+    "description_fr": "Émissions liées à l'élimination des filtres ou registres terreux des systèmes de ventilation résidentielle. Exemple: nettoyage et traitement des filtres usagés d'une VMC.",
+    "description_de": "Emissionen aus der Entsorgung von Erdfiltern oder -registern aus Wohnungslüftungsanlagen. Beispiel: Reinigung und Behandlung gebrauchter Lüftungsfilter.",
+    "search_tags": [
+      "ventilation",
+      "VMC",
+      "filtre",
+      "registre",
+      "terre",
+      "élimination",
+      "déchets",
+      "air",
+      "residential",
+      "disposal"
+    ],
+    "usage_hint_fr": "Pour les bâtiments résidentiels avec ventilation mécanique contrôlée.",
+    "usage_hint_de": "Für Wohngebäude mit mechanischer Lüftungsanlage.",
+    "popularity_score": 25
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27290",
+    "name_fr": "Élimination, sondes géothermiques, pour pompe à chaleur eau glycolée-eau (m)",
+    "name_de": "Entsorgung, Erdsonden, für Sole-Wasser-Wärmepumpe (m)",
+    "subcategory": "special_waste_types",
+    "input_units": [
+      "m"
+    ],
+    "default_unit": "m",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 2.56,
+        "unit": "kgCO2e/m"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_speciaux",
+      "special_waste_types",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.421409+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.421415+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Démontage sonde géothermique",
+    "name_simple_de": "Rückbau Erdwärmesonde",
+    "description_fr": "Enlever et recycler les tuyaux de la pompe à chaleur géothermique. Comptez environ 2,56 kg CO2 par mètre de sonde démontée.",
+    "description_de": "Abbau und Recycling der Rohre der Erdwärmepumpe. Ca. 2,56 kg CO2 pro Meter Sonde.",
+    "search_tags": [
+      "géothermie",
+      "pompe chaleur",
+      "sonde",
+      "déconstruction",
+      "recyclage",
+      "démantèlement",
+      "geothermie",
+      "Erdwärmepumpe",
+      "Bohrung",
+      "end of life"
+    ],
+    "usage_hint_fr": "Fin de vie d'une installation de chauffage géothermique",
+    "usage_hint_de": "Entsorgung von Erdwärmeheizungen am Lebenszyklusende",
+    "popularity_score": 35
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27291",
+    "name_fr": "Elimination, puits de production et d'absorption pour pompe à chaleur sur eau de nappe (pcs.)",
+    "name_de": "Entsorgung, Förder- und Schluckbrunnen für Grundwasser Wärmepumpe (Stk.)",
+    "subcategory": "special_waste_types",
+    "input_units": [
+      "p"
+    ],
+    "default_unit": "p",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 95.7,
+        "unit": "kgCO2e/piece"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_speciaux",
+      "special_waste_types",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.421622+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.421628+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27292",
+    "name_fr": "Elimination, système de ventilation, débit d'air spécifique 1 m3/hm2 SRE (m2)",
+    "name_de": "Entsorgung, Lüftungsanlage, spez. Luftmenge 1 m3/hm2 EBF (m2)",
+    "subcategory": "building_elements_and_structures",
+    "input_units": [
+      "m2"
+    ],
+    "default_unit": "m2",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.339,
+        "unit": "kgCO2e/m2"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_elements_techniques_du_batiment",
+      "building_elements_and_structures",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.421851+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.421857+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Ventilation du bâtiment",
+    "name_simple_de": "Gebäudelüftung",
+    "description_fr": "Emissions liées à l'installation et l'élimination d'un système de ventilation mécanique. Exemple: aération forcée d'un bureau ou d'un immeuble.",
+    "description_de": "Emissionen aus Installation und Entsorgung einer mechanischen Lüftungsanlage. Beispiel: Zwangslüftung eines Büros oder Wohnhauses.",
+    "search_tags": [
+      "ventilation",
+      "système d'aération",
+      "extraction air",
+      "lüftungsanlage",
+      "building systems",
+      "HVAC",
+      "débit d'air",
+      "climate control"
+    ],
+    "usage_hint_fr": "Calculez pour chaque m² de bâtiment avec ventilation mécanique.",
+    "usage_hint_de": "Berechnen Sie für jeden m² des Gebäudes mit mechanischer Lüftung.",
+    "popularity_score": 65
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27293",
+    "name_fr": "Élimination, système de ventilation, débit d'air spécifique 2 m3/hm2 EBF (m2)",
+    "name_de": "Entsorgung, Lüftungsanlage, spez. Luftmenge 2 m3/hm2 EBF (m2)",
+    "subcategory": "building_elements_and_structures",
+    "input_units": [
+      "m2"
+    ],
+    "default_unit": "m2",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.475,
+        "unit": "kgCO2e/m2"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_elements_techniques_du_batiment",
+      "building_elements_and_structures",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.422121+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.422128+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Système de ventilation du bâtiment",
+    "name_simple_de": "Gebäudelüftungsanlage",
+    "description_fr": "Émissions liées à la construction et l'installation d'un système de ventilation mécanique. Exemple: ventilation contrôlée dans un bureau ou immeuble résidentiel.",
+    "description_de": "Emissionen aus Bau und Installation einer mechanischen Lüftungsanlage. Beispiel: Kontrollierte Belüftung in einem Büro oder Wohngebäude.",
+    "search_tags": [
+      "ventilation",
+      "système de ventilation",
+      "ventilation mécanique",
+      "air handling unit",
+      "AHU",
+      "extraction d'air",
+      "climatisation",
+      "HVAC",
+      "infrastructure bâtiment",
+      "éléments de construction"
+    ],
+    "usage_hint_fr": "Lors de la construction ou rénovation d'un bâtiment avec ventilation mécanique",
+    "usage_hint_de": "Bei Neubau oder Renovierung mit mechanischer Lüftung",
+    "popularity_score": 65
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27294",
+    "name_fr": "Élimination, système de ventilation, débit d'air spécifique 4 m3/hm2 EBF (m2)",
+    "name_de": "Entsorgung, Lüftungsanlage, spez. Luftmenge 4 m3/hm2 EBF (m2)",
+    "subcategory": "building_elements_and_structures",
+    "input_units": [
+      "m2"
+    ],
+    "default_unit": "m2",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.749,
+        "unit": "kgCO2e/m2"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_elements_techniques_du_batiment",
+      "building_elements_and_structures",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.422382+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.422389+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27295",
+    "name_fr": "Élimination, système de ventilation, débit d'air spécifique 6 m3/hm2 EBF (m2)",
+    "name_de": "Entsorgung, Lüftungsanlage, spez. Luftmenge 6 m3/hm2 EBF (m2)",
+    "subcategory": "building_elements_and_structures",
+    "input_units": [
+      "m2"
+    ],
+    "default_unit": "m2",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 1.02,
+        "unit": "kgCO2e/m2"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_elements_techniques_du_batiment",
+      "building_elements_and_structures",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.422617+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.422623+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Système de ventilation du bâtiment",
+    "name_simple_de": "Lüftungssystem des Gebäudes",
+    "description_fr": "Émissions liées à la fabrication et installation d'une ventilation mécanique. Exemple : système de climatisation pour bureaux ou locaux techniques.",
+    "description_de": "Emissionen aus Herstellung und Einbau einer mechanischen Lüftungsanlage. Beispiel: Klimaanlage für Büros oder Technikräume.",
+    "search_tags": [
+      "ventilation",
+      "climatisation",
+      "air conditioning",
+      "système CVC",
+      "débit air",
+      "EBF",
+      "HVAC",
+      "éléments bâtiment"
+    ],
+    "usage_hint_fr": "Calculer l'impact d'une ventilation ou climatisation mécanique neuve par m² de surface",
+    "usage_hint_de": "Auswirkungen einer neuen Lüftungs- oder Klimaanlage pro m² berechnen",
+    "popularity_score": 62
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27296",
+    "name_fr": "Élimination, système de ventilation, débit d'air spécifique 8 m3/hm2 EBF (m2)",
+    "name_de": "Entsorgung, Lüftungsanlage, spez. Luftmenge 8 m3/hm2 EBF (m2)",
+    "subcategory": "building_elements_and_structures",
+    "input_units": [
+      "m2"
+    ],
+    "default_unit": "m2",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 1.3,
+        "unit": "kgCO2e/m2"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_elements_techniques_du_batiment",
+      "building_elements_and_structures",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.422840+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.422846+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Ventilation de bâtiment (8 m³/h/m²)",
+    "name_simple_de": "Gebäudelüftung (8 m³/h/m²)",
+    "description_fr": "Émissions liées au système de ventilation mécanique d'un bâtiment. Pour chaque m² de surface, le système renouvelle l'air 8 fois par heure.",
+    "description_de": "Emissionen des mechanischen Lüftungssystems eines Gebäudes. Pro m² Fläche wird die Luft 8-mal pro Stunde gewechselt.",
+    "search_tags": [
+      "ventilation",
+      "air handling",
+      "système de ventilation",
+      "lüftung",
+      "climatisation",
+      "HVAC",
+      "débit air",
+      "renouvellement air"
+    ],
+    "usage_hint_fr": "Pour les bâtiments avec ventilation mécanique continue",
+    "usage_hint_de": "Für Gebäude mit mechanischer Lüftung",
+    "popularity_score": 65
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27297",
+    "name_fr": "Élimination, système de ventilation résidentiel, gaines en tôle, y compris l'évacuation de l'air de la cuisine (m2)",
+    "name_de": "Entsorgung, Lüftungsanlage Wohnen, Blechkanäle, inkl. Küchenabluft (m2)",
+    "subcategory": "building_elements_and_structures",
+    "input_units": [
+      "m2"
+    ],
+    "default_unit": "m2",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.298,
+        "unit": "kgCO2e/m2"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_elements_techniques_du_batiment",
+      "building_elements_and_structures",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.443339+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.443364+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Gaines de ventilation résidentielle",
+    "name_simple_de": "Wohnungslüftungskanäle",
+    "description_fr": "Tuyauterie métallique pour évacuer l'air vicié des cuisines et pièces humides dans les logements. Exemple: système de VMC.",
+    "description_de": "Metallische Rohre zur Ableitung von Abluft aus Küchen und feuchten Räumen in Wohnungen. Beispiel: Lüftungssystem.",
+    "search_tags": [
+      "ventilation",
+      "gaines",
+      "air",
+      "kitchen",
+      "VMC",
+      "extraction",
+      "ductwork",
+      "residential"
+    ],
+    "usage_hint_fr": "Pour les rénovations ou constructions résidentielles avec système de ventilation.",
+    "usage_hint_de": "Für Renovierungen oder Neubau von Wohnungen mit Lüftungsanlage.",
+    "popularity_score": 62
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27298",
+    "name_fr": "Elimination, système de ventilation habitat, gaines PE, y compris air évacué de la cuisine (m2)",
+    "name_de": "Entsorgung, Lüftungsanlage Wohnen, PE-Kanäle, inkl. Küchenabluft (m2)",
+    "subcategory": "building_elements_and_structures",
+    "input_units": [
+      "m2"
+    ],
+    "default_unit": "m2",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.723,
+        "unit": "kgCO2e/m2"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_elements_techniques_du_batiment",
+      "building_elements_and_structures",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.443955+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.443989+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27299",
+    "name_fr": "Elimination, pompe à chaleur air-eau 7 kW (pcs.)",
+    "name_de": "Entsorgung, Luft-Wasser Wärmepumpe 7 kW (Stk.)",
+    "subcategory": "special_waste_types",
+    "input_units": [
+      "p"
+    ],
+    "default_unit": "p",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 824.0,
+        "unit": "kgCO2e/piece"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_speciaux",
+      "special_waste_types",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.444590+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.444602+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Recyclage pompe à chaleur air-eau",
+    "name_simple_de": "Recycling Luft-Wasser Wärmepumpe",
+    "description_fr": "Émissions liées à l'élimination et au recyclage d'une pompe à chaleur air-eau de 7 kW en fin de vie. Inclut le transport et le traitement des matériaux.",
+    "description_de": "Emissionen für Entsorgung und Recycling einer ausrangierten Luft-Wasser Wärmepumpe 7 kW. Umfasst Transport und Materialaufbereitung.",
+    "search_tags": [
+      "pompe à chaleur",
+      "air-eau",
+      "recyclage",
+      "fin de vie",
+      "déchets spéciaux",
+      "heat pump",
+      "disposal",
+      "7kW",
+      "élimination",
+      "traitement"
+    ],
+    "usage_hint_fr": "À utiliser lors du démantèlement d'une pompe à chaleur usagée",
+    "usage_hint_de": "Verwenden beim Abbau einer alten Wärmepumpe",
+    "popularity_score": 32
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2729a",
+    "name_fr": "Elimination, pompe à chaleur air-eau 7 kW (kg)",
+    "name_de": "Entsorgung, Luft-Wasser Wärmepumpe 7 kW (kg)",
+    "subcategory": "special_waste_types",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 3.22,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_speciaux",
+      "special_waste_types",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.444925+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.444936+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Recyclage pompe à chaleur air-eau",
+    "name_simple_de": "Entsorgung Luft-Wasser-Wärmepumpe",
+    "description_fr": "Émissions liées au traitement et recyclage d'une pompe à chaleur air-eau de 7kW en fin de vie. Inclut le démontage et la valorisation des matériaux.",
+    "description_de": "Emissionen aus Entsorgung und Recycling einer 7kW Luft-Wasser-Wärmepumpe am Ende der Lebensdauer. Inklusive Demontage und Materialverwertung.",
+    "search_tags": [
+      "pompe chaleur",
+      "air-eau",
+      "recyclage",
+      "fin de vie",
+      "entsorgung",
+      "wärmepumpe",
+      "waste",
+      "7kW",
+      "déchets spéciaux",
+      "disposal"
+    ],
+    "usage_hint_fr": "À utiliser pour le recyclage d'une pompe à chaleur air-eau en fin de vie.",
+    "usage_hint_de": "Verwenden Sie dies für die Entsorgung einer Luft-Wasser-Wärmepumpe am Lebensende.",
+    "popularity_score": 35
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2729b",
+    "name_fr": "Elimination, pompe à chaleur eau glycolée-eau 7 kW (pcs.)",
+    "name_de": "Entsorgung, Sole-Wasser Wärmepumpe 7 kW (Stk.)",
+    "subcategory": "special_waste_types",
+    "input_units": [
+      "p"
+    ],
+    "default_unit": "p",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 473.0,
+        "unit": "kgCO2e/piece"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_speciaux",
+      "special_waste_types",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.445270+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.445281+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2729c",
+    "name_fr": "Élimination, pompe à chaleur eau glycolée/eau 7 kW (kg)",
+    "name_de": "Entsorgung, Sole-Wasser Wärmepumpe 7 kW (kg)",
+    "subcategory": "special_waste_types",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 2.99,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_speciaux",
+      "special_waste_types",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.445597+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.445606+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Démantèlement pompe à chaleur 7 kW",
+    "name_simple_de": "Entsorgung Wärmepumpe 7 kW",
+    "description_fr": "Émissions liées à l'élimination et au recyclage d'une pompe à chaleur géothermale de 7 kW en fin de vie, incluant transport et traitement.",
+    "description_de": "Emissionen aus Entsorgung und Recycling einer 7 kW Geothermie-Wärmepumpe am Ende ihres Lebens, einschließlich Transport und Behandlung.",
+    "search_tags": [
+      "pompe à chaleur",
+      "géothermie",
+      "déchet spécialisé",
+      "démantèlement",
+      "recyclage",
+      "fin de vie",
+      "heat pump disposal",
+      "KBOB",
+      "élimination",
+      "traitement déchet"
+    ],
+    "usage_hint_fr": "À utiliser pour les déchets de pompe à chaleur géothermale en fin de vie",
+    "usage_hint_de": "Verwenden Sie dies für Abfallgeothermie-Wärmepumpen am Ende ihrer Lebensdauer",
+    "popularity_score": 28
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2729d",
+    "name_fr": "Élimination, distribution Bâtiment de bureaux (m2)",
+    "name_de": "Entsorgung, Verteilung Bürogebäude (m2)",
+    "subcategory": "building_elements_and_structures",
+    "input_units": [
+      "m2"
+    ],
+    "default_unit": "m2",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 1.09,
+        "unit": "kgCO2e/m2"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_elements_techniques_du_batiment",
+      "building_elements_and_structures",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.445911+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.445921+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Gestion des déchets de bureau",
+    "name_simple_de": "Abfallwirtschaft für Büros",
+    "description_fr": "Émissions liées à l'élimination et au tri des déchets produits dans un bâtiment de bureaux. Inclut le transport et le traitement des ordures.",
+    "description_de": "Emissionen aus der Abfallbeseitigung und Sortierung in einem Bürogebäude. Umfasst Transport und Abfallbehandlung.",
+    "search_tags": [
+      "déchets",
+      "waste management",
+      "ordures",
+      "Abfallwirtschaft",
+      "élimination",
+      "tri",
+      "poubelle",
+      "garbage",
+      "disposal",
+      "Entsorgung"
+    ],
+    "usage_hint_fr": "À utiliser pour calculer l'impact des déchets générés par votre surface de bureaux.",
+    "usage_hint_de": "Verwenden Sie dies, um die Auswirkungen von Büroabfällen auf Ihre Fläche zu berechnen.",
+    "popularity_score": 72
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2729e",
+    "name_fr": "Elimination, distribution bâtiments résidentiels (m2)",
+    "name_de": "Entsorgung, Verteilung Wohngebäude (m2)",
+    "subcategory": "building_elements_and_structures",
+    "input_units": [
+      "m2"
+    ],
+    "default_unit": "m2",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.696,
+        "unit": "kgCO2e/m2"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_elements_techniques_du_batiment",
+      "building_elements_and_structures",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.446226+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.446234+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Gestion des déchets - Bâtiments résidentiels",
+    "name_simple_de": "Abfallwirtschaft - Wohngebäude",
+    "description_fr": "Émissions liées à l'élimination et au transport des déchets de construction/démolition pour les bâtiments d'habitation. Par m² de surface.",
+    "description_de": "Emissionen aus Entsorgung und Transport von Bau-/Abbruchabfällen von Wohngebäuden pro m² Fläche.",
+    "search_tags": [
+      "déchets de construction",
+      "élimination",
+      "demolition waste",
+      "gestion des résidus",
+      "bâtiment résidentiel",
+      "disposal",
+      "transport déchets",
+      "immeuble"
+    ],
+    "usage_hint_fr": "Pour des projets de démolition ou rénovation d'immeubles résidentiels.",
+    "usage_hint_de": "Für Abriss- oder Renovierungsprojekte von Wohngebäuden.",
+    "popularity_score": 45
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2729f",
+    "name_fr": "Élimination, générateur de chaleur, puissance spécifique requise 10 W/m2 (m2)",
+    "name_de": "Entsorgung, Wärmeerzeuger, spez. Leistungsbedarf 10 W/m2 (m2)",
+    "subcategory": "building_elements_and_structures",
+    "input_units": [
+      "m2"
+    ],
+    "default_unit": "m2",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.00961,
+        "unit": "kgCO2e/m2"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_elements_techniques_du_batiment",
+      "building_elements_and_structures",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.446540+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.446549+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022
+  },
+  {
+    "id": "698418f3c1a4e9f26cd272a0",
+    "name_fr": "Élimination, générateur de chaleur, puissance spécifique requise 30 W/m2 (m2)",
+    "name_de": "Entsorgung, Wärmeerzeuger, spez. Leistungsbedarf 30 W/m2 (m2)",
+    "subcategory": "building_elements_and_structures",
+    "input_units": [
+      "m2"
+    ],
+    "default_unit": "m2",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.0288,
+        "unit": "kgCO2e/m2"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_elements_techniques_du_batiment",
+      "building_elements_and_structures",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.446814+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.446822+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Élimination chauffage (30 W/m²)",
+    "name_simple_de": "Entsorgung Heizanlage (30 W/m²)",
+    "description_fr": "Émissions liées au démantèlement et recyclage d'une installation de chauffage standard. Exemple: radiateurs, tuyauterie d'un petit appartement.",
+    "description_de": "Emissionen beim Abbau und Recycling einer Standard-Heizanlage. Beispiel: Heizkörper, Rohrleitungen einer kleinen Wohnung.",
+    "search_tags": [
+      "démolition",
+      "recyclage",
+      "chauffage",
+      "installation thermique",
+      "fin de vie",
+      "waste",
+      "disposal",
+      "heating system"
+    ],
+    "usage_hint_fr": "Fin de vie bâtiment ou remplacement chauffage",
+    "usage_hint_de": "Gebäudeabriss oder Heizungstausch",
+    "popularity_score": 35
+  },
+  {
+    "id": "698418f3c1a4e9f26cd272a1",
+    "name_fr": "Élimination, générateur de chaleur, puissance spécifique requise 50 W/m2 (m2)",
+    "name_de": "Entsorgung, Wärmeerzeuger, spez. Leistungsbedarf 50 W/m2 (m2)",
+    "subcategory": "building_elements_and_structures",
+    "input_units": [
+      "m2"
+    ],
+    "default_unit": "m2",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.0481,
+        "unit": "kgCO2e/m2"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_elements_techniques_du_batiment",
+      "building_elements_and_structures",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.447313+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.447329+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Élimination chauffage 50 W/m²",
+    "name_simple_de": "Entsorgung Heizung 50 W/m²",
+    "description_fr": "Émissions liées à l'élimination d'un système de chauffage de faible puissance (50 W par m² de surface). Ex: radiateurs, tuyauterie d'un petit bâtiment.",
+    "description_de": "Emissionen aus der Entsorgung einer schwachen Heizanlage (50 W pro m² Fläche). Z.B. Heizkörper, Rohrleitungen eines kleinen Gebäudes.",
+    "search_tags": [
+      "élimination chauffage",
+      "démolition radiateur",
+      "fin de vie système chauffage",
+      "déconstruction",
+      "waste heating system",
+      "Entsorgung Heizsystem",
+      "recycling chauffage",
+      "50W thermique"
+    ],
+    "usage_hint_fr": "À utiliser pour calculer l'impact environnemental du démantèlement d'une installation de chauffage.",
+    "usage_hint_de": "Für die Berechnung der Umweltauswirkungen des Rückbaus einer Heizanlage verwenden.",
+    "popularity_score": 35
+  },
+  {
+    "id": "698418f3c1a4e9f26cd272a2",
+    "name_fr": "Elimination, distribution de chaleur et émission, chauffage à air (m2)",
+    "name_de": "Entsorgung, Wärmeverteilung und Abgabe, Luftheizung (m2)",
+    "subcategory": "building_elements_and_structures",
+    "input_units": [
+      "m2"
+    ],
+    "default_unit": "m2",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.0668,
+        "unit": "kgCO2e/m2"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_elements_techniques_du_batiment",
+      "building_elements_and_structures",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.447804+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.447815+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Chauffage par air chaud",
+    "name_simple_de": "Luftheizung",
+    "description_fr": "Émissions liées au chauffage d'un bâtiment par circulation d'air chaud. Exemple: système de ventilation chauffée dans une maison ou bureau.",
+    "description_de": "Emissionen aus der Beheizung eines Gebäudes durch Warmluftverteilung. Beispiel: beheiztes Belüftungssystem in einem Haus oder Büro.",
+    "search_tags": [
+      "chauffage",
+      "air chaud",
+      "ventilation",
+      "heating",
+      "thermal comfort",
+      "bâtiment",
+      "building",
+      "climatisation"
+    ],
+    "usage_hint_fr": "Utilisez pour tout bâtiment chauffé par air chaud.",
+    "usage_hint_de": "Verwenden Sie für Gebäude mit Luftheizung.",
+    "popularity_score": 65
+  },
+  {
+    "id": "698418f3c1a4e9f26cd272a3",
+    "name_fr": "Elimination, habitat, y compris appareils et conduites (m2)",
+    "name_de": "Entsorgung, Wohnen, inkl. Apparate und Leitungen (m2)",
+    "subcategory": "building_elements_and_structures",
+    "input_units": [
+      "m2"
+    ],
+    "default_unit": "m2",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 1.54,
+        "unit": "kgCO2e/m2"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_elements_techniques_du_batiment",
+      "building_elements_and_structures",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.448139+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.448147+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022
+  },
+  {
+    "id": "698418f3c1a4e9f26cd272a4",
+    "name_fr": "Reprise et recyclage, module PV CdTe (kg)",
+    "name_de": "Rücknahme und Recycling, CdTe PV Modul (kg)",
+    "subcategory": "special_waste_types",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.298,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_speciaux",
+      "special_waste_types",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.448412+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.448420+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Recyclage panneau solaire CdTe",
+    "name_simple_de": "Recycling Cadmiumtellurid-Solarpanel",
+    "description_fr": "Émissions liées au recyclage et à la récupération des panneaux solaires à couche mince en tellurure de cadmium (technologie spécialisée).",
+    "description_de": "Emissionen aus Recycling und Rückgewinnung von Dünnschicht-Solarpaneln aus Cadmiumtellurid (Spezialtechnologie).",
+    "search_tags": [
+      "panneau solaire",
+      "CdTe",
+      "cadmium telluride",
+      "recyclage PV",
+      "déchet électronique",
+      "fin de vie module",
+      "couche mince",
+      "récupération matériaux"
+    ],
+    "usage_hint_fr": "Utiliser pour les panneaux solaires CdTe en fin de vie",
+    "usage_hint_de": "Für CdTe-Solarpanels am Ende ihrer Lebensdauer",
+    "popularity_score": 25
+  },
+  {
+    "id": "698418f3c1a4e9f26cd272a5",
+    "name_fr": "Reprise et recyclage, module PV c-Si (kg)",
+    "name_de": "Rücknahme und Recycling, c-Si PV Modul (kg)",
+    "subcategory": "special_waste_types",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.261,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_speciaux",
+      "special_waste_types",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "year": 2022,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.448721+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.448732+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2022,
+    "name_simple_fr": "Recyclage panneau solaire silicium",
+    "name_simple_de": "Recycling Silizium-Solarpaneel",
+    "description_fr": "Émissions liées au recyclage et à la valorisation des panneaux solaires en silicium cristallin en fin de vie.",
+    "description_de": "Emissionen aus Recycling und Verwertung von kristallinen Silizium-Solarpaneln am Ende ihrer Lebensdauer.",
+    "search_tags": [
+      "panneau solaire",
+      "PV",
+      "silicium",
+      "recyclage",
+      "photovoltaïque",
+      "fin de vie",
+      "solar panel",
+      "c-Si",
+      "valorisation"
+    ],
+    "usage_hint_fr": "À utiliser pour les panneaux solaires démontés ou remplacés.",
+    "usage_hint_de": "Für alte oder ausgetauschte Solarpanels verwenden.",
+    "popularity_score": 35
+  },
+  {
+    "id": "698418f3c1a4e9f26cd272a6",
+    "name_fr": "Compostage des déchets organiques {RER}",
+    "name_de": "Kompostierung organischer Abfälle {RER}",
+    "subcategory": "others",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.0,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "autres_dechets",
+      "others",
+      "uvek_database"
+    ],
+    "source": "UVEK Database",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.449008+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.449016+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024
+  },
+  {
+    "id": "698418f3c1a4e9f26cd272a7",
+    "name_fr": "Démontage, écran CRT, manuellement, à l'usine {CH}",
+    "name_de": "Demontage, CRT-Sieb, manuell, in der Anlage {CH}",
+    "subcategory": "electronics_waste",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.62149186,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_electroniques",
+      "electronics_waste",
+      "uvek_database"
+    ],
+    "source": "UVEK Database",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.449277+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.449284+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024,
+    "name_simple_fr": "Recyclage écran CRT en Suisse",
+    "name_simple_de": "CRT-Bildschirm Recycling in der Schweiz",
+    "description_fr": "Émissions pour démonter manuellement les vieux écrans à tube cathodique (CRT) en usine suisse. Inclut le tri des matériaux.",
+    "description_de": "Emissionen beim manuellen Demontieren alter Kathodenstrahlröhren-Bildschirme (CRT) in schweizer Werken. Materialsorting inbegriffen.",
+    "search_tags": [
+      "recyclage écran",
+      "CRT",
+      "tube cathodique",
+      "déchets électroniques",
+      "e-waste",
+      "ancien moniteur",
+      "démontage manuel",
+      "Suisse"
+    ],
+    "usage_hint_fr": "À utiliser pour vieux écrans CRT démontés manuellement en Suisse",
+    "usage_hint_de": "Für manuell demontierte CRT-Bildschirme in der Schweiz verwenden",
+    "popularity_score": 15
+  },
+  {
+    "id": "698418f3c1a4e9f26cd272a8",
+    "name_fr": "Démontage, écran CRT, mécaniquement, à l'usine {GLO}",
+    "name_de": "Demontage, CRT-Bildschirm, mechanisch, in der Anlage {GLO}",
+    "subcategory": "electronics_waste",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.68885017,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_electroniques",
+      "electronics_waste",
+      "uvek_database"
+    ],
+    "source": "UVEK Database",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.449575+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.449587+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024,
+    "name_simple_fr": "Recyclage écran CRT",
+    "name_simple_de": "Recycling CRT-Bildschirm",
+    "description_fr": "Émissions générées par le démontage mécanique d'un ancien écran CRT (tube cathodique) à l'usine de recyclage.",
+    "description_de": "Emissionen beim mechanischen Zerlegung eines alten CRT-Bildschirms (Kathodenstrahlröhre) in der Recyclinganlage.",
+    "search_tags": [
+      "écran CRT",
+      "tube cathodique",
+      "recyclage électronique",
+      "DEEE",
+      "démontage",
+      "CRT screen",
+      "e-waste",
+      "ancien moniteur",
+      "déchets électroniques"
+    ],
+    "usage_hint_fr": "Utilisez pour recycler des vieux écrans CRT d'ordinateurs ou téléviseurs.",
+    "usage_hint_de": "Verwenden Sie für das Recycling alter CRT-Bildschirme von Computern oder Fernsehern.",
+    "popularity_score": 35,
+    "scope": "scope3",
+    "impact_value": 0.69,
+    "impact_unit": "kgCO2e/kg"
+  },
+  {
+    "id": "698418f3c1a4e9f26cd272a9",
+    "name_fr": "Démontage, ordinateur de bureau, manuellement, à l'usine {CH}",
+    "name_de": "Demontage, Desktop-Computer, manuell, im Werk {CH}",
+    "subcategory": "electronics_waste",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.3603955,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_electroniques",
+      "electronics_waste",
+      "uvek_database"
+    ],
+    "source": "UVEK Database",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.449938+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.449950+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024,
+    "name_simple_fr": "Démontage d'ordinateur de bureau",
+    "name_simple_de": "Zerlegung von Desktop-Computern",
+    "description_fr": "Émissions liées au démontage manuel d'ordinateurs de bureau usagés en Suisse. Inclut la séparation des composants (écran, clavier, disque dur, etc.).",
+    "description_de": "Emissionen beim manuellen Zerlegen von gebrauchten Desktop-Computern in der Schweiz. Umfasst die Trennung von Komponenten (Monitor, Tastatur, Festplatte usw.).",
+    "search_tags": [
+      "déchet électronique",
+      "e-waste",
+      "ordinateur usagé",
+      "recyclage informatique",
+      "DEEE",
+      "démantèlement",
+      "desktop",
+      "informatique",
+      "déchets",
+      "traitement"
+    ],
+    "usage_hint_fr": "Utilisez ce facteur pour les ordinateurs de bureau en fin de vie recyclés en Suisse.",
+    "usage_hint_de": "Verwenden Sie diesen Faktor für ausgediente Desktop-Computer, die in der Schweiz recycelt werden.",
+    "popularity_score": 45
+  },
+  {
+    "id": "698418f3c1a4e9f26cd272aa",
+    "name_fr": "Démontage, ordinateur de bureau, mécaniquement, à l'usine {GLO}",
+    "name_de": "Demontage, Desktop-Computer, mechanisch, im Werk {GLO}",
+    "subcategory": "electronics_waste",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.41887487,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_electroniques",
+      "electronics_waste",
+      "uvek_database"
+    ],
+    "source": "UVEK Database",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.450350+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.450369+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024
+  },
+  {
+    "id": "698418f3c1a4e9f26cd272ab",
+    "name_fr": "Démontage, appareils industriels, manuellement, à l'usine {CH}",
+    "name_de": "Demontage, Industriegeräte, manuell, im Werk {CH}",
+    "subcategory": "electronics_waste",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.27058227,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_electroniques",
+      "electronics_waste",
+      "uvek_database"
+    ],
+    "source": "UVEK Database",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.450925+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.450939+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024,
+    "name_simple_fr": "Démontage manuel d'équipements industriels (CH)",
+    "name_simple_de": "Manuelle Demontage von Industrieanlagen (CH)",
+    "description_fr": "Émissions liées au démantèlement manuel d'appareils industriels en usine. Exemple: démonter une machine de production pour recycler ses matériaux.",
+    "description_de": "Emissionen beim manuellen Abbau von Industriegeräten im Werk. Beispiel: Eine Produktionsmaschine zerlegen, um ihre Materialien zu recyceln.",
+    "search_tags": [
+      "démontage",
+      "appareils industriels",
+      "recyclage équipements",
+      "waste management",
+      "démantèlement",
+      "fin de vie",
+      "usine",
+      "manual disassembly"
+    ],
+    "usage_hint_fr": "Utiliser lors du recyclage d'équipements industriels en fin de vie",
+    "usage_hint_de": "Verwenden Sie dies beim Recycling von ausrangierten Industrieanlagen",
+    "popularity_score": 35
+  },
+  {
+    "id": "698418f3c1a4e9f26cd272ac",
+    "name_fr": "Démontage, appareils industriels, mécaniquement, à l'usine {GLO}",
+    "name_de": "Demontage, Industriegeräte, mechanisch, im Werk {GLO}",
+    "subcategory": "electronics_waste",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.30451865,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_electroniques",
+      "electronics_waste",
+      "uvek_database"
+    ],
+    "source": "UVEK Database",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.451415+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.451430+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024,
+    "name_simple_fr": "Démontage d'équipements industriels",
+    "name_simple_de": "Demontage von Industrieanlagen",
+    "description_fr": "Processus de séparation mécanique des composants d'équipements industriels usagés (machines, moteurs, etc.) pour recyclage.",
+    "description_de": "Mechanische Zerlegung von Industriemaschinen und -geräten am Ende ihrer Lebensdauer zur Vorbereitung des Recyclings.",
+    "search_tags": [
+      "déconstruction",
+      "recyclage équipements",
+      "démantèlement industriel",
+      "disassembly",
+      "waste processing",
+      "déchets électroniques",
+      "end-of-life",
+      "circular economy"
+    ],
+    "usage_hint_fr": "Pour quantifier les émissions du tri/démontage de vieux équipements industriels",
+    "usage_hint_de": "Für Emissionen aus Zerlegung ausrangierter Industrieanlagen berechnen",
+    "popularity_score": 35,
+    "impact_value": 0.30451865,
+    "impact_unit": "kgCO2e/kg",
+    "scope": "scope3",
+    "input_unit_primary": "kg"
+  },
+  {
+    "id": "698418f3c1a4e9f26cd272ad",
+    "name_fr": "Démontage, accessoires informatiques, mécaniquement, à l'usine {GLO}",
+    "name_de": "Demontage, IT-Zubehör, mechanisch, im Werk {GLO}",
+    "subcategory": "electronics_waste",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 1.4240438,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_electroniques",
+      "electronics_waste",
+      "uvek_database"
+    ],
+    "source": "UVEK Database",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.451777+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.451786+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024,
+    "name_simple_fr": "Recyclage informatique en usine",
+    "name_simple_de": "IT-Recycling im Werk",
+    "description_fr": "Émissions liées au démontage et recyclage des équipements informatiques (claviers, souris, câbles) dans une usine spécialisée.",
+    "description_de": "Emissionen beim Demontage und Recycling von IT-Geräten (Tastaturen, Maus, Kabel) in einem Spezialwerk.",
+    "search_tags": [
+      "recyclage électronique",
+      "démontage ordinateur",
+      "e-waste",
+      "accessoires IT",
+      "valorisation déchets électriques",
+      "usine recyclage",
+      "WEEE",
+      "déchets informatiques"
+    ],
+    "usage_hint_fr": "Quand vous recyclez des équipements informatiques en fin de vie.",
+    "usage_hint_de": "Beim Recycling von ausgedienten IT-Geräten.",
+    "popularity_score": 42
+  },
+  {
+    "id": "698418f3c1a4e9f26cd272ae",
+    "name_fr": "Démontage, ordinateur portable, manuellement, à l'usine {CH}",
+    "name_de": "Demontage, Laptop, manuell, im Werk {CH}",
+    "subcategory": "electronics_waste",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.66448156,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_electroniques",
+      "electronics_waste",
+      "uvek_database"
+    ],
+    "source": "UVEK Database",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.452082+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.452093+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024
+  },
+  {
+    "id": "698418f3c1a4e9f26cd272af",
+    "name_fr": "Démontage, ordinateur portable, mécaniquement, à l'usine {GLO}",
+    "name_de": "Demontage, Laptop, mechanisch, im Werk {GLO}",
+    "subcategory": "electronics_waste",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 1.05114739,
+        "unit": "kgCO2e/kg",
+        "description_fr": "Pour chaque kg de laptop démonté = 1.05 kg de CO2 émis",
+        "description_de": "Pro kg zerlapter Laptop = 1.05 kg CO2 emittiert"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_electroniques",
+      "electronics_waste",
+      "uvek_database"
+    ],
+    "source": "UVEK Database",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.452416+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.452425+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024,
+    "name_simple_fr": "Démontage d'ordinateur portable",
+    "name_simple_de": "Laptop-Demontage",
+    "description_fr": "Émissions liées au démontage mécanique d'un ordinateur portable usagé en usine pour récupérer les matériaux réutilisables.",
+    "description_de": "Emissionen beim mechanischen Zerlegen eines alten Laptops in einem Werk zur Materialrückgewinnung.",
+    "search_tags": [
+      "laptop",
+      "démontage",
+      "recyclage",
+      "électronique",
+      "ordinateur portable",
+      "déchets électroniques",
+      "disassembly",
+      "e-waste",
+      "réparation",
+      "usine"
+    ],
+    "usage_hint_fr": "Utilise ce facteur si tu recycles des ordinateurs portables en usine.",
+    "usage_hint_de": "Verwende diesen Faktor beim Recycling von Laptops in Fabriken.",
+    "popularity_score": 35
+  },
+  {
+    "id": "698418f3c1a4e9f26cd272b0",
+    "name_fr": "Démontage, écran LCD, manuellement, à l'usine {CH}",
+    "name_de": "Demontage, LCD-Bildschirm, manuell, im Werk {CH}",
+    "subcategory": "electronics_waste",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 1.31457309,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_electroniques",
+      "electronics_waste",
+      "uvek_database"
+    ],
+    "source": "UVEK Database",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.452779+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.452791+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024,
+    "name_simple_fr": "Recyclage écran LCD en Suisse",
+    "name_simple_de": "LCD-Bildschirm Recycling in der Schweiz",
+    "description_fr": "Émissions produites pour démonter manuellement des écrans LCD usagés en usine suisse. Inclut le travail, le transport et l'énergie utilisée.",
+    "description_de": "Emissionen beim manuellen Demontieren von gebrauchten LCD-Bildschirmen in einem Schweizer Werk. Umfasst Arbeit, Transport und verwendete Energie.",
+    "search_tags": [
+      "écran LCD",
+      "recyclage électronique",
+      "déchets électriques",
+      "démontage",
+      "e-waste",
+      "WEEE",
+      "Suisse",
+      "usine",
+      "déchets électroniques"
+    ],
+    "usage_hint_fr": "Lorsque vous recyclez des écrans LCD ou moniteurs usagés en Suisse",
+    "usage_hint_de": "Beim Recycling von alten LCD-Bildschirmen oder Monitoren in der Schweiz",
+    "popularity_score": 35,
+    "additional_info_fr": {
+      "scope": "Scope 3 - Émissions indirectes (fins de vie)",
+      "value_per_kg": "1,31 kg CO₂e par kg d'écran",
+      "context": "Déchets électroniques - traitement en fin de vie"
+    }
+  },
+  {
+    "id": "698418f3c1a4e9f26cd272b1",
+    "name_fr": "Démontage, écran LCD, mécaniquement, à l'usine {GLO}",
+    "name_de": "Demontage, LCD-Bildschirm, mechanisch, im Werk {GLO}",
+    "subcategory": "electronics_waste",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 1.23732079,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_electroniques",
+      "electronics_waste",
+      "uvek_database"
+    ],
+    "source": "UVEK Database",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.453191+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.453203+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024,
+    "name_simple_fr": "Démontage écran LCD à l'usine",
+    "name_simple_de": "LCD-Bildschirm Demontage im Werk",
+    "description_fr": "Émissions produites lors du démontage mécanique d'écrans LCD usagés en usine de recyclage. Inclut l'énergie des machines et transport interne.",
+    "description_de": "Emissionen beim mechanischen Demontieren von gebrauchten LCD-Bildschirmen in Recyclingwerken. Umfasst Maschinenenergie und Interne Transporte.",
+    "search_tags": [
+      "écran",
+      "LCD",
+      "démontage",
+      "recyclage",
+      "électronique",
+      "waste",
+      "disassembly",
+      "décyclage"
+    ],
+    "usage_hint_fr": "Utilisez pour les vieux écrans/moniteurs à recycler en usine",
+    "usage_hint_de": "Verwenden Sie für alte Bildschirme/Monitore in Recyclingwerken",
+    "popularity_score": 35,
+    "scope": "scope3",
+    "value": 1.24,
+    "unit": "kgCO2e/kg"
+  },
+  {
+    "id": "698418f3c1a4e9f26cd272b2",
+    "name_fr": "Démontage, imprimante, laser, manuellement, à l'usine {CH}",
+    "name_de": "Demontage, Drucker, Laser, manuell, im Werk {CH}",
+    "subcategory": "electronics_waste",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 2.07823499,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_electroniques",
+      "electronics_waste",
+      "uvek_database"
+    ],
+    "source": "UVEK Database",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.453511+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.453519+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024
+  },
+  {
+    "id": "698418f3c1a4e9f26cd272b3",
+    "name_fr": "Démontage, imprimante, laser, mécaniquement, à l'usine {GLO}",
+    "name_de": "Demontage, Drucker, Laser, mechanisch, im Werk {GLO}",
+    "subcategory": "electronics_waste",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 2.08767975,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_electroniques",
+      "electronics_waste",
+      "uvek_database"
+    ],
+    "source": "UVEK Database",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.453793+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.453806+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024,
+    "name_simple_fr": "Recyclage imprimante laser",
+    "name_simple_de": "Recycling Laserdrucker",
+    "description_fr": "Émissions liées au démontage et recyclage d'une imprimante laser usagée à l'usine. Inclut la séparation des matériaux (plastique, métal, électronique).",
+    "description_de": "Emissionen beim Demontage und Recycling eines alten Laserdruckers im Werk. Umfasst die Trennung von Materialien (Kunststoff, Metall, Elektronik).",
+    "search_tags": [
+      "imprimante",
+      "printer",
+      "laser",
+      "recyclage",
+      "recycling",
+      "démontage",
+      "déchet électronique",
+      "e-waste",
+      "déchets"
+    ],
+    "usage_hint_fr": "À utiliser pour les vieilles imprimantes laser mises au rebut",
+    "usage_hint_de": "Verwenden Sie dies für alte Laserdrucker, die entsorgt werden",
+    "popularity_score": 35
+  },
+  {
+    "id": "698418f3c1a4e9f26cd272b4",
+    "name_fr": "Recyclage d'électronique par démontage",
+    "name_de": "Elektronik-Recycling durch Demontage",
+    "subcategory": "electronics_waste",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.94360333,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_electroniques",
+      "electronics_waste",
+      "uvek_database"
+    ],
+    "source": "UVEK Database",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.454078+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.454089+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024,
+    "description_fr": "Émissions liées au démontage manuel et mécanique d'appareils électroniques usagés en usine. Inclut ordinateurs, téléphones, écrans.",
+    "description_de": "Emissionen aus manueller und mechanischer Demontage von Elektroschrott in Werkstätten. Umfasst Computer, Handys, Bildschirme.",
+    "search_tags": [
+      "électronique",
+      "recycling",
+      "e-waste",
+      "DEEE",
+      "démantèlement",
+      "appareils électriques",
+      "déchets informatiques",
+      "traitement"
+    ],
+    "usage_hint_fr": "Utilisez ce facteur pour les déchets électroniques envoyés au recyclage",
+    "usage_hint_de": "Verwenden Sie diesen Faktor für Elektroschrott zur Verwertung",
+    "popularity_score": 62,
+    "scope": "scope3",
+    "value": 0.94,
+    "unit": "kgCO2e/kg"
+  },
+  {
+    "id": "698418f3c1a4e9f26cd272b5",
+    "name_fr": "Élimination, boîtier de distribution d'air, acier, 120 m3/h {CH}",
+    "name_de": "Entsorgung, Luftverteilergehäuse, Stahl, 120 m3/h {CH}",
+    "subcategory": "dechets_de_construction",
+    "input_units": [
+      "p"
+    ],
+    "default_unit": "p",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.58062868,
+        "unit": "kgCO2e/p"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_de_construction",
+      "uvek_database"
+    ],
+    "source": "UVEK Database",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.454529+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.454543+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024,
+    "name_simple_fr": "Élimination boîtier air acier",
+    "name_simple_de": "Entsorgung Luftverteiler Stahl",
+    "description_fr": "Recyclage ou élimination d'un boîtier de distribution d'air en acier (120 m³/h). Correspond aux déchets de construction/rénovation de bâtiments.",
+    "description_de": "Recycling oder Entsorgung eines Stahlluftverteilers (120 m³/h). Entspricht Bau-/Renovationsabfällen von Gebäuden.",
+    "search_tags": [
+      "déchet construction",
+      "boîtier air",
+      "acier recyclage",
+      "ventilation",
+      "démolition",
+      "gestion déchet",
+      "air distribution box",
+      "HVAC waste",
+      "construction debris"
+    ],
+    "usage_hint_fr": "Pour les projets de rénovation ou démolition avec élimination de systèmes de ventilation.",
+    "usage_hint_de": "Für Renovierungs- oder Abrissprojekte mit Entsorgung von Lüftungssystemen.",
+    "popularity_score": 35
+  },
+  {
+    "id": "698418f3c1a4e9f26cd272b6",
+    "name_fr": "Élimination, filtre à air, unité centrale, 600 m3/h {CH}",
+    "name_de": "Entsorgung, Luftfilter, zentrale Einheit, 600 m3/h {CH}",
+    "subcategory": "construction_waste",
+    "input_units": [
+      "p"
+    ],
+    "default_unit": "p",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.10495614,
+        "unit": "kgCO2e/p"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_de_construction",
+      "construction_waste",
+      "uvek_database"
+    ],
+    "source": "UVEK Database",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.454909+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.454918+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024
+  },
+  {
+    "id": "698418f3c1a4e9f26cd272b7",
+    "name_fr": "Élimination, filtre à air, unité décentralisée, 180-250 m3/h {CH}",
+    "name_de": "Entsorgung, Luftfilter, dezentrales Gerät, 180-250 m3/h {CH}",
+    "subcategory": "construction_waste",
+    "input_units": [
+      "p"
+    ],
+    "default_unit": "p",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.25253416,
+        "unit": "kgCO2e/p"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_de_construction",
+      "construction_waste",
+      "uvek_database"
+    ],
+    "source": "UVEK Database",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.455314+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.455326+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024,
+    "name_simple_fr": "Élimination filtre air décentralisé",
+    "name_simple_de": "Entsorgung dezentraler Luftfilter",
+    "description_fr": "Traitement des filtres à air usagés provenant de petits appareils de ventilation. Inclut transport, tri et élimination responsable en Suisse.",
+    "description_de": "Behandlung von gebrauchten Luftfiltern aus kleinen Lüftungsgeräten. Umfasst Transport, Sortierung und fachgerechte Entsorgung in der Schweiz.",
+    "search_tags": [
+      "filtre air",
+      "ventilation décentralisée",
+      "air filter disposal",
+      "déchets construction",
+      "élimination",
+      "recyclage filtre",
+      "déchet",
+      "traitement déchets"
+    ],
+    "usage_hint_fr": "Quand vous jetez des filtres usagés de petits appareils de ventilation",
+    "usage_hint_de": "Wenn Sie gebrauchte Filter aus kleinen Lüftungsgeräten entsorgen",
+    "popularity_score": 35
+  },
+  {
+    "id": "698418f3c1a4e9f26cd272b8",
+    "name_fr": "Élimination, filtre à air, dans la soupape d'échappement {CH}",
+    "name_de": "Entsorgung, Luftfilter, im Abluftventil {CH}",
+    "subcategory": "construction_waste",
+    "input_units": [
+      "p"
+    ],
+    "default_unit": "p",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.08294602,
+        "unit": "kgCO2e/p"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_de_construction",
+      "construction_waste",
+      "uvek_database"
+    ],
+    "source": "UVEK Database",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.455597+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.455613+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024,
+    "name_simple_fr": "Élimination filtre à air usagé",
+    "name_simple_de": "Entsorgung von Luftfiltern",
+    "description_fr": "Émissions liées au recyclage ou à l'élimination d'un filtre à air usagé (ex: filtre moteur, filtre ventilation).",
+    "description_de": "Emissionen beim Recycling oder der Entsorgung eines gebrauchten Luftfilters (z.B. Motorfilter, Lüftungsfilter).",
+    "search_tags": [
+      "filtre air",
+      "air filter disposal",
+      "déchet filtre",
+      "recyclage filtre",
+      "exhaust filter",
+      "déchets construction",
+      "élimination",
+      "waste management"
+    ],
+    "usage_hint_fr": "Utiliser lors du remplacement de filtres à air (automobile, CVAC, industrie).",
+    "usage_hint_de": "Verwenden Sie diesen Faktor beim Austausch von Luftfiltern.",
+    "popularity_score": 42
+  },
+  {
+    "id": "698418f3c1a4e9f26cd272b9",
+    "name_fr": "Élimination des déchets à l'aéroport",
+    "name_de": "Abfallentsorgung am Flughafen",
+    "subcategory": "transport_waste",
+    "input_units": [
+      "p"
+    ],
+    "default_unit": "p",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 281212.909,
+        "unit": "kgCO2e/p"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_moyens_de_transport",
+      "transport_waste",
+      "uvek_database"
+    ],
+    "source": "UVEK Database",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.455850+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.455856+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024,
+    "name_simple_fr": "Traitement des déchets d'aéroport",
+    "name_simple_de": "Flughafen-Abfallbehandlung",
+    "description_fr": "Émissions liées au tri, transport et traitement des déchets générés aux aéroports (emballages, restes de repas, papiers). Par passager.",
+    "description_de": "Emissionen aus Sortierung, Transport und Behandlung von Flughafenabfällen (Verpackungen, Speisereste, Papier). Pro Passagier.",
+    "search_tags": [
+      "déchets aéroport",
+      "waste airport",
+      "Flughafen Müll",
+      "traitement déchets",
+      "refuse disposal",
+      "élimination",
+      "tri sélectif",
+      "gestion déchets"
+    ],
+    "usage_hint_fr": "Utilisez ce facteur pour les trajets aériens incluant la gestion des déchets à l'aéroport.",
+    "usage_hint_de": "Nutzen Sie diesen Faktor für Flugreisen einschließlich Abfallwirtschaft.",
+    "popularity_score": 35,
+    "notes": {
+      "scope": "Scope 3",
+      "unit_input": "par passager (p)",
+      "value_kg_co2e_per_p": 281212.909,
+      "source": "Base de données UVEK (Office fédéral suisse)",
+      "category": "Transport et déchets"
+    }
+  },
+  {
+    "id": "698418f3c1a4e9f26cd272ba",
+    "name_fr": "Élimination, cendres de granulés de café moulu, pour la mise en décharge {CH}",
+    "name_de": "Entsorgung, Asche Kaffeemehlpellets, zur Deponierung {CH}",
+    "subcategory": "landfarming",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.00368192,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_agricoles",
+      "landfarming",
+      "uvek_database"
+    ],
+    "source": "UVEK Database",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.456126+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.456136+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024
+  },
+  {
+    "id": "698418f3c1a4e9f26cd272bb",
+    "name_fr": "Élimination, cendres de fumier de cheval et de copeaux de bois, à la mise en décharge {CH}",
+    "name_de": "Entsorgung, Asche Pferdemist und Altholzspäne, auf Deponie {CH}",
+    "subcategory": "landfarming",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.00368192,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_agricoles",
+      "landfarming",
+      "uvek_database"
+    ],
+    "source": "UVEK Database",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.456456+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.456464+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024,
+    "name_simple_fr": "Traitement des cendres de fumier de cheval",
+    "name_simple_de": "Entsorgung von Pferdemist-Asche",
+    "description_fr": "Émissions liées à l'élimination en décharge des cendres provenant du fumier de cheval mélangé à des copeaux de bois. Concerne les écuries et centres équestres.",
+    "description_de": "Emissionen aus der Deponierung von Asche aus Pferdemist gemischt mit Holzspänen. Betrifft Ställe und Reitzentren.",
+    "search_tags": [
+      "fumier cheval",
+      "cendres équines",
+      "décharge",
+      "copeaux bois",
+      "écurie",
+      "horse manure ash",
+      "elimination",
+      "waste disposal"
+    ],
+    "usage_hint_fr": "Pour les écuries, centres équestres éliminant leurs cendres de fumier",
+    "usage_hint_de": "Für Ställe und Reitzentren, die Mist-Asche entsorgen",
+    "popularity_score": 15
+  },
+  {
+    "id": "698418f3c1a4e9f26cd272bc",
+    "name_fr": "Élimination, cendres de grignons d'olive, à la mise en décharge {CY}",
+    "name_de": "Entsorgung, Asche Oliventrester, zur Deponierung {CY}",
+    "subcategory": "landfarming",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.00368192,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_agricoles",
+      "landfarming",
+      "uvek_database"
+    ],
+    "source": "UVEK Database",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.456740+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.456747+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024,
+    "name_simple_fr": "Mise en décharge des cendres d'olive",
+    "name_simple_de": "Deponierung von Olivenasche",
+    "description_fr": "Émissions générées par l'élimination en décharge des résidus de cendre provenant du traitement des olives. Concerne les producteurs d'huile d'olive.",
+    "description_de": "Emissionen aus der Deponierung von Ascherückständen aus der Olivenverarbeitung. Betrifft Olivenölproduzenten.",
+    "search_tags": [
+      "olive",
+      "cendre",
+      "décharge",
+      "élimination",
+      "résidu",
+      "grignon",
+      "waste disposal",
+      "landfarming",
+      "Chypre",
+      "agro-industrie"
+    ],
+    "usage_hint_fr": "À utiliser si vous éliminez des cendres d'olive en décharge.",
+    "usage_hint_de": "Verwenden Sie dies, wenn Sie Olivenasche deponieren.",
+    "popularity_score": 12
+  },
+  {
+    "id": "698418f3c1a4e9f26cd272bd",
+    "name_fr": "Élimination cendres de litière de volaille en décharge",
+    "name_de": "Entsorgung von Geflügeleinstreu-Asche auf Deponien",
+    "subcategory": "landfarming",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.00368192,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_agricoles",
+      "landfarming",
+      "uvek_database"
+    ],
+    "source": "UVEK Database",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.456992+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.457002+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024,
+    "description_fr": "Émissions générées par l'élimination en décharge des cendres issues de la litière de volaille (résidu de combustion ou traitement thermique).",
+    "description_de": "Emissionen aus der Deponierung von Aschepartikel aus Geflügelstallabfällen (Verbrennungs- oder Wärmeverarbeitungsrückstände).",
+    "search_tags": [
+      "volaille",
+      "poultry",
+      "cendres",
+      "ash",
+      "décharge",
+      "landfill",
+      "litière",
+      "élimination déchets",
+      "disposal"
+    ],
+    "usage_hint_fr": "Utilisez ce facteur si vous éliminez les cendres de litière de volaille à la décharge.",
+    "usage_hint_de": "Verwenden Sie diesen Faktor beim Deponieren von Geflügeleinstreu-Asche.",
+    "popularity_score": 28,
+    "metadata": {
+      "scope": "scope3",
+      "value": 0.00368192,
+      "unit": "kgCO2e/kg",
+      "input_units": [
+        "kg"
+      ],
+      "source": "UVEK Database",
+      "subcategory": "landfarming",
+      "note_fr": "Facteur très spécialisé pour les exploitations avicoles suisses.",
+      "note_de": "Hochspezialisierter Faktor für Schweizer Geflügelzuchtbetriebe."
+    }
+  },
+  {
+    "id": "698418f3c1a4e9f26cd272be",
+    "name_fr": "Élimination, solides de lisier de cendres et copeaux d'écorce, vers la mise en décharge {CH}",
+    "name_de": "Entsorgung, Asche Gülle Feststoffe und Rindenschnitzel, zur Deponierung {CH}",
+    "subcategory": "landfarming",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.00368192,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_agricoles",
+      "landfarming",
+      "uvek_database"
+    ],
+    "source": "UVEK Database",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.457398+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.457415+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024
+  },
+  {
+    "id": "698418f3c1a4e9f26cd272bf",
+    "name_fr": "Élimination, vélo {CH}",
+    "name_de": "Entsorgung, Fahrrad {CH}",
+    "subcategory": "transport_waste",
+    "input_units": [
+      "p"
+    ],
+    "default_unit": "p",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 5.95870896,
+        "unit": "kgCO2e/p"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "elimination_moyens_de_transport",
+      "transport_waste",
+      "uvek_database"
+    ],
+    "source": "UVEK Database",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.457832+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.457842+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024,
+    "name_simple_fr": "Recyclage d'un vélo",
+    "name_simple_de": "Entsorgung eines Fahrrads",
+    "description_fr": "Émissions liées au traitement et recyclage d'un vélo usagé en Suisse. Inclut le transport vers le centre de recyclage et le traitement des matériaux (acier, caoutchouc, plastique).",
+    "description_de": "Emissionen aus Behandlung und Recycling eines alten Fahrrads in der Schweiz. Umfasst Transport zum Recyclingcenter und Materialverarbeitung (Stahl, Gummi, Kunststoff).",
+    "search_tags": [
+      "vélo",
+      "bike",
+      "recycling",
+      "fin de vie",
+      "transport",
+      "déchet",
+      "entsorgung",
+      "fahrrad",
+      "abfall"
+    ],
+    "usage_hint_fr": "Utiliser pour calculer l'impact environnemental de la mise au rebut d'un vélo.",
+    "usage_hint_de": "Verwenden Sie dies, um die Umweltauswirkungen der Entsorgung eines Fahrrads zu berechnen.",
+    "popularity_score": 35
+  },
+  {
+    "id": "698418f3c1a4e9f26cd272c0",
+    "name_fr": "Élimination feuille bitume",
+    "name_de": "Entsorgung Bitumenbahn",
+    "subcategory": "construction_waste",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 2.37231992,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_de_construction",
+      "construction_waste",
+      "uvek_database"
+    ],
+    "source": "UVEK Database",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.458110+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.458117+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024,
+    "description_fr": "Émissions liées à l'élimination finale d'une feuille de bitume (membrane d'étanchéité de toiture). Inclut le transport et le traitement des déchets.",
+    "description_de": "Emissionen bei der endgültigen Entsorgung einer Bitumenbahn (Dachbahn). Umfasst Transport und Abfallbehandlung.",
+    "search_tags": [
+      "bitume",
+      "membrane étanchéité",
+      "toiture",
+      "déchet construction",
+      "bituminous sheet",
+      "roof membrane",
+      "roofing waste",
+      "elimination"
+    ],
+    "usage_hint_fr": "Utilisez pour les projets de rénovation ou démolition de toiture.",
+    "usage_hint_de": "Verwenden Sie für Dach-Renovierungs- oder Abrissprojekte.",
+    "popularity_score": 42
+  },
+  {
+    "id": "698418f3c1a4e9f26cd272c1",
+    "name_fr": "Élimination, bâtiment, brique, jusqu'à l'élimination finale {CH}",
+    "name_de": "Entsorgung, Gebäude, Ziegel, zur endgültigen Entsorgung {CH}",
+    "subcategory": "construction_waste",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.00790848,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_de_construction",
+      "construction_waste",
+      "uvek_database"
+    ],
+    "source": "UVEK Database",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.458392+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.458398+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024,
+    "name_simple_fr": "Élimination de briques de construction",
+    "name_simple_de": "Entsorgung von Bausteinen",
+    "description_fr": "Émissions liées à l'élimination finale des briques provenant de la démolition ou rénovation de bâtiments. Inclut le transport et le traitement des déchets.",
+    "description_de": "Emissionen aus der Endentsorgung von Bausteinen aus Abriss oder Renovierung. Umfasst Transport und Abfallbehandlung.",
+    "search_tags": [
+      "briques",
+      "démolition",
+      "bâtiment",
+      "déchets construction",
+      "brick waste",
+      "entsorgung",
+      "renovation",
+      "matériaux"
+    ],
+    "usage_hint_fr": "Démolition, rénovation ou destruction de bâtiments en briques",
+    "usage_hint_de": "Abriss, Renovierung oder Abruch von Ziegelgebäuden",
+    "popularity_score": 35
+  },
+  {
+    "id": "698418f3c1a4e9f26cd272c2",
+    "name_fr": "Élimination, bâtiment, brique, jusqu'au centre de tri {CH}",
+    "name_de": "Entsorgung, Gebäude, Ziegel, zur Sortieranlage {CH}",
+    "subcategory": "construction_waste",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.01414407,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_de_construction",
+      "construction_waste",
+      "uvek_database"
+    ],
+    "source": "UVEK Database",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.458670+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.458677+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024
+  },
+  {
+    "id": "698418f3c1a4e9f26cd272c3",
+    "name_fr": "Élimination, bâtiment, fer en vrac (sans armature), vers le centre de tri {CH}",
+    "name_de": "Entsorgung, Gebäude, Eisen in loser Schüttung (außer Bewehrung), zur Sortieranlage {CH}",
+    "subcategory": "construction_waste",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.0036389,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_de_construction",
+      "construction_waste",
+      "uvek_database"
+    ],
+    "source": "UVEK Database",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.458911+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.458919+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024,
+    "name_simple_fr": "Tri du fer de démolition",
+    "name_simple_de": "Sortierung von Abbrucheisen",
+    "description_fr": "Émissions liées au tri et traitement du fer récupéré lors de démolitions de bâtiments. Exemple: enlever le fer d'une vieille maison pour le recycler.",
+    "description_de": "Emissionen beim Sortieren und Behandeln von Eisen aus Gebäudeabbrüchen. Beispiel: Eisenteile aus einem alten Haus für das Recycling entfernen.",
+    "search_tags": [
+      "démolition",
+      "fer",
+      "recyclage acier",
+      "déconstruction",
+      "waste iron",
+      "Abbruchstahl",
+      "construction waste",
+      "métal lourd"
+    ],
+    "usage_hint_fr": "Lors de rénovations/démolitions de bâtiments avec éléments en fer.",
+    "usage_hint_de": "Bei Gebäuderenovierungen oder Abbrüchen mit Eisenelementen.",
+    "popularity_score": 42
+  },
+  {
+    "id": "698418f3c1a4e9f26cd272c4",
+    "name_fr": "Élimination, bâtiment, ciment (dans le béton) et mortier, à l'élimination finale {CH}",
+    "name_de": "Entsorgung, Bau, Zement (in Beton) und Mörtel, zur endgültigen Entsorgung {CH}",
+    "subcategory": "construction_waste",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.00876995,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_de_construction",
+      "construction_waste",
+      "uvek_database"
+    ],
+    "source": "UVEK Database",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.459287+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.459297+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024,
+    "name_simple_fr": "Élimination du ciment et béton",
+    "name_simple_de": "Entsorgung von Zement und Beton",
+    "description_fr": "Émissions liées au traitement final des déchets de construction contenant du ciment ou du mortier (ex: démolition, broyage, mise en décharge).",
+    "description_de": "Emissionen aus der Endbehandlung von Bau- und Abbruchabfällen mit Zement oder Mörtel (z.B. Abriss, Zerkleinerung, Deponierung).",
+    "search_tags": [
+      "déchet construction",
+      "demolition",
+      "béton",
+      "concrete waste",
+      "ciment",
+      "construction debris",
+      "abbruch",
+      "bauschutt"
+    ],
+    "usage_hint_fr": "Calculez les émissions lors de la démolition ou élimination de béton/ciment.",
+    "usage_hint_de": "Berechnen Sie Emissionen bei Abriss oder Entsorgung von Beton/Zement.",
+    "popularity_score": 65
+  },
+  {
+    "id": "698418f3c1a4e9f26cd272c5",
+    "name_fr": "Élimination, bâtiment, ciment (en béton) et mortier, vers une installation de tri {CH}",
+    "name_de": "Entsorgung, Gebäude, Zement (in Beton) und Mörtel, zur Sortieranlage {CH}",
+    "subcategory": "construction_waste",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.02168366,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_de_construction",
+      "construction_waste",
+      "uvek_database"
+    ],
+    "source": "UVEK Database",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.459549+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.459555+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024,
+    "name_simple_fr": "Tri des débris de béton",
+    "name_simple_de": "Sortierung von Betonschutt",
+    "description_fr": "Émissions liées au tri et traitement des débris de béton et mortier issus de démolition ou déconstruction. Ex: broyage, criblage en installation spécialisée.",
+    "description_de": "Emissionen aus Sortierung und Behandlung von Beton- und Mörtelresten aus Abriss oder Rückbau. Beispiel: Zerkleinerung, Siebung in spezialisierter Anlage.",
+    "search_tags": [
+      "béton",
+      "demolition",
+      "déchet construction",
+      "concrete waste",
+      "tri",
+      "mortier",
+      "ciment",
+      "debris",
+      "construction demolition",
+      "sorting"
+    ],
+    "usage_hint_fr": "À utiliser pour les débris de béton triés (pas mélangés) vers une installation.",
+    "usage_hint_de": "Für sortierten Betonschutt (nicht gemischt) zu einer Anlage verwenden.",
+    "popularity_score": 65
+  },
+  {
+    "id": "698418f3c1a4e9f26cd272c6",
+    "name_fr": "Élimination, bâtiment, dalle en fibres de ciment, jusqu'à l'élimination finale {CH}",
+    "name_de": "Entsorgung, Gebäude, Zementfaserplatte, zur endgültigen Entsorgung {CH}",
+    "subcategory": "construction_waste",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.0181212,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_de_construction",
+      "construction_waste",
+      "uvek_database"
+    ],
+    "source": "UVEK Database",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.459895+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.459904+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024
+  },
+  {
+    "id": "698418f3c1a4e9f26cd272c7",
+    "name_fr": "Élimination, bâtiment, gravier en béton, jusqu'à l'élimination finale {CH}",
+    "name_de": "Entsorgung, Gebäude, Betonkies, zur endgültigen Entsorgung {CH}",
+    "subcategory": "construction_waste",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.00876995,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_de_construction",
+      "construction_waste",
+      "uvek_database"
+    ],
+    "source": "UVEK Database",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.460186+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.460193+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024,
+    "name_simple_fr": "Élimination béton et gravats",
+    "name_simple_de": "Entsorgung von Beton und Kies",
+    "description_fr": "Traitement et élimination finale de débris de béton provenant de démolitions ou rénovations de bâtiments en Suisse.",
+    "description_de": "Behandlung und endgültige Entsorgung von Betontrümmern aus Abriss oder Gebäuderenovierung in der Schweiz.",
+    "search_tags": [
+      "déchet construction",
+      "béton démolition",
+      "gravats",
+      "waste management",
+      "construction waste",
+      "demolition",
+      "recycling béton",
+      "inertes"
+    ],
+    "usage_hint_fr": "Utilisez pour les projets de rénovation ou démolition de bâtiments.",
+    "usage_hint_de": "Verwenden Sie für Renovierungs- oder Abrissarbeiten von Gebäuden.",
+    "popularity_score": 72
+  },
+  {
+    "id": "698418f3c1a4e9f26cd272c8",
+    "name_fr": "Élimination, bâtiment, gravier en béton, vers le recyclage {CH}",
+    "name_de": "Entsorgung, Gebäude, Betonkies, zum Recycling {CH}",
+    "subcategory": "construction_waste",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.00482645,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_de_construction",
+      "construction_waste",
+      "uvek_database"
+    ],
+    "source": "UVEK Database",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.460421+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.460427+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024,
+    "name_simple_fr": "Recyclage des gravats de béton",
+    "name_simple_de": "Recycling von Betonschutt",
+    "description_fr": "Émissions liées au transport et traitement des débris de béton issus de démolition. Valorisé par recyclage en matériaux de construction.",
+    "description_de": "Emissionen aus Transport und Verarbeitung von Betonabfällen aus Abriss. Wird durch Recycling in Baustoffe zurückgewonnen.",
+    "search_tags": [
+      "déchet construction",
+      "béton démolition",
+      "gravier béton",
+      "recyclage bâtiment",
+      "waste concrete",
+      "construction waste",
+      "Bauabfall",
+      "Betonrecycling",
+      "débris bâtiment"
+    ],
+    "usage_hint_fr": "Lors de démolitions ou rénovations avec évacuation de béton",
+    "usage_hint_de": "Bei Abriss oder Renovierungen mit Betonabfallentsorgung",
+    "popularity_score": 65,
+    "scope": "scope3",
+    "impact_value": 0.00482645,
+    "impact_unit": "kgCO2e/kg",
+    "input_unit": "kg",
+    "source_credibility": "Données officielles suisses"
+  },
+  {
+    "id": "698418f3c1a4e9f26cd272c9",
+    "name_fr": "Élimination, bâtiment, gravier en béton, vers le centre de tri {CH}",
+    "name_de": "Entsorgung, Gebäude, Betonschotter, zur Sortieranlage {CH}",
+    "subcategory": "construction_waste",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.01494322,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_de_construction",
+      "construction_waste",
+      "uvek_database"
+    ],
+    "source": "UVEK Database",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.460641+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.460647+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024,
+    "name_simple_fr": "Recyclage des gravats de béton",
+    "name_simple_de": "Recycling von Betonschutt",
+    "description_fr": "Émissions liées au transport et tri des débris de béton issus de démolition vers un centre de recyclage suisse.",
+    "description_de": "Emissionen aus Transport und Sortierung von Betonschutt aus Abbrucharbeiten zu einer Schweizer Recyclinganlage.",
+    "search_tags": [
+      "béton recyclé",
+      "gravats",
+      "déconstruction",
+      "waste concrete",
+      "démolition",
+      "centre de tri",
+      "construction waste",
+      "débris"
+    ],
+    "usage_hint_fr": "Utilisez pour les travaux de démolition ou rénovation avec évacuation de béton.",
+    "usage_hint_de": "Verwenden Sie für Abriss- oder Renovierungsarbeiten mit Betonschutt.",
+    "popularity_score": 65,
+    "additional_context": {
+      "sector": "construction",
+      "applies_to": "demolition_projects",
+      "region": "Switzerland",
+      "example_use": "Démolition d'un bâtiment = 50 tonnes de gravats de béton"
+    }
+  },
+  {
+    "id": "698418f3c1a4e9f26cd272ca",
+    "name_fr": "Élimination, bâtiment, béton, non armé, à l'élimination finale {CH}",
+    "name_de": "Entsorgung, Gebäude, Beton, nicht bewehrt, zur endgültigen Entsorgung {CH}",
+    "subcategory": "construction_waste",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.00876995,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_de_construction",
+      "construction_waste",
+      "uvek_database"
+    ],
+    "source": "UVEK Database",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.460858+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.460864+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024
+  },
+  {
+    "id": "698418f3c1a4e9f26cd272cb",
+    "name_fr": "Élimination, bâtiment, béton, non armé, vers le centre de tri {CH}",
+    "name_de": "Entsorgung, Gebäude, Beton, nicht bewehrt, zur Sortieranlage {CH}",
+    "subcategory": "construction_waste",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.01492018,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_de_construction",
+      "construction_waste",
+      "uvek_database"
+    ],
+    "source": "UVEK Database",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.461075+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.461081+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024,
+    "name_simple_fr": "Recyclage béton non armé",
+    "name_simple_de": "Recycling unbewehrter Beton",
+    "description_fr": "Émissions liées au transport et tri du béton de démolition (sans armature métallique) en centre de recyclage suisse.",
+    "description_de": "Emissionen für Transport und Sortierung von Abbruchbeton (ohne Stahlbewehrung) in Schweizer Recyclinganlage.",
+    "search_tags": [
+      "béton démolition",
+      "déchet construction",
+      "recyclage béton",
+      "concrete waste",
+      "building demolition",
+      "tri déchets",
+      "non armé",
+      "sorting facility"
+    ],
+    "usage_hint_fr": "Projets de démolition/rénovation de bâtiments avec béton simple",
+    "usage_hint_de": "Abriss-/Renovierungsprojekte von Gebäuden mit Normalbeton",
+    "popularity_score": 68
+  },
+  {
+    "id": "698418f3c1a4e9f26cd272cc",
+    "name_fr": "Élimination, bâtiment, câblage électrique, à l'élimination finale {CH}",
+    "name_de": "Entsorgung, Gebäude, elektrische Leitungen, zur endgültigen Entsorgung {CH}",
+    "subcategory": "construction_waste",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 1.39581889,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_de_construction",
+      "construction_waste",
+      "uvek_database"
+    ],
+    "source": "UVEK Database",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.461316+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.461323+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024,
+    "name_simple_fr": "Recyclage câbles électriques",
+    "name_simple_de": "Recycling von Elektrokabeln",
+    "description_fr": "Émissions liées à l'élimination et recyclage des câbles électriques de bâtiments. Inclut le tri, le traitement et la valorisation des matériaux.",
+    "description_de": "Emissionen bei der Entsorgung und dem Recycling von Elektrokabeln aus Gebäuden. Umfasst Sortierung, Behandlung und Verwertung der Materialien.",
+    "search_tags": [
+      "câbles",
+      "électriques",
+      "recyclage",
+      "déchets construction",
+      "bâtiment",
+      "waste electrical",
+      "WEEE",
+      "démolition",
+      "récupération cuivre",
+      "fin de vie"
+    ],
+    "usage_hint_fr": "Lors de la démolition ou rénovation majeure d'un bâtiment",
+    "usage_hint_de": "Bei Abriss oder umfassender Gebäudesanierung",
+    "popularity_score": 35
+  },
+  {
+    "id": "698418f3c1a4e9f26cd272cd",
+    "name_fr": "Élimination, bâtiment, restes de peinture à l'émulsion, à l'élimination finale {CH}",
+    "name_de": "Entsorgung, Gebäude, Dispersionsfarbenreste, zur endgültigen Entsorgung {CH}",
+    "subcategory": "construction_waste",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 2.64835009,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_de_construction",
+      "construction_waste",
+      "uvek_database"
+    ],
+    "source": "UVEK Database",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.461544+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.461550+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024,
+    "name_simple_fr": "Élimination de restes de peinture",
+    "name_simple_de": "Entsorgung von Farbrestmengen",
+    "description_fr": "Déchets de peinture à l'eau provenant de chantiers de construction ou rénovation. Inclut l'incinération et le traitement en Suisse.",
+    "description_de": "Wasserbasierte Farbabfälle von Baustellen oder Renovierungen. Beinhaltet Verbrennung und Behandlung in der Schweiz.",
+    "search_tags": [
+      "peinture",
+      "déchet bâtiment",
+      "construction waste",
+      "paint disposal",
+      "émulsion",
+      "déchets de rénovation",
+      "incinération",
+      "traitement déchets"
+    ],
+    "usage_hint_fr": "Pour des travaux de peinture ou rénovation générant des restes à éliminer",
+    "usage_hint_de": "Für Malerarbeiten oder Renovierungen mit Farbabfallwirtschaft",
+    "popularity_score": 42
+  },
+  {
+    "id": "698418f3c1a4e9f26cd272ce",
+    "name_fr": "Élimination, bâtiment, panneaux de fibres, vers l'élimination finale {CH}",
+    "name_de": "Entsorgung, Gebäude, Faserplatten, zur endgültigen Entsorgung {CH}",
+    "subcategory": "construction_waste",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.22270901,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_de_construction",
+      "construction_waste",
+      "uvek_database"
+    ],
+    "source": "UVEK Database",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.461769+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.461774+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024
+  },
+  {
+    "id": "698418f3c1a4e9f26cd272cf",
+    "name_fr": "Élimination, bâtiment, vitre (dans un cadre brûlable), à l'élimination finale {CH}",
+    "name_de": "Entsorgung, Gebäude, Glasscheibe (in brennbarem Rahmen), zur endgültigen Entsorgung {CH}",
+    "subcategory": "construction_waste",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.02436129,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_de_construction",
+      "construction_waste",
+      "uvek_database"
+    ],
+    "source": "UVEK Database",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.461985+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.461992+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024,
+    "name_simple_fr": "Élimination de vitre de bâtiment",
+    "name_simple_de": "Entsorgung von Gebäudefenstern",
+    "description_fr": "Émissions liées à l'élimination des vitres de fenêtres avec cadre combustible. Exemple: démolition d'une façade vitrée.",
+    "description_de": "Emissionen bei der Entsorgung von Fenstern mit brennbarem Rahmen. Beispiel: Abriss einer Glasfassade.",
+    "search_tags": [
+      "vitre",
+      "fenêtre",
+      "déchet construction",
+      "glass disposal",
+      "window waste",
+      "démolition",
+      "cadre bois",
+      "élimination"
+    ],
+    "usage_hint_fr": "Utilisez lors de rénovations ou démolitions de bâtiments.",
+    "usage_hint_de": "Verwenden Sie bei Gebäudesanierungen oder Abrissen.",
+    "popularity_score": 35
+  },
+  {
+    "id": "698418f3c1a4e9f26cd272d0",
+    "name_fr": "Élimination, bâtiment, vitre (dans un cadre incombustible), au centre de tri {CH}",
+    "name_de": "Entsorgung, Gebäude, Glasscheibe (in brennbarem Rahmen), zur Sortieranlage {CH}",
+    "subcategory": "construction_waste",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.02813704,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_de_construction",
+      "construction_waste",
+      "uvek_database"
+    ],
+    "source": "UVEK Database",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.462206+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.462212+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024,
+    "name_simple_fr": "Recyclage vitre avec cadre",
+    "name_simple_de": "Glasscheiben-Recycling mit Rahmen",
+    "description_fr": "Traitement et recyclage des vitres de bâtiment avec cadre non-combustible. Exemple: fenêtres, portes vitrées issues de démolition.",
+    "description_de": "Behandlung und Recycling von Gebäudefenstern mit brennbarem Rahmen. Beispiel: Fenster und Glastüren aus Abriss.",
+    "search_tags": [
+      "vitre",
+      "verre",
+      "fenêtre",
+      "cadre",
+      "recycling",
+      "déchet construction",
+      "glass",
+      "window",
+      "demolition",
+      "tri"
+    ],
+    "usage_hint_fr": "Pour les vitres avec cadre issues de rénovation/démolition",
+    "usage_hint_de": "Für Glasscheiben mit Rahmen aus Renovierung/Abriss",
+    "popularity_score": 42
+  },
+  {
+    "id": "698418f3c1a4e9f26cd272d1",
+    "name_fr": "Élimination, bâtiment, feuille de verre, à l'élimination finale {CH}",
+    "name_de": "Entsorgung, Gebäude, Glasscheibe, zur endgültigen Entsorgung {CH}",
+    "subcategory": "construction_waste",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.00394351,
+        "unit": "kgCO2e/kg",
+        "description_fr": "Chaque kilogramme de verre éliminé génère ~3,94g de CO2e",
+        "description_de": "Jedes Kilogramm entsorgtes Glas erzeugt etwa 3,94g CO2e"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_de_construction",
+      "construction_waste",
+      "uvek_database"
+    ],
+    "source": "UVEK Database",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.462470+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.462477+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024,
+    "name_simple_fr": "Élimination verre de bâtiment",
+    "name_simple_de": "Entsorgung von Gebäudeglas",
+    "description_fr": "Émissions produites par l'élimination finale des vitres et feuilles de verre provenant de bâtiments. Inclut le transport et le traitement en déchetterie.",
+    "description_de": "Emissionen aus der endgültigen Entsorgung von Fenster- und Glasscheiben aus Gebäuden. Umfasst Transport und Behandlung auf der Deponie.",
+    "search_tags": [
+      "verre",
+      "glass",
+      "fenêtres",
+      "windows",
+      "déchets construction",
+      "demolition waste",
+      "élimination",
+      "disposal",
+      "déchet vitré"
+    ],
+    "usage_hint_fr": "Utilisez pour les vitres et vitrages éliminés lors de rénovations ou démolitions.",
+    "usage_hint_de": "Nutzen Sie für Fenster und Verglasungen, die bei Renovierungen oder Abrissen entsorgt werden.",
+    "popularity_score": 45,
+    "source_fr": "Base de données UVEK (Office fédéral de l'environnement)",
+    "source_de": "UVEK-Datenbank (Bundesamt für Umwelt)"
+  },
+  {
+    "id": "698418f3c1a4e9f26cd272d2",
+    "name_fr": "Élimination, bâtiment, feuille de verre, au centre de tri {CH}",
+    "name_de": "Entsorgung, Gebäude, Glasscheibe, zur Sortieranlage {CH}",
+    "subcategory": "construction_waste",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.01006619,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_de_construction",
+      "construction_waste",
+      "uvek_database"
+    ],
+    "source": "UVEK Database",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.462699+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.462705+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024,
+    "name_simple_fr": "Recyclage verre de fenêtre",
+    "name_simple_de": "Recycling von Fensterglas",
+    "description_fr": "Émissions liées au tri et au recyclage des vitres et vitrages de bâtiments. Inclut le transport vers le centre de tri suisse.",
+    "description_de": "Emissionen aus Sortierung und Recycling von Fensterglasscheiben aus Gebäuden. Umfasst Transport zur Schweizer Sortieranlage.",
+    "search_tags": [
+      "verre",
+      "fenêtre",
+      "vitre",
+      "recyclage",
+      "déconstruction",
+      "déchets bâtiment",
+      "glass",
+      "waste",
+      "construction"
+    ],
+    "usage_hint_fr": "Déchets de rénovation ou démolition de bâtiments contenant des vitres.",
+    "usage_hint_de": "Bauschutt aus Renovierung oder Abriss mit Fensterglas.",
+    "popularity_score": 42
+  },
+  {
+    "id": "698418f3c1a4e9f26cd272d3",
+    "name_fr": "Élimination, bâtiment, plâtre minéral, à l'élimination finale {CH}",
+    "name_de": "Entsorgung, Gebäude, mineralischer Gips, zur endgültigen Entsorgung {CH}",
+    "subcategory": "construction_waste",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.00394351,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_de_construction",
+      "construction_waste",
+      "uvek_database"
+    ],
+    "source": "UVEK Database",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.462919+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.462925+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024
+  },
+  {
+    "id": "698418f3c1a4e9f26cd272d4",
+    "name_fr": "Élimination, bâtiment, plâtre minéral, au centre de tri {CH}",
+    "name_de": "Entsorgung, Gebäude, mineralischer Gips, zur Sortieranlage {CH}",
+    "subcategory": "construction_waste",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.0169489,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_de_construction",
+      "construction_waste",
+      "uvek_database"
+    ],
+    "source": "UVEK Database",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.463166+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.463172+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024,
+    "name_simple_fr": "Tri des plaques de plâtre",
+    "name_simple_de": "Sortierung von Gipsplatten",
+    "description_fr": "Émissions générées par le tri et traitement des plaques de plâtre usagées dans un centre spécialisé suisse. Exemple: débris de rénovation.",
+    "description_de": "Emissionen durch Sortierung und Behandlung von Altgipsplatten in einer Schweizer Fachanlage. Beispiel: Renovierungsabfälle.",
+    "search_tags": [
+      "plâtre",
+      "gips",
+      "tri",
+      "déchets construction",
+      "recyclage",
+      "centre tri",
+      "sorting",
+      "drywall",
+      "plasterboard",
+      "construction waste"
+    ],
+    "usage_hint_fr": "Pour les débris de plâtre de rénovations ou démolitions triés en Suisse.",
+    "usage_hint_de": "Für Gipsabfälle aus Renovierungen oder Abrissen, die in der Schweiz sortiert werden.",
+    "popularity_score": 35,
+    "additional_info_fr": "Facteur très spécifique à la Suisse. Concerne principalement les entreprises de construction/rénovation.",
+    "additional_info_de": "Schweiz-spezifischer Faktor. Betrifft hauptsächlich Bau-/Renovierungsunternehmen."
+  },
+  {
+    "id": "698418f3c1a4e9f26cd272d5",
+    "name_fr": "Élimination, bâtiment, laine minérale, à l'élimination finale {CH}",
+    "name_de": "Entsorgung, Gebäude, Mineralwolle, zur endgültigen Entsorgung {CH}",
+    "subcategory": "construction_waste",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.00394351,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_de_construction",
+      "construction_waste",
+      "uvek_database"
+    ],
+    "source": "UVEK Database",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.463411+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.463418+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024,
+    "name_simple_fr": "Élimination de laine minérale (Suisse)",
+    "name_simple_de": "Entsorgung von Mineralwolle (Schweiz)",
+    "description_fr": "Émissions liées au traitement et élimination final de la laine minérale (isolation thermique) provenant de démolitions ou rénovations de bâtiments.",
+    "description_de": "Emissionen aus der Behandlung und endgültigen Entsorgung von Mineralwolle (Wärmedämmung) aus Gebäudeabbruch oder -renovierung.",
+    "search_tags": [
+      "laine minérale",
+      "mineral wool",
+      "isolation",
+      "démolition",
+      "déchet construction",
+      "fibres minérales",
+      "incinération",
+      "déchets bâtiment"
+    ],
+    "usage_hint_fr": "Pour les projets de rénovation ou démolition incluant l'isolation.",
+    "usage_hint_de": "Für Renovierungs- oder Abbruchprojekte mit Wärmedämmung.",
+    "popularity_score": 42,
+    "metadata": {
+      "subcategory": "construction_waste",
+      "input_units": [
+        "kg"
+      ],
+      "scope": "scope3",
+      "emission_factor": 0.00394351,
+      "emission_unit": "kgCO2e/kg",
+      "source": "UVEK Database",
+      "geographic_scope": "CH",
+      "applicability": "Suisse uniquement"
+    }
+  },
+  {
+    "id": "698418f3c1a4e9f26cd272d6",
+    "name_fr": "Élimination, bâtiment, laine minérale, au centre de tri {CH}",
+    "name_de": "Entsorgung, Gebäude, Mineralwolle, zur Sortieranlage {CH}",
+    "subcategory": "construction_waste",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.0175451,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_de_construction",
+      "construction_waste",
+      "uvek_database"
+    ],
+    "source": "UVEK Database",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.463737+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.463748+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024,
+    "name_simple_fr": "Recyclage laine minérale",
+    "name_simple_de": "Recycling Mineralwolle",
+    "description_fr": "Émissions liées au tri et au recyclage de la laine minérale (isolant) provenant de démolition ou rénovation de bâtiments.",
+    "description_de": "Emissionen beim Sortieren und Recycling von Mineralwolle (Isolierstoff) aus Abriss oder Gebäuderenovierung.",
+    "search_tags": [
+      "laine minérale",
+      "isolation",
+      "déchet construction",
+      "recyclage",
+      "mineral wool",
+      "building waste",
+      "démolition",
+      "centre tri",
+      "insulation",
+      "waste management"
+    ],
+    "usage_hint_fr": "Pour les chantiers de rénovation ou démolition avec isolants minéraux",
+    "usage_hint_de": "Für Renovierungs- oder Abrissprojekte mit Mineralwollisolierung",
+    "popularity_score": 45
+  },
+  {
+    "id": "698418f3c1a4e9f26cd272d7",
+    "name_fr": "Élimination, bâtiment, peinture sur métal, à l'élimination finale {CH}",
+    "name_de": "Entsorgung, Gebäude, Farbe auf Metall, zur endgültigen Entsorgung {CH}",
+    "subcategory": "construction_waste",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.00394351,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_de_construction",
+      "construction_waste",
+      "uvek_database"
+    ],
+    "source": "UVEK Database",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.464019+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.464026+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024
+  },
+  {
+    "id": "698418f3c1a4e9f26cd272d8",
+    "name_fr": "Élimination, bâtiment, peinture sur métal, vers le centre de tri {CH}",
+    "name_de": "Entsorgung, Gebäude, Farbe auf Metall, zur Sortieranlage {CH}",
+    "subcategory": "construction_waste",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.00416687,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_de_construction",
+      "construction_waste",
+      "uvek_database"
+    ],
+    "source": "UVEK Database",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.464254+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.464260+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024,
+    "name_simple_fr": "Recyclage peinture métallique",
+    "name_simple_de": "Recycling von Metallfarbe",
+    "description_fr": "Émissions liées au tri et recyclage de peinture sur surfaces métalliques (portes, cadres, structures). Transport vers centre de tri inclus.",
+    "description_de": "Emissionen beim Sortieren und Recyceln von Farbe auf Metalloberflächen (Türen, Rahmen, Strukturen). Transport zur Sortieranlage inbegriffen.",
+    "search_tags": [
+      "peinture",
+      "métal",
+      "recyclage",
+      "déchet construction",
+      "coating",
+      "metal waste",
+      "sorting",
+      "élimination",
+      "tri sélectif",
+      "construction waste"
+    ],
+    "usage_hint_fr": "Vous éliminez de la peinture sur métal du site de construction?",
+    "usage_hint_de": "Entsorgen Sie Farbe von Metalloberflächen auf der Baustelle?",
+    "popularity_score": 42,
+    "additional_context": {
+      "applies_to_fr": "Travaux de rénovation, démolition, retrait de revêtements",
+      "applies_to_de": "Renovierungsarbeiten, Abriss, Entfernung von Beschichtungen",
+      "scope_explanation_fr": "Scope 3 - Émissions indirectes (transport et traitement externe)",
+      "scope_explanation_de": "Scope 3 - Indirekte Emissionen (externer Transport und Behandlung)"
+    }
+  },
+  {
+    "id": "698418f3c1a4e9f26cd272d9",
+    "name_fr": "Élimination, bâtiment, peinture sur les murs, à l'usine de tri {CH}",
+    "name_de": "Entsorgung, Gebäude, Farbe an Wänden, zur Sortieranlage {CH}",
+    "subcategory": "construction_waste",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.09521803,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_de_construction",
+      "construction_waste",
+      "uvek_database"
+    ],
+    "source": "UVEK Database",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.464511+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.464518+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024,
+    "name_simple_fr": "Élimination peinture murale",
+    "name_simple_de": "Entsorgung Wandfarbe",
+    "description_fr": "Émissions liées au tri et traitement des déchets de peinture murale en Suisse. Concerne les résidus de peinture lors de rénovations ou démolitions.",
+    "description_de": "Emissionen aus der Sortierung und Behandlung von Wandfarbabfällen in der Schweiz. Betrifft Farbverschwendung bei Renovierungen oder Abbrüchen.",
+    "search_tags": [
+      "peinture",
+      "déchet peinture",
+      "rénovation",
+      "demolition waste",
+      "paint waste",
+      "construction waste",
+      "abfallwirtschaft",
+      "entsorgung farbe"
+    ],
+    "usage_hint_fr": "Utilisez pour les projets de rénovation ou démolition avec élimination de peinture.",
+    "usage_hint_de": "Verwenden Sie für Renovierungs- oder Abbauprojekte mit Farbentsorgung.",
+    "popularity_score": 35
+  },
+  {
+    "id": "698418f3c1a4e9f26cd272da",
+    "name_fr": "Élimination, bâtiment, peinture sur bois, à l'élimination finale {CH}",
+    "name_de": "Entsorgung, Gebäude, Farbe auf Holz, zur endgültigen Entsorgung {CH}",
+    "subcategory": "construction_waste",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 2.39758337,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_de_construction",
+      "construction_waste",
+      "uvek_database"
+    ],
+    "source": "UVEK Database",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.464742+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.464749+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024,
+    "name_simple_fr": "Élimination peinture sur bois",
+    "name_simple_de": "Entsorgung von Holzfarbe",
+    "description_fr": "Émissions liées au traitement et l'élimination finale de peinture utilisée sur bois en construction (portes, fenêtres, charpentes peintes).",
+    "description_de": "Emissionen aus der Behandlung und endgültigen Entsorgung von Holzfarbe aus dem Bauwesen (angestrichene Türen, Fenster, Dachkonstruktionen).",
+    "search_tags": [
+      "peinture",
+      "bois",
+      "déchet construction",
+      "demolition",
+      "paint disposal",
+      "Farbe Holz",
+      "Bauschutt",
+      "renovation",
+      "peinture glycéro",
+      "déchets"
+    ],
+    "usage_hint_fr": "Lors de démolitions ou rénovations de bâtiments avec éléments peints.",
+    "usage_hint_de": "Bei Abriss oder Renovierung von Gebäuden mit angestrichenen Elementen.",
+    "popularity_score": 42,
+    "scope": "scope3",
+    "impact_value": 2.4,
+    "impact_unit": "kgCO2e/kg"
+  },
+  {
+    "id": "698418f3c1a4e9f26cd272db",
+    "name_fr": "Élimination, bâtiment, restes de peinture, à l'élimination finale {CH}",
+    "name_de": "Entsorgung, Gebäude, Farbreste, zur endgültigen Entsorgung {CH}",
+    "subcategory": "construction_waste",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 3.69559518,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_de_construction",
+      "construction_waste",
+      "uvek_database"
+    ],
+    "source": "UVEK Database",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.464975+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.464981+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024,
+    "name_simple_fr": "Élimination de restes de peinture",
+    "name_simple_de": "Entsorgung von Farbresten",
+    "description_fr": "Émissions liées à l'élimination des restes de peinture après travaux de rénovation ou construction. Inclut le transport et le traitement final des déchets.",
+    "description_de": "Emissionen bei der Entsorgung von Farbresten nach Renovierungs- oder Bauarbeiten. Umfasst Transport und abschließende Behandlung.",
+    "search_tags": [
+      "peinture",
+      "restes de peinture",
+      "déchets construction",
+      "paint waste",
+      "Farbreste",
+      "Bauschutt",
+      "élimination",
+      "déchets bâtiment"
+    ],
+    "usage_hint_fr": "À utiliser pour les projets de rénovation ou construction avec peinture.",
+    "usage_hint_de": "Nutzen Sie diesen Faktor für Renovierungs- oder Bauprojekte mit Farbanstrich.",
+    "popularity_score": 45
+  },
+  {
+    "id": "698418f3c1a4e9f26cd272dc",
+    "name_fr": "Élimination, bâtiment, feuille d'étanchéité PE, vers l'élimination finale {CH}",
+    "name_de": "Entsorgung, Gebäude, PE-Abdichtungsfolie, zur endgültigen Entsorgung {CH}",
+    "subcategory": "construction_waste",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 2.57776409,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_de_construction",
+      "construction_waste",
+      "uvek_database"
+    ],
+    "source": "UVEK Database",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.465227+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.465234+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024
+  },
+  {
+    "id": "698418f3c1a4e9f26cd272dd",
+    "name_fr": "Élimination, bâtiment, plaque de plâtre, plâtre de gypse, jusqu'à l'élimination finale {CH}",
+    "name_de": "Entsorgung, Gebäude, Gipskartonplatten, Gipsputz, zur endgültigen Entsorgung {CH}",
+    "subcategory": "construction_waste",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.00790848,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_de_construction",
+      "construction_waste",
+      "uvek_database"
+    ],
+    "source": "UVEK Database",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.465458+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.465464+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024,
+    "name_simple_fr": "Élimination plaques de plâtre",
+    "name_simple_de": "Entsorgung von Gipskartonplatten",
+    "description_fr": "Émissions générées par l'élimination et le traitement final des plaques de plâtre (cloisons, revêtements muraux). Inclut le transport et la mise en décharge.",
+    "description_de": "Emissionen aus der Entsorgung und endgültigen Behandlung von Gipskartonplatten (Trennwände, Wandverkleidungen). Umfasst Transport und Deponierung.",
+    "search_tags": [
+      "plâtre",
+      "gypsum",
+      "cloison",
+      "drywall",
+      "déchets construction",
+      "élimination bâtiment",
+      "déchetterie",
+      "gipskarton",
+      "construction waste"
+    ],
+    "usage_hint_fr": "Rénovations, démolitions, déconstruction de cloisons et revêtements",
+    "usage_hint_de": "Renovierungen, Abrisse, Rückbau von Trennwänden und Verkleidungen",
+    "popularity_score": 42,
+    "scope": "scope3",
+    "value": 0.00790848,
+    "unit": "kgCO2e/kg",
+    "input_unit": "kg"
+  },
+  {
+    "id": "698418f3c1a4e9f26cd272de",
+    "name_fr": "Élimination, bâtiment, plaque de plâtre, plâtre de gypse, jusqu'au centre de tri {CH}",
+    "name_de": "Entsorgung, Gebäude, Gipskarton, Gipsputz, zur Sortieranlage {CH}",
+    "subcategory": "construction_waste",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.02214385,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_de_construction",
+      "construction_waste",
+      "uvek_database"
+    ],
+    "source": "UVEK Database",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.465729+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.465736+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024,
+    "name_simple_fr": "Élimination plaque de plâtre",
+    "name_simple_de": "Entsorgung Gipskarton",
+    "description_fr": "Émissions liées au transport et tri des plaques de plâtre usagées en centre de tri suisse. Concerne les chutes de chantier et démolitions.",
+    "description_de": "Emissionen beim Transport und der Sortierung von Altgipskarton in schweizer Sortieranlagen. Gilt für Bauschutt und Abbrucharbeiten.",
+    "search_tags": [
+      "plâtre",
+      "gypse",
+      "gipskarton",
+      "déchet construction",
+      "tri",
+      "élimination",
+      "demolition waste",
+      "recycling",
+      "déchets bâtiment"
+    ],
+    "usage_hint_fr": "Renseignez le poids de plaques de plâtre envoyées au tri",
+    "usage_hint_de": "Geben Sie das Gewicht des zur Sortierung gesendeten Gipskartons ein",
+    "popularity_score": 62
+  },
+  {
+    "id": "698418f3c1a4e9f26cd272df",
+    "name_fr": "Élimination, bâtiment, sandwich plâtre-carton, vers le recyclage {CH}",
+    "name_de": "Entsorgung, Gebäude, Gipskartonplatten-Sandwich, zum Recycling {CH}",
+    "subcategory": "construction_waste",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.00396498,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_de_construction",
+      "construction_waste",
+      "uvek_database"
+    ],
+    "source": "UVEK Database",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.465963+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.465970+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024
+  },
+  {
+    "id": "698418f3c1a4e9f26cd272e0",
+    "name_fr": "Élimination, bâtiment, plâtre plastique, vers l'élimination finale {CH}",
+    "name_de": "Entsorgung, Gebäude, Kunststoffputz, zur endgültigen Entsorgung {CH}",
+    "subcategory": "construction_waste",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.00394351,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_de_construction",
+      "construction_waste",
+      "uvek_database"
+    ],
+    "source": "UVEK Database",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.466195+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.466203+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024,
+    "name_simple_fr": "Élimination enduit plastique (Suisse)",
+    "name_simple_de": "Entsorgung Kunststoffputz (Schweiz)",
+    "description_fr": "Émissions générées par l'élimination finale de l'enduit plastique utilisé en construction. Exemple: démolition d'une façade ou rénovation avec enlèvement des revêtements.",
+    "description_de": "Emissionen bei der Endentsorgung von Kunststoffputz aus dem Bauwesen. Beispiel: Fassadenabriss oder Renovierung mit Beschichtungsentfernung.",
+    "search_tags": [
+      "enduit plastique",
+      "déchet construction",
+      "élimination façade",
+      "putz disposal",
+      "plastic render",
+      "rebuts bâtiment",
+      "déchets de démolition",
+      "construction waste",
+      "façade renovation"
+    ],
+    "usage_hint_fr": "Utilisez lors de projets de démolition ou rénovation avec enlèvement d'enduits.",
+    "usage_hint_de": "Verwenden Sie bei Abriss oder Renovierungsprojekten mit Putzbeschichtung.",
+    "popularity_score": 42
+  },
+  {
+    "id": "698418f3c1a4e9f26cd272e1",
+    "name_fr": "Élimination, bâtiment, produits en polyéthylène/polypropylène, vers l'élimination finale {CH}",
+    "name_de": "Entsorgung, Gebäude, Polyethylen/Polypropylen-Produkte, zur endgültigen Entsorgung {CH}",
+    "subcategory": "construction_waste",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 3.03331145,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_de_construction",
+      "construction_waste",
+      "uvek_database"
+    ],
+    "source": "UVEK Database",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.466441+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.466447+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024,
+    "name_simple_fr": "Élimination plastiques bâtiment (PE/PP)",
+    "name_simple_de": "Entsorgung Kunststoffe Gebäude (PE/PP)",
+    "description_fr": "Émissions liées à l'élimination de déchets plastiques (sacs, tuyaux, isolants) provenant de la déconstruction ou rénovation de bâtiments en Suisse.",
+    "description_de": "Emissionen bei der Entsorgung von Kunststoffabfällen (Folien, Rohre, Dämmstoffe) aus Abriss oder Sanierung von Gebäuden in der Schweiz.",
+    "search_tags": [
+      "déchet plastique",
+      "PE/PP",
+      "polyéthylène",
+      "polypropylène",
+      "démolition bâtiment",
+      "waste plastic",
+      "construction waste",
+      "déchets construction"
+    ],
+    "usage_hint_fr": "Calculer l'impact des débris plastiques lors d'une démolition ou rénovation",
+    "usage_hint_de": "Auswirkungen von Kunststoffschutt bei Abriss oder Sanierung berechnen",
+    "popularity_score": 35
+  },
+  {
+    "id": "698418f3c1a4e9f26cd272e2",
+    "name_fr": "Élimination, bâtiment, isolation en polystyrène, retardateur de flamme, jusqu'à l'élimination finale {CH}",
+    "name_de": "Entsorgung, Gebäude, Polystyrol-Isolierung, flammhemmend, zur endgültigen Entsorgung {CH}",
+    "subcategory": "construction_waste",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 3.18784566,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_de_construction",
+      "construction_waste",
+      "uvek_database"
+    ],
+    "source": "UVEK Database",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.466704+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.466711+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024
+  },
+  {
+    "id": "698418f3c1a4e9f26cd272e3",
+    "name_fr": "Élimination mousse polyuréthane",
+    "name_de": "Entsorgung Polyurethanschaum",
+    "subcategory": "construction_waste",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 2.73393453,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_de_construction",
+      "construction_waste",
+      "uvek_database"
+    ],
+    "source": "UVEK Database",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.466940+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.466947+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024,
+    "description_fr": "Émissions liées au traitement et élimination final de la mousse polyuréthane provenant de démolitions ou rénovations de bâtiments en Suisse.",
+    "description_de": "Emissionen aus Behandlung und Entsorgung von Polyurethanschaum aus Gebäudeabbruch oder Renovationen in der Schweiz.",
+    "search_tags": [
+      "polyuréthane",
+      "PUR",
+      "mousse",
+      "démolition",
+      "déchet bâtiment",
+      "isolation",
+      "élimination",
+      "waste disposal",
+      "construction waste",
+      "foam"
+    ],
+    "usage_hint_fr": "Utilisez ce facteur pour les déchets de mousse isolante lors de rénovations.",
+    "usage_hint_de": "Verwenden Sie diesen Faktor für Dämmschaumeabfälle bei Renovierungen.",
+    "popularity_score": 42,
+    "metadata": {
+      "scope": "scope3",
+      "value": 2.73,
+      "unit": "kgCO2e/kg",
+      "input_unit": "kg",
+      "source": "UVEK Database",
+      "geography": "Suisse",
+      "category": "construction_waste",
+      "typical_use_case": "Projet de rénovation ou démolition de bâtiment",
+      "notes_fr": "Facteur incluant transport et traitement final en Suisse",
+      "notes_de": "Faktor beinhaltet Transport und Endbehandlung in der Schweiz"
+    }
+  },
+  {
+    "id": "698418f3c1a4e9f26cd272e4",
+    "name_fr": "Élimination, bâtiment, étanchéité en polyuréthane, jusqu'à élimination finale {CH}",
+    "name_de": "Entsorgung, Gebäude, Polyurethanabdichtung, zur endgültigen Entsorgung {CH}",
+    "subcategory": "construction_waste",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.00394351,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_de_construction",
+      "construction_waste",
+      "uvek_database"
+    ],
+    "source": "UVEK Database",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.467183+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.467189+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024,
+    "name_simple_fr": "Élimination mousse polyuréthane (bâtiment)",
+    "name_simple_de": "Entsorgung Polyurethanschaum (Gebäude)",
+    "description_fr": "Émissions liées au traitement et l'élimination finale de mousse isolante en polyuréthane provenant de bâtiments. Inclut transport et incinération.",
+    "description_de": "Emissionen aus Behandlung und endgültiger Entsorgung von Polyurethanschaumisolierung aus Gebäuden. Umfasst Transport und Verbrennung.",
+    "search_tags": [
+      "polyuréthane",
+      "PUR",
+      "mousse isolante",
+      "déchet construction",
+      "élimination",
+      "demolition waste",
+      "insulation",
+      "foam disposal",
+      "rebut bâtiment"
+    ],
+    "usage_hint_fr": "Lors de démolition ou rénovation avec enlèvement d'isolant PUR",
+    "usage_hint_de": "Bei Abriss oder Renovierung mit Entfernung von PUR-Isolierung",
+    "popularity_score": 35
+  },
+  {
+    "id": "698418f3c1a4e9f26cd272e5",
+    "name_fr": "Élimination, bâtiment, produits en polychlorure de vinyle, jusqu'à l'élimination finale {CH}",
+    "name_de": "Entsorgung, Bauwesen, Polyvinylchloridprodukte, zur endgültigen Entsorgung {CH}",
+    "subcategory": "construction_waste",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 2.09094415,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "unit_conversions": {},
+    "tags": [
+      "dechets_de_construction",
+      "construction_waste",
+      "uvek_database"
+    ],
+    "source": "UVEK Database",
+    "region": "Suisse",
+    "year": 2024,
+    "version": 1,
+    "factor_version": 1,
+    "is_correction": false,
+    "replaced_by": null,
+    "previous_version_id": null,
+    "deleted_at": null,
+    "created_at": "2026-01-30T12:26:23.467442+00:00",
+    "change_history": [
+      {
+        "version": 1,
+        "changed_at": "2026-01-30T12:26:23.467449+00:00",
+        "changed_by": "xlsx_import",
+        "reason": "Import initial depuis le fichier Excel fourni",
+        "is_correction": false
+      }
+    ],
+    "valid_from_year": 2024
   }
 ]

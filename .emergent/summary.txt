@@ -1,83 +1,95 @@
 <analysis>**original_problem_statement:**
-L'utilisateur a initialement demandé un calculateur d'empreinte carbone. Au fil du temps, les exigences ont évolué pour inclure un tableau de bord, la gestion des objectifs de réduction et des fonctionnalités d'administration.
+L'utilisateur a initialement demandé un calculateur d'empreinte carbone. Le projet a évolué pour inclure un tableau de bord, des objectifs, et un panneau d'administration.
 
-Durant cette session, le travail s'est concentré sur la correction itérative et approfondie de la logique de création d'activités multi-impacts pour se conformer aux règles du GHG Protocol, suite à de nombreux retours et exemples concrets de l'utilisateur. Plusieurs bugs critiques ont été résolus, notamment :
-1.  La mauvaise application des règles pour les impacts de Scope 3 et 3.3.
-2.  L'agrégation incorrecte des totaux dans le tableau de bord, qui ignorait certains scopes.
-3.  Un bug de suppression dans l'interface, causé par une limitation de l'environnement sandbox.
+Au cours des dernières interactions, l'utilisateur a exprimé son insatisfaction concernant la complexité de la sélection des facteurs d'émission pour les utilisateurs novices. Après avoir discuté de plusieurs options (filtrage progressif, IA, templates), l'utilisateur et l'agent ont convenu d'une approche hybride :
+1.  **Enrichissement IA one-shot** : Utiliser une IA pour générer des noms simplifiés, des descriptions et des tags de recherche pour tous les facteurs d'émission.
+2.  **Refonte de l'interface de sélection** : Implémenter une recherche fuzzy (tolérante aux fautes), des cartes de facteurs plus lisibles, et un modal amélioré.
+3.  **Conversion d'unités** : Permettre à l'utilisateur de saisir des données dans des unités alternatives (ex: MJ) et les convertir automatiquement vers l'unité de base du facteur (ex: kWh).
 
-De plus, plusieurs nouvelles fonctionnalités et améliorations ont été implémentées à la demande de l'utilisateur :
-- Affichage des activités liées (créées automatiquement) dans la vue tabulaire.
-- Nettoyage des anciennes données de test.
-- Ajout de la création d'utilisateurs dans le panneau d'administration.
-- Ajout d'un message de bienvenue après inscription et d'un état vide pour guider les nouveaux utilisateurs.
+Un cahier des charges détaillé a été co-créé pour guider cette implémentation. L'utilisateur a également demandé et validé la création d'une page Assistance et une réorganisation complète du menu latéral pour une meilleure expérience utilisateur.
 
 **PRODUCT REQUIREMENTS:**
-*   Logique multi-impacts complète et précise selon les règles du GHG Protocol.
-*   Dashboard avec agrégation correcte des émissions par scope.
-*   Panneau Admin pour la gestion des utilisateurs.
-*   Parcours utilisateur guidé pour les nouveaux comptes (création d'exercice fiscal).
-*   Interface de saisie robuste avec gestion des activités groupées.
+*   **Sélection de Facteur Simplifiée** : Remplacer la liste technique par une interface intuitive avec recherche fuzzy, suggestions, et noms/descriptions simplifiés.
+*   **Conversion d'Unités** : Gérer les conversions au sein d'une même dimension (ex: Énergie, Distance) de manière transparente pour l'utilisateur.
+*   **Interface d'Administration Extensible** : Permettre à l'admin de gérer les nouvelles données (tags, unités, facteurs de conversion).
+*   **Page d'Assistance** : Centraliser l'aide avec une FAQ et un explorateur de facteurs d'émission.
+*   **Navigation Claire** : Organiser le menu latéral de manière logique et hiérarchique.
 
 **User's preferred language**: Français
 
 **what currently exists?**
-Une application full-stack (React/FastAPI/MongoDB) fonctionnelle.
-- **Backend :** La logique métier pour la création d'activités multi-impacts () et l'agrégation du tableau de bord () est maintenant robuste et validée par l'utilisateur. Un endpoint de création d'utilisateurs () a été ajouté. Un script de nettoyage a permis d'assainir la base de données.
-- **Frontend :**
-    - La page  affiche correctement les activités principales et secondaires (liées) et gère leur suppression groupée via un modal de confirmation personnalisé ().
-    - Un état vide () a été créé et implémenté sur la page  pour guider les nouveaux utilisateurs.
-    - La page  affiche un modal de bienvenue après l'inscription.
-    - Le panneau d'administration () dispose d'un formulaire fonctionnel pour créer de nouveaux utilisateurs.
+- Une application full-stack (React/FastAPI/MongoDB).
+- **Page Assistance** () : Une nouvelle page a été créée et intégrée, contenant des onglets pour une FAQ (avec placeholders) et pour l'explorateur de facteurs d'émission.
+- **Menu Latéral Réorganisé** () : Le menu a été restructuré en sections logiques : Navigation principale, Support, Préférences et Profil utilisateur.
+- **Refonte de la Sélection de Facteurs (Partielle)** :
+    - Un POC d'enrichissement IA a été réalisé avec succès sur 33 facteurs. Ces données enrichies (, , etc.) ont été importées dans la collection MongoDB .
+    - Le backend a été mis à jour pour supporter ces nouveaux champs.
+    - L'interface de saisie () a été refactorisée :
+        - Un nouveau composant  gère la logique de sélection.
+        - La recherche fuzzy (via ) est fonctionnelle.
+        - Les facteurs s'affichent sous forme de cartes épurées () avec des descriptions en tooltip.
+        - Le modal a une hauteur fixe et les étapes précédentes se condensent pour une meilleure lisibilité.
+        - Les unités sont affichées en toutes lettres (ex: kilomètres).
 
 **Last working item**:
-    - Last item agent was working: L'agent a créé un composant réutilisable  pour l'état où aucun exercice fiscal n'existe. Après l'avoir implémenté avec succès sur , la tâche suivante, demandée par l'utilisateur, était d'appliquer ce même état vide aux pages Informations générales, Tableau de bord et Produits.
-    - Status: IN PROGRESS
-    - Agent Testing Done: Y (pour )
-    - Which testing method agent to use? Frontend testing agent ou  en se connectant avec un nouvel utilisateur sans exercice fiscal et en naviguant vers les pages concernées (, , ).
+    - Last item agent was working: Implémentation de deux améliorations UX sur le modal de saisie () :
+        1. Fixer une hauteur de modal pour éviter les sauts de redimensionnement et rendre le contenu scrollable.
+        2. Déplacer les descriptions des facteurs dans des tooltips pour alléger l'interface.
+    - Status: USER VERIFICATION PENDING
+    - Agent Testing Done: Y
+    - Which testing method agent to use? manual testing by user
     - User Testing Done: N
 
 **All Pending/In progress Issue list**:
-  - None.
+  - Issue 1: L'enrichissement IA des facteurs a échoué massivement.
+
+  Issues Detail:
+  - Issue 1:
+     - **Attempted fixes**: Le script  a été lancé mais a rencontré des erreurs de  de l'API Anthropic et a expiré. Une tentative de réduction de la concurrence et d'ajout de délais a été faite, mais le processus reste instable et s'arrête.
+     - **Next debug checklist**:
+       - Modifier .
+       - Implémenter une file d'attente robuste avec des tentatives (retries) et un backoff exponentiel.
+       - Traiter les facteurs par lots plus petits (ex: 50 à la fois) et sauvegarder la progression après chaque lot.
+       - Augmenter le timeout de la commande .
+     - **Why fix this issue and what will be achieved with the fix?**: L'UX de sélection de facteurs ne fonctionne actuellement que pour 33 facteurs. L'enrichissement des 1158 facteurs restants est indispensable pour que la nouvelle interface soit utile sur l'ensemble de l'application.
+     - **Status**:  BLOCKED
+     - **Is recurring issue?**: Y
+     - **Should Test frontend/backend/both after fix?**: Backend (vérifier les données en base).
+     - **Blocked on other issue**: Non.
 
 **In progress Task List**:
-  - Task 1:  (P0) Généraliser l'affichage de l'état vide (aucun exercice fiscal).
-  
- Task Detail:
-  - Task 1: 
-     - **Where to resume**: Le composant  existe. Il faut maintenant l'importer et l'utiliser dans les fichiers , , et . La logique sera similaire à celle de  : récupérer  depuis  et afficher le composant si la liste est vide.
-     - **What will be achieved with this?**: Offrir une expérience utilisateur cohérente sur toutes les pages principales, en guidant un nouvel utilisateur vers l'action requise (créer un exercice fiscal) avant de pouvoir utiliser l'application.
-     - **Status**:  IN PROGRESS
-     - **Should Test frontend/backend/both after fix?**: Frontend
-     - **Blocked on something**: None
+  - None
 
 **Upcoming and Future Tasks**
     Upcoming Tasks:
-    - **P1: Migration des facteurs d'émission**: L'utilisateur fournira une liste de facteurs d'émission à importer via un script.
-    - **P1: Refactoring de DataEntry.js**: Décomposer le composant  qui est devenu très volumineux.
+    - **P0: Implémenter la conversion d'unités (Sprint 3)** : C'est la prochaine étape logique du cahier des charges.
+        - Créer les modèles et routes API pour les dimensions d'unités ().
+        - Mettre à jour le modèle  pour stocker  et .
+        - Mettre à jour  pour proposer toutes les unités d'une dimension (ex: MJ, GJ pour kWh) et gérer la conversion à la saisie.
+    - **P1: Finaliser l'enrichissement IA des facteurs** : Résoudre le problème de script (Issue 1) et enrichir les 1158 facteurs restants.
     
     Future Tasks:
-    - **P2: Améliorations UX/UI**: Ajouter des notifications toast et des skeleton loaders.
-    - **P2: Audit Trail**: Mettre en place un historique des modifications.
-    - **P2: Compléter les traductions.**
-    - **P2: Rapports exportables** (PDF/Excel).
+    - **P2: Compléter l'interface d'administration** :
+        - Créer  pour gérer les dimensions et conversions d'unités.
+        - Ajouter les champs enrichis dans .
+    - **P3: Refactoring de  / **.
+    - **P3: Améliorations UX/UI** (notifications toast, skeleton loaders).
+    - **P3: Audit Trail** (historique des modifications).
+    - **P3: Rapports exportables** (PDF/Excel).
 
 **Completed work in this session**
-- **Bug P0 Multi-Impacts & Dashboard - Corrigé**
-  - La logique métier complexe du GHG Protocol a été implémentée et corrigée sur plusieurs itérations dans .
-  - Le calcul des totaux du tableau de bord a été réparé dans  pour inclure tous les scopes.
-- **Affichage des Lignes Liées dans TableView - Implémenté**
-  - Les activités générées automatiquement (ex: ) sont maintenant visibles et stylisées en lecture seule dans la page .
-- **Nettoyage de Données & Correction de Structure - Effectué**
-  - Suppression de plus de 100 activités de test et migration d'anciennes données vers la nouvelle structure de catégories.
-- **Bug de Suppression  - Corrigé**
-  - Un modal de confirmation personnalisé () a été créé pour contourner les limitations du sandbox et réparer la suppression.
-- **Fonctionnalité Admin : Création d'Utilisateur - Implémenté**
-  - Ajout d'un endpoint backend et d'une interface frontend pour créer des utilisateurs depuis le panneau d'administration.
-- **Améliorations UX (Onboarding) - Implémenté**
-  - Ajout d'un modal de bienvenue après l'inscription ().
-  - Ajout d'un état vide sur  pour guider les nouveaux utilisateurs vers la création d'un exercice fiscal.
-  - Ajout d'un bouton de fermeture sur le wizard de configuration ().
+- **Refonte UX de la navigation**
+  - Création de la page  avec FAQ et explorateur de facteurs.
+  - Réorganisation complète du menu latéral dans  pour une meilleure hiérarchie.
+- **Refonte de la sélection de facteurs (partielle)**
+  - Enrichissement IA (POC sur 33 facteurs) et import en base de données.
+  - Mise à jour du modèle backend .
+  - Création de l'interface de recherche fuzzy avec  et des composants  et .
+- **Améliorations du modal de saisie**
+  - Le modal a maintenant une largeur dynamique et une hauteur fixe.
+  - Les étapes précédentes sont condensées pour économiser de l'espace.
+  - Les descriptions des facteurs sont passées en tooltips.
+  - Les unités sont affichées en toutes lettres.
 
 **Earlier issues found/mentioned but not fixed**
    - None.
@@ -89,61 +101,56 @@ Une application full-stack (React/FastAPI/MongoDB) fonctionnelle.
 
 
 **Key Technical Concepts**
-- **Logique Métier Complexe (GHG Protocol)**: La session a été marquée par une collaboration étroite avec l'utilisateur pour affiner et coder des règles métier nuancées.
-- **Débogage en Environnement Sandbox**: Identification et contournement d'un problème où  est bloqué, en créant un composant de modal personnalisé.
-- **État Vide (Empty State) en UI**: Conception d'une interface guidant l'utilisateur lorsqu'aucune donnée prérequise (exercice fiscal) n'existe.
-- **Refactoring vers Composant Réutilisable**: Extraction d'une logique d'UI dans un composant  pour une application cohérente.
-- **Nettoyage et Migration de Données**: Utilisation de scripts  pour nettoyer la base de données MongoDB (suppression de données de test, mise à jour de documents).
+- **Enrichissement de données par IA**: Utilisation de Claude Haiku via un script Python pour ajouter des métadonnées qualitatives (, ) à une base de données technique.
+- **Recherche Fuzzy côté client**: Implémentation de  pour une recherche tolérante aux fautes sur les noms et tags des facteurs.
+- **Refactoring de composants**: Extraction de la logique complexe de  dans un composant dédié .
+- **Layouts CSS complexes**: Utilisation de Flexbox et de classes conditionnelles pour créer un modal dynamique (largeur variable, condensation de contenu, hauteur fixe avec scroll interne).
+- **Gestion de scripts longs**: Le défi de lancer des tâches de longue durée (batch processing) dans l'environnement, avec des problèmes de timeout et de rate limiting.
 
 **key DB schema**
-  - **activities**: Pas de changement de schéma, mais la cohérence des données a été améliorée ( pour les , suppression d'activités sans ).
-  - **users**: Pas de changement de schéma.
+  - **emission_factors**: Ajout de 8 champs optionnels : , , , , , , , .
 
 **changes in tech stack**
-  - None.
+  -  a été ajouté aux dépendances frontend.
 
 **All files of reference**
-- : Le nouveau composant réutilisable à déployer.
-- : A été modifié pour utiliser .
-- , , : Fichiers cibles pour la tâche en cours.
-- : Nouveau modal de confirmation.
-- : Contient la logique métier validée pour la création d'activités.
-- : Contient la logique de calcul du tableau de bord.
-- : Contient le formulaire de création d'utilisateur.
+- : Le modal principal, refactorisé.
+- : Le nouveau composant pour l'étape 3.
+- : La carte pour afficher un facteur.
+- : La nouvelle page d'aide.
+- : Le layout principal avec le menu réorganisé.
+- : Le script (à réparer) pour l'enrichissement IA.
+- : Le fichier contenant les 33 facteurs déjà enrichis, qui peut servir de base pour le développement en attendant la réparation du script.
 
 **Areas that need refactoring**:
--  reste un composant très volumineux qui bénéficierait d'un découpage (tâche de backlog P1).
+-  est encore très grand (plus de 800 lignes) malgré l'extraction de . Il pourrait bénéficier d'un découpage supplémentaire.
 
 **key api endpoints**
-- : Logique d'agrégation corrigée.
-- : Fonctionnalité confirmée.
-- : **NOUVEAU** endpoint pour créer un utilisateur.
+- Aucune nouvelle route API n'a été créée. La route  retourne maintenant les champs enrichis.
 
 **Critical Info for New Agent**
-- La tâche en cours est simple : généraliser l'utilisation du composant .
-- La collaboration avec l'utilisateur est clé. Il est très précis et apprécie de valider la logique avant l'implémentation.
-- Le bug de  est résolu, mais il faut penser à utiliser le  pour toute nouvelle demande de confirmation.
+- **Suivre le cahier des charges** : Un cahier des charges détaillé a été défini avec l'utilisateur pour les prochaines étapes. Il est crucial de s'y référer pour la conversion d'unités.
+- **Problème d'enrichissement IA** : L'amélioration de l'UX ne s'applique qu'à 33 facteurs. La réparation du script  est une tâche de fond importante mais peut être mise en parallèle du développement de la conversion d'unités.
+- **Prochaine étape claire** : La priorité est de commencer l'implémentation de la **conversion d'unités**, en commençant par le backend (création des modèles et API pour les dimensions d'unités).
 
 **documents and test reports created in this job**
   - 
   - 
-  - 
-  -  a été mis à jour à plusieurs reprises.
 
 **Last 10 User Messages and any pending HUMAN messages** 
-- User: Demande à ajouter un état vide sur les pages ,  et . (PENDING)
-- Agent: Propose une solution (Option B: état vide illustré) pour le message guidant la création d'un exercice fiscal.
-- User: Approuve l'option B et demande l'implémentation. (DONE)
-- Agent: Propose des pistes pour deux nouvelles tâches P1 (confirmation création de compte & guide création exercice).
-- User: Demande à ajouter une croix pour fermer le wizard Configuration guidée. (DONE)
-- User: Demande à ajouter une commande admin pour créer des utilisateurs. (DONE)
-- User: Signale que les boutons de suppression/modification ne fonctionnent pas pour certaines lignes et fournit un log d'erreur . (DONE)
-- User: Confirme les actions à mener pour nettoyer les données et corriger la logique de suppression. (DONE)
-- User: Demande d'afficher les lignes créées indirectement dans la  avec un style distinct. (DONE)
-- User: Rapporte que la logique multi-impacts ne fonctionne toujours pas et fournit 3 captures d'écran pour analyse. (DONE)
+- User: Approuve l'implémentation des deux derniers ajustements UX (hauteur fixe et tooltips). (DONE)
+- Agent: Propose un plan pour ces deux ajustements.
+- User: Demande comment gérer la hauteur agaçante du modal et si les descriptions peuvent être mises en tooltip. (PENDING, work just finished)
+- Agent: Confirme que les améliorations (modal agrandi, unités en toutes lettres) sont fonctionnelles et propose de continuer avec la conversion d'unités.
+- User: Approuve l'implémentation des gains rapides (modal agrandi et unités en toutes lettres). (DONE)
+- Agent: Propose un plan d'action priorisant les gains UX rapides avant la conversion d'unités.
+- User: Demande au conseiller de continuer après avoir vu que la refonte fonctionne. (DONE)
+- Agent: Résume la réussite du Sprint 2 et propose les prochaines étapes.
+- User: Accepte l'option A : avancer avec les 33 facteurs enrichis pour valider l'UX. (DONE)
+- Agent: Fait face à l'échec de l'enrichissement complet et propose de continuer le développement avec l'échantillon de 33 facteurs.
 
 **Project Health Check:**
-- **Broken:** None
+- **Broken:** Le script d'enrichissement IA  est cassé (rate limiting, timeout).
 - **Mocked:** None
 
 **3rd Party Integrations**
@@ -174,7 +181,7 @@ backend/tests/test_product_sales.py .........                            [100%]
 ==================================== ERRORS ====================================
 ____ ERROR at setup of TestAdminUsersEndpoint.test_admin_can_get_users_list ____
 
-self = <test_admin_panel.TestAdminUsersEndpoint object at 0xfedc554bf010>
+self = <test_admin_panel.TestAdminUsersEndpoint object at 0xfb85bafeefd0>
 
     @pytest.fixture
     def admin_token(self):
@@ -241,7 +248,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/login': No
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 _ ERROR at setup of TestAdminUsersEndpoint.test_regular_user_cannot_access_admin_users _
 
-self = <test_admin_panel.TestAdminUsersEndpoint object at 0xfedc554bf6d0>
+self = <test_admin_panel.TestAdminUsersEndpoint object at 0xfb85bafef690>
 
     @pytest.fixture
     def regular_user_token(self):
@@ -312,7 +319,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/register':
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 _ ERROR at setup of TestAdminUserRoleManagement.test_admin_can_promote_user_to_admin _
 
-self = <test_admin_panel.TestAdminUserRoleManagement object at 0xfedc554cc7d0>
+self = <test_admin_panel.TestAdminUserRoleManagement object at 0xfb85baffc7d0>
 
     @pytest.fixture
     def admin_token(self):
@@ -379,7 +386,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/login': No
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 _ ERROR at setup of TestAdminUserRoleManagement.test_regular_user_cannot_change_roles _
 
-self = <test_admin_panel.TestAdminUserRoleManagement object at 0xfedc554ccf50>
+self = <test_admin_panel.TestAdminUserRoleManagement object at 0xfb85baffcf50>
 
     @pytest.fixture
     def regular_user_token(self):
@@ -449,7 +456,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/register':
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 ___ ERROR at setup of TestAdminUserRoleManagement.test_invalid_role_rejected ___
 
-self = <test_admin_panel.TestAdminUserRoleManagement object at 0xfedc554cd690>
+self = <test_admin_panel.TestAdminUserRoleManagement object at 0xfb85baffd690>
 
     @pytest.fixture
     def admin_token(self):
@@ -516,7 +523,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/login': No
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 _ ERROR at setup of TestAdminEmissionFactors.test_admin_can_get_emission_factors _
 
-self = <test_admin_panel.TestAdminEmissionFactors object at 0xfedc554ce010>
+self = <test_admin_panel.TestAdminEmissionFactors object at 0xfb85baffe050>
 
     @pytest.fixture
     def admin_token(self):
@@ -583,7 +590,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/login': No
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 _ ERROR at setup of TestAdminEmissionFactors.test_regular_user_cannot_access_admin_emission_factors _
 
-self = <test_admin_panel.TestAdminEmissionFactors object at 0xfedc554ce790>
+self = <test_admin_panel.TestAdminEmissionFactors object at 0xfb85baffe7d0>
 
     @pytest.fixture
     def regular_user_token(self):
@@ -653,7 +660,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/register':
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 _ ERROR at setup of TestAdminEmissionFactors.test_admin_can_create_emission_factor _
 
-self = <test_admin_panel.TestAdminEmissionFactors object at 0xfedc554ceed0>
+self = <test_admin_panel.TestAdminEmissionFactors object at 0xfb85baffef10>
 
     @pytest.fixture
     def admin_token(self):
@@ -720,7 +727,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/login': No
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 _ ERROR at setup of TestAdminEmissionFactors.test_admin_can_update_emission_factor _
 
-self = <test_admin_panel.TestAdminEmissionFactors object at 0xfedc554cf650>
+self = <test_admin_panel.TestAdminEmissionFactors object at 0xfb85bafff690>
 
     @pytest.fixture
     def admin_token(self):
@@ -787,7 +794,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/login': No
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 _ ERROR at setup of TestAdminEmissionFactors.test_admin_can_delete_emission_factor _
 
-self = <test_admin_panel.TestAdminEmissionFactors object at 0xfedc554cfdd0>
+self = <test_admin_panel.TestAdminEmissionFactors object at 0xfb85bafffe10>
 
     @pytest.fixture
     def admin_token(self):
@@ -854,7 +861,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/login': No
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 _ ERROR at setup of TestAdminEmissionFactors.test_regular_user_cannot_create_emission_factor _
 
-self = <test_admin_panel.TestAdminEmissionFactors object at 0xfedc554cdb10>
+self = <test_admin_panel.TestAdminEmissionFactors object at 0xfb85baffdb50>
 
     @pytest.fixture
     def regular_user_token(self):
@@ -924,7 +931,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/register':
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 _ ERROR at setup of TestAdminEmissionFactorsExportImport.test_admin_can_export_emission_factors _
 
-self = <test_admin_panel.TestAdminEmissionFactorsExportImport object at 0xfedc554d4350>
+self = <test_admin_panel.TestAdminEmissionFactorsExportImport object at 0xfb85bb004390>
 
     @pytest.fixture
     def admin_token(self):
@@ -991,7 +998,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/login': No
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 _ ERROR at setup of TestAdminEmissionFactorsExportImport.test_regular_user_cannot_export_emission_factors _
 
-self = <test_admin_panel.TestAdminEmissionFactorsExportImport object at 0xfedc554d46d0>
+self = <test_admin_panel.TestAdminEmissionFactorsExportImport object at 0xfb85bb004710>
 
     @pytest.fixture
     def regular_user_token(self):
@@ -1061,7 +1068,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/register':
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 _ ERROR at setup of TestAdminEmissionFactorsExportImport.test_admin_can_import_emission_factors _
 
-self = <test_admin_panel.TestAdminEmissionFactorsExportImport object at 0xfedc554d4a50>
+self = <test_admin_panel.TestAdminEmissionFactorsExportImport object at 0xfb85bb004a90>
 
     @pytest.fixture
     def admin_token(self):
@@ -1128,7 +1135,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/login': No
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 _ ERROR at setup of TestAdminEmissionFactorsExportImport.test_regular_user_cannot_import_emission_factors _
 
-self = <test_admin_panel.TestAdminEmissionFactorsExportImport object at 0xfedc554d4e10>
+self = <test_admin_panel.TestAdminEmissionFactorsExportImport object at 0xfb85bb004e50>
 
     @pytest.fixture
     def regular_user_token(self):
@@ -1198,7 +1205,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/register':
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 _______ ERROR at setup of TestAdminSubcategories.test_get_subcategories ________
 
-self = <test_phase4_features.TestAdminSubcategories object at 0xfedc4f6beb10>
+self = <test_phase4_features.TestAdminSubcategories object at 0xfb85b92e6a10>
 
     @pytest.fixture
     def admin_token(self):
@@ -1265,7 +1272,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/login': No
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 _______ ERROR at setup of TestAdminSubcategories.test_create_subcategory _______
 
-self = <test_phase4_features.TestAdminSubcategories object at 0xfedc4f6bedd0>
+self = <test_phase4_features.TestAdminSubcategories object at 0xfb85b92e7110>
 
     @pytest.fixture
     def admin_token(self):
@@ -1332,7 +1339,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/login': No
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 _______ ERROR at setup of TestAdminSubcategories.test_update_subcategory _______
 
-self = <test_phase4_features.TestAdminSubcategories object at 0xfedc4f6a9810>
+self = <test_phase4_features.TestAdminSubcategories object at 0xfb85b92d9a90>
 
     @pytest.fixture
     def admin_token(self):
@@ -1399,7 +1406,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/login': No
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 _______ ERROR at setup of TestAdminSubcategories.test_delete_subcategory _______
 
-self = <test_phase4_features.TestAdminSubcategories object at 0xfedc4f6bed10>
+self = <test_phase4_features.TestAdminSubcategories object at 0xfb85b92e6c90>
 
     @pytest.fixture
     def admin_token(self):
@@ -1466,7 +1473,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/login': No
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 __ ERROR at setup of TestAdminEmissionFactorsV2.test_get_emission_factors_v2 ___
 
-self = <test_phase4_features.TestAdminEmissionFactorsV2 object at 0xfedc4f6bf150>
+self = <test_phase4_features.TestAdminEmissionFactorsV2 object at 0xfb85b92e7c90>
 
     @pytest.fixture
     def admin_token(self):
@@ -1533,7 +1540,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/login': No
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 _ ERROR at setup of TestAdminEmissionFactorsV2.test_create_emission_factor_v2_with_multi_impacts _
 
-self = <test_phase4_features.TestAdminEmissionFactorsV2 object at 0xfedc4f6bfed0>
+self = <test_phase4_features.TestAdminEmissionFactorsV2 object at 0xfb85b92e5290>
 
     @pytest.fixture
     def admin_token(self):
@@ -1600,7 +1607,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/login': No
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 _ ERROR at setup of TestAdminEmissionFactorsV2.test_update_emission_factor_v2 __
 
-self = <test_phase4_features.TestAdminEmissionFactorsV2 object at 0xfedc4f6cc050>
+self = <test_phase4_features.TestAdminEmissionFactorsV2 object at 0xfb85b92f0310>
 
     @pytest.fixture
     def admin_token(self):
@@ -1667,7 +1674,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/login': No
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 _____ ERROR at setup of TestAdminEmissionFactorsV2.test_export_v2_factors ______
 
-self = <test_phase4_features.TestAdminEmissionFactorsV2 object at 0xfedc4f6cc410>
+self = <test_phase4_features.TestAdminEmissionFactorsV2 object at 0xfb85b92f05d0>
 
     @pytest.fixture
     def admin_token(self):
@@ -1734,7 +1741,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/login': No
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 _ ERROR at setup of TestPublicSubcategoriesAndFactors.test_get_subcategories_by_category _
 
-self = <test_phase4_features.TestPublicSubcategoriesAndFactors object at 0xfedc4f6cf490>
+self = <test_phase4_features.TestPublicSubcategoriesAndFactors object at 0xfb85b92f31d0>
 
     @pytest.fixture
     def user_token(self):
@@ -1801,7 +1808,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/login': No
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 _ ERROR at setup of TestPublicSubcategoriesAndFactors.test_search_emission_factors_by_subcategory _
 
-self = <test_phase4_features.TestPublicSubcategoriesAndFactors object at 0xfedc4f6cff50>
+self = <test_phase4_features.TestPublicSubcategoriesAndFactors object at 0xfb85b92f3c50>
 
     @pytest.fixture
     def user_token(self):
@@ -1868,7 +1875,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/login': No
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 _ ERROR at setup of TestPublicSubcategoriesAndFactors.test_search_emission_factors_by_unit _
 
-self = <test_phase4_features.TestPublicSubcategoriesAndFactors object at 0xfedc4f6cd810>
+self = <test_phase4_features.TestPublicSubcategoriesAndFactors object at 0xfb85b92f27d0>
 
     @pytest.fixture
     def user_token(self):
@@ -1935,7 +1942,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/login': No
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 _ ERROR at setup of TestPublicSubcategoriesAndFactors.test_get_unit_conversions _
 
-self = <test_phase4_features.TestPublicSubcategoriesAndFactors object at 0xfedc4f6ce290>
+self = <test_phase4_features.TestPublicSubcategoriesAndFactors object at 0xfb85b92f24d0>
 
     @pytest.fixture
     def user_token(self):
@@ -2002,7 +2009,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/login': No
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 _ ERROR at setup of TestMultiImpactActivityCreation.test_create_activity_with_multi_impact_factor_scope1 _
 
-self = <test_phase4_features.TestMultiImpactActivityCreation object at 0xfedc4f6ce990>
+self = <test_phase4_features.TestMultiImpactActivityCreation object at 0xfb85b92f2f10>
 
     @pytest.fixture
     def user_token(self):
@@ -2069,7 +2076,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/login': No
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 _ ERROR at setup of TestMultiImpactActivityCreation.test_business_rule_scope3_excludes_scope12_and_33 _
 
-self = <test_phase4_features.TestMultiImpactActivityCreation object at 0xfedc4f6cc9d0>
+self = <test_phase4_features.TestMultiImpactActivityCreation object at 0xfb85b92f0e50>
 
     @pytest.fixture
     def user_token(self):
@@ -2136,7 +2143,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/login': No
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 _ ERROR at setup of TestFactorsTableDisplay.test_factors_have_required_fields __
 
-self = <test_phase4_features.TestFactorsTableDisplay object at 0xfedc4f6cd290>
+self = <test_phase4_features.TestFactorsTableDisplay object at 0xfb85b92f1890>
 
     @pytest.fixture
     def admin_token(self):
@@ -2203,7 +2210,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/login': No
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 _ ERROR at setup of TestSubcategoriesTableDisplay.test_subcategories_have_required_fields _
 
-self = <test_phase4_features.TestSubcategoriesTableDisplay object at 0xfedc4f6a5f10>
+self = <test_phase4_features.TestSubcategoriesTableDisplay object at 0xfb85b94b04d0>
 
     @pytest.fixture
     def admin_token(self):
@@ -2271,7 +2278,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/login': No
 =================================== FAILURES ===================================
 _______________ TestAdminAuthentication.test_admin_login_success _______________
 
-self = <test_admin_panel.TestAdminAuthentication object at 0xfedc56faf350>
+self = <test_admin_panel.TestAdminAuthentication object at 0xfb85bc326d50>
 
     def test_admin_login_success(self):
         """Admin user can login successfully"""
@@ -2337,7 +2344,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/login': No
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 ___________ TestAdminAuthentication.test_regular_user_login_success ____________
 
-self = <test_admin_panel.TestAdminAuthentication object at 0xfedc554be710>
+self = <test_admin_panel.TestAdminAuthentication object at 0xfb85bafee610>
 
     def test_regular_user_login_success(self):
         """Regular user can login successfully"""
@@ -2407,7 +2414,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/register':
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 ____ TestAdminUsersEndpoint.test_unauthenticated_cannot_access_admin_users _____
 
-self = <test_admin_panel.TestAdminUsersEndpoint object at 0xfedc554bfdd0>
+self = <test_admin_panel.TestAdminUsersEndpoint object at 0xfb85bafefd90>
 
     def test_unauthenticated_cannot_access_admin_users(self):
         """Unauthenticated request gets 401/403 when accessing /api/admin/users"""
@@ -2471,7 +2478,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/admin/users': N
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 _____________________ TestHealthCheck.test_health_endpoint _____________________
 
-self = <test_carbon_api.TestHealthCheck object at 0xfedc541cd5d0>
+self = <test_carbon_api.TestHealthCheck object at 0xfb85b94edb10>
 
     def test_health_endpoint(self):
         """Test API health check"""
@@ -2483,7 +2490,7 @@ E        +  where 404 = <Response [404]>.status_code
 backend/tests/test_carbon_api.py:22: AssertionError
 ________________ TestEmissionFactors.test_get_emission_factors _________________
 
-self = <test_carbon_api.TestEmissionFactors object at 0xfedc5527e210>
+self = <test_carbon_api.TestEmissionFactors object at 0xfb85b94f9dd0>
 
     def test_get_emission_factors(self):
         """Test getting emission factors"""
@@ -2495,7 +2502,7 @@ E        +  where 403 = <Response [403]>.status_code
 backend/tests/test_carbon_api.py:124: AssertionError
 _______________ TestEmissionFactors.test_search_emission_factors _______________
 
-self = <test_carbon_api.TestEmissionFactors object at 0xfedc541baa50>
+self = <test_carbon_api.TestEmissionFactors object at 0xfb85b94f95d0>
 
     def test_search_emission_factors(self):
         """Test searching emission factors"""
@@ -2507,8 +2514,8 @@ E        +  where 403 = <Response [403]>.status_code
 backend/tests/test_carbon_api.py:132: AssertionError
 ______________________ TestActivities.test_get_activities ______________________
 
-self = <test_carbon_api.TestActivities object at 0xfedc541bab10>
-auth_token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OTczMTdlMmRjNDY4YjQxZDg3YTE3MWEiLCJleHAiOjE3NzA3MjM4ODZ9.fDdvejugyPgryNBoOP4tAdy5bO_EoXP6qQnxvtC-izw'
+self = <test_carbon_api.TestActivities object at 0xfb85b94f9190>
+auth_token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OTczMTdlMmRjNDY4YjQxZDg3YTE3MWEiLCJleHAiOjE3NzIwNjc0NzZ9.1_ESusxMhipU8DAjmAoOJxJHRKMfPBFut36uiD-tAFY'
 
     def test_get_activities(self, auth_token):
         """Test getting all activities"""
@@ -2519,13 +2526,13 @@ auth_token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OTczMTdlMmRjNDY4Y
         data = response.json()
 >       assert isinstance(data, list)
 E       AssertionError: assert False
-E        +  where False = isinstance({'data': [{'calculated_emissions': 883.2, 'category_id': 'electricite', 'comments': '', 'company_id': '69731b2bdc468b4...'company_id': '69731b2bdc468b41d87a171b', ...}, ...], 'pagination': {'limit': 100, 'page': 1, 'pages': 1, 'total': 26}}, list)
+E        +  where False = isinstance({'data': [{'calculated_emissions': 883.2, 'category_id': 'electricite', 'comments': '', 'company_id': '69731b2bdc468b4...'company_id': '69731b2bdc468b41d87a171b', ...}, ...], 'pagination': {'limit': 100, 'page': 1, 'pages': 1, 'total': 43}}, list)
 
 backend/tests/test_carbon_api.py:157: AssertionError
 _________________ TestActivities.test_get_activities_by_scope __________________
 
-self = <test_carbon_api.TestActivities object at 0xfedc541baf10>
-auth_token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OTczMTdlMmRjNDY4YjQxZDg3YTE3MWEiLCJleHAiOjE3NzA3MjM4ODZ9.fDdvejugyPgryNBoOP4tAdy5bO_EoXP6qQnxvtC-izw'
+self = <test_carbon_api.TestActivities object at 0xfb85b94fad10>
+auth_token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OTczMTdlMmRjNDY4YjQxZDg3YTE3MWEiLCJleHAiOjE3NzIwNjc0NzZ9.1_ESusxMhipU8DAjmAoOJxJHRKMfPBFut36uiD-tAFY'
 
     def test_get_activities_by_scope(self, auth_token):
         """Test getting activities filtered by scope"""
@@ -2536,13 +2543,13 @@ auth_token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OTczMTdlMmRjNDY4Y
         data = response.json()
 >       assert isinstance(data, list)
 E       AssertionError: assert False
-E        +  where False = isinstance({'data': [{'calculated_emissions': 7389.999999999999, 'category_id': 'combustion_fixe', 'comments': '', 'company_id': ...: '', 'company_id': '69731b2bdc468b41d87a171b', ...}], 'pagination': {'limit': 100, 'page': 1, 'pages': 1, 'total': 6}}, list)
+E        +  where False = isinstance({'data': [{'calculated_emissions': 7389.999999999999, 'category_id': 'combustion_fixe', 'comments': '', 'company_id': ... 'company_id': '69731b2bdc468b41d87a171b', ...}, ...], 'pagination': {'limit': 100, 'page': 1, 'pages': 1, 'total': 7}}, list)
 
 backend/tests/test_carbon_api.py:168: AssertionError
 ___________ TestActivityUpdate.test_update_activity_endpoint_exists ____________
 
-self = <test_carbon_api.TestActivityUpdate object at 0xfedc541bbc50>
-auth_token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OTczMTdlMmRjNDY4YjQxZDg3YTE3MWEiLCJleHAiOjE3NzA3MjM4ODh9.GIEvdf5nOd0AlpIiyOrhpnERYeEVHaDtTeisx9D2V4A'
+self = <test_carbon_api.TestActivityUpdate object at 0xfb85b94faf90>
+auth_token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OTczMTdlMmRjNDY4YjQxZDg3YTE3MWEiLCJleHAiOjE3NzIwNjc0Nzh9.H_yjWN-lAVbuzIJgycKh0XmIIlKTWURa-PVSlD-YpIg'
 
     def test_update_activity_endpoint_exists(self, auth_token):
         """Test that PUT /api/activities/{id} endpoint exists"""
@@ -2560,7 +2567,7 @@ E           KeyError: 0
 backend/tests/test_carbon_api.py:268: KeyError
 ______ TestEmissionFactorsForProducts.test_get_materials_emission_factors ______
 
-self = <test_product_lifecycle.TestEmissionFactorsForProducts object at 0xfedc4f4f1350>
+self = <test_product_lifecycle.TestEmissionFactorsForProducts object at 0xfb85b911cd10>
 
     def test_get_materials_emission_factors(self):
         """Test getting materials emission factors (Acier, Aluminium, etc.)"""
@@ -2572,7 +2579,7 @@ E        +  where 403 = <Response [403]>.status_code
 backend/tests/test_product_lifecycle.py:33: AssertionError
 ______ TestEmissionFactorsForProducts.test_get_treatment_emission_factors ______
 
-self = <test_product_lifecycle.TestEmissionFactorsForProducts object at 0xfedc4f4f1390>
+self = <test_product_lifecycle.TestEmissionFactorsForProducts object at 0xfb85b911c950>
 
     def test_get_treatment_emission_factors(self):
         """Test getting end-of-life treatment factors (Recyclage, Incinération, etc.)"""
@@ -2584,7 +2591,7 @@ E        +  where 403 = <Response [403]>.status_code
 backend/tests/test_product_lifecycle.py:48: AssertionError
 _____ TestEmissionFactorsForProducts.test_get_refrigerant_emission_factors _____
 
-self = <test_product_lifecycle.TestEmissionFactorsForProducts object at 0xfedc4f4f1890>
+self = <test_product_lifecycle.TestEmissionFactorsForProducts object at 0xfb85b911d1d0>
 
     def test_get_refrigerant_emission_factors(self):
         """Test getting refrigerant emission factors"""
@@ -2596,7 +2603,7 @@ E        +  where 403 = <Response [403]>.status_code
 backend/tests/test_product_lifecycle.py:63: AssertionError
 _____ TestEmissionFactorsForProducts.test_get_electricity_emission_factors _____
 
-self = <test_product_lifecycle.TestEmissionFactorsForProducts object at 0xfedc4f4f2210>
+self = <test_product_lifecycle.TestEmissionFactorsForProducts object at 0xfb85b911d510>
 
     def test_get_electricity_emission_factors(self):
         """Test getting electricity emission factors"""
@@ -2608,7 +2615,7 @@ E        +  where 403 = <Response [403]>.status_code
 backend/tests/test_product_lifecycle.py:77: AssertionError
 _____ TestEmissionFactorsForProducts.test_get_factors_by_tags_combustible ______
 
-self = <test_product_lifecycle.TestEmissionFactorsForProducts object at 0xfedc4f4f1b10>
+self = <test_product_lifecycle.TestEmissionFactorsForProducts object at 0xfb85b911e350>
 
     def test_get_factors_by_tags_combustible(self):
         """Test getting combustible factors by tags"""
@@ -2620,7 +2627,7 @@ E        +  where 403 = <Response [403]>.status_code
 backend/tests/test_product_lifecycle.py:87: AssertionError
 ______ TestEmissionFactorsForProducts.test_get_factors_by_tags_carburant _______
 
-self = <test_product_lifecycle.TestEmissionFactorsForProducts object at 0xfedc4f4f28d0>
+self = <test_product_lifecycle.TestEmissionFactorsForProducts object at 0xfb85b911da50>
 
     def test_get_factors_by_tags_carburant(self):
         """Test getting carburant factors by tags"""
@@ -2632,8 +2639,8 @@ E        +  where 403 = <Response [403]>.status_code
 backend/tests/test_product_lifecycle.py:96: AssertionError
 ________ TestProductEnhancedCRUD.test_create_enhanced_product_finished _________
 
-self = <test_product_lifecycle.TestProductEnhancedCRUD object at 0xfedc4f4f3750>
-auth_token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OTczMTdlMmRjNDY4YjQxZDg3YTE3MWEiLCJleHAiOjE3NzA3MjM5ODB9.7ZyRY76LdmgcXfVnBTQ-k6_xlAWxDsOeqIlBcyLl9dc'
+self = <test_product_lifecycle.TestProductEnhancedCRUD object at 0xfb85b911ebd0>
+auth_token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OTczMTdlMmRjNDY4YjQxZDg3YTE3MWEiLCJleHAiOjE3NzIwNjc2MDV9.tekuUV0m7iI0bjqFDeDmkXqDyEv-oV2mAxsyyzJ7uOk'
 
     def test_create_enhanced_product_finished(self, auth_token):
         """Test creating a finished product with full lifecycle data"""
@@ -2654,8 +2661,8 @@ E       KeyError: 0
 backend/tests/test_product_lifecycle.py:118: KeyError
 ______ TestProductEnhancedCRUD.test_create_enhanced_product_semi_finished ______
 
-self = <test_product_lifecycle.TestProductEnhancedCRUD object at 0xfedc4f4f30d0>
-auth_token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OTczMTdlMmRjNDY4YjQxZDg3YTE3MWEiLCJleHAiOjE3NzA3MjM5ODB9.7ZyRY76LdmgcXfVnBTQ-k6_xlAWxDsOeqIlBcyLl9dc'
+self = <test_product_lifecycle.TestProductEnhancedCRUD object at 0xfb85b911fb90>
+auth_token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OTczMTdlMmRjNDY4YjQxZDg3YTE3MWEiLCJleHAiOjE3NzIwNjc2MDV9.tekuUV0m7iI0bjqFDeDmkXqDyEv-oV2mAxsyyzJ7uOk'
 
     def test_create_enhanced_product_semi_finished(self, auth_token):
         """Test creating a semi-finished product with transformation energy"""
@@ -2675,8 +2682,8 @@ E       KeyError: 0
 backend/tests/test_product_lifecycle.py:192: KeyError
 ______________ TestProductSales.test_record_product_sale_enhanced ______________
 
-self = <test_product_lifecycle.TestProductSales object at 0xfedc4f7b7b50>
-auth_token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OTczMTdlMmRjNDY4YjQxZDg3YTE3MWEiLCJleHAiOjE3NzA3MjM5ODB9.7ZyRY76LdmgcXfVnBTQ-k6_xlAWxDsOeqIlBcyLl9dc'
+self = <test_product_lifecycle.TestProductSales object at 0xfb85b94cdc50>
+auth_token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OTczMTdlMmRjNDY4YjQxZDg3YTE3MWEiLCJleHAiOjE3NzIwNjc2MDV9.tekuUV0m7iI0bjqFDeDmkXqDyEv-oV2mAxsyyzJ7uOk'
 
     def test_record_product_sale_enhanced(self, auth_token):
         """Test recording a sale and verifying Scope 3 Aval activities are created"""
@@ -2714,8 +2721,8 @@ E        +  where 405 = <Response [405]>.status_code
 backend/tests/test_product_lifecycle.py:320: AssertionError
 _____________ TestProductSales.test_verify_scope3_aval_activities ______________
 
-self = <test_product_lifecycle.TestProductSales object at 0xfedc4f7b6250>
-auth_token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OTczMTdlMmRjNDY4YjQxZDg3YTE3MWEiLCJleHAiOjE3NzA3MjM5ODB9.7ZyRY76LdmgcXfVnBTQ-k6_xlAWxDsOeqIlBcyLl9dc'
+self = <test_product_lifecycle.TestProductSales object at 0xfb85b9385850>
+auth_token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OTczMTdlMmRjNDY4YjQxZDg3YTE3MWEiLCJleHAiOjE3NzIwNjc2MDV9.tekuUV0m7iI0bjqFDeDmkXqDyEv-oV2mAxsyyzJ7uOk'
 
     def test_verify_scope3_aval_activities(self, auth_token):
         """Verify that product sales create activities in Scope 3 Aval"""
@@ -2733,7 +2740,7 @@ auth_token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OTczMTdlMmRjNDY4Y
 backend/tests/test_product_lifecycle.py:359: 
 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
 
-.0 = <dict_keyiterator object at 0xfedc4f585ad0>
+.0 = <dict_keyiterator object at 0xfb85b8844fe0>
 
 >   product_activities = [a for a in data if a.get("product_id")]
                                              ^^^^^
@@ -2833,11 +2840,14 @@ ERROR backend/tests/test_phase4_features.py::TestMultiImpactActivityCreation::te
 ERROR backend/tests/test_phase4_features.py::TestMultiImpactActivityCreation::test_business_rule_scope3_excludes_scope12_and_33
 ERROR backend/tests/test_phase4_features.py::TestFactorsTableDisplay::test_factors_have_required_fields
 ERROR backend/tests/test_phase4_features.py::TestSubcategoriesTableDisplay::test_subcategories_have_required_fields
-====== 19 failed, 131 passed, 7 warnings, 31 errors in 100.57s (0:01:40) =======
+====== 19 failed, 131 passed, 7 warnings, 31 errors in 142.32s (0:02:22) =======
 - SMTP (Infomaniak)
+-  (pour l'accès aux LLMs)
+-  (NOUVEAU, pour la recherche fuzzy)
+- **Anthropic Claude Haiku**: Utilisé pour l'enrichissement de données, nécessite une clé API utilisateur.
 
 **Testing status**
-  - Testing agent used after significant changes: YES
+  - Testing agent used after significant changes: NO (Agent a utilisé le  à la place)
   - Troubleshoot agent used after agent stuck in loop: NO
   - Test files created: []
   - Known regressions: []
@@ -2847,4 +2857,4 @@ ERROR backend/tests/test_phase4_features.py::TestSubcategoriesTableDisplay::test
 - **Password**: 
 
 **What agent forgot to execute**
-- Rien. Toutes les demandes de l'utilisateur ont été prises en compte et la tâche actuelle est une continuation directe de la dernière demande.</analysis>
+- L'agent a correctement identifié et priorisé les tâches demandées par l'utilisateur. Rien d'essentiel n'a été oublié.</analysis>

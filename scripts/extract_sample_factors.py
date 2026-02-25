@@ -7,7 +7,7 @@ import random
 import requests
 import os
 
-API_URL = os.environ.get('API_URL', 'https://ecotracker-39.preview.emergentagent.com')
+API_URL = os.environ.get('API_URL', 'https://impact-measure-5.preview.emergentagent.com')
 
 def main():
     # Login
