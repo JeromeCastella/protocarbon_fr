@@ -547,10 +547,25 @@ const GuidedEntryModal = ({
                     </label>
                     {/* Affichage condensé si étape 3+ et sous-catégorie sélectionnée */}
                     {step >= 3 && selectedSubcategory ? (
-                      <div className={`p-3 rounded-xl border ${isDark ? 'bg-blue-500/20 border-blue-500/50' : 'bg-blue-50 border-blue-200'}`}>
+                      <div className={`p-3 rounded-xl border flex items-center justify-between ${isDark ? 'bg-blue-500/20 border-blue-500/50' : 'bg-blue-50 border-blue-200'}`}>
                         <span className={`font-medium ${isDark ? 'text-blue-300' : 'text-blue-700'}`}>
                           ✓ {language === 'fr' ? selectedSubcategory.name_fr : selectedSubcategory.name_de}
                         </span>
+                        {subcategories.length > 1 && (
+                          <button
+                            type="button"
+                            onClick={() => goBackToStep(1)}
+                            data-testid="change-subcategory-btn"
+                            className={`flex items-center gap-1 text-xs px-2 py-1 rounded-lg transition-colors ${
+                              isDark 
+                                ? 'text-blue-400 hover:bg-slate-600' 
+                                : 'text-blue-600 hover:bg-blue-100'
+                            }`}
+                          >
+                            <RotateCcw className="w-3 h-3" />
+                            {language === 'fr' ? 'Modifier' : 'Ändern'}
+                          </button>
+                        )}
                       </div>
                     ) : (
                       <div className="grid grid-cols-2 gap-2">
@@ -586,10 +601,25 @@ const GuidedEntryModal = ({
                     </label>
                     {/* Affichage condensé si étape 3+ et unité sélectionnée */}
                     {step >= 3 && selectedUnit ? (
-                      <div className={`p-3 rounded-xl border ${isDark ? 'bg-blue-500/20 border-blue-500/50' : 'bg-blue-50 border-blue-200'}`}>
+                      <div className={`p-3 rounded-xl border flex items-center justify-between ${isDark ? 'bg-blue-500/20 border-blue-500/50' : 'bg-blue-50 border-blue-200'}`}>
                         <span className={`font-medium ${isDark ? 'text-blue-300' : 'text-blue-700'}`}>
                           ✓ {formatUnitWithCode(selectedUnit, language, true)}
                         </span>
+                        {availableUnits.length > 1 && (
+                          <button
+                            type="button"
+                            onClick={() => goBackToStep(2)}
+                            data-testid="change-unit-btn"
+                            className={`flex items-center gap-1 text-xs px-2 py-1 rounded-lg transition-colors ${
+                              isDark 
+                                ? 'text-blue-400 hover:bg-slate-600' 
+                                : 'text-blue-600 hover:bg-blue-100'
+                            }`}
+                          >
+                            <RotateCcw className="w-3 h-3" />
+                            {language === 'fr' ? 'Modifier' : 'Ändern'}
+                          </button>
+                        )}
                       </div>
                     ) : (
                       <div className="flex flex-wrap gap-2">
