@@ -581,7 +581,7 @@ const GuidedEntryModal = ({
                                 : 'bg-gray-100 hover:bg-gray-200 text-gray-900'
                           }`}
                         >
-                          {unit}
+                          {formatUnitWithCode(unit, language, true)}
                         </button>
                       ))}
                     </div>
