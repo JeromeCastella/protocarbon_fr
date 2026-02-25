@@ -113,7 +113,7 @@ const FactorSelectionStep = ({
       
       {/* Search hint */}
       {!searchQuery && enrichedCount > 0 && (
-        <p className={`text-xs ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>
+        <p className={`text-xs mt-2 flex-shrink-0 ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>
           💡 {language === 'fr' 
             ? `Conseil : tapez des mots simples comme "voiture", "avion", "électricité"...`
             : `Tipp: Geben Sie einfache Wörter ein wie "Auto", "Flugzeug", "Strom"...`
@@ -122,7 +122,7 @@ const FactorSelectionStep = ({
       )}
       
       {/* Factor cards list */}
-      <div className="space-y-2 flex-1 overflow-y-auto pr-2 min-h-0">
+      <div className="space-y-2 flex-1 overflow-y-auto pr-2 min-h-0 mt-4">
         {displayFactors.map((factor) => (
           <FactorCard
             key={factor.id}
