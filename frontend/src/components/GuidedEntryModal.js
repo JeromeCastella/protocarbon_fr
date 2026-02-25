@@ -481,7 +481,7 @@ const GuidedEntryModal = ({
                     <>
                       <ChevronRight className="w-4 h-4 text-gray-400" />
                       <span className={`text-sm font-medium px-2 py-0.5 rounded ${isDark ? 'bg-slate-700 text-slate-300' : 'bg-gray-100 text-gray-600'}`}>
-                        {selectedUnit}
+                        {getUnitLabel(selectedUnit, language)}
                       </span>
                     </>
                   )}
