@@ -265,11 +265,20 @@ const GuidedEntryModal = ({
     setSelectedUnit(unit);
     setSelectedFactor(null);
     setStep(3);
-    setShowFactorList(true); // Afficher automatiquement la liste des facteurs
+    setShowFactorList(true);
     
-    // Filtrer les facteurs compatibles avec cette unité - MATCHING STRICT
-    const compatible = filterFactorsByUnitStrict(factors, unit);
-    setFilteredFactors(compatible);
+    const isConverted = convertedUnits.includes(unit);
+    setIsConvertedUnit(isConverted);
+    
+    if (isConverted) {
+      // Unité convertible : filtrer par dimension (trouver facteurs compatibles)
+      const compatible = filterFactorsByDimension(factors, unit);
+      setFilteredFactors(compatible);
+    } else {
+      // Unité native : filtrage strict
+      const compatible = filterFactorsByUnitStrict(factors, unit);
+      setFilteredFactors(compatible);
+    }
   };
 
   const handleFactorSelect = (factor) => {
