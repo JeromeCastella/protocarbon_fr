@@ -269,8 +269,8 @@ class TestActivityWithConversion:
         # Verify conversion fields are stored
         assert activity.get("original_quantity") == original_qty, \
             f"original_quantity should be {original_qty}, got {activity.get('original_quantity')}"
-        assert activity.get("original_unit") == "MJ", \
-            f"original_unit should be MJ, got {activity.get('original_unit')}"
+        assert activity.get("original_unit") == original_unit, \
+            f"original_unit should be {original_unit}, got {activity.get('original_unit')}"
         assert activity.get("conversion_factor") == conversion_factor, \
             f"conversion_factor should be {conversion_factor}, got {activity.get('conversion_factor')}"
         
