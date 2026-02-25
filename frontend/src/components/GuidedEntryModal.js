@@ -453,8 +453,8 @@ const GuidedEntryModal = ({
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.95, opacity: 0 }}
           onClick={(e) => e.stopPropagation()}
-          className={`w-full rounded-2xl ${isDark ? 'bg-slate-800' : 'bg-white'} shadow-2xl max-h-[90vh] overflow-hidden flex flex-col transition-all duration-300 ${
-            step >= 3 && !selectedFactor ? 'max-w-4xl' : 'max-w-2xl'
+          className={`w-full rounded-2xl ${isDark ? 'bg-slate-800' : 'bg-white'} shadow-2xl overflow-hidden flex flex-col transition-all duration-300 ${
+            step >= 3 && !selectedFactor ? 'max-w-4xl h-[85vh]' : 'max-w-2xl h-[75vh]'
           }`}
         >
           {/* Header */}
