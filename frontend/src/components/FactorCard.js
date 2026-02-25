@@ -37,7 +37,11 @@ const FactorCard = ({
   const impact = factor.impacts?.[0];
 
   return (
-    <div className="relative">
+    <div 
+      className="relative"
+      onMouseEnter={() => tooltipContent && setShowTooltip(true)}
+      onMouseLeave={() => setShowTooltip(false)}
+    >
       <button
         onClick={onClick}
         data-testid={`factor-card-${factor.id}`}
@@ -64,17 +68,11 @@ const FactorCard = ({
                 {name}
               </h4>
               
-              {/* Info icon with tooltip trigger */}
+              {/* Info icon - visual indicator only */}
               {tooltipContent && (
-                <div 
-                  className="relative flex-shrink-0"
-                  onMouseEnter={() => setShowTooltip(true)}
-                  onMouseLeave={() => setShowTooltip(false)}
-                >
-                  <Info className={`w-4 h-4 cursor-help ${
-                    isDark ? 'text-slate-500 hover:text-slate-300' : 'text-gray-400 hover:text-gray-600'
-                  }`} />
-                </div>
+                <Info className={`w-4 h-4 flex-shrink-0 ${
+                  isDark ? 'text-slate-500' : 'text-gray-400'
+                }`} />
               )}
             </div>
             

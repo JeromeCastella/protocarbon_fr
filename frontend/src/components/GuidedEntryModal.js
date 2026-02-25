@@ -150,10 +150,19 @@ const GuidedEntryModal = ({
     }
   };
 
-  // Fonction pour revenir modifier un élément en mode édition
+  // Fonction pour revenir modifier un élément (création et édition)
   const goBackToStep = (targetStep) => {
     setStep(targetStep);
-    if (targetStep === 3) {
+    if (targetStep <= 1) {
+      // Retour à la sous-catégorie : reset unité et facteur
+      setSelectedUnit('');
+      setSelectedFactor(null);
+      setShowFactorList(false);
+    } else if (targetStep <= 2) {
+      // Retour à l'unité : reset facteur
+      setSelectedFactor(null);
+      setShowFactorList(false);
+    } else if (targetStep === 3) {
       setShowFactorList(true);
     }
   };
