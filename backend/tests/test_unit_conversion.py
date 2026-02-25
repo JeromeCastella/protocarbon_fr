@@ -212,11 +212,25 @@ class TestActivityWithConversion:
         if not self.emission_factor:
             pytest.skip("No emission factor found for testing")
         
-        # Create activity with MJ input that converts to kWh
-        # 100 MJ * 0.2778 = 27.78 kWh
-        original_qty = 100
-        conversion_factor = 0.2778
-        converted_qty = original_qty * conversion_factor
+        # Get the factor's native unit
+        factor_unit = self.emission_factor.get("default_unit") or self.emission_factor.get("input_units", ["MJ"])[0]
+        
+        # Create activity with GJ input that converts to MJ (same energy dimension)
+        # 1 GJ = 1000 MJ, so 1 GJ * 1000 = 1000 MJ
+        # If factor uses MJ: original=1 GJ, converted=1000 MJ
+        if factor_unit == "MJ":
+            original_qty = 1  # 1 GJ
+            original_unit = "GJ"
+            conversion_factor = 1000  # GJ to MJ: multiply by 1000
+            converted_qty = original_qty * conversion_factor  # 1000 MJ
+            converted_unit = "MJ"
+        else:
+            # Fallback: use same unit (no conversion)
+            original_qty = 100
+            original_unit = factor_unit
+            conversion_factor = 1
+            converted_qty = original_qty
+            converted_unit = factor_unit
         
         activity_data = {
             "category_id": "combustion_fixe",
@@ -224,9 +238,9 @@ class TestActivityWithConversion:
             "scope": "scope1",
             "name": "TEST_Unit_Conversion_Activity",
             "quantity": converted_qty,  # Converted quantity
-            "unit": "kWh",  # Factor's native unit
+            "unit": converted_unit,  # Factor's native unit
             "original_quantity": original_qty,  # User input
-            "original_unit": "MJ",  # User's selected unit
+            "original_unit": original_unit,  # User's selected unit
             "conversion_factor": conversion_factor,
             "emission_factor_id": self.emission_factor["id"],
             "entry_scope": "scope1",
