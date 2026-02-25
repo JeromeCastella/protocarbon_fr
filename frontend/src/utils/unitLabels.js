@@ -23,17 +23,20 @@ export const UNIT_LABELS = {
   MWh: { fr: 'mégawattheures', de: 'Megawattstunden' },
   MJ: { fr: 'mégajoules', de: 'Megajoule' },
   GJ: { fr: 'gigajoules', de: 'Gigajoule' },
+  therm: { fr: 'therms', de: 'Therms' },
   
   // Volume
   L: { fr: 'litres', de: 'Liter' },
   l: { fr: 'litres', de: 'Liter' },
   m3: { fr: 'mètres cubes', de: 'Kubikmeter' },
   'm³': { fr: 'mètres cubes', de: 'Kubikmeter' },
+  gal: { fr: 'gallons', de: 'Gallonen' },
   
   // Mass
   kg: { fr: 'kilogrammes', de: 'Kilogramm' },
   g: { fr: 'grammes', de: 'Gramm' },
   t: { fr: 'tonnes', de: 'Tonnen' },
+  lb: { fr: 'livres', de: 'Pfund' },
   
   // Area
   'm²': { fr: 'mètres carrés', de: 'Quadratmeter' },
