@@ -647,7 +647,7 @@ const GuidedEntryModal = ({
                                 {language === 'fr' ? 'Unité:' : 'Einheit:'}
                               </span>
                               <span className={`text-sm font-medium px-2 py-0.5 rounded ${isDark ? 'bg-slate-600 text-white' : 'bg-gray-200 text-gray-900'}`}>
-                                {selectedUnit || '—'}
+                                {getUnitLabel(selectedUnit, language) || '—'}
                               </span>
                             </div>
                             {availableUnits.length > 1 && (
