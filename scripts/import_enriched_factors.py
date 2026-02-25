@@ -25,7 +25,7 @@ def main():
     # Connect to MongoDB
     client = MongoClient(MONGO_URL)
     db = client[DB_NAME]
-    collection = db['emission_factors_v2']
+    collection = db['emission_factors']
     
     # Update each factor
     updated_count = 0
