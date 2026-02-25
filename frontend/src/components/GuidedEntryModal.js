@@ -585,160 +585,16 @@ const GuidedEntryModal = ({
                   </div>
                 )}
 
-                {/* Étape 3: Facteur d'émission */}
+                {/* Étape 3: Facteur d'émission - Nouveau composant amélioré */}
                 {step >= 3 && (
-                  <div>
-                    <label className={`block text-sm font-medium mb-3 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
-                      {language === 'fr' ? '3. Facteur d\'émission' : '3. Emissionsfaktor'}
-                    </label>
-                    
-                    {/* Recherche */}
-                    <div className="relative mb-3">
-                      <Search className={`absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 ${isDark ? 'text-slate-400' : 'text-gray-400'}`} />
-                      <input
-                        type="text"
-                        value={factorSearch}
-                        onChange={(e) => {
-                          setFactorSearch(e.target.value);
-                          setShowFactorList(true);
-                        }}
-                        onFocus={() => setShowFactorList(true)}
-                        placeholder={language === 'fr' ? 'Rechercher par nom ou tag...' : 'Nach Name oder Tag suchen...'}
-                        data-testid="factor-search"
-                        className={`w-full pl-10 pr-4 py-3 rounded-xl border transition-all focus:ring-2 focus:ring-blue-500 ${
-                          isDark 
-                            ? 'bg-slate-700 border-slate-600 text-white placeholder-slate-400' 
-                            : 'bg-white border-gray-200 text-gray-900 placeholder-gray-400'
-                        }`}
-                      />
-                    </div>
-
-                    {/* Liste des facteurs */}
-                    {showFactorList && filteredFactors.length > 0 && (
-                      <div className={`rounded-xl border overflow-hidden max-h-64 overflow-y-auto ${
-                        isDark ? 'bg-slate-700 border-slate-600' : 'bg-white border-gray-200'
-                      }`}>
-                        {filteredFactors.map(factor => {
-                          const impacts = factor.impacts || [{
-                            scope: factor.scope,
-                            category: factor.category,
-                            value: factor.value,
-                            unit: factor.unit
-                          }];
-                          
-                          return (
-                            <button
-                              key={factor.id}
-                              type="button"
-                              onClick={() => handleFactorSelect(factor)}
-                              data-testid={`factor-${factor.id}`}
-                              className={`w-full px-4 py-3 text-left border-b last:border-b-0 transition-all ${
-                                selectedFactor?.id === factor.id
-                                  ? 'bg-blue-500 text-white'
-                                  : isDark 
-                                    ? 'border-slate-600 hover:bg-slate-600 text-white' 
-                                    : 'border-gray-100 hover:bg-gray-50 text-gray-900'
-                              }`}
-                            >
-                              <div className="flex items-start justify-between gap-3">
-                                <div className="flex-1">
-                                  <span className="font-medium">{getFactorName(factor)}</span>
-                                  {factor.tags?.length > 0 && (
-                                    <div className="flex flex-wrap gap-1 mt-1">
-                                      {factor.tags.slice(0, 3).map(tag => (
-                                        <span 
-                                          key={tag} 
-                                          className={`text-xs px-1.5 py-0.5 rounded ${
-                                            selectedFactor?.id === factor.id
-                                              ? 'bg-white/20'
-                                              : isDark ? 'bg-slate-600' : 'bg-gray-100'
-                                          }`}
-                                        >
-                                          {tag}
-                                        </span>
-                                      ))}
-                                    </div>
-                                  )}
-                                </div>
-                                <div className="flex flex-col gap-1 flex-shrink-0">
-                                  {impacts.slice(0, 2).map((impact, i) => {
-                                    const scopeInfo = scopeColors[impact.scope] || { bg: 'bg-gray-500', label: impact.scope };
-                                    return (
-                                      <span 
-                                        key={i}
-                                        className={`px-2 py-1 rounded text-xs font-medium text-white whitespace-nowrap ${
-                                          selectedFactor?.id === factor.id ? 'bg-white/30' : scopeInfo.bg
-                                        }`}
-                                      >
-                                        {scopeInfo.label}: {impact.value}
-                                      </span>
-                                    );
-                                  })}
-                                  {impacts.length > 2 && (
-                                    <span className={`text-xs ${selectedFactor?.id === factor.id ? 'text-white/70' : isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-                                      +{impacts.length - 2} {language === 'fr' ? 'autre(s)' : 'weitere'}
-                                    </span>
-                                  )}
-                                </div>
-                              </div>
-                            </button>
-                          );
-                        })}
-                      </div>
-                    )}
-
-                    {showFactorList && filteredFactors.length === 0 && (
-                      <div className={`p-4 rounded-xl text-center ${isDark ? 'bg-amber-500/10 border border-amber-500/30' : 'bg-amber-50 border border-amber-200'}`}>
-                        <p className={`font-medium ${isDark ? 'text-amber-400' : 'text-amber-600'}`}>
-                          {language === 'fr' 
-                            ? `Aucun facteur compatible avec l'unité "${selectedUnit}"` 
-                            : `Kein kompatibler Faktor für die Einheit "${selectedUnit}"`}
-                        </p>
-                        <p className={`text-sm mt-1 ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-                          {language === 'fr' 
-                            ? 'Veuillez sélectionner une autre unité' 
-                            : 'Bitte wählen Sie eine andere Einheit'}
-                        </p>
-                      </div>
-                    )}
-
-                    {/* Facteur sélectionné */}
-                    {selectedFactor && (
-                      <div className={`mt-3 p-4 rounded-xl ${isDark ? 'bg-blue-500/20 border border-blue-500/30' : 'bg-blue-50 border border-blue-200'}`}>
-                        <div className="flex items-start gap-3">
-                          <div className="w-10 h-10 rounded-lg bg-blue-500 flex items-center justify-center flex-shrink-0">
-                            <Check className="w-5 h-5 text-white" />
-                          </div>
-                          <div className="flex-1">
-                            <p className={`font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                              {getFactorName(selectedFactor)}
-                            </p>
-                            <div className={`text-sm mt-2 space-y-1 ${isDark ? 'text-slate-300' : 'text-gray-600'}`}>
-                              {(selectedFactor.impacts || [{
-                                scope: selectedFactor.scope,
-                                category: selectedFactor.category,
-                                value: selectedFactor.value,
-                                unit: selectedFactor.unit
-                              }]).map((impact, i) => {
-                                const scopeInfo = scopeColors[impact.scope] || { bg: 'bg-gray-500', text: 'text-gray-500', label: impact.scope };
-                                return (
-                                  <div key={i} className="flex items-center gap-2">
-                                    <span className={`w-2 h-2 rounded-full ${scopeInfo.bg}`}></span>
-                                    <span>{scopeInfo.label}: {impact.value} {impact.unit}</span>
-                                  </div>
-                                );
-                              })}
-                            </div>
-                            {selectedFactor.source && (
-                              <p className={`text-xs mt-2 ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-                                Source: {selectedFactor.source} ({selectedFactor.region})
-                              </p>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                  </div>
+                  <FactorSelectionStep
+                    factors={filteredFactors}
+                    selectedFactor={selectedFactor}
+                    onSelectFactor={handleFactorSelect}
+                    selectedUnit={selectedUnit}
+                    language={language}
+                    isDark={isDark}
+                  />
                 )}
 
                 {/* Étape 4: Quantité et résultat */}
