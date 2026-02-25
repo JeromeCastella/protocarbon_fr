@@ -391,8 +391,9 @@ async def create_single_activity(activity: ActivityCreate, current_user: dict) -
     activity_doc["emissions"] = emissions
     activity_doc["calculated_emissions"] = emissions
     activity_doc["factor_snapshot"] = None
-    activity_doc["original_quantity"] = activity.quantity
-    activity_doc["original_unit"] = activity.unit
+    activity_doc["original_quantity"] = activity.original_quantity if activity.original_quantity is not None else activity.quantity
+    activity_doc["original_unit"] = activity.original_unit or activity.unit
+    activity_doc["conversion_factor"] = activity.conversion_factor
     
     result = activities_collection.insert_one(activity_doc)
     activity_doc["id"] = str(result.inserted_id)
