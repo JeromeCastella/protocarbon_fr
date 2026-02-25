@@ -726,7 +726,7 @@ const GuidedEntryModal = ({
                               placeholder="0"
                             />
                             <span className={`absolute right-4 top-1/2 -translate-y-1/2 text-sm font-medium ${isDark ? 'text-blue-400' : 'text-blue-600'}`}>
-                              {selectedUnit || selectedFactor.default_unit || selectedFactor.input_units?.[0]}
+                              {getUnitLabel(selectedUnit || selectedFactor.default_unit || selectedFactor.input_units?.[0], language)}
                             </span>
                           </div>
                         </div>
