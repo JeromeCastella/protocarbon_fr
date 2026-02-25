@@ -4,7 +4,7 @@ import axios from 'axios';
 import { 
   X, Check, Search, ChevronRight, Info, Sparkles, AlertCircle, RotateCcw, Loader2
 } from 'lucide-react';
-import { normalizeUnit, filterFactorsByUnitStrict, getAvailableUnitsFromFactors } from '../utils/units';
+import { normalizeUnit, filterFactorsByUnitStrict, filterFactorsByDimension, getAvailableUnitsWithConversions, findDimension, convertUnit, findFactorNativeUnit, getDimensionLabel } from '../utils/units';
 import { getUnitLabel, formatUnitWithCode } from '../utils/unitLabels';
 import FactorSelectionStep from './FactorSelectionStep';
 
