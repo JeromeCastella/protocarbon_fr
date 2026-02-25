@@ -365,36 +365,20 @@ const GuidedEntryModal = ({
     });
   };
 
-  // Calculer les émissions estimées avec règles métier
+  // Calculer les émissions estimées avec règles métier et conversion d'unités
   const calculateEmissions = () => {
     if (!selectedFactor || !quantity) return null;
     
     const qty = parseFloat(quantity);
     if (isNaN(qty)) return null;
     
-    // Normaliser la quantité selon l'unité
-    let normalizedQty = qty;
-    const defaultUnit = selectedFactor.default_unit || selectedFactor.input_units?.[0];
+    // Déterminer l'unité native du facteur
+    const factorNativeUnit = findFactorNativeUnit(selectedFactor, selectedUnit);
     
-    if (selectedUnit && selectedUnit !== defaultUnit) {
-      // Chercher conversion spécifique au facteur
-      const convKey = `${selectedUnit}_to_${defaultUnit}`;
-      if (selectedFactor.unit_conversions?.[convKey]) {
-        normalizedQty = qty * selectedFactor.unit_conversions[convKey];
-      } else {
-        // Chercher conversion globale
-        const globalConv = unitConversions.find(c => 
-          (c.from_unit === selectedUnit && c.to_unit === defaultUnit) ||
-          (c.to_unit === selectedUnit && c.from_unit === defaultUnit)
-        );
-        if (globalConv) {
-          if (globalConv.from_unit === selectedUnit) {
-            normalizedQty = qty * globalConv.factor;
-          } else {
-            normalizedQty = qty / globalConv.factor;
-          }
-        }
-      }
+    // Convertir la quantité si l'unité sélectionnée diffère de l'unité native
+    let normalizedQty = qty;
+    if (selectedUnit && selectedUnit !== factorNativeUnit) {
+      normalizedQty = convertUnit(qty, selectedUnit, factorNativeUnit);
     }
     
     // Récupérer les impacts du facteur
@@ -414,6 +398,21 @@ const GuidedEntryModal = ({
       emissions: normalizedQty * impact.value
     }));
   };
+
+  // Calculer la quantité convertie pour l'affichage
+  const getConvertedQuantity = () => {
+    if (!selectedFactor || !quantity || !isConvertedUnit) return null;
+    const qty = parseFloat(quantity);
+    if (isNaN(qty)) return null;
+    const factorNativeUnit = findFactorNativeUnit(selectedFactor, selectedUnit);
+    if (selectedUnit === factorNativeUnit) return null;
+    return {
+      value: convertUnit(qty, selectedUnit, factorNativeUnit),
+      unit: factorNativeUnit
+    };
+  };
+
+  const convertedQty = getConvertedQuantity();
 
   const emissions = calculateEmissions();
   const totalEmissions = emissions?.reduce((sum, e) => sum + e.emissions, 0) || 0;
