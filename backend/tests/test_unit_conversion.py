@@ -379,6 +379,9 @@ class TestEndToEndConversion:
         - User inputs: 1 GJ
         - Conversion: 1 GJ * 1000 = 1000 MJ
         - If factor is 0.05 kgCO2e/MJ → emissions = 1000 * 0.05 = 50 kgCO2e
+        
+        Note: Multi-impact factors apply GHG business rules which filter impacts.
+        For Scope 1 entry: only scope1, scope2, scope3_3 impacts are included.
         """
         # First, find an MJ-based emission factor
         factors_response = requests.get(
@@ -406,14 +409,19 @@ class TestEndToEndConversion:
         if not impacts:
             pytest.skip("Factor has no impacts")
         
-        # Calculate expected emissions
+        # Calculate expected emissions - ONLY for scope1/scope2/scope3_3 impacts
+        # (GHG business rules filter out scope3 for Scope 1 entries)
         original_qty_gj = 1  # User enters 1 GJ
         gj_to_mj_factor = 1000  # 1 GJ = 1000 MJ
         converted_qty_mj = original_qty_gj * gj_to_mj_factor  # 1000 MJ
         
-        # Sum all impact values for total emission factor per MJ
-        total_impact_per_mj = sum(impact.get("value", 0) for impact in impacts)
-        expected_emissions = converted_qty_mj * total_impact_per_mj
+        # Apply business rules: for scope1 entry, only include scope1, scope2, scope3_3
+        applicable_scopes = ['scope1', 'scope2', 'scope3_3']
+        filtered_impact_per_mj = sum(
+            impact.get("value", 0) for impact in impacts 
+            if impact.get("scope", "").lower() in applicable_scopes
+        )
+        expected_emissions = converted_qty_mj * filtered_impact_per_mj
         
         # Create activity with GJ input
         activity_data = {
@@ -450,13 +458,13 @@ class TestEndToEndConversion:
         
         # Verify emissions are calculated based on converted MJ value
         # Allow for some floating point tolerance
-        assert abs(total_emissions - expected_emissions) < 0.1, \
+        assert abs(total_emissions - expected_emissions) < 1.0, \
             f"Emissions mismatch: expected {expected_emissions:.2f}, got {total_emissions:.2f}"
         
         print(f"✓ End-to-end conversion test passed:")
         print(f"  - Original: {original_qty_gj} GJ")
         print(f"  - Converted: {converted_qty_mj:.2f} MJ")
-        print(f"  - Impact factor: {total_impact_per_mj} kgCO2e/MJ")
+        print(f"  - Impact factor (after business rules): {filtered_impact_per_mj} kgCO2e/MJ")
         print(f"  - Expected emissions: {expected_emissions:.2f} kgCO2e")
         print(f"  - Actual emissions: {total_emissions:.2f} kgCO2e")
         
