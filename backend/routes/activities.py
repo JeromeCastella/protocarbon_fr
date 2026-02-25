@@ -188,8 +188,9 @@ async def create_activity_for_impact(
         "unit": activity.unit,
         "emission_factor_id": activity.emission_factor_id,
         "factor_snapshot": create_factor_snapshot(factor),
-        "original_quantity": activity.quantity,
-        "original_unit": activity.unit,
+        "original_quantity": activity.original_quantity if activity.original_quantity is not None else activity.quantity,
+        "original_unit": activity.original_unit or activity.unit,
+        "conversion_factor": activity.conversion_factor,
         
         # Émissions calculées
         "emissions": emissions,
