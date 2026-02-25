@@ -122,7 +122,7 @@ const FactorSelectionStep = ({
       )}
       
       {/* Factor cards list */}
-      <div className="space-y-2 flex-1 overflow-y-auto pr-2 min-h-0 mt-4">
+      <div className="space-y-2 overflow-y-auto pr-2 mt-4" style={{ maxHeight: '250px', minHeight: '200px' }}>
         {displayFactors.map((factor) => (
           <FactorCard
             key={factor.id}
