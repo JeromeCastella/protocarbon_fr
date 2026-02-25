@@ -126,23 +126,32 @@ const GuidedEntryModal = ({
       
       setFactors(allFactors);
       
-      // 6. Sélectionner l'unité originale
+      // 6. Sélectionner l'unité originale (l'unité de saisie de l'utilisateur)
       const unit = activity.original_unit || activity.unit || '';
       setSelectedUnit(unit);
       
-      // 7. Extraire les unités disponibles depuis les facteurs
-      const units = getAvailableUnitsFromFactors(allFactors);
-      setAvailableUnits(units);
+      // 7. Extraire les unités disponibles avec conversions
+      const unitsResult = getAvailableUnitsWithConversions(allFactors);
+      setNativeUnits(unitsResult.native);
+      setConvertedUnits(unitsResult.converted);
+      setAvailableUnits(unitsResult.all);
       
-      // 8. Filtrer les facteurs compatibles avec l'unité
-      const compatible = filterFactorsByUnitStrict(allFactors, unit);
+      // 8. Déterminer si l'unité est convertie
+      const unitIsConverted = unitsResult.converted.includes(unit);
+      setIsConvertedUnit(unitIsConverted);
+      
+      // 9. Filtrer les facteurs compatibles
+      const compatible = unitIsConverted 
+        ? filterFactorsByDimension(allFactors, unit)
+        : filterFactorsByUnitStrict(allFactors, unit);
       setFilteredFactors(compatible.length > 0 ? compatible : allFactors);
       
-      // 9. Sélectionner le facteur d'émission de l'activité
+      // 10. Sélectionner le facteur d'émission de l'activité
       setSelectedFactor(factor || null);
       
-      // 10. Pré-remplir quantité et commentaires
-      setQuantity(activity.quantity?.toString() || '');
+      // 11. Pré-remplir quantité (utiliser original_quantity si disponible) et commentaires
+      const displayQty = activity.original_quantity || activity.quantity;
+      setQuantity(displayQty?.toString() || '');
       setComments(activity.comments || '');
       
       // 11. Aller directement à l'étape 4 (formulaire final)
