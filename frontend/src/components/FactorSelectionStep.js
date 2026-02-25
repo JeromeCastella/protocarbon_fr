@@ -122,7 +122,7 @@ const FactorSelectionStep = ({
       )}
       
       {/* Factor cards list */}
-      <div className="space-y-2 max-h-[400px] overflow-y-auto pr-2">
+      <div className="space-y-2 flex-1 overflow-y-auto pr-2 min-h-0">
         {displayFactors.map((factor) => (
           <FactorCard
             key={factor.id}
@@ -130,7 +130,6 @@ const FactorSelectionStep = ({
             language={language}
             isSelected={selectedFactor?.id === factor.id}
             onClick={() => onSelectFactor(factor)}
-            showDetails={true}
           />
         ))}
       </div>
