@@ -102,7 +102,7 @@ async def get_emission_factors(
     if subcategory:
         query["subcategory"] = subcategory
     
-    factors = list(emission_factors_collection.find(query))
+    factors = list(emission_factors_collection.find(query).limit(2000))
     return [serialize_doc(f) for f in factors]
 
 
@@ -169,7 +169,7 @@ async def get_factors_by_category(
         ]
     }
     
-    factors = list(emission_factors_collection.find(query))
+    factors = list(emission_factors_collection.find(query).limit(1000))
     return [serialize_doc(f) for f in factors]
 
 
@@ -184,7 +184,7 @@ async def get_factors_by_tags(
     factors = list(emission_factors_collection.find({
         "deleted_at": None,
         "tags": {"$in": tag_list}
-    }))
+    }).limit(500))
     return [serialize_doc(f) for f in factors]
 
 
@@ -207,7 +207,7 @@ async def get_factors_valid_for_year(
     if subcategory:
         query["subcategory"] = subcategory
     
-    factors = list(emission_factors_collection.find(query))
+    factors = list(emission_factors_collection.find(query).limit(2000))
     return [serialize_doc(f) for f in factors]
 
 
