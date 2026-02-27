@@ -90,7 +90,7 @@ async def create_user(
 @router.get("/users")
 async def list_users(current_user: dict = Depends(require_admin)):
     """List all users (admin only)"""
-    users = list(users_collection.find({}, {"password": 0}))
+    users = list(users_collection.find({}, {"password": 0}).limit(1000))
     return [serialize_doc(u) for u in users]
 
 @router.put("/users/{user_id}/role")
@@ -136,7 +136,7 @@ async def delete_user(
 @router.get("/emission-factors-v2")
 async def get_emission_factors_v2(current_user: dict = Depends(require_admin)):
     """Get all emission factors v2 (admin only)"""
-    factors = list(emission_factors_collection.find({"deleted_at": None}))
+    factors = list(emission_factors_collection.find({"deleted_at": None}).limit(2000))
     return [serialize_doc(f) for f in factors]
 
 
@@ -320,7 +320,7 @@ async def soft_delete_factor(
 @router.get("/subcategories")
 async def get_subcategories_admin(current_user: dict = Depends(require_admin)):
     """Get all subcategories (admin)"""
-    subcategories = list(subcategories_collection.find({}).sort("order", 1))
+    subcategories = list(subcategories_collection.find({}).sort("order", 1).limit(500))
     return [serialize_doc(s) for s in subcategories]
 
 
@@ -382,7 +382,7 @@ async def delete_subcategory(
 @router.get("/unit-conversions")
 async def get_unit_conversions_admin(current_user: dict = Depends(require_admin)):
     """Get all unit conversions (admin)"""
-    conversions = list(unit_conversions_collection.find({}))
+    conversions = list(unit_conversions_collection.find({}).limit(500))
     return [serialize_doc(c) for c in conversions]
 
 
