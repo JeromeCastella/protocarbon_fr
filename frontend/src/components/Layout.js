@@ -31,11 +31,11 @@ const Layout = () => {
 
   // Navigation principale (fonctions métier)
   const mainNavItems = [
-    { path: '/dashboard', icon: LayoutDashboard, label: t('nav.dashboard') },
     { path: '/general-info', icon: Settings, label: t('nav.generalInfo') },
     { path: '/fiscal-years', icon: Calendar, label: language === 'fr' ? 'Exercices' : 'Geschäftsjahre' },
     { path: '/data-entry', icon: FileInput, label: t('nav.dataEntry') },
     { path: '/products', icon: Package, label: t('nav.products') },
+    { path: '/dashboard', icon: LayoutDashboard, label: t('nav.dashboard') },
     // Admin link - only shown if user is admin
     ...(user?.role === 'admin' ? [{ path: '/admin', icon: Shield, label: t('nav.admin') || 'Administration' }] : []),
   ];
