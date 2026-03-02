@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useTheme } from '../context/ThemeContext';
 import axios from 'axios';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -18,7 +18,8 @@ import {
   Factory,
   Leaf,
   Info,
-  Search
+  Search,
+  AlertTriangle
 } from 'lucide-react';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL || '';
@@ -27,6 +28,8 @@ const ProductWizard = ({ isOpen, onClose, onProductCreated, editingProduct = nul
   const { isDark } = useTheme();
   const [currentStep, setCurrentStep] = useState(1);
   const [loading, setLoading] = useState(false);
+  const [showCloseConfirm, setShowCloseConfirm] = useState(false);
+  const [errorToast, setErrorToast] = useState(null);
   
   // Emission factors
   const [materials, setMaterials] = useState([]);
@@ -247,6 +250,9 @@ const ProductWizard = ({ isOpen, onClose, onProductCreated, editingProduct = nul
       handleClose();
     } catch (error) {
       console.error('Failed to save product:', error);
+      const msg = error.response?.data?.detail || 'Une erreur est survenue lors de la sauvegarde.';
+      setErrorToast(msg);
+      setTimeout(() => setErrorToast(null), 5000);
     } finally {
       setLoading(false);
     }
@@ -254,6 +260,8 @@ const ProductWizard = ({ isOpen, onClose, onProductCreated, editingProduct = nul
 
   const handleClose = () => {
     setCurrentStep(1);
+    setShowCloseConfirm(false);
+    setErrorToast(null);
     setFormData({
       name: '',
       description: '',
@@ -281,6 +289,19 @@ const ProductWizard = ({ isOpen, onClose, onProductCreated, editingProduct = nul
       }
     });
     onClose();
+  };
+
+  // O2-A6: Vérifier si le formulaire a été modifié avant de fermer
+  const hasUnsavedChanges = () => {
+    return formData.name.trim() !== '' || formData.materials.length > 0;
+  };
+
+  const handleCloseRequest = () => {
+    if (hasUnsavedChanges()) {
+      setShowCloseConfirm(true);
+    } else {
+      handleClose();
+    }
   };
 
   const steps = [
@@ -332,7 +353,7 @@ const ProductWizard = ({ isOpen, onClose, onProductCreated, editingProduct = nul
             <h2 className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
               {editingProduct ? 'Modifier le produit' : 'Créer une fiche produit'}
             </h2>
-            <button onClick={handleClose} className={`p-2 rounded-lg ${isDark ? 'hover:bg-slate-700' : 'hover:bg-gray-100'}`}>
+            <button onClick={handleCloseRequest} className={`p-2 rounded-lg ${isDark ? 'hover:bg-slate-700' : 'hover:bg-gray-100'}`}>
               <X className="w-5 h-5" />
             </button>
           </div>
@@ -515,12 +536,31 @@ const ProductWizard = ({ isOpen, onClose, onProductCreated, editingProduct = nul
                   </div>
                 ) : (
                   <div className="space-y-4">
-                    {formData.materials.map((mat, index) => (
+                    {formData.materials.map((mat, index) => {
+                      // O2-A10: Nom du facteur comme titre
+                      const selectedFactor = materials.find(m => m.id === mat.emission_factor_id);
+                      const materialTitle = selectedFactor 
+                        ? (selectedFactor.name_simple_fr || selectedFactor.name_fr || selectedFactor.name || `Matière ${index + 1}`)
+                        : `Matière ${index + 1}`;
+                      // O2-A9: Contribution carbone inline
+                      const efValue = selectedFactor?.value || 0;
+                      const matEmissions = (mat.weight_kg || 0) * efValue;
+                      
+                      return (
                       <div key={index} className={`p-4 rounded-xl ${isDark ? 'bg-slate-700' : 'bg-gray-50'}`}>
                         <div className="flex items-center justify-between mb-4">
-                          <span className={`font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                            Matière {index + 1}
-                          </span>
+                          <div className="flex items-center gap-2">
+                            <span className={`font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                              {materialTitle}
+                            </span>
+                            {matEmissions > 0 && (
+                              <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${
+                                isDark ? 'bg-orange-500/20 text-orange-300' : 'bg-orange-100 text-orange-700'
+                              }`} data-testid={`mat-emissions-${index}`}>
+                                {matEmissions.toFixed(2)} kgCO₂e
+                              </span>
+                            )}
+                          </div>
                           <button
                             onClick={() => removeMaterial(index)}
                             className="p-2 rounded-lg hover:bg-red-500/20 text-red-500"
@@ -529,7 +569,7 @@ const ProductWizard = ({ isOpen, onClose, onProductCreated, editingProduct = nul
                           </button>
                         </div>
                         
-                        <div className="grid grid-cols-2 gap-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                           <div>
                             <label className={`block text-xs mb-1 ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
                               Matière
@@ -547,7 +587,9 @@ const ProductWizard = ({ isOpen, onClose, onProductCreated, editingProduct = nul
                             >
                               <option value="">Sélectionner...</option>
                               {materials.map(m => (
-                                <option key={m.id} value={m.id}>{m.name} ({m.value} {m.unit})</option>
+                                <option key={m.id} value={m.id}>
+                                  {m.name_simple_fr || m.name_fr || m.name} ({m.value} {m.unit})
+                                </option>
                               ))}
                             </select>
                           </div>
@@ -586,30 +628,15 @@ const ProductWizard = ({ isOpen, onClose, onProductCreated, editingProduct = nul
                             >
                               <option value="">Sélectionner...</option>
                               {treatments.map(t => (
-                                <option key={t.id} value={t.id}>{t.name} ({t.value} {t.unit})</option>
+                                <option key={t.id} value={t.id}>
+                                  {t.name_simple_fr || t.name_fr || t.name} ({t.value} {t.unit})
+                                </option>
                               ))}
                             </select>
                           </div>
-                          
-                          <div>
-                            <label className={`block text-xs mb-1 ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-                              Recyclabilité (%)
-                            </label>
-                            <input
-                              type="number"
-                              min="0"
-                              max="100"
-                              value={mat.recyclability_percent === 0 ? '' : mat.recyclability_percent}
-                              onChange={(e) => updateMaterial(index, 'recyclability_percent', parseFloat(e.target.value) || 0)}
-                              className={`w-full px-3 py-2 rounded-lg border text-sm ${
-                                isDark ? 'bg-slate-600 border-slate-500 text-white' : 'bg-white border-gray-200'
-                              }`}
-                              placeholder="0"
-                            />
-                          </div>
                         </div>
                       </div>
-                    ))}
+                    );})}
                   </div>
                 )}
               </motion.div>
@@ -674,7 +701,7 @@ const ProductWizard = ({ isOpen, onClose, onProductCreated, editingProduct = nul
                       >
                         <option value="">Sélectionner...</option>
                         {electricityFactors.map(f => (
-                          <option key={f.id} value={f.id}>{f.name} ({f.value} {f.unit})</option>
+                          <option key={f.id} value={f.id}>{f.name_simple_fr || f.name_fr || f.name} ({f.value} {f.unit})</option>
                         ))}
                       </select>
                     </div>
@@ -721,7 +748,7 @@ const ProductWizard = ({ isOpen, onClose, onProductCreated, editingProduct = nul
                       >
                         <option value="">Sélectionner...</option>
                         {fuelFactors.map(f => (
-                          <option key={f.id} value={f.id}>{f.name} ({f.value} {f.unit})</option>
+                          <option key={f.id} value={f.id}>{f.name_simple_fr || f.name_fr || f.name} ({f.value} {f.unit})</option>
                         ))}
                       </select>
                     </div>
@@ -819,7 +846,7 @@ const ProductWizard = ({ isOpen, onClose, onProductCreated, editingProduct = nul
                       >
                         <option value="">Par défaut (France)</option>
                         {electricityFactors.map(f => (
-                          <option key={f.id} value={f.id}>{f.name} ({f.value} {f.unit})</option>
+                          <option key={f.id} value={f.id}>{f.name_simple_fr || f.name_fr || f.name} ({f.value} {f.unit})</option>
                         ))}
                       </select>
                     </div>
@@ -868,7 +895,7 @@ const ProductWizard = ({ isOpen, onClose, onProductCreated, editingProduct = nul
                       >
                         <option value="">Par défaut (Gaz naturel)</option>
                         {fuelFactors.map(f => (
-                          <option key={f.id} value={f.id}>{f.name} ({f.value} {f.unit})</option>
+                          <option key={f.id} value={f.id}>{f.name_simple_fr || f.name_fr || f.name} ({f.value} {f.unit})</option>
                         ))}
                       </select>
                     </div>
@@ -917,7 +944,7 @@ const ProductWizard = ({ isOpen, onClose, onProductCreated, editingProduct = nul
                       >
                         <option value="">Par défaut (Diesel)</option>
                         {carburantFactors.map(f => (
-                          <option key={f.id} value={f.id}>{f.name} ({f.value} {f.unit})</option>
+                          <option key={f.id} value={f.id}>{f.name_simple_fr || f.name_fr || f.name} ({f.value} {f.unit})</option>
                         ))}
                       </select>
                     </div>
@@ -966,7 +993,7 @@ const ProductWizard = ({ isOpen, onClose, onProductCreated, editingProduct = nul
                       >
                         <option value="">Sélectionner...</option>
                         {refrigerantFactors.map(f => (
-                          <option key={f.id} value={f.id}>{f.name} (GWP: {f.value})</option>
+                          <option key={f.id} value={f.id}>{f.name_simple_fr || f.name_fr || f.name} (GWP: {f.value})</option>
                         ))}
                       </select>
                     </div>
@@ -1123,6 +1150,82 @@ const ProductWizard = ({ isOpen, onClose, onProductCreated, editingProduct = nul
           </div>
         </div>
       </motion.div>
+
+      {/* O2-A6: Dialogue de confirmation de fermeture */}
+      <AnimatePresence>
+        {showCloseConfirm && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[60] flex items-center justify-center bg-black/50"
+            onClick={() => setShowCloseConfirm(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.95 }}
+              animate={{ scale: 1 }}
+              exit={{ scale: 0.95 }}
+              onClick={(e) => e.stopPropagation()}
+              className={`w-full max-w-sm p-6 rounded-2xl shadow-2xl mx-4 ${isDark ? 'bg-slate-800' : 'bg-white'}`}
+              data-testid="close-confirm-dialog"
+            >
+              <div className="flex items-center gap-3 mb-4">
+                <div className={`w-10 h-10 rounded-full flex items-center justify-center ${isDark ? 'bg-amber-500/20' : 'bg-amber-100'}`}>
+                  <AlertTriangle className="w-5 h-5 text-amber-500" />
+                </div>
+                <h3 className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                  Quitter sans sauvegarder ?
+                </h3>
+              </div>
+              <p className={`text-sm mb-6 ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+                Les données saisies seront perdues.
+              </p>
+              <div className="flex gap-3 justify-end">
+                <button
+                  onClick={() => setShowCloseConfirm(false)}
+                  data-testid="close-confirm-cancel"
+                  className={`px-4 py-2.5 text-sm font-medium rounded-xl transition-colors ${
+                    isDark ? 'bg-slate-700 hover:bg-slate-600 text-white' : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
+                  }`}
+                >
+                  Continuer l'édition
+                </button>
+                <button
+                  onClick={handleClose}
+                  data-testid="close-confirm-discard"
+                  className="px-4 py-2.5 text-sm font-medium rounded-xl bg-red-500 text-white hover:bg-red-600 transition-colors"
+                >
+                  Quitter
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* O2-A8: Toast d'erreur */}
+      <AnimatePresence>
+        {errorToast && (
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 30 }}
+            className="fixed bottom-6 right-6 z-[70] max-w-sm"
+            data-testid="error-toast"
+          >
+            <div className="flex items-start gap-3 p-4 rounded-xl shadow-2xl bg-red-600 text-white">
+              <AlertTriangle className="w-5 h-5 flex-shrink-0 mt-0.5" />
+              <div className="flex-1">
+                <p className="text-sm font-medium">Erreur de sauvegarde</p>
+                <p className="text-xs mt-1 text-red-200">{errorToast}</p>
+              </div>
+              <button onClick={() => setErrorToast(null)} className="p-1 rounded-lg hover:bg-red-500">
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.div>
   );
 };

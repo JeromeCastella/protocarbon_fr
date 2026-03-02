@@ -48,6 +48,9 @@ const ProductSaleModal = ({ isOpen, onClose, onSaleRecorded, preselectedProduct 
   
   // Profil d'émissions actif
   const [activeProfile, setActiveProfile] = useState(null);
+  
+  // Date de la vente
+  const [saleDate, setSaleDate] = useState('');
 
   useEffect(() => {
     if (isOpen) {
