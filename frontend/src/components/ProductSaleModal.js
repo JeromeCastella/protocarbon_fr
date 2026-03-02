@@ -241,11 +241,12 @@ const ProductSaleModal = ({ isOpen, onClose, onSaleRecorded, preselectedProduct 
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
-                isEditMode 
-                  ? 'bg-gradient-to-br from-blue-500 to-blue-600' 
-                  : 'bg-gradient-to-br from-green-500 to-green-600'
+                isDark ? 'bg-slate-700' : 'bg-gray-100'
               }`}>
-                {isEditMode ? <Edit3 className="w-5 h-5 text-white" /> : <ShoppingBag className="w-5 h-5 text-white" />}
+                {isEditMode 
+                  ? <Edit3 className={`w-5 h-5 ${isDark ? 'text-slate-300' : 'text-gray-500'}`} /> 
+                  : <ShoppingBag className={`w-5 h-5 ${isDark ? 'text-slate-300' : 'text-gray-500'}`} />
+                }
               </div>
               <div>
                 <h2 className={`text-lg font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
@@ -411,75 +412,65 @@ const ProductSaleModal = ({ isOpen, onClose, onSaleRecorded, preselectedProduct 
                 />
               </div>
 
-              {/* Emissions preview */}
-              {selectedProduct && quantity > 0 && (
+              {/* Emissions preview — always visible when product selected */}
+              {selectedProduct && (
                 <div className="space-y-3">
-                  <p className={`text-sm font-medium ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
-                    {language === 'fr' ? 'Émissions totales :' : 'Gesamtemissionen:'}
+                  <p className={`text-sm font-medium ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+                    {language === 'fr' ? 'Émissions estimées' : 'Geschätzte Emissionen'}
                   </p>
                   
-                  <div className="space-y-2">
-                    {manufacturingEmissions > 0 && (
-                      <div className={`flex items-center justify-between p-3 rounded-xl ${isDark ? 'bg-orange-500/20' : 'bg-orange-50'}`}>
-                        <div className="flex items-center gap-2">
-                          <Factory className="w-4 h-4 text-orange-500" />
-                          <span className={`text-sm ${isDark ? 'text-orange-300' : 'text-orange-700'}`}>
-                            Transformation
-                          </span>
-                        </div>
-                        <span className="font-medium text-orange-500">
-                          {(manufacturingEmissions / 1000).toFixed(4)} tCO₂e
+                  <div className="grid grid-cols-3 gap-3">
+                    <div className={`p-3 rounded-xl ${isDark ? 'bg-slate-700/60' : 'bg-gray-50'}`}>
+                      <div className="flex items-center gap-1.5 mb-1">
+                        <Factory className={`w-3.5 h-3.5 ${isDark ? 'text-slate-400' : 'text-gray-400'}`} />
+                        <span className={`text-xs ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>Transformation</span>
+                      </div>
+                      <p className={`text-sm font-semibold tabular-nums ${isDark ? 'text-slate-200' : 'text-gray-800'}`} data-testid="preview-manufacturing">
+                        {(manufacturingEmissions / 1000).toFixed(3)} <span className={`text-xs font-normal ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>tCO₂e</span>
+                      </p>
+                    </div>
+                    <div className={`p-3 rounded-xl ${isDark ? 'bg-slate-700/60' : 'bg-gray-50'}`}>
+                      <div className="flex items-center gap-1.5 mb-1">
+                        <Leaf className={`w-3.5 h-3.5 ${isDark ? 'text-slate-400' : 'text-gray-400'}`} />
+                        <span className={`text-xs ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+                          {language === 'fr' ? 'Utilisation' : 'Nutzung'}
                         </span>
                       </div>
-                    )}
-                    
-                    {usageEmissions > 0 && (
-                      <div className={`flex items-center justify-between p-3 rounded-xl ${isDark ? 'bg-green-500/20' : 'bg-green-50'}`}>
-                        <div className="flex items-center gap-2">
-                          <Leaf className="w-4 h-4 text-green-500" />
-                          <span className={`text-sm ${isDark ? 'text-green-300' : 'text-green-700'}`}>
-                            {language === 'fr' ? 'Utilisation' : 'Nutzung'}
-                          </span>
-                        </div>
-                        <span className="font-medium text-green-500">
-                          {(usageEmissions / 1000).toFixed(4)} tCO₂e
+                      <p className={`text-sm font-semibold tabular-nums ${isDark ? 'text-slate-200' : 'text-gray-800'}`} data-testid="preview-usage">
+                        {(usageEmissions / 1000).toFixed(3)} <span className={`text-xs font-normal ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>tCO₂e</span>
+                      </p>
+                    </div>
+                    <div className={`p-3 rounded-xl ${isDark ? 'bg-slate-700/60' : 'bg-gray-50'}`}>
+                      <div className="flex items-center gap-1.5 mb-1">
+                        <Recycle className={`w-3.5 h-3.5 ${isDark ? 'text-slate-400' : 'text-gray-400'}`} />
+                        <span className={`text-xs ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+                          {language === 'fr' ? 'Fin de vie' : 'Lebensende'}
                         </span>
                       </div>
-                    )}
-                    
-                    {disposalEmissions > 0 && (
-                      <div className={`flex items-center justify-between p-3 rounded-xl ${isDark ? 'bg-blue-500/20' : 'bg-blue-50'}`}>
-                        <div className="flex items-center gap-2">
-                          <Recycle className="w-4 h-4 text-blue-500" />
-                          <span className={`text-sm ${isDark ? 'text-blue-300' : 'text-blue-700'}`}>
-                            {language === 'fr' ? 'Fin de vie' : 'Lebensende'}
-                          </span>
-                        </div>
-                        <span className="font-medium text-blue-500">
-                          {(disposalEmissions / 1000).toFixed(4)} tCO₂e
-                        </span>
-                      </div>
-                    )}
+                      <p className={`text-sm font-semibold tabular-nums ${isDark ? 'text-slate-200' : 'text-gray-800'}`} data-testid="preview-disposal">
+                        {(disposalEmissions / 1000).toFixed(3)} <span className={`text-xs font-normal ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>tCO₂e</span>
+                      </p>
+                    </div>
                   </div>
                   
-                  <div className={`p-4 rounded-xl bg-gradient-to-r from-purple-500 to-purple-600 text-white`}>
+                  <div className={`p-3 rounded-xl border ${isDark ? 'border-slate-600 bg-slate-700/40' : 'border-gray-200 bg-gray-50/80'}`}>
                     <div className="flex items-center justify-between">
-                      <span className="text-purple-200">Total</span>
-                      <span className="text-2xl font-bold">
-                        {(totalEmissions / 1000).toFixed(4)} tCO₂e
+                      <span className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>Total</span>
+                      <span className={`text-lg font-bold tabular-nums ${isDark ? 'text-white' : 'text-gray-900'}`} data-testid="preview-total">
+                        {(totalEmissions / 1000).toFixed(3)} tCO₂e
                       </span>
                     </div>
                   </div>
                   
-                  <div className={`flex items-center gap-2 text-xs ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-                    <ArrowRight className="w-3 h-3" />
-                    <span>
+                  {quantity > 0 && (
+                    <p className={`flex items-center gap-1.5 text-xs ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>
+                      <ArrowRight className="w-3 h-3" />
                       {language === 'fr' 
-                        ? 'Les émissions seront automatiquement ventilées dans le Scope 3 Aval'
-                        : 'Emissionen werden automatisch in Scope 3 Downstream aufgeteilt'
+                        ? 'Ventilé automatiquement dans le Scope 3 Aval'
+                        : 'Automatisch in Scope 3 Downstream aufgeteilt'
                       }
-                    </span>
-                  </div>
+                    </p>
+                  )}
                 </div>
               )}
             </>
@@ -514,9 +505,7 @@ const ProductSaleModal = ({ isOpen, onClose, onSaleRecorded, preselectedProduct 
               <button
                 onClick={handleSubmit}
                 disabled={!selectedProduct || quantity <= 0 || submitting}
-                className={`flex-1 px-4 py-3 text-white rounded-xl transition-all disabled:opacity-50 flex items-center justify-center gap-2 ${
-                  isEditMode ? 'bg-blue-500 hover:bg-blue-600' : 'bg-green-500 hover:bg-green-600'
-                }`}
+                className={`flex-1 px-4 py-3 text-white rounded-xl transition-all disabled:opacity-50 flex items-center justify-center gap-2 bg-blue-500 hover:bg-blue-600`}
                 data-testid="save-sale-btn"
               >
                 {submitting ? (
