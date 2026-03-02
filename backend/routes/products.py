@@ -212,6 +212,136 @@ async def create_product_enhanced(
     return serialize_doc(product_doc)
 
 
+@router.put("/enhanced/{product_id}")
+async def update_product_enhanced(
+    product_id: str,
+    product: ProductCreateEnhanced,
+    current_user: dict = Depends(get_current_user)
+):
+    """Update a product with detailed lifecycle analysis"""
+    # Verify product exists and belongs to user
+    existing = products_collection.find_one({
+        "_id": ObjectId(product_id),
+        "tenant_id": current_user["id"]
+    })
+    
+    if not existing:
+        raise HTTPException(status_code=404, detail="Product not found")
+    
+    product_doc = product.model_dump()
+    product_doc["tenant_id"] = current_user["id"]
+    product_doc["updated_at"] = datetime.now(timezone.utc).isoformat()
+    product_doc["is_enhanced"] = True
+    
+    # Calculate emissions for each lifecycle phase
+    manufacturing_emissions = 0
+    usage_emissions = 0
+    disposal_emissions = 0
+    
+    # Materials emissions (manufacturing)
+    for material in product.materials:
+        if material.emission_factor_id:
+            try:
+                factor = emission_factors_collection.find_one({"_id": ObjectId(material.emission_factor_id)})
+                if factor:
+                    for impact in factor.get("impacts", []):
+                        manufacturing_emissions += material.weight_kg * impact.get("value", 0)
+            except:
+                pass
+    
+    # Transformation emissions (manufacturing)
+    if product.transformation:
+        trans = product.transformation
+        if trans.electricity_factor_id:
+            try:
+                factor = emission_factors_collection.find_one({"_id": ObjectId(trans.electricity_factor_id)})
+                if factor:
+                    for impact in factor.get("impacts", []):
+                        manufacturing_emissions += trans.electricity_kwh * impact.get("value", 0)
+            except:
+                pass
+        if trans.fuel_factor_id:
+            try:
+                factor = emission_factors_collection.find_one({"_id": ObjectId(trans.fuel_factor_id)})
+                if factor:
+                    for impact in factor.get("impacts", []):
+                        manufacturing_emissions += trans.fuel_kwh * impact.get("value", 0)
+            except:
+                pass
+    
+    # Usage phase emissions
+    if product.usage:
+        usage = product.usage
+        cycles_lifetime = usage.cycles_per_year * product.lifespan_years
+        
+        if usage.electricity_factor_id:
+            try:
+                factor = emission_factors_collection.find_one({"_id": ObjectId(usage.electricity_factor_id)})
+                if factor:
+                    for impact in factor.get("impacts", []):
+                        usage_emissions += usage.electricity_kwh_per_cycle * cycles_lifetime * impact.get("value", 0)
+            except:
+                pass
+        
+        if usage.fuel_factor_id:
+            try:
+                factor = emission_factors_collection.find_one({"_id": ObjectId(usage.fuel_factor_id)})
+                if factor:
+                    for impact in factor.get("impacts", []):
+                        usage_emissions += usage.fuel_kwh_per_cycle * cycles_lifetime * impact.get("value", 0)
+            except:
+                pass
+        
+        if usage.carburant_factor_id:
+            try:
+                factor = emission_factors_collection.find_one({"_id": ObjectId(usage.carburant_factor_id)})
+                if factor:
+                    for impact in factor.get("impacts", []):
+                        usage_emissions += usage.carburant_l_per_cycle * cycles_lifetime * impact.get("value", 0)
+            except:
+                pass
+        
+        if usage.refrigerant_factor_id:
+            try:
+                factor = emission_factors_collection.find_one({"_id": ObjectId(usage.refrigerant_factor_id)})
+                if factor:
+                    for impact in factor.get("impacts", []):
+                        usage_emissions += usage.refrigerant_kg_per_cycle * cycles_lifetime * impact.get("value", 0)
+            except:
+                pass
+    
+    # End of life emissions
+    for material in product.materials:
+        if material.treatment_emission_factor_id:
+            try:
+                factor = emission_factors_collection.find_one({"_id": ObjectId(material.treatment_emission_factor_id)})
+                if factor:
+                    for impact in factor.get("impacts", []):
+                        disposal_emissions += material.weight_kg * impact.get("value", 0)
+            except:
+                pass
+    
+    product_doc["manufacturing_emissions"] = manufacturing_emissions
+    product_doc["usage_emissions"] = usage_emissions
+    product_doc["disposal_emissions"] = disposal_emissions
+    product_doc["total_emissions_per_unit"] = manufacturing_emissions + usage_emissions + disposal_emissions
+    
+    # Preserve existing fields that should not be overwritten
+    product_doc["created_at"] = existing.get("created_at")
+    product_doc["sales_history"] = existing.get("sales_history", [])
+    product_doc["total_sales"] = existing.get("total_sales", 0)
+    product_doc["emission_profiles"] = existing.get("emission_profiles", [])
+    
+    # Update the product
+    products_collection.update_one(
+        {"_id": ObjectId(product_id)},
+        {"$set": product_doc}
+    )
+    
+    updated = products_collection.find_one({"_id": ObjectId(product_id)})
+    return serialize_doc(updated)
+
+
 @router.get("/{product_id}")
 async def get_product(product_id: str, current_user: dict = Depends(get_current_user)):
     """Get a specific product"""
