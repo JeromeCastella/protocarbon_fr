@@ -130,12 +130,12 @@ const DashboardResultsTab = ({
     
     return Object.entries(scopeData.categories)
       .map(([name, value]) => ({
-        name: name,
+        name: t(`categories.${name}`) || name,
         emissions: value
       }))
       .sort((a, b) => b.emissions - a.emissions)
       .slice(0, 10);
-  }, [drillDownScope, scopeChartData]);
+  }, [drillDownScope, scopeChartData, t]);
   
   // Top 10 subcategories from all scopes
   const top10Subcategories = useMemo(() => {
