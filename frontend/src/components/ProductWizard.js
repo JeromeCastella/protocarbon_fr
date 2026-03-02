@@ -30,6 +30,7 @@ const ProductWizard = ({ isOpen, onClose, onProductCreated, editingProduct = nul
   const [loading, setLoading] = useState(false);
   const [showCloseConfirm, setShowCloseConfirm] = useState(false);
   const [errorToast, setErrorToast] = useState(null);
+  const [validationErrors, setValidationErrors] = useState([]);
   
   // Emission factors
   const [materials, setMaterials] = useState([]);
@@ -123,6 +124,24 @@ const ProductWizard = ({ isOpen, onClose, onProductCreated, editingProduct = nul
       // Load refrigerant factors
       const refrigRes = await axios.get(`${API_URL}/api/emission-factors/by-category/emissions_fugitives`, { headers });
       setRefrigerantFactors(refrigRes.data || []);
+      
+      // O5-A2: Valeurs par défaut intelligentes (seulement en création, pas en édition)
+      if (!editingProduct) {
+        // Pré-sélectionner le premier facteur d'électricité (mix suisse si disponible)
+        const elecData = elecRes.data || [];
+        const swissMix = elecData.find(f => 
+          (f.name_simple_fr || f.name_fr || '').toLowerCase().includes('suisse') ||
+          (f.name_fr || '').toLowerCase().includes('schweiz')
+        ) || elecData[0];
+        
+        if (swissMix) {
+          setFormData(prev => ({
+            ...prev,
+            transformation: { ...prev.transformation, electricity_factor_id: swissMix.id },
+            usage: { ...prev.usage, electricity_factor_id: swissMix.id }
+          }));
+        }
+      }
     } catch (error) {
       console.error('Failed to load emission factors:', error);
     }
@@ -314,20 +333,53 @@ const ProductWizard = ({ isOpen, onClose, onProductCreated, editingProduct = nul
 
   const currentStepIndex = steps.findIndex(s => s.number === currentStep);
   const isLastStep = currentStepIndex === steps.length - 1;
-  const canGoNext = currentStep === 1 ? formData.name.trim() !== '' : true;
+
+  // O2-A1: Validation par étape
+  const validateStep = (stepNum) => {
+    const errors = [];
+    if (stepNum === 1) {
+      if (!formData.name.trim()) errors.push('Le nom du produit est obligatoire.');
+      if (formData.lifespan_years <= 0) errors.push('La durée de vie doit être supérieure à 0.');
+    }
+    if (stepNum === 2) {
+      if (formData.materials.length === 0) errors.push('Ajoutez au moins une matière.');
+      formData.materials.forEach((m, i) => {
+        if (!m.emission_factor_id) errors.push(`Matière ${i + 1} : sélectionnez un matériau.`);
+        if (!m.weight_kg || m.weight_kg <= 0) errors.push(`Matière ${i + 1} : le poids doit être supérieur à 0.`);
+      });
+    }
+    if (stepNum === 4) {
+      if (formData.usage.cycles_per_year <= 0) errors.push('Le nombre de cycles par an doit être supérieur à 0.');
+    }
+    return errors;
+  };
+
+  const canGoNext = validationErrors.length === 0 && (
+    currentStep === 1 ? formData.name.trim() !== '' :
+    currentStep === 2 ? formData.materials.length > 0 && formData.materials.every(m => m.emission_factor_id && m.weight_kg > 0) :
+    true
+  );
 
   const goNext = () => {
-    const nextStep = steps[currentStepIndex + 1];
-    if (nextStep) {
-      setCurrentStep(nextStep.number);
+    const errors = validateStep(currentStep);
+    if (errors.length > 0) {
+      setValidationErrors(errors);
+      return;
     }
+    setValidationErrors([]);
+    const nextStep = steps[currentStepIndex + 1];
+    if (nextStep) setCurrentStep(nextStep.number);
+  };
+
+  const goToStep = (stepNum) => {
+    setValidationErrors([]);
+    setCurrentStep(stepNum);
   };
 
   const goPrev = () => {
+    setValidationErrors([]);
     const prevStep = steps[currentStepIndex - 1];
-    if (prevStep) {
-      setCurrentStep(prevStep.number);
-    }
+    if (prevStep) setCurrentStep(prevStep.number);
   };
 
   if (!isOpen) return null;
@@ -394,6 +446,18 @@ const ProductWizard = ({ isOpen, onClose, onProductCreated, editingProduct = nul
 
         {/* Content */}
         <div className="flex-1 overflow-y-auto p-6">
+          {/* Erreurs de validation */}
+          {validationErrors.length > 0 && (
+            <div className={`mb-4 p-3 rounded-xl flex items-start gap-2 ${isDark ? 'bg-red-500/15 border border-red-500/30' : 'bg-red-50 border border-red-200'}`} data-testid="validation-errors">
+              <AlertTriangle className="w-4 h-4 text-red-500 mt-0.5 flex-shrink-0" />
+              <ul className="text-sm space-y-0.5">
+                {validationErrors.map((err, i) => (
+                  <li key={i} className={isDark ? 'text-red-300' : 'text-red-600'}>{err}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+
           <AnimatePresence mode="wait">
             {/* Step 1: General Info */}
             {currentStep === 1 && (
@@ -405,6 +469,12 @@ const ProductWizard = ({ isOpen, onClose, onProductCreated, editingProduct = nul
                 className="space-y-6"
               >
                 <div>
+                  <div className={`mb-4 p-3 rounded-xl flex items-start gap-2 ${isDark ? 'bg-slate-700/50' : 'bg-gray-50'}`}>
+                    <Info className={`w-4 h-4 mt-0.5 flex-shrink-0 ${isDark ? 'text-blue-400' : 'text-blue-500'}`} />
+                    <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+                      Renseignez les informations de base de votre produit. Seul le nom est obligatoire pour continuer.
+                    </p>
+                  </div>
                   <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
                     Nom du produit *
                   </label>
@@ -515,7 +585,7 @@ const ProductWizard = ({ isOpen, onClose, onProductCreated, editingProduct = nul
                       Composition du produit
                     </h3>
                     <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-                      Définissez les matières composant le produit pour calculer les émissions de fin de vie
+                      Listez les matières et leur poids. Chaque matière sera associée à un traitement de fin de vie.
                     </p>
                   </div>
                   <button
@@ -663,12 +733,12 @@ const ProductWizard = ({ isOpen, onClose, onProductCreated, editingProduct = nul
                 <div className={`p-4 rounded-xl ${isDark ? 'bg-slate-700' : 'bg-gray-50'}`}>
                   <div className="flex items-center gap-2 mb-4">
                     <Zap className="w-5 h-5 text-yellow-500" />
-                    <span className={`font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>Électricité</span>
+                    <span className={`font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>Consommation électrique (fabrication)</span>
                   </div>
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <label className={`block text-xs mb-1 ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-                        Consommation (kWh/unité)
+                        Kilowattheures par unité produite
                       </label>
                       <input
                         type="number"
@@ -771,7 +841,7 @@ const ProductWizard = ({ isOpen, onClose, onProductCreated, editingProduct = nul
                     Consommations en phase d&apos;utilisation
                   </h3>
                   <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-                    Définissez les consommations par cycle d&apos;utilisation
+                    Estimez ce que consomme votre produit à chaque utilisation (un cycle de lavage, un trajet, une journée de fonctionnement...).
                   </p>
                 </div>
                 
@@ -808,12 +878,12 @@ const ProductWizard = ({ isOpen, onClose, onProductCreated, editingProduct = nul
                 <div className={`p-4 rounded-xl ${isDark ? 'bg-slate-700' : 'bg-gray-50'}`}>
                   <div className="flex items-center gap-2 mb-4">
                     <Zap className="w-5 h-5 text-yellow-500" />
-                    <span className={`font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>Électricité</span>
+                    <span className={`font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>Consommation électrique</span>
                   </div>
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <label className={`block text-xs mb-1 ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-                        kWh par cycle
+                        Kilowattheures par cycle d'utilisation
                       </label>
                       <input
                         type="number"
@@ -960,7 +1030,7 @@ const ProductWizard = ({ isOpen, onClose, onProductCreated, editingProduct = nul
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <label className={`block text-xs mb-1 ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-                        kg par cycle (fuites)
+                        kg par cycle (fuites estimées)
                       </label>
                       <input
                         type="number"
@@ -1022,25 +1092,58 @@ const ProductWizard = ({ isOpen, onClose, onProductCreated, editingProduct = nul
                 
                 {/* Product info */}
                 <div className={`p-4 rounded-xl ${isDark ? 'bg-slate-700' : 'bg-gray-50'}`}>
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center">
-                      <Package className="w-6 h-6 text-white" />
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center">
+                        <Package className="w-6 h-6 text-white" />
+                      </div>
+                      <div>
+                        <h4 className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                          {formData.name}
+                        </h4>
+                        <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+                          {formData.product_type === 'semi_finished' ? 'Produit semi-fini' : 'Produit fini'} · 
+                          Durée de vie : {formData.lifespan_years} an(s) · 
+                          {formData.materials.length} matière(s)
+                        </p>
+                      </div>
                     </div>
-                    <div>
-                      <h4 className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                        {formData.name}
-                      </h4>
-                      <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-                        {formData.product_type === 'semi_finished' ? 'Produit semi-fini' : 'Produit fini'} • 
-                        Durée de vie: {formData.lifespan_years} an(s) • 
-                        {formData.materials.length} matière(s)
-                      </p>
-                    </div>
+                    <button
+                      onClick={() => goToStep(1)}
+                      data-testid="summary-edit-step1"
+                      className={`text-xs px-3 py-1.5 rounded-lg font-medium transition-colors ${
+                        isDark ? 'text-blue-400 hover:bg-slate-600' : 'text-blue-600 hover:bg-blue-50'
+                      }`}
+                    >
+                      Modifier
+                    </button>
                   </div>
                 </div>
                 
                 {/* Emissions breakdown */}
-                <div className="grid grid-cols-3 gap-4">
+                <div>
+                  <div className="flex items-center justify-between mb-3">
+                    <h4 className={`text-sm font-semibold ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
+                      Répartition des émissions
+                    </h4>
+                    <div className="flex gap-2">
+                      {formData.product_type === 'semi_finished' && (
+                        <button onClick={() => goToStep(3)} data-testid="summary-edit-step3"
+                          className={`text-xs px-3 py-1.5 rounded-lg font-medium transition-colors ${isDark ? 'text-blue-400 hover:bg-slate-600' : 'text-blue-600 hover:bg-blue-50'}`}>
+                          Fabrication
+                        </button>
+                      )}
+                      <button onClick={() => goToStep(4)} data-testid="summary-edit-step4"
+                        className={`text-xs px-3 py-1.5 rounded-lg font-medium transition-colors ${isDark ? 'text-blue-400 hover:bg-slate-600' : 'text-blue-600 hover:bg-blue-50'}`}>
+                        Utilisation
+                      </button>
+                      <button onClick={() => goToStep(2)} data-testid="summary-edit-step2"
+                        className={`text-xs px-3 py-1.5 rounded-lg font-medium transition-colors ${isDark ? 'text-blue-400 hover:bg-slate-600' : 'text-blue-600 hover:bg-blue-50'}`}>
+                        Matières
+                      </button>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-3 gap-4">
                   {formData.product_type === 'semi_finished' && (
                     <div className={`p-4 rounded-xl ${isDark ? 'bg-orange-500/20' : 'bg-orange-50'}`}>
                       <div className="flex items-center gap-2 mb-2">
@@ -1075,6 +1178,7 @@ const ProductWizard = ({ isOpen, onClose, onProductCreated, editingProduct = nul
                     </p>
                     <p className={`text-xs ${isDark ? 'text-blue-300' : 'text-blue-600'}`}>kgCO₂e/unité</p>
                   </div>
+                </div>
                 </div>
                 
                 {/* Total */}
