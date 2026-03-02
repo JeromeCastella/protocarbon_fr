@@ -13,13 +13,19 @@ Calculateur d'empreinte carbone avec tableau de bord, objectifs et panneau d'adm
 - Recherche fuzzy (Fuse.js), FactorCard tooltips, boutons "Modifier"
 - Enrichissement IA complet (1191/1191 facteurs)
 - Conversion d'unités (5 dimensions, stockage Option C)
-- **Product Wizard Phase 1** : cartes refondues (header neutre, badge, émissions dominantes, barre composée, menu actions, détail pleine page)
-- **Product Wizard Phase 2** : validation par étape, aide contextuelle, revision rapide depuis résumé, labels lisibles, défauts intelligents, unités en toutes lettres
+- **Product Wizard Phase 1** : cartes refondues, badge, émissions dominantes, barre composée, menu actions, détail pleine page
+- **Product Wizard Phase 2** : validation par étape, aide contextuelle, revision rapide depuis résumé, labels lisibles, défauts intelligents
+- **Product Wizard Phase 3 — O3-A1 (DONE 2026-03-02)** : Refonte complète de la logique produit pour GHG Protocol
+  - Suppression de l'approche ACV (composition matières)
+  - Nouveau wizard : Informations → Transformation 3.10 (semi-finis) → Utilisation 3.11 → Fin de vie 3.12 → Résumé
+  - Backend aligne sur EndOfLifeEntry, TransformationEnergy, UsageEnergy
+  - Enrichissement des facteurs (impacts[] → value flattened) pour affichage correct
+  - Labels mis à jour : "Matières" → "Transformation" dans EmissionsBar et ProductDetailModal
 
 ## Backlog priorisé
 
-### Phase 3 — Données et calculs (backend)
-- O3-A1 : Séparer materials_emissions / disposal_emissions
+### Phase 3 — Données et calculs (backend) - EN COURS
+- ~~O3-A1 : Refonte logique produit GHG Protocol~~ ✅
 - O3-A2 : Versionning profils produit
 - O3-A3 : Recalcul automatique MAJ facteurs
 - O3-A4 : Endpoint calcul preview
