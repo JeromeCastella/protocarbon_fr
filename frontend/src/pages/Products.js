@@ -151,22 +151,6 @@ const ProductCard = ({ product, index, isDark, language, onEdit, onDelete, onDup
           <h3 className={`font-semibold truncate ${isDark ? 'text-white' : 'text-gray-900'}`}>
             {product.name}
           </h3>
-          <div className="flex items-center gap-2 mt-1">
-            <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${
-              product.product_type === 'semi_finished'
-                ? (isDark ? 'bg-amber-500/20 text-amber-300' : 'bg-amber-100 text-amber-700')
-                : (isDark ? 'bg-blue-500/20 text-blue-300' : 'bg-blue-100 text-blue-700')
-            }`} data-testid="product-type-badge">
-              {product.product_type === 'semi_finished'
-                ? (language === 'fr' ? 'Semi-fini' : 'Halbfertig')
-                : (language === 'fr' ? 'Fini' : 'Fertig')}
-            </span>
-            {product.lifespan_years > 0 && (
-              <span className={`text-xs ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>
-                {product.lifespan_years} {language === 'fr' ? 'ans' : 'Jahre'}
-              </span>
-            )}
-          </div>
         </div>
         <div className="flex items-center gap-1">
           <button
@@ -191,7 +175,7 @@ const ProductCard = ({ product, index, isDark, language, onEdit, onDelete, onDup
       {/* Dominant emissions value */}
       <div className="px-5 py-4">
         <p className={`text-3xl font-bold tracking-tight ${isDark ? 'text-white' : 'text-gray-900'}`} data-testid="total-emissions">
-          {total.toFixed(total >= 100 ? 0 : total >= 1 ? 1 : 2)}
+          {total.toFixed(1)}
           <span className={`text-base font-normal ml-1.5 ${isDark ? 'text-slate-400' : 'text-gray-400'}`}>
             kgCO₂e / {language === 'fr' ? 'unité' : 'Einheit'}
           </span>
