@@ -16,35 +16,34 @@ Calculateur d'empreinte carbone avec tableau de bord, objectifs et panneau d'adm
 - Enrichissement IA complet (1191/1191 facteurs)
 - Conversion d'unités (5 dimensions, stockage Option C)
 
-### Phase 3 — Produits GHG Protocol (COMPLÈTE 2026-03-02)
+### Phase 3 — Produits GHG Protocol (COMPLÈTE)
 - O3-A1 : Refonte logique produit (Transformation 3.10 / Utilisation 3.11 / Fin de vie 3.12)
 - O3-A2 : Versionning profils produit (version_history[] + snapshots)
 - O3-A3 : Recalcul automatique (single + batch from factor)
 - O3-A4 : Endpoint preview
 - O3-A5 : Validation backend complète
-- O3-A6 : Factor snapshots + stale_factors + deprecation soft-delete + badge "Recalcul disponible"
+- O3-A6 : Factor snapshots + stale_factors + deprecation + badge "Recalcul disponible"
+
+### Phase 4 — Mapping GHG (VÉRIFIÉ)
+- O4-A1/A2/A3 : Les ventes de produits créent automatiquement des activités dans le bilan GHG
+  - Transformation → transformation_produits (scope3_aval)
+  - Utilisation → utilisation_produits (scope3_aval)
+  - Fin de vie → fin_vie_produits (scope3_aval)
+- Mise à jour/suppression de vente → MAJ/suppression des activités liées
+- Configuration exercice 2029 corrigée (catégories produit réintégrées)
 
 ### UX Améliorations
 - Bouton Modifier visible sur fiche + modale détail
 - Cartes allégées (sans badge type, sans durée de vie, arrondi 1 digit)
 - ProductSaleModal sobre (indicateurs toujours visibles, couleurs neutres)
 
-## API Endpoints produits
-- `POST /api/products/enhanced` — Création avec validation + snapshots
-- `PUT /api/products/enhanced/{id}` — Mise à jour avec versionning
-- `POST /api/products/preview` — Calcul sans sauvegarde
-- `GET /api/products/{id}/versions` — Historique versions
-- `POST /api/products/{id}/recalculate` — Recalcul unitaire (efface stale)
-- `POST /api/products/recalculate-from-factor/{factor_id}` — Recalcul batch
-
 ## Backlog priorisé
 
 ### Phase 3 — Restant
 - O3-A7 : Logs de calcul pour audit
 
-### Phase 4 — Protocol et dette technique
-- O4-A1/A2/A3 : Mapping scopes GHG automatique
-- O5-A4/A5 : Refactoring wizard sous-composants
+### Phase 5 — Dette technique
+- O5-A4/A5 : Refactoring wizard en sous-composants
 
 ### Autres (P2-P3)
 - Admin: AdminUnitsTab.jsx, champs enrichis AdminFactorsTab.jsx
