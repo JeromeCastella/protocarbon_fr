@@ -25,14 +25,37 @@ router = APIRouter(prefix="/products", tags=["Products"])
 
 # ==================== HELPER FUNCTIONS ====================
 
+def _resolve_factor(fid):
+    """Look up a factor by ID and return (factor_doc, total_value). Returns (None, 0) if not found."""
+    if not fid:
+        return None, 0
+    try:
+        factor = emission_factors_collection.find_one({"_id": ObjectId(fid)})
+        if factor:
+            total = sum(imp.get("value", 0) for imp in factor.get("impacts", []))
+            return factor, total
+    except Exception:
+        pass
+    return None, 0
+
+
 def _calculate_emissions(product_data: dict) -> dict:
     """
     Calculate emissions for each GHG lifecycle phase.
-    Works with both Pydantic model_dump() dicts and raw MongoDB docs.
+    Also builds factor_snapshots for traceability.
     """
     manufacturing_emissions = 0
     usage_emissions = 0
     disposal_emissions = 0
+    snapshots = {}
+
+    def _add_snapshot(fid, factor, value):
+        if fid and factor:
+            snapshots[fid] = {
+                "name": factor.get("name_simple_fr") or factor.get("name_fr") or factor.get("name", ""),
+                "value": value,
+                "snapshot_at": datetime.now(timezone.utc).isoformat(),
+            }
 
     # 3.10 Transformation (semi-finished only)
     transformation = product_data.get("transformation")
@@ -44,13 +67,10 @@ def _calculate_emissions(product_data: dict) -> dict:
             (transformation.get("refrigerant_factor_id"), transformation.get("refrigerant_kg", 0)),
         ]:
             if fid and qty > 0:
-                try:
-                    factor = emission_factors_collection.find_one({"_id": ObjectId(fid)})
-                    if factor:
-                        for impact in factor.get("impacts", []):
-                            manufacturing_emissions += qty * impact.get("value", 0)
-                except Exception:
-                    pass
+                factor, val = _resolve_factor(fid)
+                if factor:
+                    manufacturing_emissions += qty * val
+                    _add_snapshot(fid, factor, val)
 
     # 3.11 Usage
     usage = product_data.get("usage")
@@ -64,33 +84,62 @@ def _calculate_emissions(product_data: dict) -> dict:
             (usage.get("refrigerant_factor_id"), usage.get("refrigerant_kg_per_cycle", 0)),
         ]:
             if fid and qty_per_cycle > 0:
-                try:
-                    factor = emission_factors_collection.find_one({"_id": ObjectId(fid)})
-                    if factor:
-                        for impact in factor.get("impacts", []):
-                            usage_emissions += qty_per_cycle * cycles_lifetime * impact.get("value", 0)
-                except Exception:
-                    pass
+                factor, val = _resolve_factor(fid)
+                if factor:
+                    usage_emissions += qty_per_cycle * cycles_lifetime * val
+                    _add_snapshot(fid, factor, val)
 
     # 3.12 End of life
     for entry in product_data.get("end_of_life", []):
         fid = entry.get("emission_factor_id")
         qty = entry.get("quantity", 0)
         if fid and qty > 0:
-            try:
-                factor = emission_factors_collection.find_one({"_id": ObjectId(fid)})
-                if factor:
-                    for impact in factor.get("impacts", []):
-                        disposal_emissions += qty * impact.get("value", 0)
-            except Exception:
-                pass
+            factor, val = _resolve_factor(fid)
+            if factor:
+                disposal_emissions += qty * val
+                _add_snapshot(fid, factor, val)
 
     return {
         "manufacturing_emissions": manufacturing_emissions,
         "usage_emissions": usage_emissions,
         "disposal_emissions": disposal_emissions,
         "total_emissions_per_unit": manufacturing_emissions + usage_emissions + disposal_emissions,
+        "factor_snapshots": snapshots,
+        "stale_factors": [],
+        "last_calculated_at": datetime.now(timezone.utc).isoformat(),
     }
+
+
+def _collect_factor_ids(product_data: dict) -> list:
+    """Collect all emission factor IDs referenced by a product."""
+    ids = set()
+    t = product_data.get("transformation") or {}
+    u = product_data.get("usage") or {}
+    for key in ["electricity_factor_id", "fuel_factor_id", "carburant_factor_id", "refrigerant_factor_id"]:
+        if t.get(key):
+            ids.add(t[key])
+        if u.get(key):
+            ids.add(u[key])
+    for entry in product_data.get("end_of_life", []):
+        if entry.get("emission_factor_id"):
+            ids.add(entry["emission_factor_id"])
+    return list(ids)
+
+
+def _mark_products_stale_for_factor(factor_id: str):
+    """Mark all products using a given factor as stale (add factor_id to stale_factors array)."""
+    query = {"$or": [
+        {"transformation.electricity_factor_id": factor_id},
+        {"transformation.fuel_factor_id": factor_id},
+        {"transformation.carburant_factor_id": factor_id},
+        {"transformation.refrigerant_factor_id": factor_id},
+        {"usage.electricity_factor_id": factor_id},
+        {"usage.fuel_factor_id": factor_id},
+        {"usage.carburant_factor_id": factor_id},
+        {"usage.refrigerant_factor_id": factor_id},
+        {"end_of_life.emission_factor_id": factor_id},
+    ]}
+    products_collection.update_many(query, {"$addToSet": {"stale_factors": factor_id}})
 
 
 def _validate_product_factors(product_data: dict) -> List[str]:
@@ -552,7 +601,10 @@ async def recalculate_product(
     return {
         "product_id": product_id,
         "previous_total": old_total,
-        **emissions,
+        "manufacturing_emissions": emissions["manufacturing_emissions"],
+        "usage_emissions": emissions["usage_emissions"],
+        "disposal_emissions": emissions["disposal_emissions"],
+        "total_emissions_per_unit": emissions["total_emissions_per_unit"],
         "changed": abs(old_total - emissions["total_emissions_per_unit"]) > 1e-9,
     }
 

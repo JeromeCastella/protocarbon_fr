@@ -189,6 +189,10 @@ async def update_emission_factor_v2(
     if result.matched_count == 0:
         raise HTTPException(status_code=404, detail="Emission factor not found")
     
+    # O3-A6: Mark all products using this factor as stale
+    from routes.products import _mark_products_stale_for_factor
+    _mark_products_stale_for_factor(factor_id)
+    
     updated = emission_factors_collection.find_one({"_id": ObjectId(factor_id)})
     return serialize_doc(updated)
 
@@ -298,7 +302,11 @@ async def soft_delete_factor(
     factor_id: str,
     current_user: dict = Depends(require_admin)
 ):
-    """Soft delete an emission factor (archive)"""
+    """Soft delete (deprecate) an emission factor. Products using it are marked stale."""
+    # O3-A6: Mark affected products stale before deprecating
+    from routes.products import _mark_products_stale_for_factor
+    _mark_products_stale_for_factor(factor_id)
+    
     result = emission_factors_collection.update_one(
         {"_id": ObjectId(factor_id)},
         {

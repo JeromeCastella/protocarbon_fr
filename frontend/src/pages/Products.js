@@ -6,7 +6,7 @@ import axios from 'axios';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Package, Plus, Trash2, Factory, Leaf, Recycle, ShoppingBag,
-  Edit3, Clock, MoreHorizontal, Copy, X
+  Edit3, Clock, MoreHorizontal, Copy, X, RefreshCw
 } from 'lucide-react';
 import ProductWizard from '../components/ProductWizard';
 import ProductSaleModal from '../components/ProductSaleModal';
@@ -125,14 +125,14 @@ const ActionsMenu = ({ onEdit, onDuplicate, onDelete, onVersions, isDark, langua
 };
 
 // ── Product card ───────────────────────────────────────────────────
-const ProductCard = ({ product, index, isDark, language, onEdit, onDelete, onDuplicate, onVersions, onSale, onClick }) => {
-  const isEnhanced = product.is_enhanced;
+const ProductCard = ({ product, index, isDark, language, onEdit, onDelete, onDuplicate, onVersions, onSale, onRecalculate, onClick }) => {
   const mfg = product.active_manufacturing_emissions ?? product.manufacturing_emissions ?? 0;
   const usage = product.active_usage_emissions ?? product.usage_emissions ?? 0;
   const disposal = product.active_disposal_emissions ?? product.disposal_emissions ?? 0;
   const total = product.active_total_emissions_per_unit ?? product.total_emissions_per_unit ?? 0;
   const fyQty = product.fiscal_year_sales_quantity ?? product.total_sales ?? 0;
   const fyEmissions = product.fiscal_year_sales_emissions ?? 0;
+  const isStale = (product.stale_factors || []).length > 0;
 
   return (
     <motion.div
@@ -171,6 +171,22 @@ const ProductCard = ({ product, index, isDark, language, onEdit, onDelete, onDup
           />
         </div>
       </div>
+
+      {/* Stale indicator */}
+      {isStale && (
+        <div className="px-5">
+          <button
+            onClick={(e) => { e.stopPropagation(); onRecalculate(product); }}
+            data-testid={`recalculate-btn-${product.id}`}
+            className={`w-full flex items-center justify-between gap-2 px-3 py-2 rounded-lg text-xs font-medium transition-colors ${
+              isDark ? 'bg-amber-500/10 text-amber-300 hover:bg-amber-500/20' : 'bg-amber-50 text-amber-700 hover:bg-amber-100'
+            }`}
+          >
+            <span>{language === 'fr' ? 'Recalcul disponible' : 'Neuberechnung verfügbar'}</span>
+            <RefreshCw className="w-3.5 h-3.5" />
+          </button>
+        </div>
+      )}
 
       {/* Dominant emissions value */}
       <div className="px-5 py-4">
@@ -264,6 +280,13 @@ const Products = () => {
   const handleVersions = (product) => { setSelectedProduct(product); setShowVersionsModal(true); };
   const handleCardClick = (product) => { setSelectedProduct(product); setShowDetailModal(true); };
 
+  const handleRecalculate = async (product) => {
+    try {
+      await axios.post(`${API_URL}/api/products/${product.id}/recalculate`);
+      fetchProducts();
+    } catch (err) { console.error('Failed to recalculate:', err); }
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -348,6 +371,7 @@ const Products = () => {
               onDuplicate={handleDuplicate}
               onVersions={handleVersions}
               onSale={handleSale}
+              onRecalculate={handleRecalculate}
               onClick={() => handleCardClick(product)}
             />
           ))}
