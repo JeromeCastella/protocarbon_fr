@@ -142,7 +142,7 @@ const ProductCard = ({ product, index, isDark, language, onEdit, onDelete, onDup
       onClick={onClick}
       data-testid={`product-card-${product.id}`}
       className={`rounded-2xl overflow-hidden cursor-pointer transition-all hover:shadow-lg ${
-        isDark ? 'bg-slate-800 hover:bg-slate-750 ring-1 ring-slate-700' : 'bg-white shadow-md hover:shadow-xl'
+        isDark ? 'bg-slate-800 hover:bg-slate-750 ring-1 ring-slate-700' : 'bg-blue-50/60 shadow-md hover:shadow-xl ring-1 ring-blue-100'
       }`}
     >
       {/* Header — neutral */}
