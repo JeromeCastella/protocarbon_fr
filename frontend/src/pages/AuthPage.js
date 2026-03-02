@@ -69,7 +69,7 @@ const AuthPage = () => {
             <div className="w-20 h-20 rounded-2xl bg-white/20 backdrop-blur flex items-center justify-center mb-8">
               <Leaf className="w-12 h-12" />
             </div>
-            <h1 className="text-5xl font-bold mb-6">Proto Carbon</h1>
+            <h1 className="text-5xl font-bold mb-6">CarbonScope</h1>
             <p className="text-xl text-blue-100 mb-8">
               {language === 'fr' 
                 ? 'Calculez et réduisez votre empreinte carbone selon le protocole GHG'

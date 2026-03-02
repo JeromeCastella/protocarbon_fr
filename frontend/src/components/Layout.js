@@ -56,7 +56,7 @@ const Layout = () => {
               <Leaf className="w-6 h-6 text-white" />
             </div>
             <div>
-              <h1 className="font-bold text-lg">Proto_carbon_{language.toUpperCase()}</h1>
+              <h1 className="font-bold text-lg">CarbonScope</h1>
               <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>Comptabilité carbone</p>
             </div>
           </div>
