@@ -23,7 +23,7 @@ load_dotenv('/app/backend/.env')
 
 from emergentintegrations.llm.chat import LlmChat, UserMessage
 
-EMERGENT_KEY = "sk-emergent-8D6B2A74f0250FbB85"
+EMERGENT_KEY = os.environ.get("EMERGENT_LLM_KEY", "")
 
 # Logging
 logging.basicConfig(

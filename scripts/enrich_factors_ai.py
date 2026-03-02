@@ -9,7 +9,7 @@ import uuid
 
 from emergentintegrations.llm.chat import LlmChat, UserMessage
 
-EMERGENT_KEY = "sk-emergent-75eA3EbCd255bB1CeD"
+EMERGENT_KEY = os.environ.get("EMERGENT_LLM_KEY", "")
 
 ENRICHMENT_PROMPT = """Tu es un expert en bilan carbone pour des entreprises suisses. Tu dois enrichir les facteurs d'émission pour les rendre compréhensibles par des utilisateurs novices.
 
