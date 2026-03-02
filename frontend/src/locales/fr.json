@@ -72,6 +72,7 @@
     "removeAdmin": "Retirer admin"
   },
   "nav": {
+    "tagline" : "Comptabilité carbone",
     "dashboard": "Tableau de bord",
     "generalInfo": "Informations générales",
     "dataEntry": "Saisie de données",

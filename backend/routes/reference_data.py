@@ -173,6 +173,29 @@ async def get_factors_by_category(
     return [serialize_doc(f) for f in factors]
 
 
+@router.get("/emission-factors/product-materials")
+async def get_product_materials(current_user: dict = Depends(get_current_user)):
+    """Get emission factors suitable for product material composition (weight-based)"""
+    material_subcategories = [
+        'beton', 'bois_et_produits_en_bois', 'matieres_plastique', 'produits_en_metal',
+        'colles_et_masses_de_jointoiement', 'enduits_et_revetements', 'produits_disolation_thermique',
+        'pierres_de_taille', 'mortiers_et_enduits', 'produits_chimiques_et_combustibles',
+        'equipements_et_technologies', 'construction', 'produits', 'autres_materiaux_massifs',
+        'building_and_construction_materials', 'metal_materials', 'glass_and_windows',
+        'flooring_materials', 'insulation_and_waterproofing', 'furniture_and_fixtures',
+        'fenetre_et_facades_verre_metal', 'installations_de_chauffage', 'installations_electriques',
+        'installations_sanitaires', 'portes', 'tuyaux', 'ventilation', 'vetements_et_textiles',
+        'revetements_de_sol', 'les_detancheite_et_feuilles_de_protection'
+    ]
+    factors = list(emission_factors_collection.find({
+        "deleted_at": None,
+        "subcategory": {"$in": material_subcategories},
+        "input_units": {"$in": ["kg", "t", "g"]}
+    }).limit(500))
+    return [serialize_doc(f) for f in factors]
+
+
+
 @router.get("/emission-factors/by-tags")
 async def get_factors_by_tags(
     tags: str,

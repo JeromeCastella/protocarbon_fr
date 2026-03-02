@@ -57,7 +57,7 @@ const Layout = () => {
             </div>
             <div>
               <h1 className="font-bold text-lg">CarbonScope</h1>
-              <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>Comptabilité carbone</p>
+              <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>{t('nav.tagline')}</p>
             </div>
           </div>
         </div>

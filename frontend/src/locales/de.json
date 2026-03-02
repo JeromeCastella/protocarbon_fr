@@ -72,6 +72,7 @@
     "removeAdmin": "Admin entfernen"
   },
   "nav": {
+    "tagline" : "Kohlenstoffbuchhaltung",
     "dashboard": "Dashboard",
     "generalInfo": "Allgemeine Informationen",
     "dataEntry": "Dateneingabe",

@@ -96,26 +96,29 @@ const ProductWizard = ({ isOpen, onClose, onProductCreated, editingProduct = nul
 
   const loadEmissionFactors = async () => {
     try {
+      const token = localStorage.getItem('token');
+      const headers = token ? { Authorization: `Bearer ${token}` } : {};
+      
       const [matRes, treatRes, elecRes] = await Promise.all([
-        axios.get(`${API_URL}/api/emission-factors/by-category/materiaux`),
-        axios.get(`${API_URL}/api/emission-factors/by-category/fin_vie_produits`),
-        axios.get(`${API_URL}/api/emission-factors/by-category/electricite`)
+        axios.get(`${API_URL}/api/emission-factors/product-materials`, { headers }),
+        axios.get(`${API_URL}/api/emission-factors/by-category/fin_vie_produits`, { headers }),
+        axios.get(`${API_URL}/api/emission-factors/by-category/electricite`, { headers })
       ]);
       
       setMaterials(matRes.data || []);
       setTreatments(treatRes.data || []);
       setElectricityFactors(elecRes.data || []);
       
-      // Load fuel factors (combustible)
-      const fuelRes = await axios.get(`${API_URL}/api/emission-factors/by-tags?tags=combustible`);
+      // Load fuel factors (combustibles)
+      const fuelRes = await axios.get(`${API_URL}/api/emission-factors/by-category/combustion_fixe`, { headers });
       setFuelFactors(fuelRes.data || []);
       
       // Load carburant factors
-      const carbuRes = await axios.get(`${API_URL}/api/emission-factors/by-tags?tags=carburant`);
+      const carbuRes = await axios.get(`${API_URL}/api/emission-factors/by-tags?tags=carburant`, { headers });
       setCarburantFactors(carbuRes.data || []);
       
       // Load refrigerant factors
-      const refrigRes = await axios.get(`${API_URL}/api/emission-factors/by-category/refrigerants`);
+      const refrigRes = await axios.get(`${API_URL}/api/emission-factors/by-category/emissions_fugitives`, { headers });
       setRefrigerantFactors(refrigRes.data || []);
     } catch (error) {
       console.error('Failed to load emission factors:', error);
