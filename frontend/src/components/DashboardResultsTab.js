@@ -9,7 +9,27 @@ import {
   TrendingDown, 
   Minus,
   ArrowLeft,
-  ChevronRight
+  ChevronRight,
+  Truck,
+  Flame,
+  Factory,
+  Wind,
+  Zap,
+  Thermometer,
+  Snowflake,
+  ShoppingCart,
+  Wrench,
+  Fuel,
+  Trash2,
+  Plane,
+  Car,
+  Building,
+  Settings,
+  Power,
+  Recycle,
+  Home,
+  Store,
+  Package
 } from 'lucide-react';
 import {
   BarChart,
@@ -39,6 +59,30 @@ const CATEGORY_COLORS = [
   '#FCD34D', '#FCA5A5', '#F9A8D4', '#818CF8',
   '#BEF264', '#FB923C'
 ];
+
+// Icon mapping (same as DataEntry.js)
+const iconMap = {
+  truck: Truck, flame: Flame, factory: Factory, wind: Wind, zap: Zap,
+  thermometer: Thermometer, snowflake: Snowflake, 'shopping-cart': ShoppingCart,
+  tool: Wrench, fuel: Fuel, trash: Trash2, plane: Plane, car: Car,
+  building: Building, settings: Settings, power: Power, recycle: Recycle,
+  home: Home, store: Store, 'trending-up': TrendingUp, package: Package
+};
+
+// Category code → icon name (matches API category.icon field)
+const CATEGORY_ICONS = {
+  combustion_mobile: 'truck', combustion_fixe: 'flame',
+  emissions_procedes: 'factory', emissions_fugitives: 'wind',
+  electricite: 'zap', chaleur_vapeur: 'thermometer',
+  refroidissement: 'snowflake', biens_services_achetes: 'shopping-cart',
+  biens_equipement: 'tool', activites_combustibles_energie: 'fuel',
+  transport_distribution_amont: 'truck', dechets_operations: 'trash',
+  deplacements_professionnels: 'plane', deplacements_domicile_travail: 'car',
+  actifs_loues_amont: 'building', transport_distribution_aval: 'truck',
+  transformation_produits: 'settings', utilisation_produits: 'power',
+  fin_vie_produits: 'recycle', actifs_loues_aval: 'home',
+  franchises: 'store', investissements: 'trending-up'
+};
 
 // Format emissions value
 const formatEmissions = (valueInKg) => {
@@ -129,8 +173,10 @@ const DashboardResultsTab = ({
     if (!scopeData?.categories) return [];
     
     return Object.entries(scopeData.categories)
-      .map(([name, value]) => ({
-        name: t(`categories.${name}`) || name,
+      .map(([key, value]) => ({
+        key,
+        name: t(`categories.${key}`) || key,
+        icon: CATEGORY_ICONS[key] || 'factory',
         emissions: value
       }))
       .sort((a, b) => b.emissions - a.emissions)
@@ -193,6 +239,41 @@ const DashboardResultsTab = ({
           {language === 'fr' ? 'Cliquez pour voir les catégories' : 'Klicken für Kategorien'}
         </p>
       </div>
+    );
+  };
+
+  // Custom tooltip for drill-down (shows full category name + value)
+  const DrillDownTooltip = ({ active, payload }) => {
+    if (!active || !payload?.length) return null;
+    const data = payload[0].payload;
+    const IconComp = iconMap[data.icon] || Factory;
+    return (
+      <div className={`px-3 py-2.5 rounded-xl shadow-lg ${isDark ? 'bg-slate-800 border border-slate-700' : 'bg-white border border-gray-200'}`}>
+        <div className="flex items-center gap-2 mb-1">
+          <IconComp className={`w-4 h-4 ${isDark ? 'text-slate-300' : 'text-gray-600'}`} />
+          <p className={`font-medium text-sm ${isDark ? 'text-white' : 'text-gray-900'}`}>{data.name}</p>
+        </div>
+        <p className={`text-sm ${isDark ? 'text-slate-300' : 'text-gray-600'}`}>
+          {formatChartValue(data.emissions)}
+        </p>
+      </div>
+    );
+  };
+
+  // Custom XAxis tick for drill-down: renders icon instead of text label
+  const CategoryIconTick = ({ x, y, payload }) => {
+    const entry = categoryDrillDownData.find(d => d.name === payload.value);
+    const iconName = entry?.icon || 'factory';
+    const IconComp = iconMap[iconName] || Factory;
+    const color = isDark ? '#94a3b8' : '#6b7280';
+    return (
+      <g transform={`translate(${x},${y + 4})`}>
+        <foreignObject x={-10} y={0} width={20} height={20}>
+          <div xmlns="http://www.w3.org/1999/xhtml" title={payload.value} style={{ cursor: 'default', display: 'flex', justifyContent: 'center' }}>
+            <IconComp size={16} color={color} />
+          </div>
+        </foreignObject>
+      </g>
     );
   };
 
@@ -354,17 +435,17 @@ const DashboardResultsTab = ({
                 <CartesianGrid strokeDasharray="2 4" stroke={isDark ? '#334155' : '#f1f5f9'} vertical={false} />
                 <XAxis 
                   dataKey="name" 
-                  tick={{ fill: isDark ? '#94a3b8' : '#6b7280', fontSize: 12 }}
+                  tick={drillDownScope ? <CategoryIconTick /> : { fill: isDark ? '#94a3b8' : '#6b7280', fontSize: 12 }}
                   interval={0}
-                  angle={drillDownScope ? -45 : 0}
-                  textAnchor={drillDownScope ? 'end' : 'middle'}
-                  height={drillDownScope ? 80 : 30}
+                  height={drillDownScope ? 32 : 30}
+                  axisLine={false}
+                  tickLine={false}
                 />
                 <YAxis 
                   tickFormatter={(value) => `${(value / 1000).toFixed(0)}t`}
                   tick={{ fill: isDark ? '#94a3b8' : '#6b7280' }}
                 />
-                <Tooltip content={drillDownScope ? undefined : <ScopeTooltip />} />
+                <Tooltip content={drillDownScope ? <DrillDownTooltip /> : <ScopeTooltip />} />
                 <Bar 
                   dataKey="emissions" 
                   barSize={36}

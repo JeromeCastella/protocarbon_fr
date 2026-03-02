@@ -17,16 +17,10 @@ Calculateur d'empreinte carbone avec tableau de bord, objectifs et panneau d'adm
 - Conversion d'unités (5 dimensions, stockage Option C)
 
 ### Phase 3 — Produits GHG Protocol (COMPLETE)
-- O3-A1 : Refonte logique produit (Transformation 3.10 / Utilisation 3.11 / Fin de vie 3.12)
-- O3-A2 : Versionning profils produit (version_history[] + snapshots)
-- O3-A3 : Recalcul automatique (single + batch from factor)
-- O3-A4 : Endpoint preview
-- O3-A5 : Validation backend complète
-- O3-A6 : Factor snapshots + stale_factors + deprecation + badge "Recalcul disponible"
+- O3-A1 à O3-A6 : Logique produit GHG, versionning, recalcul, preview, validation, snapshots
 
 ### Phase 4 — Mapping GHG (VERIFIE)
-- O4-A1/A2/A3 : Ventes produits -> activités GHG automatiques
-- Configuration exercice 2029 corrigée
+- Ventes produits -> activités GHG automatiques
 
 ### UX Améliorations
 - Bouton Modifier visible sur fiche + modale détail
@@ -34,17 +28,15 @@ Calculateur d'empreinte carbone avec tableau de bord, objectifs et panneau d'adm
 
 ### Modernisation Dashboard — Onglet Résultats (COMPLETE - 02/03/2026)
 - Palette pastels (#FB923C, #60A5FA, #A78BFA, #F9A8D4)
-- AreaChart empilé (stackId) avec gradients pour l'évolution des émissions
-- Top 7 sous-catégories avec traductions FR (+ drill-down traduit)
-- Barres Scope affinées, coins arrondis, grille discrète
-- Ombres allégées (shadow-sm + border)
+- AreaChart empilé (stackId) avec gradients pour l'évolution
+- Top 7 sous-catégories avec traductions FR
+- Barres Scope affinées, grille discrète, ombres allégées
+- **Drill-down avec icônes** : custom XAxis tick utilisant les icônes Lucide des catégories (même iconMap que DataEntry) + tooltip personnalisé avec icône + nom traduit
 
 ### Modernisation Dashboard — Onglet Objectifs (COMPLETE - 02/03/2026)
-- Trajectoire : ComposedChart avec Areas gradient dashed (cibles) + Bars pastels (réels)
+- ComposedChart avec Areas gradient dashed (cibles) + Bars pastels (réels)
 - Couleurs harmonisées : sky-400 (Scope 1&2), violet-400 (Scope 3)
-- Grille allégée, axes épurés, tooltip modernisé (borderRadius 10px, boxShadow)
-- Ombres allégées sur toutes les cartes
-- Compatible dark/light mode
+- Grille allégée, axes épurés, tooltip modernisé
 
 ## Backlog priorisé
 
