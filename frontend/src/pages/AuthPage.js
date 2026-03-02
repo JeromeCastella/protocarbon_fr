@@ -78,6 +78,15 @@ const AuthPage = () => {
             </p>
           </motion.div>
         </div>
+        {/* Brand logo — bottom left */}
+        <div className="absolute bottom-8 left-12 z-10">
+          <img
+            src={language === 'fr' ? '/logo-plan-climat-fr.png' : '/logo-plan-climat-de.png'}
+            alt={language === 'fr' ? 'Mon Plan Climat' : 'Mein Klimaplan'}
+            className="h-12 w-auto opacity-90"
+            data-testid="brand-logo"
+          />
+        </div>
       </div>
 
       {/* Right side - Form */}
