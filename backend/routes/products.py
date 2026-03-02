@@ -23,6 +23,141 @@ from utils import serialize_doc
 router = APIRouter(prefix="/products", tags=["Products"])
 
 
+# ==================== HELPER FUNCTIONS ====================
+
+def _calculate_emissions(product_data: dict) -> dict:
+    """
+    Calculate emissions for each GHG lifecycle phase.
+    Works with both Pydantic model_dump() dicts and raw MongoDB docs.
+    """
+    manufacturing_emissions = 0
+    usage_emissions = 0
+    disposal_emissions = 0
+
+    # 3.10 Transformation (semi-finished only)
+    transformation = product_data.get("transformation")
+    if transformation:
+        for fid, qty in [
+            (transformation.get("electricity_factor_id"), transformation.get("electricity_kwh", 0)),
+            (transformation.get("fuel_factor_id"), transformation.get("fuel_kwh", 0)),
+            (transformation.get("carburant_factor_id"), transformation.get("carburant_l", 0)),
+            (transformation.get("refrigerant_factor_id"), transformation.get("refrigerant_kg", 0)),
+        ]:
+            if fid and qty > 0:
+                try:
+                    factor = emission_factors_collection.find_one({"_id": ObjectId(fid)})
+                    if factor:
+                        for impact in factor.get("impacts", []):
+                            manufacturing_emissions += qty * impact.get("value", 0)
+                except Exception:
+                    pass
+
+    # 3.11 Usage
+    usage = product_data.get("usage")
+    if usage:
+        lifespan = product_data.get("lifespan_years", 1)
+        cycles_lifetime = usage.get("cycles_per_year", 1) * lifespan
+        for fid, qty_per_cycle in [
+            (usage.get("electricity_factor_id"), usage.get("electricity_kwh_per_cycle", 0)),
+            (usage.get("fuel_factor_id"), usage.get("fuel_kwh_per_cycle", 0)),
+            (usage.get("carburant_factor_id"), usage.get("carburant_l_per_cycle", 0)),
+            (usage.get("refrigerant_factor_id"), usage.get("refrigerant_kg_per_cycle", 0)),
+        ]:
+            if fid and qty_per_cycle > 0:
+                try:
+                    factor = emission_factors_collection.find_one({"_id": ObjectId(fid)})
+                    if factor:
+                        for impact in factor.get("impacts", []):
+                            usage_emissions += qty_per_cycle * cycles_lifetime * impact.get("value", 0)
+                except Exception:
+                    pass
+
+    # 3.12 End of life
+    for entry in product_data.get("end_of_life", []):
+        fid = entry.get("emission_factor_id")
+        qty = entry.get("quantity", 0)
+        if fid and qty > 0:
+            try:
+                factor = emission_factors_collection.find_one({"_id": ObjectId(fid)})
+                if factor:
+                    for impact in factor.get("impacts", []):
+                        disposal_emissions += qty * impact.get("value", 0)
+            except Exception:
+                pass
+
+    return {
+        "manufacturing_emissions": manufacturing_emissions,
+        "usage_emissions": usage_emissions,
+        "disposal_emissions": disposal_emissions,
+        "total_emissions_per_unit": manufacturing_emissions + usage_emissions + disposal_emissions,
+    }
+
+
+def _validate_product_factors(product_data: dict) -> List[str]:
+    """
+    O3-A5: Validate that referenced factor IDs exist and quantities are valid.
+    Returns a list of error messages (empty = valid).
+    """
+    errors = []
+
+    if not product_data.get("name", "").strip():
+        errors.append("Le nom du produit est obligatoire.")
+    if product_data.get("lifespan_years", 0) <= 0:
+        errors.append("La durée de vie doit être supérieure à 0.")
+
+    def _check_factor(fid, label):
+        if not fid:
+            return
+        try:
+            if not emission_factors_collection.find_one({"_id": ObjectId(fid)}):
+                errors.append(f"{label} — facteur introuvable (ID: {fid})")
+        except Exception:
+            errors.append(f"{label} — ID de facteur invalide ({fid})")
+
+    # Transformation factors
+    t = product_data.get("transformation")
+    if t:
+        _check_factor(t.get("electricity_factor_id"), "Transformation: électricité")
+        _check_factor(t.get("fuel_factor_id"), "Transformation: combustible")
+        _check_factor(t.get("carburant_factor_id"), "Transformation: carburant")
+        _check_factor(t.get("refrigerant_factor_id"), "Transformation: réfrigérant")
+
+    # Usage factors
+    u = product_data.get("usage")
+    if u:
+        if u.get("cycles_per_year", 0) <= 0:
+            errors.append("Le nombre de cycles par an doit être supérieur à 0.")
+        _check_factor(u.get("electricity_factor_id"), "Utilisation: électricité")
+        _check_factor(u.get("fuel_factor_id"), "Utilisation: combustible")
+        _check_factor(u.get("carburant_factor_id"), "Utilisation: carburant")
+        _check_factor(u.get("refrigerant_factor_id"), "Utilisation: réfrigérant")
+
+    # End of life entries
+    for i, entry in enumerate(product_data.get("end_of_life", [])):
+        _check_factor(entry.get("emission_factor_id"), f"Fin de vie ligne {i+1}")
+        if entry.get("quantity", 0) < 0:
+            errors.append(f"Fin de vie ligne {i+1} — la quantité ne peut pas être négative.")
+
+    return errors
+
+
+def _build_version_snapshot(existing: dict) -> dict:
+    """O3-A2: Build a snapshot of the current product state for version history."""
+    return {
+        "version": existing.get("version", 1),
+        "snapshot_at": datetime.now(timezone.utc).isoformat(),
+        "manufacturing_emissions": existing.get("manufacturing_emissions", 0),
+        "usage_emissions": existing.get("usage_emissions", 0),
+        "disposal_emissions": existing.get("disposal_emissions", 0),
+        "total_emissions_per_unit": existing.get("total_emissions_per_unit", 0),
+        "transformation": existing.get("transformation"),
+        "usage": existing.get("usage"),
+        "end_of_life": existing.get("end_of_life", []),
+        "lifespan_years": existing.get("lifespan_years"),
+        "product_type": existing.get("product_type"),
+    }
+
+
 @router.get("")
 async def get_products(
     include_archived: bool = False,
@@ -150,68 +285,22 @@ async def create_product_enhanced(
     product: ProductCreateEnhanced, 
     current_user: dict = Depends(get_current_user)
 ):
-    """Create a product with detailed lifecycle analysis"""
+    """Create a product with detailed lifecycle analysis (GHG Protocol)"""
     product_doc = product.model_dump()
     product_doc["tenant_id"] = current_user["id"]
     product_doc["created_at"] = datetime.now(timezone.utc).isoformat()
+    product_doc["is_enhanced"] = True
+    product_doc["version"] = 1
+    product_doc["version_history"] = []
     
-    # Calculate emissions for each lifecycle phase
-    manufacturing_emissions = 0
-    usage_emissions = 0
-    disposal_emissions = 0
+    # O3-A5: Validate factor references
+    validation_errors = _validate_product_factors(product_doc)
+    if validation_errors:
+        raise HTTPException(status_code=422, detail={"errors": validation_errors})
     
-    # Transformation emissions (3.10 - manufacturing, semi-finished only)
-    if product.transformation:
-        trans = product.transformation
-        for fid, qty in [
-            (trans.electricity_factor_id, trans.electricity_kwh),
-            (trans.fuel_factor_id, trans.fuel_kwh),
-            (trans.carburant_factor_id, trans.carburant_l),
-            (trans.refrigerant_factor_id, trans.refrigerant_kg),
-        ]:
-            if fid and qty > 0:
-                try:
-                    factor = emission_factors_collection.find_one({"_id": ObjectId(fid)})
-                    if factor:
-                        for impact in factor.get("impacts", []):
-                            manufacturing_emissions += qty * impact.get("value", 0)
-                except:
-                    pass
-    
-    # Usage phase emissions (3.11)
-    if product.usage:
-        usage = product.usage
-        cycles_lifetime = usage.cycles_per_year * product.lifespan_years
-        for fid, qty_per_cycle in [
-            (usage.electricity_factor_id, usage.electricity_kwh_per_cycle),
-            (usage.fuel_factor_id, usage.fuel_kwh_per_cycle),
-            (usage.carburant_factor_id, usage.carburant_l_per_cycle),
-            (usage.refrigerant_factor_id, usage.refrigerant_kg_per_cycle),
-        ]:
-            if fid and qty_per_cycle > 0:
-                try:
-                    factor = emission_factors_collection.find_one({"_id": ObjectId(fid)})
-                    if factor:
-                        for impact in factor.get("impacts", []):
-                            usage_emissions += qty_per_cycle * cycles_lifetime * impact.get("value", 0)
-                except:
-                    pass
-    
-    # End of life emissions (3.12)
-    for entry in product.end_of_life:
-        if entry.emission_factor_id and entry.quantity > 0:
-            try:
-                factor = emission_factors_collection.find_one({"_id": ObjectId(entry.emission_factor_id)})
-                if factor:
-                    for impact in factor.get("impacts", []):
-                        disposal_emissions += entry.quantity * impact.get("value", 0)
-            except:
-                pass
-    
-    product_doc["manufacturing_emissions"] = manufacturing_emissions
-    product_doc["usage_emissions"] = usage_emissions
-    product_doc["disposal_emissions"] = disposal_emissions
-    product_doc["total_emissions_per_unit"] = manufacturing_emissions + usage_emissions + disposal_emissions
+    # Calculate emissions using shared helper
+    emissions = _calculate_emissions(product_doc)
+    product_doc.update(emissions)
     
     result = products_collection.insert_one(product_doc)
     product_doc["id"] = str(result.inserted_id)
@@ -225,8 +314,7 @@ async def update_product_enhanced(
     product: ProductCreateEnhanced,
     current_user: dict = Depends(get_current_user)
 ):
-    """Update a product with detailed lifecycle analysis"""
-    # Verify product exists and belongs to user
+    """Update a product with detailed lifecycle analysis. Saves a version snapshot before applying changes."""
     existing = products_collection.find_one({
         "_id": ObjectId(product_id),
         "tenant_id": current_user["id"]
@@ -240,63 +328,19 @@ async def update_product_enhanced(
     product_doc["updated_at"] = datetime.now(timezone.utc).isoformat()
     product_doc["is_enhanced"] = True
     
-    # Calculate emissions for each lifecycle phase
-    manufacturing_emissions = 0
-    usage_emissions = 0
-    disposal_emissions = 0
+    # O3-A5: Validate factor references
+    validation_errors = _validate_product_factors(product_doc)
+    if validation_errors:
+        raise HTTPException(status_code=422, detail={"errors": validation_errors})
     
-    # Transformation emissions (3.10 - manufacturing, semi-finished only)
-    if product.transformation:
-        trans = product.transformation
-        for fid, qty in [
-            (trans.electricity_factor_id, trans.electricity_kwh),
-            (trans.fuel_factor_id, trans.fuel_kwh),
-            (trans.carburant_factor_id, trans.carburant_l),
-            (trans.refrigerant_factor_id, trans.refrigerant_kg),
-        ]:
-            if fid and qty > 0:
-                try:
-                    factor = emission_factors_collection.find_one({"_id": ObjectId(fid)})
-                    if factor:
-                        for impact in factor.get("impacts", []):
-                            manufacturing_emissions += qty * impact.get("value", 0)
-                except:
-                    pass
+    # O3-A2: Save version snapshot before applying changes
+    snapshot = _build_version_snapshot(existing)
+    current_version = existing.get("version", 1)
+    product_doc["version"] = current_version + 1
     
-    # Usage phase emissions (3.11)
-    if product.usage:
-        usage = product.usage
-        cycles_lifetime = usage.cycles_per_year * product.lifespan_years
-        for fid, qty_per_cycle in [
-            (usage.electricity_factor_id, usage.electricity_kwh_per_cycle),
-            (usage.fuel_factor_id, usage.fuel_kwh_per_cycle),
-            (usage.carburant_factor_id, usage.carburant_l_per_cycle),
-            (usage.refrigerant_factor_id, usage.refrigerant_kg_per_cycle),
-        ]:
-            if fid and qty_per_cycle > 0:
-                try:
-                    factor = emission_factors_collection.find_one({"_id": ObjectId(fid)})
-                    if factor:
-                        for impact in factor.get("impacts", []):
-                            usage_emissions += qty_per_cycle * cycles_lifetime * impact.get("value", 0)
-                except:
-                    pass
-    
-    # End of life emissions (3.12)
-    for entry in product.end_of_life:
-        if entry.emission_factor_id and entry.quantity > 0:
-            try:
-                factor = emission_factors_collection.find_one({"_id": ObjectId(entry.emission_factor_id)})
-                if factor:
-                    for impact in factor.get("impacts", []):
-                        disposal_emissions += entry.quantity * impact.get("value", 0)
-            except:
-                pass
-    
-    product_doc["manufacturing_emissions"] = manufacturing_emissions
-    product_doc["usage_emissions"] = usage_emissions
-    product_doc["disposal_emissions"] = disposal_emissions
-    product_doc["total_emissions_per_unit"] = manufacturing_emissions + usage_emissions + disposal_emissions
+    # Calculate emissions using shared helper
+    emissions = _calculate_emissions(product_doc)
+    product_doc.update(emissions)
     
     # Preserve existing fields that should not be overwritten
     product_doc["created_at"] = existing.get("created_at")
@@ -304,10 +348,13 @@ async def update_product_enhanced(
     product_doc["total_sales"] = existing.get("total_sales", 0)
     product_doc["emission_profiles"] = existing.get("emission_profiles", [])
     
-    # Update the product
+    # Append snapshot to version history and update
     products_collection.update_one(
         {"_id": ObjectId(product_id)},
-        {"$set": product_doc}
+        {
+            "$set": product_doc,
+            "$push": {"version_history": snapshot}
+        }
     )
     
     updated = products_collection.find_one({"_id": ObjectId(product_id)})
@@ -430,6 +477,141 @@ async def restore_product(product_id: str, current_user: dict = Depends(get_curr
         raise HTTPException(status_code=404, detail="Archived product not found")
     
     return {"message": "Product restored"}
+
+
+# ==================== O3-A4: PREVIEW (calculate without saving) ====================
+
+@router.post("/preview")
+async def preview_product_emissions(
+    product: ProductCreateEnhanced,
+    current_user: dict = Depends(get_current_user)
+):
+    """Calculate emissions for a product configuration without saving it to the database."""
+    product_data = product.model_dump()
+
+    # Validate factors
+    validation_errors = _validate_product_factors(product_data)
+    if validation_errors:
+        raise HTTPException(status_code=422, detail={"errors": validation_errors})
+
+    emissions = _calculate_emissions(product_data)
+    return {
+        "manufacturing_emissions": emissions["manufacturing_emissions"],
+        "usage_emissions": emissions["usage_emissions"],
+        "disposal_emissions": emissions["disposal_emissions"],
+        "total_emissions_per_unit": emissions["total_emissions_per_unit"],
+    }
+
+
+# ==================== O3-A2: VERSION HISTORY ====================
+
+@router.get("/{product_id}/versions")
+async def get_product_versions(
+    product_id: str,
+    current_user: dict = Depends(get_current_user)
+):
+    """Get version history for a product (O3-A2)."""
+    product = products_collection.find_one({
+        "_id": ObjectId(product_id),
+        "tenant_id": current_user["id"]
+    })
+    if not product:
+        raise HTTPException(status_code=404, detail="Product not found")
+
+    return {
+        "product_id": str(product["_id"]),
+        "product_name": product.get("name", ""),
+        "current_version": product.get("version", 1),
+        "history": product.get("version_history", [])
+    }
+
+
+# ==================== O3-A3: RECALCULATE EMISSIONS ====================
+
+@router.post("/{product_id}/recalculate")
+async def recalculate_product(
+    product_id: str,
+    current_user: dict = Depends(get_current_user)
+):
+    """Recalculate emissions for a single product based on current factor values."""
+    existing = products_collection.find_one({
+        "_id": ObjectId(product_id),
+        "tenant_id": current_user["id"]
+    })
+    if not existing:
+        raise HTTPException(status_code=404, detail="Product not found")
+
+    old_total = existing.get("total_emissions_per_unit", 0)
+    emissions = _calculate_emissions(existing)
+
+    products_collection.update_one(
+        {"_id": ObjectId(product_id)},
+        {"$set": emissions}
+    )
+
+    return {
+        "product_id": product_id,
+        "previous_total": old_total,
+        **emissions,
+        "changed": abs(old_total - emissions["total_emissions_per_unit"]) > 1e-9,
+    }
+
+
+@router.post("/recalculate-from-factor/{factor_id}")
+async def recalculate_products_using_factor(
+    factor_id: str,
+    current_user: dict = Depends(get_current_user)
+):
+    """
+    O3-A3: When a factor changes, find and recalculate all products using it.
+    Searches transformation, usage, and end_of_life references.
+    """
+    # Verify factor exists
+    try:
+        factor = emission_factors_collection.find_one({"_id": ObjectId(factor_id)})
+    except Exception:
+        raise HTTPException(status_code=400, detail="ID de facteur invalide")
+    if not factor:
+        raise HTTPException(status_code=404, detail="Facteur introuvable")
+
+    # Find all products referencing this factor
+    affected = products_collection.find({
+        "tenant_id": current_user["id"],
+        "$or": [
+            {"transformation.electricity_factor_id": factor_id},
+            {"transformation.fuel_factor_id": factor_id},
+            {"transformation.carburant_factor_id": factor_id},
+            {"transformation.refrigerant_factor_id": factor_id},
+            {"usage.electricity_factor_id": factor_id},
+            {"usage.fuel_factor_id": factor_id},
+            {"usage.carburant_factor_id": factor_id},
+            {"usage.refrigerant_factor_id": factor_id},
+            {"end_of_life.emission_factor_id": factor_id},
+        ]
+    })
+
+    results = []
+    for product in affected:
+        pid = str(product["_id"])
+        old_total = product.get("total_emissions_per_unit", 0)
+        emissions = _calculate_emissions(product)
+        products_collection.update_one(
+            {"_id": product["_id"]},
+            {"$set": emissions}
+        )
+        results.append({
+            "product_id": pid,
+            "name": product.get("name", ""),
+            "previous_total": old_total,
+            "new_total": emissions["total_emissions_per_unit"],
+            "changed": abs(old_total - emissions["total_emissions_per_unit"]) > 1e-9,
+        })
+
+    return {
+        "factor_id": factor_id,
+        "affected_products": len(results),
+        "products": results
+    }
 
 
 # ==================== EMISSION PROFILES ====================

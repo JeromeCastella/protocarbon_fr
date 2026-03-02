@@ -238,7 +238,15 @@ const ProductWizard = ({ isOpen, onClose, onProductCreated, editingProduct = nul
       handleClose();
     } catch (error) {
       console.error('Failed to save product:', error);
-      const msg = error.response?.data?.detail || 'Une erreur est survenue lors de la sauvegarde.';
+      const detail = error.response?.data?.detail;
+      let msg;
+      if (detail?.errors) {
+        msg = detail.errors.join('\n');
+      } else if (typeof detail === 'string') {
+        msg = detail;
+      } else {
+        msg = 'Une erreur est survenue lors de la sauvegarde.';
+      }
       setErrorToast(msg);
       setTimeout(() => setErrorToast(null), 5000);
     } finally {
