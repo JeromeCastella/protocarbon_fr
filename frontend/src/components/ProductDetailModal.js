@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-  X, Factory, Leaf, Recycle, Package, ShoppingBag, Edit3, Plus, Clock, Scale
+  X, Factory, Leaf, Recycle, Package, ShoppingBag, Edit3, Plus, Clock
 } from 'lucide-react';
 
 /**
@@ -17,13 +17,13 @@ const ProductDetailModal = ({
   const usage = product.active_usage_emissions ?? product.usage_emissions ?? 0;
   const disposal = product.active_disposal_emissions ?? product.disposal_emissions ?? 0;
   const total = product.active_total_emissions_per_unit ?? product.total_emissions_per_unit ?? 0;
-  const materials = product.materials || [];
+  const endOfLife = product.end_of_life || [];
   const salesHistory = product.sales_history || product.sales || [];
   const fyQty = product.fiscal_year_sales_quantity ?? product.total_sales ?? 0;
   const fyEmissions = product.fiscal_year_sales_emissions ?? 0;
 
   const phases = [
-    { key: 'mfg', label: language === 'fr' ? 'Matières / Fabrication' : 'Materialien / Herstellung', value: mfg, icon: Factory, color: 'orange' },
+    { key: 'mfg', label: language === 'fr' ? 'Transformation (3.10)' : 'Transformation (3.10)', value: mfg, icon: Factory, color: 'orange' },
     { key: 'use', label: language === 'fr' ? 'Utilisation' : 'Nutzung', value: usage, icon: Leaf, color: 'emerald' },
     { key: 'end', label: language === 'fr' ? 'Fin de vie' : 'Lebensende', value: disposal, icon: Recycle, color: 'sky' },
   ].filter(p => p.value > 0);
@@ -128,46 +128,36 @@ const ProductDetailModal = ({
                 })}
               </div>
 
-              {/* Materials list */}
-              {materials.length > 0 && (
+              {/* End of life entries */}
+              {endOfLife.length > 0 && (
                 <div>
                   <h3 className={`text-sm font-semibold mb-3 flex items-center gap-2 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
-                    <Scale className="w-4 h-4" />
-                    {language === 'fr' ? `Matières (${materials.length})` : `Materialien (${materials.length})`}
+                    <Recycle className="w-4 h-4" />
+                    {language === 'fr' ? `Fin de vie (${endOfLife.length})` : `Lebensende (${endOfLife.length})`}
                   </h3>
                   <div className={`rounded-xl overflow-hidden border ${isDark ? 'border-slate-700' : 'border-gray-200'}`}>
                     <table className="w-full text-sm">
                       <thead>
                         <tr className={isDark ? 'bg-slate-700/50' : 'bg-gray-50'}>
                           <th className={`text-left px-4 py-2.5 font-medium ${isDark ? 'text-slate-300' : 'text-gray-600'}`}>
-                            {language === 'fr' ? 'Matière' : 'Material'}
+                            {language === 'fr' ? 'Traitement' : 'Behandlung'}
                           </th>
                           <th className={`text-right px-4 py-2.5 font-medium ${isDark ? 'text-slate-300' : 'text-gray-600'}`}>
-                            {language === 'fr' ? 'Poids' : 'Gewicht'}
-                          </th>
-                          <th className={`text-right px-4 py-2.5 font-medium ${isDark ? 'text-slate-300' : 'text-gray-600'}`}>
-                            kgCO₂e
+                            {language === 'fr' ? 'Quantité' : 'Menge'}
                           </th>
                         </tr>
                       </thead>
                       <tbody>
-                        {materials.map((m, i) => {
-                          const ef = m.emission_factor_value || 0;
-                          const emissionsValue = (m.weight_kg || 0) * ef;
-                          return (
-                            <tr key={i} className={isDark ? 'border-t border-slate-700' : 'border-t border-gray-100'}>
-                              <td className={`px-4 py-2.5 ${isDark ? 'text-slate-200' : 'text-gray-800'}`}>
-                                {m.factor_name || m.name || `Matière ${i + 1}`}
-                              </td>
-                              <td className={`text-right px-4 py-2.5 ${isDark ? 'text-slate-300' : 'text-gray-600'}`}>
-                                {m.weight_kg} kg
-                              </td>
-                              <td className={`text-right px-4 py-2.5 font-medium ${isDark ? 'text-orange-300' : 'text-orange-600'}`}>
-                                {emissionsValue.toFixed(2)}
-                              </td>
-                            </tr>
-                          );
-                        })}
+                        {endOfLife.map((e, i) => (
+                          <tr key={i} className={isDark ? 'border-t border-slate-700' : 'border-t border-gray-100'}>
+                            <td className={`px-4 py-2.5 ${isDark ? 'text-slate-200' : 'text-gray-800'}`}>
+                              {e.name || `Traitement ${i + 1}`}
+                            </td>
+                            <td className={`text-right px-4 py-2.5 ${isDark ? 'text-slate-300' : 'text-gray-600'}`}>
+                              {e.quantity} {e.unit || 'kg'}
+                            </td>
+                          </tr>
+                        ))}
                       </tbody>
                     </table>
                   </div>

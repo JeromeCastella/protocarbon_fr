@@ -28,7 +28,7 @@ const EmissionsBar = ({ manufacturing, usage, disposal, isDark }) => {
   const [hovered, setHovered] = useState(null);
 
   const segments = [
-    { key: 'mfg', pct: pctMfg, value: manufacturing, color: 'bg-orange-400', label: 'Matières' },
+    { key: 'mfg', pct: pctMfg, value: manufacturing, color: 'bg-orange-400', label: 'Transformation' },
     { key: 'use', pct: pctUse, value: usage, color: 'bg-emerald-400', label: 'Utilisation' },
     { key: 'end', pct: pctEnd, value: disposal, color: 'bg-sky-400', label: 'Fin de vie' },
   ].filter(s => s.pct > 0);
