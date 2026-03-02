@@ -15,22 +15,23 @@ Calculateur d'empreinte carbone avec tableau de bord, objectifs et panneau d'adm
 - Conversion d'unités (5 dimensions, stockage Option C)
 - **Product Wizard Phase 1** : cartes refondues, badge, émissions dominantes, barre composée, menu actions, détail pleine page
 - **Product Wizard Phase 2** : validation par étape, aide contextuelle, revision rapide depuis résumé, labels lisibles, défauts intelligents
-- **Product Wizard Phase 3 — O3-A1 (DONE 2026-03-02)** : Refonte complète de la logique produit pour GHG Protocol
-  - Suppression de l'approche ACV (composition matières)
-  - Nouveau wizard : Informations → Transformation 3.10 (semi-finis) → Utilisation 3.11 → Fin de vie 3.12 → Résumé
-  - Backend aligne sur EndOfLifeEntry, TransformationEnergy, UsageEnergy
-  - Enrichissement des facteurs (impacts[] → value flattened) pour affichage correct
-  - Labels mis à jour : "Matières" → "Transformation" dans EmissionsBar et ProductDetailModal
+- **Product Wizard Phase 3 — COMPLÈTE (2026-03-02)** :
+  - O3-A1 : Refonte logique produit GHG Protocol (Transformation 3.10 / Utilisation 3.11 / Fin de vie 3.12)
+  - O3-A2 : Versionning des profils produit (version_history[] avec snapshots)
+  - O3-A3 : Recalcul automatique (single product + batch from factor)
+  - O3-A4 : Endpoint preview (calcul sans sauvegarde)
+  - O3-A5 : Validation backend complète (factor IDs, quantities, noms)
+
+## API Endpoints ajoutés (Phase 3)
+- `POST /api/products/preview` — Calcul d'émissions sans sauvegarde
+- `GET /api/products/{id}/versions` — Historique des versions
+- `POST /api/products/{id}/recalculate` — Recalcul d'un produit
+- `POST /api/products/recalculate-from-factor/{factor_id}` — Recalcul batch
 
 ## Backlog priorisé
 
-### Phase 3 — Données et calculs (backend) - EN COURS
-- ~~O3-A1 : Refonte logique produit GHG Protocol~~ ✅
-- O3-A2 : Versionning profils produit
-- O3-A3 : Recalcul automatique MAJ facteurs
-- O3-A4 : Endpoint calcul preview
-- O3-A5 : Validation backend complète
-- O3-A6 : Gestion erreur facteur manquant
+### Phase 3 — Restant
+- O3-A6 : Gestion erreur facteur manquant (produit utilisant un facteur supprimé)
 - O3-A7 : Logs de calcul pour audit
 
 ### Phase 4 — Protocol et dette technique
