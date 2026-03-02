@@ -14,6 +14,8 @@ import {
 import {
   BarChart,
   Bar,
+  AreaChart,
+  Area,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -25,25 +27,17 @@ import {
 
 // Chart colors
 const SCOPE_COLORS = {
-  scope1: '#F97316', // Orange
-  scope2: '#3B82F6', // Blue
-  scope3_amont: '#8B5CF6', // Purple
-  scope3_aval: '#EC4899', // Pink
-  scope3: '#8B5CF6' // Purple (combined)
+  scope1: '#FB923C',
+  scope2: '#60A5FA',
+  scope3_amont: '#A78BFA',
+  scope3_aval: '#F9A8D4',
+  scope3: '#A78BFA'
 };
 
-// Category colors for top 10
 const CATEGORY_COLORS = [
-  '#8B5CF6', // Purple
-  '#3B82F6', // Blue
-  '#06B6D4', // Cyan
-  '#10B981', // Emerald
-  '#F59E0B', // Amber
-  '#EF4444', // Red
-  '#EC4899', // Pink
-  '#6366F1', // Indigo
-  '#84CC16', // Lime
-  '#F97316'  // Orange
+  '#A78BFA', '#60A5FA', '#34D399', '#6EE7B7',
+  '#FCD34D', '#FCA5A5', '#F9A8D4', '#818CF8',
+  '#BEF264', '#FB923C'
 ];
 
 // Format emissions value
@@ -75,7 +69,7 @@ const DashboardResultsTab = ({
   onOpenRecalcModal
 }) => {
   const { isDark } = useTheme();
-  const { language } = useLanguage();
+  const { language, t } = useLanguage();
   
   // Drill-down state for scope chart
   const [drillDownScope, setDrillDownScope] = useState(null);
@@ -163,7 +157,7 @@ const DashboardResultsTab = ({
     return Object.entries(allCategories)
       .map(([name, value]) => ({ name, emissions: value }))
       .sort((a, b) => b.emissions - a.emissions)
-      .slice(0, 10);
+      .slice(0, 7);
   }, [scopeBreakdown]);
   
   // Evolution data for stacked chart (using fiscal comparison)
@@ -210,7 +204,7 @@ const DashboardResultsTab = ({
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className={`p-4 rounded-2xl ${isDark ? 'bg-slate-800' : 'bg-white shadow-lg'}`}
+          className={`p-4 rounded-2xl ${isDark ? 'bg-slate-800' : 'bg-white shadow-sm border border-gray-100'}`}
         >
           <div className="flex items-center gap-4">
             <div className={`p-3 rounded-xl ${isDark ? 'bg-slate-700' : 'bg-slate-100'}`}>
@@ -237,7 +231,7 @@ const DashboardResultsTab = ({
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className={`p-4 rounded-2xl ${isDark ? 'bg-slate-800' : 'bg-white shadow-lg'}`}
+          className={`p-4 rounded-2xl ${isDark ? 'bg-slate-800' : 'bg-white shadow-sm border border-gray-100'}`}
         >
           <div className="flex items-center gap-4">
             <div className="p-3 rounded-xl bg-emerald-500/20">
@@ -266,7 +260,7 @@ const DashboardResultsTab = ({
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className={`p-4 rounded-2xl ${isDark ? 'bg-slate-800' : 'bg-white shadow-lg'}`}
+          className={`p-4 rounded-2xl ${isDark ? 'bg-slate-800' : 'bg-white shadow-sm border border-gray-100'}`}
         >
           <div className="flex items-center gap-4">
             <div className={`p-3 rounded-xl ${
@@ -324,7 +318,7 @@ const DashboardResultsTab = ({
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className={`p-6 rounded-2xl ${isDark ? 'bg-slate-800' : 'bg-white shadow-lg'}`}
+          className={`p-6 rounded-2xl ${isDark ? 'bg-slate-800' : 'bg-white shadow-sm border border-gray-100'}`}
         >
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
@@ -357,7 +351,7 @@ const DashboardResultsTab = ({
                 data={drillDownScope ? categoryDrillDownData : scopeChartData}
                 margin={{ top: 10, right: 10, left: 10, bottom: 10 }}
               >
-                <CartesianGrid strokeDasharray="3 3" opacity={0.2} />
+                <CartesianGrid strokeDasharray="2 4" stroke={isDark ? '#334155' : '#f1f5f9'} vertical={false} />
                 <XAxis 
                   dataKey="name" 
                   tick={{ fill: isDark ? '#94a3b8' : '#6b7280', fontSize: 12 }}
@@ -373,8 +367,9 @@ const DashboardResultsTab = ({
                 <Tooltip content={drillDownScope ? undefined : <ScopeTooltip />} />
                 <Bar 
                   dataKey="emissions" 
+                  barSize={36}
                   cursor={drillDownScope ? 'default' : 'pointer'}
-                  radius={[4, 4, 0, 0]}
+                  radius={[6, 6, 0, 0]}
                   onClick={(data, index) => handleScopeClick(data, index)}
                   style={{ outline: 'none' }}
                 >
@@ -398,10 +393,10 @@ const DashboardResultsTab = ({
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
-          className={`p-6 rounded-2xl ${isDark ? 'bg-slate-800' : 'bg-white shadow-lg'}`}
+          className={`p-6 rounded-2xl ${isDark ? 'bg-slate-800' : 'bg-white shadow-sm border border-gray-100'}`}
         >
           <h3 className={`text-lg font-semibold mb-4 ${isDark ? 'text-white' : 'text-gray-900'}`}>
-            {language === 'fr' ? 'Top 10 sous-catégories' : 'Top 10 Unterkategorien'}
+            {language === 'fr' ? 'Top 7 sous-catégories' : 'Top 7 Unterkategorien'}
           </h3>
           
           <div className="space-y-3">
@@ -418,13 +413,13 @@ const DashboardResultsTab = ({
                   <div className="flex-1">
                     <div className="flex items-center justify-between mb-1">
                       <span className={`text-sm truncate max-w-[180px] ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
-                        {item.name}
+                        {t(`categories.${item.name}`) || item.name}
                       </span>
                       <span className={`text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
                         {formatted.value}
                       </span>
                     </div>
-                    <div className={`h-2 rounded-full ${isDark ? 'bg-slate-700' : 'bg-gray-100'} overflow-hidden`}>
+                    <div className={`h-1.5 rounded-full ${isDark ? 'bg-slate-700' : 'bg-gray-100'} overflow-hidden`}>
                       <div 
                         className="h-full rounded-full transition-all duration-500"
                         style={{ 
@@ -452,7 +447,7 @@ const DashboardResultsTab = ({
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.5 }}
-        className={`p-6 rounded-2xl ${isDark ? 'bg-slate-800' : 'bg-white shadow-lg'}`}
+        className={`p-6 rounded-2xl ${isDark ? 'bg-slate-800' : 'bg-white shadow-sm border border-gray-100'}`}
       >
         <h3 className={`text-lg font-semibold mb-4 ${isDark ? 'text-white' : 'text-gray-900'}`}>
           {language === 'fr' ? 'Évolution des émissions' : 'Emissionsentwicklung'}
@@ -460,56 +455,80 @@ const DashboardResultsTab = ({
         
         <div className="h-72">
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart 
-              data={evolutionData}
-              margin={{ top: 10, right: 30, left: 10, bottom: 10 }}
-            >
-              <CartesianGrid strokeDasharray="3 3" opacity={0.2} vertical={false} />
-              <XAxis 
-                dataKey="year" 
-                tick={{ fill: isDark ? '#94a3b8' : '#6b7280' }}
-                axisLine={{ stroke: isDark ? '#475569' : '#e5e7eb' }}
+            <AreaChart data={evolutionData} margin={{ top: 10, right: 30, left: 10, bottom: 10 }}>
+              <defs>
+                <linearGradient id="gradScope1" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor={SCOPE_COLORS.scope1} stopOpacity={0.35} />
+                  <stop offset="95%" stopColor={SCOPE_COLORS.scope1} stopOpacity={0.05} />
+                </linearGradient>
+                <linearGradient id="gradScope2" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor={SCOPE_COLORS.scope2} stopOpacity={0.35} />
+                  <stop offset="95%" stopColor={SCOPE_COLORS.scope2} stopOpacity={0.05} />
+                </linearGradient>
+                <linearGradient id="gradScope3" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor={SCOPE_COLORS.scope3} stopOpacity={0.35} />
+                  <stop offset="95%" stopColor={SCOPE_COLORS.scope3} stopOpacity={0.05} />
+                </linearGradient>
+              </defs>
+              <CartesianGrid strokeDasharray="2 4" stroke={isDark ? '#334155' : '#f1f5f9'} vertical={false} />
+              <XAxis
+                dataKey="year"
+                tick={{ fill: isDark ? '#94a3b8' : '#6b7280', fontSize: 12 }}
+                axisLine={false}
+                tickLine={false}
               />
-              <YAxis 
-                tickFormatter={(value) => `${value.toFixed(0)}`}
-                tick={{ fill: isDark ? '#94a3b8' : '#6b7280' }}
-                axisLine={{ stroke: isDark ? '#475569' : '#e5e7eb' }}
+              <YAxis
+                tickFormatter={(v) => `${v.toFixed(0)}t`}
+                tick={{ fill: isDark ? '#94a3b8' : '#6b7280', fontSize: 12 }}
+                axisLine={false}
+                tickLine={false}
+                width={40}
               />
-              <Tooltip 
+              <Tooltip
                 formatter={(value, name) => [`${value.toFixed(1)} tCO₂e`, name]}
-                contentStyle={{ 
+                contentStyle={{
                   backgroundColor: isDark ? '#1e293b' : '#fff',
-                  borderColor: isDark ? '#475569' : '#e5e7eb',
-                  borderRadius: '8px'
+                  borderColor: isDark ? '#334155' : '#e2e8f0',
+                  borderRadius: '10px',
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.08)'
                 }}
-                cursor={{ fill: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)' }}
+                cursor={{ stroke: isDark ? '#475569' : '#cbd5e1', strokeWidth: 1 }}
               />
-              <Legend 
-                wrapperStyle={{ paddingTop: '20px' }}
-                iconType="circle"
+              <Legend wrapperStyle={{ paddingTop: '16px' }} iconType="circle" iconSize={8} />
+              <Area
+                type="monotone"
+                dataKey="scope1"
+                name="Scope 1"
+                stackId="stack"
+                stroke={SCOPE_COLORS.scope1}
+                strokeWidth={2}
+                fill="url(#gradScope1)"
+                dot={false}
+                activeDot={{ r: 4, strokeWidth: 0 }}
               />
-              <Bar 
-                dataKey="scope1" 
-                name="Scope 1" 
-                stackId="stack" 
-                fill={SCOPE_COLORS.scope1}
-                radius={[0, 0, 0, 0]}
+              <Area
+                type="monotone"
+                dataKey="scope2"
+                name="Scope 2"
+                stackId="stack"
+                stroke={SCOPE_COLORS.scope2}
+                strokeWidth={2}
+                fill="url(#gradScope2)"
+                dot={false}
+                activeDot={{ r: 4, strokeWidth: 0 }}
               />
-              <Bar 
-                dataKey="scope2" 
-                name="Scope 2" 
-                stackId="stack" 
-                fill={SCOPE_COLORS.scope2}
-                radius={[0, 0, 0, 0]}
+              <Area
+                type="monotone"
+                dataKey="scope3"
+                name="Scope 3"
+                stackId="stack"
+                stroke={SCOPE_COLORS.scope3}
+                strokeWidth={2}
+                fill="url(#gradScope3)"
+                dot={false}
+                activeDot={{ r: 4, strokeWidth: 0 }}
               />
-              <Bar 
-                dataKey="scope3" 
-                name="Scope 3" 
-                stackId="stack" 
-                fill={SCOPE_COLORS.scope3}
-                radius={[4, 4, 0, 0]}
-              />
-            </BarChart>
+            </AreaChart>
           </ResponsiveContainer>
         </div>
       </motion.div>
