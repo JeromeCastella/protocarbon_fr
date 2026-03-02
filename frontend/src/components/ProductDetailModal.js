@@ -80,15 +80,14 @@ const ProductDetailModal = ({
                 </div>
               </div>
               <div className="flex items-center gap-2 flex-shrink-0">
-                {product.is_enhanced && (
-                  <button
-                    onClick={() => { onClose(); onEdit(product); }}
-                    data-testid="detail-edit-btn"
-                    className={`p-2.5 rounded-xl transition-colors ${isDark ? 'hover:bg-slate-700 text-slate-300' : 'hover:bg-gray-100 text-gray-500'}`}
-                  >
-                    <Edit3 className="w-5 h-5" />
-                  </button>
-                )}
+                <button
+                  onClick={() => { onClose(); onEdit(product); }}
+                  data-testid="detail-edit-btn"
+                  className={`flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium transition-colors ${isDark ? 'hover:bg-slate-700 text-blue-400' : 'hover:bg-blue-50 text-blue-600'}`}
+                >
+                  <Edit3 className="w-4 h-4" />
+                  {language === 'fr' ? 'Modifier' : 'Bearbeiten'}
+                </button>
                 <button onClick={onClose} className={`p-2.5 rounded-xl transition-colors ${isDark ? 'hover:bg-slate-700' : 'hover:bg-gray-100'}`}>
                   <X className={`w-5 h-5 ${isDark ? 'text-slate-400' : 'text-gray-400'}`} />
                 </button>

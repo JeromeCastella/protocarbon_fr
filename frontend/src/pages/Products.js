@@ -64,7 +64,7 @@ const EmissionsBar = ({ manufacturing, usage, disposal, isDark }) => {
 };
 
 // ── Actions dropdown ───────────────────────────────────────────────
-const ActionsMenu = ({ onEdit, onDuplicate, onDelete, onVersions, isEnhanced, isDark, language }) => {
+const ActionsMenu = ({ onEdit, onDuplicate, onDelete, onVersions, isDark, language }) => {
   const [open, setOpen] = useState(false);
   const ref = useRef(null);
 
@@ -75,7 +75,7 @@ const ActionsMenu = ({ onEdit, onDuplicate, onDelete, onVersions, isEnhanced, is
   }, []);
 
   const items = [
-    isEnhanced && { icon: Edit3, label: language === 'fr' ? 'Modifier' : 'Bearbeiten', action: onEdit, testId: 'action-edit' },
+    { icon: Edit3, label: language === 'fr' ? 'Modifier' : 'Bearbeiten', action: onEdit, testId: 'action-edit' },
     { icon: Copy, label: language === 'fr' ? 'Dupliquer' : 'Duplizieren', action: onDuplicate, testId: 'action-duplicate' },
     { icon: Clock, label: language === 'fr' ? 'Versions' : 'Versionen', action: onVersions, testId: 'action-versions' },
     { icon: Trash2, label: language === 'fr' ? 'Supprimer' : 'Löschen', action: onDelete, danger: true, testId: 'action-delete' },
@@ -168,15 +168,24 @@ const ProductCard = ({ product, index, isDark, language, onEdit, onDelete, onDup
             )}
           </div>
         </div>
-        <ActionsMenu
-          onEdit={() => onEdit(product)}
-          onDuplicate={() => onDuplicate(product)}
-          onDelete={() => onDelete(product.id)}
-          onVersions={() => onVersions(product)}
-          isEnhanced={isEnhanced}
-          isDark={isDark}
-          language={language}
-        />
+        <div className="flex items-center gap-1">
+          <button
+            onClick={(e) => { e.stopPropagation(); onEdit(product); }}
+            data-testid="card-edit-btn"
+            className={`p-1.5 rounded-lg transition-colors ${isDark ? 'hover:bg-slate-600 text-slate-400 hover:text-blue-400' : 'hover:bg-blue-100 text-gray-400 hover:text-blue-600'}`}
+            title={language === 'fr' ? 'Modifier' : 'Bearbeiten'}
+          >
+            <Edit3 className="w-4 h-4" />
+          </button>
+          <ActionsMenu
+            onEdit={() => onEdit(product)}
+            onDuplicate={() => onDuplicate(product)}
+            onDelete={() => onDelete(product.id)}
+            onVersions={() => onVersions(product)}
+            isDark={isDark}
+            language={language}
+          />
+        </div>
       </div>
 
       {/* Dominant emissions value */}
@@ -258,7 +267,7 @@ const Products = () => {
   };
 
   const handleEdit = (product) => {
-    if (product.is_enhanced) { setEditingProduct(product); setShowWizard(true); }
+    setEditingProduct(product); setShowWizard(true);
   };
 
   const handleDuplicate = (product) => {
