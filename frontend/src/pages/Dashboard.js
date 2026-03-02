@@ -327,10 +327,10 @@ const Dashboard = () => {
   };
 
   const chartColors = {
-    scope1: '#3B82F6',
-    scope2: '#06B6D4',
-    scope3_amont: '#F59E0B',
-    scope3_aval: '#6366F1'
+    scope1: '#FB923C',
+    scope2: '#60A5FA',
+    scope3_amont: '#A78BFA',
+    scope3_aval: '#F9A8D4'
   };
 
   // Loading state
@@ -595,7 +595,7 @@ const Dashboard = () => {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className={`p-12 rounded-2xl text-center ${isDark ? 'bg-slate-800' : 'bg-white shadow-lg'}`}
+              className={`p-12 rounded-2xl text-center ${isDark ? 'bg-slate-800' : 'bg-white shadow-sm border border-gray-100'}`}
             >
               <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-green-500/20 to-emerald-500/20 flex items-center justify-center">
                 <Target className="w-10 h-10 text-green-500" />
@@ -679,7 +679,7 @@ const Dashboard = () => {
                       <div className={`p-4 rounded-xl ${isDark ? 'bg-slate-800/50' : 'bg-white'}`}>
                         <div className="flex items-center justify-between mb-3">
                           <div className="flex items-center gap-2">
-                            <div className="w-3 h-3 rounded-full bg-blue-500"></div>
+                            <div className="w-3 h-3 rounded-full bg-sky-400"></div>
                             <span className={`text-sm font-medium ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
                               Scope 1 & 2
                             </span>
@@ -694,7 +694,7 @@ const Dashboard = () => {
                         </div>
                         
                         <div className="flex items-end gap-2 mb-3">
-                          <span className="text-3xl font-bold text-blue-500">-{objective.reduction_scope1_2_percent}%</span>
+                          <span className="text-3xl font-bold text-sky-400">-{objective.reduction_scope1_2_percent}%</span>
                           <span className={`text-sm pb-1 ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
                             d'ici {objective.target_year}
                           </span>
@@ -704,14 +704,14 @@ const Dashboard = () => {
                         <div className="mb-2">
                           <div className="flex justify-between text-xs mb-1">
                             <span className={isDark ? 'text-slate-400' : 'text-gray-500'}>Progression ({currentYear})</span>
-                            <span className={`font-medium ${progressPercent >= 50 ? 'text-green-500' : 'text-blue-500'}`}>
+                            <span className={`font-medium ${progressPercent >= 50 ? 'text-green-500' : 'text-sky-400'}`}>
                               {progressPercent}%
                             </span>
                           </div>
                           <div className={`h-2 rounded-full ${isDark ? 'bg-slate-700' : 'bg-gray-200'}`}>
                             <div 
                               className={`h-full rounded-full transition-all duration-500 ${
-                                progressPercent >= 50 ? 'bg-green-500' : 'bg-blue-500'
+                                progressPercent >= 50 ? 'bg-green-500' : 'bg-sky-400'
                               }`}
                               style={{ width: `${progressPercent}%` }}
                             />
@@ -751,7 +751,7 @@ const Dashboard = () => {
                       <div className={`p-4 rounded-xl ${isDark ? 'bg-slate-800/50' : 'bg-white'}`}>
                         <div className="flex items-center justify-between mb-3">
                           <div className="flex items-center gap-2">
-                            <div className="w-3 h-3 rounded-full bg-amber-500"></div>
+                            <div className="w-3 h-3 rounded-full bg-violet-400"></div>
                             <span className={`text-sm font-medium ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
                               Scope 3
                             </span>
@@ -766,7 +766,7 @@ const Dashboard = () => {
                         </div>
                         
                         <div className="flex items-end gap-2 mb-3">
-                          <span className="text-3xl font-bold text-amber-500">-{objective.reduction_scope3_percent}%</span>
+                          <span className="text-3xl font-bold text-violet-400">-{objective.reduction_scope3_percent}%</span>
                           <span className={`text-sm pb-1 ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
                             d'ici {objective.target_year}
                           </span>
@@ -776,14 +776,14 @@ const Dashboard = () => {
                         <div className="mb-2">
                           <div className="flex justify-between text-xs mb-1">
                             <span className={isDark ? 'text-slate-400' : 'text-gray-500'}>Progression ({currentYear})</span>
-                            <span className={`font-medium ${progressPercent >= 50 ? 'text-green-500' : 'text-amber-500'}`}>
+                            <span className={`font-medium ${progressPercent >= 50 ? 'text-green-500' : 'text-violet-400'}`}>
                               {progressPercent}%
                             </span>
                           </div>
                           <div className={`h-2 rounded-full ${isDark ? 'bg-slate-700' : 'bg-gray-200'}`}>
                             <div 
                               className={`h-full rounded-full transition-all duration-500 ${
-                                progressPercent >= 50 ? 'bg-green-500' : 'bg-amber-500'
+                                progressPercent >= 50 ? 'bg-green-500' : 'bg-violet-400'
                               }`}
                               style={{ width: `${progressPercent}%` }}
                             />
@@ -805,7 +805,7 @@ const Dashboard = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 }}
-                className={`p-6 rounded-2xl ${isDark ? 'bg-slate-800' : 'bg-white shadow-lg'}`}
+                className={`p-6 rounded-2xl ${isDark ? 'bg-slate-800' : 'bg-white shadow-sm border border-gray-100'}`}
               >
                 <h3 className={`text-lg font-semibold mb-4 ${isDark ? 'text-white' : 'text-gray-900'}`}>
                   Trajectoire de réduction
@@ -824,59 +824,81 @@ const Dashboard = () => {
                       })}
                       margin={{ top: 20, right: 30, left: 20, bottom: 20 }}
                     >
-                      <CartesianGrid strokeDasharray="3 3" opacity={0.2} />
+                      <defs>
+                        <linearGradient id="gradTarget12" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="5%" stopColor="#60A5FA" stopOpacity={0.15} />
+                          <stop offset="95%" stopColor="#60A5FA" stopOpacity={0.02} />
+                        </linearGradient>
+                        <linearGradient id="gradTarget3" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="5%" stopColor="#A78BFA" stopOpacity={0.15} />
+                          <stop offset="95%" stopColor="#A78BFA" stopOpacity={0.02} />
+                        </linearGradient>
+                      </defs>
+                      <CartesianGrid strokeDasharray="2 4" stroke={isDark ? '#334155' : '#f1f5f9'} vertical={false} />
                       <XAxis 
                         dataKey="year" 
-                        tick={{ fill: isDark ? '#94a3b8' : '#6b7280' }}
+                        tick={{ fill: isDark ? '#94a3b8' : '#6b7280', fontSize: 12 }}
+                        axisLine={false}
+                        tickLine={false}
                       />
                       <YAxis 
                         tickFormatter={(value) => `${(value / 1000).toFixed(0)}t`}
-                        tick={{ fill: isDark ? '#94a3b8' : '#6b7280' }}
+                        tick={{ fill: isDark ? '#94a3b8' : '#6b7280', fontSize: 12 }}
+                        axisLine={false}
+                        tickLine={false}
+                        width={50}
                       />
                       <Tooltip 
                         formatter={(value, name) => [formatChartValue(value), name]}
                         contentStyle={{ 
                           backgroundColor: isDark ? '#1e293b' : '#fff',
-                          borderColor: isDark ? '#475569' : '#e5e7eb'
+                          borderColor: isDark ? '#334155' : '#e2e8f0',
+                          borderRadius: '10px',
+                          boxShadow: '0 4px 12px rgba(0,0,0,0.08)'
                         }}
                         labelFormatter={(year) => `Année ${year}`}
+                        cursor={{ stroke: isDark ? '#475569' : '#cbd5e1', strokeWidth: 1 }}
                       />
-                      <Legend />
+                      <Legend wrapperStyle={{ paddingTop: '16px' }} iconType="circle" iconSize={8} />
                       
-                      {/* Target lines (dashed) */}
-                      <Line 
-                        type="monotone" 
-                        dataKey="target_scope1_2" 
-                        name="Cible Scope 1&2" 
-                        stroke="#3B82F6" 
+                      {/* Target areas with gradient fill */}
+                      <Area
+                        type="monotone"
+                        dataKey="target_scope1_2"
+                        name="Cible Scope 1&2"
+                        stroke="#60A5FA"
                         strokeDasharray="5 5"
                         strokeWidth={2}
+                        fill="url(#gradTarget12)"
                         dot={false}
+                        activeDot={false}
                       />
-                      <Line 
-                        type="monotone" 
-                        dataKey="target_scope3" 
-                        name="Cible Scope 3" 
-                        stroke="#F59E0B" 
+                      <Area
+                        type="monotone"
+                        dataKey="target_scope3"
+                        name="Cible Scope 3"
+                        stroke="#A78BFA"
                         strokeDasharray="5 5"
                         strokeWidth={2}
+                        fill="url(#gradTarget3)"
                         dot={false}
+                        activeDot={false}
                       />
                       
                       {/* Actual values (bars) */}
                       <Bar 
                         dataKey="actual_scope1_2" 
                         name="Réel Scope 1&2" 
-                        fill="#3B82F6"
-                        radius={[4, 4, 0, 0]}
-                        maxBarSize={40}
+                        fill="#60A5FA"
+                        radius={[6, 6, 0, 0]}
+                        maxBarSize={36}
                       />
                       <Bar 
                         dataKey="actual_scope3" 
                         name="Réel Scope 3" 
-                        fill="#F59E0B"
-                        radius={[4, 4, 0, 0]}
-                        maxBarSize={40}
+                        fill="#A78BFA"
+                        radius={[6, 6, 0, 0]}
+                        maxBarSize={36}
                       />
                     </ComposedChart>
                   </ResponsiveContainer>
@@ -892,7 +914,7 @@ const Dashboard = () => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.2 }}
-                  className={`p-6 rounded-2xl ${isDark ? 'bg-slate-800' : 'bg-white shadow-lg'}`}
+                  className={`p-6 rounded-2xl ${isDark ? 'bg-slate-800' : 'bg-white shadow-sm border border-gray-100'}`}
                 >
                   <div className="flex items-center gap-3 mb-4">
                     <Lightbulb className="w-6 h-6 text-amber-500" />
