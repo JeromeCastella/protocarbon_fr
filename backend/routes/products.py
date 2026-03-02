@@ -160,46 +160,53 @@ async def create_product_enhanced(
     usage_emissions = 0
     disposal_emissions = 0
     
-    # Materials emissions (manufacturing)
-    for material in product.materials:
-        if material.emission_factor_id:
-            factor = emission_factors_collection.find_one({"_id": ObjectId(material.emission_factor_id)})
-            if factor:
-                for impact in factor.get("impacts", []):
-                    manufacturing_emissions += material.weight_kg * impact.get("value", 0)
-    
-    # Transformation emissions (manufacturing)
+    # Transformation emissions (3.10 - manufacturing, semi-finished only)
     if product.transformation:
         trans = product.transformation
-        if trans.electricity_factor_id:
-            factor = emission_factors_collection.find_one({"_id": ObjectId(trans.electricity_factor_id)})
-            if factor:
-                for impact in factor.get("impacts", []):
-                    manufacturing_emissions += trans.electricity_kwh * impact.get("value", 0)
-        if trans.fuel_factor_id:
-            factor = emission_factors_collection.find_one({"_id": ObjectId(trans.fuel_factor_id)})
-            if factor:
-                for impact in factor.get("impacts", []):
-                    manufacturing_emissions += trans.fuel_kwh * impact.get("value", 0)
+        for fid, qty in [
+            (trans.electricity_factor_id, trans.electricity_kwh),
+            (trans.fuel_factor_id, trans.fuel_kwh),
+            (trans.carburant_factor_id, trans.carburant_l),
+            (trans.refrigerant_factor_id, trans.refrigerant_kg),
+        ]:
+            if fid and qty > 0:
+                try:
+                    factor = emission_factors_collection.find_one({"_id": ObjectId(fid)})
+                    if factor:
+                        for impact in factor.get("impacts", []):
+                            manufacturing_emissions += qty * impact.get("value", 0)
+                except:
+                    pass
     
-    # Usage phase emissions
+    # Usage phase emissions (3.11)
     if product.usage:
         usage = product.usage
         cycles_lifetime = usage.cycles_per_year * product.lifespan_years
-        
-        if usage.electricity_factor_id:
-            factor = emission_factors_collection.find_one({"_id": ObjectId(usage.electricity_factor_id)})
-            if factor:
-                for impact in factor.get("impacts", []):
-                    usage_emissions += usage.electricity_kwh_per_cycle * cycles_lifetime * impact.get("value", 0)
+        for fid, qty_per_cycle in [
+            (usage.electricity_factor_id, usage.electricity_kwh_per_cycle),
+            (usage.fuel_factor_id, usage.fuel_kwh_per_cycle),
+            (usage.carburant_factor_id, usage.carburant_l_per_cycle),
+            (usage.refrigerant_factor_id, usage.refrigerant_kg_per_cycle),
+        ]:
+            if fid and qty_per_cycle > 0:
+                try:
+                    factor = emission_factors_collection.find_one({"_id": ObjectId(fid)})
+                    if factor:
+                        for impact in factor.get("impacts", []):
+                            usage_emissions += qty_per_cycle * cycles_lifetime * impact.get("value", 0)
+                except:
+                    pass
     
-    # End of life emissions
-    for material in product.materials:
-        if material.treatment_emission_factor_id:
-            factor = emission_factors_collection.find_one({"_id": ObjectId(material.treatment_emission_factor_id)})
-            if factor:
-                for impact in factor.get("impacts", []):
-                    disposal_emissions += material.weight_kg * impact.get("value", 0)
+    # End of life emissions (3.12)
+    for entry in product.end_of_life:
+        if entry.emission_factor_id and entry.quantity > 0:
+            try:
+                factor = emission_factors_collection.find_one({"_id": ObjectId(entry.emission_factor_id)})
+                if factor:
+                    for impact in factor.get("impacts", []):
+                        disposal_emissions += entry.quantity * impact.get("value", 0)
+            except:
+                pass
     
     product_doc["manufacturing_emissions"] = manufacturing_emissions
     product_doc["usage_emissions"] = usage_emissions
@@ -238,86 +245,51 @@ async def update_product_enhanced(
     usage_emissions = 0
     disposal_emissions = 0
     
-    # Materials emissions (manufacturing)
-    for material in product.materials:
-        if material.emission_factor_id:
-            try:
-                factor = emission_factors_collection.find_one({"_id": ObjectId(material.emission_factor_id)})
-                if factor:
-                    for impact in factor.get("impacts", []):
-                        manufacturing_emissions += material.weight_kg * impact.get("value", 0)
-            except:
-                pass
-    
-    # Transformation emissions (manufacturing)
+    # Transformation emissions (3.10 - manufacturing, semi-finished only)
     if product.transformation:
         trans = product.transformation
-        if trans.electricity_factor_id:
-            try:
-                factor = emission_factors_collection.find_one({"_id": ObjectId(trans.electricity_factor_id)})
-                if factor:
-                    for impact in factor.get("impacts", []):
-                        manufacturing_emissions += trans.electricity_kwh * impact.get("value", 0)
-            except:
-                pass
-        if trans.fuel_factor_id:
-            try:
-                factor = emission_factors_collection.find_one({"_id": ObjectId(trans.fuel_factor_id)})
-                if factor:
-                    for impact in factor.get("impacts", []):
-                        manufacturing_emissions += trans.fuel_kwh * impact.get("value", 0)
-            except:
-                pass
+        for fid, qty in [
+            (trans.electricity_factor_id, trans.electricity_kwh),
+            (trans.fuel_factor_id, trans.fuel_kwh),
+            (trans.carburant_factor_id, trans.carburant_l),
+            (trans.refrigerant_factor_id, trans.refrigerant_kg),
+        ]:
+            if fid and qty > 0:
+                try:
+                    factor = emission_factors_collection.find_one({"_id": ObjectId(fid)})
+                    if factor:
+                        for impact in factor.get("impacts", []):
+                            manufacturing_emissions += qty * impact.get("value", 0)
+                except:
+                    pass
     
-    # Usage phase emissions
+    # Usage phase emissions (3.11)
     if product.usage:
         usage = product.usage
         cycles_lifetime = usage.cycles_per_year * product.lifespan_years
-        
-        if usage.electricity_factor_id:
-            try:
-                factor = emission_factors_collection.find_one({"_id": ObjectId(usage.electricity_factor_id)})
-                if factor:
-                    for impact in factor.get("impacts", []):
-                        usage_emissions += usage.electricity_kwh_per_cycle * cycles_lifetime * impact.get("value", 0)
-            except:
-                pass
-        
-        if usage.fuel_factor_id:
-            try:
-                factor = emission_factors_collection.find_one({"_id": ObjectId(usage.fuel_factor_id)})
-                if factor:
-                    for impact in factor.get("impacts", []):
-                        usage_emissions += usage.fuel_kwh_per_cycle * cycles_lifetime * impact.get("value", 0)
-            except:
-                pass
-        
-        if usage.carburant_factor_id:
-            try:
-                factor = emission_factors_collection.find_one({"_id": ObjectId(usage.carburant_factor_id)})
-                if factor:
-                    for impact in factor.get("impacts", []):
-                        usage_emissions += usage.carburant_l_per_cycle * cycles_lifetime * impact.get("value", 0)
-            except:
-                pass
-        
-        if usage.refrigerant_factor_id:
-            try:
-                factor = emission_factors_collection.find_one({"_id": ObjectId(usage.refrigerant_factor_id)})
-                if factor:
-                    for impact in factor.get("impacts", []):
-                        usage_emissions += usage.refrigerant_kg_per_cycle * cycles_lifetime * impact.get("value", 0)
-            except:
-                pass
+        for fid, qty_per_cycle in [
+            (usage.electricity_factor_id, usage.electricity_kwh_per_cycle),
+            (usage.fuel_factor_id, usage.fuel_kwh_per_cycle),
+            (usage.carburant_factor_id, usage.carburant_l_per_cycle),
+            (usage.refrigerant_factor_id, usage.refrigerant_kg_per_cycle),
+        ]:
+            if fid and qty_per_cycle > 0:
+                try:
+                    factor = emission_factors_collection.find_one({"_id": ObjectId(fid)})
+                    if factor:
+                        for impact in factor.get("impacts", []):
+                            usage_emissions += qty_per_cycle * cycles_lifetime * impact.get("value", 0)
+                except:
+                    pass
     
-    # End of life emissions
-    for material in product.materials:
-        if material.treatment_emission_factor_id:
+    # End of life emissions (3.12)
+    for entry in product.end_of_life:
+        if entry.emission_factor_id and entry.quantity > 0:
             try:
-                factor = emission_factors_collection.find_one({"_id": ObjectId(material.treatment_emission_factor_id)})
+                factor = emission_factors_collection.find_one({"_id": ObjectId(entry.emission_factor_id)})
                 if factor:
                     for impact in factor.get("impacts", []):
-                        disposal_emissions += material.weight_kg * impact.get("value", 0)
+                        disposal_emissions += entry.quantity * impact.get("value", 0)
             except:
                 pass
     

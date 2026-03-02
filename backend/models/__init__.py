@@ -322,20 +322,22 @@ class ProductEmissionProfileUpdate(BaseModel):
     disposal_emissions: Optional[float] = None
     change_reason: Optional[str] = None
 
-class MaterialComposition(BaseModel):
-    material_name: str
+class EndOfLifeEntry(BaseModel):
+    """Ligne de fin de vie : quantité × facteur de déchet"""
+    name: str = ""
+    quantity: float = 0
+    unit: str = "kg"
     emission_factor_id: Optional[str] = None
-    weight_kg: float
-    treatment_type: str
-    treatment_emission_factor_id: Optional[str] = None
-    recyclability_percent: float = 0
 
 class TransformationEnergy(BaseModel):
     electricity_kwh: float = 0
     electricity_factor_id: Optional[str] = None
     fuel_kwh: float = 0
     fuel_factor_id: Optional[str] = None
-    region: str = "France"
+    carburant_l: float = 0
+    carburant_factor_id: Optional[str] = None
+    refrigerant_kg: float = 0
+    refrigerant_factor_id: Optional[str] = None
 
 class UsageEnergy(BaseModel):
     electricity_kwh_per_cycle: float = 0
@@ -354,9 +356,9 @@ class ProductCreateEnhanced(BaseModel):
     product_type: str = "finished"
     unit: str = "unit"
     lifespan_years: float = 1
-    materials: List[MaterialComposition] = []
     transformation: Optional[TransformationEnergy] = None
     usage: Optional[UsageEnergy] = None
+    end_of_life: List[EndOfLifeEntry] = []
 
 class ProductSale(BaseModel):
     product_id: str
