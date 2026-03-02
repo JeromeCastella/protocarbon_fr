@@ -25,24 +25,25 @@ Calculateur d'empreinte carbone avec tableau de bord, objectifs et panneau d'adm
 - O3-A6 : Factor snapshots + stale_factors + deprecation + badge "Recalcul disponible"
 
 ### Phase 4 — Mapping GHG (VERIFIE)
-- O4-A1/A2/A3 : Les ventes de produits créent automatiquement des activités dans le bilan GHG
-  - Transformation -> transformation_produits (scope3_aval)
-  - Utilisation -> utilisation_produits (scope3_aval)
-  - Fin de vie -> fin_vie_produits (scope3_aval)
-- Mise à jour/suppression de vente -> MAJ/suppression des activités liées
-- Configuration exercice 2029 corrigée (catégories produit réintégrées)
+- O4-A1/A2/A3 : Ventes produits -> activités GHG automatiques
+- Configuration exercice 2029 corrigée
 
 ### UX Améliorations
 - Bouton Modifier visible sur fiche + modale détail
-- Cartes allégées (sans badge type, sans durée de vie, arrondi 1 digit)
-- ProductSaleModal sobre (indicateurs toujours visibles, couleurs neutres)
+- Cartes allégées, ProductSaleModal sobre
 
-### Modernisation Dashboard (COMPLETE - 02/03/2026)
-- Palette de couleurs adoucie (tons pastels : #FB923C, #60A5FA, #A78BFA)
+### Modernisation Dashboard — Onglet Résultats (COMPLETE - 02/03/2026)
+- Palette pastels (#FB923C, #60A5FA, #A78BFA, #F9A8D4)
 - AreaChart empilé (stackId) avec gradients pour l'évolution des émissions
 - Top 7 sous-catégories avec traductions FR (+ drill-down traduit)
-- Barres Scope plus fines, coins plus arrondis, grille discrète
-- Ombres allégées en mode clair (shadow-sm + border)
+- Barres Scope affinées, coins arrondis, grille discrète
+- Ombres allégées (shadow-sm + border)
+
+### Modernisation Dashboard — Onglet Objectifs (COMPLETE - 02/03/2026)
+- Trajectoire : ComposedChart avec Areas gradient dashed (cibles) + Bars pastels (réels)
+- Couleurs harmonisées : sky-400 (Scope 1&2), violet-400 (Scope 3)
+- Grille allégée, axes épurés, tooltip modernisé (borderRadius 10px, boxShadow)
+- Ombres allégées sur toutes les cartes
 - Compatible dark/light mode
 
 ## Backlog priorisé
