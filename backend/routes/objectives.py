@@ -17,6 +17,7 @@ from config import (
 from models import CarbonObjectiveCreate, CarbonObjectiveUpdate
 from services.auth import get_current_user
 from utils import serialize_doc
+from routes.dashboard import normalize_scope_for_reporting
 
 router = APIRouter(prefix="/objectives", tags=["Objectives"])
 
@@ -217,9 +218,10 @@ async def get_objective_trajectory(current_user: dict = Depends(get_current_user
             "target_total": round(target_s12_year + target_s3_year, 2)
         })
     
-    # Get actual emissions by fiscal year
+    # Get actual emissions by fiscal year (exclude scenarios)
     fiscal_years = list(fiscal_years_collection.find({
-        "company_id": current_user["company_id"]
+        "company_id": current_user["company_id"],
+        "type": {"$ne": "scenario"}
     }).sort("start_date", 1))
     
     actuals = []
@@ -232,7 +234,7 @@ async def get_objective_trajectory(current_user: dict = Depends(get_current_user
         
         activities = list(activities_collection.find({
             "company_id": current_user["company_id"],
-            "date": {"$gte": fy_start, "$lte": fy.get("end_date", "")}
+            "fiscal_year_id": str(fy["_id"])
         }))
         
         actual_scope1_2 = 0
@@ -240,7 +242,9 @@ async def get_objective_trajectory(current_user: dict = Depends(get_current_user
         
         for act in activities:
             emissions = act.get("emissions", 0) or act.get("calculated_emissions", 0) or 0
-            scope = act.get("scope", "")
+            raw_scope = act.get("scope", "")
+            category_id = act.get("category_id", "")
+            scope = normalize_scope_for_reporting(raw_scope, category_id)
             
             if scope in ["scope1", "scope2"]:
                 actual_scope1_2 += emissions
