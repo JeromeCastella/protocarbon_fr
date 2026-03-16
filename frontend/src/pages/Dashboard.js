@@ -620,105 +620,16 @@ const Dashboard = () => {
 
       {/* ==================== TAB 2: RÉSULTATS ==================== */}
       {activeTab === 'resultats' && (
-        <div className="space-y-4">
-          {/* FEAT-02: Scenario selector */}
-          {yearScenarios.length > 0 && (
-            <motion.div
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              className={`flex items-center gap-3 p-3 rounded-xl ${isDark ? 'bg-slate-800' : 'bg-white border border-gray-200'}`}
-              data-testid="scenario-selector"
-            >
-              <FlaskConical className={`w-4 h-4 flex-shrink-0 ${selectedScenarioId ? 'text-violet-500' : isDark ? 'text-slate-400' : 'text-gray-400'}`} />
-              <select
-                value={selectedScenarioId || ''}
-                onChange={(e) => setSelectedScenarioId(e.target.value || null)}
-                data-testid="scenario-select"
-                className={`flex-1 px-3 py-1.5 rounded-lg border text-sm transition-all ${
-                  selectedScenarioId
-                    ? 'border-violet-500/50 bg-violet-500/5 text-violet-700 font-medium'
-                    : isDark
-                      ? 'bg-slate-700 border-slate-600 text-slate-300'
-                      : 'bg-gray-50 border-gray-200 text-gray-700'
-                }`}
-              >
-                <option value="">Données réelles</option>
-                {yearScenarios.map(s => (
-                  <option key={s.id} value={s.id}>
-                    {s.scenario_name || s.name} ({s.activities_count} saisies)
-                  </option>
-                ))}
-              </select>
-              {selectedScenarioId && (
-                <button
-                  onClick={() => setSelectedScenarioId(null)}
-                  className="p-1 rounded-lg hover:bg-red-500/10 transition-colors"
-                  title="Revenir aux données réelles"
-                >
-                  <X className="w-4 h-4 text-red-500" />
-                </button>
-              )}
-            </motion.div>
-          )}
-
-          {/* Scenario comparison banner */}
-          {selectedScenarioId && scenarioSummary && summary && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              className={`p-4 rounded-xl border-2 border-violet-500/30 ${isDark ? 'bg-violet-500/5' : 'bg-violet-50'}`}
-              data-testid="scenario-comparison-banner"
-            >
-              <div className="flex items-center gap-2 mb-3">
-                <FlaskConical className="w-4 h-4 text-violet-500" />
-                <span className={`text-sm font-semibold ${isDark ? 'text-violet-300' : 'text-violet-700'}`}>
-                  Comparaison scénario vs réel
-                </span>
-              </div>
-              <div className="grid grid-cols-3 gap-4">
-                <div>
-                  <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>Réel</p>
-                  <p className={`text-lg font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                    {((summary?.total_emissions || 0) / 1000).toLocaleString('fr-FR', { maximumFractionDigits: 1 })} tCO₂e
-                  </p>
-                </div>
-                <div>
-                  <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>Scénario</p>
-                  <p className="text-lg font-bold text-violet-500">
-                    {((scenarioSummary.summary?.total_emissions || 0) / 1000).toLocaleString('fr-FR', { maximumFractionDigits: 1 })} tCO₂e
-                  </p>
-                </div>
-                <div>
-                  <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>Différence</p>
-                  {(() => {
-                    const realTotal = summary?.total_emissions || 0;
-                    const scenarioTotal = scenarioSummary.summary?.total_emissions || 0;
-                    const diff = scenarioTotal - realTotal;
-                    const pct = realTotal > 0 ? (diff / realTotal) * 100 : 0;
-                    const isReduction = diff < 0;
-                    return (
-                      <p className={`text-lg font-bold ${isReduction ? 'text-green-500' : 'text-red-500'}`}>
-                        {isReduction ? '' : '+'}{pct.toFixed(1)}%
-                        {isReduction ? <TrendingDown className="w-4 h-4 inline ml-1" /> : <TrendingUp className="w-4 h-4 inline ml-1" />}
-                      </p>
-                    );
-                  })()}
-                </div>
-              </div>
-            </motion.div>
-          )}
-
-          <DashboardResultsTab 
-            summary={selectedScenarioId && scenarioSummary ? scenarioSummary.summary : summary}
-            kpis={kpis}
-            scopeBreakdown={selectedScenarioId && scenarioSummary ? scenarioSummary.breakdown : scopeBreakdown}
-            fiscalComparison={fiscalComparison}
-            fiscalYears={fiscalYears.filter(fy => fy.type !== 'scenario')}
-            selectedFiscalYearForChart={selectedScenarioId || selectedFiscalYearForChart}
-            setSelectedFiscalYearForChart={setSelectedFiscalYearForChart}
-            onOpenRecalcModal={openRecalcModal}
-          />
-        </div>
+        <DashboardResultsTab 
+          summary={summary}
+          kpis={kpis}
+          scopeBreakdown={scopeBreakdown}
+          fiscalComparison={fiscalComparison}
+          fiscalYears={fiscalYears.filter(fy => fy.type !== 'scenario')}
+          selectedFiscalYearForChart={selectedFiscalYearForChart}
+          setSelectedFiscalYearForChart={setSelectedFiscalYearForChart}
+          onOpenRecalcModal={openRecalcModal}
+        />
       )}
 
       {/* ==================== TAB 3: OBJECTIFS ==================== */}
@@ -934,6 +845,137 @@ const Dashboard = () => {
                 </div>
               </motion.div>
 
+              {/* FEAT-02: Scenario selector for Objectives */}
+              {yearScenarios.length > 0 && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className={`flex items-center gap-3 p-3 rounded-xl ${isDark ? 'bg-slate-800' : 'bg-white border border-gray-200'}`}
+                  data-testid="scenario-selector"
+                >
+                  <FlaskConical className={`w-4 h-4 flex-shrink-0 ${selectedScenarioId ? 'text-violet-500' : isDark ? 'text-slate-400' : 'text-gray-400'}`} />
+                  <select
+                    value={selectedScenarioId || ''}
+                    onChange={(e) => setSelectedScenarioId(e.target.value || null)}
+                    data-testid="scenario-select"
+                    className={`flex-1 px-3 py-1.5 rounded-lg border text-sm transition-all ${
+                      selectedScenarioId
+                        ? 'border-violet-500/50 bg-violet-500/5 text-violet-700 font-medium'
+                        : isDark
+                          ? 'bg-slate-700 border-slate-600 text-slate-300'
+                          : 'bg-gray-50 border-gray-200 text-gray-700'
+                    }`}
+                  >
+                    <option value="">Superposer un scénario...</option>
+                    {yearScenarios.map(s => (
+                      <option key={s.id} value={s.id}>
+                        {s.scenario_name || s.name} ({s.activities_count} saisies)
+                      </option>
+                    ))}
+                  </select>
+                  {selectedScenarioId && (
+                    <button
+                      onClick={() => setSelectedScenarioId(null)}
+                      className="p-1 rounded-lg hover:bg-red-500/10 transition-colors"
+                      title="Retirer le scénario"
+                    >
+                      <X className="w-4 h-4 text-red-500" />
+                    </button>
+                  )}
+                </motion.div>
+              )}
+
+              {/* FEAT-02: Effort coverage indicator */}
+              {selectedScenarioId && scenarioSummary && objective && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  className={`p-4 rounded-xl border-2 border-violet-500/30 ${isDark ? 'bg-violet-500/5' : 'bg-violet-50'}`}
+                  data-testid="scenario-effort-indicator"
+                >
+                  <div className="flex items-center gap-2 mb-3">
+                    <FlaskConical className="w-4 h-4 text-violet-500" />
+                    <span className={`text-sm font-semibold ${isDark ? 'text-violet-300' : 'text-violet-700'}`}>
+                      Couverture de l'effort — {yearScenarios.find(s => s.id === selectedScenarioId)?.scenario_name || 'Scénario'}
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {/* Scope 1&2 coverage */}
+                    {(() => {
+                      const baselineS12 = objective.baseline_scope1_2 || 0;
+                      const targetS12 = objective.target_scope1_2 || 0;
+                      const reductionNeeded = baselineS12 - targetS12;
+                      const scenarioS12 = (scenarioSummary.summary?.scope1_emissions || 0) + (scenarioSummary.summary?.scope2_emissions || 0);
+                      const reductionAchieved = baselineS12 - scenarioS12;
+                      const coveragePct = reductionNeeded > 0 ? Math.round((reductionAchieved / reductionNeeded) * 100) : 0;
+                      const isPositive = coveragePct > 0;
+                      return (
+                        <div className={`p-3 rounded-lg ${isDark ? 'bg-slate-800/50' : 'bg-white'}`}>
+                          <div className="flex items-center gap-2 mb-2">
+                            <div className="w-2.5 h-2.5 rounded-full bg-sky-400"></div>
+                            <span className={`text-xs font-medium ${isDark ? 'text-slate-300' : 'text-gray-600'}`}>Scope 1 & 2</span>
+                          </div>
+                          <div className="flex items-end gap-2 mb-2">
+                            <span className={`text-2xl font-bold ${coveragePct >= 100 ? 'text-green-500' : isPositive ? 'text-sky-400' : 'text-red-500'}`}>
+                              {coveragePct}%
+                            </span>
+                            <span className={`text-xs pb-1 ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>
+                              de l'effort requis
+                            </span>
+                          </div>
+                          <div className={`h-1.5 rounded-full ${isDark ? 'bg-slate-700' : 'bg-gray-200'}`}>
+                            <div 
+                              className={`h-full rounded-full transition-all duration-500 ${coveragePct >= 100 ? 'bg-green-500' : isPositive ? 'bg-sky-400' : 'bg-red-400'}`}
+                              style={{ width: `${Math.min(100, Math.max(0, coveragePct))}%` }}
+                            />
+                          </div>
+                          <p className={`text-xs mt-1 ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>
+                            Scénario : {formatEmissions(scenarioS12).value} {formatEmissions(scenarioS12).unit}
+                            {' • '}Cible : {formatEmissions(targetS12).value} {formatEmissions(targetS12).unit}
+                          </p>
+                        </div>
+                      );
+                    })()}
+                    {/* Scope 3 coverage */}
+                    {(() => {
+                      const baselineS3 = objective.baseline_scope3 || 0;
+                      const targetS3 = objective.target_scope3 || 0;
+                      const reductionNeeded = baselineS3 - targetS3;
+                      const scenarioS3 = (scenarioSummary.summary?.scope3_amont_emissions || 0) + (scenarioSummary.summary?.scope3_aval_emissions || 0);
+                      const reductionAchieved = baselineS3 - scenarioS3;
+                      const coveragePct = reductionNeeded > 0 ? Math.round((reductionAchieved / reductionNeeded) * 100) : 0;
+                      const isPositive = coveragePct > 0;
+                      return (
+                        <div className={`p-3 rounded-lg ${isDark ? 'bg-slate-800/50' : 'bg-white'}`}>
+                          <div className="flex items-center gap-2 mb-2">
+                            <div className="w-2.5 h-2.5 rounded-full bg-violet-400"></div>
+                            <span className={`text-xs font-medium ${isDark ? 'text-slate-300' : 'text-gray-600'}`}>Scope 3</span>
+                          </div>
+                          <div className="flex items-end gap-2 mb-2">
+                            <span className={`text-2xl font-bold ${coveragePct >= 100 ? 'text-green-500' : isPositive ? 'text-violet-400' : 'text-red-500'}`}>
+                              {coveragePct}%
+                            </span>
+                            <span className={`text-xs pb-1 ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>
+                              de l'effort requis
+                            </span>
+                          </div>
+                          <div className={`h-1.5 rounded-full ${isDark ? 'bg-slate-700' : 'bg-gray-200'}`}>
+                            <div 
+                              className={`h-full rounded-full transition-all duration-500 ${coveragePct >= 100 ? 'bg-green-500' : isPositive ? 'bg-violet-400' : 'bg-red-400'}`}
+                              style={{ width: `${Math.min(100, Math.max(0, coveragePct))}%` }}
+                            />
+                          </div>
+                          <p className={`text-xs mt-1 ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>
+                            Scénario : {formatEmissions(scenarioS3).value} {formatEmissions(scenarioS3).unit}
+                            {' • '}Cible : {formatEmissions(targetS3).value} {formatEmissions(targetS3).unit}
+                          </p>
+                        </div>
+                      );
+                    })()}
+                  </div>
+                </motion.div>
+              )}
+
               {/* Trajectory Chart */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -947,15 +989,45 @@ const Dashboard = () => {
                 <div className="h-80">
                   <ResponsiveContainer width="100%" height="100%">
                     <ComposedChart
-                      data={trajectoryData.trajectory.map(t => {
-                        const actual = trajectoryData.actuals.find(a => a.year === t.year);
-                        return {
-                          ...t,
-                          actual_scope1_2: actual?.actual_scope1_2,
-                          actual_scope3: actual?.actual_scope3,
-                          actual_total: actual?.actual_total
-                        };
-                      })}
+                      data={(() => {
+                        // Build chart data: trajectory + actuals + scenario overlay
+                        const chartData = trajectoryData.trajectory.map(t => {
+                          const actual = trajectoryData.actuals.find(a => a.year === t.year);
+                          return {
+                            ...t,
+                            actual_scope1_2: actual?.actual_scope1_2,
+                            actual_scope3: actual?.actual_scope3,
+                            actual_total: actual?.actual_total
+                          };
+                        });
+                        
+                        // FEAT-02: Add scenario data point if a scenario is selected
+                        if (selectedScenarioId && scenarioSummary) {
+                          const scenarioFy = yearScenarios.find(s => s.id === selectedScenarioId);
+                          const scenarioYear = scenarioFy?.year;
+                          if (scenarioYear) {
+                            const scenarioS12 = (scenarioSummary.summary?.scope1_emissions || 0) + (scenarioSummary.summary?.scope2_emissions || 0);
+                            const scenarioS3 = (scenarioSummary.summary?.scope3_amont_emissions || 0) + (scenarioSummary.summary?.scope3_aval_emissions || 0);
+                            
+                            // Check if year exists in chart data
+                            const existingIdx = chartData.findIndex(d => d.year === scenarioYear);
+                            if (existingIdx >= 0) {
+                              chartData[existingIdx].scenario_scope1_2 = scenarioS12;
+                              chartData[existingIdx].scenario_scope3 = scenarioS3;
+                            } else {
+                              // Add as new point (sorted)
+                              chartData.push({
+                                year: scenarioYear,
+                                scenario_scope1_2: scenarioS12,
+                                scenario_scope3: scenarioS3
+                              });
+                              chartData.sort((a, b) => a.year - b.year);
+                            }
+                          }
+                        }
+                        
+                        return chartData;
+                      })()}
                       margin={{ top: 20, right: 30, left: 20, bottom: 20 }}
                     >
                       <defs>
@@ -1034,11 +1106,38 @@ const Dashboard = () => {
                         radius={[6, 6, 0, 0]}
                         maxBarSize={36}
                       />
+
+                      {/* FEAT-02: Scenario overlay lines (only when scenario selected) */}
+                      {selectedScenarioId && scenarioSummary && (
+                        <>
+                          <Line
+                            type="monotone"
+                            dataKey="scenario_scope1_2"
+                            name="Scénario Scope 1&2"
+                            stroke="#8B5CF6"
+                            strokeWidth={2.5}
+                            strokeDasharray="8 4"
+                            dot={{ r: 6, fill: '#8B5CF6', stroke: '#fff', strokeWidth: 2 }}
+                            connectNulls={false}
+                          />
+                          <Line
+                            type="monotone"
+                            dataKey="scenario_scope3"
+                            name="Scénario Scope 3"
+                            stroke="#D946EF"
+                            strokeWidth={2.5}
+                            strokeDasharray="8 4"
+                            dot={{ r: 6, fill: '#D946EF', stroke: '#fff', strokeWidth: 2 }}
+                            connectNulls={false}
+                          />
+                        </>
+                      )}
                     </ComposedChart>
                   </ResponsiveContainer>
                 </div>
                 <p className={`text-xs mt-4 text-center ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>
-                  Les lignes pointillées représentent la trajectoire cible SBTi. Les barres montrent les émissions réelles par exercice.
+                  Les lignes pointillées représentent la trajectoire cible SBTi. Les barres montrent les émissions réelles.
+                  {selectedScenarioId && ' Les points violets montrent la projection du scénario.'}
                 </p>
               </motion.div>
 
