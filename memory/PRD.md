@@ -1,54 +1,59 @@
-# Proto Carbon - Calculateur d'empreinte carbone
+# PRD — Calculateur d'empreinte carbone
 
 ## Problème original
-Calculateur d'empreinte carbone avec tableau de bord, objectifs et panneau d'administration. Approche hybride pour simplifier la sélection des facteurs d'émission.
+Application de calcul d'empreinte carbone alignée sur le GHG Protocol, avec tableau de bord, gestion de produits, objectifs et administration.
 
 ## Architecture
-- Frontend: React (port 3000) avec Tailwind, Shadcn/UI, framer-motion, recharts, fuse.js
-- Backend: FastAPI (port 8001) avec MongoDB (DB: carbon_tracker)
-- Langue par défaut: Français
+- **Frontend** : React + Recharts + Framer Motion + Shadcn/UI
+- **Backend** : FastAPI + MongoDB
+- **Intégrations** : SMTP (Infomaniak), OpenAI/Anthropic via clé universelle Emergent, Recharts, Fuse.js
 
-## Ce qui est implémenté
+## Fonctionnalités implémentées
 
 ### Core
-- Auth, Dashboard, Saisie de données, Page Assistance, Menu latéral
-- Recherche fuzzy (Fuse.js), FactorCard tooltips
-- Enrichissement IA complet (1191/1191 facteurs)
-- Conversion d'unités (5 dimensions, stockage Option C)
+- Gestion de produits avancée (GHG Protocol, versionning, recalcul)
+- Tableau de bord moderne (graphiques empilés, icônes, palette pastel)
+- Objectifs de réduction avec trajectoire
+- Panneau d'administration (partiel)
+- Authentification JWT sécurisée
+- Support multilingue FR/DE
 
-### Phase 3 — Produits GHG Protocol (COMPLETE)
-- O3-A1 à O3-A6 : Logique produit GHG, versionning, recalcul, preview, validation, snapshots
-
-### Phase 4 — Mapping GHG (VERIFIE)
-- Ventes produits -> activités GHG automatiques
-
-### UX Améliorations
-- Bouton Modifier visible sur fiche + modale détail
-- Cartes allégées, ProductSaleModal sobre
-
-### Modernisation Dashboard — Onglet Résultats (COMPLETE - 02/03/2026)
-- Palette pastels (#FB923C, #60A5FA, #A78BFA, #F9A8D4)
-- AreaChart empilé (stackId) avec gradients pour l'évolution
-- Top 7 sous-catégories avec traductions FR
-- Barres Scope affinées, grille discrète, ombres allégées
-- **Drill-down avec icônes** : custom XAxis tick utilisant les icônes Lucide des catégories (même iconMap que DataEntry) + tooltip personnalisé avec icône + nom traduit
-
-### Modernisation Dashboard — Onglet Objectifs (COMPLETE - 02/03/2026)
-- ComposedChart avec Areas gradient dashed (cibles) + Bars pastels (réels)
-- Couleurs harmonisées : sky-400 (Scope 1&2), violet-400 (Scope 3)
-- Grille allégée, axes épurés, tooltip modernisé
+### TECH-01 — Assainissement base sous-catégories/EF (Fév 2026)
+- 89 → 69 sous-catégories (nettoyage doublons, traductions, mappings)
+- Script de validation automatisé : `pytest backend/tests/test_db_integrity.py` (14 tests)
+- 0 anomalie détectée post-nettoyage
 
 ## Backlog priorisé
 
-### Phase 3 — Restant
-- O3-A7 : Logs de calcul pour audit (en attente décision utilisateur)
+### Sprint 1
+- [x] **TECH-01** : Assainissement base sous-catégories/EF
+- [ ] **FEAT-04** : Double mode de saisie Scope 3 Aval (fiche produit ou saisie directe)
 
-### Phase 5 — Dette technique
-- O5-A4/A5 : Refactoring wizard en sous-composants
+### Sprint 1-2
+- [ ] **FEAT-02** : Mode Scénario sur les exercices (duplication, comparaison, dashboard)
 
-### Autres (P2-P3)
-- Admin: AdminUnitsTab.jsx, champs enrichis AdminFactorsTab.jsx
-- Exports PDF/Excel
+### Sprint 2
+- [ ] **FEAT-01** : Onboarding guidé (tutoriel first-run, overlay contextuel)
+
+### Sprint 3-4
+- [ ] **FEAT-03** : Gestion multi-utilisateurs (rôles admin/editor/viewer, invitations)
+
+### Sprint 4+
+- [ ] **FEAT-05** : Base de données actions plan climat cantonal
+
+### Backlog technique
+- [ ] Refactoring `ProductWizard.js` (monolithique → sous-composants)
+- [ ] Optimisation requêtes DB `dashboard.py` (projections MongoDB)
+- [ ] Exports PDF/Excel
+- [ ] Logs d'audit émissions (O3-A7, en attente de décision)
+
+## Décisions prises
+- FEAT-02 : Scénarios illimités, dashboard avec sélecteur (Option A pour V1)
+- FEAT-04 : Badge traçabilité (fiche produit vs saisie directe) approuvé
+- FEAT-01 : Overlay contextuel (type Shepherd.js), approche généraliste
+- `emissions_procedes` : Laissée vide, à remplir plus tard
+- `activites_combustibles_energie` : Pas de sous-catégories (saisie automatique)
 
 ## Credentials de test
-- Email: newtest@x.com / Password: test123
+- Email : `newtest@x.com`
+- Password : `test123`
