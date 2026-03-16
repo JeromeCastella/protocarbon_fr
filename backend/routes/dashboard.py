@@ -235,9 +235,10 @@ async def get_category_stats(
 
 @router.get("/fiscal-comparison")
 async def get_fiscal_comparison(current_user: dict = Depends(get_current_user)):
-    """Get emissions comparison across fiscal years"""
+    """Get emissions comparison across fiscal years (actual only, excludes scenarios)"""
     fiscal_years = list(fiscal_years_collection.find({
-        "tenant_id": current_user["id"]
+        "tenant_id": current_user["id"],
+        "type": {"$ne": "scenario"}
     }).sort("start_date", 1))
     
     comparison = []
