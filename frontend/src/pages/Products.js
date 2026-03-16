@@ -141,8 +141,8 @@ const ProductCard = ({ product, index, isDark, language, onEdit, onDelete, onDup
       transition={{ delay: index * 0.04 }}
       onClick={onClick}
       data-testid={`product-card-${product.id}`}
-      className={`rounded-2xl overflow-hidden cursor-pointer transition-all hover:shadow-lg ${
-        isDark ? 'bg-slate-800 hover:bg-slate-750 ring-1 ring-slate-700' : 'bg-blue-50/60 shadow-md hover:shadow-xl ring-1 ring-blue-100'
+      className={`rounded-2xl overflow-hidden cursor-pointer transition-all ${
+        isDark ? 'bg-slate-800 hover:bg-slate-750' : 'bg-white shadow-sm border border-gray-100 hover:shadow-md'
       }`}
     >
       {/* Header — neutral */}
@@ -339,7 +339,7 @@ const Products = () => {
 
       {/* Grid */}
       {products.length === 0 ? (
-        <div className={`text-center py-16 rounded-2xl ${isDark ? 'bg-slate-800' : 'bg-white shadow-lg'}`}>
+        <div className={`text-center py-16 rounded-2xl ${isDark ? 'bg-slate-800' : 'bg-white shadow-sm border border-gray-100'}`}>
           <Package className={`w-16 h-16 mx-auto mb-4 ${isDark ? 'text-slate-600' : 'text-gray-300'}`} />
           <p className={`text-lg mb-2 ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
             {language === 'fr' ? 'Aucun produit défini' : 'Keine Produkte definiert'}

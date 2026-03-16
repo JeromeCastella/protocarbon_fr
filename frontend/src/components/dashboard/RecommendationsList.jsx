@@ -13,7 +13,7 @@ const RecommendationsList = ({ recommendations = [], formatEmissions, isDark = f
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.2 }}
-      className={`p-6 rounded-2xl ${isDark ? 'bg-slate-800' : 'bg-white shadow-lg'}`}
+      className={`p-6 rounded-2xl ${isDark ? 'bg-slate-800' : 'bg-white shadow-sm border border-gray-100'}`}
     >
       <div className="flex items-center gap-3 mb-4">
         <Lightbulb className="w-6 h-6 text-amber-500" />

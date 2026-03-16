@@ -306,23 +306,23 @@ const EmissionFactors = () => {
 
       {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div className={`p-4 rounded-xl ${isDark ? 'bg-slate-800' : 'bg-white shadow-lg'}`}>
+        <div className={`p-4 rounded-xl ${isDark ? 'bg-slate-800' : 'bg-white shadow-sm border border-gray-100'}`}>
           <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>Total facteurs</p>
           <p className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>{factors.length}</p>
         </div>
-        <div className={`p-4 rounded-xl ${isDark ? 'bg-slate-800' : 'bg-white shadow-lg'}`}>
+        <div className={`p-4 rounded-xl ${isDark ? 'bg-slate-800' : 'bg-white shadow-sm border border-gray-100'}`}>
           <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>Scope 1</p>
           <p className={`text-2xl font-bold text-blue-500`}>
             {factors.filter(f => getFactorScopes(f).includes('scope1')).length}
           </p>
         </div>
-        <div className={`p-4 rounded-xl ${isDark ? 'bg-slate-800' : 'bg-white shadow-lg'}`}>
+        <div className={`p-4 rounded-xl ${isDark ? 'bg-slate-800' : 'bg-white shadow-sm border border-gray-100'}`}>
           <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>Scope 2</p>
           <p className={`text-2xl font-bold text-cyan-500`}>
             {factors.filter(f => getFactorScopes(f).includes('scope2')).length}
           </p>
         </div>
-        <div className={`p-4 rounded-xl ${isDark ? 'bg-slate-800' : 'bg-white shadow-lg'}`}>
+        <div className={`p-4 rounded-xl ${isDark ? 'bg-slate-800' : 'bg-white shadow-sm border border-gray-100'}`}>
           <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>Scope 3</p>
           <p className={`text-2xl font-bold text-purple-500`}>
             {factors.filter(f => getFactorScopes(f).some(s => s?.startsWith('scope3'))).length}
@@ -337,7 +337,7 @@ const EmissionFactors = () => {
             key={category}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className={`rounded-2xl overflow-hidden ${isDark ? 'bg-slate-800' : 'bg-white shadow-lg'}`}
+            className={`rounded-2xl overflow-hidden ${isDark ? 'bg-slate-800' : 'bg-white shadow-sm border border-gray-100'}`}
           >
             <div className={`px-6 py-4 ${isDark ? 'bg-slate-700' : 'bg-gray-50'}`}>
               <h3 className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
@@ -427,7 +427,7 @@ const EmissionFactors = () => {
       </div>
 
       {filteredFactors.length === 0 && (
-        <div className={`text-center py-16 rounded-2xl ${isDark ? 'bg-slate-800' : 'bg-white shadow-lg'}`}>
+        <div className={`text-center py-16 rounded-2xl ${isDark ? 'bg-slate-800' : 'bg-white shadow-sm border border-gray-100'}`}>
           <Database className={`w-16 h-16 mx-auto mb-4 ${isDark ? 'text-slate-600' : 'text-gray-300'}`} />
           <p className={isDark ? 'text-slate-400' : 'text-gray-500'}>
             Aucun facteur d&apos;émission trouvé pour cette recherche.

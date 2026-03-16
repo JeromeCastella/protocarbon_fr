@@ -291,7 +291,7 @@ const Assistance = () => {
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
               data-testid={`tab-${tab.id}`}
-              className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-lg font-medium transition-all ${
+              className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-medium transition-all ${
                 activeTab === tab.id
                   ? 'bg-blue-500 text-white shadow-lg'
                   : isDark
@@ -346,7 +346,7 @@ const Assistance = () => {
                   key={category.id}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className={`rounded-2xl overflow-hidden ${isDark ? 'bg-slate-800' : 'bg-white shadow-lg'}`}
+                  className={`rounded-2xl overflow-hidden ${isDark ? 'bg-slate-800' : 'bg-white shadow-sm border border-gray-100'}`}
                 >
                   {/* Category Header */}
                   <button
@@ -441,7 +441,7 @@ const Assistance = () => {
 
           {/* No results */}
           {filteredFaqCategories.length === 0 && faqSearch && (
-            <div className={`text-center py-12 rounded-2xl ${isDark ? 'bg-slate-800' : 'bg-white shadow-lg'}`}>
+            <div className={`text-center py-12 rounded-2xl ${isDark ? 'bg-slate-800' : 'bg-white shadow-sm border border-gray-100'}`}>
               <Search className={`w-12 h-12 mx-auto mb-4 ${isDark ? 'text-slate-600' : 'text-gray-300'}`} />
               <p className={isDark ? 'text-slate-400' : 'text-gray-500'}>
                 {language === 'fr' 
@@ -542,7 +542,7 @@ const Assistance = () => {
                 initial={{ height: 0, opacity: 0 }}
                 animate={{ height: 'auto', opacity: 1 }}
                 exit={{ height: 0, opacity: 0 }}
-                className={`p-4 rounded-xl ${isDark ? 'bg-slate-800' : 'bg-white shadow-lg'}`}
+                className={`p-4 rounded-xl ${isDark ? 'bg-slate-800' : 'bg-white shadow-sm border border-gray-100'}`}
               >
                 <p className={`text-sm font-medium mb-3 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
                   {language === 'fr' ? 'Filtrer par scope' : 'Nach Scope filtern'}
@@ -603,7 +603,7 @@ const Assistance = () => {
                     className={`p-4 rounded-xl cursor-pointer transition-all ${
                       isDark 
                         ? 'bg-slate-800 hover:bg-slate-700 border border-slate-700' 
-                        : 'bg-white hover:shadow-lg border border-gray-100'
+                        : 'bg-white hover:shadow-md shadow-sm border border-gray-100'
                     }`}
                   >
                     <h4 className={`font-medium mb-2 line-clamp-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
@@ -663,7 +663,7 @@ const Assistance = () => {
 
           {/* No results */}
           {!factorsLoading && filteredFactors.length === 0 && (
-            <div className={`text-center py-12 rounded-2xl ${isDark ? 'bg-slate-800' : 'bg-white shadow-lg'}`}>
+            <div className={`text-center py-12 rounded-2xl ${isDark ? 'bg-slate-800' : 'bg-white shadow-sm border border-gray-100'}`}>
               <Database className={`w-12 h-12 mx-auto mb-4 ${isDark ? 'text-slate-600' : 'text-gray-300'}`} />
               <p className={isDark ? 'text-slate-400' : 'text-gray-500'}>
                 {language === 'fr' 

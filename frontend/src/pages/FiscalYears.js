@@ -394,7 +394,7 @@ const FiscalYears = () => {
                   : 'bg-blue-50 border-blue-200'
                 : isDark 
                   ? 'bg-slate-800 border-slate-700 hover:border-slate-600' 
-                  : 'bg-white border-gray-200 hover:border-gray-300'
+                  : 'bg-white shadow-sm border-gray-100 hover:border-gray-200 hover:shadow-md'
             }`}
           >
             {/* Current badge */}
@@ -491,7 +491,7 @@ const FiscalYears = () => {
 
       {/* Empty state */}
       {fiscalYears.length === 0 && (
-        <div className={`text-center py-16 rounded-2xl ${isDark ? 'bg-slate-800' : 'bg-gray-50'}`}>
+        <div className={`text-center py-16 rounded-2xl ${isDark ? 'bg-slate-800' : 'bg-white shadow-sm border border-gray-100'}`}>
           <Calendar className={`w-16 h-16 mx-auto mb-4 ${isDark ? 'text-slate-600' : 'text-gray-300'}`} />
           <h3 className={`text-xl font-semibold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
             Aucun exercice fiscal

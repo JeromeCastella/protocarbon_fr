@@ -1,71 +1,83 @@
 <analysis>**original_problem_statement:**
-L'utilisateur a initialement demandé un calculateur d'empreinte carbone. Le projet a évolué pour inclure un tableau de bord, des objectifs, et un panneau d'administration.
+L'utilisateur a initialement demandé un calculateur d'empreinte carbone, qui a évolué vers une application complète avec tableau de bord, gestion de produits, objectifs, et un futur panneau d'administration.
 
-Le focus récent s'est porté sur l'amélioration de la fonctionnalité de création/gestion des Produits, guidée par un backlog détaillé. Cela a inclus une refonte majeure pour aligner la logique de création de produits avec les catégories du GHG Protocol.
+Récemment, l'utilisateur a fourni un backlog détaillé de nouvelles fonctionnalités (FEAT-01 à FEAT-05 et TECH-01). Les tâches suivantes ont été complétées :
+1.  **TECH-01**: Nettoyage et assainissement de la base de données des facteurs d'émission et des sous-catégories, avec création d'un script de test d'intégrité.
+2.  **FEAT-04**: Implémentation d'un double mode de saisie (guidé Fiche produit vs Saisie directe) pour le Scope 3 Aval.
+3.  **FEAT-02**: Implémentation d'un mode Scénario pour permettre la simulation et la comparaison de stratégies de décarbonation.
+4.  **FEAT-01**: Ajout d'un tutoriel d'accueil pour les nouveaux utilisateurs avec .
 
-Suite à cela, plusieurs améliorations UX/UI ont été demandées et implémentées, notamment une modernisation visuelle complète des graphiques des onglets Résultats et Objectifs du tableau de bord, la correction de l'affichage des labels de graphiques, et un durcissement de la sécurité avant déploiement.
+La demande actuelle de l'utilisateur est d'harmoniser le design de toute l'application pour qu'il corresponde au style moderne de l'onglet Résultats du tableau de bord.
 
 **PRODUCT REQUIREMENTS:**
-*   **Refonte de la Logique Produit**: Aligner le wizard de création de produit avec les catégories 3.10, 3.11, et 3.12 du GHG Protocol. (Terminé)
-*   **Données et Calculs Robustes**: Implémenter le versionning des produits, le recalcul automatique, une validation complète côté backend et un endpoint de preview. (Terminé)
-*   **Gestion de la Dépréciation des Facteurs**: Mettre en place un système où la modification d'un facteur d'émission ne casse pas les produits existants mais les marque comme nécessitant un recalcul. (Terminé)
-*   **Amélioration de l'UX/UI**:
-    *   Améliorer l'ergonomie de la modification des produits. (Terminé)
-    *   Harmoniser et épurer le design des modales et des fiches produits. (Terminé)
-    *   Moderniser les graphiques du tableau de bord principal (Résultats et Objectifs). (Terminé)
-    *   Remplacer les longs labels textuels des graphiques par des icônes pour une meilleure lisibilité. (Terminé)
-*   **Intégration au Bilan GHG**: S'assurer que les émissions générées par les ventes de produits sont correctement mappées dans le bilan carbone global. (Terminé et Vérifié)
-*   **Personnalisation Visuelle**: Intégrer un logo partenaire sur la page de connexion, avec support multilingue. (Terminé)
-*   **Sécurité**: Remplacer le secret JWT statique par une clé cryptographique sécurisée. (Terminé)
+*   **FEAT-01 — Expérience d'onboarding guidé**: Un tutoriel pas-à-pas pour les nouveaux utilisateurs. (Terminé)
+*   **FEAT-02 — Mode Scénario sur les exercices**: Permettre la duplication d'exercices en mode scénario pour la simulation, avec comparaison visuelle sur le tableau de bord. (Terminé)
+*   **FEAT-04 — Double mode de saisie pour le Scope 3 Aval**: Offrir le choix entre une saisie via une fiche produit structurée ou une saisie directe et simplifiée. (Terminé)
+*   **TECH-01 — Assainissement de la base de données**: Auditer, nettoyer et standardiser les données des facteurs d'émission et des sous-catégories, et créer un script de validation. (Terminé)
+*   **TÂCHE UI — Harmonisation du Design**: Appliquer le style visuel de l'onglet Résultats (cartes, ombres, couleurs) à l'ensemble des pages de l'application. (En cours)
 
 **User's preferred language**: Français
 
 **what currently exists?**
-Une application full-stack (React/FastAPI/MongoDB) fonctionnelle et visuellement modernisée. Les points clés sont :
--   **Gestion de Produits Avancée**: Complète et alignée sur le GHG Protocol, avec versionning, recalculs et gestion de la staleness des données.
--   **Tableau de Bord Moderne**: Les onglets Résultats et Objectifs ont été entièrement re-stylisés avec une palette de couleurs pastel, des graphiques en aires empilées avec gradients, et une meilleure lisibilité.
--   **UX Graphiques Améliorée**: Les longs labels de l'axe X dans les graphiques en mode drill-down ont été remplacés par des icônes cliquables avec des tooltips, réutilisant le mapping existant de la page .
--   **Sécurité Renforcée**: Le secret JWT a été remplacé par une clé cryptographique sécurisée, invalidant les anciennes sessions et renforçant la sécurité de l'authentification.
--   **Prêt pour le Déploiement**: Les points bloquants identifiés par un audit de santé ont été résolus ou jugés non pertinents (le  custom est intentionnel).
+Une application full-stack (React/FastAPI/MongoDB) avec les fonctionnalités suivantes implémentées et fonctionnelles :
+-   **Gestion de Produits Avancée**: Complète et alignée sur le GHG Protocol.
+-   **Tableau de Bord Moderne**: Graphiques avancés et fonctionnalités de comparaison.
+-   **Nettoyage de Données**: Une base de données de facteurs d'émission assainie, validée par un script de test automatisé ().
+-   **Mode de Saisie Flexible (Scope 3)**: Les utilisateurs peuvent choisir entre une saisie détaillée par produit ou une saisie directe pour le Scope 3 Aval.
+-   **Mode Scénario**: Les utilisateurs peuvent créer des scénarios what-if à partir d'exercices existants, les nommer, et les superposer sur le graphique de trajectoire dans l'onglet Objectifs pour une analyse comparative.
+-   **Sélecteur d'Exercice Hiérarchique**: Le sélecteur principal distingue clairement les exercices réels des scénarios associés, améliorant la clarté de la navigation.
+-   **Tutoriel d'Onboarding**: Un guide interactif se lance pour les nouveaux utilisateurs et peut être relancé depuis la barre latérale.
 
 **Last working item**:
-    - Last item agent was working: Présentation de l'état d'avancement du backlog au complet à l'utilisateur, suite à sa demande. L'agent a listé les tâches terminées, en attente de décision, et le backlog restant.
-    - Status: USER VERIFICATION PENDING
+    - Last item agent was working: Le projet d'harmonisation du design de l'application. L'agent a analysé le design de référence de l'onglet Résultats et s'apprêtait à commencer les modifications sur la page .
+    - Status: NOT STARTED
     - Agent Testing Done: N/A
-    - Which testing method agent to use? N/A
-    - User Testing Done: Y/N
+    - Which testing method agent to use? frontend testing agent (après la mise à jour de toutes les pages concernées).
+    - User Testing Done: N
 
 **All Pending/In progress Issue list**:
   - Aucun.
 
 **In progress Task List**:
-  - Aucun.
+  - Task 1: **Harmonisation du Design de l'Application** (Priorité: P0)
+     - Where to resume: L'agent doit commencer à modifier le fichier  pour appliquer les styles (cartes, ombres, espacements) identifiés dans l'onglet .
+     - What will be achieved with this? Une expérience utilisateur cohérente et un design professionnel sur l'ensemble de l'application. Les pages à mettre à jour sont : , , , et .
+     - Status: IN PROGRESS
+     - Should Test frontend/backend/both after fix? frontend
+     - Blocked on something: Non.
 
 **Upcoming and Future Tasks**
     Upcoming Tasks:
-    - **P0: O3-A7 — Logs d'audit pour les calculs d'émission**: Le choix sur le niveau de détail des logs (minimal, détaillé, ou reporté) est en attente de la décision de l'utilisateur. **C'est la prochaine décision à prendre.**
+    - **P0: FEAT-03 — Gestion multi-utilisateurs par compte**: Permettre à plusieurs utilisateurs de collaborer sur un même compte avec des rôles (Admin, Éditeur, Lecteur). C'est un chantier architectural majeur.
+    - **P1: O3-A7 — Logs d'audit pour les calculs d'émission**: La décision sur le niveau de détail des logs est en attente de la part de l'utilisateur.
 
     Future Tasks:
-    - **P1: O5-A4/A5 — Découpage du composant monolithique **: Refactoriser le wizard en sous-composants plus petits pour améliorer la maintenabilité.
-    - **P2: Finaliser le panneau d'administration**:
-        - Créer une interface pour gérer les dimensions et les conversions d'unités ().
-        - Créer une interface pour gérer les champs de facteurs d'émission enrichis ().
-    - **P2: Exports PDF/Excel**: Ajouter la fonctionnalité d'export des bilans et rapports.
-    - **P2: Optimisation des requêtes DB**: Ajouter des projections MongoDB sur les 10 requêtes identifiées dans  pour améliorer les performances.
+    - **P1: O5-A4/A5 — Découpage du composant monolithique **: Refactoriser pour améliorer la maintenabilité.
+    - **P2: Finaliser le panneau d'administration**: Interfaces pour la gestion des unités () et des facteurs ().
+    - **P2: Exports PDF/Excel**: Ajouter la fonctionnalité d'export.
+    - **P2: FEAT-05 — Base de données des actions du plan climat cantonal**: Intégrer un référentiel d'actions de réduction pour proposer des recommandations aux utilisateurs.
+    - **P2: Optimisation des requêtes DB**: Ajouter des projections MongoDB dans .
 
 **Completed work in this session**
-- **Modernisation du Dashboard (Onglet Résultats)**: Refonte complète du style : graphiques  empilés avec gradients, nouvelle palette de couleurs, ombres allégées.
-- **Modernisation du Dashboard (Onglet Objectifs)**: Harmonisation du style avec l'onglet Résultats (graphique de trajectoire, cartes de progression).
-- **Correction UX Graphiques**: Remplacement des labels textuels obliques dans les graphiques drill-down par des icônes avec tooltips, en réutilisant le  existant.
-- **Correction de Bug (Données)**: Résolution d'un bug où les données d'émissions annuelles étaient écrasées dans l'état du composant.
-- **Correction de Bug (Traduction)**: Traduction des labels manquants dans le graphique drill-down.
-- **Audit de Déploiement**: Lancement d'un health check pour vérifier la préparation au déploiement.
-- **Durcissement de la Sécurité**: Remplacement du  statique par un token cryptographique sécurisé dans .
+- **TECH-01: Assainissement de la Base de Données**:
+  - Nettoyage collaboratif de la collection  (doublons, traductions, liens orphelins).
+  - Création d'un script de test d'intégrité .
+- **FEAT-04: Double Mode de Saisie Scope 3 Aval**:
+  - Mise en place d'une modale de choix () et intégration dans .
+  - Ajout d'un badge de traçabilité dans la table des activités.
+- **FEAT-02: Mode Scénario**:
+  - **Backend**: Modification du modèle , création d'endpoints pour la création et la récupération de scénarios.
+  - **Frontend**: Mise à jour de la page  pour la gestion des scénarios, refonte du sélecteur  en une vue hiérarchique, et ajout d'un overlay de comparaison sur le graphique de trajectoire du .
+- **FEAT-01: Tutoriel d'Onboarding Guidé**:
+  - **Backend**: Ajout du flag  au modèle utilisateur et d'un endpoint pour le mettre à jour.
+  - **Frontend**: Intégration de  via un composant , déclenché à la première connexion et ré-activable depuis la barre latérale.
+- **Corrections de Bugs Critiques**:
+  - Correction d'un bug où les données de scénario étaient doublées ou mal calculées dans les graphiques du tableau de bord en raison de filtres et de normalisation de  manquants dans les endpoints backend (, ).
 
 **Earlier issues found/mentioned but not fixed**
    - **Issue 1**: **Optimisation des requêtes base de données**
-     - **Debug checklist**: Le fichier  contient environ 10 requêtes MongoDB () qui ne spécifient pas de projection.
-     - **Why to solve this issue and what will be achieved with this?** Ajouter des projections () réduira la charge sur la base de données et la latence réseau en ne transférant que les données strictement nécessaires au frontend. C'est une bonne pratique de performance.
+     - **Debug checklist**: Le fichier  contient environ 10 requêtes MongoDB qui ne spécifient pas de projection.
+     - **Why to solve this issue and what will be achieved with this?** Réduire la charge sur la base de données et la latence réseau. C'est une bonne pratique de performance.
      - **Should Test frontend/backend/both after fix**: backend
      - **Is recurring issue?** N
 
@@ -76,58 +88,70 @@ Une application full-stack (React/FastAPI/MongoDB) fonctionnelle et visuellement
 
 
 **Key Technical Concepts**
-- **Custom Chart Rendering (Recharts)**: Utilisation de  dans un  pour injecter des composants React (icônes Lucide) comme labels d'axe, résolvant un problème d'UX complexe.
-- **Security Hardening**: Remplacement d'un secret statique par un token généré cryptographiquement () pour sécuriser l'authentification JWT.
-- **Deployment Health Check**: Utilisation proactive d'un agent spécialisé pour auditer le code et l'environnement à la recherche de problèmes de sécurité et de performance avant le déploiement.
-- **Développement Itératif UI/UX**: Enchaînement rapide de cycles de feedback/implémentation pour moderniser l'interface (graphiques, palettes de couleurs, icônes).
+- **Test d'Intégrité Automatisé (Pytest)**: Création d'un script de test dédié pour garantir la qualité et la cohérence des données de référence dans la base de données.
+- **Refonte de Composant (React)**: Réécriture complète de  pour passer d'un simple dropdown à un sélecteur hiérarchique à deux niveaux, améliorant l'UX de la sélection de scénarios.
+- **Visualisation de Données (Recharts)**: Superposition d'une ligne de scénario sur un graphique en aires existant pour créer un overlay de comparaison visuelle directe.
+- **Gestion d'État Globale (React Context)**: Extension du  pour gérer l'état de l'onboarding de l'utilisateur à travers toute l'application.
+- **Intégration de Librairie Tiers**: Utilisation de  pour construire un tutoriel utilisateur guidé et interactif.
 
 **key DB schema**
-  - Pas de changement dans ce fork.
+  - **fiscal_years**:
+    - : actual | scenario (nouveau)
+    - : string (nom du scénario, nouveau)
+    - : ObjectId (lien vers l'exercice parent, nouveau)
+  - **users**:
+    - : boolean (nouveau)
 
 **changes in tech stack**
-  - None.
+  -  a été ajouté comme dépendance frontend.
 
 **All files of reference**
-- : Fichier principal des modifications de ce fork (refonte UI/UX des graphiques).
-- : Fichier modifié pour le durcissement de la sécurité (JWT_SECRET).
-- : Document de suivi du projet, mis à jour par l'agent.
-- : Cahier des charges fourni par l'utilisateur pour la modernisation des graphiques.
+-  (Contient le design de référence et a été modifié pour les scénarios)
+-  (Prochaine page à modifier pour l'harmonisation UI)
+-  (Modifié pour la gestion des scénarios)
+-  (Composant clé pour la sélection d'exercice/scénario)
+-  (Logique du tutoriel)
+-  (Script de validation de la BDD)
+-  (Logique backend des scénarios)
+-  (Logique du graphique de trajectoire)
 
 **Areas that need refactoring**:
-- ****: Ce composant est monolithique et identifié comme une tâche de refactoring future pour améliorer sa maintenabilité.
-- ****: Nécessite l'ajout de projections aux requêtes MongoDB pour l'optimisation des performances.
+- ****: Ce composant monolithique est toujours un candidat pour une future refactorisation.
+- ****: Nécessite toujours l'ajout de projections aux requêtes MongoDB pour l'optimisation.
 
 **key api endpoints**
-- Aucun nouvel endpoint créé dans ce fork.
+- : Marque le tutoriel comme terminé pour l'utilisateur.
+- : Récupère les scénarios associés à un exercice annuel.
+- : Modifié pour permettre la création de scénarios.
+- : Corrigé pour exclure les scénarios des données réelles et normaliser les scopes.
+- : Corrigé pour exclure les scénarios du graphique d'évolution.
 
 **Critical Info for New Agent**
-- **Priorité immédiate**: Attendre la décision de l'utilisateur concernant la prochaine tâche. Il vient de recevoir un état des lieux complet du backlog.
-- **Prochaine étape probable**: L'utilisateur devra se prononcer sur l'implémentation des **logs d'audit (O3-A7)**. Préparez-vous à discuter des options (minimal, détaillé, etc.).
-- **Contexte utilisateur**: L'utilisateur est technique, réactif et apprécie les solutions créatives aux problèmes d'UX (comme l'idée des icônes pour les graphiques). Continuez à proposer des solutions bien argumentées.
-- **État du projet**: L'application est stable, testée et visuellement aboutie. Les tâches restantes relèvent principalement du backlog (fonctionnalités d'admin, refactoring, optimisations).
+- La tâche immédiate est l'**harmonisation de l'interface utilisateur**. Commencez par la page  et appliquez les styles (cartes, ombres, couleurs) de l'onglet .
+- L'utilisateur est très impliqué et apprécie les suggestions proactives, en particulier pour l'UX.
+- Une fois l'harmonisation de l'UI terminée, la prochaine tâche prioritaire du backlog est , qui est un chantier technique important.
 
 **documents and test reports created in this job**
-  - Plusieurs rapports de test dans  suite aux modernisations du dashboard.
-  -  (mis à jour).
+  - 
+  - De nombreux rapports de test dans  suite aux implémentations des features , , et .
 
 **Last 10 User Messages and any pending HUMAN messages**
-1.  **[163]** User asked for a full status update on the project backlog. (Completed)
-2.  **[161]** User acknowledged the JWT secret fix with OK. (Completed)
-3.  **[151]** User questioned the  issue from the health check, clarifying it's their intended custom domain, and approved fixing the SMTP/JWT secret issues. (Completed)
-4.  **[147]** User requested to run the deployment health check agent. (Completed)
-5.  **[104]** User asked if the agent could use the same icons as the ones on the  page for the chart labels. (Completed)
-6.  **[102]** User proposed exploring a solution with icons and tooltips for the long chart labels and asked about its technical difficulty. (Completed)
-7.  **[100]** User reported a UI problem with unappealing, overlapping diagonal labels in the drill-down chart view. (Completed)
-8.  **[67]** User diagnosed a data issue themselves (the data was simply being overwritten) and told the agent to proceed with the UI modernization. (Completed)
-9.  **[60]** User expressed satisfaction with the new look of the Results tab and asked for the steps to apply a similar style to the Objectives tab, while also pointing out a potential data issue. (Completed)
-10. **[11]** User provided the specification file () and specified that the area chart should be stacked. (Completed)
+1.  **[462]** D'accord pour commencer l'harmonisation UI avec la page  et garder les autres en backlog. (Tâche en cours)
+2.  **[459]** Demande d'uniformiser le design de toute l'app en se basant sur le style de l'onglet Résultats. (Tâche en cours)
+3.  **[390]** Donne ses choix pour le tutoriel : minimaliste, bilingue, avec . (Terminé)
+4.  **[387]** Demande de commencer le  (Onboarding) et de clarifier les questions ouvertes. (Terminé)
+5.  **[360]** Choisit l'option C pour la refonte du sélecteur d'exercices. (Terminé)
+6.  **[357]** Demande une amélioration du sélecteur d'exercices pour hiérarchiser les exercices réels et les scénarios. (Terminé)
+7.  **[321]** Signale un bug : les valeurs du scénario semblent réduites par un ratio incorrect sur le graphique. (Corrigé)
+8.  **[309]** Signale un bug : les données du scénario s'affichent à 0 sur le graphique. (Corrigé)
+9.  **[278]** Accepte les suggestions d'amélioration pour l'onglet Objectifs. (Terminé)
+10. **[269]** Demande de déplacer le sélecteur de scénario sur l'onglet Objectifs et de proposer d'autres améliorations pour cette vue. (Terminé)
 
 **Project Health Check:**
-- **Broken**: None. Le  a été corrigé.
-- **Mocked**: None.
+- **Broken**: Aucun.
+- **Mocked**: Aucun.
 - **Needs Attention**:
-    - **Optimisation DB**: 10 requêtes dans  pourraient être optimisées avec des projections. C'est une recommandation de performance, non bloquante.
-    - **Secrets**: Les identifiants SMTP sont dans , ce qui est acceptable pour un déploiement initial mais pourrait être migré vers un gestionnaire de secrets à long terme.
+    - **Optimisation DB**: Les requêtes dans  peuvent encore être optimisées avec des projections.
 
 **3rd Party Integrations**
 - 
@@ -137,32 +161,35 @@ platform linux -- Python 3.11.14, pytest-9.0.2, pluggy-1.6.0
 rootdir: /app
 plugins: anyio-3.7.1, asyncio-1.3.0
 asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
-collected 243 items
+collected 270 items
 
-backend/tests/test_admin_panel.py FFEEFEEEEEEEEEEEEE                     [  7%]
-backend/tests/test_auth.py .......                                       [ 10%]
-backend/tests/test_carbon_api.py F......FFFF...F                         [ 16%]
-backend/tests/test_comprehensive_features.py ........................... [ 27%]
-..                                                                       [ 28%]
-backend/tests/test_dashboard_results.py ....................             [ 36%]
-backend/tests/test_dashboard_scope_normalization.py .........            [ 40%]
-backend/tests/test_data_entry_bugs.py EFFFEEEEEEEEEFEE                   [ 46%]
-backend/tests/test_emissions.py ...............                          [ 53%]
-backend/tests/test_ghg_product_wizard.py EEEEEEEEEEEE                    [ 58%]
-backend/tests/test_ghg_protocol_rules.py .........                       [ 61%]
-backend/tests/test_models.py ...........                                 [ 66%]
-backend/tests/test_multi_impacts.py .........                            [ 69%]
-backend/tests/test_phase3_features.py EEEEEEEEEEE                        [ 74%]
-backend/tests/test_phase4_features.py EEEEEEEEEEEEEEEE                   [ 81%]
-backend/tests/test_product_lifecycle.py FFFFFFFF..sF..                   [ 86%]
-backend/tests/test_product_sales.py .........                            [ 90%]
+backend/tests/test_admin_panel.py FFEEFEEEEEEEEEEEEE                     [  6%]
+backend/tests/test_auth.py .......                                       [  9%]
+backend/tests/test_carbon_api.py F......FFFF...F                         [ 14%]
+backend/tests/test_comprehensive_features.py ...................F....... [ 24%]
+..                                                                       [ 25%]
+backend/tests/test_dashboard_results.py ...................F             [ 32%]
+backend/tests/test_dashboard_scope_normalization.py .........            [ 36%]
+backend/tests/test_data_entry_bugs.py EFFFEEEEEEEEEFEE                   [ 42%]
+backend/tests/test_db_integrity.py ..............                        [ 47%]
+backend/tests/test_emissions.py ...............                          [ 52%]
+backend/tests/test_feat02_scenarios.py EEEEEEEE                          [ 55%]
+backend/tests/test_ghg_product_wizard.py EEEEEEEEEEEE                    [ 60%]
+backend/tests/test_ghg_protocol_rules.py .........                       [ 63%]
+backend/tests/test_models.py ...........                                 [ 67%]
+backend/tests/test_multi_impacts.py .........                            [ 71%]
+backend/tests/test_onboarding.py EEEEF                                   [ 72%]
+backend/tests/test_phase3_features.py EEEEEEEEEEE                        [ 77%]
+backend/tests/test_phase4_features.py EEEEEEEEEEEEEEEE                   [ 82%]
+backend/tests/test_product_lifecycle.py FFFFFFFF..sF..                   [ 88%]
+backend/tests/test_product_sales.py .........                            [ 91%]
 backend/tests/test_product_wizard.py EEEEEEEEEEEEEE                      [ 96%]
 backend/tests/test_unit_conversion.py FFFFFFEEE                          [100%]
 
 ==================================== ERRORS ====================================
 ____ ERROR at setup of TestAdminUsersEndpoint.test_admin_can_get_users_list ____
 
-self = <test_admin_panel.TestAdminUsersEndpoint object at 0xfffa9225fd50>
+self = <test_admin_panel.TestAdminUsersEndpoint object at 0xf8ff8ee70310>
 
     @pytest.fixture
     def admin_token(self):
@@ -229,7 +256,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/login': No
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 _ ERROR at setup of TestAdminUsersEndpoint.test_regular_user_cannot_access_admin_users _
 
-self = <test_admin_panel.TestAdminUsersEndpoint object at 0xfffa92270450>
+self = <test_admin_panel.TestAdminUsersEndpoint object at 0xf8ff8ee709d0>
 
     @pytest.fixture
     def regular_user_token(self):
@@ -300,7 +327,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/register':
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 _ ERROR at setup of TestAdminUserRoleManagement.test_admin_can_promote_user_to_admin _
 
-self = <test_admin_panel.TestAdminUserRoleManagement object at 0xfffa92271550>
+self = <test_admin_panel.TestAdminUserRoleManagement object at 0xf8ff8ee71a50>
 
     @pytest.fixture
     def admin_token(self):
@@ -367,7 +394,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/login': No
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 _ ERROR at setup of TestAdminUserRoleManagement.test_regular_user_cannot_change_roles _
 
-self = <test_admin_panel.TestAdminUserRoleManagement object at 0xfffa92271cd0>
+self = <test_admin_panel.TestAdminUserRoleManagement object at 0xf8ff8ee721d0>
 
     @pytest.fixture
     def regular_user_token(self):
@@ -437,7 +464,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/register':
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 ___ ERROR at setup of TestAdminUserRoleManagement.test_invalid_role_rejected ___
 
-self = <test_admin_panel.TestAdminUserRoleManagement object at 0xfffa92272410>
+self = <test_admin_panel.TestAdminUserRoleManagement object at 0xf8ff8ee72910>
 
     @pytest.fixture
     def admin_token(self):
@@ -504,7 +531,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/login': No
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 _ ERROR at setup of TestAdminEmissionFactors.test_admin_can_get_emission_factors _
 
-self = <test_admin_panel.TestAdminEmissionFactors object at 0xfffa92272dd0>
+self = <test_admin_panel.TestAdminEmissionFactors object at 0xf8ff8ee732d0>
 
     @pytest.fixture
     def admin_token(self):
@@ -571,7 +598,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/login': No
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 _ ERROR at setup of TestAdminEmissionFactors.test_regular_user_cannot_access_admin_emission_factors _
 
-self = <test_admin_panel.TestAdminEmissionFactors object at 0xfffa92273550>
+self = <test_admin_panel.TestAdminEmissionFactors object at 0xf8ff8ee73a50>
 
     @pytest.fixture
     def regular_user_token(self):
@@ -641,7 +668,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/register':
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 _ ERROR at setup of TestAdminEmissionFactors.test_admin_can_create_emission_factor _
 
-self = <test_admin_panel.TestAdminEmissionFactors object at 0xfffa92273c90>
+self = <test_admin_panel.TestAdminEmissionFactors object at 0xf8ff8ee741d0>
 
     @pytest.fixture
     def admin_token(self):
@@ -708,7 +735,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/login': No
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 _ ERROR at setup of TestAdminEmissionFactors.test_admin_can_update_emission_factor _
 
-self = <test_admin_panel.TestAdminEmissionFactors object at 0xfffa92274450>
+self = <test_admin_panel.TestAdminEmissionFactors object at 0xf8ff8ee74950>
 
     @pytest.fixture
     def admin_token(self):
@@ -775,7 +802,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/login': No
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 _ ERROR at setup of TestAdminEmissionFactors.test_admin_can_delete_emission_factor _
 
-self = <test_admin_panel.TestAdminEmissionFactors object at 0xfffa92272f50>
+self = <test_admin_panel.TestAdminEmissionFactors object at 0xf8ff8ee71e10>
 
     @pytest.fixture
     def admin_token(self):
@@ -842,7 +869,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/login': No
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 _ ERROR at setup of TestAdminEmissionFactors.test_regular_user_cannot_create_emission_factor _
 
-self = <test_admin_panel.TestAdminEmissionFactors object at 0xfffa9225f0d0>
+self = <test_admin_panel.TestAdminEmissionFactors object at 0xf8ff8ee74790>
 
     @pytest.fixture
     def regular_user_token(self):
@@ -912,7 +939,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/register':
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 _ ERROR at setup of TestAdminEmissionFactorsExportImport.test_admin_can_export_emission_factors _
 
-self = <test_admin_panel.TestAdminEmissionFactorsExportImport object at 0xfffa92274ed0>
+self = <test_admin_panel.TestAdminEmissionFactorsExportImport object at 0xf8ff8ee75250>
 
     @pytest.fixture
     def admin_token(self):
@@ -979,7 +1006,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/login': No
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 _ ERROR at setup of TestAdminEmissionFactorsExportImport.test_regular_user_cannot_export_emission_factors _
 
-self = <test_admin_panel.TestAdminEmissionFactorsExportImport object at 0xfffa92275250>
+self = <test_admin_panel.TestAdminEmissionFactorsExportImport object at 0xf8ff8ee755d0>
 
     @pytest.fixture
     def regular_user_token(self):
@@ -1049,7 +1076,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/register':
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 _ ERROR at setup of TestAdminEmissionFactorsExportImport.test_admin_can_import_emission_factors _
 
-self = <test_admin_panel.TestAdminEmissionFactorsExportImport object at 0xfffa922755d0>
+self = <test_admin_panel.TestAdminEmissionFactorsExportImport object at 0xf8ff8ee75950>
 
     @pytest.fixture
     def admin_token(self):
@@ -1116,7 +1143,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/login': No
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 _ ERROR at setup of TestAdminEmissionFactorsExportImport.test_regular_user_cannot_import_emission_factors _
 
-self = <test_admin_panel.TestAdminEmissionFactorsExportImport object at 0xfffa92275990>
+self = <test_admin_panel.TestAdminEmissionFactorsExportImport object at 0xf8ff8ee75d10>
 
     @pytest.fixture
     def regular_user_token(self):
@@ -1186,7 +1213,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/register':
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 _______________ ERROR at setup of TestAuthentication.test_login ________________
 
-self = <test_data_entry_bugs.TestAuthentication object at 0xfffa906d2390>
+self = <test_data_entry_bugs.TestAuthentication object at 0xf8ff8d346750>
 
     @pytest.fixture(scope="class")
     def auth_token(self):
@@ -1253,7 +1280,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/login': No
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 _______ ERROR at setup of TestEmissionFactors.test_get_emission_factors ________
 
-self = <test_data_entry_bugs.TestEmissionFactors object at 0xfffa920845d0>
+self = <test_data_entry_bugs.TestEmissionFactors object at 0xf8ff8d192e90>
 
     @pytest.fixture(scope="class")
     def auth_headers(self):
@@ -1320,7 +1347,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/login': No
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 ______ ERROR at setup of TestEmissionFactors.test_search_emission_factors ______
 
-self = <test_data_entry_bugs.TestEmissionFactors object at 0xfffa920845d0>
+self = <test_data_entry_bugs.TestEmissionFactors object at 0xf8ff8d192e90>
 
     @pytest.fixture(scope="class")
     def auth_headers(self):
@@ -1387,7 +1414,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/login': No
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 __________ ERROR at setup of TestEmissionFactors.test_search_by_query __________
 
-self = <test_data_entry_bugs.TestEmissionFactors object at 0xfffa920845d0>
+self = <test_data_entry_bugs.TestEmissionFactors object at 0xf8ff8d192e90>
 
     @pytest.fixture(scope="class")
     def auth_headers(self):
@@ -1454,7 +1481,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/login': No
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 _________ ERROR at setup of TestEmissionFactors.test_get_factor_by_id __________
 
-self = <test_data_entry_bugs.TestEmissionFactors object at 0xfffa920845d0>
+self = <test_data_entry_bugs.TestEmissionFactors object at 0xf8ff8d192e90>
 
     @pytest.fixture(scope="class")
     def auth_headers(self):
@@ -1521,7 +1548,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/login': No
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 _______ ERROR at setup of TestEmissionFactors.test_factors_have_impacts ________
 
-self = <test_data_entry_bugs.TestEmissionFactors object at 0xfffa920845d0>
+self = <test_data_entry_bugs.TestEmissionFactors object at 0xf8ff8d192e90>
 
     @pytest.fixture(scope="class")
     def auth_headers(self):
@@ -1588,7 +1615,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/login': No
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 _____________ ERROR at setup of TestActivities.test_get_activities _____________
 
-self = <test_data_entry_bugs.TestActivities object at 0xfffa92086010>
+self = <test_data_entry_bugs.TestActivities object at 0xf8ff8d193450>
 
     @pytest.fixture(scope="class")
     def auth_headers(self):
@@ -1655,7 +1682,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/login': No
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 ____________ ERROR at setup of TestActivities.test_create_activity _____________
 
-self = <test_data_entry_bugs.TestActivities object at 0xfffa92086010>
+self = <test_data_entry_bugs.TestActivities object at 0xf8ff8d193450>
 
     @pytest.fixture(scope="class")
     def auth_headers(self):
@@ -1722,7 +1749,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/login': No
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 ____ ERROR at setup of TestActivities.test_create_activity_with_conversion _____
 
-self = <test_data_entry_bugs.TestActivities object at 0xfffa92086010>
+self = <test_data_entry_bugs.TestActivities object at 0xf8ff8d193450>
 
     @pytest.fixture(scope="class")
     def auth_headers(self):
@@ -1789,7 +1816,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/login': No
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 _________ ERROR at setup of TestActivities.test_delete_test_activities _________
 
-self = <test_data_entry_bugs.TestActivities object at 0xfffa92086010>
+self = <test_data_entry_bugs.TestActivities object at 0xf8ff8d193450>
 
     @pytest.fixture(scope="class")
     def auth_headers(self):
@@ -1856,7 +1883,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/login': No
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 ____________ ERROR at setup of TestDashboard.test_dashboard_summary ____________
 
-self = <test_data_entry_bugs.TestDashboard object at 0xfffa9069d690>
+self = <test_data_entry_bugs.TestDashboard object at 0xf8ff8d2b2b90>
 
     @pytest.fixture(scope="class")
     def auth_headers(self):
@@ -1922,7 +1949,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/login': No
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 _____________ ERROR at setup of TestDashboard.test_category_stats ______________
 
-self = <test_data_entry_bugs.TestDashboard object at 0xfffa9069d690>
+self = <test_data_entry_bugs.TestDashboard object at 0xf8ff8d2b2b90>
 
     @pytest.fixture(scope="class")
     def auth_headers(self):
@@ -1984,6 +2011,558 @@ self = <PreparedRequest [POST]>, url = '/api/auth/login', params = OrderedDict()
                 f"Perhaps you meant https://{url}?"
             )
 E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/login': No scheme supplied. Perhaps you meant https:///api/auth/login?
+
+/root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
+___ ERROR at setup of TestScenarioFeature.test_01_login_and_get_fiscal_years ___
+
+self = <test_feat02_scenarios.TestScenarioFeature object at 0xf8ff8d32e490>
+
+    @pytest.fixture(autouse=True)
+    def setup(self):
+        """Setup: Get auth token and store it"""
+        self.session = requests.Session()
+        self.session.headers.update({"Content-Type": "application/json"})
+    
+        # Login to get token
+>       login_response = self.session.post(f"{BASE_URL}/api/auth/login", json={
+            "email": TEST_EMAIL,
+            "password": TEST_PASSWORD
+        })
+
+backend/tests/test_feat02_scenarios.py:27: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/root/.venv/lib/python3.11/site-packages/requests/sessions.py:637: in post
+    return self.request("POST", url, data=data, json=json, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/root/.venv/lib/python3.11/site-packages/requests/sessions.py:575: in request
+    prep = self.prepare_request(req)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+/root/.venv/lib/python3.11/site-packages/requests/sessions.py:484: in prepare_request
+    p.prepare(
+/root/.venv/lib/python3.11/site-packages/requests/models.py:367: in prepare
+    self.prepare_url(url, params)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <PreparedRequest [POST]>, url = 'None/api/auth/login'
+params = OrderedDict()
+
+    def prepare_url(self, url, params):
+        """Prepares the given HTTP URL."""
+        #: Accept objects that have string representations.
+        #: We're unable to blindly call unicode/str functions
+        #: as this will include the bytestring indicator (b'')
+        #: on python 3.x.
+        #: https://github.com/psf/requests/pull/2238
+        if isinstance(url, bytes):
+            url = url.decode("utf8")
+        else:
+            url = str(url)
+    
+        # Remove leading whitespaces from url
+        url = url.lstrip()
+    
+        # Don't do any URL preparation for non-HTTP schemes like `mailto`,
+        # `data` etc to work around exceptions from `url_parse`, which
+        # handles RFC 3986 only.
+        if ":" in url and not url.lower().startswith("http"):
+            self.url = url
+            return
+    
+        # Support for unicode domain names and paths.
+        try:
+            scheme, auth, host, port, path, query, fragment = parse_url(url)
+        except LocationParseError as e:
+            raise InvalidURL(*e.args)
+    
+        if not scheme:
+>           raise MissingSchema(
+                f"Invalid URL {url!r}: No scheme supplied. "
+                f"Perhaps you meant https://{url}?"
+            )
+E           requests.exceptions.MissingSchema: Invalid URL 'None/api/auth/login': No scheme supplied. Perhaps you meant https://None/api/auth/login?
+
+/root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
+_ ERROR at setup of TestScenarioFeature.test_02_get_current_fiscal_year_excludes_scenarios _
+
+self = <test_feat02_scenarios.TestScenarioFeature object at 0xf8ff8d32ec90>
+
+    @pytest.fixture(autouse=True)
+    def setup(self):
+        """Setup: Get auth token and store it"""
+        self.session = requests.Session()
+        self.session.headers.update({"Content-Type": "application/json"})
+    
+        # Login to get token
+>       login_response = self.session.post(f"{BASE_URL}/api/auth/login", json={
+            "email": TEST_EMAIL,
+            "password": TEST_PASSWORD
+        })
+
+backend/tests/test_feat02_scenarios.py:27: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/root/.venv/lib/python3.11/site-packages/requests/sessions.py:637: in post
+    return self.request("POST", url, data=data, json=json, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/root/.venv/lib/python3.11/site-packages/requests/sessions.py:575: in request
+    prep = self.prepare_request(req)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+/root/.venv/lib/python3.11/site-packages/requests/sessions.py:484: in prepare_request
+    p.prepare(
+/root/.venv/lib/python3.11/site-packages/requests/models.py:367: in prepare
+    self.prepare_url(url, params)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <PreparedRequest [POST]>, url = 'None/api/auth/login'
+params = OrderedDict()
+
+    def prepare_url(self, url, params):
+        """Prepares the given HTTP URL."""
+        #: Accept objects that have string representations.
+        #: We're unable to blindly call unicode/str functions
+        #: as this will include the bytestring indicator (b'')
+        #: on python 3.x.
+        #: https://github.com/psf/requests/pull/2238
+        if isinstance(url, bytes):
+            url = url.decode("utf8")
+        else:
+            url = str(url)
+    
+        # Remove leading whitespaces from url
+        url = url.lstrip()
+    
+        # Don't do any URL preparation for non-HTTP schemes like `mailto`,
+        # `data` etc to work around exceptions from `url_parse`, which
+        # handles RFC 3986 only.
+        if ":" in url and not url.lower().startswith("http"):
+            self.url = url
+            return
+    
+        # Support for unicode domain names and paths.
+        try:
+            scheme, auth, host, port, path, query, fragment = parse_url(url)
+        except LocationParseError as e:
+            raise InvalidURL(*e.args)
+    
+        if not scheme:
+>           raise MissingSchema(
+                f"Invalid URL {url!r}: No scheme supplied. "
+                f"Perhaps you meant https://{url}?"
+            )
+E           requests.exceptions.MissingSchema: Invalid URL 'None/api/auth/login': No scheme supplied. Perhaps you meant https://None/api/auth/login?
+
+/root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
+_ ERROR at setup of TestScenarioFeature.test_03_create_scenario_via_duplicate __
+
+self = <test_feat02_scenarios.TestScenarioFeature object at 0xf8ff8d295750>
+
+    @pytest.fixture(autouse=True)
+    def setup(self):
+        """Setup: Get auth token and store it"""
+        self.session = requests.Session()
+        self.session.headers.update({"Content-Type": "application/json"})
+    
+        # Login to get token
+>       login_response = self.session.post(f"{BASE_URL}/api/auth/login", json={
+            "email": TEST_EMAIL,
+            "password": TEST_PASSWORD
+        })
+
+backend/tests/test_feat02_scenarios.py:27: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/root/.venv/lib/python3.11/site-packages/requests/sessions.py:637: in post
+    return self.request("POST", url, data=data, json=json, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/root/.venv/lib/python3.11/site-packages/requests/sessions.py:575: in request
+    prep = self.prepare_request(req)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+/root/.venv/lib/python3.11/site-packages/requests/sessions.py:484: in prepare_request
+    p.prepare(
+/root/.venv/lib/python3.11/site-packages/requests/models.py:367: in prepare
+    self.prepare_url(url, params)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <PreparedRequest [POST]>, url = 'None/api/auth/login'
+params = OrderedDict()
+
+    def prepare_url(self, url, params):
+        """Prepares the given HTTP URL."""
+        #: Accept objects that have string representations.
+        #: We're unable to blindly call unicode/str functions
+        #: as this will include the bytestring indicator (b'')
+        #: on python 3.x.
+        #: https://github.com/psf/requests/pull/2238
+        if isinstance(url, bytes):
+            url = url.decode("utf8")
+        else:
+            url = str(url)
+    
+        # Remove leading whitespaces from url
+        url = url.lstrip()
+    
+        # Don't do any URL preparation for non-HTTP schemes like `mailto`,
+        # `data` etc to work around exceptions from `url_parse`, which
+        # handles RFC 3986 only.
+        if ":" in url and not url.lower().startswith("http"):
+            self.url = url
+            return
+    
+        # Support for unicode domain names and paths.
+        try:
+            scheme, auth, host, port, path, query, fragment = parse_url(url)
+        except LocationParseError as e:
+            raise InvalidURL(*e.args)
+    
+        if not scheme:
+>           raise MissingSchema(
+                f"Invalid URL {url!r}: No scheme supplied. "
+                f"Perhaps you meant https://{url}?"
+            )
+E           requests.exceptions.MissingSchema: Invalid URL 'None/api/auth/login': No scheme supplied. Perhaps you meant https://None/api/auth/login?
+
+/root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
+_____ ERROR at setup of TestScenarioFeature.test_04_scenario_requires_name _____
+
+self = <test_feat02_scenarios.TestScenarioFeature object at 0xf8ff8ec715d0>
+
+    @pytest.fixture(autouse=True)
+    def setup(self):
+        """Setup: Get auth token and store it"""
+        self.session = requests.Session()
+        self.session.headers.update({"Content-Type": "application/json"})
+    
+        # Login to get token
+>       login_response = self.session.post(f"{BASE_URL}/api/auth/login", json={
+            "email": TEST_EMAIL,
+            "password": TEST_PASSWORD
+        })
+
+backend/tests/test_feat02_scenarios.py:27: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/root/.venv/lib/python3.11/site-packages/requests/sessions.py:637: in post
+    return self.request("POST", url, data=data, json=json, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/root/.venv/lib/python3.11/site-packages/requests/sessions.py:575: in request
+    prep = self.prepare_request(req)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+/root/.venv/lib/python3.11/site-packages/requests/sessions.py:484: in prepare_request
+    p.prepare(
+/root/.venv/lib/python3.11/site-packages/requests/models.py:367: in prepare
+    self.prepare_url(url, params)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <PreparedRequest [POST]>, url = 'None/api/auth/login'
+params = OrderedDict()
+
+    def prepare_url(self, url, params):
+        """Prepares the given HTTP URL."""
+        #: Accept objects that have string representations.
+        #: We're unable to blindly call unicode/str functions
+        #: as this will include the bytestring indicator (b'')
+        #: on python 3.x.
+        #: https://github.com/psf/requests/pull/2238
+        if isinstance(url, bytes):
+            url = url.decode("utf8")
+        else:
+            url = str(url)
+    
+        # Remove leading whitespaces from url
+        url = url.lstrip()
+    
+        # Don't do any URL preparation for non-HTTP schemes like `mailto`,
+        # `data` etc to work around exceptions from `url_parse`, which
+        # handles RFC 3986 only.
+        if ":" in url and not url.lower().startswith("http"):
+            self.url = url
+            return
+    
+        # Support for unicode domain names and paths.
+        try:
+            scheme, auth, host, port, path, query, fragment = parse_url(url)
+        except LocationParseError as e:
+            raise InvalidURL(*e.args)
+    
+        if not scheme:
+>           raise MissingSchema(
+                f"Invalid URL {url!r}: No scheme supplied. "
+                f"Perhaps you meant https://{url}?"
+            )
+E           requests.exceptions.MissingSchema: Invalid URL 'None/api/auth/login': No scheme supplied. Perhaps you meant https://None/api/auth/login?
+
+/root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
+_____ ERROR at setup of TestScenarioFeature.test_05_get_scenarios_for_year _____
+
+self = <test_feat02_scenarios.TestScenarioFeature object at 0xf8ff8ec70c10>
+
+    @pytest.fixture(autouse=True)
+    def setup(self):
+        """Setup: Get auth token and store it"""
+        self.session = requests.Session()
+        self.session.headers.update({"Content-Type": "application/json"})
+    
+        # Login to get token
+>       login_response = self.session.post(f"{BASE_URL}/api/auth/login", json={
+            "email": TEST_EMAIL,
+            "password": TEST_PASSWORD
+        })
+
+backend/tests/test_feat02_scenarios.py:27: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/root/.venv/lib/python3.11/site-packages/requests/sessions.py:637: in post
+    return self.request("POST", url, data=data, json=json, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/root/.venv/lib/python3.11/site-packages/requests/sessions.py:575: in request
+    prep = self.prepare_request(req)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+/root/.venv/lib/python3.11/site-packages/requests/sessions.py:484: in prepare_request
+    p.prepare(
+/root/.venv/lib/python3.11/site-packages/requests/models.py:367: in prepare
+    self.prepare_url(url, params)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <PreparedRequest [POST]>, url = 'None/api/auth/login'
+params = OrderedDict()
+
+    def prepare_url(self, url, params):
+        """Prepares the given HTTP URL."""
+        #: Accept objects that have string representations.
+        #: We're unable to blindly call unicode/str functions
+        #: as this will include the bytestring indicator (b'')
+        #: on python 3.x.
+        #: https://github.com/psf/requests/pull/2238
+        if isinstance(url, bytes):
+            url = url.decode("utf8")
+        else:
+            url = str(url)
+    
+        # Remove leading whitespaces from url
+        url = url.lstrip()
+    
+        # Don't do any URL preparation for non-HTTP schemes like `mailto`,
+        # `data` etc to work around exceptions from `url_parse`, which
+        # handles RFC 3986 only.
+        if ":" in url and not url.lower().startswith("http"):
+            self.url = url
+            return
+    
+        # Support for unicode domain names and paths.
+        try:
+            scheme, auth, host, port, path, query, fragment = parse_url(url)
+        except LocationParseError as e:
+            raise InvalidURL(*e.args)
+    
+        if not scheme:
+>           raise MissingSchema(
+                f"Invalid URL {url!r}: No scheme supplied. "
+                f"Perhaps you meant https://{url}?"
+            )
+E           requests.exceptions.MissingSchema: Invalid URL 'None/api/auth/login': No scheme supplied. Perhaps you meant https://None/api/auth/login?
+
+/root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
+___ ERROR at setup of TestScenarioFeature.test_06_scenario_dashboard_summary ___
+
+self = <test_feat02_scenarios.TestScenarioFeature object at 0xf8ff8ec720d0>
+
+    @pytest.fixture(autouse=True)
+    def setup(self):
+        """Setup: Get auth token and store it"""
+        self.session = requests.Session()
+        self.session.headers.update({"Content-Type": "application/json"})
+    
+        # Login to get token
+>       login_response = self.session.post(f"{BASE_URL}/api/auth/login", json={
+            "email": TEST_EMAIL,
+            "password": TEST_PASSWORD
+        })
+
+backend/tests/test_feat02_scenarios.py:27: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/root/.venv/lib/python3.11/site-packages/requests/sessions.py:637: in post
+    return self.request("POST", url, data=data, json=json, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/root/.venv/lib/python3.11/site-packages/requests/sessions.py:575: in request
+    prep = self.prepare_request(req)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+/root/.venv/lib/python3.11/site-packages/requests/sessions.py:484: in prepare_request
+    p.prepare(
+/root/.venv/lib/python3.11/site-packages/requests/models.py:367: in prepare
+    self.prepare_url(url, params)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <PreparedRequest [POST]>, url = 'None/api/auth/login'
+params = OrderedDict()
+
+    def prepare_url(self, url, params):
+        """Prepares the given HTTP URL."""
+        #: Accept objects that have string representations.
+        #: We're unable to blindly call unicode/str functions
+        #: as this will include the bytestring indicator (b'')
+        #: on python 3.x.
+        #: https://github.com/psf/requests/pull/2238
+        if isinstance(url, bytes):
+            url = url.decode("utf8")
+        else:
+            url = str(url)
+    
+        # Remove leading whitespaces from url
+        url = url.lstrip()
+    
+        # Don't do any URL preparation for non-HTTP schemes like `mailto`,
+        # `data` etc to work around exceptions from `url_parse`, which
+        # handles RFC 3986 only.
+        if ":" in url and not url.lower().startswith("http"):
+            self.url = url
+            return
+    
+        # Support for unicode domain names and paths.
+        try:
+            scheme, auth, host, port, path, query, fragment = parse_url(url)
+        except LocationParseError as e:
+            raise InvalidURL(*e.args)
+    
+        if not scheme:
+>           raise MissingSchema(
+                f"Invalid URL {url!r}: No scheme supplied. "
+                f"Perhaps you meant https://{url}?"
+            )
+E           requests.exceptions.MissingSchema: Invalid URL 'None/api/auth/login': No scheme supplied. Perhaps you meant https://None/api/auth/login?
+
+/root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
+_ ERROR at setup of TestScenarioFeature.test_07_multiple_scenarios_same_year_allowed _
+
+self = <test_feat02_scenarios.TestScenarioFeature object at 0xf8ff8ec72150>
+
+    @pytest.fixture(autouse=True)
+    def setup(self):
+        """Setup: Get auth token and store it"""
+        self.session = requests.Session()
+        self.session.headers.update({"Content-Type": "application/json"})
+    
+        # Login to get token
+>       login_response = self.session.post(f"{BASE_URL}/api/auth/login", json={
+            "email": TEST_EMAIL,
+            "password": TEST_PASSWORD
+        })
+
+backend/tests/test_feat02_scenarios.py:27: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/root/.venv/lib/python3.11/site-packages/requests/sessions.py:637: in post
+    return self.request("POST", url, data=data, json=json, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/root/.venv/lib/python3.11/site-packages/requests/sessions.py:575: in request
+    prep = self.prepare_request(req)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+/root/.venv/lib/python3.11/site-packages/requests/sessions.py:484: in prepare_request
+    p.prepare(
+/root/.venv/lib/python3.11/site-packages/requests/models.py:367: in prepare
+    self.prepare_url(url, params)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <PreparedRequest [POST]>, url = 'None/api/auth/login'
+params = OrderedDict()
+
+    def prepare_url(self, url, params):
+        """Prepares the given HTTP URL."""
+        #: Accept objects that have string representations.
+        #: We're unable to blindly call unicode/str functions
+        #: as this will include the bytestring indicator (b'')
+        #: on python 3.x.
+        #: https://github.com/psf/requests/pull/2238
+        if isinstance(url, bytes):
+            url = url.decode("utf8")
+        else:
+            url = str(url)
+    
+        # Remove leading whitespaces from url
+        url = url.lstrip()
+    
+        # Don't do any URL preparation for non-HTTP schemes like `mailto`,
+        # `data` etc to work around exceptions from `url_parse`, which
+        # handles RFC 3986 only.
+        if ":" in url and not url.lower().startswith("http"):
+            self.url = url
+            return
+    
+        # Support for unicode domain names and paths.
+        try:
+            scheme, auth, host, port, path, query, fragment = parse_url(url)
+        except LocationParseError as e:
+            raise InvalidURL(*e.args)
+    
+        if not scheme:
+>           raise MissingSchema(
+                f"Invalid URL {url!r}: No scheme supplied. "
+                f"Perhaps you meant https://{url}?"
+            )
+E           requests.exceptions.MissingSchema: Invalid URL 'None/api/auth/login': No scheme supplied. Perhaps you meant https://None/api/auth/login?
+
+/root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
+_ ERROR at setup of TestScenarioFeature.test_08_delete_scenario_does_not_affect_actual _
+
+self = <test_feat02_scenarios.TestScenarioFeature object at 0xf8ff8ec72450>
+
+    @pytest.fixture(autouse=True)
+    def setup(self):
+        """Setup: Get auth token and store it"""
+        self.session = requests.Session()
+        self.session.headers.update({"Content-Type": "application/json"})
+    
+        # Login to get token
+>       login_response = self.session.post(f"{BASE_URL}/api/auth/login", json={
+            "email": TEST_EMAIL,
+            "password": TEST_PASSWORD
+        })
+
+backend/tests/test_feat02_scenarios.py:27: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/root/.venv/lib/python3.11/site-packages/requests/sessions.py:637: in post
+    return self.request("POST", url, data=data, json=json, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/root/.venv/lib/python3.11/site-packages/requests/sessions.py:575: in request
+    prep = self.prepare_request(req)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+/root/.venv/lib/python3.11/site-packages/requests/sessions.py:484: in prepare_request
+    p.prepare(
+/root/.venv/lib/python3.11/site-packages/requests/models.py:367: in prepare
+    self.prepare_url(url, params)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <PreparedRequest [POST]>, url = 'None/api/auth/login'
+params = OrderedDict()
+
+    def prepare_url(self, url, params):
+        """Prepares the given HTTP URL."""
+        #: Accept objects that have string representations.
+        #: We're unable to blindly call unicode/str functions
+        #: as this will include the bytestring indicator (b'')
+        #: on python 3.x.
+        #: https://github.com/psf/requests/pull/2238
+        if isinstance(url, bytes):
+            url = url.decode("utf8")
+        else:
+            url = str(url)
+    
+        # Remove leading whitespaces from url
+        url = url.lstrip()
+    
+        # Don't do any URL preparation for non-HTTP schemes like `mailto`,
+        # `data` etc to work around exceptions from `url_parse`, which
+        # handles RFC 3986 only.
+        if ":" in url and not url.lower().startswith("http"):
+            self.url = url
+            return
+    
+        # Support for unicode domain names and paths.
+        try:
+            scheme, auth, host, port, path, query, fragment = parse_url(url)
+        except LocationParseError as e:
+            raise InvalidURL(*e.args)
+    
+        if not scheme:
+>           raise MissingSchema(
+                f"Invalid URL {url!r}: No scheme supplied. "
+                f"Perhaps you meant https://{url}?"
+            )
+E           requests.exceptions.MissingSchema: Invalid URL 'None/api/auth/login': No scheme supplied. Perhaps you meant https://None/api/auth/login?
 
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 _ ERROR at setup of TestEmissionFactorCategories.test_fin_vie_produits_category _
@@ -2766,9 +3345,277 @@ self = <PreparedRequest [POST]>, url = '/api/auth/login', params = OrderedDict()
 E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/login': No scheme supplied. Perhaps you meant https:///api/auth/login?
 
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
+____ ERROR at setup of TestOnboardingAPIs.test_get_me_has_onboarding_field _____
+
+self = <test_onboarding.TestOnboardingAPIs object at 0xf8ff8ee76b90>
+
+    @pytest.fixture(scope="class")
+    def auth_token(self):
+        """Get authentication token"""
+>       response = requests.post(f"{BASE_URL}/api/auth/login", json={
+            "email": "newtest@x.com",
+            "password": "test123"
+        })
+
+backend/tests/test_onboarding.py:17: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/root/.venv/lib/python3.11/site-packages/requests/api.py:115: in post
+    return request("post", url, data=data, json=json, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/root/.venv/lib/python3.11/site-packages/requests/api.py:59: in request
+    return session.request(method=method, url=url, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/root/.venv/lib/python3.11/site-packages/requests/sessions.py:575: in request
+    prep = self.prepare_request(req)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+/root/.venv/lib/python3.11/site-packages/requests/sessions.py:484: in prepare_request
+    p.prepare(
+/root/.venv/lib/python3.11/site-packages/requests/models.py:367: in prepare
+    self.prepare_url(url, params)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <PreparedRequest [POST]>, url = '/api/auth/login', params = OrderedDict()
+
+    def prepare_url(self, url, params):
+        """Prepares the given HTTP URL."""
+        #: Accept objects that have string representations.
+        #: We're unable to blindly call unicode/str functions
+        #: as this will include the bytestring indicator (b'')
+        #: on python 3.x.
+        #: https://github.com/psf/requests/pull/2238
+        if isinstance(url, bytes):
+            url = url.decode("utf8")
+        else:
+            url = str(url)
+    
+        # Remove leading whitespaces from url
+        url = url.lstrip()
+    
+        # Don't do any URL preparation for non-HTTP schemes like `mailto`,
+        # `data` etc to work around exceptions from `url_parse`, which
+        # handles RFC 3986 only.
+        if ":" in url and not url.lower().startswith("http"):
+            self.url = url
+            return
+    
+        # Support for unicode domain names and paths.
+        try:
+            scheme, auth, host, port, path, query, fragment = parse_url(url)
+        except LocationParseError as e:
+            raise InvalidURL(*e.args)
+    
+        if not scheme:
+>           raise MissingSchema(
+                f"Invalid URL {url!r}: No scheme supplied. "
+                f"Perhaps you meant https://{url}?"
+            )
+E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/login': No scheme supplied. Perhaps you meant https:///api/auth/login?
+
+/root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
+__________ ERROR at setup of TestOnboardingAPIs.test_onboarding_reset __________
+
+self = <test_onboarding.TestOnboardingAPIs object at 0xf8ff8ee76b90>
+
+    @pytest.fixture(scope="class")
+    def auth_token(self):
+        """Get authentication token"""
+>       response = requests.post(f"{BASE_URL}/api/auth/login", json={
+            "email": "newtest@x.com",
+            "password": "test123"
+        })
+
+backend/tests/test_onboarding.py:17: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/root/.venv/lib/python3.11/site-packages/requests/api.py:115: in post
+    return request("post", url, data=data, json=json, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/root/.venv/lib/python3.11/site-packages/requests/api.py:59: in request
+    return session.request(method=method, url=url, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/root/.venv/lib/python3.11/site-packages/requests/sessions.py:575: in request
+    prep = self.prepare_request(req)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+/root/.venv/lib/python3.11/site-packages/requests/sessions.py:484: in prepare_request
+    p.prepare(
+/root/.venv/lib/python3.11/site-packages/requests/models.py:367: in prepare
+    self.prepare_url(url, params)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <PreparedRequest [POST]>, url = '/api/auth/login', params = OrderedDict()
+
+    def prepare_url(self, url, params):
+        """Prepares the given HTTP URL."""
+        #: Accept objects that have string representations.
+        #: We're unable to blindly call unicode/str functions
+        #: as this will include the bytestring indicator (b'')
+        #: on python 3.x.
+        #: https://github.com/psf/requests/pull/2238
+        if isinstance(url, bytes):
+            url = url.decode("utf8")
+        else:
+            url = str(url)
+    
+        # Remove leading whitespaces from url
+        url = url.lstrip()
+    
+        # Don't do any URL preparation for non-HTTP schemes like `mailto`,
+        # `data` etc to work around exceptions from `url_parse`, which
+        # handles RFC 3986 only.
+        if ":" in url and not url.lower().startswith("http"):
+            self.url = url
+            return
+    
+        # Support for unicode domain names and paths.
+        try:
+            scheme, auth, host, port, path, query, fragment = parse_url(url)
+        except LocationParseError as e:
+            raise InvalidURL(*e.args)
+    
+        if not scheme:
+>           raise MissingSchema(
+                f"Invalid URL {url!r}: No scheme supplied. "
+                f"Perhaps you meant https://{url}?"
+            )
+E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/login': No scheme supplied. Perhaps you meant https:///api/auth/login?
+
+/root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
+________ ERROR at setup of TestOnboardingAPIs.test_onboarding_complete _________
+
+self = <test_onboarding.TestOnboardingAPIs object at 0xf8ff8ee76b90>
+
+    @pytest.fixture(scope="class")
+    def auth_token(self):
+        """Get authentication token"""
+>       response = requests.post(f"{BASE_URL}/api/auth/login", json={
+            "email": "newtest@x.com",
+            "password": "test123"
+        })
+
+backend/tests/test_onboarding.py:17: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/root/.venv/lib/python3.11/site-packages/requests/api.py:115: in post
+    return request("post", url, data=data, json=json, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/root/.venv/lib/python3.11/site-packages/requests/api.py:59: in request
+    return session.request(method=method, url=url, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/root/.venv/lib/python3.11/site-packages/requests/sessions.py:575: in request
+    prep = self.prepare_request(req)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+/root/.venv/lib/python3.11/site-packages/requests/sessions.py:484: in prepare_request
+    p.prepare(
+/root/.venv/lib/python3.11/site-packages/requests/models.py:367: in prepare
+    self.prepare_url(url, params)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <PreparedRequest [POST]>, url = '/api/auth/login', params = OrderedDict()
+
+    def prepare_url(self, url, params):
+        """Prepares the given HTTP URL."""
+        #: Accept objects that have string representations.
+        #: We're unable to blindly call unicode/str functions
+        #: as this will include the bytestring indicator (b'')
+        #: on python 3.x.
+        #: https://github.com/psf/requests/pull/2238
+        if isinstance(url, bytes):
+            url = url.decode("utf8")
+        else:
+            url = str(url)
+    
+        # Remove leading whitespaces from url
+        url = url.lstrip()
+    
+        # Don't do any URL preparation for non-HTTP schemes like `mailto`,
+        # `data` etc to work around exceptions from `url_parse`, which
+        # handles RFC 3986 only.
+        if ":" in url and not url.lower().startswith("http"):
+            self.url = url
+            return
+    
+        # Support for unicode domain names and paths.
+        try:
+            scheme, auth, host, port, path, query, fragment = parse_url(url)
+        except LocationParseError as e:
+            raise InvalidURL(*e.args)
+    
+        if not scheme:
+>           raise MissingSchema(
+                f"Invalid URL {url!r}: No scheme supplied. "
+                f"Perhaps you meant https://{url}?"
+            )
+E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/login': No scheme supplied. Perhaps you meant https:///api/auth/login?
+
+/root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
+_______ ERROR at setup of TestOnboardingAPIs.test_onboarding_toggle_flow _______
+
+self = <test_onboarding.TestOnboardingAPIs object at 0xf8ff8ee76b90>
+
+    @pytest.fixture(scope="class")
+    def auth_token(self):
+        """Get authentication token"""
+>       response = requests.post(f"{BASE_URL}/api/auth/login", json={
+            "email": "newtest@x.com",
+            "password": "test123"
+        })
+
+backend/tests/test_onboarding.py:17: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/root/.venv/lib/python3.11/site-packages/requests/api.py:115: in post
+    return request("post", url, data=data, json=json, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/root/.venv/lib/python3.11/site-packages/requests/api.py:59: in request
+    return session.request(method=method, url=url, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/root/.venv/lib/python3.11/site-packages/requests/sessions.py:575: in request
+    prep = self.prepare_request(req)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+/root/.venv/lib/python3.11/site-packages/requests/sessions.py:484: in prepare_request
+    p.prepare(
+/root/.venv/lib/python3.11/site-packages/requests/models.py:367: in prepare
+    self.prepare_url(url, params)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <PreparedRequest [POST]>, url = '/api/auth/login', params = OrderedDict()
+
+    def prepare_url(self, url, params):
+        """Prepares the given HTTP URL."""
+        #: Accept objects that have string representations.
+        #: We're unable to blindly call unicode/str functions
+        #: as this will include the bytestring indicator (b'')
+        #: on python 3.x.
+        #: https://github.com/psf/requests/pull/2238
+        if isinstance(url, bytes):
+            url = url.decode("utf8")
+        else:
+            url = str(url)
+    
+        # Remove leading whitespaces from url
+        url = url.lstrip()
+    
+        # Don't do any URL preparation for non-HTTP schemes like `mailto`,
+        # `data` etc to work around exceptions from `url_parse`, which
+        # handles RFC 3986 only.
+        if ":" in url and not url.lower().startswith("http"):
+            self.url = url
+            return
+    
+        # Support for unicode domain names and paths.
+        try:
+            scheme, auth, host, port, path, query, fragment = parse_url(url)
+        except LocationParseError as e:
+            raise InvalidURL(*e.args)
+    
+        if not scheme:
+>           raise MissingSchema(
+                f"Invalid URL {url!r}: No scheme supplied. "
+                f"Perhaps you meant https://{url}?"
+            )
+E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/login': No scheme supplied. Perhaps you meant https:///api/auth/login?
+
+/root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 _ ERROR at setup of TestPreviewEndpoint.test_preview_with_valid_factors_returns_emissions _
 
-self = <test_phase3_features.TestPreviewEndpoint object at 0xfffa90396ad0>
+self = <test_phase3_features.TestPreviewEndpoint object at 0xf8ff8cfbb510>
 
     @pytest.fixture(scope="class")
     def auth_token(self):
@@ -2835,7 +3682,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/login': No
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 _ ERROR at setup of TestPreviewEndpoint.test_preview_with_invalid_factor_id_returns_422 _
 
-self = <test_phase3_features.TestPreviewEndpoint object at 0xfffa90396ad0>
+self = <test_phase3_features.TestPreviewEndpoint object at 0xf8ff8cfbb510>
 
     @pytest.fixture(scope="class")
     def auth_token(self):
@@ -2902,7 +3749,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/login': No
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 _ ERROR at setup of TestBackendValidation.test_create_with_empty_name_returns_422 _
 
-self = <test_phase3_features.TestBackendValidation object at 0xfffa90397210>
+self = <test_phase3_features.TestBackendValidation object at 0xf8ff8cfc6b90>
 
     @pytest.fixture(scope="class")
     def auth_token(self):
@@ -2969,7 +3816,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/login': No
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 _ ERROR at setup of TestBackendValidation.test_create_with_invalid_factor_id_returns_422 _
 
-self = <test_phase3_features.TestBackendValidation object at 0xfffa90397210>
+self = <test_phase3_features.TestBackendValidation object at 0xf8ff8cfc6b90>
 
     @pytest.fixture(scope="class")
     def auth_token(self):
@@ -3036,7 +3883,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/login': No
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 _ ERROR at setup of TestBackendValidation.test_create_with_valid_data_succeeds _
 
-self = <test_phase3_features.TestBackendValidation object at 0xfffa90397210>
+self = <test_phase3_features.TestBackendValidation object at 0xf8ff8cfc6b90>
 
     @pytest.fixture(scope="class")
     def auth_token(self):
@@ -3103,7 +3950,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/login': No
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 ________ ERROR at setup of TestVersioning.test_versioning_initial_state ________
 
-self = <test_phase3_features.TestVersioning object at 0xfffa903a0b90>
+self = <test_phase3_features.TestVersioning object at 0xf8ff8cfc5750>
 
     @pytest.fixture(scope="class")
     def auth_token(self):
@@ -3170,7 +4017,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/login': No
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 _____ ERROR at setup of TestVersioning.test_versioning_after_first_update ______
 
-self = <test_phase3_features.TestVersioning object at 0xfffa903a0b90>
+self = <test_phase3_features.TestVersioning object at 0xf8ff8cfc5750>
 
     @pytest.fixture(scope="class")
     def auth_token(self):
@@ -3237,7 +4084,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/login': No
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 _____ ERROR at setup of TestVersioning.test_versioning_after_second_update _____
 
-self = <test_phase3_features.TestVersioning object at 0xfffa903a0b90>
+self = <test_phase3_features.TestVersioning object at 0xf8ff8cfc5750>
 
     @pytest.fixture(scope="class")
     def auth_token(self):
@@ -3304,7 +4151,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/login': No
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 ______ ERROR at setup of TestRecalculate.test_recalculate_single_product _______
 
-self = <test_phase3_features.TestRecalculate object at 0xfffa903a2c90>
+self = <test_phase3_features.TestRecalculate object at 0xf8ff8f1e4510>
 
     @pytest.fixture(scope="class")
     def auth_token(self):
@@ -3371,7 +4218,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/login': No
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 ________ ERROR at setup of TestRecalculate.test_recalculate_from_factor ________
 
-self = <test_phase3_features.TestRecalculate object at 0xfffa903a2c90>
+self = <test_phase3_features.TestRecalculate object at 0xf8ff8f1e4510>
 
     @pytest.fixture(scope="class")
     def auth_token(self):
@@ -3438,7 +4285,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/login': No
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 _ ERROR at setup of TestRecalculate.test_recalculate_from_invalid_factor_returns_error _
 
-self = <test_phase3_features.TestRecalculate object at 0xfffa903a2c90>
+self = <test_phase3_features.TestRecalculate object at 0xf8ff8f1e4510>
 
     @pytest.fixture(scope="class")
     def auth_token(self):
@@ -3505,7 +4352,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/login': No
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 _______ ERROR at setup of TestAdminSubcategories.test_get_subcategories ________
 
-self = <test_phase4_features.TestAdminSubcategories object at 0xfffa90579050>
+self = <test_phase4_features.TestAdminSubcategories object at 0xf8ff8cf9d2d0>
 
     @pytest.fixture
     def admin_token(self):
@@ -3572,7 +4419,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/login': No
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 _______ ERROR at setup of TestAdminSubcategories.test_create_subcategory _______
 
-self = <test_phase4_features.TestAdminSubcategories object at 0xfffa90579890>
+self = <test_phase4_features.TestAdminSubcategories object at 0xf8ff8d173450>
 
     @pytest.fixture
     def admin_token(self):
@@ -3639,7 +4486,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/login': No
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 _______ ERROR at setup of TestAdminSubcategories.test_update_subcategory _______
 
-self = <test_phase4_features.TestAdminSubcategories object at 0xfffa903a3a50>
+self = <test_phase4_features.TestAdminSubcategories object at 0xf8ff8d170610>
 
     @pytest.fixture
     def admin_token(self):
@@ -3706,7 +4553,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/login': No
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 _______ ERROR at setup of TestAdminSubcategories.test_delete_subcategory _______
 
-self = <test_phase4_features.TestAdminSubcategories object at 0xfffa90579a90>
+self = <test_phase4_features.TestAdminSubcategories object at 0xf8ff8d170a90>
 
     @pytest.fixture
     def admin_token(self):
@@ -3773,7 +4620,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/login': No
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 __ ERROR at setup of TestAdminEmissionFactorsV2.test_get_emission_factors_v2 ___
 
-self = <test_phase4_features.TestAdminEmissionFactorsV2 object at 0xfffa9057a010>
+self = <test_phase4_features.TestAdminEmissionFactorsV2 object at 0xf8ff8d171410>
 
     @pytest.fixture
     def admin_token(self):
@@ -3840,7 +4687,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/login': No
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 _ ERROR at setup of TestAdminEmissionFactorsV2.test_create_emission_factor_v2_with_multi_impacts _
 
-self = <test_phase4_features.TestAdminEmissionFactorsV2 object at 0xfffa9055c190>
+self = <test_phase4_features.TestAdminEmissionFactorsV2 object at 0xf8ff8d171890>
 
     @pytest.fixture
     def admin_token(self):
@@ -3907,7 +4754,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/login': No
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 _ ERROR at setup of TestAdminEmissionFactorsV2.test_update_emission_factor_v2 __
 
-self = <test_phase4_features.TestAdminEmissionFactorsV2 object at 0xfffa9055d1d0>
+self = <test_phase4_features.TestAdminEmissionFactorsV2 object at 0xf8ff8d171550>
 
     @pytest.fixture
     def admin_token(self):
@@ -3974,7 +4821,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/login': No
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 _____ ERROR at setup of TestAdminEmissionFactorsV2.test_export_v2_factors ______
 
-self = <test_phase4_features.TestAdminEmissionFactorsV2 object at 0xfffa9055c7d0>
+self = <test_phase4_features.TestAdminEmissionFactorsV2 object at 0xf8ff8d172dd0>
 
     @pytest.fixture
     def admin_token(self):
@@ -4041,7 +4888,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/login': No
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 _ ERROR at setup of TestPublicSubcategoriesAndFactors.test_get_subcategories_by_category _
 
-self = <test_phase4_features.TestPublicSubcategoriesAndFactors object at 0xfffa9055d2d0>
+self = <test_phase4_features.TestPublicSubcategoriesAndFactors object at 0xf8ff8d173510>
 
     @pytest.fixture
     def user_token(self):
@@ -4108,7 +4955,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/login': No
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 _ ERROR at setup of TestPublicSubcategoriesAndFactors.test_search_emission_factors_by_subcategory _
 
-self = <test_phase4_features.TestPublicSubcategoriesAndFactors object at 0xfffa9055d810>
+self = <test_phase4_features.TestPublicSubcategoriesAndFactors object at 0xf8ff8d173bd0>
 
     @pytest.fixture
     def user_token(self):
@@ -4175,7 +5022,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/login': No
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 _ ERROR at setup of TestPublicSubcategoriesAndFactors.test_search_emission_factors_by_unit _
 
-self = <test_phase4_features.TestPublicSubcategoriesAndFactors object at 0xfffa9055ec90>
+self = <test_phase4_features.TestPublicSubcategoriesAndFactors object at 0xf8ff8d2bf4d0>
 
     @pytest.fixture
     def user_token(self):
@@ -4242,7 +5089,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/login': No
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 _ ERROR at setup of TestPublicSubcategoriesAndFactors.test_get_unit_conversions _
 
-self = <test_phase4_features.TestPublicSubcategoriesAndFactors object at 0xfffa9055e450>
+self = <test_phase4_features.TestPublicSubcategoriesAndFactors object at 0xf8ff8cf84390>
 
     @pytest.fixture
     def user_token(self):
@@ -4309,7 +5156,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/login': No
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 _ ERROR at setup of TestMultiImpactActivityCreation.test_create_activity_with_multi_impact_factor_scope1 _
 
-self = <test_phase4_features.TestMultiImpactActivityCreation object at 0xfffa9055e090>
+self = <test_phase4_features.TestMultiImpactActivityCreation object at 0xf8ff8d171150>
 
     @pytest.fixture
     def user_token(self):
@@ -4376,7 +5223,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/login': No
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 _ ERROR at setup of TestMultiImpactActivityCreation.test_business_rule_scope3_excludes_scope12_and_33 _
 
-self = <test_phase4_features.TestMultiImpactActivityCreation object at 0xfffa9055fbd0>
+self = <test_phase4_features.TestMultiImpactActivityCreation object at 0xf8ff8cf841d0>
 
     @pytest.fixture
     def user_token(self):
@@ -4443,7 +5290,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/login': No
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 _ ERROR at setup of TestFactorsTableDisplay.test_factors_have_required_fields __
 
-self = <test_phase4_features.TestFactorsTableDisplay object at 0xfffa9056c4d0>
+self = <test_phase4_features.TestFactorsTableDisplay object at 0xf8ff8cf85c90>
 
     @pytest.fixture
     def admin_token(self):
@@ -4510,7 +5357,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/login': No
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 _ ERROR at setup of TestSubcategoriesTableDisplay.test_subcategories_have_required_fields _
 
-self = <test_phase4_features.TestSubcategoriesTableDisplay object at 0xfffa9056cd90>
+self = <test_phase4_features.TestSubcategoriesTableDisplay object at 0xf8ff8cf85990>
 
     @pytest.fixture
     def admin_token(self):
@@ -5487,7 +6334,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/login': No
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 _ ERROR at setup of TestActivityWithConversion.test_create_activity_with_conversion_fields _
 
-self = <test_unit_conversion.TestActivityWithConversion object at 0xfffa90623b90>
+self = <test_unit_conversion.TestActivityWithConversion object at 0xf8ff8d26ae50>
 
     @pytest.fixture(autouse=True)
     def setup(self):
@@ -5555,7 +6402,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/login': No
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 _ ERROR at setup of TestActivityWithConversion.test_activity_without_conversion _
 
-self = <test_unit_conversion.TestActivityWithConversion object at 0xfffa905198d0>
+self = <test_unit_conversion.TestActivityWithConversion object at 0xf8ff8d26be10>
 
     @pytest.fixture(autouse=True)
     def setup(self):
@@ -5623,7 +6470,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/login': No
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 _ ERROR at setup of TestEndToEndConversion.test_gj_to_mj_emissions_calculation _
 
-self = <test_unit_conversion.TestEndToEndConversion object at 0xfffa90518190>
+self = <test_unit_conversion.TestEndToEndConversion object at 0xf8ff8d26b490>
 
     @pytest.fixture(autouse=True)
     def setup(self):
@@ -5691,7 +6538,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/login': No
 =================================== FAILURES ===================================
 _______________ TestAdminAuthentication.test_admin_login_success _______________
 
-self = <test_admin_panel.TestAdminAuthentication object at 0xfffa9225e5d0>
+self = <test_admin_panel.TestAdminAuthentication object at 0xf8ff8ee5eb50>
 
     def test_admin_login_success(self):
         """Admin user can login successfully"""
@@ -5757,7 +6604,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/login': No
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 ___________ TestAdminAuthentication.test_regular_user_login_success ____________
 
-self = <test_admin_panel.TestAdminAuthentication object at 0xfffa9225f350>
+self = <test_admin_panel.TestAdminAuthentication object at 0xf8ff8ee5f910>
 
     def test_regular_user_login_success(self):
         """Regular user can login successfully"""
@@ -5827,7 +6674,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/register':
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 ____ TestAdminUsersEndpoint.test_unauthenticated_cannot_access_admin_users _____
 
-self = <test_admin_panel.TestAdminUsersEndpoint object at 0xfffa92270b50>
+self = <test_admin_panel.TestAdminUsersEndpoint object at 0xf8ff8ee710d0>
 
     def test_unauthenticated_cannot_access_admin_users(self):
         """Unauthenticated request gets 401/403 when accessing /api/admin/users"""
@@ -5891,7 +6738,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/admin/users': N
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 _____________________ TestHealthCheck.test_health_endpoint _____________________
 
-self = <test_carbon_api.TestHealthCheck object at 0xfffa90760d90>
+self = <test_carbon_api.TestHealthCheck object at 0xf8ff8d364ed0>
 
     def test_health_endpoint(self):
         """Test API health check"""
@@ -5903,7 +6750,7 @@ E        +  where 404 = <Response [404]>.status_code
 backend/tests/test_carbon_api.py:22: AssertionError
 ________________ TestEmissionFactors.test_get_emission_factors _________________
 
-self = <test_carbon_api.TestEmissionFactors object at 0xfffa9076df10>
+self = <test_carbon_api.TestEmissionFactors object at 0xf8ff8d372f50>
 
     def test_get_emission_factors(self):
         """Test getting emission factors"""
@@ -5915,7 +6762,7 @@ E        +  where 403 = <Response [403]>.status_code
 backend/tests/test_carbon_api.py:124: AssertionError
 _______________ TestEmissionFactors.test_search_emission_factors _______________
 
-self = <test_carbon_api.TestEmissionFactors object at 0xfffa9076e010>
+self = <test_carbon_api.TestEmissionFactors object at 0xf8ff8d372b50>
 
     def test_search_emission_factors(self):
         """Test searching emission factors"""
@@ -5927,8 +6774,8 @@ E        +  where 403 = <Response [403]>.status_code
 backend/tests/test_carbon_api.py:132: AssertionError
 ______________________ TestActivities.test_get_activities ______________________
 
-self = <test_carbon_api.TestActivities object at 0xfffa9076ecd0>
-auth_token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OTczMTdlMmRjNDY4YjQxZDg3YTE3MWEiLCJleHAiOjE3NzM2Nzk2ODB9.PERcsKc0RJ251lcplgICYxytjUvGX2VILOYT_hAgQWY'
+self = <test_carbon_api.TestActivities object at 0xf8ff8d373a10>
+auth_token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OTczMTdlMmRjNDY4YjQxZDg3YTE3MWEiLCJleHAiOjE3NzM3Njk0NTJ9.8k2jEYJGkUmBwxao1HE3W0ua2O6np_uUY47jZGgteIc'
 
     def test_get_activities(self, auth_token):
         """Test getting all activities"""
@@ -5939,13 +6786,13 @@ auth_token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OTczMTdlMmRjNDY4Y
         data = response.json()
 >       assert isinstance(data, list)
 E       AssertionError: assert False
-E        +  where False = isinstance({'data': [{'calculated_emissions': 883.2, 'category_id': 'electricite', 'comments': '', 'company_id': '69731b2bdc468b4...'company_id': '69731b2bdc468b41d87a171b', ...}, ...], 'pagination': {'limit': 100, 'page': 1, 'pages': 1, 'total': 70}}, list)
+E        +  where False = isinstance({'data': [{'calculated_emissions': 250.0, 'category_id': 'transformation_produits', 'company_id': '69731b2bdc468b41d87...at': '2026-03-16T07:11:22.255883+00:00', ...}, ...], 'pagination': {'limit': 100, 'page': 1, 'pages': 3, 'total': 240}}, list)
 
 backend/tests/test_carbon_api.py:157: AssertionError
 _________________ TestActivities.test_get_activities_by_scope __________________
 
-self = <test_carbon_api.TestActivities object at 0xfffa9076f390>
-auth_token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OTczMTdlMmRjNDY4YjQxZDg3YTE3MWEiLCJleHAiOjE3NzM2Nzk2ODB9.PERcsKc0RJ251lcplgICYxytjUvGX2VILOYT_hAgQWY'
+self = <test_carbon_api.TestActivities object at 0xf8ff8d373e90>
+auth_token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OTczMTdlMmRjNDY4YjQxZDg3YTE3MWEiLCJleHAiOjE3NzM3Njk0NTN9.BDkdheiTLpqBGIgzFpR-3HQe6h171oczQertDMYxOiY'
 
     def test_get_activities_by_scope(self, auth_token):
         """Test getting activities filtered by scope"""
@@ -5956,13 +6803,13 @@ auth_token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OTczMTdlMmRjNDY4Y
         data = response.json()
 >       assert isinstance(data, list)
 E       AssertionError: assert False
-E        +  where False = isinstance({'data': [{'calculated_emissions': 7389.999999999999, 'category_id': 'combustion_fixe', 'comments': '', 'company_id': ...'company_id': '69731b2bdc468b41d87a171b', ...}, ...], 'pagination': {'limit': 100, 'page': 1, 'pages': 1, 'total': 13}}, list)
+E        +  where False = isinstance({'data': [{'calculated_emissions': 7389.999999999999, 'category_id': 'combustion_fixe', 'comments': '', 'company_id': ...'company_id': '69731b2bdc468b41d87a171b', ...}, ...], 'pagination': {'limit': 100, 'page': 1, 'pages': 1, 'total': 29}}, list)
 
 backend/tests/test_carbon_api.py:168: AssertionError
 ___________ TestActivityUpdate.test_update_activity_endpoint_exists ____________
 
-self = <test_carbon_api.TestActivityUpdate object at 0xfffa9076c150>
-auth_token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OTczMTdlMmRjNDY4YjQxZDg3YTE3MWEiLCJleHAiOjE3NzM2Nzk2ODN9.68vvBcX_kg4tRrahtiFlVFoinnsyhi8_1Oua8dWwSWE'
+self = <test_carbon_api.TestActivityUpdate object at 0xf8ff8d370690>
+auth_token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OTczMTdlMmRjNDY4YjQxZDg3YTE3MWEiLCJleHAiOjE3NzM3Njk0NTV9.CPmGfySGmTmW2giXpyCXlyLbPlDTvBvrOs8zwgm1d8c'
 
     def test_update_activity_endpoint_exists(self, auth_token):
         """Test that PUT /api/activities/{id} endpoint exists"""
@@ -5978,9 +6825,52 @@ auth_token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OTczMTdlMmRjNDY4Y
 E           KeyError: 0
 
 backend/tests/test_carbon_api.py:268: KeyError
+_________________ TestAdminPanel.test_get_admin_subcategories __________________
+
+self = <test_comprehensive_features.TestAdminPanel object at 0xf8ff8d091490>
+auth_headers = {'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OTczMTdlMmRjNDY4YjQxZDg3YTE3MWEiLCJleHAiOjE3NzM3Njk0NTd9.q2Il8CgjBFxH2ZXZ3gvJl_iPsbSVzulAGNYqbKMw_Kc'}
+
+    def test_get_admin_subcategories(self, auth_headers):
+        """Test getting admin subcategories"""
+        response = requests.get(f"{BASE_URL}/api/admin/subcategories", headers=auth_headers)
+        assert response.status_code == 200
+        data = response.json()
+        assert isinstance(data, list)
+>       assert len(data) >= 89  # Should have 89 subcategories
+        ^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: assert 69 >= 89
+E        +  where 69 = len([{'categories': ['deplacements_domicile_travail', 'deplacements_professionnels', 'transport_distribution_aval', 'trans..._services_achetes'], 'code': 'bois_et_produits_en_bois', 'icon': 'circle', 'id': '698418f3c1a4e9f26cd27102', ...}, ...])
+
+backend/tests/test_comprehensive_features.py:236: AssertionError
+______ TestTop10Subcategories.test_scope_breakdown_provides_category_data ______
+
+self = <test_dashboard_results.TestTop10Subcategories object at 0xf8ff8d33a250>
+auth_headers = {'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OTczMTdlMmRjNDY4YjQxZDg3YTE3MWEiLCJleHAiOjE3NzM3Njk0NjN9.uN8IZ7tmoHFskL18K9awhIOIVKxBSscAd-tzBa80Pe4'}
+
+    def test_scope_breakdown_provides_category_data(self, auth_headers):
+        """Test that scope breakdown provides enough data for Top 10 subcategories"""
+        response = requests.get(f"{BASE_URL}/api/dashboard/scope-breakdown/current", headers=auth_headers)
+        data = response.json()
+    
+        # Collect all categories from all scopes
+        all_categories = {}
+        for scope_key, scope_data in data["scopes"].items():
+            for cat_name, cat_value in scope_data.get("categories", {}).items():
+                if cat_name in all_categories:
+                    all_categories[cat_name] += cat_value
+                else:
+                    all_categories[cat_name] = cat_value
+    
+        # Should have some categories for the Top 10 list
+>       assert len(all_categories) > 0, "Should have at least some categories for Top 10 list"
+E       AssertionError: Should have at least some categories for Top 10 list
+E       assert 0 > 0
+E        +  where 0 = len({})
+
+backend/tests/test_dashboard_results.py:226: AssertionError
 ______________________ TestCategories.test_get_categories ______________________
 
-self = <test_data_entry_bugs.TestCategories object at 0xfffa906c2190>
+self = <test_data_entry_bugs.TestCategories object at 0xf8ff8ec8e690>
 
     def test_get_categories(self):
         """Test GET /api/categories"""
@@ -6044,7 +6934,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/categories': No
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 _________________ TestSubcategories.test_get_subcategories_all _________________
 
-self = <test_data_entry_bugs.TestSubcategories object at 0xfffa906d3110>
+self = <test_data_entry_bugs.TestSubcategories object at 0xf8ff8d346190>
 
     def test_get_subcategories_all(self):
         """Test GET /api/subcategories without filter"""
@@ -6109,7 +6999,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/subcategories':
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 _____________ TestSubcategories.test_get_subcategories_by_category _____________
 
-self = <test_data_entry_bugs.TestSubcategories object at 0xfffa92085050>
+self = <test_data_entry_bugs.TestSubcategories object at 0xf8ff8d345e10>
 
     def test_get_subcategories_by_category(self):
         """Test GET /api/subcategories?category=combustion_mobile"""
@@ -6174,7 +7064,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/subcategories?c
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 ________________ TestUnitConversions.test_get_units_dimensions _________________
 
-self = <test_data_entry_bugs.TestUnitConversions object at 0xfffa9069f950>
+self = <test_data_entry_bugs.TestUnitConversions object at 0xf8ff8d2b3c10>
 
     def test_get_units_dimensions(self):
         """Test GET /api/units/dimensions"""
@@ -6237,9 +7127,75 @@ params = OrderedDict()
 E           requests.exceptions.MissingSchema: Invalid URL '/api/units/dimensions': No scheme supplied. Perhaps you meant https:///api/units/dimensions?
 
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
+__________ TestOnboardingAPIs.test_onboarding_endpoints_require_auth ___________
+
+self = <test_onboarding.TestOnboardingAPIs object at 0xf8ff8cfba2d0>
+
+    def test_onboarding_endpoints_require_auth(self):
+        """Onboarding endpoints should require authentication"""
+        # Test without auth
+>       reset_response = requests.post(f"{BASE_URL}/api/auth/onboarding/reset")
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/test_onboarding.py:92: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/root/.venv/lib/python3.11/site-packages/requests/api.py:115: in post
+    return request("post", url, data=data, json=json, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/root/.venv/lib/python3.11/site-packages/requests/api.py:59: in request
+    return session.request(method=method, url=url, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/root/.venv/lib/python3.11/site-packages/requests/sessions.py:575: in request
+    prep = self.prepare_request(req)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+/root/.venv/lib/python3.11/site-packages/requests/sessions.py:484: in prepare_request
+    p.prepare(
+/root/.venv/lib/python3.11/site-packages/requests/models.py:367: in prepare
+    self.prepare_url(url, params)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <PreparedRequest [POST]>, url = '/api/auth/onboarding/reset'
+params = OrderedDict()
+
+    def prepare_url(self, url, params):
+        """Prepares the given HTTP URL."""
+        #: Accept objects that have string representations.
+        #: We're unable to blindly call unicode/str functions
+        #: as this will include the bytestring indicator (b'')
+        #: on python 3.x.
+        #: https://github.com/psf/requests/pull/2238
+        if isinstance(url, bytes):
+            url = url.decode("utf8")
+        else:
+            url = str(url)
+    
+        # Remove leading whitespaces from url
+        url = url.lstrip()
+    
+        # Don't do any URL preparation for non-HTTP schemes like `mailto`,
+        # `data` etc to work around exceptions from `url_parse`, which
+        # handles RFC 3986 only.
+        if ":" in url and not url.lower().startswith("http"):
+            self.url = url
+            return
+    
+        # Support for unicode domain names and paths.
+        try:
+            scheme, auth, host, port, path, query, fragment = parse_url(url)
+        except LocationParseError as e:
+            raise InvalidURL(*e.args)
+    
+        if not scheme:
+>           raise MissingSchema(
+                f"Invalid URL {url!r}: No scheme supplied. "
+                f"Perhaps you meant https://{url}?"
+            )
+E           requests.exceptions.MissingSchema: Invalid URL '/api/auth/onboarding/reset': No scheme supplied. Perhaps you meant https:///api/auth/onboarding/reset?
+
+/root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 ______ TestEmissionFactorsForProducts.test_get_materials_emission_factors ______
 
-self = <test_product_lifecycle.TestEmissionFactorsForProducts object at 0xfffa903bcf50>
+self = <test_product_lifecycle.TestEmissionFactorsForProducts object at 0xf8ff8cffc9d0>
 
     def test_get_materials_emission_factors(self):
         """Test getting materials emission factors (Acier, Aluminium, etc.)"""
@@ -6251,7 +7207,7 @@ E        +  where 403 = <Response [403]>.status_code
 backend/tests/test_product_lifecycle.py:33: AssertionError
 ______ TestEmissionFactorsForProducts.test_get_treatment_emission_factors ______
 
-self = <test_product_lifecycle.TestEmissionFactorsForProducts object at 0xfffa903bce10>
+self = <test_product_lifecycle.TestEmissionFactorsForProducts object at 0xf8ff8cffca10>
 
     def test_get_treatment_emission_factors(self):
         """Test getting end-of-life treatment factors (Recyclage, Incinération, etc.)"""
@@ -6263,7 +7219,7 @@ E        +  where 403 = <Response [403]>.status_code
 backend/tests/test_product_lifecycle.py:48: AssertionError
 _____ TestEmissionFactorsForProducts.test_get_refrigerant_emission_factors _____
 
-self = <test_product_lifecycle.TestEmissionFactorsForProducts object at 0xfffa903bd410>
+self = <test_product_lifecycle.TestEmissionFactorsForProducts object at 0xf8ff8cffc6d0>
 
     def test_get_refrigerant_emission_factors(self):
         """Test getting refrigerant emission factors"""
@@ -6275,7 +7231,7 @@ E        +  where 403 = <Response [403]>.status_code
 backend/tests/test_product_lifecycle.py:63: AssertionError
 _____ TestEmissionFactorsForProducts.test_get_electricity_emission_factors _____
 
-self = <test_product_lifecycle.TestEmissionFactorsForProducts object at 0xfffa903bddd0>
+self = <test_product_lifecycle.TestEmissionFactorsForProducts object at 0xf8ff8cffc050>
 
     def test_get_electricity_emission_factors(self):
         """Test getting electricity emission factors"""
@@ -6287,7 +7243,7 @@ E        +  where 403 = <Response [403]>.status_code
 backend/tests/test_product_lifecycle.py:77: AssertionError
 _____ TestEmissionFactorsForProducts.test_get_factors_by_tags_combustible ______
 
-self = <test_product_lifecycle.TestEmissionFactorsForProducts object at 0xfffa903be110>
+self = <test_product_lifecycle.TestEmissionFactorsForProducts object at 0xf8ff8cffde50>
 
     def test_get_factors_by_tags_combustible(self):
         """Test getting combustible factors by tags"""
@@ -6299,7 +7255,7 @@ E        +  where 403 = <Response [403]>.status_code
 backend/tests/test_product_lifecycle.py:87: AssertionError
 ______ TestEmissionFactorsForProducts.test_get_factors_by_tags_carburant _______
 
-self = <test_product_lifecycle.TestEmissionFactorsForProducts object at 0xfffa903be610>
+self = <test_product_lifecycle.TestEmissionFactorsForProducts object at 0xf8ff8cffe410>
 
     def test_get_factors_by_tags_carburant(self):
         """Test getting carburant factors by tags"""
@@ -6311,8 +7267,8 @@ E        +  where 403 = <Response [403]>.status_code
 backend/tests/test_product_lifecycle.py:96: AssertionError
 ________ TestProductEnhancedCRUD.test_create_enhanced_product_finished _________
 
-self = <test_product_lifecycle.TestProductEnhancedCRUD object at 0xfffa903bee10>
-auth_token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OTczMTdlMmRjNDY4YjQxZDg3YTE3MWEiLCJleHAiOjE3NzM2Nzk3NTN9.bdmevIYQjNSeqxhlmX995qGrJbN0vQe0pMfC1iAoCOY'
+self = <test_product_lifecycle.TestProductEnhancedCRUD object at 0xf8ff8cffe910>
+auth_token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OTczMTdlMmRjNDY4YjQxZDg3YTE3MWEiLCJleHAiOjE3NzM3Njk1NDZ9.GtY5fv98rgSdIAtZjAcHcn7FweRuZAw-AjvY0KIw7ks'
 
     def test_create_enhanced_product_finished(self, auth_token):
         """Test creating a finished product with full lifecycle data"""
@@ -6333,8 +7289,8 @@ E       KeyError: 0
 backend/tests/test_product_lifecycle.py:118: KeyError
 ______ TestProductEnhancedCRUD.test_create_enhanced_product_semi_finished ______
 
-self = <test_product_lifecycle.TestProductEnhancedCRUD object at 0xfffa903bf310>
-auth_token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OTczMTdlMmRjNDY4YjQxZDg3YTE3MWEiLCJleHAiOjE3NzM2Nzk3NTN9.bdmevIYQjNSeqxhlmX995qGrJbN0vQe0pMfC1iAoCOY'
+self = <test_product_lifecycle.TestProductEnhancedCRUD object at 0xf8ff8cfff310>
+auth_token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OTczMTdlMmRjNDY4YjQxZDg3YTE3MWEiLCJleHAiOjE3NzM3Njk1NDZ9.GtY5fv98rgSdIAtZjAcHcn7FweRuZAw-AjvY0KIw7ks'
 
     def test_create_enhanced_product_semi_finished(self, auth_token):
         """Test creating a semi-finished product with transformation energy"""
@@ -6354,8 +7310,8 @@ E       KeyError: 0
 backend/tests/test_product_lifecycle.py:192: KeyError
 _____________ TestProductSales.test_verify_scope3_aval_activities ______________
 
-self = <test_product_lifecycle.TestProductSales object at 0xfffa903d4dd0>
-auth_token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OTczMTdlMmRjNDY4YjQxZDg3YTE3MWEiLCJleHAiOjE3NzM2Nzk3NTN9.bdmevIYQjNSeqxhlmX995qGrJbN0vQe0pMfC1iAoCOY'
+self = <test_product_lifecycle.TestProductSales object at 0xf8ff8cfd49d0>
+auth_token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OTczMTdlMmRjNDY4YjQxZDg3YTE3MWEiLCJleHAiOjE3NzM3Njk1NDZ9.GtY5fv98rgSdIAtZjAcHcn7FweRuZAw-AjvY0KIw7ks'
 
     def test_verify_scope3_aval_activities(self, auth_token):
         """Verify that product sales create activities in Scope 3 Aval"""
@@ -6373,7 +7329,7 @@ auth_token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OTczMTdlMmRjNDY4Y
 backend/tests/test_product_lifecycle.py:359: 
 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
 
-.0 = <dict_keyiterator object at 0xfffa7d55cb80>
+.0 = <dict_keyiterator object at 0xf8ff7a14ccc0>
 
 >   product_activities = [a for a in data if a.get("product_id")]
                                              ^^^^^
@@ -6382,7 +7338,7 @@ E   AttributeError: 'str' object has no attribute 'get'
 backend/tests/test_product_lifecycle.py:359: AttributeError
 ___ TestUnitDimensionsEndpoint.test_get_unit_dimensions_returns_5_dimensions ___
 
-self = <test_unit_conversion.TestUnitDimensionsEndpoint object at 0xfffa906225d0>
+self = <test_unit_conversion.TestUnitDimensionsEndpoint object at 0xf8ff8d13d890>
 
     def test_get_unit_dimensions_returns_5_dimensions(self):
         """GET /api/units/dimensions should return all 5 dimensions"""
@@ -6447,7 +7403,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/units/dimension
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 ______ TestUnitDimensionsEndpoint.test_energy_dimension_has_correct_units ______
 
-self = <test_unit_conversion.TestUnitDimensionsEndpoint object at 0xfffa90623650>
+self = <test_unit_conversion.TestUnitDimensionsEndpoint object at 0xf8ff8d26bf10>
 
     def test_energy_dimension_has_correct_units(self):
         """Energy dimension should have kWh, MWh, MJ, GJ, therm"""
@@ -6512,7 +7468,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/units/dimension
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 _____ TestUnitDimensionsEndpoint.test_distance_dimension_has_correct_units _____
 
-self = <test_unit_conversion.TestUnitDimensionsEndpoint object at 0xfffa90621c10>
+self = <test_unit_conversion.TestUnitDimensionsEndpoint object at 0xf8ff8d26bc90>
 
     def test_distance_dimension_has_correct_units(self):
         """Distance dimension should have km, m, miles"""
@@ -6577,7 +7533,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/units/dimension
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 _______ TestUnitDimensionsEndpoint.test_mass_dimension_has_correct_units _______
 
-self = <test_unit_conversion.TestUnitDimensionsEndpoint object at 0xfffa90620390>
+self = <test_unit_conversion.TestUnitDimensionsEndpoint object at 0xf8ff8d26ac50>
 
     def test_mass_dimension_has_correct_units(self):
         """Mass dimension should have kg, t, g, lb"""
@@ -6642,7 +7598,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/units/dimension
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 ______ TestUnitDimensionsEndpoint.test_volume_dimension_has_correct_units ______
 
-self = <test_unit_conversion.TestUnitDimensionsEndpoint object at 0xfffa904fad90>
+self = <test_unit_conversion.TestUnitDimensionsEndpoint object at 0xf8ff8d13f6d0>
 
     def test_volume_dimension_has_correct_units(self):
         """Volume dimension should have L, m3, gal"""
@@ -6707,7 +7663,7 @@ E           requests.exceptions.MissingSchema: Invalid URL '/api/units/dimension
 /root/.venv/lib/python3.11/site-packages/requests/models.py:438: MissingSchema
 _____ TestUnitDimensionsEndpoint.test_monetary_dimension_has_correct_units _____
 
-self = <test_unit_conversion.TestUnitDimensionsEndpoint object at 0xfffa90623a10>
+self = <test_unit_conversion.TestUnitDimensionsEndpoint object at 0xf8ff8d131350>
 
     def test_monetary_dimension_has_correct_units(self):
         """Monetary dimension should have CHF, kCHF"""
@@ -6822,10 +7778,13 @@ FAILED backend/tests/test_carbon_api.py::TestEmissionFactors::test_search_emissi
 FAILED backend/tests/test_carbon_api.py::TestActivities::test_get_activities
 FAILED backend/tests/test_carbon_api.py::TestActivities::test_get_activities_by_scope
 FAILED backend/tests/test_carbon_api.py::TestActivityUpdate::test_update_activity_endpoint_exists
+FAILED backend/tests/test_comprehensive_features.py::TestAdminPanel::test_get_admin_subcategories
+FAILED backend/tests/test_dashboard_results.py::TestTop10Subcategories::test_scope_breakdown_provides_category_data
 FAILED backend/tests/test_data_entry_bugs.py::TestCategories::test_get_categories
 FAILED backend/tests/test_data_entry_bugs.py::TestSubcategories::test_get_subcategories_all
 FAILED backend/tests/test_data_entry_bugs.py::TestSubcategories::test_get_subcategories_by_category
 FAILED backend/tests/test_data_entry_bugs.py::TestUnitConversions::test_get_units_dimensions
+FAILED backend/tests/test_onboarding.py::TestOnboardingAPIs::test_onboarding_endpoints_require_auth
 FAILED backend/tests/test_product_lifecycle.py::TestEmissionFactorsForProducts::test_get_materials_emission_factors
 FAILED backend/tests/test_product_lifecycle.py::TestEmissionFactorsForProducts::test_get_treatment_emission_factors
 FAILED backend/tests/test_product_lifecycle.py::TestEmissionFactorsForProducts::test_get_refrigerant_emission_factors
@@ -6868,6 +7827,14 @@ ERROR backend/tests/test_data_entry_bugs.py::TestActivities::test_create_activit
 ERROR backend/tests/test_data_entry_bugs.py::TestActivities::test_delete_test_activities
 ERROR backend/tests/test_data_entry_bugs.py::TestDashboard::test_dashboard_summary
 ERROR backend/tests/test_data_entry_bugs.py::TestDashboard::test_category_stats
+ERROR backend/tests/test_feat02_scenarios.py::TestScenarioFeature::test_01_login_and_get_fiscal_years
+ERROR backend/tests/test_feat02_scenarios.py::TestScenarioFeature::test_02_get_current_fiscal_year_excludes_scenarios
+ERROR backend/tests/test_feat02_scenarios.py::TestScenarioFeature::test_03_create_scenario_via_duplicate
+ERROR backend/tests/test_feat02_scenarios.py::TestScenarioFeature::test_04_scenario_requires_name
+ERROR backend/tests/test_feat02_scenarios.py::TestScenarioFeature::test_05_get_scenarios_for_year
+ERROR backend/tests/test_feat02_scenarios.py::TestScenarioFeature::test_06_scenario_dashboard_summary
+ERROR backend/tests/test_feat02_scenarios.py::TestScenarioFeature::test_07_multiple_scenarios_same_year_allowed
+ERROR backend/tests/test_feat02_scenarios.py::TestScenarioFeature::test_08_delete_scenario_does_not_affect_actual
 ERROR backend/tests/test_ghg_product_wizard.py::TestEmissionFactorCategories::test_fin_vie_produits_category
 ERROR backend/tests/test_ghg_product_wizard.py::TestEmissionFactorCategories::test_electricite_category
 ERROR backend/tests/test_ghg_product_wizard.py::TestEmissionFactorCategories::test_combustion_fixe_category
@@ -6880,6 +7847,10 @@ ERROR backend/tests/test_ghg_product_wizard.py::TestProductEnhancedWithEOL::test
 ERROR backend/tests/test_ghg_product_wizard.py::TestProductEnhancedWithEOL::test_cleanup_product
 ERROR backend/tests/test_ghg_product_wizard.py::TestSemiFinishedProductWithTransformation::test_create_semi_finished_with_transformation
 ERROR backend/tests/test_ghg_product_wizard.py::TestSemiFinishedProductWithTransformation::test_cleanup_semi_finished
+ERROR backend/tests/test_onboarding.py::TestOnboardingAPIs::test_get_me_has_onboarding_field
+ERROR backend/tests/test_onboarding.py::TestOnboardingAPIs::test_onboarding_reset
+ERROR backend/tests/test_onboarding.py::TestOnboardingAPIs::test_onboarding_complete
+ERROR backend/tests/test_onboarding.py::TestOnboardingAPIs::test_onboarding_toggle_flow
 ERROR backend/tests/test_phase3_features.py::TestPreviewEndpoint::test_preview_with_valid_factors_returns_emissions
 ERROR backend/tests/test_phase3_features.py::TestPreviewEndpoint::test_preview_with_invalid_factor_id_returns_422
 ERROR backend/tests/test_phase3_features.py::TestBackendValidation::test_create_with_empty_name_returns_422
@@ -6924,14 +7895,14 @@ ERROR backend/tests/test_product_wizard.py::TestProductSalesFlow::test_record_sa
 ERROR backend/tests/test_unit_conversion.py::TestActivityWithConversion::test_create_activity_with_conversion_fields
 ERROR backend/tests/test_unit_conversion.py::TestActivityWithConversion::test_activity_without_conversion
 ERROR backend/tests/test_unit_conversion.py::TestEndToEndConversion::test_gj_to_mj_emissions_calculation
-= 28 failed, 131 passed, 1 skipped, 7 warnings, 83 errors in 89.33s (0:01:29) ==
-- SMTP (Infomaniak)
--  (pour l'accès à la clé LLM universelle)
+= 31 failed, 143 passed, 1 skipped, 7 warnings, 95 errors in 111.08s (0:01:51) =
 - 
-- **OpenAI / Anthropic**: Utilisé via la clé universelle Emergent pour l'enrichissement de données.
+- 
+-  (Nouveau)
+- **OpenAI / Anthropic**: via la clé universelle Emergent.
 
 **Testing status**
-  - Testing agent used after significant changes: YES. Utilisé avec succès après chaque modernisation d'onglet du dashboard.
+  - Testing agent used after significant changes: YES. Utilisé avec succès après chaque implémentation de feature majeure (, , ) et pour les corrections de bugs.
   - Troubleshoot agent used after agent stuck in loop: NO
   - Test files created: []
   - Known regressions: None.
@@ -6941,4 +7912,4 @@ ERROR backend/tests/test_unit_conversion.py::TestEndToEndConversion::test_gj_to_
 - **Password**: 
 
 **What agent forgot to execute**
-- Rien. L'agent a été très méthodique, a suivi toutes les demandes de l'utilisateur, a utilisé les agents spécialisés (testing, health check) de manière proactive et a maintenu le backlog à jour. Les tâches non réalisées sont clairement identifiées et en attente de priorisation par l'utilisateur.</analysis>
+- Rien. L'agent a suivi méthodiquement les demandes de l'utilisateur et a maintenu le backlog à jour. Les tâches restantes sont clairement identifiées pour le futur.</analysis>

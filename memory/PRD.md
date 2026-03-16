@@ -34,6 +34,7 @@ Application de calcul d'empreinte carbone alignée sur le GHG Protocol, avec tab
 
 ### Sprint 2
 - [x] **FEAT-01** : Onboarding guidé (tutoriel first-run, overlay contextuel react-joyride)
+- [x] **UI-HARMONISATION** : Design unifié sur toutes les pages (Mars 2026)
 
 ### Sprint 3-4
 - [ ] **FEAT-03** : Gestion multi-utilisateurs (rôles admin/editor/viewer, invitations)

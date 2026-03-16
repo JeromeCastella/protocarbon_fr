@@ -21,7 +21,7 @@ const AdminTabs = ({ activeTab, setActiveTab, factorsCount, subcategoriesCount, 
           key={tab.id}
           data-testid={`admin-tab-${tab.id}`}
           onClick={() => setActiveTab(tab.id)}
-          className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-lg font-medium transition-all ${
+          className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-medium transition-all ${
             activeTab === tab.id
               ? `${tab.color} text-white`
               : isDark ? 'text-slate-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'
