@@ -105,7 +105,29 @@ const FiscalYears = () => {
     return years;
   }, [existingYears]);
 
-  // Find first available year for default selection
+  // Years already taken by the selected scenario entity
+  const scenarioTakenYears = useMemo(() => {
+    if (!createForm.isScenario || !createForm.selectedScenarioId || createForm.selectedScenarioId === 'new') {
+      return new Set();
+    }
+    return new Set(
+      fiscalYears
+        .filter(fy => fy.type === 'scenario' && fy.scenario_id === createForm.selectedScenarioId)
+        .map(fy => fy.year)
+    );
+  }, [fiscalYears, createForm.isScenario, createForm.selectedScenarioId]);
+
+  // Auto-select first available year when scenario changes
+  useEffect(() => {
+    if (createForm.isScenario && createForm.selectedScenarioId && createForm.selectedScenarioId !== 'new') {
+      if (scenarioTakenYears.has(createForm.year)) {
+        const firstFree = availableYears.find(y => !scenarioTakenYears.has(y.year));
+        if (firstFree) {
+          setCreateForm(prev => ({ ...prev, year: firstFree.year }));
+        }
+      }
+    }
+  }, [createForm.selectedScenarioId, scenarioTakenYears]);
   useEffect(() => {
     const firstAvailable = availableYears.find(y => y.available);
     if (firstAvailable && showCreateModal) {
@@ -679,16 +701,21 @@ const FiscalYears = () => {
                           : 'bg-white border-gray-200 text-gray-900'
                       }`}
                     >
-                      {availableYears.map(({ year, available }) => (
-                        <option 
-                          key={year} 
-                          value={year} 
-                          disabled={!createForm.isScenario && !available}
-                          className={(!createForm.isScenario && !available) ? 'text-gray-400' : ''}
-                        >
-                          {year} {!createForm.isScenario && !available ? '(déjà créé)' : ''}
-                        </option>
-                      ))}
+                      {availableYears.map(({ year, available }) => {
+                        const isActualTaken = !createForm.isScenario && !available;
+                        const isScenarioTaken = createForm.isScenario && scenarioTakenYears.has(year);
+                        const isDisabled = isActualTaken || isScenarioTaken;
+                        return (
+                          <option 
+                            key={year} 
+                            value={year} 
+                            disabled={isDisabled}
+                            className={isDisabled ? 'text-gray-400' : ''}
+                          >
+                            {year} {isActualTaken ? '(déjà créé)' : isScenarioTaken ? '(scénario existant)' : ''}
+                          </option>
+                        );
+                      })}
                     </select>
                     <ChevronDown className={`absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 pointer-events-none ${
                       isDark ? 'text-slate-400' : 'text-gray-500'
@@ -769,7 +796,7 @@ const FiscalYears = () => {
                 </button>
                 <button
                   onClick={handleCreate}
-                  disabled={loading || (!createForm.isScenario && existingYears.has(createForm.year)) || (createForm.isScenario && createForm.selectedScenarioId === '') || (createForm.isScenario && createForm.selectedScenarioId === 'new' && !createForm.newScenarioName.trim())}
+                  disabled={loading || (!createForm.isScenario && existingYears.has(createForm.year)) || (createForm.isScenario && createForm.selectedScenarioId === '') || (createForm.isScenario && createForm.selectedScenarioId === 'new' && !createForm.newScenarioName.trim()) || (createForm.isScenario && scenarioTakenYears.has(createForm.year))}
                   className="flex items-center gap-2 px-5 py-2.5 bg-blue-500 hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-xl font-medium transition-colors"
                 >
                   {loading ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
