@@ -27,7 +27,7 @@ Application de calcul d'empreinte carbone alignée sur le GHG Protocol, avec tab
 
 ### Sprint 1
 - [x] **TECH-01** : Assainissement base sous-catégories/EF
-- [ ] **FEAT-04** : Double mode de saisie Scope 3 Aval (fiche produit ou saisie directe)
+- [x] **FEAT-04** : Double mode de saisie Scope 3 Aval (fiche produit ou saisie directe)
 
 ### Sprint 1-2
 - [ ] **FEAT-02** : Mode Scénario sur les exercices (duplication, comparaison, dashboard)
