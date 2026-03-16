@@ -47,6 +47,7 @@ import {
 import ProductSaleModal from '../components/ProductSaleModal';
 import GuidedEntryModal from '../components/GuidedEntryModal';
 import SaleEditModal from '../components/SaleEditModal';
+import Scope3AvalChoiceModal from '../components/Scope3AvalChoiceModal';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL || '';
 
@@ -147,6 +148,9 @@ const DataEntry = () => {
   // Product sale modal state
   const [showProductSaleModal, setShowProductSaleModal] = useState(false);
 
+  // Scope 3 Aval choice modal state (FEAT-04)
+  const [showScope3AvalChoice, setShowScope3AvalChoice] = useState(false);
+
   // Sale edit modal state (for editing linked sale activities)
   const [showSaleEditModal, setShowSaleEditModal] = useState(false);
   const [editingSaleId, setEditingSaleId] = useState(null);
@@ -217,15 +221,22 @@ const DataEntry = () => {
     return [...baseScopeCategories, PRODUITS_VENDUS_CARD];
   })();
   
-  // Calculate unique product sales count (by sale_id) for the merged card
+  // Calculate activity count for the merged "Produits vendus" card
+  // Includes both product sheet sales (unique sale_id) and direct entry activities
   const getProductSalesCount = () => {
     const productSaleIds = new Set();
+    let directEntryCount = 0;
     (activities || []).forEach(activity => {
-      if (PRODUCT_SALE_CATEGORIES.includes(activity.category_id) && activity.sale_id) {
-        productSaleIds.add(activity.sale_id);
+      if (PRODUCT_SALE_CATEGORIES.includes(activity.category_id)) {
+        if (activity.sale_id) {
+          productSaleIds.add(activity.sale_id);
+        } else if (!activity.group_index || activity.group_index === 0) {
+          // Count direct entries (non-grouped or primary in group)
+          directEntryCount++;
+        }
       }
     });
-    return productSaleIds.size;
+    return productSaleIds.size + directEntryCount;
   };
 
   // Category 3.3 message state
@@ -239,8 +250,9 @@ const DataEntry = () => {
     }
     
     // Check if this is the merged "Produits vendus" card or individual product category
+    // FEAT-04: Show choice modal instead of directly opening ProductSaleModal
     if (category.code === 'produits_vendus' || PRODUCT_SALE_CATEGORIES.includes(category.code)) {
-      setShowProductSaleModal(true);
+      setShowScope3AvalChoice(true);
       return;
     }
     
@@ -853,9 +865,29 @@ const DataEntry = () => {
                               </td>
                             )}
                             <td className="py-4 px-4">
-                              <span className={`text-sm ${isDark ? 'text-slate-300' : 'text-gray-600'} ${isLinkedActivity ? 'opacity-70' : ''}`}>
-                                {getCategoryName(activity.category_id)}
-                              </span>
+                              <div className="flex items-center gap-2">
+                                <span className={`text-sm ${isDark ? 'text-slate-300' : 'text-gray-600'} ${isLinkedActivity ? 'opacity-70' : ''}`}>
+                                  {getCategoryName(activity.category_id)}
+                                </span>
+                                {/* FEAT-04: Badge de traçabilité pour les activités Scope 3 Aval */}
+                                {PRODUCT_SALE_CATEGORIES.includes(activity.category_id) && !isLinkedActivity && (
+                                  activity.sale_id ? (
+                                    <span className={`px-1.5 py-0.5 rounded text-xs font-medium whitespace-nowrap ${
+                                      isDark ? 'bg-purple-500/20 text-purple-300' : 'bg-purple-100 text-purple-700'
+                                    }`} data-testid={`badge-product-sheet-${activity.id}`} title={language === 'fr' ? 'Activité liée à une fiche produit' : 'Verknüpft mit Produktblatt'}>
+                                      <Package className="w-3 h-3 inline mr-0.5" />
+                                      {language === 'fr' ? 'Fiche' : 'Blatt'}
+                                    </span>
+                                  ) : (
+                                    <span className={`px-1.5 py-0.5 rounded text-xs font-medium whitespace-nowrap ${
+                                      isDark ? 'bg-indigo-500/20 text-indigo-300' : 'bg-indigo-100 text-indigo-700'
+                                    }`} data-testid={`badge-direct-entry-${activity.id}`} title={language === 'fr' ? 'Saisie directe (sans fiche produit)' : 'Direkteingabe (ohne Produktblatt)'}>
+                                      <FileText className="w-3 h-3 inline mr-0.5" />
+                                      {language === 'fr' ? 'Direct' : 'Direkt'}
+                                    </span>
+                                  )
+                                )}
+                              </div>
                             </td>
                             <td className="py-4 px-4 text-right">
                               <span className={`font-medium ${isDark ? 'text-white' : 'text-gray-900'} ${isLinkedActivity ? 'opacity-70' : ''}`}>
@@ -903,14 +935,6 @@ const DataEntry = () => {
                                 >
                                   <Trash2 className="w-4 h-4 text-red-500" />
                                 </button>
-                                {/* Sale indicator badge */}
-                                {activity.sale_id && (
-                                  <span className={`px-1.5 py-0.5 rounded text-xs font-medium ${
-                                    isDark ? 'bg-purple-500/20 text-purple-300' : 'bg-purple-100 text-purple-700'
-                                  }`} title="Cette activité fait partie d'une vente groupée">
-                                    <ShoppingBag className="w-3 h-3 inline" />
-                                  </span>
-                                )}
                               </div>
                               )}
                             </td>
@@ -968,6 +992,24 @@ const DataEntry = () => {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* ========== SCOPE 3 AVAL CHOICE MODAL (FEAT-04) ========== */}
+      <Scope3AvalChoiceModal
+        isOpen={showScope3AvalChoice}
+        onClose={() => setShowScope3AvalChoice(false)}
+        onChooseProductSheet={() => setShowProductSaleModal(true)}
+        onChooseDirectEntry={(categoryCode) => {
+          // Find the real category object from the full categories list
+          const cat = categories.find(c => c.code === categoryCode);
+          if (cat) {
+            setSelectedCategory(cat);
+            setEditingActivityData(null);
+            setShowModal(true);
+          }
+        }}
+        language={language}
+        isDark={isDark}
+      />
 
       {/* Product Sale Modal (for transformation/utilisation/fin_vie categories) */}
       <ProductSaleModal
