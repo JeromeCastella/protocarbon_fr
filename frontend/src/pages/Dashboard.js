@@ -845,8 +845,8 @@ const Dashboard = () => {
                 </div>
               </motion.div>
 
-              {/* FEAT-02: Scenario selector for Objectives */}
-              {yearScenarios.length > 0 && (
+              {/* FEAT-02: Scenario selector for Objectives (only when viewing actual data) */}
+              {yearScenarios.length > 0 && currentFiscalYear?.type !== 'scenario' && (
                 <motion.div
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
