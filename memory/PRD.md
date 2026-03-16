@@ -48,7 +48,7 @@ Application de calcul d'empreinte carbone alignée sur le GHG Protocol, avec tab
 - [ ] Logs d'audit émissions (O3-A7, en attente de décision)
 
 ## Décisions prises
-- FEAT-02 : Scénarios illimités, dashboard avec sélecteur (Option A pour V1)
+- FEAT-02 : Scénarios illimités, sélecteur hiérarchisé en 2 niveaux (Option C), overlay trajectoire violet
 - FEAT-04 : Badge traçabilité (fiche produit vs saisie directe) approuvé
 - FEAT-01 : Overlay contextuel (type Shepherd.js), approche généraliste
 - `emissions_procedes` : Laissée vide, à remplir plus tard
