@@ -33,7 +33,7 @@ Application de calcul d'empreinte carbone alignée sur le GHG Protocol, avec tab
 - [x] **FEAT-02** : Mode Scénario sur les exercices (duplication, comparaison, dashboard)
 
 ### Sprint 2
-- [ ] **FEAT-01** : Onboarding guidé (tutoriel first-run, overlay contextuel)
+- [x] **FEAT-01** : Onboarding guidé (tutoriel first-run, overlay contextuel react-joyride)
 
 ### Sprint 3-4
 - [ ] **FEAT-03** : Gestion multi-utilisateurs (rôles admin/editor/viewer, invitations)
