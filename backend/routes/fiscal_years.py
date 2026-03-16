@@ -12,7 +12,8 @@ sys.path.append('/app/backend')
 from config import (
     fiscal_years_collection,
     activities_collection,
-    companies_collection
+    companies_collection,
+    scenarios_collection
 )
 from models import FiscalYearCreate, FiscalYearDuplicate, FiscalYearContextUpdate
 from services.auth import get_current_user
@@ -354,8 +355,20 @@ async def duplicate_fiscal_year(
         raise HTTPException(status_code=404, detail="Fiscal year not found")
     
     # Validate scenario fields
-    if data.is_scenario and not data.scenario_name:
-        raise HTTPException(status_code=400, detail="Un nom est requis pour les scénarios")
+    if data.is_scenario:
+        # Resolve scenario name from scenario_id or fallback to scenario_name
+        resolved_scenario_name = None
+        resolved_scenario_id = None
+        if data.scenario_id:
+            scenario_doc = scenarios_collection.find_one({"_id": ObjectId(data.scenario_id)})
+            if not scenario_doc:
+                raise HTTPException(status_code=404, detail="Scénario introuvable")
+            resolved_scenario_name = scenario_doc["name"]
+            resolved_scenario_id = data.scenario_id
+        elif data.scenario_name:
+            resolved_scenario_name = data.scenario_name
+        else:
+            raise HTTPException(status_code=400, detail="Un scénario (scenario_id ou scenario_name) est requis")
     
     # Check if target year already exists (only for actual exercises, not scenarios)
     if not data.is_scenario:
@@ -376,7 +389,7 @@ async def duplicate_fiscal_year(
     new_end_date = f"{data.new_year}-12-31"
     
     if data.is_scenario:
-        new_name = f"Scénario {data.new_year} — {data.scenario_name}"
+        new_name = f"Scénario {data.new_year} — {resolved_scenario_name}"
     else:
         new_name = f"Exercice {data.new_year}"
     
@@ -416,8 +429,10 @@ async def duplicate_fiscal_year(
     
     # Scenario-specific fields
     if data.is_scenario:
-        new_fy["scenario_name"] = data.scenario_name
+        new_fy["scenario_name"] = resolved_scenario_name
         new_fy["reference_fiscal_year_id"] = fiscal_year_id
+        if resolved_scenario_id:
+            new_fy["scenario_id"] = resolved_scenario_id
     
     result = fiscal_years_collection.insert_one(new_fy)
     new_fy_id = str(result.inserted_id)

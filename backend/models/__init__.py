@@ -242,8 +242,9 @@ class FiscalYearDuplicate(BaseModel):
     new_year: int  # Année du nouvel exercice
     duplicate_activities: bool = False
     activity_ids_to_duplicate: List[str] = []
-    is_scenario: bool = False  # FEAT-02: True pour créer un scénario au lieu d'un exercice réel
-    scenario_name: Optional[str] = None  # Nom libre du scénario (obligatoire si is_scenario=True)
+    is_scenario: bool = False
+    scenario_id: Optional[str] = None  # Référence vers la collection scenarios
+    scenario_name: Optional[str] = None  # Fallback texte libre (déprécié)
 
 # ==================== ACTIVITY MODELS ====================
 
@@ -386,6 +387,16 @@ class ProductCreate(BaseModel):
     usage_emissions: float = 0
     disposal_emissions: float = 0
     unit: str = "unit"
+
+# ==================== SCENARIO MODELS ====================
+
+class ScenarioCreate(BaseModel):
+    name: str
+    description: Optional[str] = None
+
+class ScenarioUpdate(BaseModel):
+    name: Optional[str] = None
+    description: Optional[str] = None
 
 # ==================== CARBON OBJECTIVES MODELS ====================
 

@@ -36,6 +36,7 @@ fiscal_years_collection = db["fiscal_years"]
 subcategories_collection = db["subcategories"]
 unit_conversions_collection = db["unit_conversions"]
 carbon_objectives_collection = db["carbon_objectives"]
+scenarios_collection = db["scenarios"]
 
 # Password hashing
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")

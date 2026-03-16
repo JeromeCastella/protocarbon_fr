@@ -54,9 +54,24 @@ const FiscalYears = () => {
     duplicateFrom: null,
     duplicateActivities: false,
     isScenario: false,
-    scenarioName: ''
+    selectedScenarioId: '',   // '' = no selection, 'new' = create new
+    newScenarioName: ''
   });
   const [createError, setCreateError] = useState('');
+  
+  // Scenarios list
+  const [scenarios, setScenarios] = useState([]);
+  
+  const fetchScenarios = async () => {
+    try {
+      const res = await axios.get(`${API_URL}/api/scenarios`);
+      setScenarios(res.data || []);
+    } catch (e) {
+      console.error('Failed to fetch scenarios:', e);
+    }
+  };
+  
+  useEffect(() => { fetchScenarios(); }, []);
   
   // Rectify form state
   const [rectifyReason, setRectifyReason] = useState('');
@@ -150,9 +165,15 @@ const FiscalYears = () => {
     if (!createForm.year) return;
     
     // Scenario validation
-    if (createForm.isScenario && !createForm.scenarioName.trim()) {
-      setCreateError('Un nom est requis pour les scénarios');
-      return;
+    if (createForm.isScenario) {
+      if (createForm.selectedScenarioId === '') {
+        setCreateError('Veuillez sélectionner ou créer un scénario');
+        return;
+      }
+      if (createForm.selectedScenarioId === 'new' && !createForm.newScenarioName.trim()) {
+        setCreateError('Un nom est requis pour le nouveau scénario');
+        return;
+      }
     }
     
     // Check if year is available (only for actual exercises)
@@ -166,16 +187,31 @@ const FiscalYears = () => {
     
     try {
       if (createForm.duplicateFrom) {
-        // Create via duplication (actual or scenario)
+        let scenarioId = null;
+        let scenarioName = null;
+        
+        if (createForm.isScenario) {
+          if (createForm.selectedScenarioId === 'new') {
+            // Create the scenario entity first
+            const res = await axios.post(`${API_URL}/api/scenarios`, { 
+              name: createForm.newScenarioName.trim() 
+            });
+            scenarioId = res.data.id;
+            await fetchScenarios();
+          } else {
+            scenarioId = createForm.selectedScenarioId;
+          }
+        }
+        
         await duplicateToNewYear(createForm.duplicateFrom, {
           new_year: createForm.year,
           duplicate_activities: createForm.duplicateActivities,
           activity_ids_to_duplicate: [],
           is_scenario: createForm.isScenario,
-          scenario_name: createForm.isScenario ? createForm.scenarioName : undefined
+          scenario_id: scenarioId || undefined,
+          scenario_name: scenarioName || undefined
         });
       } else if (!createForm.isScenario) {
-        // Create empty actual fiscal year
         await createFiscalYear({ year: createForm.year });
       } else {
         setCreateError('Un scénario doit être basé sur un exercice existant');
@@ -184,7 +220,7 @@ const FiscalYears = () => {
       }
       
       setShowCreateModal(false);
-      setCreateForm({ year: new Date().getFullYear() + 1, duplicateFrom: null, duplicateActivities: false, isScenario: false, scenarioName: '' });
+      setCreateForm({ year: new Date().getFullYear() + 1, duplicateFrom: null, duplicateActivities: false, isScenario: false, selectedScenarioId: '', newScenarioName: '' });
     } catch (error) {
       console.error('Failed to create fiscal year:', error);
       setCreateError(error.response?.data?.detail || 'Erreur lors de la création');
@@ -552,7 +588,7 @@ const FiscalYears = () => {
                 {createForm.duplicateFrom && (
                   <div className="flex gap-2">
                     <button
-                      onClick={() => setCreateForm(prev => ({ ...prev, isScenario: false, scenarioName: '' }))}
+                      onClick={() => setCreateForm(prev => ({ ...prev, isScenario: false, selectedScenarioId: '', newScenarioName: '' }))}
                       data-testid="type-actual-btn"
                       className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl border-2 font-medium text-sm transition-all ${
                         !createForm.isScenario
@@ -582,24 +618,49 @@ const FiscalYears = () => {
                   </div>
                 )}
 
-                {/* Scenario name (only when scenario mode is selected) */}
+                {/* Scenario selector (only when scenario mode is selected) */}
                 {createForm.isScenario && (
                   <div>
                     <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
-                      Nom du scénario *
+                      Scénario *
                     </label>
-                    <input
-                      type="text"
-                      value={createForm.scenarioName}
-                      onChange={(e) => setCreateForm(prev => ({ ...prev, scenarioName: e.target.value }))}
-                      placeholder="Ex: Plan décarbonation, Sans véhicules diesel..."
-                      data-testid="scenario-name-input"
-                      className={`w-full px-4 py-3 rounded-xl border transition-all focus:ring-2 focus:ring-violet-500 ${
-                        isDark 
-                          ? 'bg-slate-700 border-slate-600 text-white placeholder-slate-400' 
-                          : 'bg-white border-gray-200 text-gray-900 placeholder-gray-400'
-                      }`}
-                    />
+                    <div className="relative">
+                      <select
+                        value={createForm.selectedScenarioId}
+                        onChange={(e) => setCreateForm(prev => ({ ...prev, selectedScenarioId: e.target.value, newScenarioName: '' }))}
+                        data-testid="scenario-select"
+                        className={`w-full px-4 py-3 pr-10 rounded-xl border appearance-none transition-all focus:ring-2 focus:ring-violet-500 ${
+                          isDark 
+                            ? 'bg-slate-700 border-slate-600 text-white' 
+                            : 'bg-white border-gray-200 text-gray-900'
+                        }`}
+                      >
+                        <option value="">— Choisir un scénario —</option>
+                        {scenarios.map(s => (
+                          <option key={s.id} value={s.id}>{s.name}</option>
+                        ))}
+                        <option value="new">+ Créer un nouveau scénario</option>
+                      </select>
+                      <ChevronDown className={`absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 pointer-events-none ${
+                        isDark ? 'text-slate-400' : 'text-gray-500'
+                      }`} />
+                    </div>
+                    
+                    {/* New scenario name input */}
+                    {createForm.selectedScenarioId === 'new' && (
+                      <input
+                        type="text"
+                        value={createForm.newScenarioName}
+                        onChange={(e) => setCreateForm(prev => ({ ...prev, newScenarioName: e.target.value }))}
+                        placeholder="Nom du nouveau scénario..."
+                        data-testid="new-scenario-name-input"
+                        className={`w-full mt-2 px-4 py-3 rounded-xl border transition-all focus:ring-2 focus:ring-violet-500 ${
+                          isDark 
+                            ? 'bg-slate-700 border-slate-600 text-white placeholder-slate-400' 
+                            : 'bg-white border-gray-200 text-gray-900 placeholder-gray-400'
+                        }`}
+                      />
+                    )}
                   </div>
                 )}
 
@@ -708,7 +769,7 @@ const FiscalYears = () => {
                 </button>
                 <button
                   onClick={handleCreate}
-                  disabled={loading || (!createForm.isScenario && existingYears.has(createForm.year)) || (createForm.isScenario && !createForm.scenarioName.trim())}
+                  disabled={loading || (!createForm.isScenario && existingYears.has(createForm.year)) || (createForm.isScenario && createForm.selectedScenarioId === '') || (createForm.isScenario && createForm.selectedScenarioId === 'new' && !createForm.newScenarioName.trim())}
                   className="flex items-center gap-2 px-5 py-2.5 bg-blue-500 hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-xl font-medium transition-colors"
                 >
                   {loading ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
