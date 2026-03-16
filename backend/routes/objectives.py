@@ -237,7 +237,8 @@ async def get_objective_trajectory(current_user: dict = Depends(get_current_user
             "fiscal_year_id": str(fy["_id"])
         }))
         
-        actual_scope1_2 = 0
+        actual_scope1 = 0
+        actual_scope2 = 0
         actual_scope3 = 0
         
         for act in activities:
@@ -246,8 +247,10 @@ async def get_objective_trajectory(current_user: dict = Depends(get_current_user
             category_id = act.get("category_id", "")
             scope = normalize_scope_for_reporting(raw_scope, category_id)
             
-            if scope in ["scope1", "scope2"]:
-                actual_scope1_2 += emissions
+            if scope == "scope1":
+                actual_scope1 += emissions
+            elif scope == "scope2":
+                actual_scope2 += emissions
             elif scope in ["scope3_amont", "scope3_aval"]:
                 actual_scope3 += emissions
         
@@ -255,9 +258,10 @@ async def get_objective_trajectory(current_user: dict = Depends(get_current_user
             "year": fy_year,
             "fiscal_year_id": str(fy["_id"]),
             "fiscal_year_name": fy.get("name", ""),
-            "actual_scope1_2": round(actual_scope1_2, 2),
+            "actual_scope1": round(actual_scope1, 2),
+            "actual_scope2": round(actual_scope2, 2),
             "actual_scope3": round(actual_scope3, 2),
-            "actual_total": round(actual_scope1_2 + actual_scope3, 2)
+            "actual_total": round(actual_scope1 + actual_scope2 + actual_scope3, 2)
         })
     
     return {

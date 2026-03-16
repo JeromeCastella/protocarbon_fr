@@ -44,13 +44,9 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
-  Legend,
   ResponsiveContainer,
   Cell,
-  LineChart,
-  Line,
   Area,
-  AreaChart,
   ComposedChart,
   ReferenceLine
 } from 'recharts';
@@ -701,12 +697,12 @@ const Dashboard = () => {
                   {(() => {
                     // Calculate current progress for Scope 1&2
                     // Find the most recent actual with data
-                    const actualsWithData = trajectoryData.actuals?.filter(a => (a.actual_scope1_2 || 0) > 0 || (a.actual_scope3 || 0) > 0) || [];
+                    const actualsWithData = trajectoryData.actuals?.filter(a => ((a.actual_scope1 || 0) + (a.actual_scope2 || 0)) > 0 || (a.actual_scope3 || 0) > 0) || [];
                     const latestActual = actualsWithData.length > 0 
                       ? actualsWithData[actualsWithData.length - 1] 
                       : trajectoryData.actuals?.[0]; // Fallback to first (baseline year)
                     
-                    const currentS12 = latestActual?.actual_scope1_2 || objective.baseline_scope1_2;
+                    const currentS12 = (latestActual?.actual_scope1 || 0) + (latestActual?.actual_scope2 || 0) || objective.baseline_scope1_2;
                     const baselineS12 = objective.baseline_scope1_2 || 0;
                     const targetS12 = objective.target_scope1_2 || 0;
                     const reductionNeeded = baselineS12 - targetS12;
@@ -774,7 +770,7 @@ const Dashboard = () => {
                   {/* Scope 3 Progress Card */}
                   {(() => {
                     // Find the most recent actual with data
-                    const actualsWithData = trajectoryData.actuals?.filter(a => (a.actual_scope1_2 || 0) > 0 || (a.actual_scope3 || 0) > 0) || [];
+                    const actualsWithData = trajectoryData.actuals?.filter(a => ((a.actual_scope1 || 0) + (a.actual_scope2 || 0)) > 0 || (a.actual_scope3 || 0) > 0) || [];
                     const latestActual = actualsWithData.length > 0 
                       ? actualsWithData[actualsWithData.length - 1] 
                       : trajectoryData.actuals?.[0];
@@ -992,37 +988,38 @@ const Dashboard = () => {
                   <ResponsiveContainer width="100%" height="100%">
                     <ComposedChart
                       data={(() => {
-                        // Build chart data: trajectory + actuals + scenario overlay
                         const chartData = trajectoryData.trajectory.map(t => {
                           const actual = trajectoryData.actuals.find(a => a.year === t.year);
                           return {
-                            ...t,
-                            actual_scope1_2: actual?.actual_scope1_2,
-                            actual_scope3: actual?.actual_scope3,
-                            actual_total: actual?.actual_total
+                            year: t.year,
+                            target_total: t.target_total,
+                            actual_scope1: actual?.actual_scope1 || null,
+                            actual_scope2: actual?.actual_scope2 || null,
+                            actual_scope3: actual?.actual_scope3 || null,
                           };
                         });
                         
-                        // FEAT-02: Add scenario data point if a scenario is selected
+                        // FEAT-02: Add scenario data if selected
                         if (selectedScenarioId && scenarioSummary) {
                           const scenarioFy = yearScenarios.find(s => s.id === selectedScenarioId);
                           const scenarioYear = scenarioFy?.year;
                           if (scenarioYear) {
                             const se = scenarioSummary.summary?.scope_emissions || {};
-                            const scenarioS12 = (se.scope1 || 0) + (se.scope2 || 0);
-                            const scenarioS3 = (se.scope3_amont || 0) + (se.scope3_aval || 0);
+                            const sScope1 = se.scope1 || 0;
+                            const sScope2 = se.scope2 || 0;
+                            const sScope3 = (se.scope3_amont || 0) + (se.scope3_aval || 0);
                             
-                            // Check if year exists in chart data
                             const existingIdx = chartData.findIndex(d => d.year === scenarioYear);
                             if (existingIdx >= 0) {
-                              chartData[existingIdx].scenario_scope1_2 = scenarioS12;
-                              chartData[existingIdx].scenario_scope3 = scenarioS3;
+                              chartData[existingIdx].scenario_scope1 = sScope1;
+                              chartData[existingIdx].scenario_scope2 = sScope2;
+                              chartData[existingIdx].scenario_scope3 = sScope3;
                             } else {
-                              // Add as new point (sorted)
                               chartData.push({
                                 year: scenarioYear,
-                                scenario_scope1_2: scenarioS12,
-                                scenario_scope3: scenarioS3
+                                scenario_scope1: sScope1,
+                                scenario_scope2: sScope2,
+                                scenario_scope3: sScope3
                               });
                               chartData.sort((a, b) => a.year - b.year);
                             }
@@ -1034,13 +1031,9 @@ const Dashboard = () => {
                       margin={{ top: 20, right: 30, left: 20, bottom: 20 }}
                     >
                       <defs>
-                        <linearGradient id="gradTarget12" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="5%" stopColor="#60A5FA" stopOpacity={0.15} />
-                          <stop offset="95%" stopColor="#60A5FA" stopOpacity={0.02} />
-                        </linearGradient>
-                        <linearGradient id="gradTarget3" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="5%" stopColor="#A78BFA" stopOpacity={0.15} />
-                          <stop offset="95%" stopColor="#A78BFA" stopOpacity={0.02} />
+                        <linearGradient id="gradTargetTotal" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="5%" stopColor="#34D399" stopOpacity={0.12} />
+                          <stop offset="95%" stopColor="#34D399" stopOpacity={0.02} />
                         </linearGradient>
                       </defs>
                       <CartesianGrid strokeDasharray="2 4" stroke={isDark ? '#334155' : '#f1f5f9'} vertical={false} />
@@ -1058,89 +1051,112 @@ const Dashboard = () => {
                         width={50}
                       />
                       <Tooltip 
-                        formatter={(value, name) => [formatChartValue(value), name]}
-                        contentStyle={{ 
-                          backgroundColor: isDark ? '#1e293b' : '#fff',
-                          borderColor: isDark ? '#334155' : '#e2e8f0',
-                          borderRadius: '10px',
-                          boxShadow: '0 4px 12px rgba(0,0,0,0.08)'
+                        content={({ active, payload, label }) => {
+                          if (!active || !payload?.length) return null;
+                          const items = payload.filter(p => p.value != null && p.value > 0);
+                          if (!items.length) return null;
+                          return (
+                            <div className={`px-4 py-3 rounded-xl shadow-2xl ${isDark ? 'bg-slate-800 border border-slate-700' : 'bg-white border border-gray-200'}`}>
+                              <p className={`text-sm font-semibold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>Année {label}</p>
+                              {items.map((item, i) => {
+                                const nameMap = {
+                                  target_total: 'Cible totale',
+                                  actual_scope1: 'Scope 1',
+                                  actual_scope2: 'Scope 2',
+                                  actual_scope3: 'Scope 3',
+                                  scenario_scope1: 'Scénario S1',
+                                  scenario_scope2: 'Scénario S2',
+                                  scenario_scope3: 'Scénario S3',
+                                };
+                                return (
+                                  <div key={i} className="flex items-center gap-2 text-xs py-0.5">
+                                    <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: item.color || item.fill }} />
+                                    <span className={isDark ? 'text-slate-300' : 'text-gray-600'}>{nameMap[item.dataKey] || item.name}</span>
+                                    <span className={`ml-auto font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>{formatChartValue(item.value)}</span>
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          );
                         }}
-                        labelFormatter={(year) => `Année ${year}`}
                         cursor={{ stroke: isDark ? '#475569' : '#cbd5e1', strokeWidth: 1 }}
                       />
-                      <Legend wrapperStyle={{ paddingTop: '16px' }} iconType="circle" iconSize={8} />
                       
-                      {/* Target areas with gradient fill */}
+                      {/* Reference line at baseline */}
+                      {objective?.baseline_total && (
+                        <ReferenceLine 
+                          y={objective.baseline_total} 
+                          stroke={isDark ? '#64748b' : '#94a3b8'} 
+                          strokeDasharray="6 4" 
+                          strokeWidth={1}
+                          label={{ 
+                            value: `Base: ${(objective.baseline_total / 1000).toFixed(1)}t`, 
+                            position: 'right', 
+                            fill: isDark ? '#64748b' : '#94a3b8', 
+                            fontSize: 11 
+                          }}
+                        />
+                      )}
+                      
+                      {/* Target trajectory area - emerald envelope */}
                       <Area
                         type="monotone"
-                        dataKey="target_scope1_2"
-                        name="Cible Scope 1&2"
-                        stroke="#60A5FA"
-                        strokeDasharray="5 5"
+                        dataKey="target_total"
+                        name="Cible totale"
+                        stroke="#34D399"
+                        strokeDasharray="6 4"
                         strokeWidth={2}
-                        fill="url(#gradTarget12)"
+                        fill="url(#gradTargetTotal)"
                         dot={false}
                         activeDot={false}
                       />
-                      <Area
-                        type="monotone"
-                        dataKey="target_scope3"
-                        name="Cible Scope 3"
-                        stroke="#A78BFA"
-                        strokeDasharray="5 5"
-                        strokeWidth={2}
-                        fill="url(#gradTarget3)"
-                        dot={false}
-                        activeDot={false}
-                      />
                       
-                      {/* Actual values (bars) */}
-                      <Bar 
-                        dataKey="actual_scope1_2" 
-                        name="Réel Scope 1&2" 
-                        fill="#60A5FA"
-                        radius={[6, 6, 0, 0]}
-                        maxBarSize={36}
-                      />
-                      <Bar 
-                        dataKey="actual_scope3" 
-                        name="Réel Scope 3" 
-                        fill="#A78BFA"
-                        radius={[6, 6, 0, 0]}
-                        maxBarSize={36}
-                      />
+                      {/* Actual emissions - stacked bars */}
+                      <Bar dataKey="actual_scope1" name="Scope 1" stackId="actual" fill="#FB923C" radius={[0, 0, 0, 0]} maxBarSize={32} />
+                      <Bar dataKey="actual_scope2" name="Scope 2" stackId="actual" fill="#60A5FA" radius={[0, 0, 0, 0]} maxBarSize={32} />
+                      <Bar dataKey="actual_scope3" name="Scope 3" stackId="actual" fill="#A78BFA" radius={[4, 4, 0, 0]} maxBarSize={32} />
 
-                      {/* FEAT-02: Scenario overlay lines (only when scenario selected) */}
+                      {/* Scenario emissions - stacked bars with transparency */}
                       {selectedScenarioId && scenarioSummary && (
                         <>
-                          <Line
-                            type="monotone"
-                            dataKey="scenario_scope1_2"
-                            name="Scénario Scope 1&2"
-                            stroke="#8B5CF6"
-                            strokeWidth={2.5}
-                            strokeDasharray="8 4"
-                            dot={{ r: 6, fill: '#8B5CF6', stroke: '#fff', strokeWidth: 2 }}
-                            connectNulls={false}
-                          />
-                          <Line
-                            type="monotone"
-                            dataKey="scenario_scope3"
-                            name="Scénario Scope 3"
-                            stroke="#D946EF"
-                            strokeWidth={2.5}
-                            strokeDasharray="8 4"
-                            dot={{ r: 6, fill: '#D946EF', stroke: '#fff', strokeWidth: 2 }}
-                            connectNulls={false}
-                          />
+                          <Bar dataKey="scenario_scope1" name="Scénario S1" stackId="scenario" fill="#FB923C" fillOpacity={0.4} stroke="#FB923C" strokeDasharray="4 2" strokeWidth={1} radius={[0, 0, 0, 0]} maxBarSize={32} />
+                          <Bar dataKey="scenario_scope2" name="Scénario S2" stackId="scenario" fill="#60A5FA" fillOpacity={0.4} stroke="#60A5FA" strokeDasharray="4 2" strokeWidth={1} radius={[0, 0, 0, 0]} maxBarSize={32} />
+                          <Bar dataKey="scenario_scope3" name="Scénario S3" stackId="scenario" fill="#A78BFA" fillOpacity={0.4} stroke="#A78BFA" strokeDasharray="4 2" strokeWidth={1} radius={[4, 4, 0, 0]} maxBarSize={32} />
                         </>
                       )}
                     </ComposedChart>
                   </ResponsiveContainer>
                 </div>
-                <p className={`text-xs mt-4 text-center ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>
-                  Les lignes pointillées représentent la trajectoire cible SBTi. Les barres montrent les émissions réelles.
-                  {selectedScenarioId && ' Les points violets montrent la projection du scénario.'}
+                
+                {/* Legend */}
+                <div className="flex flex-wrap items-center justify-center gap-4 mt-4">
+                  <div className="flex items-center gap-1.5">
+                    <div className="w-3 h-3 rounded-sm" style={{ backgroundColor: '#FB923C' }} />
+                    <span className={`text-xs ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>Scope 1</span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <div className="w-3 h-3 rounded-sm" style={{ backgroundColor: '#60A5FA' }} />
+                    <span className={`text-xs ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>Scope 2</span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <div className="w-3 h-3 rounded-sm" style={{ backgroundColor: '#A78BFA' }} />
+                    <span className={`text-xs ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>Scope 3</span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <div className="w-3 h-1 rounded-sm border border-dashed" style={{ borderColor: '#34D399', backgroundColor: 'rgba(52,211,153,0.12)' }} />
+                    <span className={`text-xs ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>Trajectoire cible</span>
+                  </div>
+                  {selectedScenarioId && (
+                    <div className="flex items-center gap-1.5">
+                      <div className="w-3 h-3 rounded-sm border border-dashed opacity-50" style={{ borderColor: '#8B5CF6', backgroundColor: 'rgba(139,92,246,0.2)' }} />
+                      <span className={`text-xs ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>Scénario</span>
+                    </div>
+                  )}
+                </div>
+                
+                <p className={`text-xs mt-3 text-center ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>
+                  La zone verte représente la trajectoire cible SBTi. Les barres montrent les émissions réelles par scope.
+                  {selectedScenarioId && ' Les barres transparentes montrent la projection du scénario.'}
                 </p>
               </motion.div>
 
