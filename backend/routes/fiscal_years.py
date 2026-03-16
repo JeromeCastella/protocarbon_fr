@@ -384,6 +384,19 @@ async def duplicate_fiscal_year(
                 detail=f"Un exercice fiscal existe déjà pour l'année {data.new_year}"
             )
     
+    # Check if scenario already has a fiscal year for this year
+    if data.is_scenario and resolved_scenario_id:
+        existing_scenario_fy = fiscal_years_collection.find_one({
+            "scenario_id": resolved_scenario_id,
+            "year": data.new_year,
+            "type": "scenario"
+        })
+        if existing_scenario_fy:
+            raise HTTPException(
+                status_code=400,
+                detail=f"Ce scénario a déjà un exercice pour l'année {data.new_year}"
+            )
+    
     # Auto-generate dates for new year
     new_start_date = f"{data.new_year}-01-01"
     new_end_date = f"{data.new_year}-12-31"

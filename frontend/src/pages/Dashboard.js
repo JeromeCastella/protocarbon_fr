@@ -116,10 +116,11 @@ const Dashboard = () => {
   const [recalcLoading, setRecalcLoading] = useState(false);
   const [expandedActivities, setExpandedActivities] = useState(false);
 
-  // Scenario state (FEAT-02)
-  const [selectedScenarioId, setSelectedScenarioId] = useState(null);
-  const [scenarioSummary, setScenarioSummary] = useState(null);
-  const [yearScenarios, setYearScenarios] = useState([]);
+  // Scenario state
+  const [selectedScenarioEntityId, setSelectedScenarioEntityId] = useState(null);
+  const [scenarioEntities, setScenarioEntities] = useState([]);
+  const [scenarioDataPoints, setScenarioDataPoints] = useState([]); // [{year, scope1, scope2, scope3}]
+  const [scenarioSummary, setScenarioSummary] = useState(null); // summary of the latest period (for KPI cards)
 
   // Objectives state
   const [objective, setObjective] = useState(null);
@@ -136,13 +137,14 @@ const Dashboard = () => {
   useEffect(() => {
     fetchAllData();
     fetchObjectiveData();
-    fetchScenariosForYear();
+    fetchScenarioEntities();
     // Sync the chart fiscal year selector with the global context
     if (currentFiscalYear?.id) {
       setSelectedFiscalYearForChart(currentFiscalYear.id);
     }
     // Reset scenario selection when switching fiscal year
-    setSelectedScenarioId(null);
+    setSelectedScenarioEntityId(null);
+    setScenarioDataPoints([]);
     setScenarioSummary(null);
   }, [currentFiscalYear?.id]);
 
@@ -168,40 +170,66 @@ const Dashboard = () => {
     }
   };
 
-  // FEAT-02: Fetch scenarios for the current fiscal year's year
-  const fetchScenariosForYear = async () => {
-    if (!currentFiscalYear?.year) return;
+  // Fetch scenario entities for the company
+  const fetchScenarioEntities = async () => {
     try {
-      const response = await axios.get(`${API_URL}/api/fiscal-years/scenarios/${currentFiscalYear.year}`);
-      setYearScenarios(response.data || []);
+      const response = await axios.get(`${API_URL}/api/scenarios`);
+      setScenarioEntities(response.data || []);
     } catch (error) {
-      setYearScenarios([]);
+      setScenarioEntities([]);
     }
   };
 
-  // FEAT-02: Fetch scenario summary when a scenario is selected
+  // Fetch all periods for the selected scenario entity
   useEffect(() => {
-    if (!selectedScenarioId) {
+    if (!selectedScenarioEntityId) {
+      setScenarioDataPoints([]);
       setScenarioSummary(null);
       return;
     }
-    const fetchScenarioData = async () => {
+    const fetchAllScenarioPeriods = async () => {
       try {
-        const [summaryRes, breakdownRes] = await Promise.all([
-          axios.get(`${API_URL}/api/dashboard/summary?fiscal_year_id=${selectedScenarioId}`),
-          axios.get(`${API_URL}/api/dashboard/scope-breakdown/${selectedScenarioId}`)
-        ]);
-        setScenarioSummary({
-          summary: summaryRes.data,
-          breakdown: breakdownRes.data
+        // Get all fiscal years linked to this scenario entity
+        const fyRes = await axios.get(`${API_URL}/api/fiscal-years`);
+        const allFys = fyRes.data || [];
+        const scenarioFys = allFys.filter(fy => fy.scenario_id === selectedScenarioEntityId && fy.type === 'scenario');
+        
+        if (scenarioFys.length === 0) {
+          setScenarioDataPoints([]);
+          setScenarioSummary(null);
+          return;
+        }
+        
+        // Fetch summary for each period in parallel
+        const summaries = await Promise.all(
+          scenarioFys.map(fy => axios.get(`${API_URL}/api/dashboard/summary?fiscal_year_id=${fy.id}`).then(r => ({ year: fy.year, data: r.data, fyId: fy.id })).catch(() => null))
+        );
+        
+        const dataPoints = summaries.filter(Boolean).map(s => {
+          const se = s.data?.scope_emissions || {};
+          return {
+            year: s.year,
+            scope1: se.scope1 || 0,
+            scope2: se.scope2 || 0,
+            scope3: (se.scope3_amont || 0) + (se.scope3_aval || 0)
+          };
         });
+        
+        setScenarioDataPoints(dataPoints);
+        
+        // Use the latest period's summary for KPI cards
+        const latestPeriod = summaries.filter(Boolean).sort((a, b) => b.year - a.year)[0];
+        if (latestPeriod) {
+          setScenarioSummary({ summary: latestPeriod.data });
+        }
       } catch (error) {
-        console.error('Failed to fetch scenario data:', error);
+        console.error('Failed to fetch scenario periods:', error);
+        setScenarioDataPoints([]);
         setScenarioSummary(null);
       }
     };
-    fetchScenarioData();
-  }, [selectedScenarioId]);
+    fetchAllScenarioPeriods();
+  }, [selectedScenarioEntityId]);
 
   const handleCreateObjective = async () => {
     if (!objectiveForm.reference_fiscal_year_id) {
@@ -842,20 +870,20 @@ const Dashboard = () => {
               </motion.div>
 
               {/* FEAT-02: Scenario selector for Objectives (only when viewing actual data) */}
-              {yearScenarios.length > 0 && currentFiscalYear?.type !== 'scenario' && (
+              {scenarioEntities.length > 0 && currentFiscalYear?.type !== 'scenario' && (
                 <motion.div
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
                   className={`flex items-center gap-3 p-3 rounded-xl ${isDark ? 'bg-slate-800' : 'bg-white border border-gray-200'}`}
                   data-testid="scenario-selector"
                 >
-                  <FlaskConical className={`w-4 h-4 flex-shrink-0 ${selectedScenarioId ? 'text-violet-500' : isDark ? 'text-slate-400' : 'text-gray-400'}`} />
+                  <FlaskConical className={`w-4 h-4 flex-shrink-0 ${selectedScenarioEntityId ? 'text-violet-500' : isDark ? 'text-slate-400' : 'text-gray-400'}`} />
                   <select
-                    value={selectedScenarioId || ''}
-                    onChange={(e) => setSelectedScenarioId(e.target.value || null)}
+                    value={selectedScenarioEntityId || ''}
+                    onChange={(e) => setSelectedScenarioEntityId(e.target.value || null)}
                     data-testid="scenario-select"
                     className={`flex-1 px-3 py-1.5 rounded-lg border text-sm transition-all ${
-                      selectedScenarioId
+                      selectedScenarioEntityId
                         ? 'border-violet-500/50 bg-violet-500/5 text-violet-700 font-medium'
                         : isDark
                           ? 'bg-slate-700 border-slate-600 text-slate-300'
@@ -863,15 +891,15 @@ const Dashboard = () => {
                     }`}
                   >
                     <option value="">Superposer un scénario...</option>
-                    {yearScenarios.map(s => (
+                    {scenarioEntities.map(s => (
                       <option key={s.id} value={s.id}>
-                        {s.scenario_name || s.name} ({s.activities_count} saisies)
+                        {s.name}
                       </option>
                     ))}
                   </select>
-                  {selectedScenarioId && (
+                  {selectedScenarioEntityId && (
                     <button
-                      onClick={() => setSelectedScenarioId(null)}
+                      onClick={() => setSelectedScenarioEntityId(null)}
                       className="p-1 rounded-lg hover:bg-red-500/10 transition-colors"
                       title="Retirer le scénario"
                     >
@@ -882,7 +910,7 @@ const Dashboard = () => {
               )}
 
               {/* FEAT-02: Effort coverage indicator */}
-              {selectedScenarioId && scenarioSummary && objective && (
+              {selectedScenarioEntityId && scenarioSummary && objective && (
                 <motion.div
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: 'auto' }}
@@ -892,7 +920,7 @@ const Dashboard = () => {
                   <div className="flex items-center gap-2 mb-3">
                     <FlaskConical className="w-4 h-4 text-violet-500" />
                     <span className={`text-sm font-semibold ${isDark ? 'text-violet-300' : 'text-violet-700'}`}>
-                      Couverture de l'effort — {yearScenarios.find(s => s.id === selectedScenarioId)?.scenario_name || 'Scénario'}
+                      Couverture de l'effort — {scenarioEntities.find(s => s.id === selectedScenarioEntityId)?.name || 'Scénario'}
                     </span>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -999,31 +1027,24 @@ const Dashboard = () => {
                           };
                         });
                         
-                        // FEAT-02: Add scenario data if selected
-                        if (selectedScenarioId && scenarioSummary) {
-                          const scenarioFy = yearScenarios.find(s => s.id === selectedScenarioId);
-                          const scenarioYear = scenarioFy?.year;
-                          if (scenarioYear) {
-                            const se = scenarioSummary.summary?.scope_emissions || {};
-                            const sScope1 = se.scope1 || 0;
-                            const sScope2 = se.scope2 || 0;
-                            const sScope3 = (se.scope3_amont || 0) + (se.scope3_aval || 0);
-                            
-                            const existingIdx = chartData.findIndex(d => d.year === scenarioYear);
+                        // Add scenario data for ALL periods of the selected scenario
+                        if (selectedScenarioEntityId && scenarioDataPoints.length > 0) {
+                          for (const dp of scenarioDataPoints) {
+                            const existingIdx = chartData.findIndex(d => d.year === dp.year);
                             if (existingIdx >= 0) {
-                              chartData[existingIdx].scenario_scope1 = sScope1;
-                              chartData[existingIdx].scenario_scope2 = sScope2;
-                              chartData[existingIdx].scenario_scope3 = sScope3;
+                              chartData[existingIdx].scenario_scope1 = dp.scope1;
+                              chartData[existingIdx].scenario_scope2 = dp.scope2;
+                              chartData[existingIdx].scenario_scope3 = dp.scope3;
                             } else {
                               chartData.push({
-                                year: scenarioYear,
-                                scenario_scope1: sScope1,
-                                scenario_scope2: sScope2,
-                                scenario_scope3: sScope3
+                                year: dp.year,
+                                scenario_scope1: dp.scope1,
+                                scenario_scope2: dp.scope2,
+                                scenario_scope3: dp.scope3
                               });
-                              chartData.sort((a, b) => a.year - b.year);
                             }
                           }
+                          chartData.sort((a, b) => a.year - b.year);
                         }
                         
                         return chartData;
@@ -1117,7 +1138,7 @@ const Dashboard = () => {
                       <Bar dataKey="actual_scope3" name="Scope 3" stackId="actual" fill="#A78BFA" radius={[4, 4, 0, 0]} maxBarSize={32} />
 
                       {/* Scenario emissions - stacked bars with transparency */}
-                      {selectedScenarioId && scenarioSummary && (
+                      {selectedScenarioEntityId && scenarioDataPoints.length > 0 && (
                         <>
                           <Bar dataKey="scenario_scope1" name="Scénario S1" stackId="scenario" fill="#FB923C" fillOpacity={0.4} stroke="#FB923C" strokeDasharray="4 2" strokeWidth={1} radius={[0, 0, 0, 0]} maxBarSize={32} />
                           <Bar dataKey="scenario_scope2" name="Scénario S2" stackId="scenario" fill="#60A5FA" fillOpacity={0.4} stroke="#60A5FA" strokeDasharray="4 2" strokeWidth={1} radius={[0, 0, 0, 0]} maxBarSize={32} />
@@ -1146,7 +1167,7 @@ const Dashboard = () => {
                     <div className="w-3 h-1 rounded-sm border border-dashed" style={{ borderColor: '#34D399', backgroundColor: 'rgba(52,211,153,0.12)' }} />
                     <span className={`text-xs ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>Trajectoire cible</span>
                   </div>
-                  {selectedScenarioId && (
+                  {selectedScenarioEntityId && (
                     <div className="flex items-center gap-1.5">
                       <div className="w-3 h-3 rounded-sm border border-dashed opacity-50" style={{ borderColor: '#8B5CF6', backgroundColor: 'rgba(139,92,246,0.2)' }} />
                       <span className={`text-xs ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>Scénario</span>
@@ -1156,7 +1177,7 @@ const Dashboard = () => {
                 
                 <p className={`text-xs mt-3 text-center ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>
                   La zone verte représente la trajectoire cible SBTi. Les barres montrent les émissions réelles par scope.
-                  {selectedScenarioId && ' Les barres transparentes montrent la projection du scénario.'}
+                  {selectedScenarioEntityId && ' Les barres transparentes montrent la projection du scénario.'}
                 </p>
               </motion.div>
 
