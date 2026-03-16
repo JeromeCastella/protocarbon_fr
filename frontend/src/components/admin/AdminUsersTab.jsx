@@ -174,8 +174,8 @@ const AdminUsersTab = ({ users, currentUserId, onRefetch }) => {
 
       {/* Create User Modal */}
       {showCreateForm && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className={`w-full max-w-md rounded-2xl p-6 ${isDark ? 'bg-slate-800' : 'bg-white'}`}>
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className={`w-full max-w-md rounded-2xl shadow-2xl p-6 ${isDark ? 'bg-slate-800' : 'bg-white'}`}>
             <div className="flex items-center justify-between mb-6">
               <h3 className={`text-xl font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
                 {language === 'fr' ? 'Créer un utilisateur' : 'Benutzer erstellen'}
@@ -330,8 +330,8 @@ const AdminUsersTab = ({ users, currentUserId, onRefetch }) => {
 
       {/* Delete Confirmation Modal */}
       {deleteConfirm && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className={`w-full max-w-md rounded-2xl p-6 ${isDark ? 'bg-slate-800' : 'bg-white'}`}>
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className={`w-full max-w-md rounded-2xl shadow-2xl p-6 ${isDark ? 'bg-slate-800' : 'bg-white'}`}>
             <div className="flex items-center gap-3 mb-4">
               <div className="p-3 rounded-full bg-red-500/10">
                 <AlertTriangle className="w-6 h-6 text-red-500" />

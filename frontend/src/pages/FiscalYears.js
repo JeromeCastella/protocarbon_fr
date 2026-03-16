@@ -523,7 +523,7 @@ const FiscalYears = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50"
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
             onClick={() => setShowCreateModal(false)}
           >
             <motion.div
@@ -531,7 +531,7 @@ const FiscalYears = () => {
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.95, opacity: 0 }}
               onClick={(e) => e.stopPropagation()}
-              className={`w-full max-w-md rounded-2xl shadow-xl ${isDark ? 'bg-slate-800' : 'bg-white'}`}
+              className={`w-full max-w-md rounded-2xl shadow-2xl ${isDark ? 'bg-slate-800' : 'bg-white'}`}
             >
               {/* Header */}
               <div className={`flex items-center justify-between p-6 border-b ${isDark ? 'border-slate-700' : 'border-gray-100'}`}>
@@ -727,7 +727,7 @@ const FiscalYears = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50"
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
             onClick={() => setShowCloseModal(false)}
           >
             <motion.div
@@ -735,7 +735,7 @@ const FiscalYears = () => {
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.95, opacity: 0 }}
               onClick={(e) => e.stopPropagation()}
-              className={`w-full max-w-md rounded-2xl shadow-xl ${isDark ? 'bg-slate-800' : 'bg-white'}`}
+              className={`w-full max-w-md rounded-2xl shadow-2xl ${isDark ? 'bg-slate-800' : 'bg-white'}`}
             >
               <div className="p-6">
                 <div className="flex items-center gap-4 mb-4">
@@ -790,7 +790,7 @@ const FiscalYears = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50"
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
             onClick={() => setShowRectifyModal(false)}
           >
             <motion.div
@@ -798,7 +798,7 @@ const FiscalYears = () => {
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.95, opacity: 0 }}
               onClick={(e) => e.stopPropagation()}
-              className={`w-full max-w-md rounded-2xl shadow-xl ${isDark ? 'bg-slate-800' : 'bg-white'}`}
+              className={`w-full max-w-md rounded-2xl shadow-2xl ${isDark ? 'bg-slate-800' : 'bg-white'}`}
             >
               <div className="p-6">
                 <div className="flex items-center gap-4 mb-4">
@@ -863,7 +863,7 @@ const FiscalYears = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50"
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
             onClick={() => setShowDeleteModal(false)}
           >
             <motion.div
@@ -871,7 +871,7 @@ const FiscalYears = () => {
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.95, opacity: 0 }}
               onClick={(e) => e.stopPropagation()}
-              className={`w-full max-w-md rounded-2xl shadow-xl ${isDark ? 'bg-slate-800' : 'bg-white'}`}
+              className={`w-full max-w-md rounded-2xl shadow-2xl ${isDark ? 'bg-slate-800' : 'bg-white'}`}
             >
               <div className="p-6">
                 <div className="flex items-center gap-4 mb-4">

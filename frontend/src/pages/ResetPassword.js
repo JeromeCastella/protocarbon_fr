@@ -57,7 +57,7 @@ const ResetPassword = () => {
   if (!token) {
     return (
       <div className={`min-h-screen flex items-center justify-center p-8 ${isDark ? 'bg-slate-900' : 'bg-gradient-to-br from-blue-50 via-white to-green-50'}`}>
-        <div className={`p-8 rounded-2xl text-center ${isDark ? 'bg-slate-800' : 'bg-white shadow-xl'}`}>
+        <div className={`p-8 rounded-2xl text-center ${isDark ? 'bg-slate-800' : 'bg-white shadow-sm border border-gray-100'}`}>
           <AlertCircle className="w-16 h-16 text-red-500 mx-auto mb-4" />
           <h2 className={`text-xl font-bold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
             {language === 'fr' ? 'Lien invalide' : 'Ungültiger Link'}
