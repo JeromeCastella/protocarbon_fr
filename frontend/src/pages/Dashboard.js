@@ -34,7 +34,8 @@ import {
   Lightbulb,
   TrendingDown as TrendDown,
   Sparkles,
-  X
+  X,
+  FlaskConical
 } from 'lucide-react';
 import {
   BarChart,
@@ -119,6 +120,11 @@ const Dashboard = () => {
   const [recalcLoading, setRecalcLoading] = useState(false);
   const [expandedActivities, setExpandedActivities] = useState(false);
 
+  // Scenario state (FEAT-02)
+  const [selectedScenarioId, setSelectedScenarioId] = useState(null);
+  const [scenarioSummary, setScenarioSummary] = useState(null);
+  const [yearScenarios, setYearScenarios] = useState([]);
+
   // Objectives state
   const [objective, setObjective] = useState(null);
   const [trajectoryData, setTrajectoryData] = useState({ trajectory: [], actuals: [] });
@@ -134,10 +140,14 @@ const Dashboard = () => {
   useEffect(() => {
     fetchAllData();
     fetchObjectiveData();
+    fetchScenariosForYear();
     // Sync the chart fiscal year selector with the global context
     if (currentFiscalYear?.id) {
       setSelectedFiscalYearForChart(currentFiscalYear.id);
     }
+    // Reset scenario selection when switching fiscal year
+    setSelectedScenarioId(null);
+    setScenarioSummary(null);
   }, [currentFiscalYear?.id]);
 
   useEffect(() => {
@@ -161,6 +171,41 @@ const Dashboard = () => {
       console.error('Failed to fetch objective data:', error);
     }
   };
+
+  // FEAT-02: Fetch scenarios for the current fiscal year's year
+  const fetchScenariosForYear = async () => {
+    if (!currentFiscalYear?.year) return;
+    try {
+      const response = await axios.get(`${API_URL}/api/fiscal-years/scenarios/${currentFiscalYear.year}`);
+      setYearScenarios(response.data || []);
+    } catch (error) {
+      setYearScenarios([]);
+    }
+  };
+
+  // FEAT-02: Fetch scenario summary when a scenario is selected
+  useEffect(() => {
+    if (!selectedScenarioId) {
+      setScenarioSummary(null);
+      return;
+    }
+    const fetchScenarioData = async () => {
+      try {
+        const [summaryRes, breakdownRes] = await Promise.all([
+          axios.get(`${API_URL}/api/dashboard/summary?fiscal_year_id=${selectedScenarioId}`),
+          axios.get(`${API_URL}/api/dashboard/scope-breakdown/${selectedScenarioId}`)
+        ]);
+        setScenarioSummary({
+          summary: summaryRes.data,
+          breakdown: breakdownRes.data
+        });
+      } catch (error) {
+        console.error('Failed to fetch scenario data:', error);
+        setScenarioSummary(null);
+      }
+    };
+    fetchScenarioData();
+  }, [selectedScenarioId]);
 
   const handleCreateObjective = async () => {
     if (!objectiveForm.reference_fiscal_year_id) {
@@ -575,16 +620,105 @@ const Dashboard = () => {
 
       {/* ==================== TAB 2: RÉSULTATS ==================== */}
       {activeTab === 'resultats' && (
-        <DashboardResultsTab 
-          summary={summary}
-          kpis={kpis}
-          scopeBreakdown={scopeBreakdown}
-          fiscalComparison={fiscalComparison}
-          fiscalYears={fiscalYears}
-          selectedFiscalYearForChart={selectedFiscalYearForChart}
-          setSelectedFiscalYearForChart={setSelectedFiscalYearForChart}
-          onOpenRecalcModal={openRecalcModal}
-        />
+        <div className="space-y-4">
+          {/* FEAT-02: Scenario selector */}
+          {yearScenarios.length > 0 && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className={`flex items-center gap-3 p-3 rounded-xl ${isDark ? 'bg-slate-800' : 'bg-white border border-gray-200'}`}
+              data-testid="scenario-selector"
+            >
+              <FlaskConical className={`w-4 h-4 flex-shrink-0 ${selectedScenarioId ? 'text-violet-500' : isDark ? 'text-slate-400' : 'text-gray-400'}`} />
+              <select
+                value={selectedScenarioId || ''}
+                onChange={(e) => setSelectedScenarioId(e.target.value || null)}
+                data-testid="scenario-select"
+                className={`flex-1 px-3 py-1.5 rounded-lg border text-sm transition-all ${
+                  selectedScenarioId
+                    ? 'border-violet-500/50 bg-violet-500/5 text-violet-700 font-medium'
+                    : isDark
+                      ? 'bg-slate-700 border-slate-600 text-slate-300'
+                      : 'bg-gray-50 border-gray-200 text-gray-700'
+                }`}
+              >
+                <option value="">Données réelles</option>
+                {yearScenarios.map(s => (
+                  <option key={s.id} value={s.id}>
+                    {s.scenario_name || s.name} ({s.activities_count} saisies)
+                  </option>
+                ))}
+              </select>
+              {selectedScenarioId && (
+                <button
+                  onClick={() => setSelectedScenarioId(null)}
+                  className="p-1 rounded-lg hover:bg-red-500/10 transition-colors"
+                  title="Revenir aux données réelles"
+                >
+                  <X className="w-4 h-4 text-red-500" />
+                </button>
+              )}
+            </motion.div>
+          )}
+
+          {/* Scenario comparison banner */}
+          {selectedScenarioId && scenarioSummary && summary && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              className={`p-4 rounded-xl border-2 border-violet-500/30 ${isDark ? 'bg-violet-500/5' : 'bg-violet-50'}`}
+              data-testid="scenario-comparison-banner"
+            >
+              <div className="flex items-center gap-2 mb-3">
+                <FlaskConical className="w-4 h-4 text-violet-500" />
+                <span className={`text-sm font-semibold ${isDark ? 'text-violet-300' : 'text-violet-700'}`}>
+                  Comparaison scénario vs réel
+                </span>
+              </div>
+              <div className="grid grid-cols-3 gap-4">
+                <div>
+                  <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>Réel</p>
+                  <p className={`text-lg font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                    {((summary?.total_emissions || 0) / 1000).toLocaleString('fr-FR', { maximumFractionDigits: 1 })} tCO₂e
+                  </p>
+                </div>
+                <div>
+                  <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>Scénario</p>
+                  <p className="text-lg font-bold text-violet-500">
+                    {((scenarioSummary.summary?.total_emissions || 0) / 1000).toLocaleString('fr-FR', { maximumFractionDigits: 1 })} tCO₂e
+                  </p>
+                </div>
+                <div>
+                  <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>Différence</p>
+                  {(() => {
+                    const realTotal = summary?.total_emissions || 0;
+                    const scenarioTotal = scenarioSummary.summary?.total_emissions || 0;
+                    const diff = scenarioTotal - realTotal;
+                    const pct = realTotal > 0 ? (diff / realTotal) * 100 : 0;
+                    const isReduction = diff < 0;
+                    return (
+                      <p className={`text-lg font-bold ${isReduction ? 'text-green-500' : 'text-red-500'}`}>
+                        {isReduction ? '' : '+'}{pct.toFixed(1)}%
+                        {isReduction ? <TrendingDown className="w-4 h-4 inline ml-1" /> : <TrendingUp className="w-4 h-4 inline ml-1" />}
+                      </p>
+                    );
+                  })()}
+                </div>
+              </div>
+            </motion.div>
+          )}
+
+          <DashboardResultsTab 
+            summary={selectedScenarioId && scenarioSummary ? scenarioSummary.summary : summary}
+            kpis={kpis}
+            scopeBreakdown={selectedScenarioId && scenarioSummary ? scenarioSummary.breakdown : scopeBreakdown}
+            fiscalComparison={fiscalComparison}
+            fiscalYears={fiscalYears.filter(fy => fy.type !== 'scenario')}
+            selectedFiscalYearForChart={selectedScenarioId || selectedFiscalYearForChart}
+            setSelectedFiscalYearForChart={setSelectedFiscalYearForChart}
+            onOpenRecalcModal={openRecalcModal}
+          />
+        </div>
       )}
 
       {/* ==================== TAB 3: OBJECTIFS ==================== */}

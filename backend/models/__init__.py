@@ -242,6 +242,8 @@ class FiscalYearDuplicate(BaseModel):
     new_year: int  # Année du nouvel exercice
     duplicate_activities: bool = False
     activity_ids_to_duplicate: List[str] = []
+    is_scenario: bool = False  # FEAT-02: True pour créer un scénario au lieu d'un exercice réel
+    scenario_name: Optional[str] = None  # Nom libre du scénario (obligatoire si is_scenario=True)
 
 # ==================== ACTIVITY MODELS ====================
 

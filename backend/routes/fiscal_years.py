@@ -49,16 +49,18 @@ async def get_fiscal_years(current_user: dict = Depends(get_current_user)):
 
 @router.get("/current")
 async def get_current_fiscal_year(current_user: dict = Depends(get_current_user)):
-    """Get the current (most recent draft) fiscal year"""
+    """Get the current (most recent draft) fiscal year - excludes scenarios"""
     fy = fiscal_years_collection.find_one({
         "tenant_id": current_user["id"],
-        "status": "draft"
+        "status": "draft",
+        "type": {"$ne": "scenario"}
     }, sort=[("start_date", -1)])
     
     if not fy:
-        # Fallback to most recent
+        # Fallback to most recent actual exercise
         fy = fiscal_years_collection.find_one({
-            "tenant_id": current_user["id"]
+            "tenant_id": current_user["id"],
+            "type": {"$ne": "scenario"}
         }, sort=[("start_date", -1)])
     
     if not fy:
@@ -178,10 +180,11 @@ async def create_fiscal_year(fy: FiscalYearCreate, current_user: dict = Depends(
     company = companies_collection.find_one({"tenant_id": current_user["id"]})
     company_id = str(company["_id"]) if company else None
     
-    # Check if fiscal year already exists for this year
+    # Check if fiscal year already exists for this year (actual only, not scenarios)
     existing = fiscal_years_collection.find_one({
         "tenant_id": current_user["id"],
-        "year": fy.year
+        "year": fy.year,
+        "type": {"$ne": "scenario"}
     })
     
     if existing:
@@ -228,6 +231,7 @@ async def create_fiscal_year(fy: FiscalYearCreate, current_user: dict = Depends(
         "start_date": start_date,
         "end_date": end_date,
         "status": "draft",
+        "type": "actual",
         "tenant_id": current_user["id"],
         "company_id": company_id,
         "context": context,
@@ -340,7 +344,7 @@ async def duplicate_fiscal_year(
     data: FiscalYearDuplicate,
     current_user: dict = Depends(get_current_user)
 ):
-    """Duplicate a fiscal year to a new year, optionally with its activities"""
+    """Duplicate a fiscal year to a new year, optionally as a scenario"""
     fy = fiscal_years_collection.find_one({
         "_id": ObjectId(fiscal_year_id),
         "tenant_id": current_user["id"]
@@ -349,22 +353,32 @@ async def duplicate_fiscal_year(
     if not fy:
         raise HTTPException(status_code=404, detail="Fiscal year not found")
     
-    # Check if target year already exists
-    existing = fiscal_years_collection.find_one({
-        "tenant_id": current_user["id"],
-        "year": data.new_year
-    })
+    # Validate scenario fields
+    if data.is_scenario and not data.scenario_name:
+        raise HTTPException(status_code=400, detail="Un nom est requis pour les scénarios")
     
-    if existing:
-        raise HTTPException(
-            status_code=400, 
-            detail=f"Un exercice fiscal existe déjà pour l'année {data.new_year}"
-        )
+    # Check if target year already exists (only for actual exercises, not scenarios)
+    if not data.is_scenario:
+        existing = fiscal_years_collection.find_one({
+            "tenant_id": current_user["id"],
+            "year": data.new_year,
+            "type": {"$ne": "scenario"}
+        })
+        
+        if existing:
+            raise HTTPException(
+                status_code=400, 
+                detail=f"Un exercice fiscal existe déjà pour l'année {data.new_year}"
+            )
     
     # Auto-generate dates for new year
     new_start_date = f"{data.new_year}-01-01"
     new_end_date = f"{data.new_year}-12-31"
-    new_name = f"Exercice {data.new_year}"
+    
+    if data.is_scenario:
+        new_name = f"Scénario {data.new_year} — {data.scenario_name}"
+    else:
+        new_name = f"Exercice {data.new_year}"
     
     # Copy context from source fiscal year
     source_context = fy.get("context", {})
@@ -392,12 +406,18 @@ async def duplicate_fiscal_year(
         "start_date": new_start_date,
         "end_date": new_end_date,
         "status": "draft",
+        "type": "scenario" if data.is_scenario else "actual",
         "tenant_id": current_user["id"],
         "company_id": fy.get("company_id"),
         "context": new_context,
         "created_at": datetime.now(timezone.utc).isoformat(),
         "duplicated_from": fiscal_year_id
     }
+    
+    # Scenario-specific fields
+    if data.is_scenario:
+        new_fy["scenario_name"] = data.scenario_name
+        new_fy["reference_fiscal_year_id"] = fiscal_year_id
     
     result = fiscal_years_collection.insert_one(new_fy)
     new_fy_id = str(result.inserted_id)
@@ -447,8 +467,31 @@ async def duplicate_fiscal_year(
     return {
         "id": new_fy_id,
         "message": "Fiscal year duplicated successfully",
-        "duplicated_activities": duplicated_activities
+        "duplicated_activities": duplicated_activities,
+        "type": "scenario" if data.is_scenario else "actual"
     }
+
+
+
+@router.get("/scenarios/{year}")
+async def get_scenarios_for_year(year: int, current_user: dict = Depends(get_current_user)):
+    """Get all scenarios for a specific year"""
+    scenarios = list(fiscal_years_collection.find({
+        "tenant_id": current_user["id"],
+        "year": year,
+        "type": "scenario"
+    }).sort("created_at", -1))
+    
+    result = []
+    for s in scenarios:
+        s_data = serialize_doc(s)
+        s_data["activities_count"] = activities_collection.count_documents({
+            "tenant_id": current_user["id"],
+            "fiscal_year_id": str(s["_id"])
+        })
+        result.append(s_data)
+    
+    return result
 
 
 @router.get("/{fiscal_year_id}/activities")

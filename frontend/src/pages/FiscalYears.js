@@ -16,7 +16,8 @@ import {
   ChevronDown,
   FileText,
   MoreVertical,
-  RefreshCw
+  RefreshCw,
+  FlaskConical
 } from 'lucide-react';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL || '';
@@ -51,7 +52,9 @@ const FiscalYears = () => {
   const [createForm, setCreateForm] = useState({
     year: new Date().getFullYear() + 1,
     duplicateFrom: null,
-    duplicateActivities: false
+    duplicateActivities: false,
+    isScenario: false,
+    scenarioName: ''
   });
   const [createError, setCreateError] = useState('');
   
@@ -64,8 +67,12 @@ const FiscalYears = () => {
   const [deleteError, setDeleteError] = useState('');
 
   // Calculate available years (those not already created)
+  // Calculate available years (those not already created as actual exercises)
   const existingYears = useMemo(() => {
-    return new Set(fiscalYears.map(fy => fy.year || parseInt(fy.name?.replace('Exercice ', ''))));
+    return new Set(fiscalYears
+      .filter(fy => fy.type !== 'scenario')
+      .map(fy => fy.year || parseInt(fy.name?.replace('Exercice ', '')))
+    );
   }, [fiscalYears]);
 
   const availableYears = useMemo(() => {
@@ -97,8 +104,18 @@ const FiscalYears = () => {
     return date.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' });
   };
 
-  const getStatusBadge = (status) => {
-    switch (status) {
+  const getStatusBadge = (fy) => {
+    // Scenario badge takes priority
+    if (fy.type === 'scenario') {
+      return (
+        <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-violet-500/20 text-violet-500 text-xs font-medium"
+              data-testid={`badge-scenario-${fy.id}`}>
+          <FlaskConical className="w-3 h-3" />
+          Scénario
+        </span>
+      );
+    }
+    switch (fy.status) {
       case 'closed':
         return (
           <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-green-500/20 text-green-500 text-xs font-medium">
@@ -132,8 +149,14 @@ const FiscalYears = () => {
   const handleCreate = async () => {
     if (!createForm.year) return;
     
-    // Check if year is available
-    if (existingYears.has(createForm.year)) {
+    // Scenario validation
+    if (createForm.isScenario && !createForm.scenarioName.trim()) {
+      setCreateError('Un nom est requis pour les scénarios');
+      return;
+    }
+    
+    // Check if year is available (only for actual exercises)
+    if (!createForm.isScenario && existingYears.has(createForm.year)) {
       setCreateError(`Un exercice existe déjà pour l'année ${createForm.year}`);
       return;
     }
@@ -142,20 +165,26 @@ const FiscalYears = () => {
     setCreateError('');
     
     try {
-      if (createForm.duplicateActivities && createForm.duplicateFrom) {
-        // Create via duplication
+      if (createForm.duplicateFrom) {
+        // Create via duplication (actual or scenario)
         await duplicateToNewYear(createForm.duplicateFrom, {
           new_year: createForm.year,
-          duplicate_activities: true,
-          activity_ids_to_duplicate: []
+          duplicate_activities: createForm.duplicateActivities,
+          activity_ids_to_duplicate: [],
+          is_scenario: createForm.isScenario,
+          scenario_name: createForm.isScenario ? createForm.scenarioName : undefined
         });
-      } else {
-        // Create empty fiscal year
+      } else if (!createForm.isScenario) {
+        // Create empty actual fiscal year
         await createFiscalYear({ year: createForm.year });
+      } else {
+        setCreateError('Un scénario doit être basé sur un exercice existant');
+        setLoading(false);
+        return;
       }
       
       setShowCreateModal(false);
-      setCreateForm({ year: new Date().getFullYear() + 1, duplicateFrom: null, duplicateActivities: false });
+      setCreateForm({ year: new Date().getFullYear() + 1, duplicateFrom: null, duplicateActivities: false, isScenario: false, scenarioName: '' });
     } catch (error) {
       console.error('Failed to create fiscal year:', error);
       setCreateError(error.response?.data?.detail || 'Erreur lors de la création');
@@ -287,7 +316,9 @@ const FiscalYears = () => {
         setCreateForm({
           year: targetYear,
           duplicateFrom: fy.id,
-          duplicateActivities: true
+          duplicateActivities: true,
+          isScenario: false,
+          scenarioName: ''
         });
         setShowCreateModal(true);
         break;
@@ -299,12 +330,17 @@ const FiscalYears = () => {
     }
   };
 
-  // Sort fiscal years by year descending
+  // Sort fiscal years: actual first by year ascending, then scenarios grouped after their reference year
   const sortedFiscalYears = useMemo(() => {
     return [...fiscalYears].sort((a, b) => {
       const yearA = a.year || parseInt(a.name?.replace('Exercice ', ''));
       const yearB = b.year || parseInt(b.name?.replace('Exercice ', ''));
-      return yearA - yearB;
+      // Sort by year first
+      if (yearA !== yearB) return yearA - yearB;
+      // Same year: actual before scenarios
+      const typeA = a.type === 'scenario' ? 1 : 0;
+      const typeB = b.type === 'scenario' ? 1 : 0;
+      return typeA - typeB;
     });
   }, [fiscalYears]);
 
@@ -325,7 +361,9 @@ const FiscalYears = () => {
             setCreateForm({ 
               year: availableYears.find(y => y.available)?.year || new Date().getFullYear(), 
               duplicateFrom: null, 
-              duplicateActivities: false 
+              duplicateActivities: false,
+              isScenario: false,
+              scenarioName: ''
             });
             setCreateError('');
             setShowCreateModal(true);
@@ -346,7 +384,11 @@ const FiscalYears = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.05 }}
             className={`relative p-5 rounded-2xl border transition-all ${
-              currentFiscalYear?.id === fy.id
+              fy.type === 'scenario'
+                ? isDark
+                  ? 'bg-violet-500/5 border-violet-500/30 hover:border-violet-500/50'
+                  : 'bg-violet-50/50 border-violet-200 hover:border-violet-300'
+                : currentFiscalYear?.id === fy.id
                 ? isDark 
                   ? 'bg-blue-500/10 border-blue-500/50' 
                   : 'bg-blue-50 border-blue-200'
@@ -369,10 +411,13 @@ const FiscalYears = () => {
                 onClick={() => selectFiscalYear(fy)}
               >
                 <h3 className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                  {fy.name}
+                  {fy.type === 'scenario' ? (fy.scenario_name || 'Scénario') : fy.name}
                 </h3>
                 <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-                  {formatDate(fy.start_date)} → {formatDate(fy.end_date)}
+                  {fy.type === 'scenario' 
+                    ? `${fy.year} — basé sur ${fiscalYears.find(f => f.id === fy.reference_fiscal_year_id)?.name || 'exercice source'}`
+                    : `${formatDate(fy.start_date)} → ${formatDate(fy.end_date)}`
+                  }
                 </p>
               </div>
               
@@ -426,7 +471,7 @@ const FiscalYears = () => {
 
             {/* Status and stats */}
             <div className="flex items-center justify-between">
-              {getStatusBadge(fy.status)}
+              {getStatusBadge(fy)}
               <span className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
                 {getActivityCount(fy)} saisies
               </span>
@@ -503,6 +548,61 @@ const FiscalYears = () => {
 
               {/* Content */}
               <div className="p-6 space-y-5">
+                {/* Type toggle: Actual vs Scenario (only when duplicating) */}
+                {createForm.duplicateFrom && (
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => setCreateForm(prev => ({ ...prev, isScenario: false, scenarioName: '' }))}
+                      data-testid="type-actual-btn"
+                      className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl border-2 font-medium text-sm transition-all ${
+                        !createForm.isScenario
+                          ? 'border-blue-500 bg-blue-500/10 text-blue-500'
+                          : isDark
+                            ? 'border-slate-600 text-slate-400 hover:border-slate-500'
+                            : 'border-gray-200 text-gray-500 hover:border-gray-300'
+                      }`}
+                    >
+                      <FileText className="w-4 h-4" />
+                      Exercice réel
+                    </button>
+                    <button
+                      onClick={() => setCreateForm(prev => ({ ...prev, isScenario: true }))}
+                      data-testid="type-scenario-btn"
+                      className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl border-2 font-medium text-sm transition-all ${
+                        createForm.isScenario
+                          ? 'border-violet-500 bg-violet-500/10 text-violet-500'
+                          : isDark
+                            ? 'border-slate-600 text-slate-400 hover:border-slate-500'
+                            : 'border-gray-200 text-gray-500 hover:border-gray-300'
+                      }`}
+                    >
+                      <FlaskConical className="w-4 h-4" />
+                      Scénario
+                    </button>
+                  </div>
+                )}
+
+                {/* Scenario name (only when scenario mode is selected) */}
+                {createForm.isScenario && (
+                  <div>
+                    <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
+                      Nom du scénario *
+                    </label>
+                    <input
+                      type="text"
+                      value={createForm.scenarioName}
+                      onChange={(e) => setCreateForm(prev => ({ ...prev, scenarioName: e.target.value }))}
+                      placeholder="Ex: Plan décarbonation, Sans véhicules diesel..."
+                      data-testid="scenario-name-input"
+                      className={`w-full px-4 py-3 rounded-xl border transition-all focus:ring-2 focus:ring-violet-500 ${
+                        isDark 
+                          ? 'bg-slate-700 border-slate-600 text-white placeholder-slate-400' 
+                          : 'bg-white border-gray-200 text-gray-900 placeholder-gray-400'
+                      }`}
+                    />
+                  </div>
+                )}
+
                 {/* Year selector */}
                 <div>
                   <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
@@ -522,10 +622,10 @@ const FiscalYears = () => {
                         <option 
                           key={year} 
                           value={year} 
-                          disabled={!available}
-                          className={!available ? 'text-gray-400' : ''}
+                          disabled={!createForm.isScenario && !available}
+                          className={(!createForm.isScenario && !available) ? 'text-gray-400' : ''}
                         >
-                          {year} {!available ? '(déjà créé)' : ''}
+                          {year} {!createForm.isScenario && !available ? '(déjà créé)' : ''}
                         </option>
                       ))}
                     </select>
@@ -534,7 +634,10 @@ const FiscalYears = () => {
                     }`} />
                   </div>
                   <p className={`mt-1.5 text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-                    Période : 1er janvier {createForm.year} → 31 décembre {createForm.year}
+                    {createForm.isScenario 
+                      ? `Projection pour l'année ${createForm.year}`
+                      : `Période : 1er janvier ${createForm.year} → 31 décembre ${createForm.year}`
+                    }
                   </p>
                 </div>
 
@@ -605,7 +708,7 @@ const FiscalYears = () => {
                 </button>
                 <button
                   onClick={handleCreate}
-                  disabled={loading || existingYears.has(createForm.year)}
+                  disabled={loading || (!createForm.isScenario && existingYears.has(createForm.year)) || (createForm.isScenario && !createForm.scenarioName.trim())}
                   className="flex items-center gap-2 px-5 py-2.5 bg-blue-500 hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-xl font-medium transition-colors"
                 >
                   {loading ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
