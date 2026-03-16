@@ -63,7 +63,8 @@ def get_current_user(user_id: str = Depends(verify_token)) -> dict:
         "language": user.get("language", "fr"),
         "role": user.get("role", "user"),
         "company_id": user.get("company_id"),
-        "email_verified": user.get("email_verified", False)
+        "email_verified": user.get("email_verified", False),
+        "onboarding_completed": user.get("onboarding_completed", False)
     }
 
 def require_admin(current_user: dict = Depends(get_current_user)) -> dict:

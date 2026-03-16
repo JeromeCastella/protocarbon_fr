@@ -379,6 +379,25 @@ async def update_me(user_update: UserUpdate, current_user: dict = Depends(get_cu
     return serialize_doc(updated)
 
 
+@router.post("/onboarding/complete")
+async def complete_onboarding(current_user: dict = Depends(get_current_user)):
+    """Mark onboarding as completed for current user"""
+    users_collection.update_one(
+        {"_id": ObjectId(current_user["id"])},
+        {"$set": {"onboarding_completed": True}}
+    )
+    return {"status": "ok"}
+
+@router.post("/onboarding/reset")
+async def reset_onboarding(current_user: dict = Depends(get_current_user)):
+    """Reset onboarding flag to re-trigger the tutorial"""
+    users_collection.update_one(
+        {"_id": ObjectId(current_user["id"])},
+        {"$set": {"onboarding_completed": False}}
+    )
+    return {"status": "ok"}
+
+
 # ============== ADMIN ROUTES ==============
 
 @router.get("/users")

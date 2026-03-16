@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import { useLanguage } from '../context/LanguageContext';
 import FiscalYearSelector from './FiscalYearSelector';
+import OnboardingTour, { useOnboarding } from './OnboardingTour';
 import { 
   LayoutDashboard, 
   Settings, 
@@ -19,7 +20,8 @@ import {
   Globe,
   Leaf,
   Calendar,
-  Shield
+  Shield,
+  GraduationCap
 } from 'lucide-react';
 
 const Layout = () => {
@@ -28,6 +30,7 @@ const Layout = () => {
   const { t, language, toggleLanguage } = useLanguage();
   const location = useLocation();
   const navigate = useNavigate();
+  const { restartTour } = useOnboarding();
 
   // Navigation principale (fonctions métier)
   const mainNavItems = [
@@ -148,6 +151,19 @@ const Layout = () => {
 
         {/* Section Profil utilisateur */}
         <div className={`p-4 border-t ${isDark ? 'border-slate-700' : 'border-gray-200'}`}>
+          {/* Relancer le tutoriel */}
+          <button
+            onClick={restartTour}
+            data-testid="restart-tour-btn"
+            className={`w-full flex items-center gap-2 px-3 py-2 mb-3 rounded-lg text-sm transition-all ${
+              isDark 
+                ? 'text-slate-400 hover:text-indigo-400 hover:bg-slate-700/50' 
+                : 'text-gray-500 hover:text-indigo-600 hover:bg-indigo-50'
+            }`}
+          >
+            <GraduationCap className="w-4 h-4" />
+            <span>{language === 'fr' ? 'Relancer le tutoriel' : 'Tutorial starten'}</span>
+          </button>
           <div className={`p-4 rounded-xl ${isDark ? 'bg-slate-700/50' : 'bg-gray-100'}`}>
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white font-bold">
@@ -176,6 +192,9 @@ const Layout = () => {
           <Outlet />
         </div>
       </main>
+
+      {/* FEAT-01: Onboarding Tour */}
+      <OnboardingTour />
     </div>
   );
 };
