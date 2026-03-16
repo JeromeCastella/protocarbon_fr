@@ -38,6 +38,7 @@ Application de calcul d'empreinte carbone alignée sur le GHG Protocol, avec tab
 - [x] **CHART-TRAJECTORY** : Refonte graphique trajectoire — barres empilées Scope 1/2/3, area cible emerald, scénarios transparents, ligne de référence (Mars 2026)
 
 ### Sprint 3-4
+- [x] **SCENARIO-ENTITY** : Scénarios comme entité first-class — dropdown, collection dédiée, migration des données existantes (Mars 2026)
 - [ ] **FEAT-03** : Gestion multi-utilisateurs (rôles admin/editor/viewer, invitations)
 
 ### Sprint 4+
