@@ -905,7 +905,8 @@ const Dashboard = () => {
                       const baselineS12 = objective.baseline_scope1_2 || 0;
                       const targetS12 = objective.target_scope1_2 || 0;
                       const reductionNeeded = baselineS12 - targetS12;
-                      const scenarioS12 = (scenarioSummary.summary?.scope1_emissions || 0) + (scenarioSummary.summary?.scope2_emissions || 0);
+                      const se = scenarioSummary.summary?.scope_emissions || {};
+                      const scenarioS12 = (se.scope1 || 0) + (se.scope2 || 0);
                       const reductionAchieved = baselineS12 - scenarioS12;
                       const coveragePct = reductionNeeded > 0 ? Math.round((reductionAchieved / reductionNeeded) * 100) : 0;
                       const isPositive = coveragePct > 0;
@@ -941,7 +942,8 @@ const Dashboard = () => {
                       const baselineS3 = objective.baseline_scope3 || 0;
                       const targetS3 = objective.target_scope3 || 0;
                       const reductionNeeded = baselineS3 - targetS3;
-                      const scenarioS3 = (scenarioSummary.summary?.scope3_amont_emissions || 0) + (scenarioSummary.summary?.scope3_aval_emissions || 0);
+                      const se = scenarioSummary.summary?.scope_emissions || {};
+                      const scenarioS3 = (se.scope3_amont || 0) + (se.scope3_aval || 0);
                       const reductionAchieved = baselineS3 - scenarioS3;
                       const coveragePct = reductionNeeded > 0 ? Math.round((reductionAchieved / reductionNeeded) * 100) : 0;
                       const isPositive = coveragePct > 0;
@@ -1006,8 +1008,9 @@ const Dashboard = () => {
                           const scenarioFy = yearScenarios.find(s => s.id === selectedScenarioId);
                           const scenarioYear = scenarioFy?.year;
                           if (scenarioYear) {
-                            const scenarioS12 = (scenarioSummary.summary?.scope1_emissions || 0) + (scenarioSummary.summary?.scope2_emissions || 0);
-                            const scenarioS3 = (scenarioSummary.summary?.scope3_amont_emissions || 0) + (scenarioSummary.summary?.scope3_aval_emissions || 0);
+                            const se = scenarioSummary.summary?.scope_emissions || {};
+                            const scenarioS12 = (se.scope1 || 0) + (se.scope2 || 0);
+                            const scenarioS3 = (se.scope3_amont || 0) + (se.scope3_aval || 0);
                             
                             // Check if year exists in chart data
                             const existingIdx = chartData.findIndex(d => d.year === scenarioYear);
