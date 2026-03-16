@@ -41,6 +41,7 @@ Application de calcul d'empreinte carbone alignée sur le GHG Protocol, avec tab
 - [x] **SCENARIO-ENTITY** : Scénarios comme entité first-class — dropdown, collection dédiée, migration des données existantes (Mars 2026)
 - [x] **SCOPE-NORMALIZATION** : Normalisation du scope à l'écriture + module partagé `scope_mapping.py` + migration 47 activités (Mars 2026)
 - [x] **REFACTOR-WIZARD** : Découpage ProductWizard.js (978→825 lignes, 8 fichiers modulaires, parité 100%) (Mars 2026)
+- [x] **FIX-SCENARIO-MULTI-PERIOD** : Scénarios multi-périodes sur le graphique trajectoire + validation doublon année/scénario (Mars 2026)
 - [ ] **FEAT-03** : Gestion multi-utilisateurs (rôles admin/editor/viewer, invitations)
 
 ### Sprint 4+
