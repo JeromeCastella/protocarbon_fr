@@ -18,6 +18,7 @@ from config import (
 from models import ActivityCreate, ActivityUpdate, ActivityGroupUpdate
 from services.auth import get_current_user
 from services.emissions import create_factor_snapshot
+from services.scope_mapping import normalize_scope_for_reporting
 from utils import serialize_doc
 
 router = APIRouter(prefix="/activities", tags=["Activities"])
@@ -164,6 +165,10 @@ async def create_activity_for_impact(
     else:
         display_category = activity.category_id
     
+    # Normaliser le scope pour le stockage (scope3 → scope3_amont/aval selon la catégorie)
+    # Rend les données auto-portantes, indépendantes du pipeline de reporting
+    stored_scope = normalize_scope_for_reporting(impact_scope, display_category)
+    
     # Construire le document
     activity_doc = {
         # Groupement
@@ -175,8 +180,8 @@ async def create_activity_for_impact(
         "entry_scope": activity.entry_scope or activity.scope,
         "entry_category": activity.entry_category or activity.category_id,
         
-        # Données de l'impact (scope normalisé)
-        "scope": impact_scope,
+        # Données de l'impact (scope résolu pour le reporting)
+        "scope": stored_scope,
         "category_id": display_category,  # Catégorie d'affichage selon les règles GHG
         "subcategory_id": activity.subcategory_id,
         "impact_value": impact.get("value", 0),

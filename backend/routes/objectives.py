@@ -17,7 +17,7 @@ from config import (
 from models import CarbonObjectiveCreate, CarbonObjectiveUpdate
 from services.auth import get_current_user
 from utils import serialize_doc
-from routes.dashboard import normalize_scope_for_reporting
+from services.scope_mapping import normalize_scope_for_reporting
 
 router = APIRouter(prefix="/objectives", tags=["Objectives"])
 
