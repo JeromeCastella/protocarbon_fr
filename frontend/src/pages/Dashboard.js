@@ -1015,6 +1015,8 @@ const Dashboard = () => {
                 <div className="h-80">
                   <ResponsiveContainer width="100%" height="100%">
                     <ComposedChart
+                      barGap={2}
+                      barCategoryGap="20%"
                       data={(() => {
                         const chartData = trajectoryData.trajectory.map(t => {
                           const actual = trajectoryData.actuals.find(a => a.year === t.year);
