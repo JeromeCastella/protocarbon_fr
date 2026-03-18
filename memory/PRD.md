@@ -47,6 +47,7 @@ Application de calcul d'empreinte carbone alignée sur le GHG Protocol, avec tab
 - [x] **ADMIN-FACTORS-PANEL** : Panneau admin finalisé — pagination serveur (50/page), recherche serveur debounce, filtre Tous/Publics/Experts, toggle is_public dans modal création/édition (Mars 2026)
 - [x] **ADMIN-SUBCATEGORIES-PANEL** : Onglet sous-catégories finalisé — cartes résumé (98 subcats, 8978 EFs, 10 sans public), colonne Facteurs avec badges pub/exp, en-têtes triables, noms bilingues FR/DE, CRUD complet (Mars 2026)
 - [x] **ADMIN-UNITS-PANEL** : Onglet Conversions d'unités créé — 11 conversions (km→L, MWh→kWh, t→kg, etc.), tableau avec badges colorés, prévisualisation formule, CRUD complet, recherche (Mars 2026)
+- [x] **SLIDE-OVER-MODAL** : GuidedEntryModal transformé en panneau slide-over plein écran (94% largeur) avec layout 2 colonnes : gauche (32%) récap/quantité/calcul live, droite (68%) facteurs pleine hauteur. Animation spring slide-in. Page data-entry visible derrière. (Mars 2026)
 - [ ] **FEAT-03** : Gestion multi-utilisateurs (rôles admin/editor/viewer, invitations)
 
 ### Sprint 4+
