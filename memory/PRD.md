@@ -48,6 +48,7 @@ Application de calcul d'empreinte carbone alignée sur le GHG Protocol, avec tab
 - [x] **ADMIN-SUBCATEGORIES-PANEL** : Onglet sous-catégories finalisé — cartes résumé (98 subcats, 8978 EFs, 10 sans public), colonne Facteurs avec badges pub/exp, en-têtes triables, noms bilingues FR/DE, CRUD complet (Mars 2026)
 - [x] **ADMIN-UNITS-PANEL** : Onglet Conversions d'unités créé — 11 conversions (km→L, MWh→kWh, t→kg, etc.), tableau avec badges colorés, prévisualisation formule, CRUD complet, recherche (Mars 2026)
 - [x] **SLIDE-OVER-MODAL** : GuidedEntryModal transformé en panneau slide-over plein écran (94% largeur) avec layout 2 colonnes : gauche (32%) récap/quantité/calcul live, droite (68%) facteurs pleine hauteur. Animation spring slide-in. Page data-entry visible derrière. (Mars 2026)
+- [x] **FIX-BAFU-FACTOR-LOOKUP** : Bug critique — les facteurs BAFU 2025 ont un 'id' custom différent de MongoDB '_id'. Création de find_emission_factor helper (fallback _id → id). Corrigé dans activities.py, products.py, reference_data.py, admin.py. (Mars 2026)
 - [ ] **FEAT-03** : Gestion multi-utilisateurs (rôles admin/editor/viewer, invitations)
 
 ### Sprint 4+
