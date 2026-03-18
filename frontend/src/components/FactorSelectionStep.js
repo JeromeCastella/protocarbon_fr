@@ -160,8 +160,8 @@ const FactorSelectionStep = ({
         </p>
       )}
       
-      {/* Factor cards list */}
-      <div className="space-y-2 overflow-y-auto pr-2 mt-4" style={{ maxHeight: '250px', minHeight: '200px' }}>
+      {/* Factor cards grid */}
+      <div className="grid grid-cols-2 xl:grid-cols-3 gap-2 overflow-y-auto pr-2 mt-4 flex-1 auto-rows-min content-start">
         {displayFactors.map((factor) => (
           <FactorCard
             key={factor.id}
