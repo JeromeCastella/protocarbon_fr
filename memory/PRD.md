@@ -42,16 +42,20 @@ Application de calcul d'empreinte carbone alignée sur le GHG Protocol, avec tab
 - [x] **SCOPE-NORMALIZATION** : Normalisation du scope à l'écriture + module partagé `scope_mapping.py` + migration 47 activités (Mars 2026)
 - [x] **REFACTOR-WIZARD** : Découpage ProductWizard.js (978→825 lignes, 8 fichiers modulaires, parité 100%) (Mars 2026)
 - [x] **FIX-SCENARIO-MULTI-PERIOD** : Scénarios multi-périodes sur le graphique trajectoire + validation doublon année/scénario (Mars 2026)
+- [x] **MIGRATION-BAFU-2025** : Migration base de données facteurs d'émission — 1191→8978 EFs, nouveaux champs is_public/popularity_score, 51 sous-catégories, 2 manquantes créées (Mars 2026)
+- [x] **FILTER-IS-PUBLIC** : Filtre facteurs publics/experts dans GuidedEntryModal — toggle dans FactorSelectionStep, badge Expert sur FactorCard, tri backend par is_public+popularity_score (Mars 2026)
 - [ ] **FEAT-03** : Gestion multi-utilisateurs (rôles admin/editor/viewer, invitations)
 
 ### Sprint 4+
 - [ ] **FEAT-05** : Base de données actions plan climat cantonal
 
 ### Backlog technique
-- [ ] Refactoring `ProductWizard.js` (monolithique → sous-composants)
+- [x] Refactoring `ProductWizard.js` (monolithique → sous-composants)
 - [ ] Optimisation requêtes DB `dashboard.py` (projections MongoDB)
 - [ ] Exports PDF/Excel
 - [ ] Logs d'audit émissions (O3-A7, en attente de décision)
+- [ ] Finaliser panneau d'administration (AdminUnitsTab, AdminFactorsTab)
+- [ ] Base de données actions plan climat cantonal (FEAT-05)
 
 ## Décisions prises
 - FEAT-02 : Scénarios illimités, sélecteur hiérarchisé en 2 niveaux (Option C), overlay trajectoire violet
