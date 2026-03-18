@@ -14,11 +14,12 @@ export const useAdminData = (isAdmin) => {
   const [users, setUsers] = useState([]);
   const isInitialLoad = useRef(true);
 
-  const fetchFactors = useCallback(async (page = 1, search = "") => {
+  const fetchFactors = useCallback(async (page = 1, search = "", is_public = "") => {
     if (!isAdmin) return;
     try {
       const params = new URLSearchParams({ page, page_size: 50 });
       if (search) params.append("search", search);
+      if (is_public) params.append("is_public", is_public);
       const res = await axios.get(`${API_URL}/api/admin/emission-factors-v2?${params}`);
       const data = res.data;
       setFactors(data.items || []);

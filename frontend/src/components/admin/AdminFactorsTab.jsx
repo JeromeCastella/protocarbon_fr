@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Search, Plus, Edit2, Trash2, Download, Upload, 
   Sparkles, GitBranch, History, Archive, X, Check, Tag, Layers,
-  ChevronLeft, ChevronRight
+  ChevronLeft, ChevronRight, FlaskConical
 } from 'lucide-react';
 import axios from 'axios';
 import { 
@@ -27,7 +27,8 @@ const INITIAL_FORM = {
   tags: '',
   source: 'OFEV',
   region: 'Suisse',
-  year: 2024
+  year: 2024,
+  is_public: true
 };
 
 const AdminFactorsTab = ({ factors, subcategories, pagination, onPageChange, onRefetch }) => {
@@ -35,6 +36,7 @@ const AdminFactorsTab = ({ factors, subcategories, pagination, onPageChange, onR
   const { t, language } = useLanguage();
   const [search, setSearch] = useState('');
   const [searchTimeout, setSearchTimeout] = useState(null);
+  const [expertFilter, setExpertFilter] = useState('all'); // 'all' | 'public' | 'expert'
 
   // Impact types config with translation keys
   const IMPACT_TYPES_CONFIG = [
@@ -68,11 +70,18 @@ const AdminFactorsTab = ({ factors, subcategories, pagination, onPageChange, onR
   const handleSearchChange = useCallback((value) => {
     setSearch(value);
     if (searchTimeout) clearTimeout(searchTimeout);
+    const isPublicParam = expertFilter === 'public' ? 'true' : expertFilter === 'expert' ? 'false' : '';
     const timeout = setTimeout(() => {
-      onPageChange(1, value);
+      onPageChange(1, value, isPublicParam);
     }, 400);
     setSearchTimeout(timeout);
-  }, [onPageChange, searchTimeout]);
+  }, [onPageChange, searchTimeout, expertFilter]);
+
+  const handleFilterChange = useCallback((filter) => {
+    setExpertFilter(filter);
+    const isPublicParam = filter === 'public' ? 'true' : filter === 'expert' ? 'false' : '';
+    onPageChange(1, search, isPublicParam);
+  }, [onPageChange, search]);
 
   useEffect(() => {
     return () => { if (searchTimeout) clearTimeout(searchTimeout); };
@@ -180,7 +189,8 @@ const AdminFactorsTab = ({ factors, subcategories, pagination, onPageChange, onR
           unit: imp.unit,
           type: imp.type
         })),
-        input_units: factorForm.input_units.filter(Boolean)
+        input_units: factorForm.input_units.filter(Boolean),
+        is_public: factorForm.is_public
       };
 
       if (editingFactor) {
@@ -218,7 +228,8 @@ const AdminFactorsTab = ({ factors, subcategories, pagination, onPageChange, onR
       tags: (factor.tags || []).join(', '),
       source: factor.source || 'OFEV',
       region: factor.region || 'Suisse',
-      year: factor.year || 2024
+      year: factor.year || 2024,
+      is_public: factor.is_public !== false
     });
     setShowFactorModal(true);
   };
@@ -347,6 +358,32 @@ const AdminFactorsTab = ({ factors, subcategories, pagination, onPageChange, onR
             className={`w-full pl-10 pr-4 py-2 rounded-lg border ${isDark ? 'bg-slate-700 border-slate-600 text-white' : 'bg-white border-gray-200'}`}
           />
         </div>
+        
+        {/* Expert filter */}
+        <div className={`flex items-center rounded-lg border overflow-hidden ${isDark ? 'border-slate-600' : 'border-gray-200'}`}>
+          {[
+            { key: 'all', label: language === 'fr' ? 'Tous' : 'Alle' },
+            { key: 'public', label: language === 'fr' ? 'Publics' : 'Öffentlich' },
+            { key: 'expert', label: 'Experts', icon: FlaskConical }
+          ].map(({ key, label, icon: Icon }) => (
+            <button
+              key={key}
+              data-testid={`filter-${key}`}
+              onClick={() => handleFilterChange(key)}
+              className={`flex items-center gap-1.5 px-3 py-2 text-sm transition-colors ${
+                expertFilter === key
+                  ? key === 'expert'
+                    ? 'bg-amber-500 text-white'
+                    : 'bg-blue-500 text-white'
+                  : isDark ? 'hover:bg-slate-700 text-slate-300' : 'hover:bg-gray-50 text-gray-600'
+              }`}
+            >
+              {Icon && <Icon className="w-3.5 h-3.5" />}
+              {label}
+            </button>
+          ))}
+        </div>
+
         <button
           data-testid="add-factor-btn"
           onClick={() => { resetFactorForm(); setEditingFactor(null); setShowFactorModal(true); }}
@@ -493,7 +530,10 @@ const AdminFactorsTab = ({ factors, subcategories, pagination, onPageChange, onR
           <div className="flex items-center gap-2">
             <button
               data-testid="pagination-prev"
-              onClick={() => onPageChange(pagination.page - 1, search)}
+              onClick={() => {
+                const isPublicParam = expertFilter === 'public' ? 'true' : expertFilter === 'expert' ? 'false' : '';
+                onPageChange(pagination.page - 1, search, isPublicParam);
+              }}
               disabled={pagination.page <= 1}
               className={`p-2 rounded-lg border transition-colors disabled:opacity-30 ${isDark ? 'border-slate-600 hover:bg-slate-700' : 'border-gray-200 hover:bg-gray-50'}`}
             >
@@ -504,7 +544,10 @@ const AdminFactorsTab = ({ factors, subcategories, pagination, onPageChange, onR
             </span>
             <button
               data-testid="pagination-next"
-              onClick={() => onPageChange(pagination.page + 1, search)}
+              onClick={() => {
+                const isPublicParam = expertFilter === 'public' ? 'true' : expertFilter === 'expert' ? 'false' : '';
+                onPageChange(pagination.page + 1, search, isPublicParam);
+              }}
               disabled={pagination.page >= pagination.total_pages}
               className={`p-2 rounded-lg border transition-colors disabled:opacity-30 ${isDark ? 'border-slate-600 hover:bg-slate-700' : 'border-gray-200 hover:bg-gray-50'}`}
             >
@@ -747,6 +790,39 @@ const AdminFactorsTab = ({ factors, subcategories, pagination, onPageChange, onR
                     <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>Année</label>
                     <input type="number" value={factorForm.year} onChange={(e) => setFactorForm(prev => ({ ...prev, year: e.target.value }))} className={`w-full px-4 py-2 rounded-lg border ${isDark ? 'bg-slate-700 border-slate-600 text-white' : 'bg-white border-gray-200'}`} />
                   </div>
+                </div>
+
+                {/* Expert toggle */}
+                <div className={`flex items-center justify-between p-4 rounded-xl border ${
+                  !factorForm.is_public 
+                    ? isDark ? 'bg-amber-500/10 border-amber-500/30' : 'bg-amber-50 border-amber-200'
+                    : isDark ? 'bg-slate-700/30 border-slate-700' : 'bg-gray-50 border-gray-200'
+                }`}>
+                  <div className="flex items-center gap-3">
+                    <FlaskConical className={`w-5 h-5 ${!factorForm.is_public ? 'text-amber-500' : isDark ? 'text-slate-400' : 'text-gray-400'}`} />
+                    <div>
+                      <span className={`font-medium ${isDark ? 'text-slate-200' : 'text-gray-700'}`}>
+                        {language === 'fr' ? 'Facteur expert' : 'Experten-Faktor'}
+                      </span>
+                      <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+                        {language === 'fr' 
+                          ? 'Les facteurs experts ne sont visibles que si l\'utilisateur active le mode expert'
+                          : 'Experten-Faktoren sind nur im Expertenmodus sichtbar'}
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    data-testid="toggle-is-public"
+                    onClick={() => setFactorForm(prev => ({ ...prev, is_public: !prev.is_public }))}
+                    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                      !factorForm.is_public ? 'bg-amber-500' : isDark ? 'bg-slate-600' : 'bg-gray-300'
+                    }`}
+                  >
+                    <span className={`inline-block h-4 w-4 rounded-full bg-white transition-transform ${
+                      !factorForm.is_public ? 'translate-x-6' : 'translate-x-1'
+                    }`} />
+                  </button>
                 </div>
               </div>
 

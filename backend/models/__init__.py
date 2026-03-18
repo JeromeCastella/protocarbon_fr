@@ -96,6 +96,7 @@ class EmissionFactorV2Create(BaseModel):
     source: str = "OFEV"
     region: str = "Suisse"
     year: int = 2024
+    is_public: bool = True
     # Champs enrichis pour UX simplifiée
     name_simple_fr: Optional[str] = None
     name_simple_de: Optional[str] = None
@@ -118,6 +119,7 @@ class EmissionFactorV2Update(BaseModel):
     source: Optional[str] = None
     region: Optional[str] = None
     year: Optional[int] = None
+    is_public: Optional[bool] = None
     # Champs enrichis pour UX simplifiée
     name_simple_fr: Optional[str] = None
     name_simple_de: Optional[str] = None

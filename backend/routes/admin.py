@@ -138,6 +138,7 @@ async def get_emission_factors_v2(
     page: int = 1,
     page_size: int = 50,
     search: str = "",
+    is_public: str = "",
     current_user: dict = Depends(require_admin)
 ):
     """Get emission factors v2 with pagination (admin only)"""
@@ -149,6 +150,10 @@ async def get_emission_factors_v2(
             {"subcategory": {"$regex": search, "$options": "i"}},
             {"tags": {"$regex": search, "$options": "i"}}
         ]
+    if is_public == "true":
+        query["is_public"] = True
+    elif is_public == "false":
+        query["is_public"] = False
     
     total = emission_factors_collection.count_documents(query)
     skip = (page - 1) * page_size
