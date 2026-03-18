@@ -5,6 +5,30 @@ from bson import ObjectId
 from typing import Any, Dict
 
 
+def find_emission_factor(collection, factor_id: str):
+    """
+    Find an emission factor by _id or custom id field.
+    BAFU 2025 factors have a custom 'id' field different from MongoDB '_id'.
+    """
+    if not factor_id:
+        return None
+    try:
+        doc = collection.find_one({"_id": ObjectId(factor_id)})
+        if doc:
+            return doc
+    except Exception:
+        pass
+    return collection.find_one({"id": factor_id})
+
+
+def ef_id_filter(factor_id: str) -> dict:
+    """Build a MongoDB filter that matches either _id or custom id."""
+    try:
+        return {"$or": [{"_id": ObjectId(factor_id)}, {"id": factor_id}]}
+    except Exception:
+        return {"id": factor_id}
+
+
 def serialize_doc(doc: Dict[str, Any]) -> Dict[str, Any]:
     """
     Sérialise un document MongoDB pour JSON

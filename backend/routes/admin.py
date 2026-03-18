@@ -27,7 +27,7 @@ from models import (
     UserUpdate
 )
 from services.auth import get_current_user, require_admin
-from utils import serialize_doc
+from utils import serialize_doc, find_emission_factor, ef_id_filter
 
 router = APIRouter(prefix="/admin", tags=["Admin"])
 
@@ -215,7 +215,7 @@ async def update_emission_factor_v2(
     update_data["updated_at"] = datetime.now(timezone.utc).isoformat()
     
     result = emission_factors_collection.update_one(
-        {"_id": ObjectId(factor_id), "deleted_at": None},
+        {**ef_id_filter(factor_id), "deleted_at": None},
         {"$set": update_data}
     )
     
@@ -226,7 +226,7 @@ async def update_emission_factor_v2(
     from routes.products import _mark_products_stale_for_factor
     _mark_products_stale_for_factor(factor_id)
     
-    updated = emission_factors_collection.find_one({"_id": ObjectId(factor_id)})
+    updated = find_emission_factor(emission_factors_collection, factor_id)
     return serialize_doc(updated)
 
 
@@ -300,7 +300,7 @@ async def get_factor_history(
 ):
     """Get version history of an emission factor"""
     # Get current factor
-    current = emission_factors_collection.find_one({"_id": ObjectId(factor_id)})
+    current = find_emission_factor(emission_factors_collection, factor_id)
     
     if not current:
         raise HTTPException(status_code=404, detail="Emission factor not found")
@@ -310,7 +310,7 @@ async def get_factor_history(
     # Follow previous_version_id chain
     prev_id = current.get("previous_version_id")
     while prev_id:
-        prev = emission_factors_collection.find_one({"_id": ObjectId(prev_id)})
+        prev = find_emission_factor(emission_factors_collection, prev_id)
         if prev:
             history.append(serialize_doc(prev))
             prev_id = prev.get("previous_version_id")
@@ -320,7 +320,7 @@ async def get_factor_history(
     # Follow replaced_by chain
     next_id = current.get("replaced_by")
     while next_id:
-        next_factor = emission_factors_collection.find_one({"_id": ObjectId(next_id)})
+        next_factor = find_emission_factor(emission_factors_collection, next_id)
         if next_factor:
             history.insert(0, serialize_doc(next_factor))
             next_id = next_factor.get("replaced_by")
@@ -341,7 +341,7 @@ async def soft_delete_factor(
     _mark_products_stale_for_factor(factor_id)
     
     result = emission_factors_collection.update_one(
-        {"_id": ObjectId(factor_id)},
+        ef_id_filter(factor_id),
         {
             "$set": {
                 "deleted_at": datetime.now(timezone.utc).isoformat(),

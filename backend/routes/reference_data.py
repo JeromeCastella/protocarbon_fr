@@ -16,7 +16,7 @@ from config import (
     emission_factors_collection
 )
 from services.auth import get_current_user
-from utils import serialize_doc
+from utils import serialize_doc, find_emission_factor
 
 router = APIRouter(tags=["Reference Data"])
 
@@ -243,10 +243,7 @@ async def get_emission_factor_by_id(
     current_user: dict = Depends(get_current_user)
 ):
     """Get a specific emission factor by its ID"""
-    try:
-        factor = emission_factors_collection.find_one({"_id": ObjectId(factor_id)})
-        if not factor:
-            raise HTTPException(status_code=404, detail="Emission factor not found")
-        return serialize_doc(factor)
-    except Exception as e:
-        raise HTTPException(status_code=400, detail=f"Invalid factor ID: {str(e)}")
+    factor = find_emission_factor(emission_factors_collection, factor_id)
+    if not factor:
+        raise HTTPException(status_code=404, detail="Emission factor not found")
+    return serialize_doc(factor)

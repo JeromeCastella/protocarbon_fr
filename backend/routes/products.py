@@ -18,7 +18,7 @@ from config import (
 )
 from models import ProductCreate, ProductCreateEnhanced, ProductSale, ProductSaleUpdate, ProductEmissionProfileCreate, ProductEmissionProfileUpdate
 from services.auth import get_current_user
-from utils import serialize_doc
+from utils import serialize_doc, find_emission_factor
 
 router = APIRouter(prefix="/products", tags=["Products"])
 
@@ -30,7 +30,7 @@ def _resolve_factor(fid):
     if not fid:
         return None, 0
     try:
-        factor = emission_factors_collection.find_one({"_id": ObjectId(fid)})
+        factor = find_emission_factor(emission_factors_collection, fid)
         if factor:
             total = sum(imp.get("value", 0) for imp in factor.get("impacts", []))
             return factor, total
@@ -158,7 +158,7 @@ def _validate_product_factors(product_data: dict) -> List[str]:
         if not fid:
             return
         try:
-            if not emission_factors_collection.find_one({"_id": ObjectId(fid)}):
+            if not find_emission_factor(emission_factors_collection, fid):
                 errors.append(f"{label} — facteur introuvable (ID: {fid})")
         except Exception:
             errors.append(f"{label} — ID de facteur invalide ({fid})")
@@ -619,10 +619,7 @@ async def recalculate_products_using_factor(
     Searches transformation, usage, and end_of_life references.
     """
     # Verify factor exists
-    try:
-        factor = emission_factors_collection.find_one({"_id": ObjectId(factor_id)})
-    except Exception:
-        raise HTTPException(status_code=400, detail="ID de facteur invalide")
+    factor = find_emission_factor(emission_factors_collection, factor_id)
     if not factor:
         raise HTTPException(status_code=404, detail="Facteur introuvable")
 

@@ -19,7 +19,7 @@ from models import ActivityCreate, ActivityUpdate, ActivityGroupUpdate
 from services.auth import get_current_user
 from services.emissions import create_factor_snapshot
 from services.scope_mapping import normalize_scope_for_reporting
-from utils import serialize_doc
+from utils import serialize_doc, find_emission_factor
 
 router = APIRouter(prefix="/activities", tags=["Activities"])
 
@@ -287,9 +287,7 @@ async def create_activity(activity: ActivityCreate, current_user: dict = Depends
     """
     
     # Récupérer le facteur d'émission
-    factor = None
-    if activity.emission_factor_id:
-        factor = emission_factors_collection.find_one({"_id": ObjectId(activity.emission_factor_id)})
+    factor = find_emission_factor(emission_factors_collection, activity.emission_factor_id)
     
     # Si pas de facteur ou facteur manuel, créer une activité simple
     if not factor:
@@ -446,7 +444,7 @@ async def update_activity(
             factor_id = update_data.get("emission_factor_id", existing.get("emission_factor_id"))
             
             if factor_id:
-                factor = emission_factors_collection.find_one({"_id": ObjectId(factor_id)})
+                factor = find_emission_factor(emission_factors_collection, factor_id)
                 if factor:
                     emissions = 0
                     unit = update_data.get("unit", existing.get("unit", ""))
@@ -511,7 +509,7 @@ async def create_activities_bulk(
         # Calculate emissions
         emissions = 0
         if activity.emission_factor_id:
-            factor = emission_factors_collection.find_one({"_id": ObjectId(activity.emission_factor_id)})
+            factor = find_emission_factor(emission_factors_collection, activity.emission_factor_id)
             if factor:
                 for impact in factor.get("impacts", []):
                     emissions += activity.quantity * impact.get("value", 0)
