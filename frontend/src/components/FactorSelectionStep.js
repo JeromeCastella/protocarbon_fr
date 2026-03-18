@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Search, X, Info, FlaskConical } from 'lucide-react';
+import { Search, X, Info, FlaskConical, LayoutGrid, Table2, Check } from 'lucide-react';
 import FactorCard from './FactorCard';
 import { createFactorSearchIndex, searchFactors, sortFactorsByRelevance } from '../utils/factorSearch';
 
@@ -18,6 +18,7 @@ const FactorSelectionStep = ({
   const [searchQuery, setSearchQuery] = useState('');
   const [searchIndex, setSearchIndex] = useState(null);
   const [showExpertFactors, setShowExpertFactors] = useState(false);
+  const [viewMode, setViewMode] = useState('grid'); // 'grid' | 'table'
 
   // Split factors into public and all
   const publicFactors = useMemo(() => {
@@ -82,17 +83,46 @@ const FactorSelectionStep = ({
 
   return (
     <div className="flex flex-col h-full min-h-0">
-      {/* Header with count and expert toggle */}
+      {/* Header with count, view toggle and expert toggle */}
       <div className="flex items-center justify-between flex-shrink-0">
         <label className={`block text-sm font-medium ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
           {language === 'fr' 
             ? '3. Sélectionner le facteur d\'émission' 
             : '3. Emissionsfaktor auswählen'}
         </label>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
           <span className={`text-xs ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>
             {displayFactors.length} {language === 'fr' ? 'facteur(s)' : 'Faktor(en)'}
           </span>
+          {/* View mode toggle */}
+          <div className={`flex rounded-lg border overflow-hidden ${isDark ? 'border-slate-600' : 'border-gray-200'}`}>
+            <button
+              type="button"
+              onClick={() => setViewMode('grid')}
+              data-testid="view-mode-grid"
+              title={language === 'fr' ? 'Vue grille' : 'Gitteransicht'}
+              className={`p-1.5 transition-all ${
+                viewMode === 'grid'
+                  ? isDark ? 'bg-blue-500/20 text-blue-400' : 'bg-blue-50 text-blue-600'
+                  : isDark ? 'text-slate-500 hover:text-slate-300' : 'text-gray-400 hover:text-gray-600'
+              }`}
+            >
+              <LayoutGrid className="w-3.5 h-3.5" />
+            </button>
+            <button
+              type="button"
+              onClick={() => setViewMode('table')}
+              data-testid="view-mode-table"
+              title={language === 'fr' ? 'Vue tableau' : 'Tabellenansicht'}
+              className={`p-1.5 transition-all ${
+                viewMode === 'table'
+                  ? isDark ? 'bg-blue-500/20 text-blue-400' : 'bg-blue-50 text-blue-600'
+                  : isDark ? 'text-slate-500 hover:text-slate-300' : 'text-gray-400 hover:text-gray-600'
+              }`}
+            >
+              <Table2 className="w-3.5 h-3.5" />
+            </button>
+          </div>
           {expertCount > 0 && (
             <button
               type="button"
@@ -161,17 +191,93 @@ const FactorSelectionStep = ({
       )}
       
       {/* Factor cards grid */}
-      <div className="grid grid-cols-2 xl:grid-cols-3 gap-2 overflow-y-auto pr-2 mt-4 flex-1 auto-rows-min content-start">
-        {displayFactors.map((factor) => (
-          <FactorCard
-            key={factor.id}
-            factor={factor}
-            language={language}
-            isSelected={selectedFactor?.id === factor.id}
-            onClick={() => onSelectFactor(factor)}
-          />
-        ))}
-      </div>
+      {viewMode === 'grid' ? (
+        <div className="grid grid-cols-2 xl:grid-cols-3 gap-2 overflow-y-auto pr-2 mt-4 flex-1 auto-rows-min content-start">
+          {displayFactors.map((factor) => (
+            <FactorCard
+              key={factor.id}
+              factor={factor}
+              language={language}
+              isSelected={selectedFactor?.id === factor.id}
+              onClick={() => onSelectFactor(factor)}
+            />
+          ))}
+        </div>
+      ) : (
+        <div className="overflow-y-auto mt-4 flex-1" data-testid="factor-table-view">
+          <table className="w-full text-left">
+            <thead className={`sticky top-0 z-10 text-[11px] uppercase tracking-wider ${
+              isDark ? 'bg-slate-800 text-slate-500' : 'bg-white text-gray-400'
+            }`}>
+              <tr>
+                <th className="py-2 pr-2 font-medium">{language === 'fr' ? 'Nom' : 'Name'}</th>
+                <th className="py-2 px-2 font-medium text-right whitespace-nowrap">{language === 'fr' ? 'Valeur' : 'Wert'}</th>
+                <th className="py-2 px-2 font-medium">{language === 'fr' ? 'Unité' : 'Einheit'}</th>
+                <th className="py-2 pl-2 font-medium">{language === 'fr' ? 'Source' : 'Quelle'}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {displayFactors.map((factor) => {
+                const isSelected = selectedFactor?.id === factor.id;
+                const isExpert = factor.is_public === false;
+                const name = language === 'fr'
+                  ? (factor.name_simple_fr || factor.name_fr)
+                  : (factor.name_simple_de || factor.name_de || factor.name_fr);
+                const impact = factor.impacts?.[0];
+                return (
+                  <tr
+                    key={factor.id}
+                    onClick={() => onSelectFactor(factor)}
+                    data-testid={`factor-row-${factor.id}`}
+                    className={`cursor-pointer border-b transition-colors ${
+                      isSelected
+                        ? isDark
+                          ? 'bg-blue-500/15 border-blue-500/30'
+                          : 'bg-blue-50 border-blue-100'
+                        : isDark
+                          ? 'border-slate-700/50 hover:bg-slate-700/40'
+                          : 'border-gray-100 hover:bg-gray-50'
+                    }`}
+                  >
+                    <td className="py-1.5 pr-2">
+                      <div className="flex items-center gap-1.5 min-w-0">
+                        {isSelected && (
+                          <div className="flex-shrink-0 w-4 h-4 rounded-full bg-blue-500 flex items-center justify-center">
+                            <Check className="w-2.5 h-2.5 text-white" />
+                          </div>
+                        )}
+                        <span className={`text-xs truncate max-w-[280px] ${
+                          isSelected
+                            ? isDark ? 'text-blue-300 font-medium' : 'text-blue-700 font-medium'
+                            : isDark ? 'text-slate-200' : 'text-gray-800'
+                        }`}>
+                          {name}
+                        </span>
+                        {isExpert && (
+                          <span className={`flex-shrink-0 text-[8px] font-bold px-1 py-px rounded ${
+                            isDark ? 'bg-amber-500/20 text-amber-400' : 'bg-amber-100 text-amber-700'
+                          }`}>EXP</span>
+                        )}
+                      </div>
+                    </td>
+                    <td className={`py-1.5 px-2 text-right font-mono text-[11px] whitespace-nowrap ${
+                      isDark ? 'text-slate-400' : 'text-gray-500'
+                    }`}>
+                      {impact ? (impact.value < 0.001 ? impact.value.toExponential(2) : impact.value.toFixed(3)) : '—'}
+                    </td>
+                    <td className={`py-1.5 px-2 text-[11px] ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>
+                      {impact?.unit || ''}
+                    </td>
+                    <td className={`py-1.5 pl-2 text-[11px] ${isDark ? 'text-slate-600' : 'text-gray-300'}`}>
+                      {factor.source || ''}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      )}
       
       {/* No results message */}
       {searchQuery && displayFactors.length === 0 && (
