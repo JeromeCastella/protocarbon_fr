@@ -44,6 +44,7 @@ Application de calcul d'empreinte carbone alignée sur le GHG Protocol, avec tab
 - [x] **FIX-SCENARIO-MULTI-PERIOD** : Scénarios multi-périodes sur le graphique trajectoire + validation doublon année/scénario (Mars 2026)
 - [x] **MIGRATION-BAFU-2025** : Migration base de données facteurs d'émission — 1191→8978 EFs, nouveaux champs is_public/popularity_score, 51 sous-catégories, 2 manquantes créées (Mars 2026)
 - [x] **FILTER-IS-PUBLIC** : Filtre facteurs publics/experts dans GuidedEntryModal — toggle dans FactorSelectionStep, badge Expert sur FactorCard, tri backend par is_public+popularity_score (Mars 2026)
+- [x] **ADMIN-FACTORS-PANEL** : Panneau admin finalisé — pagination serveur (50/page), recherche serveur debounce, filtre Tous/Publics/Experts, toggle is_public dans modal création/édition (Mars 2026)
 - [ ] **FEAT-03** : Gestion multi-utilisateurs (rôles admin/editor/viewer, invitations)
 
 ### Sprint 4+
