@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { useTheme } from '../../context/ThemeContext';
 import { useLanguage } from '../../context/LanguageContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Search, Plus, Edit2, Trash2, Download, Upload, 
-  Sparkles, GitBranch, History, Archive, X, Check, Tag, Layers
+  Sparkles, GitBranch, History, Archive, X, Check, Tag, Layers,
+  ChevronLeft, ChevronRight
 } from 'lucide-react';
 import axios from 'axios';
 import { 
@@ -29,10 +30,11 @@ const INITIAL_FORM = {
   year: 2024
 };
 
-const AdminFactorsTab = ({ factors, subcategories, onRefetch }) => {
+const AdminFactorsTab = ({ factors, subcategories, pagination, onPageChange, onRefetch }) => {
   const { isDark } = useTheme();
   const { t, language } = useLanguage();
   const [search, setSearch] = useState('');
+  const [searchTimeout, setSearchTimeout] = useState(null);
 
   // Impact types config with translation keys
   const IMPACT_TYPES_CONFIG = [
@@ -62,14 +64,22 @@ const AdminFactorsTab = ({ factors, subcategories, onRefetch }) => {
   });
   const [factorHistory, setFactorHistory] = useState(null);
 
-  // Filter factors
-  const filteredFactors = factors.filter(f => {
-    const searchLower = search.toLowerCase();
-    return (f.name_fr || f.name || '').toLowerCase().includes(searchLower) ||
-           (f.name_de || '').toLowerCase().includes(searchLower) ||
-           f.tags?.some(t => t.toLowerCase().includes(searchLower)) ||
-           (f.subcategory || '').toLowerCase().includes(searchLower);
-  });
+  // Server-side search with debounce
+  const handleSearchChange = useCallback((value) => {
+    setSearch(value);
+    if (searchTimeout) clearTimeout(searchTimeout);
+    const timeout = setTimeout(() => {
+      onPageChange(1, value);
+    }, 400);
+    setSearchTimeout(timeout);
+  }, [onPageChange, searchTimeout]);
+
+  useEffect(() => {
+    return () => { if (searchTimeout) clearTimeout(searchTimeout); };
+  }, [searchTimeout]);
+
+  // Use factors directly from server (already filtered/paginated)
+  const filteredFactors = factors;
 
   // Get linked categories for subcategory
   const getLinkedCategories = () => {
@@ -332,7 +342,7 @@ const AdminFactorsTab = ({ factors, subcategories, onRefetch }) => {
             type="text"
             data-testid="factor-search"
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) => handleSearchChange(e.target.value)}
             placeholder={t('common.search') + '...'}
             className={`w-full pl-10 pr-4 py-2 rounded-lg border ${isDark ? 'bg-slate-700 border-slate-600 text-white' : 'bg-white border-gray-200'}`}
           />
@@ -473,6 +483,36 @@ const AdminFactorsTab = ({ factors, subcategories, onRefetch }) => {
           </tbody>
         </table>
       </div>
+
+      {/* Pagination */}
+      {pagination && pagination.total_pages > 1 && (
+        <div className="flex items-center justify-between pt-2">
+          <span className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+            {((pagination.page - 1) * pagination.page_size) + 1}–{Math.min(pagination.page * pagination.page_size, pagination.total)} {language === 'fr' ? 'sur' : 'von'} {pagination.total}
+          </span>
+          <div className="flex items-center gap-2">
+            <button
+              data-testid="pagination-prev"
+              onClick={() => onPageChange(pagination.page - 1, search)}
+              disabled={pagination.page <= 1}
+              className={`p-2 rounded-lg border transition-colors disabled:opacity-30 ${isDark ? 'border-slate-600 hover:bg-slate-700' : 'border-gray-200 hover:bg-gray-50'}`}
+            >
+              <ChevronLeft className="w-4 h-4" />
+            </button>
+            <span className={`text-sm font-medium px-3 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
+              {pagination.page} / {pagination.total_pages}
+            </span>
+            <button
+              data-testid="pagination-next"
+              onClick={() => onPageChange(pagination.page + 1, search)}
+              disabled={pagination.page >= pagination.total_pages}
+              className={`p-2 rounded-lg border transition-colors disabled:opacity-30 ${isDark ? 'border-slate-600 hover:bg-slate-700' : 'border-gray-200 hover:bg-gray-50'}`}
+            >
+              <ChevronRight className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Factor Modal */}
       <AnimatePresence>

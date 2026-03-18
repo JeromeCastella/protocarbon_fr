@@ -134,10 +134,38 @@ async def delete_user(
 # ==================== EMISSION FACTORS V2 ====================
 
 @router.get("/emission-factors-v2")
-async def get_emission_factors_v2(current_user: dict = Depends(require_admin)):
-    """Get all emission factors v2 (admin only)"""
-    factors = list(emission_factors_collection.find({"deleted_at": None}).limit(2000))
-    return [serialize_doc(f) for f in factors]
+async def get_emission_factors_v2(
+    page: int = 1,
+    page_size: int = 50,
+    search: str = "",
+    current_user: dict = Depends(require_admin)
+):
+    """Get emission factors v2 with pagination (admin only)"""
+    query = {"deleted_at": None}
+    if search:
+        query["$or"] = [
+            {"name_fr": {"$regex": search, "$options": "i"}},
+            {"name_de": {"$regex": search, "$options": "i"}},
+            {"subcategory": {"$regex": search, "$options": "i"}},
+            {"tags": {"$regex": search, "$options": "i"}}
+        ]
+    
+    total = emission_factors_collection.count_documents(query)
+    skip = (page - 1) * page_size
+    factors = list(
+        emission_factors_collection.find(query)
+        .sort([("is_public", -1), ("popularity_score", -1)])
+        .skip(skip)
+        .limit(page_size)
+    )
+    
+    return {
+        "items": [serialize_doc(f) for f in factors],
+        "total": total,
+        "page": page,
+        "page_size": page_size,
+        "total_pages": (total + page_size - 1) // page_size
+    }
 
 
 @router.post("/emission-factors-v2")

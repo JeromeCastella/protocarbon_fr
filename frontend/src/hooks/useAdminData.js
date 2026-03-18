@@ -9,9 +9,24 @@ const API_URL = process.env.REACT_APP_BACKEND_URL || '';
 export const useAdminData = (isAdmin) => {
   const [loading, setLoading] = useState(true);
   const [factors, setFactors] = useState([]);
+  const [factorsPagination, setFactorsPagination] = useState({ total: 0, page: 1, page_size: 50, total_pages: 0 });
   const [subcategories, setSubcategories] = useState([]);
   const [users, setUsers] = useState([]);
   const isInitialLoad = useRef(true);
+
+  const fetchFactors = useCallback(async (page = 1, search = "") => {
+    if (!isAdmin) return;
+    try {
+      const params = new URLSearchParams({ page, page_size: 50 });
+      if (search) params.append("search", search);
+      const res = await axios.get(`${API_URL}/api/admin/emission-factors-v2?${params}`);
+      const data = res.data;
+      setFactors(data.items || []);
+      setFactorsPagination({ total: data.total, page: data.page, page_size: data.page_size, total_pages: data.total_pages });
+    } catch (error) {
+      console.error('Failed to fetch factors:', error);
+    }
+  }, [isAdmin]);
 
   const fetchData = useCallback(async () => {
     if (!isAdmin) return;
@@ -21,12 +36,14 @@ export const useAdminData = (isAdmin) => {
     }  
     try {
       const [factorsRes, usersRes, subcatsRes] = await Promise.all([
-        axios.get(`${API_URL}/api/admin/emission-factors-v2`),
+        axios.get(`${API_URL}/api/admin/emission-factors-v2?page=1&page_size=50`),
         axios.get(`${API_URL}/api/admin/users`),
         axios.get(`${API_URL}/api/admin/subcategories`)
       ]);
       
-      setFactors(factorsRes.data || []);
+      const fData = factorsRes.data;
+      setFactors(fData.items || []);
+      setFactorsPagination({ total: fData.total, page: fData.page, page_size: fData.page_size, total_pages: fData.total_pages });
       setUsers(usersRes.data || []);
       setSubcategories(subcatsRes.data || []);
     } catch (error) {
@@ -44,6 +61,8 @@ export const useAdminData = (isAdmin) => {
   return {
     loading,
     factors,
+    factorsPagination,
+    fetchFactors,
     subcategories,
     users,
     refetch: fetchData

@@ -23,7 +23,7 @@ const Admin = () => {
   const [activeTab, setActiveTab] = useState('factors');
   
   // Use custom hook for data fetching
-  const { loading, factors, subcategories, users, refetch } = useAdminData(user?.role === 'admin');
+  const { loading, factors, factorsPagination, fetchFactors, subcategories, users, refetch } = useAdminData(user?.role === 'admin');
 
   // Access check
   if (user?.role !== 'admin') {
@@ -51,7 +51,7 @@ const Admin = () => {
       <AdminTabs 
         activeTab={activeTab} 
         setActiveTab={setActiveTab}
-        factorsCount={factors.length}
+        factorsCount={factorsPagination.total || factors.length}
         subcategoriesCount={subcategories.length}
         usersCount={users.length}
       />
@@ -68,6 +68,8 @@ const Admin = () => {
             <AdminFactorsTab 
               factors={factors} 
               subcategories={subcategories} 
+              pagination={factorsPagination}
+              onPageChange={fetchFactors}
               onRefetch={refetch} 
             />
           )}
