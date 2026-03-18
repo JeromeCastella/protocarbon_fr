@@ -7,7 +7,7 @@ import random
 import requests
 import os
 
-API_URL = os.environ.get('API_URL', 'https://ui-cohesion-carbon.preview.emergentagent.com')
+API_URL = os.environ.get('API_URL', 'https://carbon-footprint-19.preview.emergentagent.com')
 
 def main():
     # Login
