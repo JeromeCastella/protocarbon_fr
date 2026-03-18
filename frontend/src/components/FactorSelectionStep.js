@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Search, X, Info } from 'lucide-react';
+import { Search, X, Info, FlaskConical } from 'lucide-react';
 import FactorCard from './FactorCard';
 import { createFactorSearchIndex, searchFactors, sortFactorsByRelevance } from '../utils/factorSearch';
 
@@ -17,18 +17,33 @@ const FactorSelectionStep = ({
 }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchIndex, setSearchIndex] = useState(null);
+  const [showExpertFactors, setShowExpertFactors] = useState(false);
+
+  // Split factors into public and all
+  const publicFactors = useMemo(() => {
+    if (!factors) return [];
+    return factors.filter(f => f.is_public === true);
+  }, [factors]);
+
+  const expertCount = useMemo(() => {
+    if (!factors) return 0;
+    return factors.filter(f => f.is_public === false).length;
+  }, [factors]);
+
+  // Active factor list based on toggle
+  const activeFactors = showExpertFactors ? factors : publicFactors;
   
-  // Create search index when factors change
+  // Create search index when active factors change
   useEffect(() => {
-    if (factors && factors.length > 0) {
-      const index = createFactorSearchIndex(factors);
+    if (activeFactors && activeFactors.length > 0) {
+      const index = createFactorSearchIndex(activeFactors);
       setSearchIndex(index);
     }
-  }, [factors]);
+  }, [activeFactors]);
   
   // Filter and sort factors
   const displayFactors = useMemo(() => {
-    if (!factors || factors.length === 0) return [];
+    if (!activeFactors || activeFactors.length === 0) return [];
     
     // If searching, use fuzzy search
     if (searchQuery.trim().length >= 2 && searchIndex) {
@@ -37,13 +52,13 @@ const FactorSelectionStep = ({
     }
     
     // Otherwise, sort by relevance
-    return sortFactorsByRelevance(factors, language);
-  }, [factors, searchQuery, searchIndex, language]);
+    return sortFactorsByRelevance(activeFactors, language);
+  }, [activeFactors, searchQuery, searchIndex, language]);
   
   // Count enriched factors
   const enrichedCount = useMemo(() => {
-    return factors?.filter(f => f.name_simple_fr || f.name_simple_de).length || 0;
-  }, [factors]);
+    return activeFactors?.filter(f => f.name_simple_fr || f.name_simple_de).length || 0;
+  }, [activeFactors]);
 
   if (!factors || factors.length === 0) {
     return (
@@ -67,16 +82,40 @@ const FactorSelectionStep = ({
 
   return (
     <div className="flex flex-col h-full min-h-0">
-      {/* Header with count */}
+      {/* Header with count and expert toggle */}
       <div className="flex items-center justify-between flex-shrink-0">
         <label className={`block text-sm font-medium ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
           {language === 'fr' 
             ? '3. Sélectionner le facteur d\'émission' 
             : '3. Emissionsfaktor auswählen'}
         </label>
-        <span className={`text-xs ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>
-          {displayFactors.length} {language === 'fr' ? 'facteur(s)' : 'Faktor(en)'}
-        </span>
+        <div className="flex items-center gap-3">
+          <span className={`text-xs ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>
+            {displayFactors.length} {language === 'fr' ? 'facteur(s)' : 'Faktor(en)'}
+          </span>
+          {expertCount > 0 && (
+            <button
+              type="button"
+              onClick={() => setShowExpertFactors(!showExpertFactors)}
+              data-testid="toggle-expert-factors"
+              className={`flex items-center gap-1.5 text-xs px-2.5 py-1.5 rounded-lg border transition-all ${
+                showExpertFactors
+                  ? isDark
+                    ? 'bg-amber-500/20 border-amber-500/50 text-amber-300'
+                    : 'bg-amber-50 border-amber-300 text-amber-700'
+                  : isDark
+                    ? 'bg-slate-700 border-slate-600 text-slate-400 hover:border-slate-500'
+                    : 'bg-gray-50 border-gray-200 text-gray-500 hover:border-gray-300'
+              }`}
+            >
+              <FlaskConical className="w-3.5 h-3.5" />
+              {showExpertFactors 
+                ? (language === 'fr' ? 'Masquer experts' : 'Experten ausblenden')
+                : (language === 'fr' ? `+ ${expertCount} experts` : `+ ${expertCount} Experten`)
+              }
+            </button>
+          )}
+        </div>
       </div>
       
       {/* Search bar */}

@@ -102,7 +102,7 @@ async def get_emission_factors(
     if subcategory:
         query["subcategory"] = subcategory
     
-    factors = list(emission_factors_collection.find(query).limit(2000))
+    factors = list(emission_factors_collection.find(query).sort([("is_public", -1), ("popularity_score", -1)]).limit(2000))
     return [serialize_doc(f) for f in factors]
 
 
@@ -146,7 +146,7 @@ async def search_emission_factors(
                     {"category": category}
                 ]
     
-    factors = list(emission_factors_collection.find(query).limit(100))
+    factors = list(emission_factors_collection.find(query).sort([("is_public", -1), ("popularity_score", -1)]).limit(500))
     return [serialize_doc(f) for f in factors]
 
 
@@ -169,7 +169,7 @@ async def get_factors_by_category(
         ]
     }
     
-    factors = list(emission_factors_collection.find(query).limit(1000))
+    factors = list(emission_factors_collection.find(query).sort([("is_public", -1), ("popularity_score", -1)]).limit(1000))
     return [serialize_doc(f) for f in factors]
 
 

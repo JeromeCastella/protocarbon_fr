@@ -15,6 +15,8 @@ const FactorCard = ({
   const { isDark } = useTheme();
   const [showTooltip, setShowTooltip] = useState(false);
   
+  const isExpert = factor.is_public === false;
+  
   // Get display name (prefer simplified, fallback to technical)
   const name = language === 'fr' 
     ? (factor.name_simple_fr || factor.name_fr)
@@ -67,6 +69,15 @@ const FactorCard = ({
               }`}>
                 {name}
               </h4>
+              
+              {/* Expert badge */}
+              {isExpert && (
+                <span className={`flex-shrink-0 text-[10px] font-semibold px-1.5 py-0.5 rounded ${
+                  isDark ? 'bg-amber-500/20 text-amber-400' : 'bg-amber-100 text-amber-700'
+                }`} data-testid={`expert-badge-${factor.id}`}>
+                  Expert
+                </span>
+              )}
               
               {/* Info icon - visual indicator only */}
               {tooltipContent && (
