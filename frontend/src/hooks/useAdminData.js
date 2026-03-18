@@ -11,6 +11,7 @@ export const useAdminData = (isAdmin) => {
   const [factors, setFactors] = useState([]);
   const [factorsPagination, setFactorsPagination] = useState({ total: 0, page: 1, page_size: 50, total_pages: 0 });
   const [subcategories, setSubcategories] = useState([]);
+  const [unitConversions, setUnitConversions] = useState([]);
   const [users, setUsers] = useState([]);
   const isInitialLoad = useRef(true);
 
@@ -36,10 +37,11 @@ export const useAdminData = (isAdmin) => {
       setLoading(true);
     }  
     try {
-      const [factorsRes, usersRes, subcatsRes] = await Promise.all([
+      const [factorsRes, usersRes, subcatsRes, unitsRes] = await Promise.all([
         axios.get(`${API_URL}/api/admin/emission-factors-v2?page=1&page_size=50`),
         axios.get(`${API_URL}/api/admin/users`),
-        axios.get(`${API_URL}/api/admin/subcategories`)
+        axios.get(`${API_URL}/api/admin/subcategories`),
+        axios.get(`${API_URL}/api/admin/unit-conversions`)
       ]);
       
       const fData = factorsRes.data;
@@ -47,6 +49,7 @@ export const useAdminData = (isAdmin) => {
       setFactorsPagination({ total: fData.total, page: fData.page, page_size: fData.page_size, total_pages: fData.total_pages });
       setUsers(usersRes.data || []);
       setSubcategories(subcatsRes.data || []);
+      setUnitConversions(unitsRes.data || []);
     } catch (error) {
       console.error('Failed to fetch admin data:', error);
     } finally {
@@ -65,6 +68,7 @@ export const useAdminData = (isAdmin) => {
     factorsPagination,
     fetchFactors,
     subcategories,
+    unitConversions,
     users,
     refetch: fetchData
   };

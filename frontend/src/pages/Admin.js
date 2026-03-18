@@ -10,6 +10,7 @@ import {
   AdminTabs, 
   AdminFactorsTab, 
   AdminSubcategoriesTab, 
+  AdminUnitsTab,
   AdminUsersTab,
   AdminExportTab 
 } from '../components/admin';
@@ -23,7 +24,7 @@ const Admin = () => {
   const [activeTab, setActiveTab] = useState('factors');
   
   // Use custom hook for data fetching
-  const { loading, factors, factorsPagination, fetchFactors, subcategories, users, refetch } = useAdminData(user?.role === 'admin');
+  const { loading, factors, factorsPagination, fetchFactors, subcategories, unitConversions, users, refetch } = useAdminData(user?.role === 'admin');
 
   // Access check
   if (user?.role !== 'admin') {
@@ -53,6 +54,7 @@ const Admin = () => {
         setActiveTab={setActiveTab}
         factorsCount={factorsPagination.total || factors.length}
         subcategoriesCount={subcategories.length}
+        unitsCount={unitConversions.length}
         usersCount={users.length}
       />
 
@@ -78,6 +80,14 @@ const Admin = () => {
           {activeTab === 'subcategories' && (
             <AdminSubcategoriesTab 
               subcategories={subcategories} 
+              onRefetch={refetch} 
+            />
+          )}
+
+          {/* Units Tab */}
+          {activeTab === 'units' && (
+            <AdminUnitsTab 
+              unitConversions={unitConversions} 
               onRefetch={refetch} 
             />
           )}
