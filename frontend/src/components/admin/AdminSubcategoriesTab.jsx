@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useTheme } from '../../context/ThemeContext';
 import { useLanguage } from '../../context/LanguageContext';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, Plus, Edit2, Trash2, Layers, X, Check } from 'lucide-react';
+import { Search, Plus, Edit2, Trash2, Layers, X, Check, Database, FlaskConical } from 'lucide-react';
 import axios from 'axios';
 import { ALL_CATEGORIES } from '../../hooks/useAdminData';
 
@@ -24,13 +24,36 @@ const AdminSubcategoriesTab = ({ subcategories, onRefetch }) => {
   const [showModal, setShowModal] = useState(false);
   const [editing, setEditing] = useState(null);
   const [form, setForm] = useState(INITIAL_FORM);
+  const [sortField, setSortField] = useState('order');
+  const [sortDir, setSortDir] = useState('asc');
 
-  const filteredSubcats = subcategories.filter(s => {
-    const searchLower = search.toLowerCase();
-    return s.code?.toLowerCase().includes(searchLower) ||
-           s.name_fr?.toLowerCase().includes(searchLower) ||
-           s.name_de?.toLowerCase().includes(searchLower);
-  });
+  const filteredSubcats = subcategories
+    .filter(s => {
+      const q = search.toLowerCase();
+      return s.code?.toLowerCase().includes(q) ||
+             s.name_fr?.toLowerCase().includes(q) ||
+             s.name_de?.toLowerCase().includes(q);
+    })
+    .sort((a, b) => {
+      const aVal = a[sortField] ?? 0;
+      const bVal = b[sortField] ?? 0;
+      if (typeof aVal === 'string') return sortDir === 'asc' ? aVal.localeCompare(bVal) : bVal.localeCompare(aVal);
+      return sortDir === 'asc' ? aVal - bVal : bVal - aVal;
+    });
+
+  const handleSort = (field) => {
+    if (sortField === field) {
+      setSortDir(prev => prev === 'asc' ? 'desc' : 'asc');
+    } else {
+      setSortField(field);
+      setSortDir('asc');
+    }
+  };
+
+  const SortIndicator = ({ field }) => {
+    if (sortField !== field) return null;
+    return <span className="ml-1">{sortDir === 'asc' ? '\u2191' : '\u2193'}</span>;
+  };
 
   const handleEdit = (subcat) => {
     setEditing(subcat);
@@ -47,7 +70,6 @@ const AdminSubcategoriesTab = ({ subcategories, onRefetch }) => {
 
   const handleDelete = async (subcatId) => {
     if (!window.confirm(t('confirmations.delete'))) return;
-    
     try {
       await axios.delete(`${API_URL}/api/admin/subcategories/${subcatId}`);
       onRefetch();
@@ -64,7 +86,6 @@ const AdminSubcategoriesTab = ({ subcategories, onRefetch }) => {
       } else {
         await axios.post(`${API_URL}/api/admin/subcategories`, form);
       }
-      
       setShowModal(false);
       setEditing(null);
       setForm(INITIAL_FORM);
@@ -103,8 +124,53 @@ const AdminSubcategoriesTab = ({ subcategories, onRefetch }) => {
     scope3_aval: t('scope.scope3Aval')
   };
 
+  // Summary stats
+  const totalEFs = subcategories.reduce((sum, s) => sum + (s.ef_total || 0), 0);
+  const totalPublic = subcategories.reduce((sum, s) => sum + (s.ef_public || 0), 0);
+  const noPublicCount = subcategories.filter(s => (s.ef_total || 0) > 0 && (s.ef_public || 0) === 0).length;
+
   return (
     <div className="space-y-4">
+      {/* Summary cards */}
+      <div className="grid grid-cols-3 gap-3">
+        <div className={`p-3 rounded-xl border ${isDark ? 'bg-slate-800 border-slate-700' : 'bg-white border-gray-200'}`}>
+          <div className="flex items-center gap-2">
+            <Layers className={`w-4 h-4 ${isDark ? 'text-purple-400' : 'text-purple-500'}`} />
+            <span className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+              {language === 'fr' ? 'Sous-catégories' : 'Unterkategorien'}
+            </span>
+          </div>
+          <div className={`text-2xl font-bold mt-1 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+            {subcategories.length}
+          </div>
+        </div>
+        <div className={`p-3 rounded-xl border ${isDark ? 'bg-slate-800 border-slate-700' : 'bg-white border-gray-200'}`}>
+          <div className="flex items-center gap-2">
+            <Database className={`w-4 h-4 ${isDark ? 'text-blue-400' : 'text-blue-500'}`} />
+            <span className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+              {language === 'fr' ? 'Facteurs totaux' : 'Gesamtfaktoren'}
+            </span>
+          </div>
+          <div className={`text-2xl font-bold mt-1 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+            {totalEFs.toLocaleString()}
+            <span className={`text-sm font-normal ml-2 ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+              ({totalPublic} {language === 'fr' ? 'publics' : 'öffentlich'})
+            </span>
+          </div>
+        </div>
+        <div className={`p-3 rounded-xl border ${noPublicCount > 0 ? isDark ? 'bg-amber-500/10 border-amber-500/30' : 'bg-amber-50 border-amber-200' : isDark ? 'bg-slate-800 border-slate-700' : 'bg-white border-gray-200'}`}>
+          <div className="flex items-center gap-2">
+            <FlaskConical className={`w-4 h-4 ${noPublicCount > 0 ? 'text-amber-500' : isDark ? 'text-green-400' : 'text-green-500'}`} />
+            <span className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+              {language === 'fr' ? 'Sans facteur public' : 'Ohne öffentlichen Faktor'}
+            </span>
+          </div>
+          <div className={`text-2xl font-bold mt-1 ${noPublicCount > 0 ? 'text-amber-500' : isDark ? 'text-green-400' : 'text-green-600'}`}>
+            {noPublicCount}
+          </div>
+        </div>
+      </div>
+
       {/* Actions */}
       <div className="flex items-center gap-4 flex-wrap">
         <div className="relative flex-1 min-w-64">
@@ -133,64 +199,117 @@ const AdminSubcategoriesTab = ({ subcategories, onRefetch }) => {
         <table className="w-full">
           <thead>
             <tr className={isDark ? 'bg-slate-700' : 'bg-gray-50'}>
-              <th className="text-left px-4 py-3 font-medium">{t('common.code')}</th>
-              <th className="text-left px-4 py-3 font-medium">{t('admin.factors.nameFr')}</th>
-              <th className="text-left px-4 py-3 font-medium">{t('admin.factors.nameDe')}</th>
-              <th className="text-left px-4 py-3 font-medium">{t('admin.subcategories.linkedCategories')}</th>
-              <th className="text-left px-4 py-3 font-medium">{t('common.order')}</th>
+              <th className="text-left px-4 py-3 font-medium cursor-pointer select-none" onClick={() => handleSort('code')}>
+                {t('common.code')}<SortIndicator field="code" />
+              </th>
+              <th className="text-left px-4 py-3 font-medium cursor-pointer select-none" onClick={() => handleSort('name_fr')}>
+                {t('admin.factors.nameFr')}<SortIndicator field="name_fr" />
+              </th>
+              <th className="text-left px-4 py-3 font-medium">
+                {t('admin.subcategories.linkedCategories')}
+              </th>
+              <th className="text-left px-4 py-3 font-medium cursor-pointer select-none" onClick={() => handleSort('ef_total')}>
+                {language === 'fr' ? 'Facteurs' : 'Faktoren'}<SortIndicator field="ef_total" />
+              </th>
+              <th className="text-left px-4 py-3 font-medium cursor-pointer select-none" onClick={() => handleSort('order')}>
+                {t('common.order')}<SortIndicator field="order" />
+              </th>
               <th className="text-right px-4 py-3 font-medium">{t('common.actions')}</th>
             </tr>
           </thead>
           <tbody>
-            {filteredSubcats.map(subcat => (
-              <tr 
-                key={subcat.id} 
-                data-testid={`subcategory-row-${subcat.id}`}
-                className={`border-t ${isDark ? 'border-slate-700 hover:bg-slate-700/50' : 'border-gray-100 hover:bg-gray-50'}`}
-              >
-                <td className="px-4 py-3">
-                  <code className={`text-sm px-2 py-1 rounded ${isDark ? 'bg-slate-600' : 'bg-gray-100'}`}>
-                    {subcat.code}
-                  </code>
-                </td>
-                <td className="px-4 py-3 font-medium">{subcat.name_fr}</td>
-                <td className="px-4 py-3">{subcat.name_de}</td>
-                <td className="px-4 py-3">
-                  <div className="flex flex-wrap gap-1">
-                    {(subcat.categories || []).slice(0, 3).map(cat => (
-                      <span 
-                        key={cat} 
-                        className={`text-xs px-2 py-0.5 rounded ${isDark ? 'bg-purple-500/20 text-purple-400' : 'bg-purple-100 text-purple-600'}`}
-                      >
-                        {cat}
-                      </span>
-                    ))}
-                    {(subcat.categories || []).length > 3 && (
-                      <span className="text-xs text-gray-500">+{subcat.categories.length - 3}</span>
+            {filteredSubcats.map(subcat => {
+              const efTotal = subcat.ef_total || 0;
+              const efPublic = subcat.ef_public || 0;
+              const efExpert = efTotal - efPublic;
+              const hasNoPublic = efTotal > 0 && efPublic === 0;
+
+              return (
+                <tr 
+                  key={subcat.id} 
+                  data-testid={`subcategory-row-${subcat.id}`}
+                  className={`border-t ${isDark ? 'border-slate-700 hover:bg-slate-700/50' : 'border-gray-100 hover:bg-gray-50'}`}
+                >
+                  <td className="px-4 py-3">
+                    <code className={`text-sm px-2 py-1 rounded ${isDark ? 'bg-slate-600' : 'bg-gray-100'}`}>
+                      {subcat.code}
+                    </code>
+                  </td>
+                  <td className="px-4 py-3">
+                    <div className="font-medium">{language === 'fr' ? subcat.name_fr : (subcat.name_de || subcat.name_fr)}</div>
+                    {language === 'fr' && subcat.name_de && (
+                      <div className={`text-xs ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>{subcat.name_de}</div>
                     )}
-                  </div>
-                </td>
-                <td className="px-4 py-3">{subcat.order}</td>
-                <td className="px-4 py-3 text-right">
-                  <div className="flex items-center justify-end gap-2">
-                    <button 
-                      onClick={() => handleEdit(subcat)} 
-                      className={`p-2 rounded-lg ${isDark ? 'hover:bg-slate-600' : 'hover:bg-gray-100'}`}
-                    >
-                      <Edit2 className="w-4 h-4" />
-                    </button>
-                    <button 
-                      onClick={() => handleDelete(subcat.id)} 
-                      className="p-2 rounded-lg text-red-500 hover:bg-red-500/10"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            ))}
+                  </td>
+                  <td className="px-4 py-3">
+                    <div className="flex flex-wrap gap-1">
+                      {(subcat.categories || []).slice(0, 3).map(cat => (
+                        <span 
+                          key={cat} 
+                          className={`text-xs px-2 py-0.5 rounded ${isDark ? 'bg-purple-500/20 text-purple-400' : 'bg-purple-100 text-purple-600'}`}
+                        >
+                          {cat}
+                        </span>
+                      ))}
+                      {(subcat.categories || []).length > 3 && (
+                        <span className="text-xs text-gray-500">+{subcat.categories.length - 3}</span>
+                      )}
+                    </div>
+                  </td>
+                  <td className="px-4 py-3">
+                    {efTotal > 0 ? (
+                      <div className="flex items-center gap-2">
+                        <span className={`text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                          {efTotal}
+                        </span>
+                        <div className="flex items-center gap-1">
+                          <span className={`text-xs px-1.5 py-0.5 rounded ${isDark ? 'bg-blue-500/20 text-blue-400' : 'bg-blue-100 text-blue-600'}`}>
+                            {efPublic} pub.
+                          </span>
+                          {efExpert > 0 && (
+                            <span className={`text-xs px-1.5 py-0.5 rounded ${
+                              hasNoPublic
+                                ? isDark ? 'bg-amber-500/20 text-amber-400' : 'bg-amber-100 text-amber-600'
+                                : isDark ? 'bg-slate-600 text-slate-400' : 'bg-gray-100 text-gray-500'
+                            }`}>
+                              {efExpert} exp.
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    ) : (
+                      <span className={`text-xs ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>-</span>
+                    )}
+                  </td>
+                  <td className="px-4 py-3">{subcat.order}</td>
+                  <td className="px-4 py-3 text-right">
+                    <div className="flex items-center justify-end gap-1">
+                      <button 
+                        onClick={() => handleEdit(subcat)} 
+                        className={`p-2 rounded-lg ${isDark ? 'hover:bg-slate-600' : 'hover:bg-gray-100'}`}
+                        title={t('common.edit')}
+                      >
+                        <Edit2 className="w-4 h-4" />
+                      </button>
+                      <button 
+                        onClick={() => handleDelete(subcat.id)} 
+                        className="p-2 rounded-lg text-red-500 hover:bg-red-500/10"
+                        title={t('common.delete')}
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
+      </div>
+
+      {/* Count */}
+      <div className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+        {filteredSubcats.length} / {subcategories.length} {language === 'fr' ? 'sous-catégories' : 'Unterkategorien'}
       </div>
 
       {/* Modal */}
@@ -236,9 +355,10 @@ const AdminSubcategoriesTab = ({ subcategories, onRefetch }) => {
                     </label>
                     <input
                       type="text"
+                      data-testid="subcategory-code"
                       value={form.code}
                       onChange={(e) => setForm(prev => ({ ...prev, code: e.target.value.toLowerCase().replace(/\s/g, '_') }))}
-                      className={`w-full px-4 py-2 rounded-lg border ${isDark ? 'bg-slate-700 border-slate-600 text-white' : 'bg-white border-gray-200'}`}
+                      className={`w-full px-4 py-2 rounded-lg border ${isDark ? 'bg-slate-700 border-slate-600 text-white' : 'bg-white border-gray-200'} ${editing ? 'opacity-60' : ''}`}
                       placeholder="voitures"
                       disabled={!!editing}
                     />
@@ -249,6 +369,7 @@ const AdminSubcategoriesTab = ({ subcategories, onRefetch }) => {
                     </label>
                     <input
                       type="text"
+                      data-testid="subcategory-name-fr"
                       value={form.name_fr}
                       onChange={(e) => setForm(prev => ({ ...prev, name_fr: e.target.value }))}
                       className={`w-full px-4 py-2 rounded-lg border ${isDark ? 'bg-slate-700 border-slate-600 text-white' : 'bg-white border-gray-200'}`}
@@ -261,6 +382,7 @@ const AdminSubcategoriesTab = ({ subcategories, onRefetch }) => {
                     </label>
                     <input
                       type="text"
+                      data-testid="subcategory-name-de"
                       value={form.name_de}
                       onChange={(e) => setForm(prev => ({ ...prev, name_de: e.target.value }))}
                       className={`w-full px-4 py-2 rounded-lg border ${isDark ? 'bg-slate-700 border-slate-600 text-white' : 'bg-white border-gray-200'}`}
@@ -300,6 +422,9 @@ const AdminSubcategoriesTab = ({ subcategories, onRefetch }) => {
                 <div>
                   <label className={`block text-sm font-medium mb-3 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
                     {t('admin.subcategories.linkedCategories')}
+                    <span className={`ml-2 text-xs font-normal ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+                      ({form.categories.length} {language === 'fr' ? 'sélectionnée(s)' : 'ausgewählt'})
+                    </span>
                   </label>
                   <div className="space-y-4">
                     {Object.entries(categoriesByScope).map(([scope, cats]) => (
@@ -341,6 +466,7 @@ const AdminSubcategoriesTab = ({ subcategories, onRefetch }) => {
                     {t('common.cancel')}
                   </button>
                   <button
+                    data-testid="subcategory-save-btn"
                     onClick={handleSave}
                     disabled={!form.code || !form.name_fr || !form.name_de}
                     className="flex-1 px-4 py-3 bg-purple-500 text-white rounded-xl hover:bg-purple-600 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"

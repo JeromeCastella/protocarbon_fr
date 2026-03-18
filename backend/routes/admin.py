@@ -360,9 +360,30 @@ async def soft_delete_factor(
 
 @router.get("/subcategories")
 async def get_subcategories_admin(current_user: dict = Depends(require_admin)):
-    """Get all subcategories (admin)"""
+    """Get all subcategories with EF counts (admin)"""
     subcategories = list(subcategories_collection.find({}).sort("order", 1).limit(500))
-    return [serialize_doc(s) for s in subcategories]
+    
+    # Get EF counts per subcategory in one aggregation
+    pipeline = [
+        {"$match": {"deleted_at": None}},
+        {"$group": {
+            "_id": "$subcategory",
+            "ef_total": {"$sum": 1},
+            "ef_public": {"$sum": {"$cond": [{"$eq": ["$is_public", True]}, 1, 0]}}
+        }}
+    ]
+    ef_counts = {doc["_id"]: {"ef_total": doc["ef_total"], "ef_public": doc["ef_public"]} 
+                 for doc in emission_factors_collection.aggregate(pipeline)}
+    
+    result = []
+    for s in subcategories:
+        doc = serialize_doc(s)
+        counts = ef_counts.get(doc.get("code"), {"ef_total": 0, "ef_public": 0})
+        doc["ef_total"] = counts["ef_total"]
+        doc["ef_public"] = counts["ef_public"]
+        result.append(doc)
+    
+    return result
 
 
 @router.post("/subcategories")
