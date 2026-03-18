@@ -481,540 +481,432 @@ const GuidedEntryModal = ({
 
   if (!isOpen) return null;
 
-  return (
-    <AnimatePresence>
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4"
-        style={{ zIndex:60 }}
+  // Left panel: shows context and form when factor is selected
+  const renderLeftPanel = () => (
+    <div className={`w-full flex flex-col h-full border-r ${isDark ? 'border-slate-700' : 'border-gray-200'}`}>
+      {/* Header */}
+      <div className={`p-5 border-b ${isDark ? 'border-slate-700' : 'border-gray-200'}`}>
+        <div className="flex items-center justify-between">
+          <h3 className={`text-lg font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+            {editingActivity ? (language === 'fr' ? 'Modifier l\'entrée' : 'Eintrag bearbeiten') : (language === 'fr' ? 'Nouvelle saisie' : 'Neue Eingabe')}
+          </h3>
+          <button
+            onClick={onClose}
+            className={`p-2 rounded-lg lg:hidden ${isDark ? 'hover:bg-slate-700' : 'hover:bg-gray-100'}`}
+          >
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+        <div className="flex items-center gap-2 mt-2 flex-wrap">
+          <div className="w-3 h-3 rounded-full" style={{ backgroundColor: category?.color }}></div>
+          <span className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+            {language === 'fr' ? category?.name_fr : category?.name_de}
+          </span>
+        </div>
+      </div>
 
-      >
-        <motion.div
-          initial={{ scale: 0.95, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          exit={{ scale: 0.95, opacity: 0 }}
-          onClick={(e) => e.stopPropagation()}
-          className={`w-full max-w-3xl rounded-2xl ${isDark ? 'bg-slate-800' : 'bg-white'} shadow-2xl overflow-hidden flex flex-col transition-all duration-300 ${
-            step >= 3 ? 'h-[85vh]' : 'h-[75vh]'
-          }`}
-        >
-          {/* Header */}
-          <div className={`p-6 border-b ${isDark ? 'border-slate-700' : 'border-gray-200'}`}>
-            <div className="flex items-center justify-between">
-              <div>
-                <h3 className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                  {editingActivity ? (language === 'fr' ? 'Modifier l\'entrée' : 'Eintrag bearbeiten') : (language === 'fr' ? 'Nouvelle saisie' : 'Neue Eingabe')}
-                </h3>
-                <div className="flex items-center gap-2 mt-2 flex-wrap">
-                  <div className="w-3 h-3 rounded-full" style={{ backgroundColor: category?.color }}></div>
-                  <span className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-                    {language === 'fr' ? category?.name_fr : category?.name_de}
-                  </span>
-                  {selectedSubcategory && (
-                    <>
-                      <ChevronRight className="w-4 h-4 text-gray-400" />
-                      <span className={`text-sm font-medium ${isDark ? 'text-slate-300' : 'text-gray-600'}`}>
-                        {language === 'fr' ? selectedSubcategory.name_fr : selectedSubcategory.name_de}
-                      </span>
-                    </>
-                  )}
-                  {selectedUnit && (
-                    <>
-                      <ChevronRight className="w-4 h-4 text-gray-400" />
-                      <span className={`text-sm font-medium px-2 py-0.5 rounded ${isDark ? 'bg-slate-700 text-slate-300' : 'bg-gray-100 text-gray-600'}`}>
-                        {getUnitLabel(selectedUnit, language)}
-                      </span>
-                    </>
-                  )}
-                </div>
-              </div>
-              <button
-                onClick={onClose}
-                className={`p-2 rounded-lg ${isDark ? 'hover:bg-slate-700' : 'hover:bg-gray-100'}`}
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-            
-            {/* Indicateur d'étapes */}
-            <div className="flex items-center gap-2 mt-4">
-              {[1, 2, 3, 4].map(s => (
-                <div key={s} className="flex items-center">
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium transition-all ${
-                    step >= s 
-                      ? 'bg-blue-500 text-white' 
-                      : isDark ? 'bg-slate-700 text-slate-400' : 'bg-gray-200 text-gray-500'
-                  }`}>
-                    {step > s ? <Check className="w-4 h-4" /> : s}
-                  </div>
-                  {s < 4 && (
-                    <div className={`w-8 h-1 mx-1 rounded ${
-                      step > s ? 'bg-blue-500' : isDark ? 'bg-slate-700' : 'bg-gray-200'
-                    }`} />
-                  )}
-                </div>
-              ))}
-            </div>
+      {/* Scrollable content */}
+      <div className="flex-1 overflow-y-auto p-5 space-y-4">
+        {loading ? (
+          <div className="flex flex-col items-center justify-center h-48">
+            <Loader2 className="w-10 h-10 text-blue-500 animate-spin mb-4" />
+            <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+              {language === 'fr' ? 'Chargement...' : 'Laden...'}
+            </p>
           </div>
-
-          {/* Body - Scrollable */}
-          <div className="flex-1 overflow-y-auto p-6 flex flex-col min-h-0">
-            {loading ? (
-              <div className="flex flex-col items-center justify-center h-48">
-                <Loader2 className="w-10 h-10 text-blue-500 animate-spin mb-4" />
-                <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-                  {isEditMode 
-                    ? (language === 'fr' ? 'Chargement des données...' : 'Daten werden geladen...')
-                    : (language === 'fr' ? 'Chargement...' : 'Laden...')
-                  }
-                </p>
-              </div>
-            ) : (
-              <div className="space-y-6">
-                {/* Étape 1: Sous-catégories */}
-                {step >= 1 && subcategories.length > 0 && (
-                  <div>
-                    <label className={`block text-sm font-medium mb-3 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
-                      {language === 'fr' ? '1. Choisir une sous-catégorie' : '1. Unterkategorie wählen'}
-                    </label>
-                    {/* Affichage condensé si étape 3+ et sous-catégorie sélectionnée */}
-                    {step >= 3 && selectedSubcategory ? (
-                      <div className={`p-3 rounded-xl border flex items-center justify-between ${isDark ? 'bg-blue-500/20 border-blue-500/50' : 'bg-blue-50 border-blue-200'}`}>
-                        <span className={`font-medium ${isDark ? 'text-blue-300' : 'text-blue-700'}`}>
-                          ✓ {language === 'fr' ? selectedSubcategory.name_fr : selectedSubcategory.name_de}
-                        </span>
-                        {subcategories.length > 1 && (
-                          <button
-                            type="button"
-                            onClick={() => goBackToStep(1)}
-                            data-testid="change-subcategory-btn"
-                            className={`flex items-center gap-1 text-xs px-2 py-1 rounded-lg transition-colors ${
-                              isDark 
-                                ? 'text-blue-400 hover:bg-slate-600' 
-                                : 'text-blue-600 hover:bg-blue-100'
-                            }`}
-                          >
-                            <RotateCcw className="w-3 h-3" />
-                            {language === 'fr' ? 'Modifier' : 'Ändern'}
-                          </button>
-                        )}
-                      </div>
-                    ) : (
-                      <div className="grid grid-cols-2 gap-2">
-                        {subcategories.map(subcat => (
-                          <button
-                            key={subcat.code}
-                            type="button"
-                            onClick={() => handleSubcategorySelect(subcat)}
-                            data-testid={`subcat-${subcat.code}`}
-                            className={`p-4 rounded-xl text-left transition-all border ${
-                              selectedSubcategory?.code === subcat.code
-                                ? 'bg-blue-500 text-white border-blue-500'
-                                : isDark 
-                                  ? 'bg-slate-700 hover:bg-slate-600 text-white border-slate-600' 
-                                  : 'bg-white hover:bg-gray-50 text-gray-900 border-gray-200'
-                            }`}
-                          >
-                            <span className="font-medium">
-                              {language === 'fr' ? subcat.name_fr : subcat.name_de}
-                            </span>
-                          </button>
-                        ))}
-                      </div>
+        ) : (
+          <>
+            {/* Step 1: Subcategory */}
+            {subcategories.length > 0 && (
+              <div>
+                <label className={`block text-xs font-medium mb-2 uppercase tracking-wider ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>
+                  {language === 'fr' ? '1. Sous-catégorie' : '1. Unterkategorie'}
+                </label>
+                {selectedSubcategory && step >= 2 ? (
+                  <button
+                    type="button"
+                    onClick={() => subcategories.length > 1 && goBackToStep(1)}
+                    data-testid="change-subcategory-btn"
+                    className={`w-full p-3 rounded-xl border flex items-center justify-between group ${
+                      isDark ? 'bg-blue-500/10 border-blue-500/30 hover:bg-blue-500/20' : 'bg-blue-50 border-blue-200 hover:bg-blue-100'
+                    }`}
+                  >
+                    <span className={`font-medium text-sm ${isDark ? 'text-blue-300' : 'text-blue-700'}`}>
+                      {language === 'fr' ? selectedSubcategory.name_fr : selectedSubcategory.name_de}
+                    </span>
+                    {subcategories.length > 1 && (
+                      <RotateCcw className={`w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity ${isDark ? 'text-blue-400' : 'text-blue-600'}`} />
                     )}
+                  </button>
+                ) : (
+                  <div className="grid grid-cols-1 gap-1.5">
+                    {subcategories.map(subcat => (
+                      <button
+                        key={subcat.code}
+                        type="button"
+                        onClick={() => handleSubcategorySelect(subcat)}
+                        data-testid={`subcat-${subcat.code}`}
+                        className={`p-3 rounded-xl text-left text-sm transition-all border ${
+                          selectedSubcategory?.code === subcat.code
+                            ? 'bg-blue-500 text-white border-blue-500'
+                            : isDark 
+                              ? 'bg-slate-700 hover:bg-slate-600 text-white border-slate-600' 
+                              : 'bg-white hover:bg-gray-50 text-gray-900 border-gray-200'
+                        }`}
+                      >
+                        {language === 'fr' ? subcat.name_fr : subcat.name_de}
+                      </button>
+                    ))}
                   </div>
                 )}
+              </div>
+            )}
 
-                {/* Étape 2: Unité de saisie */}
-                {step >= 2 && availableUnits.length > 0 && (
+            {/* Step 2: Unit */}
+            {step >= 2 && availableUnits.length > 0 && (
+              <div>
+                <label className={`block text-xs font-medium mb-2 uppercase tracking-wider ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>
+                  {language === 'fr' ? '2. Unité' : '2. Einheit'}
+                </label>
+                {selectedUnit && step >= 3 ? (
+                  <button
+                    type="button"
+                    onClick={() => availableUnits.length > 1 && goBackToStep(2)}
+                    data-testid="change-unit-btn"
+                    className={`w-full p-3 rounded-xl border flex items-center justify-between group ${
+                      isDark ? 'bg-blue-500/10 border-blue-500/30 hover:bg-blue-500/20' : 'bg-blue-50 border-blue-200 hover:bg-blue-100'
+                    }`}
+                  >
+                    <span className={`font-medium text-sm ${isDark ? 'text-blue-300' : 'text-blue-700'}`}>
+                      {formatUnitWithCode(selectedUnit, language, true)}
+                    </span>
+                    {availableUnits.length > 1 && (
+                      <RotateCcw className={`w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity ${isDark ? 'text-blue-400' : 'text-blue-600'}`} />
+                    )}
+                  </button>
+                ) : (
                   <div>
-                    <label className={`block text-sm font-medium mb-3 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
-                      {language === 'fr' ? '2. Unité de saisie' : '2. Eingabeeinheit'}
-                    </label>
-                    {/* Affichage condensé si étape 3+ et unité sélectionnée */}
-                    {step >= 3 && selectedUnit ? (
-                      <div className={`p-3 rounded-xl border flex items-center justify-between ${isDark ? 'bg-blue-500/20 border-blue-500/50' : 'bg-blue-50 border-blue-200'}`}>
-                        <span className={`font-medium ${isDark ? 'text-blue-300' : 'text-blue-700'}`}>
-                          ✓ {formatUnitWithCode(selectedUnit, language, true)}
-                        </span>
-                        {availableUnits.length > 1 && (
-                          <button
-                            type="button"
-                            onClick={() => goBackToStep(2)}
-                            data-testid="change-unit-btn"
-                            className={`flex items-center gap-1 text-xs px-2 py-1 rounded-lg transition-colors ${
-                              isDark 
-                                ? 'text-blue-400 hover:bg-slate-600' 
-                                : 'text-blue-600 hover:bg-blue-100'
-                            }`}
-                          >
-                            <RotateCcw className="w-3 h-3" />
-                            {language === 'fr' ? 'Modifier' : 'Ändern'}
-                          </button>
-                        )}
-                      </div>
-                    ) : (
-                      <div>
-                        {/* Unités natives du facteur */}
-                        <div className="flex flex-wrap gap-2">
-                          {nativeUnits.map(unit => (
+                    <div className="flex flex-wrap gap-1.5">
+                      {nativeUnits.map(unit => (
+                        <button
+                          key={unit}
+                          type="button"
+                          onClick={() => handleUnitSelect(unit)}
+                          data-testid={`unit-${unit}`}
+                          className={`px-3 py-2 rounded-lg text-sm font-medium transition-all ${
+                            selectedUnit === unit
+                              ? 'bg-blue-500 text-white'
+                              : isDark 
+                                ? 'bg-slate-700 hover:bg-slate-600 text-white' 
+                                : 'bg-gray-100 hover:bg-gray-200 text-gray-900'
+                          }`}
+                        >
+                          {formatUnitWithCode(unit, language, true)}
+                        </button>
+                      ))}
+                    </div>
+                    {convertedUnits.length > 0 && (
+                      <div className="mt-2">
+                        <p className={`text-xs mb-1.5 ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>
+                          {language === 'fr' ? 'Conversion auto' : 'Auto. Konvertierung'}
+                        </p>
+                        <div className="flex flex-wrap gap-1.5">
+                          {convertedUnits.map(unit => (
                             <button
                               key={unit}
                               type="button"
                               onClick={() => handleUnitSelect(unit)}
                               data-testid={`unit-${unit}`}
-                              className={`px-4 py-2 rounded-lg font-medium transition-all ${
+                              className={`px-3 py-2 rounded-lg text-sm font-medium transition-all border border-dashed ${
                                 selectedUnit === unit
-                                  ? 'bg-blue-500 text-white'
+                                  ? 'bg-blue-500 text-white border-blue-500'
                                   : isDark 
-                                    ? 'bg-slate-700 hover:bg-slate-600 text-white' 
-                                    : 'bg-gray-100 hover:bg-gray-200 text-gray-900'
+                                    ? 'bg-slate-800 hover:bg-slate-700 text-slate-300 border-slate-600' 
+                                    : 'bg-white hover:bg-gray-50 text-gray-700 border-gray-300'
                               }`}
                             >
                               {formatUnitWithCode(unit, language, true)}
                             </button>
                           ))}
                         </div>
-                        {/* Unités convertibles (même dimension) */}
-                        {convertedUnits.length > 0 && (
-                          <div className="mt-3">
-                            <p className={`text-xs mb-2 ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>
-                              {language === 'fr' 
-                                ? 'Autres unités (conversion automatique)' 
-                                : 'Andere Einheiten (automatische Konvertierung)'}
-                            </p>
-                            <div className="flex flex-wrap gap-2">
-                              {convertedUnits.map(unit => (
-                                <button
-                                  key={unit}
-                                  type="button"
-                                  onClick={() => handleUnitSelect(unit)}
-                                  data-testid={`unit-${unit}`}
-                                  className={`px-4 py-2 rounded-lg font-medium transition-all border border-dashed ${
-                                    selectedUnit === unit
-                                      ? 'bg-blue-500 text-white border-blue-500'
-                                      : isDark 
-                                        ? 'bg-slate-800 hover:bg-slate-700 text-slate-300 border-slate-600' 
-                                        : 'bg-white hover:bg-gray-50 text-gray-700 border-gray-300'
-                                  }`}
-                                >
-                                  {formatUnitWithCode(unit, language, true)}
-                                </button>
-                              ))}
-                            </div>
-                          </div>
-                        )}
                       </div>
                     )}
                   </div>
-                )}
-
-                {/* Étape 3: Facteur d'émission - Nouveau composant amélioré */}
-                {step >= 3 && (
-                  <div className="flex-1 flex flex-col min-h-0">
-                    <FactorSelectionStep
-                      factors={filteredFactors}
-                      selectedFactor={selectedFactor}
-                      onSelectFactor={handleFactorSelect}
-                      selectedUnit={selectedUnit}
-                      language={language}
-                      isDark={isDark}
-                    />
-                  </div>
-                )}
-
-                {/* Étape 4: Quantité et résultat */}
-                {step >= 4 && selectedFactor && (
-                  <>
-                    {/* Résumé des sélections en mode édition */}
-                    {isEditMode && (
-                      <div className={`mb-4 p-4 rounded-xl ${isDark ? 'bg-slate-700/50 border border-slate-600' : 'bg-gray-50 border border-gray-200'}`}>
-                        <div className="flex items-center gap-2 mb-3">
-                          <Info className="w-4 h-4 text-blue-500" />
-                          <span className={`text-sm font-medium ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
-                            {language === 'fr' ? 'Éléments sélectionnés' : 'Ausgewählte Elemente'}
-                          </span>
-                        </div>
-                        <div className="space-y-2">
-                          {/* Sous-catégorie */}
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-2">
-                              <span className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-                                {language === 'fr' ? 'Sous-catégorie:' : 'Unterkategorie:'}
-                              </span>
-                              <span className={`text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                                {selectedSubcategory 
-                                  ? (language === 'fr' ? selectedSubcategory.name_fr : selectedSubcategory.name_de)
-                                  : '—'}
-                              </span>
-                            </div>
-                            {subcategories.length > 1 && (
-                              <button
-                                type="button"
-                                onClick={() => goBackToStep(1)}
-                                className={`flex items-center gap-1 text-xs px-2 py-1 rounded-lg transition-colors ${
-                                  isDark 
-                                    ? 'text-blue-400 hover:bg-slate-600' 
-                                    : 'text-blue-600 hover:bg-blue-50'
-                                }`}
-                              >
-                                <RotateCcw className="w-3 h-3" />
-                                {language === 'fr' ? 'Modifier' : 'Ändern'}
-                              </button>
-                            )}
-                          </div>
-                          {/* Unité */}
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-2">
-                              <span className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-                                {language === 'fr' ? 'Unité:' : 'Einheit:'}
-                              </span>
-                              <span className={`text-sm font-medium px-2 py-0.5 rounded ${isDark ? 'bg-slate-600 text-white' : 'bg-gray-200 text-gray-900'}`}>
-                                {getUnitLabel(selectedUnit, language) || '—'}
-                              </span>
-                            </div>
-                            {availableUnits.length > 1 && (
-                              <button
-                                type="button"
-                                onClick={() => goBackToStep(2)}
-                                className={`flex items-center gap-1 text-xs px-2 py-1 rounded-lg transition-colors ${
-                                  isDark 
-                                    ? 'text-blue-400 hover:bg-slate-600' 
-                                    : 'text-blue-600 hover:bg-blue-50'
-                                }`}
-                              >
-                                <RotateCcw className="w-3 h-3" />
-                                {language === 'fr' ? 'Modifier' : 'Ändern'}
-                              </button>
-                            )}
-                          </div>
-                          {/* Facteur */}
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-2 flex-1 min-w-0">
-                              <span className={`text-sm flex-shrink-0 ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-                                {language === 'fr' ? 'Facteur:' : 'Faktor:'}
-                              </span>
-                              <span className={`text-sm font-medium truncate ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                                {selectedFactor ? getFactorName(selectedFactor) : '—'}
-                              </span>
-                            </div>
-                            {filteredFactors.length > 1 && (
-                              <button
-                                type="button"
-                                onClick={() => goBackToStep(3)}
-                                className={`flex items-center gap-1 text-xs px-2 py-1 rounded-lg transition-colors flex-shrink-0 ${
-                                  isDark 
-                                    ? 'text-blue-400 hover:bg-slate-600' 
-                                    : 'text-blue-600 hover:bg-blue-50'
-                                }`}
-                              >
-                                <RotateCcw className="w-3 h-3" />
-                                {language === 'fr' ? 'Modifier' : 'Ändern'}
-                              </button>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                    )}
-
-                    <div className={`p-4 rounded-xl ${
-                      isDark 
-                        ? 'bg-gradient-to-r from-blue-500/20 to-green-500/20 border border-blue-500/30' 
-                        : 'bg-gradient-to-r from-blue-50 to-green-50 border border-blue-200'
-                    }`}>
-                      <label className={`block text-sm font-medium mb-3 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
-                        {isEditMode 
-                          ? (language === 'fr' ? 'Quantité' : 'Menge')
-                          : (language === 'fr' ? '4. Quantité' : '4. Menge')
-                        }
-                      </label>
-                      
-                      <div className="flex items-center gap-4">
-                        {/* Input quantité */}
-                        <div className="flex-1">
-                          <div className="relative">
-                            <input
-                              type="number"
-                              value={quantity || ''}
-                              onChange={(e) => setQuantity(e.target.value)}
-                              data-testid="quantity-input"
-                              required
-                              step="any"
-                              autoFocus
-                              className={`w-full px-4 py-3 pr-16 rounded-xl border transition-all focus:ring-2 focus:ring-blue-500 ${
-                                isDark 
-                                  ? 'bg-slate-700 border-slate-600 text-white' 
-                                  : 'bg-white border-gray-200 text-gray-900'
-                              }`}
-                              placeholder="0"
-                            />
-                            <span className={`absolute right-4 top-1/2 -translate-y-1/2 text-sm font-medium ${isDark ? 'text-blue-400' : 'text-blue-600'}`}>
-                              {getUnitLabel(selectedUnit || selectedFactor.default_unit || selectedFactor.input_units?.[0], language)}
-                            </span>
-                          </div>
-                        </div>
-
-                        <ChevronRight className={`w-6 h-6 ${isDark ? 'text-slate-500' : 'text-gray-400'}`} />
-
-                        {/* Résultat */}
-                        <div className="flex-1">
-                          <div className={`px-4 py-3 rounded-xl ${
-                            quantity 
-                              ? isDark ? 'bg-green-500/20 border border-green-500/30' : 'bg-green-100 border border-green-300'
-                              : isDark ? 'bg-slate-700 border border-slate-600' : 'bg-gray-100 border border-gray-200'
-                          }`}>
-                            <span className={`text-lg font-bold ${
-                              quantity 
-                                ? isDark ? 'text-green-400' : 'text-green-600'
-                                : isDark ? 'text-slate-500' : 'text-gray-400'
-                            }`}>
-                              {quantity 
-                                ? `${(totalEmissions / 1000).toFixed(4)} tCO₂e`
-                                : '— tCO₂e'
-                              }
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Indicateur de conversion d'unité */}
-                      {convertedQty && quantity && (
-                        <div className={`mt-3 px-3 py-2 rounded-lg flex items-center gap-2 ${
-                          isDark ? 'bg-blue-500/10 border border-blue-500/20' : 'bg-blue-50 border border-blue-100'
-                        }`} data-testid="conversion-indicator">
-                          <Info className={`w-4 h-4 flex-shrink-0 ${isDark ? 'text-blue-400' : 'text-blue-500'}`} />
-                          <span className={`text-sm ${isDark ? 'text-blue-300' : 'text-blue-700'}`}>
-                            {language === 'fr' ? 'Équivalent' : 'Entspricht'} : {convertedQty.value.toFixed(2)} {getUnitLabel(convertedQty.unit, language)}
-                          </span>
-                        </div>
-                      )}
-
-                      {/* Détail multi-impacts */}
-                      {quantity && emissions && emissions.length > 0 && (
-                        <div className={`mt-4 pt-4 border-t ${isDark ? 'border-slate-600' : 'border-gray-200'}`}>
-                          <div className="flex items-center justify-between mb-2">
-                            <div className="flex items-center gap-2">
-                              <Sparkles className="w-4 h-4 text-purple-500" />
-                              <span className={`text-sm font-medium ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
-                                {emissions.length > 1 
-                                  ? (language === 'fr' ? 'Répartition multi-impacts' : 'Mehrfach-Auswirkungen')
-                                  : (language === 'fr' ? 'Impact comptabilisé' : 'Berücksichtigte Auswirkung')
-                                }
-                              </span>
-                            </div>
-                            {hasFilteredImpacts && (
-                              <div className="flex items-center gap-1">
-                                <Info className="w-3 h-3 text-amber-500" />
-                                <span className={`text-xs ${isDark ? 'text-amber-400' : 'text-amber-600'}`}>
-                                  {language === 'fr' 
-                                    ? `Règle métier appliquée (${allImpacts.length - filteredImpacts.length} impact(s) exclu(s))` 
-                                    : `Geschäftsregel angewendet (${allImpacts.length - filteredImpacts.length} Auswirkung(en) ausgeschlossen)`
-                                  }
-                                </span>
-                              </div>
-                            )}
-                          </div>
-                          <div className={`grid ${emissions.length > 2 ? 'grid-cols-3' : emissions.length > 1 ? 'grid-cols-2' : 'grid-cols-1'} gap-2`}>
-                            {emissions.map((e, i) => {
-                              const scopeInfo = scopeColors[e.scope] || { bg: 'bg-gray-500', label: e.scope };
-                              return (
-                                <div 
-                                  key={i}
-                                  className={`p-3 rounded-lg ${isDark ? 'bg-slate-700' : 'bg-white'} border ${isDark ? 'border-slate-600' : 'border-gray-200'}`}
-                                >
-                                  <div className="flex items-center gap-2 mb-1">
-                                    <span className={`w-2 h-2 rounded-full ${scopeInfo.bg}`}></span>
-                                    <span className={`text-xs font-medium ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-                                      {scopeInfo.label}
-                                    </span>
-                                    {e.type && e.type !== 'direct' && (
-                                      <span className={`text-xs px-1.5 py-0.5 rounded ${isDark ? 'bg-slate-600 text-slate-300' : 'bg-gray-100 text-gray-600'}`}>
-                                        {e.type === 'upstream' ? (language === 'fr' ? 'amont' : 'Vorkette') : e.type}
-                                      </span>
-                                    )}
-                                  </div>
-                                  <p className={`text-lg font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                                    {(e.emissions / 1000).toFixed(4)} <span className="text-sm font-normal">tCO₂e</span>
-                                  </p>
-                                  <p className={`text-xs ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>
-                                    {e.value} {e.unit}
-                                  </p>
-                                </div>
-                              );
-                            })}
-                          </div>
-                          
-                          {/* Explication des règles métier */}
-                          {hasFilteredImpacts && (
-                            <div className={`mt-3 p-3 rounded-lg ${isDark ? 'bg-amber-500/10 border border-amber-500/20' : 'bg-amber-50 border border-amber-200'}`}>
-                              <p className={`text-xs ${isDark ? 'text-amber-300' : 'text-amber-700'}`}>
-                                {scope?.startsWith('scope3') && scope !== 'scope3_amont'
-                                  ? (language === 'fr' 
-                                      ? '📋 Saisie en Scope 3 : seuls les impacts Scope 3 sont comptabilisés (hors amont énergie).' 
-                                      : '📋 Scope 3 Eingabe: Nur Scope 3 Auswirkungen werden berücksichtigt (ohne Energievorkette).')
-                                  : (language === 'fr'
-                                      ? '📋 Saisie en Scope 1/2 : les impacts Scope 1, 2 et Scope 3.3 (amont énergie) sont comptabilisés.'
-                                      : '📋 Scope 1/2 Eingabe: Scope 1, 2 und Scope 3.3 (Energievorkette) Auswirkungen werden berücksichtigt.')
-                                }
-                              </p>
-                            </div>
-                          )}
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Commentaire */}
-                    <div>
-                      <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
-                        {language === 'fr' ? 'Commentaire (optionnel)' : 'Kommentar (optional)'}
-                      </label>
-                      <textarea
-                        value={comments}
-                        onChange={(e) => setComments(e.target.value)}
-                        rows={2}
-                        className={`w-full px-4 py-3 rounded-xl border transition-all focus:ring-2 focus:ring-blue-500 ${
-                          isDark 
-                            ? 'bg-slate-700 border-slate-600 text-white' 
-                            : 'bg-white border-gray-200 text-gray-900'
-                        }`}
-                        placeholder={language === 'fr' ? 'Notes, source des données...' : 'Notizen, Datenquelle...'}
-                      />
-                    </div>
-                  </>
                 )}
               </div>
             )}
+
+            {/* Selected factor recap */}
+            {selectedFactor && (
+              <div>
+                <label className={`block text-xs font-medium mb-2 uppercase tracking-wider ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>
+                  {language === 'fr' ? '3. Facteur sélectionné' : '3. Ausgewählter Faktor'}
+                </label>
+                <button
+                  type="button"
+                  onClick={() => goBackToStep(3)}
+                  className={`w-full p-3 rounded-xl border text-left group ${
+                    isDark ? 'bg-green-500/10 border-green-500/30 hover:bg-green-500/20' : 'bg-green-50 border-green-200 hover:bg-green-100'
+                  }`}
+                >
+                  <div className="flex items-start justify-between gap-2">
+                    <span className={`font-medium text-sm leading-tight ${isDark ? 'text-green-300' : 'text-green-700'}`}>
+                      {getFactorName(selectedFactor)}
+                    </span>
+                    <RotateCcw className={`w-3.5 h-3.5 flex-shrink-0 mt-0.5 opacity-0 group-hover:opacity-100 transition-opacity ${isDark ? 'text-green-400' : 'text-green-600'}`} />
+                  </div>
+                  {selectedFactor.is_public === false && (
+                    <span className={`inline-block mt-1 text-[10px] font-semibold px-1.5 py-0.5 rounded ${isDark ? 'bg-amber-500/20 text-amber-400' : 'bg-amber-100 text-amber-700'}`}>
+                      Expert
+                    </span>
+                  )}
+                </button>
+              </div>
+            )}
+
+            {/* Separator */}
+            {selectedFactor && (
+              <div className={`border-t ${isDark ? 'border-slate-700' : 'border-gray-200'}`} />
+            )}
+
+            {/* Step 4: Quantity — always visible when factor selected */}
+            {selectedFactor && (
+              <div>
+                <label className={`block text-xs font-medium mb-2 uppercase tracking-wider ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>
+                  {language === 'fr' ? '4. Quantité' : '4. Menge'}
+                </label>
+                <div className="relative">
+                  <input
+                    type="number"
+                    value={quantity || ''}
+                    onChange={(e) => setQuantity(e.target.value)}
+                    data-testid="quantity-input"
+                    required
+                    step="any"
+                    autoFocus={step >= 4}
+                    className={`w-full px-4 py-3 pr-16 rounded-xl border transition-all focus:ring-2 focus:ring-blue-500 ${
+                      isDark 
+                        ? 'bg-slate-700 border-slate-600 text-white' 
+                        : 'bg-white border-gray-200 text-gray-900'
+                    }`}
+                    placeholder="0"
+                  />
+                  <span className={`absolute right-4 top-1/2 -translate-y-1/2 text-sm font-medium ${isDark ? 'text-blue-400' : 'text-blue-600'}`}>
+                    {getUnitLabel(selectedUnit || selectedFactor.default_unit || selectedFactor.input_units?.[0], language)}
+                  </span>
+                </div>
+                
+                {/* Conversion indicator */}
+                {convertedQty && quantity && (
+                  <div className={`mt-2 px-3 py-1.5 rounded-lg flex items-center gap-2 ${
+                    isDark ? 'bg-blue-500/10 border border-blue-500/20' : 'bg-blue-50 border border-blue-100'
+                  }`} data-testid="conversion-indicator">
+                    <Info className={`w-3.5 h-3.5 flex-shrink-0 ${isDark ? 'text-blue-400' : 'text-blue-500'}`} />
+                    <span className={`text-xs ${isDark ? 'text-blue-300' : 'text-blue-700'}`}>
+                      = {convertedQty.value.toFixed(2)} {getUnitLabel(convertedQty.unit, language)}
+                    </span>
+                  </div>
+                )}
+
+                {/* Live emissions result */}
+                <div className={`mt-3 p-4 rounded-xl ${
+                  quantity 
+                    ? isDark ? 'bg-green-500/10 border border-green-500/30' : 'bg-green-50 border border-green-200'
+                    : isDark ? 'bg-slate-700/50 border border-slate-700' : 'bg-gray-50 border border-gray-200'
+                }`}>
+                  <span className={`text-2xl font-bold ${
+                    quantity 
+                      ? isDark ? 'text-green-400' : 'text-green-600'
+                      : isDark ? 'text-slate-600' : 'text-gray-300'
+                  }`}>
+                    {quantity 
+                      ? `${(totalEmissions / 1000).toFixed(4)}`
+                      : '—'
+                    }
+                  </span>
+                  <span className={`ml-2 text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>tCO₂e</span>
+                </div>
+
+                {/* Multi-impact detail */}
+                {quantity && emissions && emissions.length > 1 && (
+                  <div className="mt-2 space-y-1">
+                    {emissions.map((e, i) => {
+                      const scopeInfo = scopeColors[e.scope] || { bg: 'bg-gray-500', label: e.scope };
+                      return (
+                        <div key={i} className="flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <span className={`w-2 h-2 rounded-full ${scopeInfo.bg}`}></span>
+                            <span className={`text-xs ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>{scopeInfo.label}</span>
+                          </div>
+                          <span className={`text-xs font-medium ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
+                            {(e.emissions / 1000).toFixed(4)} tCO₂e
+                          </span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+
+                {/* Business rule notice */}
+                {quantity && hasFilteredImpacts && (
+                  <div className={`mt-2 p-2 rounded-lg text-xs ${isDark ? 'bg-amber-500/10 text-amber-400' : 'bg-amber-50 text-amber-700'}`}>
+                    {language === 'fr' 
+                      ? `Règle métier: ${allImpacts.length - filteredImpacts.length} impact(s) exclu(s)`
+                      : `Geschäftsregel: ${allImpacts.length - filteredImpacts.length} Auswirkung(en) ausgeschlossen`}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Comment */}
+            {selectedFactor && (
+              <div>
+                <label className={`block text-xs font-medium mb-2 uppercase tracking-wider ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>
+                  {language === 'fr' ? 'Commentaire' : 'Kommentar'}
+                </label>
+                <textarea
+                  value={comments}
+                  onChange={(e) => setComments(e.target.value)}
+                  rows={2}
+                  className={`w-full px-4 py-2 rounded-xl border text-sm transition-all focus:ring-2 focus:ring-blue-500 ${
+                    isDark 
+                      ? 'bg-slate-700 border-slate-600 text-white' 
+                      : 'bg-white border-gray-200 text-gray-900'
+                  }`}
+                  placeholder={language === 'fr' ? 'Notes, source...' : 'Notizen, Quelle...'}
+                />
+              </div>
+            )}
+          </>
+        )}
+      </div>
+
+      {/* Footer */}
+      <div className={`p-4 border-t ${isDark ? 'border-slate-700' : 'border-gray-200'}`}>
+        <div className="flex gap-3">
+          <button
+            type="button"
+            onClick={onClose}
+            className={`flex-1 px-4 py-3 rounded-xl border text-sm transition-all ${
+              isDark 
+                ? 'border-slate-600 hover:bg-slate-700 text-white' 
+                : 'border-gray-200 hover:bg-gray-50 text-gray-900'
+            }`}
+          >
+            {language === 'fr' ? 'Annuler' : 'Abbrechen'}
+          </button>
+          <button
+            onClick={handleSubmit}
+            disabled={!selectedFactor || !quantity}
+            data-testid="submit-entry-btn"
+            className="flex-1 px-4 py-3 bg-blue-500 text-white rounded-xl hover:bg-blue-600 text-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+          >
+            <Check className="w-5 h-5" />
+            {editingActivity 
+              ? (language === 'fr' ? 'Modifier' : 'Speichern')
+              : (language === 'fr' ? 'Enregistrer' : 'Speichern')
+            }
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+
+  // Right panel: factor selection (full height)
+  const renderRightPanel = () => (
+    <div className="w-full flex flex-col h-full">
+      {/* Right header */}
+      <div className={`p-5 border-b flex items-center justify-between ${isDark ? 'border-slate-700' : 'border-gray-200'}`}>
+        <div className="flex items-center gap-3">
+          {/* Step indicators */}
+          <div className="flex items-center gap-1.5">
+            {[1, 2, 3, 4].map(s => (
+              <div key={s} className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-medium transition-all ${
+                step >= s 
+                  ? 'bg-blue-500 text-white' 
+                  : isDark ? 'bg-slate-700 text-slate-500' : 'bg-gray-200 text-gray-400'
+              }`}>
+                {step > s ? <Check className="w-3.5 h-3.5" /> : s}
+              </div>
+            ))}
+          </div>
+          <span className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+            {step === 1 && (language === 'fr' ? 'Sous-catégorie' : 'Unterkategorie')}
+            {step === 2 && (language === 'fr' ? 'Unité' : 'Einheit')}
+            {step >= 3 && (language === 'fr' ? 'Facteur d\'émission' : 'Emissionsfaktor')}
+          </span>
+        </div>
+        <button
+          onClick={onClose}
+          className={`p-2 rounded-lg ${isDark ? 'hover:bg-slate-700' : 'hover:bg-gray-100'}`}
+        >
+          <X className="w-5 h-5" />
+        </button>
+      </div>
+
+      {/* Right content */}
+      <div className="flex-1 overflow-y-auto p-5 flex flex-col min-h-0">
+        {step < 3 ? (
+          /* Placeholder before step 3 */
+          <div className="flex flex-col items-center justify-center h-full text-center">
+            <div className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-4 ${isDark ? 'bg-slate-700' : 'bg-gray-100'}`}>
+              <Search className={`w-8 h-8 ${isDark ? 'text-slate-500' : 'text-gray-400'}`} />
+            </div>
+            <p className={`text-base font-medium ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
+              {step === 1 
+                ? (language === 'fr' ? 'Sélectionnez une sous-catégorie' : 'Wählen Sie eine Unterkategorie')
+                : (language === 'fr' ? 'Sélectionnez une unité' : 'Wählen Sie eine Einheit')
+              }
+            </p>
+            <p className={`text-sm mt-1 ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>
+              {language === 'fr' 
+                ? 'Les facteurs d\'émission s\'afficheront ici'
+                : 'Emissionsfaktoren werden hier angezeigt'}
+            </p>
+          </div>
+        ) : (
+          /* Step 3: Factor selection - full space */
+          <div className="flex-1 flex flex-col min-h-0">
+            <FactorSelectionStep
+              factors={filteredFactors}
+              selectedFactor={selectedFactor}
+              onSelectFactor={handleFactorSelect}
+              selectedUnit={selectedUnit}
+              language={language}
+              isDark={isDark}
+            />
+          </div>
+        )}
+      </div>
+    </div>
+  );
+
+  return (
+    <AnimatePresence>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="fixed inset-0 bg-black/30"
+        style={{ zIndex: 60 }}
+        onClick={onClose}
+      >
+        <motion.div
+          initial={{ x: '100%' }}
+          animate={{ x: 0 }}
+          exit={{ x: '100%' }}
+          transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+          onClick={(e) => e.stopPropagation()}
+          className={`absolute inset-y-0 right-0 w-[94%] max-w-[1600px] ${isDark ? 'bg-slate-800' : 'bg-white'} shadow-2xl flex flex-row`}
+        >
+          {/* Left column — context, form, submit */}
+          <div className="w-[32%] min-w-[320px] flex-shrink-0">
+            {renderLeftPanel()}
           </div>
 
-          {/* Footer */}
-          <div className={`p-6 border-t ${isDark ? 'border-slate-700' : 'border-gray-200'}`}>
-            <div className="flex gap-3">
-              <button
-                type="button"
-                onClick={onClose}
-                className={`flex-1 px-4 py-3 rounded-xl border transition-all ${
-                  isDark 
-                    ? 'border-slate-600 hover:bg-slate-700 text-white' 
-                    : 'border-gray-200 hover:bg-gray-50 text-gray-900'
-                }`}
-              >
-                {language === 'fr' ? 'Annuler' : 'Abbrechen'}
-              </button>
-              <button
-                onClick={handleSubmit}
-                disabled={!selectedFactor || !quantity}
-                data-testid="submit-entry-btn"
-                className="flex-1 px-4 py-3 bg-blue-500 text-white rounded-xl hover:bg-blue-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-              >
-                <Check className="w-5 h-5" />
-                {editingActivity 
-                  ? (language === 'fr' ? 'Modifier' : 'Speichern')
-                  : (language === 'fr' ? 'Enregistrer' : 'Speichern')
-                }
-              </button>
-            </div>
+          {/* Right column — factor selection */}
+          <div className="flex-1">
+            {renderRightPanel()}
           </div>
         </motion.div>
       </motion.div>
