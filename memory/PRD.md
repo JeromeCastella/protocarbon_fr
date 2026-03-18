@@ -50,6 +50,7 @@ Application de calcul d'empreinte carbone alignée sur le GHG Protocol, avec tab
 - [x] **SLIDE-OVER-MODAL** : GuidedEntryModal transformé en panneau slide-over plein écran (94% largeur) avec layout 2 colonnes : gauche (32%) récap/quantité/calcul live, droite (68%) facteurs pleine hauteur. Animation spring slide-in. Page data-entry visible derrière. (Mars 2026)
 - [x] **FIX-BAFU-FACTOR-LOOKUP** : Bug critique — les facteurs BAFU 2025 ont un 'id' custom différent de MongoDB '_id'. Création de find_emission_factor helper (fallback _id → id). Corrigé dans activities.py, products.py, reference_data.py, admin.py. (Mars 2026)
 - [x] **COMPACT-FACTOR-GRID** : Grille compacte de facteurs d'émission — remplacement de la liste verticale (3-4 items) par une grille CSS responsive 2-3 colonnes (~24 facteurs visibles), scroll vertical, compatible recherche/expert toggle/tooltip (Mars 2026)
+- [x] **VIEW-MODE-TOGGLE** : Toggle grille/tableau pour facteurs d'émission — vue tableau spreadsheet dense (Nom/Valeur/Unité/Source, ~20 lignes visibles) alternative à la grille de cartes, toggle icône LayoutGrid/Table2, sélection/recherche/expert compatible dans les deux modes (Mars 2026)
 - [ ] **FEAT-03** : Gestion multi-utilisateurs (rôles admin/editor/viewer, invitations)
 
 ### Sprint 4+
