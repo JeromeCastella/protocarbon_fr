@@ -21,7 +21,8 @@ import {
   Leaf,
   Calendar,
   Shield,
-  GraduationCap
+  GraduationCap,
+  Layers
 } from 'lucide-react';
 
 const Layout = () => {
@@ -41,6 +42,7 @@ const Layout = () => {
     { path: '/dashboard', icon: LayoutDashboard, label: t('nav.dashboard') },
     // Admin link - only shown if user is admin
     ...(user?.role === 'admin' ? [{ path: '/admin', icon: Shield, label: t('nav.admin') || 'Administration' }] : []),
+    ...(user?.role === 'admin' ? [{ path: '/curation', icon: Layers, label: language === 'fr' ? 'Curation' : 'Kuratierung' }] : []),
   ];
 
   // Support/Aide (séparé visuellement)

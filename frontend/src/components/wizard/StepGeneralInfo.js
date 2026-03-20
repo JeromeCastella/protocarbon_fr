@@ -46,9 +46,9 @@ export const StepGeneralInfo = ({ formData, setFormData, isDark }) => {
       </div>
       <div>
         <label className={s.labelMd}>Durée de vie estimée (années)</label>
-        <input type="number" min="0.1" step="0.1" value={formData.lifespan_years === 0 ? '' : formData.lifespan_years}
-          onChange={(e) => setFormData({ ...formData, lifespan_years: parseFloat(e.target.value) || 1 })}
-          className={s.inputLg} placeholder="1" data-testid="product-lifespan-input" />
+        <input type="number" min="1" max="30" step="1" value={formData.lifespan_years === 0 ? '' : formData.lifespan_years}
+          onChange={(e) => setFormData({ ...formData, lifespan_years: parseFloat(e.target.value) || 0 })}
+          className={s.inputLg} placeholder="0" data-testid="product-lifespan-input" />
       </div>
       {formData.product_type === 'semi_finished' && (
         <div className={`p-4 rounded-xl ${isDark ? 'bg-blue-500/20' : 'bg-blue-50'} flex items-start gap-3`}>

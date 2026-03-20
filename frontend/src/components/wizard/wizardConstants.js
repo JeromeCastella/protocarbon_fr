@@ -3,7 +3,7 @@ export const INITIAL_FORM = {
   description: '',
   product_type: 'finished',
   unit: 'unit',
-  lifespan_years: 1,
+  lifespan_years: 0,
   transformation: {
     electricity_kwh: 0,
     electricity_factor_id: '',

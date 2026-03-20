@@ -1,5 +1,6 @@
 import React, { useState, useEffect, createContext, useContext } from 'react';
 import axios from 'axios';
+import { useAuth } from './AuthContext';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL || '';
 
@@ -14,6 +15,7 @@ export const useFiscalYear = () => {
 };
 
 export const FiscalYearProvider = ({ children }) => {
+  const { token } = useAuth();
   const [fiscalYears, setFiscalYears] = useState([]);
   const [currentFiscalYear, setCurrentFiscalYear] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -34,51 +36,14 @@ export const FiscalYearProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    // Only fetch if we have an auth token
-    const token = localStorage.getItem('token');
     if (token) {
       fetchFiscalYears();
     } else {
+      setFiscalYears([]);
+      setCurrentFiscalYear(null);
       setLoading(false);
     }
-    
-    // Listen for storage changes (login/logout from other tabs)
-    const handleStorageChange = (e) => {
-      if (e.key === 'token') {
-        if (e.newValue) {
-          fetchFiscalYears();
-        } else {
-          setFiscalYears([]);
-          setCurrentFiscalYear(null);
-        }
-      }
-    };
-    
-    window.addEventListener('storage', handleStorageChange);
-    return () => window.removeEventListener('storage', handleStorageChange);
-  }, []);
-  
-  // Also refresh when axios auth header changes (after login)
-  useEffect(() => {
-    const checkAuth = () => {
-      const hasAuthHeader = !!axios.defaults.headers.common['Authorization'];
-      const token = localStorage.getItem('token');
-      if (hasAuthHeader && token && fiscalYears.length === 0 && !loading) {
-        fetchFiscalYears();
-      }
-    };
-    
-    // Check periodically for auth changes
-    const interval = setInterval(checkAuth, 1000);
-    
-    // Clean up after 10 seconds (should be logged in by then)
-    const timeout = setTimeout(() => clearInterval(interval), 10000);
-    
-    return () => {
-      clearInterval(interval);
-      clearTimeout(timeout);
-    };
-  }, [fiscalYears.length, loading]);
+  }, [token]);
 
   const selectFiscalYear = (fiscalYear) => {
     setCurrentFiscalYear(fiscalYear);

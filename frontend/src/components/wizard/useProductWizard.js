@@ -81,7 +81,7 @@ export const useProductWizard = (isOpen, editingProduct) => {
       description: product.description || '',
       product_type: product.product_type || 'finished',
       unit: product.unit || 'unit',
-      lifespan_years: product.lifespan_years || 1,
+      lifespan_years: product.lifespan_years || 0,
       transformation: product.transformation || { ...INITIAL_FORM.transformation },
       usage: product.usage || { ...INITIAL_FORM.usage },
       end_of_life: product.end_of_life || []
@@ -139,7 +139,7 @@ export const useProductWizard = (isOpen, editingProduct) => {
     const errors = [];
     if (stepNum === 1) {
       if (!formData.name.trim()) errors.push('Le nom du produit est obligatoire.');
-      if (formData.lifespan_years <= 0) errors.push('La durée de vie doit être > 0.');
+      if (formData.lifespan_years <= 0 || formData.lifespan_years > 30) errors.push('La durée de vie doit être entre 0.5 et 30 ans.');
     }
     if (stepNum === 3 && formData.usage.cycles_per_year <= 0) errors.push('Cycles/an doit être > 0.');
     if (stepNum === 4) {
