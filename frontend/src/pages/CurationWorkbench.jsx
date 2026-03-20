@@ -4,7 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import {
   Search, X, Filter, CheckSquare, Square, ChevronLeft, ChevronRight,
   BarChart3, Eye, EyeOff, Flag, CheckCircle2, CircleDot, Sparkles,
-  ArrowUpDown, ArrowUp, ArrowDown, Layers, Save, Loader2
+  ArrowUpDown, ArrowUp, ArrowDown, Layers, Save, Loader2, Code2, Copy, Check
 } from 'lucide-react';
 
 const API = process.env.REACT_APP_BACKEND_URL;
@@ -363,6 +363,8 @@ export default function CurationWorkbench() {
   const [bulkPreview, setBulkPreview] = useState(null);
   const [pendingBulkChanges, setPendingBulkChanges] = useState(null);
   const [showAISuggest, setShowAISuggest] = useState(false);
+  const [jsonModalFactor, setJsonModalFactor] = useState(null);
+  const [subcategoriesList, setSubcategoriesList] = useState([]);
 
   // Debounce search
   useEffect(() => {
@@ -404,6 +406,13 @@ export default function CurationWorkbench() {
 
   useEffect(() => { fetchStats(); }, [fetchStats]);
   useEffect(() => { fetchFactors(); }, [fetchFactors]);
+
+  // Extract subcategories list from stats for dropdown
+  useEffect(() => {
+    if (stats?.by_subcategory) {
+      setSubcategoriesList(stats.by_subcategory.map(sc => ({ code: sc.subcategory, name_fr: sc.name_fr })));
+    }
+  }, [stats]);
 
   // Inline edit
   const inlineEdit = async (factorId, field, value) => {
@@ -614,13 +623,14 @@ export default function CurationWorkbench() {
               <th className="py-2 px-2 cursor-pointer" onClick={() => toggleSort('curation_status')}>
                 <div className="flex items-center gap-1">Statut <SortIcon field="curation_status" /></div>
               </th>
+              <th className="py-2 px-1 w-8"></th>
             </tr>
           </thead>
           <tbody>
             {loadingFactors ? (
-              <tr><td colSpan={9} className="text-center py-12"><Loader2 className="w-6 h-6 animate-spin mx-auto text-blue-500" /></td></tr>
+              <tr><td colSpan={10} className="text-center py-12"><Loader2 className="w-6 h-6 animate-spin mx-auto text-blue-500" /></td></tr>
             ) : factors.length === 0 ? (
-              <tr><td colSpan={9} className={`text-center py-12 text-sm ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>Aucun facteur trouvé</td></tr>
+              <tr><td colSpan={10} className={`text-center py-12 text-sm ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>Aucun facteur trouvé</td></tr>
             ) : factors.map((f, rowIdx) => {
               const isSelected = selectedIds.includes(f.id);
               const nameChanged = f.name_simple_fr && f.name_simple_fr !== f.name_fr;
@@ -661,7 +671,18 @@ export default function CurationWorkbench() {
                     />
                   </td>
                   <td className={`py-1.5 px-2 text-[11px] ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-                    {f.subcategory}
+                    <select
+                      value={f.subcategory || ''}
+                      onChange={e => inlineEdit(f.id, 'subcategory', e.target.value)}
+                      data-testid={`subcat-select-${f.id}`}
+                      className={`w-full text-[11px] rounded border py-0.5 px-1 cursor-pointer ${
+                        isDark ? 'bg-slate-800 border-slate-700 text-slate-300' : 'bg-white border-gray-200 text-gray-600'
+                      }`}
+                    >
+                      {subcategoriesList.map(sc => (
+                        <option key={sc.code} value={sc.code}>{sc.name_fr}</option>
+                      ))}
+                    </select>
                   </td>
                   <td className="py-1.5 px-2 text-center">
                     <button onClick={() => inlineEdit(f.id, 'is_public', !f.is_public)}
@@ -684,6 +705,13 @@ export default function CurationWorkbench() {
                   </td>
                   <td className="py-1.5 px-2">
                     <StatusBadge status={f.curation_status} isDark={isDark} onCycle={s => inlineEdit(f.id, 'curation_status', s)} />
+                  </td>
+                  <td className="py-1.5 px-1">
+                    <button onClick={() => setJsonModalFactor(f)} title="Voir JSON complet"
+                      data-testid={`json-btn-${f.id}`}
+                      className={`p-1 rounded transition-colors ${isDark ? 'text-slate-600 hover:text-slate-300 hover:bg-slate-700' : 'text-gray-300 hover:text-gray-600 hover:bg-gray-100'}`}>
+                      <Code2 className="w-3.5 h-3.5" />
+                    </button>
                   </td>
                 </tr>
               );
@@ -731,6 +759,36 @@ export default function CurationWorkbench() {
       {showAISuggest && (
         <AISuggestModal factorIds={selectedIds.slice(0, 20)} isDark={isDark} token={token}
           onApply={handleAISuggestApply} onClose={() => setShowAISuggest(false)} />
+      )}
+
+      {/* JSON viewer modal */}
+      {jsonModalFactor && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm" onClick={() => setJsonModalFactor(null)}>
+          <div onClick={e => e.stopPropagation()} data-testid="json-modal"
+            className={`w-full max-w-3xl mx-4 rounded-2xl shadow-2xl max-h-[85vh] flex flex-col ${isDark ? 'bg-slate-800' : 'bg-white'}`}>
+            <div className={`p-4 border-b flex items-center gap-3 ${isDark ? 'border-slate-700' : 'border-gray-200'}`}>
+              <Code2 className="w-5 h-5 text-blue-500" />
+              <div className="flex-1 min-w-0">
+                <h3 className={`font-semibold text-sm truncate ${isDark ? 'text-white' : 'text-gray-900'}`}>{jsonModalFactor.name_fr}</h3>
+                <p className={`text-xs ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>ID: {jsonModalFactor.id}</p>
+              </div>
+              <button
+                onClick={() => { navigator.clipboard.writeText(JSON.stringify(jsonModalFactor, null, 2)); }}
+                title="Copier JSON"
+                className={`p-2 rounded-lg transition-colors ${isDark ? 'hover:bg-slate-700 text-slate-400' : 'hover:bg-gray-100 text-gray-500'}`}>
+                <Copy className="w-4 h-4" />
+              </button>
+              <button onClick={() => setJsonModalFactor(null)} className={`p-2 rounded-lg ${isDark ? 'hover:bg-slate-700' : 'hover:bg-gray-100'}`}>
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+            <div className="flex-1 overflow-auto p-4">
+              <pre className={`text-xs font-mono whitespace-pre-wrap leading-relaxed ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
+                {JSON.stringify(jsonModalFactor, null, 2)}
+              </pre>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
