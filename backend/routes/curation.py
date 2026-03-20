@@ -49,6 +49,7 @@ async def list_curation_factors(
     curation_status: str = "",
     is_public: str = "",
     has_simple_name: str = "",
+    default_unit: str = "",
     sort_by: str = "subcategory",
     sort_order: str = "asc",
     current_user: dict = Depends(require_admin),
@@ -65,6 +66,8 @@ async def list_curation_factors(
         ]
     if subcategory:
         query["subcategory"] = subcategory
+    if default_unit:
+        query["default_unit"] = default_unit
     if curation_status:
         if curation_status == "untreated":
             # Match factors with null or "untreated" curation_status
@@ -107,6 +110,14 @@ async def list_curation_factors(
         "total_pages": max(1, (total + page_size - 1) // page_size),
     }
 
+
+
+# ==================== DISTINCT UNITS ====================
+
+@router.get("/units")
+async def list_units(current_user: dict = Depends(require_admin)):
+    units = emission_factors_collection.distinct("default_unit", {"deleted_at": None})
+    return sorted([u for u in units if u])
 
 # ==================== INLINE EDIT (SINGLE FACTOR) ====================
 
@@ -390,10 +401,10 @@ Retourne un JSON array:
 
         response = await chat.send_message(UserMessage(text=prompt))
 
-        # Parse JSON from response
+        # Parse JSON from response (response is a string)
         import json
         import re
-        text = response.text
+        text = response
         # Extract JSON array from response
         match = re.search(r'\[.*\]', text, re.DOTALL)
         if match:

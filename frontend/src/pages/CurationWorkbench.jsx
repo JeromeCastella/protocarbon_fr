@@ -72,7 +72,7 @@ const StatsDashboard = ({ stats, isDark, onSubcategoryClick, activeSubcategory }
 };
 
 // ==================== BULK ACTIONS BAR ====================
-const BulkActionsBar = ({ selectedIds, isDark, onClearSelection, onBulkAction, loading }) => {
+const BulkActionsBar = ({ selectedIds, isDark, onClearSelection, onBulkAction, loading, subcategoriesList }) => {
   const [bulkField, setBulkField] = useState('');
   const [bulkValue, setBulkValue] = useState('');
 
@@ -132,10 +132,13 @@ const BulkActionsBar = ({ selectedIds, isDark, onClearSelection, onBulkAction, l
         />
       )}
       {bulkField === 'subcategory' && (
-        <input type="text" placeholder="Code sous-catégorie" value={bulkValue}
-          onChange={e => setBulkValue(e.target.value)}
-          className={`text-xs rounded-lg px-2 py-1.5 border w-40 ${isDark ? 'bg-slate-800 border-slate-600 text-white' : 'bg-white border-gray-300'}`}
-        />
+        <select value={bulkValue} onChange={e => setBulkValue(e.target.value)}
+          className={`text-xs rounded-lg px-2 py-1.5 border max-w-[200px] ${isDark ? 'bg-slate-800 border-slate-600 text-white' : 'bg-white border-gray-300'}`}>
+          <option value="">Choisir...</option>
+          {subcategoriesList.map(sc => (
+            <option key={sc.code} value={sc.code}>{sc.name_fr}</option>
+          ))}
+        </select>
       )}
 
       {bulkField && bulkValue && (
@@ -351,6 +354,8 @@ export default function CurationWorkbench() {
   const [subcategory, setSubcategory] = useState('');
   const [curationStatus, setCurationStatus] = useState('');
   const [isPublic, setIsPublic] = useState('');
+  const [defaultUnit, setDefaultUnit] = useState('');
+  const [unitsList, setUnitsList] = useState([]);
   const [sortBy, setSortBy] = useState('subcategory');
   const [sortOrder, setSortOrder] = useState('asc');
 
@@ -373,7 +378,7 @@ export default function CurationWorkbench() {
   }, [search]);
 
   // Reset page on filter change
-  useEffect(() => { setPage(1); }, [searchDebounced, subcategory, curationStatus, isPublic]);
+  useEffect(() => { setPage(1); }, [searchDebounced, subcategory, curationStatus, isPublic, defaultUnit]);
 
   // Fetch stats
   const fetchStats = useCallback(async () => {
@@ -392,6 +397,7 @@ export default function CurationWorkbench() {
       if (subcategory) params.set('subcategory', subcategory);
       if (curationStatus) params.set('curation_status', curationStatus);
       if (isPublic) params.set('is_public', isPublic);
+      if (defaultUnit) params.set('default_unit', defaultUnit);
 
       const res = await fetch(`${API}/api/curation/factors?${params}`, { headers: { Authorization: `Bearer ${token}` } });
       if (res.ok) {
@@ -402,7 +408,7 @@ export default function CurationWorkbench() {
       }
     } catch (e) { console.error(e); }
     setLoadingFactors(false);
-  }, [token, page, pageSize, searchDebounced, subcategory, curationStatus, isPublic, sortBy, sortOrder]);
+  }, [token, page, pageSize, searchDebounced, subcategory, curationStatus, isPublic, defaultUnit, sortBy, sortOrder]);
 
   useEffect(() => { fetchStats(); }, [fetchStats]);
   useEffect(() => { fetchFactors(); }, [fetchFactors]);
@@ -418,7 +424,14 @@ export default function CurationWorkbench() {
         }
       } catch (e) { console.error(e); }
     };
+    const fetchUnits = async () => {
+      try {
+        const res = await fetch(`${API}/api/curation/units`, { headers: { Authorization: `Bearer ${token}` } });
+        if (res.ok) setUnitsList(await res.json());
+      } catch (e) { console.error(e); }
+    };
     fetchAllSubcategories();
+    fetchUnits();
   }, [token]);
 
   // Inline edit
@@ -588,6 +601,15 @@ export default function CurationWorkbench() {
           <option value="false">Experts</option>
         </select>
 
+        <select value={defaultUnit} onChange={e => setDefaultUnit(e.target.value)}
+          data-testid="filter-unit"
+          className={`text-xs rounded-lg px-2 py-1.5 border ${isDark ? 'bg-slate-800 border-slate-600 text-white' : 'bg-white border-gray-300'}`}>
+          <option value="">Toutes unités</option>
+          {unitsList.map(u => (
+            <option key={u} value={u}>{u}</option>
+          ))}
+        </select>
+
         {selectedIds.length > 0 && (
           <button onClick={() => setShowAISuggest(true)} data-testid="ai-suggest-btn"
             className="px-3 py-1.5 bg-purple-500 text-white text-xs rounded-lg hover:bg-purple-600 flex items-center gap-1.5">
@@ -600,7 +622,7 @@ export default function CurationWorkbench() {
       <StatsDashboard stats={stats} isDark={isDark} onSubcategoryClick={setSubcategory} activeSubcategory={subcategory} />
 
       {/* Bulk actions bar */}
-      <BulkActionsBar selectedIds={selectedIds} isDark={isDark} onClearSelection={() => setSelectedIds([])} onBulkAction={handleBulkAction} loading={bulkLoading} />
+      <BulkActionsBar selectedIds={selectedIds} isDark={isDark} onClearSelection={() => setSelectedIds([])} onBulkAction={handleBulkAction} loading={bulkLoading} subcategoriesList={subcategoriesList} />
 
       {/* Table */}
       <div className="flex-1 overflow-auto">
