@@ -409,10 +409,17 @@ export default function CurationWorkbench() {
 
   // Extract subcategories list from stats for dropdown
   useEffect(() => {
-    if (stats?.by_subcategory) {
-      setSubcategoriesList(stats.by_subcategory.map(sc => ({ code: sc.subcategory, name_fr: sc.name_fr })));
-    }
-  }, [stats]);
+    const fetchAllSubcategories = async () => {
+      try {
+        const res = await fetch(`${API}/api/subcategories`, { headers: { Authorization: `Bearer ${token}` } });
+        if (res.ok) {
+          const data = await res.json();
+          setSubcategoriesList(data.map(sc => ({ code: sc.code, name_fr: sc.name_fr || sc.code })).sort((a, b) => a.name_fr.localeCompare(b.name_fr)));
+        }
+      } catch (e) { console.error(e); }
+    };
+    fetchAllSubcategories();
+  }, [token]);
 
   // Inline edit
   const inlineEdit = async (factorId, field, value) => {
