@@ -150,7 +150,7 @@ const BulkActionsBar = ({ selectedIds, isDark, onClearSelection, onBulkAction, l
 };
 
 // ==================== INLINE EDITABLE CELL ====================
-const EditableCell = ({ value, onSave, isDark, placeholder = '', className = '', type = 'text' }) => {
+const EditableCell = ({ value, onSave, isDark, placeholder = '', className = '', type = 'text', cellId = '', onNavigate }) => {
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState(value || '');
   const ref = useRef(null);
@@ -158,15 +158,20 @@ const EditableCell = ({ value, onSave, isDark, placeholder = '', className = '',
   useEffect(() => { setDraft(value || ''); }, [value]);
   useEffect(() => { if (editing && ref.current) ref.current.focus(); }, [editing]);
 
-  const commit = () => {
+  // Allow parent to trigger editing via cellId
+  const startEditing = useCallback(() => setEditing(true), []);
+
+  const commit = (navigateDir) => {
     setEditing(false);
     if (draft !== (value || '')) onSave(type === 'number' ? Number(draft) : draft);
+    if (navigateDir && onNavigate) onNavigate(cellId, navigateDir);
   };
 
   if (!editing) {
     return (
       <div
         onClick={() => setEditing(true)}
+        data-cell-id={cellId}
         title="Cliquer pour éditer"
         className={`cursor-text min-h-[24px] ${!value ? `italic ${isDark ? 'text-slate-600' : 'text-gray-300'}` : ''} ${className}`}
       >
@@ -180,9 +185,23 @@ const EditableCell = ({ value, onSave, isDark, placeholder = '', className = '',
       ref={ref}
       type={type}
       value={draft}
+      data-cell-id={cellId}
       onChange={e => setDraft(e.target.value)}
-      onBlur={commit}
-      onKeyDown={e => { if (e.key === 'Enter') commit(); if (e.key === 'Escape') { setDraft(value || ''); setEditing(false); } }}
+      onBlur={() => commit(null)}
+      onKeyDown={e => {
+        if (e.key === 'Tab') {
+          e.preventDefault();
+          commit(e.shiftKey ? 'prev' : 'next');
+        } else if (e.key === 'Enter' && e.shiftKey) {
+          e.preventDefault();
+          commit('mark-reviewed');
+        } else if (e.key === 'Enter') {
+          commit('down');
+        } else if (e.key === 'Escape') {
+          setDraft(value || '');
+          setEditing(false);
+        }
+      }}
       className={`w-full bg-transparent border-b-2 border-blue-500 outline-none text-xs py-0.5 ${isDark ? 'text-white' : 'text-gray-900'}`}
     />
   );
@@ -448,6 +467,43 @@ export default function CurationWorkbench() {
     fetchStats();
   };
 
+  // Cell navigation: cellId format = "row-{idx}-col-{colIdx}" where col 0=FR, 1=DE
+  const handleCellNavigate = useCallback((cellId, direction) => {
+    const match = cellId.match(/row-(\d+)-col-(\d+)/);
+    if (!match) return;
+    let rowIdx = parseInt(match[1]);
+    let colIdx = parseInt(match[2]);
+
+    if (direction === 'next' || direction === 'down') {
+      // Tab: next cell (FR→DE→next row FR) / Enter: same col next row
+      if (direction === 'next') {
+        colIdx++;
+        if (colIdx > 1) { colIdx = 0; rowIdx++; }
+      } else {
+        rowIdx++;
+      }
+    } else if (direction === 'prev') {
+      colIdx--;
+      if (colIdx < 0) { colIdx = 1; rowIdx--; }
+    } else if (direction === 'mark-reviewed') {
+      // Mark current row as reviewed then move to next row FR
+      if (factors[rowIdx]) {
+        inlineEdit(factors[rowIdx].id, 'curation_status', 'reviewed');
+      }
+      rowIdx++;
+      colIdx = 0;
+    }
+
+    // Focus the target cell
+    if (rowIdx >= 0 && rowIdx < factors.length) {
+      const targetId = `row-${rowIdx}-col-${colIdx}`;
+      setTimeout(() => {
+        const el = document.querySelector(`[data-cell-id="${targetId}"]`);
+        if (el) el.click();
+      }, 50);
+    }
+  }, [factors, inlineEdit]);
+
   // Sort toggle
   const toggleSort = (field) => {
     if (sortBy === field) {
@@ -565,7 +621,7 @@ export default function CurationWorkbench() {
               <tr><td colSpan={9} className="text-center py-12"><Loader2 className="w-6 h-6 animate-spin mx-auto text-blue-500" /></td></tr>
             ) : factors.length === 0 ? (
               <tr><td colSpan={9} className={`text-center py-12 text-sm ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>Aucun facteur trouvé</td></tr>
-            ) : factors.map(f => {
+            ) : factors.map((f, rowIdx) => {
               const isSelected = selectedIds.includes(f.id);
               const nameChanged = f.name_simple_fr && f.name_simple_fr !== f.name_fr;
               const impact = f.impacts?.[0];
@@ -590,6 +646,8 @@ export default function CurationWorkbench() {
                       placeholder="—"
                       isDark={isDark}
                       onSave={v => inlineEdit(f.id, 'name_simple_fr', v)}
+                      cellId={`row-${rowIdx}-col-0`}
+                      onNavigate={handleCellNavigate}
                     />
                   </td>
                   <td className="py-1.5 px-2 text-xs max-w-[200px]">
@@ -598,6 +656,8 @@ export default function CurationWorkbench() {
                       placeholder="—"
                       isDark={isDark}
                       onSave={v => inlineEdit(f.id, 'name_simple_de', v)}
+                      cellId={`row-${rowIdx}-col-1`}
+                      onNavigate={handleCellNavigate}
                     />
                   </td>
                   <td className={`py-1.5 px-2 text-[11px] ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
@@ -632,11 +692,19 @@ export default function CurationWorkbench() {
         </table>
       </div>
 
-      {/* Pagination */}
+      {/* Pagination + keyboard hints */}
       <div className={`px-4 py-2 border-t flex items-center justify-between flex-shrink-0 ${isDark ? 'border-slate-700' : 'border-gray-200'}`}>
-        <span className={`text-xs ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>
-          Page {page}/{totalPages} — {total} facteur(s)
-        </span>
+        <div className="flex items-center gap-4">
+          <span className={`text-xs ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>
+            Page {page}/{totalPages} — {total} facteur(s)
+          </span>
+          <div className={`flex items-center gap-3 text-[10px] ${isDark ? 'text-slate-600' : 'text-gray-300'}`} data-testid="keyboard-hints">
+            <span><kbd className={`px-1 py-0.5 rounded text-[9px] font-mono ${isDark ? 'bg-slate-700 text-slate-400' : 'bg-gray-100 text-gray-500'}`}>Tab</kbd> cellule suivante</span>
+            <span><kbd className={`px-1 py-0.5 rounded text-[9px] font-mono ${isDark ? 'bg-slate-700 text-slate-400' : 'bg-gray-100 text-gray-500'}`}>Enter</kbd> ligne suivante</span>
+            <span><kbd className={`px-1 py-0.5 rounded text-[9px] font-mono ${isDark ? 'bg-slate-700 text-slate-400' : 'bg-gray-100 text-gray-500'}`}>Shift+Enter</kbd> traité + suivant</span>
+            <span><kbd className={`px-1 py-0.5 rounded text-[9px] font-mono ${isDark ? 'bg-slate-700 text-slate-400' : 'bg-gray-100 text-gray-500'}`}>Esc</kbd> annuler</span>
+          </div>
+        </div>
         <div className="flex items-center gap-2">
           <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page <= 1}
             data-testid="page-prev"
