@@ -648,6 +648,7 @@ export default function CurationWorkbench() {
               <th className="py-2 px-2 cursor-pointer text-center" onClick={() => toggleSort('popularity_score')}>
                 <div className="flex items-center gap-1 justify-center">Pop. <SortIcon field="popularity_score" /></div>
               </th>
+              <th className="py-2 px-2">Unité</th>
               <th className="py-2 px-2">Valeur</th>
               <th className="py-2 px-2 cursor-pointer" onClick={() => toggleSort('curation_status')}>
                 <div className="flex items-center gap-1">Statut <SortIcon field="curation_status" /></div>
@@ -657,9 +658,9 @@ export default function CurationWorkbench() {
           </thead>
           <tbody>
             {loadingFactors ? (
-              <tr><td colSpan={10} className="text-center py-12"><Loader2 className="w-6 h-6 animate-spin mx-auto text-blue-500" /></td></tr>
+              <tr><td colSpan={11} className="text-center py-12"><Loader2 className="w-6 h-6 animate-spin mx-auto text-blue-500" /></td></tr>
             ) : factors.length === 0 ? (
-              <tr><td colSpan={10} className={`text-center py-12 text-sm ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>Aucun facteur trouvé</td></tr>
+              <tr><td colSpan={11} className={`text-center py-12 text-sm ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>Aucun facteur trouvé</td></tr>
             ) : factors.map((f, rowIdx) => {
               const isSelected = selectedIds.includes(f.id);
               const nameChanged = f.name_simple_fr && f.name_simple_fr !== f.name_fr;
@@ -728,6 +729,20 @@ export default function CurationWorkbench() {
                       onSave={v => inlineEdit(f.id, 'popularity_score', v)}
                       className="text-center w-10 mx-auto"
                     />
+                  </td>
+                  <td className={`py-1.5 px-2 text-[11px] ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+                    <select
+                      value={f.default_unit || ''}
+                      onChange={e => inlineEdit(f.id, 'default_unit', e.target.value)}
+                      data-testid={`unit-select-${f.id}`}
+                      className={`w-full text-[11px] rounded border py-0.5 px-1 cursor-pointer ${
+                        isDark ? 'bg-slate-800 border-slate-700 text-slate-300' : 'bg-white border-gray-200 text-gray-600'
+                      }`}
+                    >
+                      {unitsList.map(u => (
+                        <option key={u} value={u}>{u}</option>
+                      ))}
+                    </select>
                   </td>
                   <td className={`py-1.5 px-2 font-mono text-[11px] whitespace-nowrap ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>
                     {impact ? `${impact.value < 0.001 ? impact.value.toExponential(2) : impact.value.toFixed(4)} ${impact.unit}` : '—'}

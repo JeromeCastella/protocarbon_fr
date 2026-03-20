@@ -24,6 +24,7 @@ class InlineEditPayload(BaseModel):
     is_public: Optional[bool] = None
     popularity_score: Optional[int] = None
     curation_status: Optional[str] = None
+    default_unit: Optional[str] = None
 
 class BulkPayload(BaseModel):
     factor_ids: List[str]
