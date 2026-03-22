@@ -157,18 +157,44 @@ const EditableCell = ({ value, onSave, isDark, placeholder = '', className = '',
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState(value || '');
   const ref = useRef(null);
+  const committedRef = useRef(false);
+  const lastSavedRef = useRef(null);
 
-  useEffect(() => { setDraft(value || ''); }, [value]);
-  useEffect(() => { if (editing && ref.current) ref.current.focus(); }, [editing]);
+  // Sync draft from value ONLY when not editing (prevents overwrite during typing)
+  useEffect(() => {
+    if (!editing) {
+      setDraft(value || '');
+    }
+  }, [value, editing]);
 
-  // Allow parent to trigger editing via cellId
-  const startEditing = useCallback(() => setEditing(true), []);
+  // Clear optimistic display when API responds (value changes)
+  useEffect(() => {
+    lastSavedRef.current = null;
+  }, [value]);
+
+  useEffect(() => {
+    if (editing && ref.current) {
+      ref.current.focus();
+      ref.current.select();
+      committedRef.current = false;
+    }
+  }, [editing]);
 
   const commit = (navigateDir) => {
+    if (committedRef.current) return;
+    committedRef.current = true;
+    const currentDraft = draft;
     setEditing(false);
-    if (draft !== (value || '')) onSave(type === 'number' ? Number(draft) : draft);
+    if (currentDraft !== (value || '')) {
+      const saveValue = type === 'number' ? Number(currentDraft) : currentDraft;
+      lastSavedRef.current = String(saveValue);
+      onSave(saveValue);
+    }
     if (navigateDir && onNavigate) onNavigate(cellId, navigateDir);
   };
+
+  // Show optimistic value while API hasn't responded yet
+  const displayValue = lastSavedRef.current !== null ? lastSavedRef.current : value;
 
   if (!editing) {
     return (
@@ -176,9 +202,9 @@ const EditableCell = ({ value, onSave, isDark, placeholder = '', className = '',
         onClick={() => setEditing(true)}
         data-cell-id={cellId}
         title="Cliquer pour éditer"
-        className={`cursor-text min-h-[24px] ${!value ? `italic ${isDark ? 'text-slate-600' : 'text-gray-300'}` : ''} ${className}`}
+        className={`cursor-text min-h-[24px] ${!displayValue ? `italic ${isDark ? 'text-slate-600' : 'text-gray-300'}` : ''} ${className}`}
       >
-        {value || placeholder}
+        {displayValue || placeholder}
       </div>
     );
   }
@@ -202,6 +228,7 @@ const EditableCell = ({ value, onSave, isDark, placeholder = '', className = '',
           commit('down');
         } else if (e.key === 'Escape') {
           setDraft(value || '');
+          committedRef.current = true;
           setEditing(false);
         }
       }}
