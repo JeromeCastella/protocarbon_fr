@@ -551,6 +551,9 @@ Retourne un JSON array:
         return {"translations": result, "skipped": skipped, "target_field": target_field}
 
     except Exception as e:
+        import traceback
+        print(f"[TRANSLATE ERROR] direction={payload.direction}, factors={len(payload.factor_ids)}: {str(e)}")
+        traceback.print_exc()
         raise HTTPException(500, f"Erreur de traduction IA: {str(e)}")
 
 

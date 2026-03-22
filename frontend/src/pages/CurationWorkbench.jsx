@@ -407,7 +407,10 @@ const TranslatePreviewModal = ({ factorIds, direction, isDark, token, onApply, o
           headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
           body: JSON.stringify({ factor_ids: factorIds, direction }),
         });
-        if (!res.ok) throw new Error('Erreur de traduction');
+        if (!res.ok) {
+          const errData = await res.json().catch(() => ({}));
+          throw new Error(errData.detail || `Erreur de traduction (${res.status})`);
+        }
         const data = await res.json();
         setTranslations(data.translations || []);
         setTargetField(data.target_field || '');
