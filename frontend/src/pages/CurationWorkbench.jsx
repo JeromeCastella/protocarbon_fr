@@ -176,6 +176,21 @@ const BulkActionsBar = ({ selectedIds, isDark, onClearSelection, onBulkAction, l
         <CopyPlus className="w-3 h-3" /> Source → DE
       </button>
 
+      {/* Separator */}
+      <div className={`mx-1 h-6 w-px ${isDark ? 'bg-slate-600' : 'bg-gray-300'}`} />
+
+      {/* Translate source_product_name */}
+      <button onClick={() => onTranslate('source_to_fr')} disabled={loading}
+        className={`px-3 py-1.5 text-xs rounded-lg flex items-center gap-1.5 ${isDark ? 'bg-orange-500/10 text-orange-400 hover:bg-orange-500/20' : 'bg-orange-50 text-orange-700 hover:bg-orange-100'}`}
+        data-testid="translate-source-fr-btn" title="Traduire source_product_name → français simplifié (IA)">
+        <Languages className="w-3 h-3" /> Source+Trad → FR
+      </button>
+      <button onClick={() => onTranslate('source_to_de')} disabled={loading}
+        className={`px-3 py-1.5 text-xs rounded-lg flex items-center gap-1.5 ${isDark ? 'bg-orange-500/10 text-orange-400 hover:bg-orange-500/20' : 'bg-orange-50 text-orange-700 hover:bg-orange-100'}`}
+        data-testid="translate-source-de-btn" title="Traduire source_product_name → allemand simplifié (IA)">
+        <Languages className="w-3 h-3" /> Source+Trad → DE
+      </button>
+
       {/* Translate */}
       <button onClick={() => onTranslate('fr_to_de')} disabled={loading}
         className={`px-3 py-1.5 text-xs rounded-lg flex items-center gap-1.5 ${isDark ? 'bg-sky-500/10 text-sky-400 hover:bg-sky-500/20' : 'bg-sky-50 text-sky-700 hover:bg-sky-100'}`}
@@ -376,7 +391,13 @@ const TranslatePreviewModal = ({ factorIds, direction, isDark, token, onApply, o
   const [targetField, setTargetField] = useState('');
   const [skipped, setSkipped] = useState(0);
 
-  const dirLabel = direction === 'fr_to_de' ? 'FR → DE' : 'DE → FR';
+  const dirLabels = {
+    'fr_to_de': 'FR → DE',
+    'de_to_fr': 'DE → FR',
+    'source_to_fr': 'Source → FR (traduit)',
+    'source_to_de': 'Source → DE (traduit)',
+  };
+  const dirLabel = dirLabels[direction] || direction;
 
   useEffect(() => {
     const fetchTranslations = async () => {

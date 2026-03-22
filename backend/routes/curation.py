@@ -430,8 +430,20 @@ async def translate_preview(
         target_field = "name_simple_fr"
         source_lang = "allemand"
         target_lang = "français"
+    elif payload.direction == "source_to_fr":
+        source_field = "source_product_name"
+        source_orig = "source_product_name"
+        target_field = "name_simple_fr"
+        source_lang = "anglais (technique ecoinvent)"
+        target_lang = "français"
+    elif payload.direction == "source_to_de":
+        source_field = "source_product_name"
+        source_orig = "source_product_name"
+        target_field = "name_simple_de"
+        source_lang = "anglais (technique ecoinvent)"
+        target_lang = "allemand"
     else:
-        raise HTTPException(400, "direction must be 'fr_to_de' or 'de_to_fr'")
+        raise HTTPException(400, "direction must be 'fr_to_de', 'de_to_fr', 'source_to_fr' or 'source_to_de'")
 
     or_filters = []
     for fid in payload.factor_ids:
@@ -455,16 +467,35 @@ async def translate_preview(
     )
 
     if not factors:
-        return {"translations": [], "skipped": len(payload.factor_ids)}
+        return {"translations": [], "skipped": len(payload.factor_ids), "target_field": target_field}
 
-    # Build prompt for Gemini
+    # Build prompt
+    is_source_translate = payload.direction.startswith("source_to_")
+
     lines = []
     for f in factors:
         src_name = f.get(source_field) or f.get(source_orig, "")
         fid = serialize_doc(f).get("id", str(f["_id"]))
         lines.append(f'- ID: {fid} | {source_lang}: "{src_name}"')
 
-    prompt = f"""Traduis ces noms de facteurs d'émission du {source_lang} vers le {target_lang} (contexte: bilan carbone suisse).
+    if is_source_translate:
+        prompt = f"""Traduis et simplifie ces noms techniques de facteurs d'émission ecoinvent ({source_lang}) vers le {target_lang} (contexte: bilan carbone suisse).
+
+Règles:
+- Traduis de l'anglais technique vers le {target_lang} courant suisse {"(Hochdeutsch)" if target_lang == "allemand" else ""}
+- Simplifie le nom: 3-8 mots max, compréhensible par un non-spécialiste
+- Garde l'information essentielle (matériau, type d'énergie, usage)
+- Supprime les codes pays, variantes techniques, références et détails trop spécifiques
+- Conserve les unités si présentes
+- Retourne UNIQUEMENT un JSON valide, sans commentaires
+
+Noms à traduire:
+{chr(10).join(lines)}
+
+Retourne un JSON array:
+[{{"id": "...", "translation": "..."}}]"""
+    else:
+        prompt = f"""Traduis ces noms de facteurs d'émission du {source_lang} vers le {target_lang} (contexte: bilan carbone suisse).
 
 Règles:
 - Garde le même style et longueur que l'original
