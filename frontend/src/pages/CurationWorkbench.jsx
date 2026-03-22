@@ -664,6 +664,7 @@ export default function CurationWorkbench() {
               <th className="py-2 px-2 cursor-pointer" onClick={() => toggleSort('name_fr')}>
                 <div className="flex items-center gap-1">Nom original <SortIcon field="name_fr" /></div>
               </th>
+              <th className="py-2 px-2">Source BAFU</th>
               <th className="py-2 px-2">Nom simplifié FR</th>
               <th className="py-2 px-2">Nom simplifié DE</th>
               <th className="py-2 px-2 cursor-pointer" onClick={() => toggleSort('subcategory')}>
@@ -685,9 +686,9 @@ export default function CurationWorkbench() {
           </thead>
           <tbody>
             {loadingFactors ? (
-              <tr><td colSpan={11} className="text-center py-12"><Loader2 className="w-6 h-6 animate-spin mx-auto text-blue-500" /></td></tr>
+              <tr><td colSpan={12} className="text-center py-12"><Loader2 className="w-6 h-6 animate-spin mx-auto text-blue-500" /></td></tr>
             ) : factors.length === 0 ? (
-              <tr><td colSpan={11} className={`text-center py-12 text-sm ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>Aucun facteur trouvé</td></tr>
+              <tr><td colSpan={12} className={`text-center py-12 text-sm ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>Aucun facteur trouvé</td></tr>
             ) : factors.map((f, rowIdx) => {
               const isSelected = selectedIds.includes(f.id);
               const nameChanged = f.name_simple_fr && f.name_simple_fr !== f.name_fr;
@@ -706,6 +707,10 @@ export default function CurationWorkbench() {
                   </td>
                   <td className={`py-1.5 px-2 text-xs max-w-[220px] truncate ${isDark ? 'text-slate-300' : 'text-gray-700'}`} title={f.name_fr}>
                     {f.name_fr}
+                  </td>
+                  <td className={`py-1.5 px-2 text-[10px] max-w-[200px] truncate ${isDark ? 'text-slate-500' : 'text-gray-400'}`}
+                    title={f.source_product_name || ''} data-testid={`source-name-${f.id}`}>
+                    {f.source_product_name || '—'}
                   </td>
                   <td className={`py-1.5 px-2 text-xs max-w-[200px] ${nameChanged ? 'font-medium' : ''} ${isDark ? 'text-white' : 'text-gray-900'}`}>
                     <EditableCell

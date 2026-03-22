@@ -27,18 +27,33 @@ Application full-stack (React/FastAPI/MongoDB) pour la comptabilité carbone d'e
 - IA Gemini Pro pour suggestions de titres simplifiés
 - Raccourcis clavier (Tab, Enter, Shift+Enter, Escape)
 - Dashboard de progression global et par sous-catégorie
+- **Colonne "Source BAFU"** (source_product_name) — lecture seule, affiche le nom technique ecoinvent
+
+## DB Schema - emission_factors
+```
+{
+  id, name_fr, name_de, name_simple_fr, name_simple_de,
+  source_product_name (NEW - from bafu_product_name),
+  subcategory, default_unit, is_public, popularity_score,
+  curation_status, impacts[], region, source, year, ...
+}
+```
 
 ## Bug Fixes
-- **2026-03-22**: Fix EditableCell - double-commit (committedRef), protection draft pendant édition (!editing guard), affichage optimiste (lastSavedRef), auto-select on focus. Résout: copier-coller, éditions consécutives, disparition de texte.
+- **2026-03-22**: Fix EditableCell - double-commit (committedRef), protection draft pendant édition (!editing guard), affichage optimiste (lastSavedRef), auto-select on focus
+
+## Data Migrations
+- **2026-03-22**: Migration source_product_name — ajout du champ depuis le fichier BAFU (8747/8978 renseignés) + sync corrections utilisateur (name_fr, name_de, impacts, etc.)
 
 ## Key Files
 - `frontend/src/pages/CurationWorkbench.jsx` — Page de curation
 - `backend/routes/curation.py` — API de curation
+- `backend/scripts/migrate_source_product_name.py` — Script de migration
 - `frontend/src/components/ProductWizard.js` — Wizard produit (slide-over)
 - `frontend/src/components/FactorSelectionStep.js` — Sélection facteurs (grille/tableau)
 
 ## API Endpoints
-- `GET /api/curation/factors` — Liste paginée avec filtres
+- `GET /api/curation/factors` — Liste paginée avec filtres (inclut source_product_name)
 - `PATCH /api/curation/factors/{id}` — Édition en ligne
 - `POST /api/curation/bulk-preview` / `bulk-apply` — Actions en masse
 - `POST /api/curation/suggest-titles` — Suggestions IA
