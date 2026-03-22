@@ -6,7 +6,7 @@ Application full-stack (React/FastAPI/MongoDB) pour la comptabilité carbone d'e
 ## Architecture
 - **Frontend**: React + TailwindCSS + Shadcn/UI, port 3000
 - **Backend**: FastAPI + MongoDB, port 8001
-- **Integrations**: Gemini Pro via emergentintegrations (suggestions IA)
+- **Integrations**: Gemini Pro / GPT-4o-mini via emergentintegrations (suggestions IA + traductions)
 
 ## Core Features Implemented
 - Auth (email/password)
@@ -18,7 +18,7 @@ Application full-stack (React/FastAPI/MongoDB) pour la comptabilité carbone d'e
 - Exercices fiscaux
 - **Atelier de Curation (Phase 1 & 2)** — feature majeure
 
-## Atelier de Curation (FEAT-CUR-01 & 02) — Terminé
+## Atelier de Curation — Terminé
 - Tableau éditable en ligne (~9000 facteurs, pagination côté serveur)
 - Cellules éditables: name_simple_fr, name_simple_de, sous-catégorie, unité, popularité
 - Suivi statut curation (À traiter, Traité, Signalé)
@@ -27,38 +27,36 @@ Application full-stack (React/FastAPI/MongoDB) pour la comptabilité carbone d'e
 - IA Gemini Pro pour suggestions de titres simplifiés
 - Raccourcis clavier (Tab, Enter, Shift+Enter, Escape)
 - Dashboard de progression global et par sous-catégorie
-- **Colonne "Source BAFU"** (source_product_name) — lecture seule, affiche le nom technique ecoinvent
+- **Colonne "Source BAFU"** (source_product_name) — lecture seule, nom technique ecoinvent
+- **Copie en masse** : "Copier orig. → FR/DE" — copie name_fr→name_simple_fr uniquement sur cellules vides (null)
+- **Traduction en masse** : "Traduire FR → DE" via IA (GPT-4o-mini) avec aperçu et validation
 
 ## DB Schema - emission_factors
 ```
 {
-  id, name_fr, name_de, name_simple_fr, name_simple_de,
-  source_product_name (NEW - from bafu_product_name),
+  id, name_fr, name_de,
+  name_simple_fr (null=non curé, valeur=curé),
+  name_simple_de (null=non curé, valeur=curé),
+  source_product_name (nom technique ecoinvent),
   subcategory, default_unit, is_public, popularity_score,
   curation_status, impacts[], region, source, year, ...
 }
 ```
 
-## Bug Fixes
-- **2026-03-22**: Fix EditableCell - double-commit (committedRef), protection draft pendant édition (!editing guard), affichage optimiste (lastSavedRef), auto-select on focus
-
-## Data Migrations
-- **2026-03-22**: Migration source_product_name — ajout du champ depuis le fichier BAFU (8747/8978 renseignés) + sync corrections utilisateur (name_fr, name_de, impacts, etc.)
-
 ## Key Files
 - `frontend/src/pages/CurationWorkbench.jsx` — Page de curation
-- `backend/routes/curation.py` — API de curation
+- `backend/routes/curation.py` — API de curation (incl. copy, translate)
 - `backend/scripts/migrate_source_product_name.py` — Script de migration
-- `frontend/src/components/ProductWizard.js` — Wizard produit (slide-over)
-- `frontend/src/components/FactorSelectionStep.js` — Sélection facteurs (grille/tableau)
 
-## API Endpoints
-- `GET /api/curation/factors` — Liste paginée avec filtres (inclut source_product_name)
+## API Endpoints Curation
+- `GET /api/curation/factors` — Liste paginée avec filtres
 - `PATCH /api/curation/factors/{id}` — Édition en ligne
+- `POST /api/curation/bulk-copy-originals` — Copie originaux → simplifié (FR/DE)
+- `POST /api/curation/translate-preview` — Prévisualisation traductions IA
+- `POST /api/curation/translate-apply` — Application traductions validées
 - `POST /api/curation/bulk-preview` / `bulk-apply` — Actions en masse
 - `POST /api/curation/suggest-titles` — Suggestions IA
 - `GET /api/curation/stats` — Dashboard progression
-- `GET /api/curation/units` — Liste unités uniques
 
 ## Backlog
 ### P0

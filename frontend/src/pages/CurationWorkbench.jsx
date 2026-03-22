@@ -4,7 +4,8 @@ import { useAuth } from '../context/AuthContext';
 import {
   Search, X, Filter, CheckSquare, Square, ChevronLeft, ChevronRight,
   BarChart3, Eye, EyeOff, Flag, CheckCircle2, CircleDot, Sparkles,
-  ArrowUpDown, ArrowUp, ArrowDown, Layers, Save, Loader2, Code2, Copy, Check
+  ArrowUpDown, ArrowUp, ArrowDown, Layers, Save, Loader2, Code2, Copy, Check,
+  Languages, CopyPlus
 } from 'lucide-react';
 
 const API = process.env.REACT_APP_BACKEND_URL;
@@ -72,7 +73,7 @@ const StatsDashboard = ({ stats, isDark, onSubcategoryClick, activeSubcategory }
 };
 
 // ==================== BULK ACTIONS BAR ====================
-const BulkActionsBar = ({ selectedIds, isDark, onClearSelection, onBulkAction, loading, subcategoriesList }) => {
+const BulkActionsBar = ({ selectedIds, isDark, onClearSelection, onBulkAction, loading, subcategoriesList, onCopyOriginals, onTranslate }) => {
   const [bulkField, setBulkField] = useState('');
   const [bulkValue, setBulkValue] = useState('');
 
@@ -148,6 +149,28 @@ const BulkActionsBar = ({ selectedIds, isDark, onClearSelection, onBulkAction, l
           Appliquer
         </button>
       )}
+
+      {/* Separator */}
+      <div className={`mx-1 h-6 w-px ${isDark ? 'bg-slate-600' : 'bg-gray-300'}`} />
+
+      {/* Copy originals */}
+      <button onClick={() => onCopyOriginals('fr')} disabled={loading}
+        className={`px-3 py-1.5 text-xs rounded-lg flex items-center gap-1.5 ${isDark ? 'bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20' : 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100'}`}
+        data-testid="copy-originals-fr-btn" title="Copier name_fr → name_simple_fr (cellules vides uniquement)">
+        <CopyPlus className="w-3 h-3" /> Copier orig. → FR
+      </button>
+      <button onClick={() => onCopyOriginals('de')} disabled={loading}
+        className={`px-3 py-1.5 text-xs rounded-lg flex items-center gap-1.5 ${isDark ? 'bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20' : 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100'}`}
+        data-testid="copy-originals-de-btn" title="Copier name_de → name_simple_de (cellules vides uniquement)">
+        <CopyPlus className="w-3 h-3" /> Copier orig. → DE
+      </button>
+
+      {/* Translate */}
+      <button onClick={() => onTranslate('fr_to_de')} disabled={loading}
+        className={`px-3 py-1.5 text-xs rounded-lg flex items-center gap-1.5 ${isDark ? 'bg-sky-500/10 text-sky-400 hover:bg-sky-500/20' : 'bg-sky-50 text-sky-700 hover:bg-sky-100'}`}
+        data-testid="translate-fr-de-btn" title="Traduire les noms simplifiés FR → DE (IA)">
+        <Languages className="w-3 h-3" /> Traduire FR → DE
+      </button>
     </div>
   );
 };
@@ -324,6 +347,116 @@ const AISuggestModal = ({ factorIds, isDark, token, onApply, onClose }) => {
             <button onClick={onClose} className={`px-4 py-2 rounded-xl text-sm ${isDark ? 'hover:bg-slate-700 text-white' : 'hover:bg-gray-100 text-gray-700'}`}>Annuler</button>
             <button onClick={handleApply} className="px-4 py-2 bg-purple-500 text-white rounded-xl text-sm hover:bg-purple-600 flex items-center gap-2">
               <Sparkles className="w-4 h-4" />Appliquer {Object.values(selected).filter(Boolean).length} suggestion(s)
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+// ==================== TRANSLATE PREVIEW MODAL ====================
+const TranslatePreviewModal = ({ factorIds, direction, isDark, token, onApply, onClose }) => {
+  const [translations, setTranslations] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [applying, setApplying] = useState(false);
+  const [error, setError] = useState(null);
+  const [selected, setSelected] = useState({});
+  const [targetField, setTargetField] = useState('');
+  const [skipped, setSkipped] = useState(0);
+
+  const dirLabel = direction === 'fr_to_de' ? 'FR → DE' : 'DE → FR';
+
+  useEffect(() => {
+    const fetchTranslations = async () => {
+      try {
+        const res = await fetch(`${API}/api/curation/translate-preview`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+          body: JSON.stringify({ factor_ids: factorIds, direction }),
+        });
+        if (!res.ok) throw new Error('Erreur de traduction');
+        const data = await res.json();
+        setTranslations(data.translations || []);
+        setTargetField(data.target_field || '');
+        setSkipped(data.skipped || 0);
+        const sel = {};
+        (data.translations || []).forEach(t => { sel[t.factor_id] = true; });
+        setSelected(sel);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchTranslations();
+  }, [factorIds, direction, token]);
+
+  const handleApply = async () => {
+    const toApply = translations.filter(t => selected[t.factor_id]);
+    if (toApply.length === 0) return;
+    setApplying(true);
+    try {
+      const res = await fetch(`${API}/api/curation/translate-apply`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({
+          translations: toApply.map(t => ({ factor_id: t.factor_id, value: t.translation })),
+          target_field: targetField,
+        }),
+      });
+      if (res.ok) {
+        const result = await res.json();
+        onApply(result.modified_count);
+      }
+    } catch (err) {
+      setError(err.message);
+    }
+    setApplying(false);
+  };
+
+  const selectedCount = Object.values(selected).filter(Boolean).length;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm" onClick={onClose}>
+      <div onClick={e => e.stopPropagation()} className={`w-full max-w-2xl mx-4 rounded-2xl shadow-2xl max-h-[80vh] flex flex-col ${isDark ? 'bg-slate-800' : 'bg-white'}`}
+        data-testid="translate-preview-modal">
+        <div className={`p-5 border-b flex items-center gap-3 ${isDark ? 'border-slate-700' : 'border-gray-200'}`}>
+          <Languages className="w-5 h-5 text-sky-500" />
+          <h3 className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>Traduction {dirLabel}</h3>
+          {skipped > 0 && <span className={`text-xs ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>({skipped} ignoré(s) — source vide ou cible déjà remplie)</span>}
+          <button onClick={onClose} className="ml-auto p-1 rounded hover:bg-slate-700"><X className="w-4 h-4" /></button>
+        </div>
+        <div className="flex-1 overflow-y-auto p-5">
+          {loading && <div className="flex items-center justify-center py-12"><Loader2 className="w-8 h-8 animate-spin text-sky-500" /><span className="ml-3 text-sm">Traduction en cours...</span></div>}
+          {error && <p className="text-red-500 text-sm">{error}</p>}
+          {!loading && !error && translations.length === 0 && (
+            <p className={`text-sm text-center py-8 ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>
+              Aucun facteur à traduire. Vérifiez que les noms source sont renseignés et que les cibles sont vides.
+            </p>
+          )}
+          {!loading && !error && translations.map(t => (
+            <div key={t.factor_id} className={`mb-3 p-3 rounded-xl border ${selected[t.factor_id] ? isDark ? 'border-sky-500/30 bg-sky-500/5' : 'border-sky-200 bg-sky-50' : isDark ? 'border-slate-700' : 'border-gray-200'}`}>
+              <div className="flex items-start gap-2">
+                <button onClick={() => setSelected(p => ({ ...p, [t.factor_id]: !p[t.factor_id] }))}
+                  className="mt-0.5 flex-shrink-0">
+                  {selected[t.factor_id] ? <CheckSquare className="w-4 h-4 text-sky-500" /> : <Square className="w-4 h-4 text-slate-500" />}
+                </button>
+                <div className="flex-1 min-w-0">
+                  <p className={`text-xs ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>Source: {t.source_name}</p>
+                  <p className={`text-sm font-medium mt-1 ${isDark ? 'text-white' : 'text-gray-900'}`}>→ {t.translation}</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+        {!loading && !error && translations.length > 0 && (
+          <div className={`p-4 border-t flex justify-end gap-3 ${isDark ? 'border-slate-700' : 'border-gray-200'}`}>
+            <button onClick={onClose} className={`px-4 py-2 rounded-xl text-sm ${isDark ? 'hover:bg-slate-700 text-white' : 'hover:bg-gray-100 text-gray-700'}`}>Annuler</button>
+            <button onClick={handleApply} disabled={applying || selectedCount === 0}
+              className="px-4 py-2 bg-sky-500 text-white rounded-xl text-sm hover:bg-sky-600 disabled:opacity-50 flex items-center gap-2">
+              {applying ? <Loader2 className="w-4 h-4 animate-spin" /> : <Languages className="w-4 h-4" />}
+              Appliquer {selectedCount} traduction(s)
             </button>
           </div>
         )}
@@ -523,6 +656,35 @@ export default function CurationWorkbench() {
     fetchStats();
   };
 
+  // Copy originals -> simplified
+  const [copyLoading, setCopyLoading] = useState(false);
+  const handleCopyOriginals = async (lang) => {
+    setCopyLoading(true);
+    try {
+      const res = await fetch(`${API}/api/curation/bulk-copy-originals`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ factor_ids: selectedIds, lang }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        alert(`${data.modified_count} nom(s) copié(s), ${data.skipped_count} ignoré(s) (déjà remplis)`);
+        fetchFactors();
+        fetchStats();
+      }
+    } catch (e) { console.error(e); }
+    setCopyLoading(false);
+  };
+
+  // Translate preview
+  const [translateModal, setTranslateModal] = useState(null); // { factorIds, direction }
+  const handleTranslateApply = (modifiedCount) => {
+    setTranslateModal(null);
+    alert(`${modifiedCount} traduction(s) appliquée(s)`);
+    fetchFactors();
+    fetchStats();
+  };
+
   // Cell navigation: cellId format = "row-{idx}-col-{colIdx}" where col 0=FR, 1=DE
   const handleCellNavigate = useCallback((cellId, direction) => {
     const match = cellId.match(/row-(\d+)-col-(\d+)/);
@@ -649,7 +811,8 @@ export default function CurationWorkbench() {
       <StatsDashboard stats={stats} isDark={isDark} onSubcategoryClick={setSubcategory} activeSubcategory={subcategory} />
 
       {/* Bulk actions bar */}
-      <BulkActionsBar selectedIds={selectedIds} isDark={isDark} onClearSelection={() => setSelectedIds([])} onBulkAction={handleBulkAction} loading={bulkLoading} subcategoriesList={subcategoriesList} />
+      <BulkActionsBar selectedIds={selectedIds} isDark={isDark} onClearSelection={() => setSelectedIds([])} onBulkAction={handleBulkAction} loading={bulkLoading || copyLoading} subcategoriesList={subcategoriesList}
+        onCopyOriginals={handleCopyOriginals} onTranslate={(dir) => setTranslateModal({ factorIds: selectedIds, direction: dir })} />
 
       {/* Table */}
       <div className="flex-1 overflow-auto">
@@ -691,7 +854,8 @@ export default function CurationWorkbench() {
               <tr><td colSpan={12} className={`text-center py-12 text-sm ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>Aucun facteur trouvé</td></tr>
             ) : factors.map((f, rowIdx) => {
               const isSelected = selectedIds.includes(f.id);
-              const nameChanged = f.name_simple_fr && f.name_simple_fr !== f.name_fr;
+              const hasFrCustom = f.name_simple_fr != null && f.name_simple_fr !== f.name_fr;
+              const hasDeCustom = f.name_simple_de != null && f.name_simple_de !== f.name_de;
               const impact = f.impacts?.[0];
               return (
                 <tr key={f.id} data-testid={`factor-row-${f.id}`}
@@ -712,9 +876,9 @@ export default function CurationWorkbench() {
                     title={f.source_product_name || ''} data-testid={`source-name-${f.id}`}>
                     {f.source_product_name || '—'}
                   </td>
-                  <td className={`py-1.5 px-2 text-xs max-w-[200px] ${nameChanged ? 'font-medium' : ''} ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                  <td className={`py-1.5 px-2 text-xs max-w-[200px] ${hasFrCustom ? 'font-medium' : ''} ${isDark ? 'text-white' : 'text-gray-900'}`}>
                     <EditableCell
-                      value={nameChanged ? f.name_simple_fr : ''}
+                      value={f.name_simple_fr || ''}
                       placeholder="—"
                       isDark={isDark}
                       onSave={v => inlineEdit(f.id, 'name_simple_fr', v)}
@@ -724,7 +888,7 @@ export default function CurationWorkbench() {
                   </td>
                   <td className="py-1.5 px-2 text-xs max-w-[200px]">
                     <EditableCell
-                      value={f.name_simple_de !== f.name_de ? f.name_simple_de : ''}
+                      value={f.name_simple_de || ''}
                       placeholder="—"
                       isDark={isDark}
                       onSave={v => inlineEdit(f.id, 'name_simple_de', v)}
@@ -835,6 +999,10 @@ export default function CurationWorkbench() {
       {showAISuggest && (
         <AISuggestModal factorIds={selectedIds.slice(0, 20)} isDark={isDark} token={token}
           onApply={handleAISuggestApply} onClose={() => setShowAISuggest(false)} />
+      )}
+      {translateModal && (
+        <TranslatePreviewModal factorIds={translateModal.factorIds} direction={translateModal.direction}
+          isDark={isDark} token={token} onApply={handleTranslateApply} onClose={() => setTranslateModal(null)} />
       )}
 
       {/* JSON viewer modal */}
