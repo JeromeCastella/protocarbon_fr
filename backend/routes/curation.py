@@ -36,6 +36,7 @@ class SuggestTitlesPayload(BaseModel):
 class BulkCopyOriginalsPayload(BaseModel):
     factor_ids: List[str]
     lang: str  # "fr" or "de"
+    source_field: str = "original"  # "original" (name_fr/name_de) or "source_product_name"
 
 class TranslatePreviewPayload(BaseModel):
     factor_ids: List[str]
@@ -359,13 +360,16 @@ async def bulk_copy_originals(
     payload: BulkCopyOriginalsPayload,
     current_user: dict = Depends(require_admin),
 ):
-    """Copy name_fr -> name_simple_fr (or DE) for factors where simplified name is null."""
+    """Copy name_fr/name_de or source_product_name -> name_simple_fr/de for factors where simplified name is null."""
     from bson import ObjectId
 
     if payload.lang not in ("fr", "de"):
         raise HTTPException(400, "lang must be 'fr' or 'de'")
 
-    source_field = f"name_{payload.lang}"
+    if payload.source_field == "source_product_name":
+        copy_from = "source_product_name"
+    else:
+        copy_from = f"name_{payload.lang}"
     target_field = f"name_simple_{payload.lang}"
 
     or_filters = []
@@ -393,7 +397,7 @@ async def bulk_copy_originals(
     result = emission_factors_collection.update_many(
         query,
         [{"$set": {
-            target_field: f"${source_field}",
+            target_field: f"${copy_from}",
             "updated_at": datetime.now(timezone.utc).isoformat(),
         }}],
     )

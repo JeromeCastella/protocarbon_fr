@@ -154,15 +154,26 @@ const BulkActionsBar = ({ selectedIds, isDark, onClearSelection, onBulkAction, l
       <div className={`mx-1 h-6 w-px ${isDark ? 'bg-slate-600' : 'bg-gray-300'}`} />
 
       {/* Copy originals */}
-      <button onClick={() => onCopyOriginals('fr')} disabled={loading}
+      <button onClick={() => onCopyOriginals('fr', 'original')} disabled={loading}
         className={`px-3 py-1.5 text-xs rounded-lg flex items-center gap-1.5 ${isDark ? 'bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20' : 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100'}`}
         data-testid="copy-originals-fr-btn" title="Copier name_fr → name_simple_fr (cellules vides uniquement)">
-        <CopyPlus className="w-3 h-3" /> Copier orig. → FR
+        <CopyPlus className="w-3 h-3" /> Orig. → FR
       </button>
-      <button onClick={() => onCopyOriginals('de')} disabled={loading}
+      <button onClick={() => onCopyOriginals('de', 'original')} disabled={loading}
         className={`px-3 py-1.5 text-xs rounded-lg flex items-center gap-1.5 ${isDark ? 'bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20' : 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100'}`}
         data-testid="copy-originals-de-btn" title="Copier name_de → name_simple_de (cellules vides uniquement)">
-        <CopyPlus className="w-3 h-3" /> Copier orig. → DE
+        <CopyPlus className="w-3 h-3" /> Orig. → DE
+      </button>
+      {/* Copy from source_product_name */}
+      <button onClick={() => onCopyOriginals('fr', 'source_product_name')} disabled={loading}
+        className={`px-3 py-1.5 text-xs rounded-lg flex items-center gap-1.5 ${isDark ? 'bg-amber-500/10 text-amber-400 hover:bg-amber-500/20' : 'bg-amber-50 text-amber-700 hover:bg-amber-100'}`}
+        data-testid="copy-source-fr-btn" title="Copier source_product_name → name_simple_fr (cellules vides uniquement)">
+        <CopyPlus className="w-3 h-3" /> Source → FR
+      </button>
+      <button onClick={() => onCopyOriginals('de', 'source_product_name')} disabled={loading}
+        className={`px-3 py-1.5 text-xs rounded-lg flex items-center gap-1.5 ${isDark ? 'bg-amber-500/10 text-amber-400 hover:bg-amber-500/20' : 'bg-amber-50 text-amber-700 hover:bg-amber-100'}`}
+        data-testid="copy-source-de-btn" title="Copier source_product_name → name_simple_de (cellules vides uniquement)">
+        <CopyPlus className="w-3 h-3" /> Source → DE
       </button>
 
       {/* Translate */}
@@ -658,13 +669,13 @@ export default function CurationWorkbench() {
 
   // Copy originals -> simplified
   const [copyLoading, setCopyLoading] = useState(false);
-  const handleCopyOriginals = async (lang) => {
+  const handleCopyOriginals = async (lang, sourceField = 'original') => {
     setCopyLoading(true);
     try {
       const res = await fetch(`${API}/api/curation/bulk-copy-originals`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify({ factor_ids: selectedIds, lang }),
+        body: JSON.stringify({ factor_ids: selectedIds, lang, source_field: sourceField }),
       });
       if (res.ok) {
         const data = await res.json();
