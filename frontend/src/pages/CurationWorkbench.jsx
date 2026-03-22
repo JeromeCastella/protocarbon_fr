@@ -962,18 +962,23 @@ export default function CurationWorkbench() {
                     />
                   </td>
                   <td className={`py-1.5 px-2 text-[11px] ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-                    <select
-                      value={f.default_unit || ''}
-                      onChange={e => inlineEdit(f.id, 'default_unit', e.target.value)}
-                      data-testid={`unit-select-${f.id}`}
-                      className={`w-full text-[11px] rounded border py-0.5 px-1 cursor-pointer ${
+                    <input
+                      list="units-datalist"
+                      defaultValue={f.default_unit || ''}
+                      onBlur={e => {
+                        const val = e.target.value.trim();
+                        if (val && val !== f.default_unit) inlineEdit(f.id, 'default_unit', val);
+                      }}
+                      onKeyDown={e => {
+                        if (e.key === 'Enter') { e.target.blur(); }
+                        if (e.key === 'Escape') { e.target.value = f.default_unit || ''; e.target.blur(); }
+                      }}
+                      data-testid={`unit-input-${f.id}`}
+                      className={`w-full text-[11px] rounded border py-0.5 px-1 ${
                         isDark ? 'bg-slate-800 border-slate-700 text-slate-300' : 'bg-white border-gray-200 text-gray-600'
                       }`}
-                    >
-                      {unitsList.map(u => (
-                        <option key={u} value={u}>{u}</option>
-                      ))}
-                    </select>
+                      placeholder="Unité..."
+                    />
                   </td>
                   <td className={`py-1.5 px-2 font-mono text-[11px] whitespace-nowrap ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>
                     {impact ? `${impact.value < 0.001 ? impact.value.toExponential(2) : impact.value.toFixed(4)} ${impact.unit}` : '—'}
@@ -993,6 +998,9 @@ export default function CurationWorkbench() {
             })}
           </tbody>
         </table>
+        <datalist id="units-datalist">
+          {unitsList.map(u => <option key={u} value={u} />)}
+        </datalist>
       </div>
 
       {/* Pagination + keyboard hints */}
