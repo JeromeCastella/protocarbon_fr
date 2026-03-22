@@ -7,7 +7,7 @@ import random
 import requests
 import os
 
-API_URL = os.environ.get('API_URL', 'https://factor-review.preview.emergentagent.com')
+API_URL = os.environ.get('API_URL', 'https://bafu-curation.preview.emergentagent.com')
 
 def main():
     # Login
