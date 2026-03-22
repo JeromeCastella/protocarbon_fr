@@ -485,7 +485,7 @@ Règles:
 - Traduis de l'anglais technique vers le {target_lang} courant suisse {"(Hochdeutsch)" if target_lang == "allemand" else ""}
 - Simplifie le nom: 3-8 mots max, compréhensible par un non-spécialiste
 - Garde l'information essentielle (matériau, type d'énergie, usage)
-- Si le nom contient un code pays entre accolades (ex: {{IT}}, {{DE}}, {{FR}}), ajoute-le entre parenthèses à la fin du titre traduit — sauf si c'est {{CH}} (Suisse), auquel cas tu l'omets complètement
+- Si le nom contient un code pays entre accolades (ex: {{IT}}, {{DE}}, {{FR}}), ajoute le code ISO tel quel entre parenthèses à la fin du titre traduit (ex: {{IT}} → (IT), {{FR}} → (FR)) — ne traduis jamais le code en toutes lettres et fais bien attention à remplacer les crochets par des parenthèses — sauf si c'est {{CH}} (Suisse), auquel cas tu l'omets complètement
 - Supprime les variantes techniques, références et détails trop spécifiques (hors code pays)
 - Conserve les unités si présentes
 - Retourne UNIQUEMENT un JSON valide, sans commentaires
