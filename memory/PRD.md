@@ -31,7 +31,10 @@ Application full-stack (React/FastAPI/MongoDB) pour la comptabilité carbone d'e
 - **Copie en masse** : 4 options de copie vers les noms simplifiés (cellules vides uniquement) :
   - "Orig. → FR/DE" — copie name_fr/name_de → name_simple_fr/name_simple_de
   - "Source → FR/DE" — copie source_product_name → name_simple_fr/name_simple_de
-- **Traduction en masse** : "Traduire FR → DE" via IA (GPT-4o-mini) avec aperçu et validation
+- **Traduction en masse** : 3 options via IA (GPT-4o-mini) avec aperçu et validation :
+  - "Traduire FR → DE" — traduit name_simple_fr vers name_simple_de
+  - "Source+Trad → FR" — traduit et simplifie source_product_name (anglais ecoinvent) vers français
+  - "Source+Trad → DE" — traduit et simplifie source_product_name (anglais ecoinvent) vers allemand
 
 ## DB Schema - emission_factors
 ```
