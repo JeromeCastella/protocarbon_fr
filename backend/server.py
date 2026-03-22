@@ -13,10 +13,11 @@ app = FastAPI(title="Carbon Footprint Calculator - GHG Protocol")
 
 # CORS Configuration
 cors_origins_raw = os.environ.get("CORS_ORIGINS", "*")
-if cors_origins_raw == "*":
+cors_origins_list = [o.strip() for o in cors_origins_raw.split(",") if o.strip()]
+if "*" in cors_origins_list:
     cors_origins = ["*"]
 else:
-    cors_origins = [o.strip() for o in cors_origins_raw.split(",") if o.strip()]
+    cors_origins = cors_origins_list
 
 app.add_middleware(
     CORSMiddleware,
