@@ -14,10 +14,11 @@ const FactorSelectionStep = ({
   selectedUnit,
   language = 'fr',
   isDark = false,
+  showExpertFactors = false,
+  onToggleExpert = null,
 }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchIndex, setSearchIndex] = useState(null);
-  const [showExpertFactors, setShowExpertFactors] = useState(false);
   const [viewMode, setViewMode] = useState('grid'); // 'grid' | 'table'
 
   // Split factors into public and all
@@ -126,7 +127,7 @@ const FactorSelectionStep = ({
           {expertCount > 0 && (
             <button
               type="button"
-              onClick={() => setShowExpertFactors(!showExpertFactors)}
+              onClick={() => onToggleExpert ? onToggleExpert() : null}
               data-testid="toggle-expert-factors"
               className={`flex items-center gap-1.5 text-xs px-2.5 py-1.5 rounded-lg border transition-all ${
                 showExpertFactors

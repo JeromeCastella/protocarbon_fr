@@ -106,6 +106,25 @@ async def get_emission_factors(
     return [serialize_doc(f) for f in factors]
 
 
+@router.get("/emission-factors/search-index")
+async def get_emission_factors_search_index(
+    current_user: dict = Depends(get_current_user)
+):
+    """Return all emission factors with minimal fields for client-side Fuse.js search."""
+    pipeline = [
+        {"$match": {"deleted_at": None}},
+        {"$sort": {"is_public": -1, "popularity_score": -1}},
+        {"$project": {
+            "_id": 0, "id": 1, "name_fr": 1, "name_de": 1, "name_simple_fr": 1,
+            "name_simple_de": 1, "source_product_name": 1,
+            "is_public": 1, "subcategory": 1, "default_unit": 1,
+            "popularity_score": 1, "tags": 1, "category": 1, "scope": 1,
+            "impact": {"$arrayElemAt": ["$impacts", 0]},
+        }}
+    ]
+    return list(emission_factors_collection.aggregate(pipeline))
+
+
 @router.get("/emission-factors/search")
 async def search_emission_factors(
     q: Optional[str] = None,

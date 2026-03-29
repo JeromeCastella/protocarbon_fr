@@ -23,7 +23,10 @@ const GuidedEntryModal = ({
   language,
   isDark,
   onSubmit,
-  editingActivity = null
+  editingActivity = null,
+  preSelectedFactor = null,
+  showExpertFactors = false,
+  onToggleExpert = null,
 }) => {
   // État du parcours
   const [step, setStep] = useState(1);
@@ -61,6 +64,10 @@ const GuidedEntryModal = ({
         // Mode édition : charger toutes les données et aller à l'étape 4
         setIsEditMode(true);
         loadForEditing(editingActivity);
+      } else if (preSelectedFactor) {
+        // Mode recherche : facteur pré-sélectionné, aller directement à l'étape 4
+        setIsEditMode(false);
+        loadForPreSelectedFactor(preSelectedFactor);
       } else {
         // Mode création : reset et parcours normal
         setIsEditMode(false);
@@ -68,7 +75,7 @@ const GuidedEntryModal = ({
         fetchSubcategories();
       }
     }
-  }, [isOpen, category, editingActivity?.id]);
+  }, [isOpen, category, editingActivity?.id, preSelectedFactor?.id]);
 
   const resetState = () => {
     setStep(1);
@@ -164,6 +171,67 @@ const GuidedEntryModal = ({
       setLoading(false);
     }
   };
+
+  /**
+   * Charge un facteur pré-sélectionné depuis la recherche globale
+   * et passe directement à l'étape 4 (formulaire final)
+   */
+  const loadForPreSelectedFactor = async (factor) => {
+    setLoading(true);
+    try {
+      // 1. Fetch the full factor data (the search index has minimal fields)
+      let fullFactor = factor;
+      try {
+        const factorRes = await axios.get(`${API_URL}/api/emission-factors/${factor.id}`);
+        if (factorRes.data) fullFactor = factorRes.data;
+      } catch (err) {
+        console.warn('Could not fetch full factor, using search data:', err);
+      }
+
+      // 2. Set the factor and its units
+      setSelectedFactor(fullFactor);
+      setFactors([fullFactor]);
+      setFilteredFactors([fullFactor]);
+
+      // 3. Set default unit
+      const unit = fullFactor.default_unit || '';
+      setSelectedUnit(unit);
+      setIsConvertedUnit(false);
+
+      // 4. Extract available units
+      const unitsResult = getAvailableUnitsWithConversions([fullFactor]);
+      setNativeUnits(unitsResult.native);
+      setConvertedUnits(unitsResult.converted);
+      setAvailableUnits(unitsResult.all);
+
+      // 5. Set subcategory if available
+      if (fullFactor.subcategory) {
+        try {
+          const subcatsRes = await axios.get(`${API_URL}/api/subcategories?category=${category.code}`);
+          const subcats = subcatsRes.data || [];
+          setSubcategories(subcats);
+          const subcat = subcats.find(s => s.code === fullFactor.subcategory);
+          setSelectedSubcategory(subcat || null);
+        } catch (err) {
+          console.warn('Could not fetch subcategories:', err);
+        }
+      }
+
+      // 6. Reset input fields
+      setQuantity('');
+      setComments('');
+
+      // 7. Go to step 4 (quantity input)
+      setStep(4);
+      setShowFactorList(false);
+
+    } catch (error) {
+      console.error('Failed to load pre-selected factor:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
 
   // Fonction pour revenir modifier un élément (création et édition)
   const goBackToStep = (targetStep) => {
@@ -874,6 +942,8 @@ const GuidedEntryModal = ({
               selectedUnit={selectedUnit}
               language={language}
               isDark={isDark}
+              showExpertFactors={showExpertFactors}
+              onToggleExpert={onToggleExpert}
             />
           </div>
         )}
