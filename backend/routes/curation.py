@@ -76,6 +76,7 @@ async def list_curation_factors(
             {"name_de": {"$regex": search, "$options": "i"}},
             {"name_simple_fr": {"$regex": search, "$options": "i"}},
             {"name_simple_de": {"$regex": search, "$options": "i"}},
+            {"source_product_name": {"$regex": search, "$options": "i"}},
             {"tags": {"$regex": search, "$options": "i"}},
         ]
     if subcategory:
@@ -105,7 +106,7 @@ async def list_curation_factors(
         ]
 
     sort_dir = 1 if sort_order == "asc" else -1
-    sort_field = sort_by if sort_by in ["name_fr", "subcategory", "popularity_score", "is_public", "curation_status"] else "subcategory"
+    sort_field = sort_by if sort_by in ["name_fr", "subcategory", "popularity_score", "is_public", "curation_status", "source_product_name"] else "subcategory"
 
     total = emission_factors_collection.count_documents(query)
     skip = (page - 1) * page_size
