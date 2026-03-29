@@ -862,7 +862,9 @@ export default function CurationWorkbench() {
               <th className="py-2 px-2 cursor-pointer" onClick={() => toggleSort('name_fr')}>
                 <div className="flex items-center gap-1">Nom original <SortIcon field="name_fr" /></div>
               </th>
-              <th className="py-2 px-2">Source BAFU</th>
+              <th className="py-2 px-2 cursor-pointer" onClick={() => toggleSort('source_product_name')}>
+                <div className="flex items-center gap-1">Source BAFU <SortIcon field="source_product_name" /></div>
+              </th>
               <th className="py-2 px-2">Nom simplifié FR</th>
               <th className="py-2 px-2">Nom simplifié DE</th>
               <th className="py-2 px-2 cursor-pointer" onClick={() => toggleSort('subcategory')}>
