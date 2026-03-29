@@ -11,12 +11,22 @@ Application full-stack (React/FastAPI/MongoDB) pour la comptabilité carbone d'e
 ## Core Features Implemented
 - Auth (email/password)
 - Dashboard avec métriques GHG Protocol
-- Saisie de données (slide-over)
+- Saisie de données (slide-over) + **Recherche globale de facteurs** (Fuse.js, toggle Expert)
 - Gestion de produits (slide-over)
 - Administration
 - Facteurs d'émission avec grille/tableau
 - Exercices fiscaux
 - **Atelier de Curation (Phase 1 & 2)** — feature majeure
+- **Vue tabulaire détaillée** : Slide-over panel pour activités par scope (Facteur, %, Source, Commentaire)
+
+## Recherche globale de facteurs — Terminé
+- Barre de recherche en haut de la page Data Entry (Fuse.js client-side, lazy loading)
+- Toggle "Expert" partagé entre recherche globale et parcours guidé (FactorSelectionStep)
+- Fuzzy search sur 6 champs pondérés (nom simplifié FR/DE, nom FR/DE, source, tags)
+- Résultats en dropdown avec nom, catégorie, unité, valeur d'impact, badge Expert
+- Clic sur résultat → formulaire guidé directement à l'étape 4 (quantité)
+- Toggle persisté en localStorage
+- Endpoint backend `GET /api/emission-factors/search-index` (8978 facteurs, ~4MB, projection légère)
 
 ## Atelier de Curation — Terminé
 - Tableau éditable en ligne (~9000 facteurs, pagination côté serveur)
