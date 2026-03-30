@@ -56,6 +56,14 @@ const GuidedEntryModal = ({
   
   // Mode édition
   const [isEditMode, setIsEditMode] = useState(false);
+  
+  // Category resolution for search-selected factors
+  const [pendingCategoryChoice, setPendingCategoryChoice] = useState(null); // array of category objects or null
+  const [resolvedCategory, setResolvedCategory] = useState(null); // user-picked category when ambiguous
+  
+  // Effective category and scope (resolved > prop)
+  const effectiveCategory = resolvedCategory || category;
+  const effectiveScope = resolvedCategory?.scope || scope;
 
   // Reset quand on ouvre le modal - différencier création et édition
   useEffect(() => {
@@ -92,6 +100,8 @@ const GuidedEntryModal = ({
     setNativeUnits([]);
     setConvertedUnits([]);
     setShowFactorList(false);
+    setPendingCategoryChoice(null);
+    setResolvedCategory(null);
   };
 
   /**
@@ -175,6 +185,7 @@ const GuidedEntryModal = ({
   /**
    * Charge un facteur pré-sélectionné depuis la recherche globale
    * et passe directement à l'étape 4 (formulaire final)
+   * Si _resolvedCategories est présent, affiche un sélecteur de catégorie d'abord
    */
   const loadForPreSelectedFactor = async (factor) => {
     setLoading(true);
@@ -183,7 +194,7 @@ const GuidedEntryModal = ({
       let fullFactor = factor;
       try {
         const factorRes = await axios.get(`${API_URL}/api/emission-factors/${factor.id}`);
-        if (factorRes.data) fullFactor = factorRes.data;
+        if (factorRes.data) fullFactor = { ...factorRes.data, scope: factor.scope };
       } catch (err) {
         console.warn('Could not fetch full factor, using search data:', err);
       }
@@ -221,8 +232,14 @@ const GuidedEntryModal = ({
       setQuantity('');
       setComments('');
 
-      // 7. Go to step 4 (quantity input)
-      setStep(4);
+      // 7. Check if we need user to pick a category
+      if (factor._resolvedCategories && factor._resolvedCategories.length > 1) {
+        setPendingCategoryChoice(factor._resolvedCategories);
+        setStep(4); // show step 4 with category picker overlay
+      } else {
+        setPendingCategoryChoice(null);
+        setStep(4);
+      }
       setShowFactorList(false);
 
     } catch (error) {
@@ -468,7 +485,7 @@ const GuidedEntryModal = ({
     }];
     
     // Appliquer les règles métier pour filtrer les impacts
-    impacts = applyBusinessRules(impacts, scope, category?.code);
+    impacts = applyBusinessRules(impacts, effectiveScope, effectiveCategory?.code);
     
     return impacts.map(impact => ({
       ...impact,
@@ -511,9 +528,9 @@ const GuidedEntryModal = ({
     const conversionFactor = needsConversion ? convertedQtyValue / qty : null;
     
     await onSubmit({
-      category_id: category.code,
+      category_id: effectiveCategory.code,
       subcategory_id: selectedSubcategory?.code,
-      scope: scope,
+      scope: effectiveScope,
       name: language === 'fr' 
         ? (selectedFactor.name_fr || selectedFactor.name) 
         : (selectedFactor.name_de || selectedFactor.name),
@@ -524,8 +541,8 @@ const GuidedEntryModal = ({
       conversion_factor: conversionFactor,   // Facteur de conversion (pour audit)
       emission_factor_id: selectedFactor.id,
       comments: comments,
-      entry_scope: scope,
-      entry_category: category.code
+      entry_scope: effectiveScope,
+      entry_category: effectiveCategory.code
     });
     
     onClose();
@@ -566,9 +583,9 @@ const GuidedEntryModal = ({
           </button>
         </div>
         <div className="flex items-center gap-2 mt-2 flex-wrap">
-          <div className="w-3 h-3 rounded-full" style={{ backgroundColor: category?.color }}></div>
+          <div className="w-3 h-3 rounded-full" style={{ backgroundColor: effectiveCategory?.color }}></div>
           <span className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-            {language === 'fr' ? category?.name_fr : category?.name_de}
+            {language === 'fr' ? effectiveCategory?.name_fr : effectiveCategory?.name_de}
           </span>
         </div>
       </div>
@@ -735,6 +752,37 @@ const GuidedEntryModal = ({
             {/* Separator */}
             {selectedFactor && (
               <div className={`border-t ${isDark ? 'border-slate-700' : 'border-gray-200'}`} />
+            )}
+
+            {/* Category picker — shown when search found multiple possible categories */}
+            {selectedFactor && pendingCategoryChoice && pendingCategoryChoice.length > 1 && (
+              <div data-testid="category-picker">
+                <label className={`block text-xs font-medium mb-2 uppercase tracking-wider ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>
+                  {language === 'fr' ? 'Catégorie' : 'Kategorie'}
+                </label>
+                <div className="flex flex-wrap gap-2">
+                  {pendingCategoryChoice.map(cat => {
+                    const isSelected = effectiveCategory?.code === cat.code;
+                    const scopeLabel = scopeColors[cat.scope]?.label || cat.scope;
+                    return (
+                      <button
+                        key={cat.code}
+                        type="button"
+                        onClick={() => setResolvedCategory(cat)}
+                        data-testid={`category-choice-${cat.code}`}
+                        className={`px-3 py-2 rounded-lg text-xs font-medium border transition-all ${
+                          isSelected
+                            ? (isDark ? 'border-blue-500 bg-blue-500/20 text-blue-300' : 'border-blue-400 bg-blue-50 text-blue-700')
+                            : (isDark ? 'border-slate-600 hover:border-slate-500 text-slate-400' : 'border-gray-200 hover:border-gray-300 text-gray-600')
+                        }`}
+                      >
+                        <span>{language === 'fr' ? (cat.name_fr || cat.code) : (cat.name_de || cat.code)}</span>
+                        <span className={`ml-1.5 opacity-60`}>({scopeLabel})</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
             )}
 
             {/* Step 4: Quantity — always visible when factor selected */}

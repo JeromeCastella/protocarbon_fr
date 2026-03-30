@@ -700,6 +700,7 @@ const DataEntry = () => {
   const { currentFiscalYear, fiscalYears } = useFiscalYear();
   const [activeScope, setActiveScope] = useState('scope1');
   const [categories, setCategories] = useState([]);
+  const [allSubcategories, setAllSubcategories] = useState([]); // For search category resolution
   const [activities, setActivities] = useState([]);
   const [summary, setSummary] = useState(null);
   const [categoryStats, setCategoryStats] = useState({});
@@ -757,16 +758,31 @@ const DataEntry = () => {
   const handleSearchFactorSelect = (factor) => {
     // Derive scope from factor or its first impact
     const factorScope = factor.scope || factor.impact?.scope || 'scope1';
+
+    // Resolve possible categories from factor's subcategory
+    const subcat = allSubcategories.find(s => s.code === factor.subcategory);
+    const subcatCategoryCodes = subcat?.categories || [];
     
-    // Find the category for this factor
-    const category = categories.find(c => c.code === factor.category);
-    if (category) {
-      setSelectedCategory(category);
+    // Get full category objects for these codes
+    const possibleCategories = subcatCategoryCodes
+      .map(code => categories.find(c => c.code === code))
+      .filter(Boolean);
+
+    if (possibleCategories.length === 1) {
+      // Unambiguous — auto-select
+      setSelectedCategory(possibleCategories[0]);
+      setPreSelectedFactor({ ...factor, scope: factorScope, _resolvedCategories: null });
+    } else if (possibleCategories.length > 1) {
+      // Ambiguous — pass choices to GuidedEntryModal for user to pick
+      setSelectedCategory(possibleCategories[0]); // pre-select first as default
+      setPreSelectedFactor({ ...factor, scope: factorScope, _resolvedCategories: possibleCategories });
     } else {
-      setSelectedCategory({ code: factor.category || 'unknown', scope: factorScope });
+      // No subcategory match — fallback to factor.category or unknown
+      const fallbackCat = categories.find(c => c.code === factor.category);
+      setSelectedCategory(fallbackCat || { code: factor.category || 'unknown', scope: factorScope });
+      setPreSelectedFactor({ ...factor, scope: factorScope, _resolvedCategories: null });
     }
-    // Attach scope to the factor for GuidedEntryModal
-    setPreSelectedFactor({ ...factor, scope: factorScope });
+
     setEditingActivityData(null);
     setShowModal(true);
   };
@@ -776,13 +792,15 @@ const DataEntry = () => {
       // Build query params with fiscal year filter
       const fiscalYearParam = currentFiscalYear?.id ? `&fiscal_year_id=${currentFiscalYear.id}` : '';
       
-      const [categoriesRes, activitiesRes, summaryRes, statsRes] = await Promise.all([
+      const [categoriesRes, activitiesRes, summaryRes, statsRes, subcatsRes] = await Promise.all([
         axios.get(`${API_URL}/api/categories`),
         axios.get(`${API_URL}/api/activities?limit=500${fiscalYearParam}`),
         axios.get(`${API_URL}/api/dashboard/summary${fiscalYearParam ? '?' + fiscalYearParam.slice(1) : ''}`),
-        axios.get(`${API_URL}/api/dashboard/category-stats${fiscalYearParam ? '?' + fiscalYearParam.slice(1) : ''}`)
+        axios.get(`${API_URL}/api/dashboard/category-stats${fiscalYearParam ? '?' + fiscalYearParam.slice(1) : ''}`),
+        axios.get(`${API_URL}/api/subcategories`),
       ]);
       setCategories(categoriesRes.data || []);
+      setAllSubcategories(subcatsRes.data || []);
       // Handle paginated response
       const activitiesData = activitiesRes.data?.data || activitiesRes.data || [];
       setActivities(activitiesData);
