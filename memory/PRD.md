@@ -82,6 +82,8 @@ Application full-stack (React/FastAPI/MongoDB) pour la comptabilité carbone d'e
 ### P1
 - **FEAT-03 — Multi-utilisateurs**: Rôles Admin/Éditeur/Lecteur
 - **Exports PDF/Excel**
+- **FEAT-DR — Dual Reporting (Location-based / Market-based)**: Gestion du double reporting pour le Scope 2 selon le GHG Protocol — approche basée sur la localisation vs. approche basée sur le marché (certificats d'énergie, contrats, mix résiduel)
+- **FEAT-PLAUS — Test de plausibilité global**: Vérification automatique de la cohérence des volumes saisis par rapport aux informations générales de l'entreprise (effectifs, surface, chiffre d'affaires, secteur d'activité). Alertes si les données semblent incohérentes
 
 ### P2
 - Base de données actions plan climat cantonal
