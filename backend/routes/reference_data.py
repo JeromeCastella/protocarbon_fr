@@ -118,8 +118,9 @@ async def get_emission_factors_search_index(
             "_id": 0, "id": 1, "name_fr": 1, "name_de": 1, "name_simple_fr": 1,
             "name_simple_de": 1, "source_product_name": 1,
             "is_public": 1, "subcategory": 1, "default_unit": 1,
-            "popularity_score": 1, "tags": 1, "category": 1, "scope": 1,
+            "popularity_score": 1, "tags": 1, "category": 1,
             "impact": {"$arrayElemAt": ["$impacts", 0]},
+            "scope": {"$ifNull": ["$scope", {"$arrayElemAt": ["$impacts.scope", 0]}]},
         }}
     ]
     return list(emission_factors_collection.aggregate(pipeline))

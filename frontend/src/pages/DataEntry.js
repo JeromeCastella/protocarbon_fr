@@ -755,15 +755,18 @@ const DataEntry = () => {
 
   // Handle factor selected from global search bar
   const handleSearchFactorSelect = (factor) => {
+    // Derive scope from factor or its first impact
+    const factorScope = factor.scope || factor.impact?.scope || 'scope1';
+    
     // Find the category for this factor
     const category = categories.find(c => c.code === factor.category);
     if (category) {
       setSelectedCategory(category);
     } else {
-      // Fallback: create a minimal category object from factor data
-      setSelectedCategory({ code: factor.category || 'unknown', scope: factor.scope || 'scope1' });
+      setSelectedCategory({ code: factor.category || 'unknown', scope: factorScope });
     }
-    setPreSelectedFactor(factor);
+    // Attach scope to the factor for GuidedEntryModal
+    setPreSelectedFactor({ ...factor, scope: factorScope });
     setEditingActivityData(null);
     setShowModal(true);
   };
@@ -1308,7 +1311,7 @@ const DataEntry = () => {
           setPreSelectedFactor(null);
         }}
         category={selectedCategory}
-        scope={activeScope}
+        scope={preSelectedFactor ? (preSelectedFactor.scope || selectedCategory?.scope || activeScope) : activeScope}
         language={language}
         isDark={isDark}
         onSubmit={handleActivitySubmit}
