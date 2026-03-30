@@ -6,7 +6,7 @@ import pytest
 import requests
 import os
 
-BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://bafu-curation.preview.emergentagent.com').rstrip('/')
+BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://carbon-curation.preview.emergentagent.com').rstrip('/')
 
 # Test credentials
 TEST_EMAIL = "newtest@x.com"

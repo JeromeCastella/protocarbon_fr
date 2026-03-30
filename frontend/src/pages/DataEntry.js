@@ -477,6 +477,8 @@ const TableViewPanel = ({
 /* ================================================================
  *  GLOBAL FACTOR SEARCH — Quick search bar for power users
  * ================================================================ */
+const normalize = (str) => typeof str === 'string' ? str.normalize('NFD').replace(/[\u0300-\u036f]/g, '') : str;
+
 const FUSE_OPTIONS = {
   keys: [
     { name: 'name_simple_fr', weight: 4 },
@@ -490,6 +492,11 @@ const FUSE_OPTIONS = {
   ignoreLocation: true,
   minMatchCharLength: 2,
   includeScore: true,
+  getFn: (obj, path) => {
+    const val = Fuse.config.getFn(obj, path);
+    if (Array.isArray(val)) return val.map(v => normalize(v));
+    return normalize(val);
+  },
 };
 
 const GlobalFactorSearch = ({ isDark, language, showExpertFactors, onToggleExpert, onSelectFactor }) => {
@@ -543,7 +550,7 @@ const GlobalFactorSearch = ({ isDark, language, showExpertFactors, onToggleExper
       return;
     }
     debounceRef.current = setTimeout(() => {
-      const raw = fuseIndex.search(query, { limit: 50 });
+      const raw = fuseIndex.search(normalize(query), { limit: 50 });
       const filtered = showExpertFactors
         ? raw
         : raw.filter(r => r.item.is_public);
