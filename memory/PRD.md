@@ -25,8 +25,10 @@ Application full-stack (React/FastAPI/MongoDB) pour la comptabilité carbone d'e
 - Fuzzy search sur 6 champs pondérés (nom simplifié FR/DE, nom FR/DE, source, tags)
 - Résultats en dropdown avec nom, catégorie, unité, valeur d'impact, badge Expert
 - Clic sur résultat → formulaire guidé directement à l'étape 4 (quantité)
+- **Résolution hybride de catégorie** : auto-dérivation quand unique, mini-sélecteur quand ambigu (89/100 sous-catégories ont 2+ catégories)
+- Scope correctement dérivé depuis `impacts[0].scope` du facteur
 - Toggle persisté en localStorage
-- Endpoint backend `GET /api/emission-factors/search-index` (8978 facteurs, ~4MB, projection légère)
+- Endpoint backend `GET /api/emission-factors/search-index` (8978 facteurs, ~4MB, aggregation avec scope)
 
 ## Atelier de Curation — Terminé
 - Tableau éditable en ligne (~9000 facteurs, pagination côté serveur)
