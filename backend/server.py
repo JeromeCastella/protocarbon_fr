@@ -11,11 +11,21 @@ from routes import api_router
 
 app = FastAPI(title="Carbon Footprint Calculator - GHG Protocol")
 
-# CORS Configuration — permissive car le proxy/ingress gère les CORS
+# CORS Configuration
+# Note: avec allow_origins=["*"] + allow_credentials=True,
+# FastAPI/Starlette reflète l'origine exacte de la requête (pas "*" littéral),
+# ce qui est compatible avec les requêtes authentifiées.
+cors_origins_raw = os.environ.get("CORS_ORIGINS", "*")
+cors_origins_list = [o.strip() for o in cors_origins_raw.split(",") if o.strip()]
+if "*" in cors_origins_list:
+    cors_origins = ["*"]
+else:
+    cors_origins = cors_origins_list
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=False,
+    allow_origins=cors_origins,
+    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
