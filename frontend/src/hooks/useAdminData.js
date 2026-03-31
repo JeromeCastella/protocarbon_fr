@@ -3,6 +3,7 @@
  */
 import { useState, useEffect, useCallback, useRef } from 'react';
 import axios from 'axios';
+import logger from '../utils/logger';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL || '';
 
@@ -26,7 +27,7 @@ export const useAdminData = (isAdmin) => {
       setFactors(data.items || []);
       setFactorsPagination({ total: data.total, page: data.page, page_size: data.page_size, total_pages: data.total_pages });
     } catch (error) {
-      console.error('Failed to fetch factors:', error);
+      logger.error('Failed to fetch factors:', error);
     }
   }, [isAdmin]);
 
@@ -51,7 +52,7 @@ export const useAdminData = (isAdmin) => {
       setSubcategories(subcatsRes.data || []);
       setUnitConversions(unitsRes.data || []);
     } catch (error) {
-      console.error('Failed to fetch admin data:', error);
+      logger.error('Failed to fetch admin data:', error);
     } finally {
       setLoading(false);
       isInitialLoad.current = false;

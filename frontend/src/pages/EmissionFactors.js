@@ -3,6 +3,7 @@ import { useTheme } from '../context/ThemeContext';
 import { useLanguage } from '../context/LanguageContext';
 import axios from 'axios';
 import { motion } from 'framer-motion';
+import logger from '../utils/logger';
 import { 
   Database, 
   Search, 
@@ -33,7 +34,7 @@ const EmissionFactors = () => {
       const response = await axios.get(`${API_URL}/api/emission-factors`);
       setFactors(response.data || []);
     } catch (error) {
-      console.error('Failed to fetch emission factors:', error);
+      logger.error('Failed to fetch emission factors:', error);
     } finally {
       setLoading(false);
     }
@@ -43,11 +44,7 @@ const EmissionFactors = () => {
   const handleExportJSON = async () => {
     setExporting(true);
     try {
-      // Get token from localStorage for authenticated request
-      const token = localStorage.getItem('token');
-      const headers = token ? { Authorization: `Bearer ${token}` } : {};
-      
-      const response = await axios.get(`${API_URL}/api/export/emission-factors`, { headers });
+      const response = await axios.get(`${API_URL}/api/export/emission-factors`);
       const data = response.data;
       
       // Create blob and download
@@ -61,7 +58,7 @@ const EmissionFactors = () => {
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
     } catch (error) {
-      console.error('Failed to export emission factors:', error);
+      logger.error('Failed to export emission factors:', error);
       alert('Erreur lors de l\'export des facteurs d\'émission');
     } finally {
       setExporting(false);
@@ -72,11 +69,7 @@ const EmissionFactors = () => {
   const handleExportCSV = async () => {
     setExporting(true);
     try {
-      // Get token from localStorage for authenticated request
-      const token = localStorage.getItem('token');
-      const authHeaders = token ? { Authorization: `Bearer ${token}` } : {};
-      
-      const response = await axios.get(`${API_URL}/api/export/emission-factors`, { headers: authHeaders });
+      const response = await axios.get(`${API_URL}/api/export/emission-factors`);
       const factors = response.data.emission_factors || [];
       
       // Build CSV content
@@ -153,7 +146,7 @@ const EmissionFactors = () => {
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
     } catch (error) {
-      console.error('Failed to export emission factors:', error);
+      logger.error('Failed to export emission factors:', error);
       alert('Erreur lors de l\'export des facteurs d\'émission');
     } finally {
       setExporting(false);

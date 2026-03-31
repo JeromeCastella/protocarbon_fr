@@ -8,6 +8,7 @@ sys.path.insert(0, '/app/backend')
 from services.auth import hash_password, verify_password, create_access_token
 from jose import jwt
 from config import JWT_SECRET, JWT_ALGORITHM
+from tests.conftest_credentials import TEST_GENERIC_PASSWORD
 
 
 class TestPasswordHashing:
@@ -15,7 +16,7 @@ class TestPasswordHashing:
     
     def test_hash_password(self):
         """Test password hashing"""
-        password = "testpassword123"
+        password = TEST_GENERIC_PASSWORD
         hashed = hash_password(password)
         
         assert hashed != password
@@ -24,21 +25,21 @@ class TestPasswordHashing:
     
     def test_verify_password_correct(self):
         """Test verifying correct password"""
-        password = "testpassword123"
+        password = TEST_GENERIC_PASSWORD
         hashed = hash_password(password)
         
         assert verify_password(password, hashed) == True
     
     def test_verify_password_incorrect(self):
         """Test verifying incorrect password"""
-        password = "testpassword123"
+        password = TEST_GENERIC_PASSWORD
         hashed = hash_password(password)
         
         assert verify_password("wrongpassword", hashed) == False
     
     def test_different_hashes_same_password(self):
         """Test that same password produces different hashes (salt)"""
-        password = "testpassword123"
+        password = TEST_GENERIC_PASSWORD
         hash1 = hash_password(password)
         hash2 = hash_password(password)
         

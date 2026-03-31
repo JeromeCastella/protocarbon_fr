@@ -11,12 +11,13 @@ Business Rules:
 import pytest
 import requests
 import os
+from tests.conftest_credentials import TEST_BASE_URL, TEST_ADMIN_EMAIL, TEST_ADMIN_PASSWORD
 
 BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://carbon-curation.preview.emergentagent.com')
 
 # Test credentials
-TEST_EMAIL = "newtest@x.com"
-TEST_PASSWORD = "test123"
+# credentials imported from conftest_credentials
+# credentials imported from conftest_credentials
 
 # Hydroélectricité factor with multi-impacts
 HYDRO_FACTOR_ID = "698418f3c1a4e9f26cd27156"
@@ -31,7 +32,7 @@ class TestMultiImpactsBusinessRules:
         """Setup: authenticate and get token"""
         response = requests.post(
             f"{BASE_URL}/api/auth/login",
-            json={"email": TEST_EMAIL, "password": TEST_PASSWORD}
+            json={"email": TEST_ADMIN_EMAIL, "password": TEST_ADMIN_PASSWORD}
         )
         assert response.status_code == 200, f"Login failed: {response.text}"
         data = response.json()
@@ -383,7 +384,7 @@ class TestActivityGroupOperations:
         """Setup: authenticate and get token"""
         response = requests.post(
             f"{BASE_URL}/api/auth/login",
-            json={"email": TEST_EMAIL, "password": TEST_PASSWORD}
+            json={"email": TEST_ADMIN_EMAIL, "password": TEST_ADMIN_PASSWORD}
         )
         assert response.status_code == 200
         data = response.json()

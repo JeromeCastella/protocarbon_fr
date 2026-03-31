@@ -2,13 +2,14 @@
 Routes d'authentification étendues
 Inclut: login, register, password reset, email verification, account lockout
 """
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, HTTPException, Depends, Request, Response
 from datetime import datetime, timezone, timedelta
 from bson import ObjectId
 from pydantic import BaseModel, EmailStr
 from typing import Optional
 import secrets
 import hashlib
+import os
 
 from config import users_collection, companies_collection, pwd_context, db
 from models import UserRegister, UserLogin, UserResponse, UserUpdate
@@ -31,6 +32,9 @@ MAX_LOGIN_ATTEMPTS = 5
 LOCKOUT_DURATION_MINUTES = 15
 RESET_TOKEN_EXPIRY_HOURS = 1
 VERIFICATION_TOKEN_EXPIRY_HOURS = 24
+COOKIE_NAME = "access_token"
+COOKIE_SECURE = os.environ.get("COOKIE_SECURE", "true").lower() == "true"
+COOKIE_SAMESITE = os.environ.get("COOKIE_SAMESITE", "lax")
 
 
 # ============== MODELS ==============
@@ -109,6 +113,32 @@ def reset_failed_attempts(user_id: str):
     )
 
 
+def set_auth_cookie(response: Response, token: str, max_age: int = None):
+    """Set httpOnly secure cookie with the JWT token"""
+    if max_age is None:
+        max_age = 60 * 60 * 24  # 1 day default
+    response.set_cookie(
+        key=COOKIE_NAME,
+        value=token,
+        httponly=True,
+        secure=COOKIE_SECURE,
+        samesite=COOKIE_SAMESITE,
+        max_age=max_age,
+        path="/",
+    )
+
+
+def clear_auth_cookie(response: Response):
+    """Clear the httpOnly auth cookie"""
+    response.delete_cookie(
+        key=COOKIE_NAME,
+        path="/",
+        httponly=True,
+        secure=COOKIE_SECURE,
+        samesite=COOKIE_SAMESITE,
+    )
+
+
 # ============== REGISTRATION ==============
 
 @router.post("/register")
@@ -151,7 +181,7 @@ async def register(user: UserRegister):
 # ============== LOGIN ==============
 
 @router.post("/login")
-async def login(user: LoginExtended):
+async def login(user: LoginExtended, response: Response):
     """Login with account lockout protection and remember me option"""
     db_user = users_collection.find_one({"email": user.email})
     if not db_user:
@@ -192,6 +222,10 @@ async def login(user: LoginExtended):
     token_expiry = 43200 if user.remember_me else None  # 30 days vs default
     token = create_access_token({"sub": user_id}, expires_delta=token_expiry)
     
+    # Set httpOnly cookie
+    cookie_max_age = 60 * 60 * 24 * 30 if user.remember_me else 60 * 60 * 24  # 30 days or 1 day
+    set_auth_cookie(response, token, max_age=cookie_max_age)
+    
     return {
         "token": token,
         "user": {
@@ -204,6 +238,13 @@ async def login(user: LoginExtended):
             "email_verified": db_user.get("email_verified", False)
         }
     }
+
+
+@router.post("/logout")
+async def logout(response: Response):
+    """Logout — clear the httpOnly auth cookie"""
+    clear_auth_cookie(response)
+    return {"message": "Logged out"}
 
 
 # ============== PASSWORD RECOVERY ==============

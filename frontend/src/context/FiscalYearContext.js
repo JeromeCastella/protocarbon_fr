@@ -1,6 +1,7 @@
 import React, { useState, useEffect, createContext, useContext } from 'react';
 import axios from 'axios';
 import { useAuth } from './AuthContext';
+import logger from '../utils/logger';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL || '';
 
@@ -15,7 +16,7 @@ export const useFiscalYear = () => {
 };
 
 export const FiscalYearProvider = ({ children }) => {
-  const { token } = useAuth();
+  const { isAuthenticated } = useAuth();
   const [fiscalYears, setFiscalYears] = useState([]);
   const [currentFiscalYear, setCurrentFiscalYear] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -29,21 +30,21 @@ export const FiscalYearProvider = ({ children }) => {
       setFiscalYears(yearsRes.data || []);
       setCurrentFiscalYear(currentRes.data);
     } catch (error) {
-      console.error('Failed to fetch fiscal years:', error);
+      logger.error('Failed to fetch fiscal years:', error);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    if (token) {
+    if (isAuthenticated) {
       fetchFiscalYears();
     } else {
       setFiscalYears([]);
       setCurrentFiscalYear(null);
       setLoading(false);
     }
-  }, [token]);
+  }, [isAuthenticated]);
 
   const selectFiscalYear = (fiscalYear) => {
     setCurrentFiscalYear(fiscalYear);

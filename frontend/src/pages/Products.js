@@ -13,6 +13,7 @@ import ProductSaleModal from '../components/ProductSaleModal';
 import ProductVersionsModal from '../components/ProductVersionsModal';
 import ProductDetailModal from '../components/ProductDetailModal';
 import EmptyFiscalYearState from '../components/EmptyFiscalYearState';
+import logger from '../utils/logger';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL || '';
 
@@ -246,7 +247,7 @@ const Products = () => {
       const fy = currentFiscalYear?.id ? `?fiscal_year_id=${currentFiscalYear.id}` : '';
       const res = await axios.get(`${API_URL}/api/products${fy}`);
       setProducts(res.data || []);
-    } catch (err) { console.error('Failed to fetch products:', err); }
+    } catch (err) { logger.error('Failed to fetch products:', err); }
     finally { setLoading(false); }
   };
 
@@ -263,7 +264,7 @@ const Products = () => {
           : 'Das Produkt wurde archiviert, da es Verkäufe gibt.');
       }
       fetchProducts();
-    } catch (err) { console.error('Failed to delete product:', err); }
+    } catch (err) { logger.error('Failed to delete product:', err); }
   };
 
   const handleEdit = (product) => {
@@ -284,7 +285,7 @@ const Products = () => {
     try {
       await axios.post(`${API_URL}/api/products/${product.id}/recalculate`);
       fetchProducts();
-    } catch (err) { console.error('Failed to recalculate:', err); }
+    } catch (err) { logger.error('Failed to recalculate:', err); }
   };
 
   if (loading) {

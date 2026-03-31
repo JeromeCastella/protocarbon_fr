@@ -5,6 +5,7 @@ Tests the /api/objectives/trajectory endpoint returns separate scope values
 import pytest
 import requests
 import os
+from tests.conftest_credentials import TEST_BASE_URL, TEST_ADMIN_EMAIL, TEST_ADMIN_PASSWORD
 
 BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://carbon-curation.preview.emergentagent.com')
 

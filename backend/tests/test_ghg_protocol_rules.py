@@ -13,12 +13,13 @@ Business Rules:
 import pytest
 import requests
 import os
+from tests.conftest_credentials import TEST_BASE_URL, TEST_ADMIN_EMAIL, TEST_ADMIN_PASSWORD
 
 BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://carbon-curation.preview.emergentagent.com')
 
 # Test credentials
-TEST_EMAIL = "newtest@x.com"
-TEST_PASSWORD = "test123"
+# credentials from conftest_credentials
+# credentials from conftest_credentials
 
 # Specific emission factors from the request
 CHAUDIERE_MAZOUT_ID = "698418f3c1a4e9f26cd2735f"  # Scope 1 - combustion_fixe
@@ -34,7 +35,7 @@ class TestGHGProtocolRulesWithSpecificFactors:
         """Setup: authenticate and get token"""
         response = requests.post(
             f"{BASE_URL}/api/auth/login",
-            json={"email": TEST_EMAIL, "password": TEST_PASSWORD}
+            json={"email": TEST_ADMIN_EMAIL, "password": TEST_ADMIN_PASSWORD}
         )
         assert response.status_code == 200, f"Login failed: {response.text}"
         data = response.json()
@@ -448,7 +449,7 @@ class TestZeroValueImpactExclusion:
         """Setup: authenticate and get token"""
         response = requests.post(
             f"{BASE_URL}/api/auth/login",
-            json={"email": TEST_EMAIL, "password": TEST_PASSWORD}
+            json={"email": TEST_ADMIN_EMAIL, "password": TEST_ADMIN_PASSWORD}
         )
         assert response.status_code == 200
         data = response.json()

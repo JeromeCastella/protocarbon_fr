@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Download, FileJson, CheckCircle, AlertCircle, Loader2, Database, Package, Activity, Layers, FileCode, HardDrive, Shield, Info } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import { useLanguage } from '../../context/LanguageContext';
+import logger from '../../utils/logger';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL;
 
@@ -29,16 +30,15 @@ const AdminExportTab = () => {
 
   const fetchFiscalYears = async () => {
     try {
-      const token = localStorage.getItem('token');
       const res = await fetch(`${API_URL}/api/fiscal-years`, {
-        headers: { Authorization: `Bearer ${token}` }
+        credentials: 'include'
       });
       if (res.ok) {
         const data = await res.json();
         setFiscalYears(data);
       }
     } catch (error) {
-      console.error('Error fetching fiscal years:', error);
+      logger.error('Error fetching fiscal years:', error);
     } finally {
       setLoadingFY(false);
     }
@@ -47,16 +47,15 @@ const AdminExportTab = () => {
   const fetchDumpInfo = async () => {
     setDumpInfoLoading(true);
     try {
-      const token = localStorage.getItem('token');
       const res = await fetch(`${API_URL}/api/export/mongodump/info`, {
-        headers: { Authorization: `Bearer ${token}` }
+        credentials: 'include'
       });
       if (res.ok) {
         const data = await res.json();
         setDumpInfo(data);
       }
     } catch (error) {
-      console.error('Error fetching dump info:', error);
+      logger.error('Error fetching dump info:', error);
     } finally {
       setDumpInfoLoading(false);
     }
@@ -66,9 +65,8 @@ const AdminExportTab = () => {
     setDumpLoading(true);
     setDumpResult(null);
     try {
-      const token = localStorage.getItem('token');
       const res = await fetch(`${API_URL}/api/export/mongodump`, {
-        headers: { Authorization: `Bearer ${token}` }
+        credentials: 'include'
       });
 
       if (!res.ok) {
@@ -106,7 +104,7 @@ const AdminExportTab = () => {
           : `Export erfolgreich — ${filename} (${sizeMB} MB) — Methode: ${methodLabel}`
       });
     } catch (error) {
-      console.error('MongoDB dump error:', error);
+      logger.error('MongoDB dump error:', error);
       setDumpResult({
         success: false,
         message: language === 'fr'
@@ -123,7 +121,6 @@ const AdminExportTab = () => {
     setResult(null);
     
     try {
-      const token = localStorage.getItem('token');
       let endpoint = `${API_URL}/api/export/${exportType}`;
       
       if (selectedFiscalYear !== 'all') {
@@ -131,7 +128,7 @@ const AdminExportTab = () => {
       }
       
       const res = await fetch(endpoint, {
-        headers: { Authorization: `Bearer ${token}` }
+        credentials: 'include'
       });
       
       if (!res.ok) {
@@ -180,7 +177,7 @@ const AdminExportTab = () => {
         stats: data.statistics || { count: data[exportType]?.length || 0 }
       });
     } catch (error) {
-      console.error('Export error:', error);
+      logger.error('Export error:', error);
       setResult({
         success: false,
         message: language === 'fr' ? 'Erreur lors de l\'export' : 'Exportfehler'

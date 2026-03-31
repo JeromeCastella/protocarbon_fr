@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Search, Plus, Edit2, Trash2, Layers, X, Check, Database, FlaskConical } from 'lucide-react';
 import axios from 'axios';
 import { ALL_CATEGORIES } from '../../hooks/useAdminData';
+import logger from '../../utils/logger';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL || '';
 
@@ -74,7 +75,7 @@ const AdminSubcategoriesTab = ({ subcategories, onRefetch }) => {
       await axios.delete(`${API_URL}/api/admin/subcategories/${subcatId}`);
       onRefetch();
     } catch (error) {
-      console.error('Failed to delete subcategory:', error);
+      logger.error('Failed to delete subcategory:', error);
       alert(t('errors.generic'));
     }
   };
@@ -91,7 +92,7 @@ const AdminSubcategoriesTab = ({ subcategories, onRefetch }) => {
       setForm(INITIAL_FORM);
       onRefetch();
     } catch (error) {
-      console.error('Failed to save subcategory:', error);
+      logger.error('Failed to save subcategory:', error);
       alert('Erreur: ' + (error.response?.data?.detail || error.message));
     }
   };

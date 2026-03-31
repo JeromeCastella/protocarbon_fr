@@ -3,6 +3,7 @@ import { useTheme } from '../../context/ThemeContext';
 import { useLanguage } from '../../context/LanguageContext';
 import { Trash2, Shield, ShieldOff, AlertTriangle, X, UserPlus, Eye, EyeOff } from 'lucide-react';
 import axios from 'axios';
+import logger from '../../utils/logger';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL || '';
 
@@ -35,7 +36,7 @@ const AdminUsersTab = ({ users, currentUserId, onRefetch }) => {
       await axios.put(`${API_URL}/api/admin/users/${userId}/role`, { role: newRole });
       onRefetch();
     } catch (error) {
-      console.error('Failed to update user role:', error);
+      logger.error('Failed to update user role:', error);
       alert(error.response?.data?.detail || t('errors.generic'));
     } finally {
       setLoading(false);
@@ -49,7 +50,7 @@ const AdminUsersTab = ({ users, currentUserId, onRefetch }) => {
       setDeleteConfirm(null);
       onRefetch();
     } catch (error) {
-      console.error('Failed to delete user:', error);
+      logger.error('Failed to delete user:', error);
       alert(error.response?.data?.detail || t('errors.generic'));
     } finally {
       setLoading(false);
@@ -67,7 +68,7 @@ const AdminUsersTab = ({ users, currentUserId, onRefetch }) => {
       setCreateForm({ email: '', password: '', name: '', role: 'user' });
       onRefetch();
     } catch (error) {
-      console.error('Failed to create user:', error);
+      logger.error('Failed to create user:', error);
       setCreateError(error.response?.data?.detail || t('errors.generic'));
     } finally {
       setLoading(false);

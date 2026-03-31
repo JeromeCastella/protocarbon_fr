@@ -3,6 +3,7 @@ import { useTheme } from '../context/ThemeContext';
 import { useFiscalYear } from '../context/FiscalYearContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import axios from 'axios';
+import logger from '../utils/logger';
 import { 
   Calendar, 
   Plus, 
@@ -67,7 +68,7 @@ const FiscalYears = () => {
       const res = await axios.get(`${API_URL}/api/scenarios`);
       setScenarios(res.data || []);
     } catch (e) {
-      console.error('Failed to fetch scenarios:', e);
+      logger.error('Failed to fetch scenarios:', e);
     }
   };
   
@@ -244,7 +245,7 @@ const FiscalYears = () => {
       setShowCreateModal(false);
       setCreateForm({ year: new Date().getFullYear() + 1, duplicateFrom: null, duplicateActivities: false, isScenario: false, selectedScenarioId: '', newScenarioName: '' });
     } catch (error) {
-      console.error('Failed to create fiscal year:', error);
+      logger.error('Failed to create fiscal year:', error);
       setCreateError(error.response?.data?.detail || 'Erreur lors de la création');
     } finally {
       setLoading(false);
@@ -260,7 +261,7 @@ const FiscalYears = () => {
       setShowCloseModal(false);
       setSelectedFY(null);
     } catch (error) {
-      console.error('Failed to close fiscal year:', error);
+      logger.error('Failed to close fiscal year:', error);
       alert(error.response?.data?.detail || 'Erreur lors de la clôture');
     } finally {
       setLoading(false);
@@ -277,7 +278,7 @@ const FiscalYears = () => {
       setSelectedFY(null);
       setRectifyReason('');
     } catch (error) {
-      console.error('Failed to rectify fiscal year:', error);
+      logger.error('Failed to rectify fiscal year:', error);
       alert(error.response?.data?.detail || 'Erreur lors de la rectification');
     } finally {
       setLoading(false);
@@ -299,7 +300,7 @@ const FiscalYears = () => {
         totalEmissions: response.data?.total_emissions || 0
       });
     } catch (error) {
-      console.error('Failed to fetch stats:', error);
+      logger.error('Failed to fetch stats:', error);
       setDeleteStats({ activitiesCount: 0, totalEmissions: 0 });
     } finally {
       setLoading(false);
@@ -316,14 +317,14 @@ const FiscalYears = () => {
     setDeleteError('');
     try {
       const response = await axios.delete(`${API_URL}/api/fiscal-years/${selectedFY.id}`);
-      console.log('Delete response:', response.data);
+      logger.log('Delete response:', response.data);
       await refreshFiscalYears();
       setShowDeleteModal(false);
       setSelectedFY(null);
       setDeleteStats(null);
       setDeleteConfirmText('');
     } catch (error) {
-      console.error('Failed to delete fiscal year:', error);
+      logger.error('Failed to delete fiscal year:', error);
       setDeleteError(error.response?.data?.detail || 'Erreur lors de la suppression');
     } finally {
       setLoading(false);

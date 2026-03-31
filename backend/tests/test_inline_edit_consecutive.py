@@ -11,19 +11,20 @@ import pytest
 import requests
 import os
 import time
+from tests.conftest_credentials import TEST_BASE_URL, TEST_ADMIN_EMAIL, TEST_ADMIN_PASSWORD
 
 BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', '').rstrip('/')
 
-TEST_EMAIL = "newtest@x.com"
-TEST_PASSWORD = "test123"
+# credentials from conftest_credentials
+# credentials from conftest_credentials
 
 
 @pytest.fixture(scope="module")
 def auth_token():
     """Get authentication token for admin user"""
     response = requests.post(f"{BASE_URL}/api/auth/login", json={
-        "email": TEST_EMAIL,
-        "password": TEST_PASSWORD
+        "email": TEST_ADMIN_EMAIL,
+        "password": TEST_ADMIN_PASSWORD
     })
     assert response.status_code == 200, f"Login failed: {response.text}"
     return response.json().get("token")

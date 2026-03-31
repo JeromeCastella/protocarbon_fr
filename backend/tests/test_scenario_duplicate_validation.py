@@ -6,12 +6,13 @@ if the same scenario entity already has a fiscal year for that year.
 import pytest
 import requests
 import os
+from tests.conftest_credentials import TEST_BASE_URL, TEST_ADMIN_EMAIL, TEST_ADMIN_PASSWORD
 
 BASE_URL = os.environ.get('REACT_APP_BACKEND_URL')
 
 # Test credentials
-TEST_EMAIL = "newtest@x.com"
-TEST_PASSWORD = "test123"
+# credentials from conftest_credentials
+# credentials from conftest_credentials
 
 
 class TestScenarioDuplicateValidation:
@@ -24,8 +25,8 @@ class TestScenarioDuplicateValidation:
         self.session.headers.update({"Content-Type": "application/json"})
         
         login_response = self.session.post(f"{BASE_URL}/api/auth/login", json={
-            "email": TEST_EMAIL,
-            "password": TEST_PASSWORD
+            "email": TEST_ADMIN_EMAIL,
+            "password": TEST_ADMIN_PASSWORD
         })
         
         if login_response.status_code == 200:

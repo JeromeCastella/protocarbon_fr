@@ -5,20 +5,21 @@ Tests: Auth, Dashboard, Activities, Products, Emission Factors, Admin, Export
 import pytest
 import requests
 import os
+from tests.conftest_credentials import TEST_BASE_URL, TEST_ADMIN_EMAIL, TEST_ADMIN_PASSWORD
 
 BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://carbon-curation.preview.emergentagent.com')
 
 # Test credentials
-TEST_EMAIL = "newtest@x.com"
-TEST_PASSWORD = "test123"
+# credentials imported from conftest_credentials
+# credentials imported from conftest_credentials
 
 
 @pytest.fixture(scope="module")
 def auth_token():
     """Get authentication token"""
     response = requests.post(f"{BASE_URL}/api/auth/login", json={
-        "email": TEST_EMAIL,
-        "password": TEST_PASSWORD
+        "email": TEST_ADMIN_EMAIL,
+        "password": TEST_ADMIN_PASSWORD
     })
     assert response.status_code == 200, f"Login failed: {response.text}"
     data = response.json()
@@ -38,8 +39,8 @@ class TestAuthentication:
     def test_login_success(self):
         """Test successful login"""
         response = requests.post(f"{BASE_URL}/api/auth/login", json={
-            "email": TEST_EMAIL,
-            "password": TEST_PASSWORD
+            "email": TEST_ADMIN_EMAIL,
+            "password": TEST_ADMIN_PASSWORD
         })
         assert response.status_code == 200
         data = response.json()

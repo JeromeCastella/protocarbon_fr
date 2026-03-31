@@ -44,6 +44,7 @@ import {
   X
 } from 'lucide-react';
 import EmptyFiscalYearState from '../components/EmptyFiscalYearState';
+import logger from '../utils/logger';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL || '';
 
@@ -138,7 +139,7 @@ const GeneralInfo = () => {
       }
       setCategories(categoriesRes.data || []);
     } catch (error) {
-      console.error('Failed to fetch data:', error);
+      logger.error('Failed to fetch data:', error);
     } finally {
       setLoading(false);
     }
@@ -157,7 +158,7 @@ const GeneralInfo = () => {
       });
       setContextReadonly(response.data.is_readonly || false);
     } catch (error) {
-      console.error('Failed to fetch fiscal year context:', error);
+      logger.error('Failed to fetch fiscal year context:', error);
     } finally {
       setContextLoading(false);
     }
@@ -175,7 +176,7 @@ const GeneralInfo = () => {
       setSaved(true);
       setTimeout(() => setSaved(false), 2000);
     } catch (error) {
-      console.error('Failed to save:', error);
+      logger.error('Failed to save:', error);
     } finally {
       setSaving(false);
     }
@@ -190,7 +191,7 @@ const GeneralInfo = () => {
       setSavedContext(true);
       setTimeout(() => setSavedContext(false), 2000);
     } catch (error) {
-      console.error('Failed to save fiscal year context:', error);
+      logger.error('Failed to save fiscal year context:', error);
     } finally {
       setSavingContext(false);
     }
@@ -211,7 +212,7 @@ const GeneralInfo = () => {
       setSavedPerimeter(true);
       setTimeout(() => setSavedPerimeter(false), 2000);
     } catch (error) {
-      console.error('Failed to auto-save category:', error);
+      logger.error('Failed to auto-save category:', error);
     }
   };
 
@@ -233,7 +234,7 @@ const GeneralInfo = () => {
       setSavedPerimeter(true);
       setTimeout(() => setSavedPerimeter(false), 2000);
     } catch (error) {
-      console.error('Failed to auto-save categories:', error);
+      logger.error('Failed to auto-save categories:', error);
     }
   };
 
@@ -452,7 +453,7 @@ const GeneralInfo = () => {
           excluded_categories: newExcluded
         });
       } catch (error) {
-        console.error('Failed to save wizard results:', error);
+        logger.error('Failed to save wizard results:', error);
       }
     }
     
@@ -1148,9 +1149,9 @@ const GeneralInfo = () => {
                 
                 {/* Progress bar */}
                 <div className="flex gap-1">
-                  {wizardSteps.map((_, i) => (
+                  {wizardSteps.map((step, i) => (
                     <div
-                      key={i}
+                      key={step.id || `step-${i}`}
                       className={`h-1 flex-1 rounded-full transition-all ${
                         i <= wizardStep ? 'bg-purple-500' : isDark ? 'bg-slate-600' : 'bg-gray-200'
                       }`}

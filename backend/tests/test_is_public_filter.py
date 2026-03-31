@@ -5,10 +5,11 @@ Tests the BAFU 2025 migration results and API behavior
 import pytest
 import requests
 import os
+from tests.conftest_credentials import TEST_BASE_URL, TEST_ADMIN_EMAIL, TEST_ADMIN_PASSWORD
 
 BASE_URL = os.environ.get('REACT_APP_BACKEND_URL')
-TEST_EMAIL = "newtest@x.com"
-TEST_PASSWORD = "test123"
+# credentials from conftest_credentials
+# credentials from conftest_credentials
 
 
 @pytest.fixture(scope="module")
@@ -16,7 +17,7 @@ def auth_token():
     """Authenticate and get token"""
     response = requests.post(
         f"{BASE_URL}/api/auth/login",
-        json={"email": TEST_EMAIL, "password": TEST_PASSWORD}
+        json={"email": TEST_ADMIN_EMAIL, "password": TEST_ADMIN_PASSWORD}
     )
     assert response.status_code == 200, f"Auth failed: {response.text}"
     return response.json()["token"]

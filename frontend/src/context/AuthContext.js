@@ -1,7 +1,11 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
+import logger from '../utils/logger';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL || '';
+
+// Configure axios to send cookies with every request
+axios.defaults.withCredentials = true;
 
 const AuthContext = createContext();
 
@@ -15,25 +19,20 @@ export const useAuth = () => {
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [token, setToken] = useState(() => localStorage.getItem('token'));
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (token) {
-      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-      fetchUser();
-    } else {
-      setLoading(false);
-    }
-  }, [token]);
+    // On mount, check if we have a valid session via /me
+    checkSession();
+  }, []);
 
-  const fetchUser = async () => {
+  const checkSession = async () => {
     try {
       const response = await axios.get(`${API_URL}/api/auth/me`);
       setUser(response.data);
-    } catch (error) {
-      console.error('Failed to fetch user:', error);
-      logout();
+    } catch {
+      // No valid session — that's fine
+      setUser(null);
     } finally {
       setLoading(false);
     }
@@ -45,10 +44,7 @@ export const AuthProvider = ({ children }) => {
       password,
       remember_me: rememberMe
     });
-    const { token: newToken, user: userData } = response.data;
-    localStorage.setItem('token', newToken);
-    axios.defaults.headers.common['Authorization'] = `Bearer ${newToken}`;
-    setToken(newToken);
+    const { user: userData } = response.data;
     setUser(userData);
     return userData;
   };
@@ -57,18 +53,15 @@ export const AuthProvider = ({ children }) => {
     const response = await axios.post(`${API_URL}/api/auth/register`, { 
       email, password, name, language 
     });
-    const { token: newToken, user: userData } = response.data;
-    localStorage.setItem('token', newToken);
-    axios.defaults.headers.common['Authorization'] = `Bearer ${newToken}`;
-    setToken(newToken);
-    setUser(userData);
-    return userData;
+    return response.data;
   };
 
-  const logout = () => {
-    localStorage.removeItem('token');
-    delete axios.defaults.headers.common['Authorization'];
-    setToken(null);
+  const logout = async () => {
+    try {
+      await axios.post(`${API_URL}/api/auth/logout`);
+    } catch {
+      // Ignore logout errors
+    }
     setUser(null);
   };
 
@@ -81,7 +74,6 @@ export const AuthProvider = ({ children }) => {
     <AuthContext.Provider value={{ 
       user, 
       setUser,
-      token, 
       loading, 
       login, 
       register, 

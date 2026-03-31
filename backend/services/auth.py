@@ -3,9 +3,10 @@ Services d'authentification
 """
 from datetime import datetime, timezone, timedelta
 from jose import JWTError, jwt
-from fastapi import HTTPException, Depends
+from fastapi import HTTPException, Depends, Request
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from bson import ObjectId
+from typing import Optional
 
 from config import (
     JWT_SECRET, 
@@ -15,7 +16,9 @@ from config import (
     users_collection
 )
 
-security = HTTPBearer()
+security = HTTPBearer(auto_error=False)
+
+COOKIE_NAME = "access_token"
 
 def hash_password(password: str) -> str:
     """Hash a password using bcrypt"""
@@ -40,10 +43,22 @@ def create_access_token(data: dict, expires_delta: int = None) -> str:
     to_encode.update({"exp": expire})
     return jwt.encode(to_encode, JWT_SECRET, algorithm=JWT_ALGORITHM)
 
-def verify_token(credentials: HTTPAuthorizationCredentials = Depends(security)) -> str:
-    """Verify JWT token and return user_id"""
+def verify_token(request: Request, credentials: Optional[HTTPAuthorizationCredentials] = Depends(security)) -> str:
+    """Verify JWT token from httpOnly cookie or Authorization header, return user_id"""
+    token = None
+
+    # 1. Try httpOnly cookie first
+    token = request.cookies.get(COOKIE_NAME)
+
+    # 2. Fallback to Authorization header
+    if not token and credentials:
+        token = credentials.credentials
+
+    if not token:
+        raise HTTPException(status_code=401, detail="Not authenticated")
+
     try:
-        payload = jwt.decode(credentials.credentials, JWT_SECRET, algorithms=[JWT_ALGORITHM])
+        payload = jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
         user_id = payload.get("sub")
         if user_id is None:
             raise HTTPException(status_code=401, detail="Invalid token")

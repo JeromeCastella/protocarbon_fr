@@ -8,6 +8,7 @@ import {
   ChevronLeft, ChevronRight, FlaskConical
 } from 'lucide-react';
 import axios from 'axios';
+import logger from '../../utils/logger';
 import { 
   ALL_CATEGORIES, 
   COMMON_UNITS, 
@@ -204,7 +205,7 @@ const AdminFactorsTab = ({ factors, subcategories, pagination, onPageChange, onR
       resetFactorForm();
       onRefetch();
     } catch (error) {
-      console.error('Failed to save factor:', error);
+      logger.error('Failed to save factor:', error);
       alert(t('errors.generic') + ': ' + (error.response?.data?.detail || error.message));
     }
   };
@@ -240,7 +241,7 @@ const AdminFactorsTab = ({ factors, subcategories, pagination, onPageChange, onR
       await axios.delete(`${API_URL}/api/admin/emission-factors/${factorId}`);
       onRefetch();
     } catch (error) {
-      console.error('Failed to delete factor:', error);
+      logger.error('Failed to delete factor:', error);
       alert(t('errors.generic'));
     }
   };
@@ -251,7 +252,7 @@ const AdminFactorsTab = ({ factors, subcategories, pagination, onPageChange, onR
       await axios.delete(`${API_URL}/api/admin/emission-factors-v2/${factorId}/soft`);
       onRefetch();
     } catch (error) {
-      console.error('Failed to archive factor:', error);
+      logger.error('Failed to archive factor:', error);
       alert(t('errors.generic') + ': ' + (error.response?.data?.detail || error.message));
     }
   };
@@ -288,7 +289,7 @@ const AdminFactorsTab = ({ factors, subcategories, pagination, onPageChange, onR
       setVersioningFactor(null);
       onRefetch();
     } catch (error) {
-      console.error('Failed to create new version:', error);
+      logger.error('Failed to create new version:', error);
       alert(t('errors.generic') + ': ' + (error.response?.data?.detail || error.message));
     }
   };
@@ -307,7 +308,7 @@ const AdminFactorsTab = ({ factors, subcategories, pagination, onPageChange, onR
       setFactorHistory(response.data);
       setShowHistoryModal(true);
     } catch (error) {
-      console.error('Failed to fetch history:', error);
+      logger.error('Failed to fetch history:', error);
       alert(t('errors.generic') + ': ' + (error.response?.data?.detail || error.message));
     }
   };
@@ -324,7 +325,7 @@ const AdminFactorsTab = ({ factors, subcategories, pagination, onPageChange, onR
       a.download = `emission_factors_v2_${new Date().toISOString().split('T')[0]}.json`;
       a.click();
     } catch (error) {
-      console.error('Export failed:', error);
+      logger.error('Export failed:', error);
       alert(t('errors.generic'));
     }
   };
@@ -338,7 +339,7 @@ const AdminFactorsTab = ({ factors, subcategories, pagination, onPageChange, onR
       onRefetch();
       alert(t('admin.import.success'));
     } catch (error) {
-      console.error('Import failed:', error);
+      logger.error('Import failed:', error);
       alert(t('errors.generic') + ': ' + error.message);
     }
   };
@@ -460,7 +461,7 @@ const AdminFactorsTab = ({ factors, subcategories, pagination, onPageChange, onR
                   <td className="px-4 py-3">
                     <div className="flex flex-col gap-1">
                       {impacts.slice(0, 2).map((imp, i) => (
-                        <div key={i} className="flex items-center gap-2">
+                        <div key={`${imp.scope}-${imp.value}-${i}`} className="flex items-center gap-2">
                           <span className={`px-2 py-0.5 rounded text-xs font-medium text-white ${getScopeColor(imp.scope)}`}>
                             {imp.scope?.replace('_', ' ')}
                           </span>
@@ -649,7 +650,7 @@ const AdminFactorsTab = ({ factors, subcategories, pagination, onPageChange, onR
                   <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>Unités d'entrée acceptées</label>
                   <div className="space-y-2">
                     {factorForm.input_units.map((unit, i) => (
-                      <div key={i} className="flex items-center gap-2">
+                      <div key={`unit-${i}-${unit}`} className="flex items-center gap-2">
                         <select
                           value={unit}
                           onChange={(e) => setFactorForm(prev => ({
@@ -901,7 +902,7 @@ const AdminFactorsTab = ({ factors, subcategories, pagination, onPageChange, onR
                   <label className={`block text-sm font-medium mb-3 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>Valeurs des impacts</label>
                   <div className="space-y-3">
                     {versionForm.impacts.map((impact, i) => (
-                      <div key={i} className={`p-4 rounded-xl border ${isDark ? 'bg-slate-700/50 border-slate-600' : 'bg-gray-50 border-gray-200'}`}>
+                      <div key={`${impact.scope}-${impact.category || i}`} className={`p-4 rounded-xl border ${isDark ? 'bg-slate-700/50 border-slate-600' : 'bg-gray-50 border-gray-200'}`}>
                         <div className="flex items-center gap-3 mb-3">
                           <span className={`px-2 py-1 rounded text-xs font-medium text-white ${getScopeColor(impact.scope)}`}>{impact.scope?.replace('_', ' ')}</span>
                           <span className={`text-sm ${isDark ? 'text-slate-300' : 'text-gray-600'}`}>{ALL_CATEGORIES.find(c => c.value === impact.category)?.label || impact.category}</span>
@@ -954,7 +955,7 @@ const AdminFactorsTab = ({ factors, subcategories, pagination, onPageChange, onR
                     <h3 className={`font-medium mb-3 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>Journal des modifications</h3>
                     <div className="space-y-3 pl-4 border-l-2 border-blue-500/30">
                       {factorHistory.change_history.slice().reverse().map((change, i) => (
-                        <div key={i} className="relative">
+                        <div key={`v${change.version}-${i}`} className="relative">
                           <div className="absolute -left-[1.35rem] top-1 w-3 h-3 rounded-full bg-blue-500" />
                           <div className={`text-sm ${isDark ? 'text-slate-300' : 'text-gray-600'}`}>
                             <span className="font-medium">v{change.version}</span>

@@ -4,6 +4,7 @@ import { useTheme } from '../context/ThemeContext';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
+import logger from '../utils/logger';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL;
 
@@ -184,7 +185,7 @@ export const useOnboarding = () => {
         setUser({ ...user, onboarding_completed: false });
       }
     } catch (error) {
-      console.error('Failed to reset onboarding:', error);
+      logger.error('Failed to reset onboarding:', error);
     }
   };
 

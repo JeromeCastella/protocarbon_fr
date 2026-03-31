@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useTheme } from '../context/ThemeContext';
 import { useAuth } from '../context/AuthContext';
+import logger from '../utils/logger';
 import {
   Search, X, Filter, CheckSquare, Square, ChevronLeft, ChevronRight,
   BarChart3, Eye, EyeOff, Flag, CheckCircle2, CircleDot, Sparkles,
@@ -307,7 +308,7 @@ const StatusBadge = ({ status, isDark, onCycle }) => {
 };
 
 // ==================== AI SUGGEST MODAL ====================
-const AISuggestModal = ({ factorIds, isDark, token, onApply, onClose }) => {
+const AISuggestModal = ({ factorIds, isDark, onApply, onClose }) => {
   const [suggestions, setSuggestions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -318,7 +319,7 @@ const AISuggestModal = ({ factorIds, isDark, token, onApply, onClose }) => {
       try {
         const res = await fetch(`${API}/api/curation/suggest-titles`, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+          headers: { 'Content-Type': 'application/json' }, credentials: 'include',
           body: JSON.stringify({ factor_ids: factorIds }),
         });
         if (!res.ok) throw new Error('Erreur IA');
@@ -334,7 +335,7 @@ const AISuggestModal = ({ factorIds, isDark, token, onApply, onClose }) => {
       }
     };
     fetchSuggestions();
-  }, [factorIds, token]);
+  }, [factorIds]);
 
   const handleApply = () => {
     const toApply = suggestions.filter(s => selected[s.factor_id]);
@@ -382,7 +383,7 @@ const AISuggestModal = ({ factorIds, isDark, token, onApply, onClose }) => {
 };
 
 // ==================== TRANSLATE PREVIEW MODAL ====================
-const TranslatePreviewModal = ({ factorIds, direction, isDark, token, onApply, onClose }) => {
+const TranslatePreviewModal = ({ factorIds, direction, isDark, onApply, onClose }) => {
   const [translations, setTranslations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [applying, setApplying] = useState(false);
@@ -404,7 +405,7 @@ const TranslatePreviewModal = ({ factorIds, direction, isDark, token, onApply, o
       try {
         const res = await fetch(`${API}/api/curation/translate-preview`, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+          headers: { 'Content-Type': 'application/json' }, credentials: 'include',
           body: JSON.stringify({ factor_ids: factorIds, direction }),
         });
         if (!res.ok) {
@@ -425,7 +426,7 @@ const TranslatePreviewModal = ({ factorIds, direction, isDark, token, onApply, o
       }
     };
     fetchTranslations();
-  }, [factorIds, direction, token]);
+  }, [factorIds, direction]);
 
   const handleApply = async () => {
     const toApply = translations.filter(t => selected[t.factor_id]);
@@ -434,7 +435,7 @@ const TranslatePreviewModal = ({ factorIds, direction, isDark, token, onApply, o
     try {
       const res = await fetch(`${API}/api/curation/translate-apply`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        headers: { 'Content-Type': 'application/json' }, credentials: 'include',
         body: JSON.stringify({
           translations: toApply.map(t => ({ factor_id: t.factor_id, value: t.translation })),
           target_field: targetField,
@@ -533,7 +534,7 @@ const BulkPreviewModal = ({ preview, isDark, onConfirm, onCancel, loading }) => 
 // ==================== MAIN CURATION PAGE ====================
 export default function CurationWorkbench() {
   const { isDark } = useTheme();
-  const { token } = useAuth();
+  // Auth handled via httpOnly cookies
 
   // Data state
   const [stats, setStats] = useState(null);
@@ -578,10 +579,10 @@ export default function CurationWorkbench() {
   // Fetch stats
   const fetchStats = useCallback(async () => {
     try {
-      const res = await fetch(`${API}/api/curation/stats`, { headers: { Authorization: `Bearer ${token}` } });
+      const res = await fetch(`${API}/api/curation/stats`, { credentials: 'include' });
       if (res.ok) setStats(await res.json());
-    } catch (e) { console.error(e); }
-  }, [token]);
+    } catch (e) { logger.error(e); }
+  }, []);
 
   // Fetch factors
   const fetchFactors = useCallback(async () => {
@@ -594,16 +595,16 @@ export default function CurationWorkbench() {
       if (isPublic) params.set('is_public', isPublic);
       if (defaultUnit) params.set('default_unit', defaultUnit);
 
-      const res = await fetch(`${API}/api/curation/factors?${params}`, { headers: { Authorization: `Bearer ${token}` } });
+      const res = await fetch(`${API}/api/curation/factors?${params}`, { credentials: 'include' });
       if (res.ok) {
         const data = await res.json();
         setFactors(data.items);
         setTotal(data.total);
         setTotalPages(data.total_pages);
       }
-    } catch (e) { console.error(e); }
+    } catch (e) { logger.error(e); }
     setLoadingFactors(false);
-  }, [token, page, pageSize, searchDebounced, subcategory, curationStatus, isPublic, defaultUnit, sortBy, sortOrder]);
+  }, [page, pageSize, searchDebounced, subcategory, curationStatus, isPublic, defaultUnit, sortBy, sortOrder]);
 
   useEffect(() => { fetchStats(); }, [fetchStats]);
   useEffect(() => { fetchFactors(); }, [fetchFactors]);
@@ -612,29 +613,29 @@ export default function CurationWorkbench() {
   useEffect(() => {
     const fetchAllSubcategories = async () => {
       try {
-        const res = await fetch(`${API}/api/subcategories`, { headers: { Authorization: `Bearer ${token}` } });
+        const res = await fetch(`${API}/api/subcategories`, { credentials: 'include' });
         if (res.ok) {
           const data = await res.json();
           setSubcategoriesList(data.map(sc => ({ code: sc.code, name_fr: sc.name_fr || sc.code })).sort((a, b) => a.name_fr.localeCompare(b.name_fr)));
         }
-      } catch (e) { console.error(e); }
+      } catch (e) { logger.error(e); }
     };
     const fetchUnits = async () => {
       try {
-        const res = await fetch(`${API}/api/curation/units`, { headers: { Authorization: `Bearer ${token}` } });
+        const res = await fetch(`${API}/api/curation/units`, { credentials: 'include' });
         if (res.ok) setUnitsList(await res.json());
-      } catch (e) { console.error(e); }
+      } catch (e) { logger.error(e); }
     };
     fetchAllSubcategories();
     fetchUnits();
-  }, [token]);
+  }, []);
 
   // Inline edit
   const inlineEdit = async (factorId, field, value) => {
     try {
       const res = await fetch(`${API}/api/curation/factors/${factorId}`, {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        headers: { 'Content-Type': 'application/json' }, credentials: 'include',
         body: JSON.stringify({ [field]: value }),
       });
       if (res.ok) {
@@ -642,7 +643,7 @@ export default function CurationWorkbench() {
         setFactors(prev => prev.map(f => f.id === factorId ? updated : f));
         fetchStats();
       }
-    } catch (e) { console.error(e); }
+    } catch (e) { logger.error(e); }
   };
 
   // Bulk action
@@ -651,7 +652,7 @@ export default function CurationWorkbench() {
     try {
       const res = await fetch(`${API}/api/curation/bulk-preview`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        headers: { 'Content-Type': 'application/json' }, credentials: 'include',
         body: JSON.stringify({ factor_ids: selectedIds, changes }),
       });
       if (res.ok) {
@@ -659,7 +660,7 @@ export default function CurationWorkbench() {
         setBulkPreview(preview);
         setPendingBulkChanges(changes);
       }
-    } catch (e) { console.error(e); }
+    } catch (e) { logger.error(e); }
     setBulkLoading(false);
   };
 
@@ -668,7 +669,7 @@ export default function CurationWorkbench() {
     try {
       await fetch(`${API}/api/curation/bulk-apply`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        headers: { 'Content-Type': 'application/json' }, credentials: 'include',
         body: JSON.stringify({ factor_ids: selectedIds, changes: pendingBulkChanges }),
       });
       setSelectedIds([]);
@@ -676,7 +677,7 @@ export default function CurationWorkbench() {
       setPendingBulkChanges(null);
       fetchFactors();
       fetchStats();
-    } catch (e) { console.error(e); }
+    } catch (e) { logger.error(e); }
     setBulkLoading(false);
   };
 
@@ -698,7 +699,7 @@ export default function CurationWorkbench() {
     try {
       const res = await fetch(`${API}/api/curation/bulk-copy-originals`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        headers: { 'Content-Type': 'application/json' }, credentials: 'include',
         body: JSON.stringify({ factor_ids: selectedIds, lang, source_field: sourceField }),
       });
       if (res.ok) {
@@ -707,7 +708,7 @@ export default function CurationWorkbench() {
         fetchFactors();
         fetchStats();
       }
-    } catch (e) { console.error(e); }
+    } catch (e) { logger.error(e); }
     setCopyLoading(false);
   };
 
@@ -1042,12 +1043,12 @@ export default function CurationWorkbench() {
           onConfirm={confirmBulkApply} onCancel={() => { setBulkPreview(null); setPendingBulkChanges(null); }} />
       )}
       {showAISuggest && (
-        <AISuggestModal factorIds={selectedIds.slice(0, 20)} isDark={isDark} token={token}
+        <AISuggestModal factorIds={selectedIds.slice(0, 20)} isDark={isDark}
           onApply={handleAISuggestApply} onClose={() => setShowAISuggest(false)} />
       )}
       {translateModal && (
         <TranslatePreviewModal factorIds={translateModal.factorIds} direction={translateModal.direction}
-          isDark={isDark} token={token} onApply={handleTranslateApply} onClose={() => setTranslateModal(null)} />
+          isDark={isDark} onApply={handleTranslateApply} onClose={() => setTranslateModal(null)} />
       )}
 
       {/* JSON viewer modal */}

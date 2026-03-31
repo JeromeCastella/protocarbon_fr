@@ -52,6 +52,7 @@ import {
 } from 'recharts';
 import DashboardResultsTab from '../components/DashboardResultsTab';
 import EmptyFiscalYearState from '../components/EmptyFiscalYearState';
+import logger from '../utils/logger';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL || '';
 
@@ -166,7 +167,7 @@ const Dashboard = () => {
       setTrajectoryData(trajRes.data);
       setRecommendations(recoRes.data.recommendations || []);
     } catch (error) {
-      console.error('Failed to fetch objective data:', error);
+      logger.error('Failed to fetch objective data:', error);
     }
   };
 
@@ -223,7 +224,7 @@ const Dashboard = () => {
           setScenarioSummary({ summary: latestPeriod.data });
         }
       } catch (error) {
-        console.error('Failed to fetch scenario periods:', error);
+        logger.error('Failed to fetch scenario periods:', error);
         setScenarioDataPoints([]);
         setScenarioSummary(null);
       }
@@ -243,7 +244,7 @@ const Dashboard = () => {
       await fetchObjectiveData();
       setShowObjectiveModal(false);
     } catch (error) {
-      console.error('Failed to create objective:', error);
+      logger.error('Failed to create objective:', error);
       alert('Erreur lors de la création de l\'objectif: ' + (error.response?.data?.detail || error.message));
     } finally {
       setObjectiveLoading(false);
@@ -261,7 +262,7 @@ const Dashboard = () => {
       setTrajectoryData({ trajectory: [], actuals: [] });
       setRecommendations([]);
     } catch (error) {
-      console.error('Failed to archive objective:', error);
+      logger.error('Failed to archive objective:', error);
       alert('Erreur lors de l\'archivage: ' + (error.response?.data?.detail || error.message));
     }
   };
@@ -307,7 +308,7 @@ const Dashboard = () => {
         totalCategories: totalCats
       });
     } catch (error) {
-      console.error('Failed to fetch dashboard data:', error);
+      logger.error('Failed to fetch dashboard data:', error);
     } finally {
       setLoading(false);
     }
@@ -339,7 +340,7 @@ const Dashboard = () => {
       });
       setDrillDownScope(null);
     } catch (error) {
-      console.error('Failed to fetch scope breakdown:', error);
+      logger.error('Failed to fetch scope breakdown:', error);
     }
   };
 
@@ -360,7 +361,7 @@ const Dashboard = () => {
       });
       setRecalcResult(response.data);
     } catch (error) {
-      console.error('Failed to recalculate:', error);
+      logger.error('Failed to recalculate:', error);
       alert('Erreur lors du recalcul: ' + (error.response?.data?.detail || error.message));
     } finally {
       setRecalcLoading(false);
@@ -1092,7 +1093,7 @@ const Dashboard = () => {
                                   scenario_scope3: 'Scénario S3',
                                 };
                                 return (
-                                  <div key={i} className="flex items-center gap-2 text-xs py-0.5">
+                                  <div key={item.dataKey || `legend-${i}`} className="flex items-center gap-2 text-xs py-0.5">
                                     <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: item.color || item.fill }} />
                                     <span className={isDark ? 'text-slate-300' : 'text-gray-600'}>{nameMap[item.dataKey] || item.name}</span>
                                     <span className={`ml-auto font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>{formatChartValue(item.value)}</span>
@@ -1599,7 +1600,7 @@ const Dashboard = () => {
                                   </thead>
                                   <tbody>
                                     {recalcResult.comparisons?.map((comp, i) => (
-                                      <tr key={i} className={`border-t ${isDark ? 'border-slate-700' : 'border-gray-100'}`}>
+                                      <tr key={comp.activity_name || `comp-${i}`} className={`border-t ${isDark ? 'border-slate-700' : 'border-gray-100'}`}>
                                         <td className="px-4 py-2">
                                           <div className="font-medium">{comp.activity_name}</div>
                                           <div className={`text-xs ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>

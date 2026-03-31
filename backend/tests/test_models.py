@@ -7,6 +7,7 @@ sys.path.insert(0, '/app/backend')
 
 from pydantic import ValidationError
 from models import (
+from tests.conftest_credentials import TEST_GENERIC_PASSWORD
     UserRegister,
     UserLogin,
     ActivityCreate,
@@ -24,7 +25,7 @@ class TestUserModels:
         """Test valid user registration"""
         user = UserRegister(
             email="test@example.com",
-            password="password123",
+            password=TEST_GENERIC_PASSWORD,
             name="Test User",
             language="fr",
             role="user"
@@ -38,7 +39,7 @@ class TestUserModels:
         with pytest.raises(ValidationError):
             UserRegister(
                 email="invalid-email",
-                password="password123",
+                password=TEST_GENERIC_PASSWORD,
                 name="Test User"
             )
     
@@ -46,7 +47,7 @@ class TestUserModels:
         """Test valid user login"""
         login = UserLogin(
             email="test@example.com",
-            password="password123"
+            password=TEST_GENERIC_PASSWORD
         )
         
         assert login.email == "test@example.com"

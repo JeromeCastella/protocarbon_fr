@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { INITIAL_FORM } from './wizardConstants';
+import logger from '../../utils/logger';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL || '';
 
@@ -71,7 +72,7 @@ export const useProductWizard = (isOpen, editingProduct) => {
         }
       }
     } catch (error) {
-      console.error('Failed to load emission factors:', error);
+      logger.error('Failed to load emission factors:', error);
     }
   };
 

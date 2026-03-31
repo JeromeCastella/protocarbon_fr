@@ -109,6 +109,41 @@ def apply_business_rules(impacts: list, entry_scope: str, entry_category: str) -
     return filtered
 
 
+def resolve_activity_date(activity_date, fiscal_year_id):
+    """Résout la date d'activité : date fournie > milieu de l'exercice fiscal > date du jour."""
+    if activity_date:
+        return activity_date
+    if fiscal_year_id:
+        fy = fiscal_years_collection.find_one({"_id": ObjectId(fiscal_year_id)})
+        if fy:
+            start = fy.get("start_date", "")[:10]
+            end = fy.get("end_date", "")[:10]
+            if start and end:
+                from datetime import datetime as dt
+                start_dt = dt.strptime(start, "%Y-%m-%d")
+                end_dt = dt.strptime(end, "%Y-%m-%d")
+                mid_dt = start_dt + (end_dt - start_dt) / 2
+                return mid_dt.strftime("%Y-%m-%d")
+    return datetime.now(timezone.utc).strftime("%Y-%m-%d")
+
+
+def resolve_quantity(activity, factor):
+    """Résout la quantité en tenant compte des conversions d'unité."""
+    quantity = activity.quantity
+    default_unit = factor.get("default_unit", activity.unit)
+
+    if activity.original_quantity is not None and activity.conversion_factor is not None:
+        return quantity
+
+    if activity.unit != default_unit:
+        unit_conversions = factor.get("unit_conversions", {})
+        conversion_key = f"{activity.unit}_to_{default_unit}"
+        if conversion_key in unit_conversions:
+            quantity = quantity * unit_conversions[conversion_key]
+
+    return quantity
+
+
 async def create_activity_for_impact(
     activity: ActivityCreate,
     current_user: dict,
@@ -120,53 +155,12 @@ async def create_activity_for_impact(
 ) -> dict:
     """Crée une activité pour un impact spécifique"""
     
-    # Calculer les émissions pour cet impact
-    quantity = activity.quantity
-    default_unit = factor.get("default_unit", activity.unit)
-    
-    # Utiliser la conversion fournie par le frontend si disponible
-    if activity.original_quantity is not None and activity.conversion_factor is not None:
-        # Le frontend a déjà converti : quantity est en unité de base du facteur
-        # On stocke les infos originales pour traçabilité
-        pass
-    elif activity.unit != default_unit:
-        # Fallback : conversion via unit_conversions du facteur
-        unit_conversions = factor.get("unit_conversions", {})
-        conversion_key = f"{activity.unit}_to_{default_unit}"
-        if conversion_key in unit_conversions:
-            quantity = quantity * unit_conversions[conversion_key]
-    
+    quantity = resolve_quantity(activity, factor)
     emissions = quantity * impact.get("value", 0)
+    activity_date = resolve_activity_date(activity.date, activity.fiscal_year_id)
     
-    # Déterminer la date
-    activity_date = activity.date
-    if not activity_date and activity.fiscal_year_id:
-        fy = fiscal_years_collection.find_one({"_id": ObjectId(activity.fiscal_year_id)})
-        if fy:
-            start = fy.get("start_date", "")[:10]
-            end = fy.get("end_date", "")[:10]
-            if start and end:
-                from datetime import datetime as dt
-                start_dt = dt.strptime(start, "%Y-%m-%d")
-                end_dt = dt.strptime(end, "%Y-%m-%d")
-                mid_dt = start_dt + (end_dt - start_dt) / 2
-                activity_date = mid_dt.strftime("%Y-%m-%d")
-    if not activity_date:
-        activity_date = datetime.now(timezone.utc).strftime("%Y-%m-%d")
-    
-    # Déterminer le scope normalisé de l'impact
     impact_scope = normalize_scope(impact.get("scope", activity.scope))
-    
-    # Déterminer la catégorie d'affichage selon le scope de l'impact
-    # Règle GHG Protocol : les impacts scope3_3 (amont énergie) vont dans 
-    # la catégorie "Activités liées aux combustibles et à l'énergie"
-    if impact_scope == 'scope3_3':
-        display_category = 'activites_combustibles_energie'
-    else:
-        display_category = activity.category_id
-    
-    # Normaliser le scope pour le stockage (scope3 → scope3_amont/aval selon la catégorie)
-    # Rend les données auto-portantes, indépendantes du pipeline de reporting
+    display_category = 'activites_combustibles_energie' if impact_scope == 'scope3_3' else activity.category_id
     stored_scope = normalize_scope_for_reporting(impact_scope, display_category)
     
     # Construire le document

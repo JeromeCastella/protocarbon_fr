@@ -3,6 +3,7 @@ import { useTheme } from '../context/ThemeContext';
 import { useLanguage } from '../context/LanguageContext';
 import axios from 'axios';
 import { motion, AnimatePresence } from 'framer-motion';
+import logger from '../utils/logger';
 import { 
   HelpCircle, 
   Search, 
@@ -193,7 +194,7 @@ const Assistance = () => {
       const response = await axios.get(`${API_URL}/api/emission-factors`);
       setFactors(response.data || []);
     } catch (error) {
-      console.error('Failed to fetch emission factors:', error);
+      logger.error('Failed to fetch emission factors:', error);
     } finally {
       setFactorsLoading(false);
     }
@@ -623,7 +624,7 @@ const Assistance = () => {
                         const color = getScopeColor(impact.scope);
                         return (
                           <span
-                            key={i}
+                            key={`${impact.scope}-${impact.value}-${i}`}
                             className={`px-2 py-0.5 text-xs rounded-full bg-${color}-500/20 text-${color}-500`}
                           >
                             {impact.scope}: {impact.value?.toFixed(2)} {impact.unit}
@@ -751,7 +752,7 @@ const Assistance = () => {
                       const Icon = config.icon;
                       return (
                         <div
-                          key={i}
+                          key={`${impact.scope}-${impact.category || i}`}
                           className={`flex items-center justify-between p-3 rounded-xl ${isDark ? 'bg-slate-700' : 'bg-gray-50'}`}
                         >
                           <div className="flex items-center gap-3">
@@ -778,9 +779,9 @@ const Assistance = () => {
                       {language === 'fr' ? 'Unités acceptées' : 'Akzeptierte Einheiten'}
                     </p>
                     <div className="flex flex-wrap gap-2">
-                      {selectedFactor.input_units.map((unit, i) => (
+                      {selectedFactor.input_units.map((unit) => (
                         <span
-                          key={i}
+                          key={unit}
                           className={`px-3 py-1 rounded-lg text-sm ${isDark ? 'bg-slate-700 text-slate-300' : 'bg-gray-100 text-gray-600'}`}
                         >
                           {unit}
@@ -821,9 +822,9 @@ const Assistance = () => {
                       Tags
                     </p>
                     <div className="flex flex-wrap gap-2">
-                      {selectedFactor.tags.map((tag, i) => (
+                      {selectedFactor.tags.map((tag) => (
                         <span
-                          key={i}
+                          key={tag}
                           className={`px-2 py-1 rounded text-xs ${isDark ? 'bg-blue-500/20 text-blue-400' : 'bg-blue-50 text-blue-600'}`}
                         >
                           {tag}

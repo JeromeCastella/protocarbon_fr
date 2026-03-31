@@ -249,9 +249,11 @@ async def export_mongodump(current_user: dict = Depends(require_admin)):
     mongodump_available = shutil.which("mongodump") is not None
 
     if mongodump_available:
-        return await _export_via_mongodump(mongo_url, db_name, timestamp)
-    else:
-        return await _export_via_python(db_name, timestamp)
+        try:
+            return await _export_via_mongodump(mongo_url, db_name, timestamp)
+        except FileNotFoundError:
+            pass  # Binary in PATH but not executable — fall through to Python fallback
+    return await _export_via_python(db_name, timestamp)
 
 
 async def _export_via_mongodump(mongo_url: str, db_name: str, timestamp: str):
@@ -296,6 +298,11 @@ async def _export_via_mongodump(mongo_url: str, db_name: str, timestamp: str):
         if os.path.exists(archive_path):
             os.unlink(archive_path)
         raise HTTPException(status_code=504, detail="mongodump timed out (>120s)")
+    except FileNotFoundError:
+    # mongodump binary referenced in PATH but not actually executable — fallback to Python
+        if os.path.exists(archive_path):
+            os.unlink(archive_path)
+        raise
     except HTTPException:
         raise
     except Exception as e:

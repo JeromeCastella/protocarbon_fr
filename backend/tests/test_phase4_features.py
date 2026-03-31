@@ -11,12 +11,13 @@ import pytest
 import requests
 import os
 import uuid
+from tests.conftest_credentials import TEST_BASE_URL, TEST_ADMIN_EMAIL, TEST_ADMIN_PASSWORD
 
 BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', '').rstrip('/')
 
 # Test credentials
-ADMIN_EMAIL = "newtest@x.com"
-ADMIN_PASSWORD = "test123"
+# credentials from conftest_credentials
+# credentials from conftest_credentials
 
 
 class TestAdminSubcategories:
@@ -26,8 +27,8 @@ class TestAdminSubcategories:
     def admin_token(self):
         """Get admin authentication token"""
         response = requests.post(f"{BASE_URL}/api/auth/login", json={
-            "email": ADMIN_EMAIL,
-            "password": ADMIN_PASSWORD
+            "email": TEST_ADMIN_EMAIL,
+            "password": TEST_ADMIN_PASSWORD
         })
         if response.status_code == 200:
             return response.json().get("token")
@@ -157,8 +158,8 @@ class TestAdminEmissionFactorsV2:
     def admin_token(self):
         """Get admin authentication token"""
         response = requests.post(f"{BASE_URL}/api/auth/login", json={
-            "email": ADMIN_EMAIL,
-            "password": ADMIN_PASSWORD
+            "email": TEST_ADMIN_EMAIL,
+            "password": TEST_ADMIN_PASSWORD
         })
         if response.status_code == 200:
             return response.json().get("token")
@@ -298,8 +299,8 @@ class TestPublicSubcategoriesAndFactors:
     def user_token(self):
         """Get user authentication token"""
         response = requests.post(f"{BASE_URL}/api/auth/login", json={
-            "email": ADMIN_EMAIL,
-            "password": ADMIN_PASSWORD
+            "email": TEST_ADMIN_EMAIL,
+            "password": TEST_ADMIN_PASSWORD
         })
         if response.status_code == 200:
             return response.json().get("token")
@@ -361,8 +362,8 @@ class TestMultiImpactActivityCreation:
     def user_token(self):
         """Get user authentication token"""
         response = requests.post(f"{BASE_URL}/api/auth/login", json={
-            "email": ADMIN_EMAIL,
-            "password": ADMIN_PASSWORD
+            "email": TEST_ADMIN_EMAIL,
+            "password": TEST_ADMIN_PASSWORD
         })
         if response.status_code == 200:
             return response.json().get("token")
@@ -372,8 +373,8 @@ class TestMultiImpactActivityCreation:
     def admin_token(self):
         """Get admin authentication token"""
         response = requests.post(f"{BASE_URL}/api/auth/login", json={
-            "email": ADMIN_EMAIL,
-            "password": ADMIN_PASSWORD
+            "email": TEST_ADMIN_EMAIL,
+            "password": TEST_ADMIN_PASSWORD
         })
         if response.status_code == 200:
             return response.json().get("token")
@@ -510,8 +511,8 @@ class TestFactorsTableDisplay:
     def admin_token(self):
         """Get admin authentication token"""
         response = requests.post(f"{BASE_URL}/api/auth/login", json={
-            "email": ADMIN_EMAIL,
-            "password": ADMIN_PASSWORD
+            "email": TEST_ADMIN_EMAIL,
+            "password": TEST_ADMIN_PASSWORD
         })
         if response.status_code == 200:
             return response.json().get("token")
@@ -551,8 +552,8 @@ class TestSubcategoriesTableDisplay:
     def admin_token(self):
         """Get admin authentication token"""
         response = requests.post(f"{BASE_URL}/api/auth/login", json={
-            "email": ADMIN_EMAIL,
-            "password": ADMIN_PASSWORD
+            "email": TEST_ADMIN_EMAIL,
+            "password": TEST_ADMIN_PASSWORD
         })
         if response.status_code == 200:
             return response.json().get("token")

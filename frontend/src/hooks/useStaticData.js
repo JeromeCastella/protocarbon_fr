@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
+import logger from '../utils/logger';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL;
 
@@ -39,7 +40,7 @@ export const useStaticData = () => {
       setCategories(response.data);
       return response.data;
     } catch (err) {
-      console.error('Failed to fetch categories:', err);
+      logger.error('Failed to fetch categories:', err);
       setError(err);
       return [];
     }
@@ -57,7 +58,7 @@ export const useStaticData = () => {
       setSubcategories(response.data);
       return response.data;
     } catch (err) {
-      console.error('Failed to fetch subcategories:', err);
+      logger.error('Failed to fetch subcategories:', err);
       setError(err);
       return [];
     }
@@ -75,7 +76,7 @@ export const useStaticData = () => {
       setUnitConversions(response.data);
       return response.data;
     } catch (err) {
-      console.error('Failed to fetch unit conversions:', err);
+      logger.error('Failed to fetch unit conversions:', err);
       setError(err);
       return [];
     }

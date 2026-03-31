@@ -51,6 +51,7 @@ import GuidedEntryModal from '../components/GuidedEntryModal';
 import SaleEditModal from '../components/SaleEditModal';
 import Scope3AvalChoiceModal from '../components/Scope3AvalChoiceModal';
 import Fuse from 'fuse.js';
+import logger from '../utils/logger';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL || '';
 
@@ -526,16 +527,15 @@ const GlobalFactorSearch = ({ isDark, language, showExpertFactors, onToggleExper
     if (allFactors || isLoading) return;
     setIsLoading(true);
     try {
-      const token = localStorage.getItem('token');
       const res = await fetch(`${API_URL}/api/emission-factors/search-index`, {
-        headers: { Authorization: `Bearer ${token}` }
+        credentials: 'include'
       });
       const data = await res.json();
       setAllFactors(data);
       const fuse = new Fuse(data, FUSE_OPTIONS);
       setFuseIndex(fuse);
     } catch (err) {
-      console.error('Failed to load search index:', err);
+      logger.error('Failed to load search index:', err);
     } finally {
       setIsLoading(false);
     }
@@ -815,7 +815,7 @@ const DataEntry = () => {
       setCategoryStats(statsRes.data || {});
       setExcludedCategories(summaryRes.data?.excluded_categories || []);
     } catch (error) {
-      console.error('Failed to fetch data:', error);
+      logger.error('Failed to fetch data:', error);
     } finally {
       setLoading(false);
     }
@@ -924,7 +924,7 @@ const DataEntry = () => {
           };
         }
       } catch (error) {
-        console.error('Failed to load activity group:', error);
+        logger.error('Failed to load activity group:', error);
       }
     }
     
@@ -962,12 +962,12 @@ const DataEntry = () => {
         
         // Log pour debug (multi-impacts)
         if (response.data.count > 1) {
-          console.log(`Créé ${response.data.count} activités (groupe ${response.data.group_id})`);
+          logger.log(`Créé ${response.data.count} activités (groupe ${response.data.group_id})`);
         }
       }
       fetchData();
     } catch (error) {
-      console.error('Failed to save activity:', error);
+      logger.error('Failed to save activity:', error);
       // TODO: Afficher toast d'erreur avec le message
       if (error.response?.data?.detail) {
         alert(error.response.data.detail);
@@ -1024,7 +1024,7 @@ const DataEntry = () => {
         }
         fetchData();
       } catch (error) {
-        console.error('Failed to delete activity:', error);
+        logger.error('Failed to delete activity:', error);
       }
     };
 
@@ -1048,7 +1048,7 @@ const DataEntry = () => {
       setEditingActivity(null);
       fetchData();
     } catch (error) {
-      console.error('Failed to update activity:', error);
+      logger.error('Failed to update activity:', error);
     }
   };
 

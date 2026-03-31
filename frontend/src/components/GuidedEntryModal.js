@@ -7,6 +7,7 @@ import {
 import { normalizeUnit, filterFactorsByUnitStrict, filterFactorsByDimension, getAvailableUnitsWithConversions, findDimension, convertUnit, findFactorNativeUnit, getDimensionLabel } from '../utils/units';
 import { getUnitLabel, formatUnitWithCode } from '../utils/unitLabels';
 import FactorSelectionStep from './FactorSelectionStep';
+import logger from '../utils/logger';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL || '';
 
@@ -137,7 +138,7 @@ const GuidedEntryModal = ({
             allFactors = [factor, ...allFactors];
           }
         } catch (err) {
-          console.warn('Could not fetch emission factor by ID:', err);
+          logger.warn('Could not fetch emission factor by ID:', err);
         }
       }
       
@@ -176,7 +177,7 @@ const GuidedEntryModal = ({
       setShowFactorList(false);
       
     } catch (error) {
-      console.error('Failed to load activity for editing:', error);
+      logger.error('Failed to load activity for editing:', error);
     } finally {
       setLoading(false);
     }
@@ -196,7 +197,7 @@ const GuidedEntryModal = ({
         const factorRes = await axios.get(`${API_URL}/api/emission-factors/${factor.id}`);
         if (factorRes.data) fullFactor = { ...factorRes.data, scope: factor.scope };
       } catch (err) {
-        console.warn('Could not fetch full factor, using search data:', err);
+        logger.warn('Could not fetch full factor, using search data:', err);
       }
 
       // 2. Set the factor and its units
@@ -224,7 +225,7 @@ const GuidedEntryModal = ({
           const subcat = subcats.find(s => s.code === fullFactor.subcategory);
           setSelectedSubcategory(subcat || null);
         } catch (err) {
-          console.warn('Could not fetch subcategories:', err);
+          logger.warn('Could not fetch subcategories:', err);
         }
       }
 
@@ -243,7 +244,7 @@ const GuidedEntryModal = ({
       setShowFactorList(false);
 
     } catch (error) {
-      console.error('Failed to load pre-selected factor:', error);
+      logger.error('Failed to load pre-selected factor:', error);
     } finally {
       setLoading(false);
     }
@@ -280,7 +281,7 @@ const GuidedEntryModal = ({
         await fetchFactorsForCategory();
       }
     } catch (error) {
-      console.error('Failed to fetch subcategories:', error);
+      logger.error('Failed to fetch subcategories:', error);
     } finally {
       setLoading(false);
     }
@@ -297,7 +298,7 @@ const GuidedEntryModal = ({
       // Extraire les unités disponibles
       extractAvailableUnits(allFactors);
     } catch (error) {
-      console.error('Failed to fetch factors:', error);
+      logger.error('Failed to fetch factors:', error);
     } finally {
       setLoading(false);
     }
@@ -333,7 +334,7 @@ const GuidedEntryModal = ({
       setFilteredFactors(allFactors);
       extractAvailableUnits(allFactors);
     } catch (error) {
-      console.error('Failed to fetch factors:', error);
+      logger.error('Failed to fetch factors:', error);
     } finally {
       setLoading(false);
     }

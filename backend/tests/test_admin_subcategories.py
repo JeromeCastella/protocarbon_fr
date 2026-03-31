@@ -10,12 +10,13 @@ Tests for:
 import pytest
 import requests
 import os
+from tests.conftest_credentials import TEST_BASE_URL, TEST_ADMIN_EMAIL, TEST_ADMIN_PASSWORD, TEST_USER_EMAIL, TEST_USER_PASSWORD
 
 BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', '').rstrip('/')
 
 # Test credentials (admin user)
-TEST_EMAIL = "newtest@x.com"
-TEST_PASSWORD = "test123"
+# credentials imported from conftest_credentials
+# credentials imported from conftest_credentials
 
 # Track created test data for cleanup
 created_subcategory_ids = []
@@ -25,8 +26,8 @@ created_subcategory_ids = []
 def auth_token():
     """Get authentication token for admin user"""
     response = requests.post(f"{BASE_URL}/api/auth/login", json={
-        "email": TEST_EMAIL,
-        "password": TEST_PASSWORD
+        "email": TEST_ADMIN_EMAIL,
+        "password": TEST_ADMIN_PASSWORD
     })
     if response.status_code == 200:
         return response.json().get("access_token") or response.json().get("token")

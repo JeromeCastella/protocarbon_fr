@@ -19,6 +19,7 @@ import {
   History
 } from 'lucide-react';
 import ProductVersionsModal from './ProductVersionsModal';
+import logger from '../utils/logger';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL || '';
 
@@ -88,7 +89,7 @@ const ProductSaleModal = ({ isOpen, onClose, onSaleRecorded, preselectedProduct 
         if (found) setSelectedProduct(found);
       }
     } catch (error) {
-      console.error('Failed to fetch products:', error);
+      logger.error('Failed to fetch products:', error);
     } finally {
       setLoading(false);
     }
@@ -137,7 +138,7 @@ const ProductSaleModal = ({ isOpen, onClose, onSaleRecorded, preselectedProduct 
         }
       }
     } catch (error) {
-      console.error('Failed to fetch product sales:', error);
+      logger.error('Failed to fetch product sales:', error);
       setExistingSale(null);
       setQuantity(0);
       setIsEditMode(false);
@@ -167,7 +168,7 @@ const ProductSaleModal = ({ isOpen, onClose, onSaleRecorded, preselectedProduct 
       onSaleRecorded && onSaleRecorded();
       handleClose();
     } catch (error) {
-      console.error('Failed to save sale:', error);
+      logger.error('Failed to save sale:', error);
     } finally {
       setSubmitting(false);
     }
@@ -182,7 +183,7 @@ const ProductSaleModal = ({ isOpen, onClose, onSaleRecorded, preselectedProduct 
       onSaleRecorded && onSaleRecorded();
       handleClose();
     } catch (error) {
-      console.error('Failed to delete sale:', error);
+      logger.error('Failed to delete sale:', error);
     } finally {
       setSubmitting(false);
       setShowDeleteConfirm(false);

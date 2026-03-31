@@ -3,6 +3,7 @@ import { useTheme } from '../context/ThemeContext';
 import { useLanguage } from '../context/LanguageContext';
 import axios from 'axios';
 import { motion, AnimatePresence } from 'framer-motion';
+import logger from '../utils/logger';
 import { 
   Package, 
   ShoppingBag,
@@ -60,7 +61,7 @@ const SaleEditModal = ({ isOpen, onClose, saleId, productId, onSaleUpdated }) =>
       setQuantity(saleInfo.quantity || 1);
       setSaleDate(saleInfo.date || '');
     } catch (error) {
-      console.error('Failed to fetch sale details:', error);
+      logger.error('Failed to fetch sale details:', error);
     } finally {
       setLoading(false);
     }
@@ -79,7 +80,7 @@ const SaleEditModal = ({ isOpen, onClose, saleId, productId, onSaleUpdated }) =>
       onSaleUpdated && onSaleUpdated();
       handleClose();
     } catch (error) {
-      console.error('Failed to update sale:', error);
+      logger.error('Failed to update sale:', error);
     } finally {
       setSubmitting(false);
     }
@@ -95,7 +96,7 @@ const SaleEditModal = ({ isOpen, onClose, saleId, productId, onSaleUpdated }) =>
       onSaleUpdated && onSaleUpdated();
       handleClose();
     } catch (error) {
-      console.error('Failed to delete sale:', error);
+      logger.error('Failed to delete sale:', error);
     } finally {
       setDeleting(false);
       setShowDeleteConfirm(false);

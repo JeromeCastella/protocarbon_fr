@@ -6,14 +6,15 @@ import pytest
 import requests
 import os
 import uuid
+from tests.conftest_credentials import TEST_BASE_URL, TEST_ADMIN_EMAIL, TEST_ADMIN_PASSWORD, TEST_USER_EMAIL, TEST_USER_PASSWORD
 
 BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', '').rstrip('/')
 
 # Test credentials
 ADMIN_EMAIL = "newtest@x.com"
-ADMIN_PASSWORD = "test123"
+# credentials imported from conftest_credentials
 REGULAR_USER_EMAIL = "regular_user_test@test.com"
-REGULAR_USER_PASSWORD = "test123"
+# credentials imported from conftest_credentials
 
 
 class TestAdminAuthentication:
@@ -23,7 +24,7 @@ class TestAdminAuthentication:
         """Admin user can login successfully"""
         response = requests.post(f"{BASE_URL}/api/auth/login", json={
             "email": ADMIN_EMAIL,
-            "password": ADMIN_PASSWORD
+            "password": TEST_ADMIN_PASSWORD
         })
         assert response.status_code == 200, f"Admin login failed: {response.text}"
         data = response.json()
@@ -36,7 +37,7 @@ class TestAdminAuthentication:
         # First try to register the regular user if not exists
         register_response = requests.post(f"{BASE_URL}/api/auth/register", json={
             "email": REGULAR_USER_EMAIL,
-            "password": REGULAR_USER_PASSWORD,
+            "password": TEST_USER_PASSWORD,
             "name": "Regular Test User",
             "role": "user"
         })
@@ -44,7 +45,7 @@ class TestAdminAuthentication:
         # Login
         response = requests.post(f"{BASE_URL}/api/auth/login", json={
             "email": REGULAR_USER_EMAIL,
-            "password": REGULAR_USER_PASSWORD
+            "password": TEST_USER_PASSWORD
         })
         assert response.status_code == 200, f"Regular user login failed: {response.text}"
         data = response.json()
@@ -60,7 +61,7 @@ class TestAdminUsersEndpoint:
         """Get admin authentication token"""
         response = requests.post(f"{BASE_URL}/api/auth/login", json={
             "email": ADMIN_EMAIL,
-            "password": ADMIN_PASSWORD
+            "password": TEST_ADMIN_PASSWORD
         })
         if response.status_code == 200:
             return response.json().get("token")
@@ -72,14 +73,14 @@ class TestAdminUsersEndpoint:
         # Ensure user exists
         requests.post(f"{BASE_URL}/api/auth/register", json={
             "email": REGULAR_USER_EMAIL,
-            "password": REGULAR_USER_PASSWORD,
+            "password": TEST_USER_PASSWORD,
             "name": "Regular Test User",
             "role": "user"
         })
         
         response = requests.post(f"{BASE_URL}/api/auth/login", json={
             "email": REGULAR_USER_EMAIL,
-            "password": REGULAR_USER_PASSWORD
+            "password": TEST_USER_PASSWORD
         })
         if response.status_code == 200:
             return response.json().get("token")
@@ -125,7 +126,7 @@ class TestAdminUserRoleManagement:
         """Get admin authentication token"""
         response = requests.post(f"{BASE_URL}/api/auth/login", json={
             "email": ADMIN_EMAIL,
-            "password": ADMIN_PASSWORD
+            "password": TEST_ADMIN_PASSWORD
         })
         if response.status_code == 200:
             return response.json().get("token")
@@ -136,14 +137,14 @@ class TestAdminUserRoleManagement:
         """Get regular user authentication token"""
         requests.post(f"{BASE_URL}/api/auth/register", json={
             "email": REGULAR_USER_EMAIL,
-            "password": REGULAR_USER_PASSWORD,
+            "password": TEST_USER_PASSWORD,
             "name": "Regular Test User",
             "role": "user"
         })
         
         response = requests.post(f"{BASE_URL}/api/auth/login", json={
             "email": REGULAR_USER_EMAIL,
-            "password": REGULAR_USER_PASSWORD
+            "password": TEST_USER_PASSWORD
         })
         if response.status_code == 200:
             return response.json().get("token")
@@ -227,7 +228,7 @@ class TestAdminEmissionFactors:
         """Get admin authentication token"""
         response = requests.post(f"{BASE_URL}/api/auth/login", json={
             "email": ADMIN_EMAIL,
-            "password": ADMIN_PASSWORD
+            "password": TEST_ADMIN_PASSWORD
         })
         if response.status_code == 200:
             return response.json().get("token")
@@ -238,14 +239,14 @@ class TestAdminEmissionFactors:
         """Get regular user authentication token"""
         requests.post(f"{BASE_URL}/api/auth/register", json={
             "email": REGULAR_USER_EMAIL,
-            "password": REGULAR_USER_PASSWORD,
+            "password": TEST_USER_PASSWORD,
             "name": "Regular Test User",
             "role": "user"
         })
         
         response = requests.post(f"{BASE_URL}/api/auth/login", json={
             "email": REGULAR_USER_EMAIL,
-            "password": REGULAR_USER_PASSWORD
+            "password": TEST_USER_PASSWORD
         })
         if response.status_code == 200:
             return response.json().get("token")
@@ -401,7 +402,7 @@ class TestAdminEmissionFactorsExportImport:
         """Get admin authentication token"""
         response = requests.post(f"{BASE_URL}/api/auth/login", json={
             "email": ADMIN_EMAIL,
-            "password": ADMIN_PASSWORD
+            "password": TEST_ADMIN_PASSWORD
         })
         if response.status_code == 200:
             return response.json().get("token")
@@ -412,14 +413,14 @@ class TestAdminEmissionFactorsExportImport:
         """Get regular user authentication token"""
         requests.post(f"{BASE_URL}/api/auth/register", json={
             "email": REGULAR_USER_EMAIL,
-            "password": REGULAR_USER_PASSWORD,
+            "password": TEST_USER_PASSWORD,
             "name": "Regular Test User",
             "role": "user"
         })
         
         response = requests.post(f"{BASE_URL}/api/auth/login", json={
             "email": REGULAR_USER_EMAIL,
-            "password": REGULAR_USER_PASSWORD
+            "password": TEST_USER_PASSWORD
         })
         if response.status_code == 200:
             return response.json().get("token")

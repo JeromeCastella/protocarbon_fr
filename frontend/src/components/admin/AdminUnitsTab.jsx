@@ -4,6 +4,7 @@ import { useLanguage } from '../../context/LanguageContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, Plus, Edit2, Trash2, ArrowRight, X, Check, Repeat } from 'lucide-react';
 import axios from 'axios';
+import logger from '../../utils/logger';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL || '';
 
@@ -49,7 +50,7 @@ const AdminUnitsTab = ({ unitConversions, onRefetch }) => {
       await axios.delete(`${API_URL}/api/admin/unit-conversions/${convId}`);
       onRefetch();
     } catch (error) {
-      console.error('Failed to delete conversion:', error);
+      logger.error('Failed to delete conversion:', error);
     }
   };
 
@@ -69,7 +70,7 @@ const AdminUnitsTab = ({ unitConversions, onRefetch }) => {
       setForm(INITIAL_FORM);
       onRefetch();
     } catch (error) {
-      console.error('Failed to save conversion:', error);
+      logger.error('Failed to save conversion:', error);
       alert('Erreur: ' + (error.response?.data?.detail || error.message));
     }
   };

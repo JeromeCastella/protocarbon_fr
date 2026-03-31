@@ -3,6 +3,7 @@ import { useTheme } from '../context/ThemeContext';
 import { useLanguage } from '../context/LanguageContext';
 import axios from 'axios';
 import { motion, AnimatePresence } from 'framer-motion';
+import logger from '../utils/logger';
 import { 
   X,
   Plus,
@@ -67,7 +68,7 @@ const ProductVersionsModal = ({ isOpen, onClose, productId, productName, onProfi
       setProfiles(profilesRes.data.profiles || []);
       setFiscalYears(fyRes.data || []);
     } catch (error) {
-      console.error('Failed to fetch data:', error);
+      logger.error('Failed to fetch data:', error);
     } finally {
       setLoading(false);
     }
@@ -146,7 +147,7 @@ const ProductVersionsModal = ({ isOpen, onClose, productId, productName, onProfi
       setShowForm(false);
       onProfileUpdated && onProfileUpdated();
     } catch (error) {
-      console.error('Failed to save profile:', error);
+      logger.error('Failed to save profile:', error);
       alert(error.response?.data?.detail || 'Error saving profile');
     } finally {
       setSaving(false);
@@ -165,7 +166,7 @@ const ProductVersionsModal = ({ isOpen, onClose, productId, productName, onProfi
       await fetchData();
       onProfileUpdated && onProfileUpdated();
     } catch (error) {
-      console.error('Failed to delete profile:', error);
+      logger.error('Failed to delete profile:', error);
     }
   };
 
