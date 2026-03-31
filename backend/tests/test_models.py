@@ -6,8 +6,8 @@ import sys
 sys.path.insert(0, '/app/backend')
 
 from pydantic import ValidationError
-from models import (
 from tests.conftest_credentials import TEST_GENERIC_PASSWORD
+from models import (
     UserRegister,
     UserLogin,
     ActivityCreate,

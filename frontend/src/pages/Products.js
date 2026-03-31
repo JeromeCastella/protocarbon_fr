@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useTheme } from '../context/ThemeContext';
 import { useLanguage } from '../context/LanguageContext';
 import { useFiscalYear } from '../context/FiscalYearContext';
@@ -103,9 +103,9 @@ const ActionsMenu = ({ onEdit, onDuplicate, onDelete, onVersions, isDark, langua
               isDark ? 'bg-slate-700 border-slate-600' : 'bg-white border-gray-200'
             }`}
           >
-            {items.map((item, i) => (
+            {items.map((item) => (
               <button
-                key={i}
+                key={item.testId || item.label}
                 data-testid={item.testId}
                 onClick={(e) => { e.stopPropagation(); setOpen(false); item.action(); }}
                 className={`w-full flex items-center gap-2.5 px-3.5 py-2.5 text-sm transition-colors ${
@@ -240,16 +240,16 @@ const Products = () => {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [editingProduct, setEditingProduct] = useState(null);
 
-  useEffect(() => { fetchProducts(); }, [currentFiscalYear]);
-
-  const fetchProducts = async () => {
+  const fetchProducts = useCallback(async () => {
     try {
       const fy = currentFiscalYear?.id ? `?fiscal_year_id=${currentFiscalYear.id}` : '';
       const res = await axios.get(`${API_URL}/api/products${fy}`);
       setProducts(res.data || []);
     } catch (err) { logger.error('Failed to fetch products:', err); }
     finally { setLoading(false); }
-  };
+  }, [currentFiscalYear?.id]);
+
+  useEffect(() => { fetchProducts(); }, [fetchProducts]);
 
   const handleDelete = async (productId) => {
     const msg = language === 'fr'

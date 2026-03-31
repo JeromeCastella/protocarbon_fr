@@ -413,6 +413,40 @@ async def get_activity(activity_id: str, current_user: dict = Depends(get_curren
 
 
 @router.put("/{activity_id}")
+def recalculate_emissions(existing: dict, update_data: dict) -> dict:
+    """Recalcule les émissions si la quantité ou le facteur a changé."""
+    quantity = update_data.get("quantity", existing.get("quantity", 0))
+    factor_id = update_data.get("emission_factor_id", existing.get("emission_factor_id"))
+    if not factor_id:
+        return update_data
+
+    factor = find_emission_factor(emission_factors_collection, factor_id)
+    if not factor:
+        return update_data
+
+    unit = update_data.get("unit", existing.get("unit", ""))
+    quantity = resolve_quantity_from_values(quantity, unit, factor)
+
+    emissions = sum(quantity * imp.get("value", 0) for imp in factor.get("impacts", []))
+    update_data["emissions"] = emissions
+    update_data["calculated_emissions"] = emissions
+    update_data["factor_snapshot"] = create_factor_snapshot(factor)
+    return update_data
+
+
+def resolve_quantity_from_values(quantity: float, unit: str, factor: dict) -> float:
+    """Applique la conversion d'unité si nécessaire."""
+    default_unit = factor.get("default_unit", unit)
+    if unit == default_unit:
+        return quantity
+    unit_conversions = factor.get("unit_conversions", {})
+    conversion_key = f"{unit}_to_{default_unit}"
+    if conversion_key in unit_conversions:
+        return quantity * unit_conversions[conversion_key]
+    return quantity
+
+
+@router.put("/{activity_id}")
 async def update_activity(
     activity_id: str, 
     activity: ActivityUpdate, 
@@ -426,36 +460,13 @@ async def update_activity(
     
     update_data["updated_at"] = datetime.now(timezone.utc).isoformat()
     
-    # Recalculate emissions if quantity or factor changed
     if "quantity" in update_data or "emission_factor_id" in update_data:
         existing = activities_collection.find_one({
             "_id": ObjectId(activity_id),
             "tenant_id": current_user["id"]
         })
-        
         if existing:
-            quantity = update_data.get("quantity", existing.get("quantity", 0))
-            factor_id = update_data.get("emission_factor_id", existing.get("emission_factor_id"))
-            
-            if factor_id:
-                factor = find_emission_factor(emission_factors_collection, factor_id)
-                if factor:
-                    emissions = 0
-                    unit = update_data.get("unit", existing.get("unit", ""))
-                    default_unit = factor.get("default_unit", unit)
-                    
-                    if unit != default_unit:
-                        unit_conversions = factor.get("unit_conversions", {})
-                        conversion_key = f"{unit}_to_{default_unit}"
-                        if conversion_key in unit_conversions:
-                            quantity = quantity * unit_conversions[conversion_key]
-                    
-                    for impact in factor.get("impacts", []):
-                        emissions += quantity * impact.get("value", 0)
-                    
-                    update_data["emissions"] = emissions
-                    update_data["calculated_emissions"] = emissions
-                    update_data["factor_snapshot"] = create_factor_snapshot(factor)
+            update_data = recalculate_emissions(existing, update_data)
     
     result = activities_collection.update_one(
         {"_id": ObjectId(activity_id), "tenant_id": current_user["id"]},
@@ -544,21 +555,64 @@ async def get_activity_group(
     }
 
 
+def _build_simple_updates(update) -> dict:
+    """Extrait les champs simples à mettre à jour sur un groupe."""
+    updates = {}
+    if update.name is not None:
+        updates["name"] = update.name
+    if update.comments is not None:
+        updates["comments"] = update.comments
+    if update.unit is not None:
+        updates["unit"] = update.unit
+    return updates
+
+
+async def _recreate_group(group_id, update, main_activity, current_user):
+    """Supprime l'ancien groupe et recrée avec un nouveau facteur."""
+    activities_collection.delete_many({
+        "group_id": group_id,
+        "tenant_id": current_user["id"]
+    })
+    new_activity = ActivityCreate(
+        category_id=update.category_id or main_activity["entry_category"],
+        subcategory_id=update.subcategory_id or main_activity.get("subcategory_id"),
+        scope=main_activity["entry_scope"],
+        name=update.name or main_activity["name"],
+        quantity=update.quantity or main_activity["quantity"],
+        unit=update.unit or main_activity["unit"],
+        emission_factor_id=update.emission_factor_id,
+        entry_scope=main_activity["entry_scope"],
+        entry_category=main_activity["entry_category"],
+        fiscal_year_id=main_activity.get("fiscal_year_id"),
+        comments=update.comments if update.comments is not None else main_activity.get("comments")
+    )
+    return await create_activity(new_activity, current_user)
+
+
+def _update_group_quantity(activities, new_quantity, old_quantity):
+    """Met à jour la quantité d'un groupe proportionnellement."""
+    ratio = new_quantity / old_quantity
+    for activity in activities:
+        new_emissions = activity["emissions"] * ratio
+        activities_collection.update_one(
+            {"_id": activity["_id"]},
+            {"$set": {
+                "quantity": new_quantity,
+                "emissions": new_emissions,
+                "calculated_emissions": new_emissions,
+                "updated_at": datetime.now(timezone.utc).isoformat()
+            }}
+        )
+
+
 @router.put("/groups/{group_id}")
 async def update_activity_group(
     group_id: str,
     update: ActivityGroupUpdate,
     current_user: dict = Depends(get_current_user)
 ):
-    """
-    Met à jour toutes les activités d'un groupe multi-impacts.
+    """Met à jour toutes les activités d'un groupe multi-impacts."""
     
-    - Si changement de quantité : recalcule les émissions proportionnellement
-    - Si changement de facteur : supprime et recrée toutes les activités
-    - Si changement de commentaires : met à jour toutes les activités
-    """
-    
-    # Récupérer toutes les activités du groupe
     activities = list(activities_collection.find({
         "group_id": group_id,
         "tenant_id": current_user["id"]
@@ -569,55 +623,16 @@ async def update_activity_group(
     
     main_activity = activities[0]
     
-    # Si changement de facteur → supprimer et recréer tout le groupe
+    # Changement de facteur → supprimer et recréer
     if update.emission_factor_id and update.emission_factor_id != main_activity.get("emission_factor_id"):
-        # Supprimer les anciennes activités
-        activities_collection.delete_many({
-            "group_id": group_id,
-            "tenant_id": current_user["id"]
-        })
-        
-        # Recréer avec le nouveau facteur
-        new_activity = ActivityCreate(
-            category_id=update.category_id or main_activity["entry_category"],
-            subcategory_id=update.subcategory_id or main_activity.get("subcategory_id"),
-            scope=main_activity["entry_scope"],
-            name=update.name or main_activity["name"],
-            quantity=update.quantity or main_activity["quantity"],
-            unit=update.unit or main_activity["unit"],
-            emission_factor_id=update.emission_factor_id,
-            entry_scope=main_activity["entry_scope"],
-            entry_category=main_activity["entry_category"],
-            fiscal_year_id=main_activity.get("fiscal_year_id"),
-            comments=update.comments if update.comments is not None else main_activity.get("comments")
-        )
-        return await create_activity(new_activity, current_user)
+        return await _recreate_group(group_id, update, main_activity, current_user)
     
-    # Si changement de quantité → mise à jour proportionnelle
+    # Changement de quantité → mise à jour proportionnelle
     if update.quantity and update.quantity != main_activity["quantity"]:
-        ratio = update.quantity / main_activity["quantity"]
-        
-        for activity in activities:
-            new_emissions = activity["emissions"] * ratio
-            activities_collection.update_one(
-                {"_id": activity["_id"]},
-                {"$set": {
-                    "quantity": update.quantity,
-                    "emissions": new_emissions,
-                    "calculated_emissions": new_emissions,
-                    "updated_at": datetime.now(timezone.utc).isoformat()
-                }}
-            )
+        _update_group_quantity(activities, update.quantity, main_activity["quantity"])
     
-    # Mise à jour des champs simples
-    simple_updates = {}
-    if update.name is not None:
-        simple_updates["name"] = update.name
-    if update.comments is not None:
-        simple_updates["comments"] = update.comments
-    if update.unit is not None:
-        simple_updates["unit"] = update.unit
-    
+    # Champs simples
+    simple_updates = _build_simple_updates(update)
     if simple_updates:
         simple_updates["updated_at"] = datetime.now(timezone.utc).isoformat()
         activities_collection.update_many(
@@ -625,10 +640,8 @@ async def update_activity_group(
             {"$set": simple_updates}
         )
     
-    # Retourner le groupe mis à jour
     updated_activities = list(activities_collection.find({
-        "group_id": group_id,
-        "tenant_id": current_user["id"]
+        "group_id": group_id, "tenant_id": current_user["id"]
     }).sort("group_index", 1))
     
     return {

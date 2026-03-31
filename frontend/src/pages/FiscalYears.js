@@ -72,7 +72,8 @@ const FiscalYears = () => {
     }
   };
   
-  useEffect(() => { fetchScenarios(); }, []);
+  useEffect(() => { fetchScenarios(); // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   
   // Rectify form state
   const [rectifyReason, setRectifyReason] = useState('');

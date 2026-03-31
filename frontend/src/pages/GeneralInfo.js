@@ -111,6 +111,7 @@ const GeneralInfo = () => {
   // Load company data on mount
   useEffect(() => {
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Load fiscal year context when selected fiscal year changes
@@ -118,6 +119,7 @@ const GeneralInfo = () => {
     if (selectedFiscalYear?.id) {
       fetchFiscalYearContext(selectedFiscalYear.id);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedFiscalYear?.id]);
 
   const fetchData = async () => {

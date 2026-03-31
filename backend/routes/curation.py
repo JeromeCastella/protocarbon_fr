@@ -411,6 +411,104 @@ async def bulk_copy_originals(
 
 # ==================== TRANSLATE PREVIEW ====================
 
+DIRECTION_CONFIG = {
+    "fr_to_de": {
+        "source_field": "name_simple_fr", "source_orig": "name_fr",
+        "target_field": "name_simple_de",
+        "source_lang": "français", "target_lang": "allemand",
+        "is_source_translate": False,
+    },
+    "de_to_fr": {
+        "source_field": "name_simple_de", "source_orig": "name_de",
+        "target_field": "name_simple_fr",
+        "source_lang": "allemand", "target_lang": "français",
+        "is_source_translate": False,
+    },
+    "source_to_fr": {
+        "source_field": "source_product_name", "source_orig": "source_product_name",
+        "target_field": "name_simple_fr",
+        "source_lang": "anglais (technique ecoinvent)", "target_lang": "français",
+        "is_source_translate": True,
+    },
+    "source_to_de": {
+        "source_field": "source_product_name", "source_orig": "source_product_name",
+        "target_field": "name_simple_de",
+        "source_lang": "anglais (technique ecoinvent)", "target_lang": "allemand",
+        "is_source_translate": True,
+    },
+}
+
+
+def build_translate_prompt(factors: list, cfg: dict) -> str:
+    """Construit le prompt de traduction IA."""
+    lines = []
+    for f in factors:
+        src_name = f.get(cfg["source_field"]) or f.get(cfg["source_orig"], "")
+        fid = serialize_doc(f).get("id", str(f["_id"]))
+        lines.append(f'- ID: {fid} | {cfg["source_lang"]}: "{src_name}"')
+
+    names_block = chr(10).join(lines)
+    de_note = '(Hochdeutsch)' if cfg["target_lang"] == "allemand" else ""
+
+    if cfg["is_source_translate"]:
+        return f"""Traduis et simplifie ces noms techniques de facteurs d'émission ecoinvent ({cfg["source_lang"]}) vers le {cfg["target_lang"]} (contexte: bilan carbone suisse).
+
+Règles:
+- Traduis de l'anglais technique vers le {cfg["target_lang"]} courant suisse {de_note}
+- Simplifie le nom: 3-8 mots max, compréhensible par un non-spécialiste
+- Garde l'information essentielle (matériau, type d'énergie, usage)
+- Si le nom contient un code pays entre accolades (ex: {{IT}}, {{DE}}, {{FR}}), ajoute le code ISO tel quel entre parenthèses à la fin du titre traduit (ex: {{IT}} → (IT), {{FR}} → (FR)) — ne traduis jamais le code en toutes lettres et fais bien attention à remplacer les crochets par des parenthèses — sauf si c'est {{CH}} (Suisse), auquel cas tu l'omets complètement
+- Supprime les variantes techniques, références et détails trop spécifiques (hors code pays)
+- Conserve les unités si présentes
+- Retourne UNIQUEMENT un JSON valide, sans commentaires
+
+Noms à traduire:
+{names_block}
+
+Retourne un JSON array:
+[{{"id": "...", "translation": "..."}}]"""
+    else:
+        return f"""Traduis ces noms de facteurs d'émission du {cfg["source_lang"]} vers le {cfg["target_lang"]} (contexte: bilan carbone suisse).
+
+Règles:
+- Garde le même style et longueur que l'original
+- Conserve les abréviations techniques et les unités
+- Utilise le {cfg["target_lang"]} courant suisse {de_note}
+- Retourne UNIQUEMENT un JSON valide, sans commentaires
+
+Noms à traduire:
+{names_block}
+
+Retourne un JSON array:
+[{{"id": "...", "translation": "..."}}]"""
+
+
+def parse_translation_response(response: str, factors: list, cfg: dict) -> list:
+    """Parse la réponse IA et la mappe aux facteurs."""
+    import json
+    import re
+    match = re.search(r'\[.*\]', response, re.DOTALL)
+    translations_raw = json.loads(match.group()) if match else json.loads(response)
+
+    factor_map = {}
+    for f in factors:
+        doc = serialize_doc(f)
+        factor_map[doc.get("id", str(f["_id"]))] = f
+
+    result = []
+    for t in translations_raw:
+        fid = t.get("id", "")
+        if fid in factor_map:
+            f = factor_map[fid]
+            src_name = f.get(cfg["source_field"]) or f.get(cfg["source_orig"], "")
+            result.append({
+                "factor_id": fid,
+                "source_name": src_name,
+                "translation": t.get("translation", ""),
+            })
+    return result
+
+
 @router.post("/translate-preview")
 async def translate_preview(
     payload: TranslatePreviewPayload,
@@ -419,32 +517,12 @@ async def translate_preview(
     """Generate translation preview using AI. Only for factors with source name set and target empty."""
     from bson import ObjectId
 
-    if payload.direction == "fr_to_de":
-        source_field = "name_simple_fr"
-        source_orig = "name_fr"
-        target_field = "name_simple_de"
-        source_lang = "français"
-        target_lang = "allemand"
-    elif payload.direction == "de_to_fr":
-        source_field = "name_simple_de"
-        source_orig = "name_de"
-        target_field = "name_simple_fr"
-        source_lang = "allemand"
-        target_lang = "français"
-    elif payload.direction == "source_to_fr":
-        source_field = "source_product_name"
-        source_orig = "source_product_name"
-        target_field = "name_simple_fr"
-        source_lang = "anglais (technique ecoinvent)"
-        target_lang = "français"
-    elif payload.direction == "source_to_de":
-        source_field = "source_product_name"
-        source_orig = "source_product_name"
-        target_field = "name_simple_de"
-        source_lang = "anglais (technique ecoinvent)"
-        target_lang = "allemand"
-    else:
-        raise HTTPException(400, "direction must be 'fr_to_de', 'de_to_fr', 'source_to_fr' or 'source_to_de'")
+    cfg = DIRECTION_CONFIG.get(payload.direction)
+    if not cfg:
+        raise HTTPException(400, f"direction must be one of: {', '.join(DIRECTION_CONFIG.keys())}")
+
+    source_field = cfg["source_field"]
+    target_field = cfg["target_field"]
 
     or_filters = []
     for fid in payload.factor_ids:
@@ -457,7 +535,6 @@ async def translate_preview(
     if not or_filters:
         raise HTTPException(400, "Aucun facteur sélectionné")
 
-    # Get factors where source is set (not null) and target is null
     factors = list(
         emission_factors_collection.find({
             "$or": or_filters,
@@ -470,46 +547,7 @@ async def translate_preview(
     if not factors:
         return {"translations": [], "skipped": len(payload.factor_ids), "target_field": target_field}
 
-    # Build prompt
-    is_source_translate = payload.direction.startswith("source_to_")
-
-    lines = []
-    for f in factors:
-        src_name = f.get(source_field) or f.get(source_orig, "")
-        fid = serialize_doc(f).get("id", str(f["_id"]))
-        lines.append(f'- ID: {fid} | {source_lang}: "{src_name}"')
-
-    if is_source_translate:
-        prompt = f"""Traduis et simplifie ces noms techniques de facteurs d'émission ecoinvent ({source_lang}) vers le {target_lang} (contexte: bilan carbone suisse).
-
-Règles:
-- Traduis de l'anglais technique vers le {target_lang} courant suisse {"(Hochdeutsch)" if target_lang == "allemand" else ""}
-- Simplifie le nom: 3-8 mots max, compréhensible par un non-spécialiste
-- Garde l'information essentielle (matériau, type d'énergie, usage)
-- Si le nom contient un code pays entre accolades (ex: {{IT}}, {{DE}}, {{FR}}), ajoute le code ISO tel quel entre parenthèses à la fin du titre traduit (ex: {{IT}} → (IT), {{FR}} → (FR)) — ne traduis jamais le code en toutes lettres et fais bien attention à remplacer les crochets par des parenthèses — sauf si c'est {{CH}} (Suisse), auquel cas tu l'omets complètement
-- Supprime les variantes techniques, références et détails trop spécifiques (hors code pays)
-- Conserve les unités si présentes
-- Retourne UNIQUEMENT un JSON valide, sans commentaires
-
-Noms à traduire:
-{chr(10).join(lines)}
-
-Retourne un JSON array:
-[{{"id": "...", "translation": "..."}}]"""
-    else:
-        prompt = f"""Traduis ces noms de facteurs d'émission du {source_lang} vers le {target_lang} (contexte: bilan carbone suisse).
-
-Règles:
-- Garde le même style et longueur que l'original
-- Conserve les abréviations techniques et les unités
-- Utilise le {target_lang} courant suisse {"(Hochdeutsch)" if target_lang == "allemand" else ""}
-- Retourne UNIQUEMENT un JSON valide, sans commentaires
-
-Noms à traduire:
-{chr(10).join(lines)}
-
-Retourne un JSON array:
-[{{"id": "...", "translation": "..."}}]"""
+    prompt = build_translate_prompt(factors, cfg)
 
     try:
         import os
@@ -518,37 +556,11 @@ Retourne un JSON array:
         chat = LlmChat(
             api_key=os.environ.get("EMERGENT_LLM_KEY"),
             session_id=f"curation-translate-{current_user['id']}",
-            system_message=f"Tu es un traducteur expert {source_lang}-{target_lang} spécialisé dans le domaine du bilan carbone suisse.",
+            system_message=f"Tu es un traducteur expert {cfg['source_lang']}-{cfg['target_lang']} spécialisé dans le domaine du bilan carbone suisse.",
         ).with_model("openai", "gpt-4o-mini")
 
         response = await chat.send_message(UserMessage(text=prompt))
-
-        import json
-        import re
-        match = re.search(r'\[.*\]', response, re.DOTALL)
-        if match:
-            translations_raw = json.loads(match.group())
-        else:
-            translations_raw = json.loads(response)
-
-        # Map back to factors
-        factor_map = {}
-        for f in factors:
-            doc = serialize_doc(f)
-            factor_map[doc.get("id", str(f["_id"]))] = f
-
-        result = []
-        for t in translations_raw:
-            fid = t.get("id", "")
-            if fid in factor_map:
-                f = factor_map[fid]
-                src_name = f.get(source_field) or f.get(source_orig, "")
-                result.append({
-                    "factor_id": fid,
-                    "source_name": src_name,
-                    "translation": t.get("translation", ""),
-                })
-
+        result = parse_translation_response(response, factors, cfg)
         skipped = len(payload.factor_ids) - len(factors)
         return {"translations": result, "skipped": skipped, "target_field": target_field}
 
