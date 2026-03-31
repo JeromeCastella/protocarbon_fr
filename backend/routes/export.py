@@ -2,10 +2,13 @@
 Routes pour l'export des données
 """
 from fastapi import APIRouter, HTTPException, Depends
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, StreamingResponse
 from datetime import datetime, timezone
 from bson import ObjectId
 from typing import Optional
+import subprocess
+import os
+import tempfile
 
 import sys
 sys.path.append('/app/backend')
@@ -20,7 +23,7 @@ from config import (
     carbon_objectives_collection,
     companies_collection
 )
-from services.auth import get_current_user
+from services.auth import get_current_user, require_admin
 
 router = APIRouter(prefix="/export", tags=["Export"])
 
@@ -225,3 +228,95 @@ async def export_reference_data(current_user: dict = Depends(get_current_user)):
         }
     }
 
+
+
+@router.get("/mongodump")
+async def export_mongodump(current_user: dict = Depends(require_admin)):
+    """
+    Export complet de la base MongoDB au format mongodump archive.
+    Lecture seule — aucun risque pour la base de données.
+    Réservé aux administrateurs.
+    """
+    mongo_url = os.environ.get("MONGO_URL", "mongodb://localhost:27017")
+    db_name = os.environ.get("DB_NAME", "carbon_tracker")
+
+    # Créer un fichier temporaire pour l'archive
+    tmp = tempfile.NamedTemporaryFile(delete=False, suffix=".archive")
+    tmp.close()
+    archive_path = tmp.name
+
+    try:
+        result = subprocess.run(
+            ["mongodump", f"--uri={mongo_url}", f"--db={db_name}", f"--archive={archive_path}"],
+            capture_output=True, text=True, timeout=120
+        )
+
+        if result.returncode != 0:
+            raise HTTPException(status_code=500, detail=f"mongodump failed: {result.stderr}")
+
+        file_size = os.path.getsize(archive_path)
+        timestamp = datetime.now(timezone.utc).strftime("%Y-%m-%d_%H%M%S")
+        filename = f"{db_name}_{timestamp}.archive"
+
+        def iterfile():
+            try:
+                with open(archive_path, "rb") as f:
+                    while chunk := f.read(1024 * 1024):  # 1MB chunks
+                        yield chunk
+            finally:
+                # Nettoyage du fichier temporaire après envoi
+                if os.path.exists(archive_path):
+                    os.unlink(archive_path)
+
+        return StreamingResponse(
+            iterfile(),
+            media_type="application/octet-stream",
+            headers={
+                "Content-Disposition": f'attachment; filename="{filename}"',
+                "Content-Length": str(file_size),
+                "X-Export-DB": db_name,
+                "X-Export-Timestamp": timestamp,
+            }
+        )
+    except subprocess.TimeoutExpired:
+        if os.path.exists(archive_path):
+            os.unlink(archive_path)
+        raise HTTPException(status_code=504, detail="mongodump timed out (>120s)")
+    except HTTPException:
+        raise
+    except Exception as e:
+        if os.path.exists(archive_path):
+            os.unlink(archive_path)
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/mongodump/info")
+async def mongodump_info(current_user: dict = Depends(require_admin)):
+    """
+    Retourne les métadonnées de la base sans lancer le dump.
+    Utile pour afficher la taille estimée et les collections avant export.
+    """
+    from config import db
+
+    collections = db.list_collection_names()
+    stats = {}
+    total_docs = 0
+    for col_name in collections:
+        count = db[col_name].count_documents({})
+        stats[col_name] = count
+        total_docs += count
+
+    # Taille estimée via la commande dbStats
+    db_stats = db.command("dbStats")
+    data_size = db_stats.get("dataSize", 0)
+    storage_size = db_stats.get("storageSize", 0)
+
+    return {
+        "db_name": os.environ.get("DB_NAME", "carbon_tracker"),
+        "collections": stats,
+        "total_documents": total_docs,
+        "total_collections": len(collections),
+        "data_size_bytes": data_size,
+        "data_size_mb": round(data_size / (1024 * 1024), 2),
+        "storage_size_mb": round(storage_size / (1024 * 1024), 2),
+    }

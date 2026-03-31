@@ -18,6 +18,7 @@ Application full-stack (React/FastAPI/MongoDB) pour la comptabilité carbone d'e
 - Exercices fiscaux
 - **Atelier de Curation (Phase 1 & 2)** — feature majeure
 - **Vue tabulaire détaillée** : Slide-over panel pour activités par scope (Facteur, %, Source, Commentaire)
+- **Export MongoDB (mongodump)** : Bouton admin pour télécharger un dump complet de la base au format .archive (compatible mongorestore pour migration)
 
 ## Recherche globale de facteurs — Terminé
 - Barre de recherche en haut de la page Data Entry (Fuse.js client-side, lazy loading)
