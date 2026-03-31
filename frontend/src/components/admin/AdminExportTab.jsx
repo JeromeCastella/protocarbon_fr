@@ -31,7 +31,7 @@ const AdminExportTab = () => {
   const fetchFiscalYears = async () => {
     try {
       const res = await fetch(`${API_URL}/api/fiscal-years`, {
-        credentials: 'include'
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
       });
       if (res.ok) {
         const data = await res.json();
@@ -48,7 +48,7 @@ const AdminExportTab = () => {
     setDumpInfoLoading(true);
     try {
       const res = await fetch(`${API_URL}/api/export/mongodump/info`, {
-        credentials: 'include'
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
       });
       if (res.ok) {
         const data = await res.json();
@@ -66,7 +66,7 @@ const AdminExportTab = () => {
     setDumpResult(null);
     try {
       const res = await fetch(`${API_URL}/api/export/mongodump`, {
-        credentials: 'include'
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
       });
 
       if (!res.ok) {
@@ -128,7 +128,7 @@ const AdminExportTab = () => {
       }
       
       const res = await fetch(endpoint, {
-        credentials: 'include'
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
       });
       
       if (!res.ok) {

@@ -527,8 +527,9 @@ const GlobalFactorSearch = ({ isDark, language, showExpertFactors, onToggleExper
     if (allFactors || isLoading) return;
     setIsLoading(true);
     try {
+      const token = localStorage.getItem('token');
       const res = await fetch(`${API_URL}/api/emission-factors/search-index`, {
-        credentials: 'include'
+        headers: { Authorization: `Bearer ${token}` }
       });
       const data = await res.json();
       setAllFactors(data);

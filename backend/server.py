@@ -11,27 +11,11 @@ from routes import api_router
 
 app = FastAPI(title="Carbon Footprint Calculator - GHG Protocol")
 
-# CORS Configuration
-cors_origins_raw = os.environ.get("CORS_ORIGINS", "")
-frontend_url = os.environ.get("FRONTEND_URL", "")
-
-# Build explicit origins list for credential-safe CORS
-cors_origins_list = [o.strip() for o in cors_origins_raw.split(",") if o.strip() and o.strip() != "*"]
-if frontend_url and frontend_url not in cors_origins_list:
-    cors_origins_list.append(frontend_url)
-
-# When credentials=True, origins must be explicit (not "*")
-# If no specific origins configured, allow common dev origins
-if not cors_origins_list:
-    cors_origins_list = [
-        "http://localhost:3000",
-        "http://127.0.0.1:3000",
-    ]
-
+# CORS Configuration — permissive car le proxy/ingress gère les CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=cors_origins_list,
-    allow_credentials=True,
+    allow_origins=["*"],
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )

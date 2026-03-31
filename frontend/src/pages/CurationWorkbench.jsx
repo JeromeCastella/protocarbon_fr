@@ -313,13 +313,14 @@ const AISuggestModal = ({ factorIds, isDark, onApply, onClose }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selected, setSelected] = useState({});
+  const authToken = localStorage.getItem('token');
 
   useEffect(() => {
     const fetchSuggestions = async () => {
       try {
         const res = await fetch(`${API}/api/curation/suggest-titles`, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' }, credentials: 'include',
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${authToken}` },
           body: JSON.stringify({ factor_ids: factorIds }),
         });
         if (!res.ok) throw new Error('Erreur IA');
@@ -391,6 +392,7 @@ const TranslatePreviewModal = ({ factorIds, direction, isDark, onApply, onClose 
   const [selected, setSelected] = useState({});
   const [targetField, setTargetField] = useState('');
   const [skipped, setSkipped] = useState(0);
+  const authToken = localStorage.getItem('token');
 
   const dirLabels = {
     'fr_to_de': 'FR → DE',
@@ -405,7 +407,7 @@ const TranslatePreviewModal = ({ factorIds, direction, isDark, onApply, onClose 
       try {
         const res = await fetch(`${API}/api/curation/translate-preview`, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' }, credentials: 'include',
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${authToken}` },
           body: JSON.stringify({ factor_ids: factorIds, direction }),
         });
         if (!res.ok) {
@@ -435,7 +437,7 @@ const TranslatePreviewModal = ({ factorIds, direction, isDark, onApply, onClose 
     try {
       const res = await fetch(`${API}/api/curation/translate-apply`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' }, credentials: 'include',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${authToken}` },
         body: JSON.stringify({
           translations: toApply.map(t => ({ factor_id: t.factor_id, value: t.translation })),
           target_field: targetField,
@@ -534,7 +536,7 @@ const BulkPreviewModal = ({ preview, isDark, onConfirm, onCancel, loading }) => 
 // ==================== MAIN CURATION PAGE ====================
 export default function CurationWorkbench() {
   const { isDark } = useTheme();
-  // Auth handled via httpOnly cookies
+  const { token } = useAuth();
 
   // Data state
   const [stats, setStats] = useState(null);
@@ -579,7 +581,7 @@ export default function CurationWorkbench() {
   // Fetch stats
   const fetchStats = useCallback(async () => {
     try {
-      const res = await fetch(`${API}/api/curation/stats`, { credentials: 'include' });
+      const res = await fetch(`${API}/api/curation/stats`, { headers: { Authorization: `Bearer ${token}` } });
       if (res.ok) setStats(await res.json());
     } catch (e) { logger.error(e); }
   }, []);
@@ -595,7 +597,7 @@ export default function CurationWorkbench() {
       if (isPublic) params.set('is_public', isPublic);
       if (defaultUnit) params.set('default_unit', defaultUnit);
 
-      const res = await fetch(`${API}/api/curation/factors?${params}`, { credentials: 'include' });
+      const res = await fetch(`${API}/api/curation/factors?${params}`, { headers: { Authorization: `Bearer ${token}` } });
       if (res.ok) {
         const data = await res.json();
         setFactors(data.items);
@@ -613,7 +615,7 @@ export default function CurationWorkbench() {
   useEffect(() => {
     const fetchAllSubcategories = async () => {
       try {
-        const res = await fetch(`${API}/api/subcategories`, { credentials: 'include' });
+        const res = await fetch(`${API}/api/subcategories`, { headers: { Authorization: `Bearer ${token}` } });
         if (res.ok) {
           const data = await res.json();
           setSubcategoriesList(data.map(sc => ({ code: sc.code, name_fr: sc.name_fr || sc.code })).sort((a, b) => a.name_fr.localeCompare(b.name_fr)));
@@ -622,7 +624,7 @@ export default function CurationWorkbench() {
     };
     const fetchUnits = async () => {
       try {
-        const res = await fetch(`${API}/api/curation/units`, { credentials: 'include' });
+        const res = await fetch(`${API}/api/curation/units`, { headers: { Authorization: `Bearer ${token}` } });
         if (res.ok) setUnitsList(await res.json());
       } catch (e) { logger.error(e); }
     };
@@ -635,7 +637,7 @@ export default function CurationWorkbench() {
     try {
       const res = await fetch(`${API}/api/curation/factors/${factorId}`, {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' }, credentials: 'include',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({ [field]: value }),
       });
       if (res.ok) {
@@ -652,7 +654,7 @@ export default function CurationWorkbench() {
     try {
       const res = await fetch(`${API}/api/curation/bulk-preview`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' }, credentials: 'include',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({ factor_ids: selectedIds, changes }),
       });
       if (res.ok) {
@@ -669,7 +671,7 @@ export default function CurationWorkbench() {
     try {
       await fetch(`${API}/api/curation/bulk-apply`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' }, credentials: 'include',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({ factor_ids: selectedIds, changes: pendingBulkChanges }),
       });
       setSelectedIds([]);
@@ -699,7 +701,7 @@ export default function CurationWorkbench() {
     try {
       const res = await fetch(`${API}/api/curation/bulk-copy-originals`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' }, credentials: 'include',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({ factor_ids: selectedIds, lang, source_field: sourceField }),
       });
       if (res.ok) {
