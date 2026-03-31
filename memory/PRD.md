@@ -9,7 +9,7 @@ Application full-stack (React/FastAPI/MongoDB) pour la comptabilité carbone d'e
 - **Integrations**: Gemini Pro / GPT-4o-mini via emergentintegrations (suggestions IA + traductions)
 
 ## Core Features Implemented
-- Auth (email/password)
+- Auth (httpOnly cookies + JWT fallback)
 - Dashboard avec métriques GHG Protocol
 - Saisie de données (slide-over) + **Recherche globale de facteurs** (Fuse.js, toggle Expert)
 - Gestion de produits (slide-over)
@@ -19,6 +19,15 @@ Application full-stack (React/FastAPI/MongoDB) pour la comptabilité carbone d'e
 - **Atelier de Curation (Phase 1 & 2)** — feature majeure
 - **Vue tabulaire détaillée** : Slide-over panel pour activités par scope (Facteur, %, Source, Commentaire)
 - **Export MongoDB (mongodump)** : Bouton admin pour télécharger un dump complet de la base au format .archive (compatible mongorestore pour migration)
+
+## Code Quality Improvements (March 2026)
+- Auth migrated from localStorage to httpOnly secure cookies (XSS protection)
+- Console.log replaced with environment-aware logger utility
+- Array index keys replaced with stable identifiers
+- CORS configured with explicit origins (credentials-safe)
+- Python functions refactored for lower cyclomatic complexity
+- Test credentials centralized in conftest_credentials.py
+- Backend logout endpoint added (POST /api/auth/logout)
 
 ## Recherche globale de facteurs — Terminé
 - Barre de recherche en haut de la page Data Entry (Fuse.js client-side, lazy loading)
