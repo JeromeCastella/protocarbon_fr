@@ -80,6 +80,7 @@ const AdminExportTab = () => {
       const disposition = res.headers.get('Content-Disposition');
       const filenameMatch = disposition?.match(/filename="(.+)"/);
       const filename = filenameMatch ? filenameMatch[1] : `mongodump_${new Date().toISOString().split('T')[0]}.archive`;
+      const exportMethod = res.headers.get('X-Export-Method') || 'unknown';
 
       const blob = await res.blob();
 
@@ -97,11 +98,12 @@ const AdminExportTab = () => {
       }, 200);
 
       const sizeMB = (blob.size / (1024 * 1024)).toFixed(1);
+      const methodLabel = exportMethod === 'mongodump' ? 'mongodump native' : 'BSON Python';
       setDumpResult({
         success: true,
         message: language === 'fr'
-          ? `Export réussi — ${filename} (${sizeMB} MB)`
-          : `Export erfolgreich — ${filename} (${sizeMB} MB)`
+          ? `Export réussi — ${filename} (${sizeMB} MB) — Méthode : ${methodLabel}`
+          : `Export erfolgreich — ${filename} (${sizeMB} MB) — Methode: ${methodLabel}`
       });
     } catch (error) {
       console.error('MongoDB dump error:', error);
@@ -410,8 +412,8 @@ const AdminExportTab = () => {
             </h3>
             <p className={`text-sm mt-1 ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
               {language === 'fr'
-                ? 'Export natif de la base complète au format .archive — compatible mongorestore pour migration vers un autre hébergeur.'
-                : 'Nativer Export der gesamten Datenbank im .archive-Format — kompatibel mit mongorestore für die Migration zu einem anderen Hoster.'}
+                ? 'Export natif de la base complète au format BSON — compatible mongorestore pour migration vers un autre hébergeur.'
+                : 'Nativer Export der gesamten Datenbank im BSON-Format — kompatibel mit mongorestore für die Migration zu einem anderen Hoster.'}
             </p>
           </div>
         </div>
@@ -493,8 +495,8 @@ const AdminExportTab = () => {
           <div>
             <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
               {language === 'fr'
-                ? 'Restauration : mongorestore --archive=fichier.archive'
-                : 'Wiederherstellung: mongorestore --archive=datei.archive'}
+                ? 'Restauration : mongorestore --archive=fichier.archive ou mongorestore --dir=dump/'
+                : 'Wiederherstellung: mongorestore --archive=datei.archive oder mongorestore --dir=dump/'}
             </p>
           </div>
           <button
@@ -515,7 +517,7 @@ const AdminExportTab = () => {
             ) : (
               <>
                 <Download className="w-5 h-5" />
-                {language === 'fr' ? 'Télécharger .archive' : '.archive herunterladen'}
+                {language === 'fr' ? 'Télécharger le dump' : 'Dump herunterladen'}
               </>
             )}
           </button>

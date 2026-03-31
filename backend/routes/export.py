@@ -233,14 +233,29 @@ async def export_reference_data(current_user: dict = Depends(get_current_user)):
 @router.get("/mongodump")
 async def export_mongodump(current_user: dict = Depends(require_admin)):
     """
-    Export complet de la base MongoDB au format mongodump archive.
+    Export complet de la base MongoDB.
+    Tente d'abord mongodump (format .archive natif).
+    Si mongodump n'est pas disponible, génère un export BSON en .zip
+    compatible avec mongorestore --dir.
     Lecture seule — aucun risque pour la base de données.
     Réservé aux administrateurs.
     """
+    import shutil
+
     mongo_url = os.environ.get("MONGO_URL", "mongodb://localhost:27017")
     db_name = os.environ.get("DB_NAME", "carbon_tracker")
+    timestamp = datetime.now(timezone.utc).strftime("%Y-%m-%d_%H%M%S")
 
-    # Créer un fichier temporaire pour l'archive
+    mongodump_available = shutil.which("mongodump") is not None
+
+    if mongodump_available:
+        return await _export_via_mongodump(mongo_url, db_name, timestamp)
+    else:
+        return await _export_via_python(db_name, timestamp)
+
+
+async def _export_via_mongodump(mongo_url: str, db_name: str, timestamp: str):
+    """Export natif via le binaire mongodump → fichier .archive"""
     tmp = tempfile.NamedTemporaryFile(delete=False, suffix=".archive")
     tmp.close()
     archive_path = tmp.name
@@ -255,16 +270,14 @@ async def export_mongodump(current_user: dict = Depends(require_admin)):
             raise HTTPException(status_code=500, detail=f"mongodump failed: {result.stderr}")
 
         file_size = os.path.getsize(archive_path)
-        timestamp = datetime.now(timezone.utc).strftime("%Y-%m-%d_%H%M%S")
         filename = f"{db_name}_{timestamp}.archive"
 
         def iterfile():
             try:
                 with open(archive_path, "rb") as f:
-                    while chunk := f.read(1024 * 1024):  # 1MB chunks
+                    while chunk := f.read(1024 * 1024):
                         yield chunk
             finally:
-                # Nettoyage du fichier temporaire après envoi
                 if os.path.exists(archive_path):
                     os.unlink(archive_path)
 
@@ -276,6 +289,7 @@ async def export_mongodump(current_user: dict = Depends(require_admin)):
                 "Content-Length": str(file_size),
                 "X-Export-DB": db_name,
                 "X-Export-Timestamp": timestamp,
+                "X-Export-Method": "mongodump",
             }
         )
     except subprocess.TimeoutExpired:
@@ -287,6 +301,81 @@ async def export_mongodump(current_user: dict = Depends(require_admin)):
     except Exception as e:
         if os.path.exists(archive_path):
             os.unlink(archive_path)
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+async def _export_via_python(db_name: str, timestamp: str):
+    """
+    Fallback Python pur : exporte chaque collection en BSON + metadata JSON
+    dans un zip compatible mongorestore --dir.
+    Structure: dump/<db_name>/<collection>.bson + <collection>.metadata.json
+    """
+    import zipfile
+    import bson
+    from config import db
+
+    tmp = tempfile.NamedTemporaryFile(delete=False, suffix=".zip")
+    tmp.close()
+    zip_path = tmp.name
+
+    try:
+        with zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED) as zf:
+            collections = db.list_collection_names()
+            for col_name in collections:
+                collection = db[col_name]
+
+                # Write BSON data
+                bson_data = b""
+                for doc in collection.find():
+                    bson_data += bson.BSON.encode(doc)
+
+                zf.writestr(f"dump/{db_name}/{col_name}.bson", bson_data)
+
+                # Write metadata JSON (indexes)
+                indexes = []
+                for idx in collection.list_indexes():
+                    idx_doc = dict(idx)
+                    # Convert key to list of tuples for JSON
+                    idx_doc["key"] = {k: v for k, v in idx_doc.get("key", {}).items()}
+                    indexes.append(idx_doc)
+
+                import json
+                metadata = {
+                    "options": {},
+                    "indexes": indexes,
+                    "type": "collection"
+                }
+                zf.writestr(
+                    f"dump/{db_name}/{col_name}.metadata.json",
+                    json.dumps(metadata, default=str)
+                )
+
+        file_size = os.path.getsize(zip_path)
+        filename = f"{db_name}_{timestamp}_bson.zip"
+
+        def iterfile():
+            try:
+                with open(zip_path, "rb") as f:
+                    while chunk := f.read(1024 * 1024):
+                        yield chunk
+            finally:
+                if os.path.exists(zip_path):
+                    os.unlink(zip_path)
+
+        return StreamingResponse(
+            iterfile(),
+            media_type="application/zip",
+            headers={
+                "Content-Disposition": f'attachment; filename="{filename}"',
+                "Content-Length": str(file_size),
+                "X-Export-DB": db_name,
+                "X-Export-Timestamp": timestamp,
+                "X-Export-Method": "python-bson",
+            }
+        )
+    except Exception as e:
+        if os.path.exists(zip_path):
+            os.unlink(zip_path)
         raise HTTPException(status_code=500, detail=str(e))
 
 
