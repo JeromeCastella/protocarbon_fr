@@ -15,7 +15,7 @@ import ProductDetailModal from '../components/ProductDetailModal';
 import EmptyFiscalYearState from '../components/EmptyFiscalYearState';
 import logger from '../utils/logger';
 
-const API_URL = process.env.REACT_APP_BACKEND_URL || '';
+import { API_URL } from '../utils/apiConfig';
 
 // ── Emissions stacked bar ──────────────────────────────────────────
 const EmissionsBar = ({ manufacturing, usage, disposal, isDark }) => {

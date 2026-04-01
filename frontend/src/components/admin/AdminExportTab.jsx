@@ -4,7 +4,7 @@ import { useTheme } from '../../context/ThemeContext';
 import { useLanguage } from '../../context/LanguageContext';
 import logger from '../../utils/logger';
 
-const API_URL = process.env.REACT_APP_BACKEND_URL;
+import { API_URL } from '../../utils/apiConfig';
 
 const AdminExportTab = () => {
   const { isDark } = useTheme();

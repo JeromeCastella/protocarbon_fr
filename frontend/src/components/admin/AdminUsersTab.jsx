@@ -5,7 +5,7 @@ import { Trash2, Shield, ShieldOff, AlertTriangle, X, UserPlus, Eye, EyeOff } fr
 import axios from 'axios';
 import logger from '../../utils/logger';
 
-const API_URL = process.env.REACT_APP_BACKEND_URL || '';
+import { API_URL } from '../../utils/apiConfig';
 
 const AdminUsersTab = ({ users, currentUserId, onRefetch }) => {
   const { isDark } = useTheme();

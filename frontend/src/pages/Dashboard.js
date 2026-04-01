@@ -54,7 +54,7 @@ import DashboardResultsTab from '../components/DashboardResultsTab';
 import EmptyFiscalYearState from '../components/EmptyFiscalYearState';
 import logger from '../utils/logger';
 
-const API_URL = process.env.REACT_APP_BACKEND_URL || '';
+import { API_URL } from '../utils/apiConfig';
 
 // Utility function to format emissions with appropriate unit
 const formatEmissions = (valueInKg) => {

@@ -6,7 +6,7 @@ import { Search, Plus, Edit2, Trash2, ArrowRight, X, Check, Repeat } from 'lucid
 import axios from 'axios';
 import logger from '../../utils/logger';
 
-const API_URL = process.env.REACT_APP_BACKEND_URL || '';
+import { API_URL } from '../../utils/apiConfig';
 
 const INITIAL_FORM = {
   from_unit: '',

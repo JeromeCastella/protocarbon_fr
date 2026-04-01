@@ -7,7 +7,7 @@ import { Leaf, Lock, ArrowLeft, CheckCircle, AlertCircle, Eye, EyeOff } from 'lu
 import axios from 'axios';
 import PasswordStrength from '../components/PasswordStrength';
 
-const API_URL = process.env.REACT_APP_BACKEND_URL || '';
+import { API_URL } from '../utils/apiConfig';
 
 const ResetPassword = () => {
   const [searchParams] = useSearchParams();

@@ -9,7 +9,7 @@ import {
   Languages, CopyPlus
 } from 'lucide-react';
 
-const API = process.env.REACT_APP_BACKEND_URL;
+import { API_URL as API } from '../utils/apiConfig';
 
 // ==================== STATS DASHBOARD ====================
 const StatsDashboard = ({ stats, isDark, onSubcategoryClick, activeSubcategory }) => {

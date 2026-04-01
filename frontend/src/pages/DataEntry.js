@@ -53,7 +53,7 @@ import Scope3AvalChoiceModal from '../components/Scope3AvalChoiceModal';
 import Fuse from 'fuse.js';
 import logger from '../utils/logger';
 
-const API_URL = process.env.REACT_APP_BACKEND_URL || '';
+import { API_URL } from '../utils/apiConfig';
 
 // Categories that should open product sale modal instead of regular entry
 const PRODUCT_SALE_CATEGORIES = ['transformation_produits', 'utilisation_produits', 'fin_vie_produits'];

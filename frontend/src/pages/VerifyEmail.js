@@ -6,7 +6,7 @@ import { motion } from 'framer-motion';
 import { Leaf, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
 import axios from 'axios';
 
-const API_URL = process.env.REACT_APP_BACKEND_URL || '';
+import { API_URL } from '../utils/apiConfig';
 
 const VerifyEmail = () => {
   const [searchParams] = useSearchParams();

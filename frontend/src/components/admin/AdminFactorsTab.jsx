@@ -15,7 +15,7 @@ import {
   getScopeColor 
 } from '../../hooks/useAdminData';
 
-const API_URL = process.env.REACT_APP_BACKEND_URL || '';
+import { API_URL } from '../../utils/apiConfig';
 
 const INITIAL_FORM = {
   name_fr: '',

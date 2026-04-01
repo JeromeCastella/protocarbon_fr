@@ -7,9 +7,10 @@ Application full-stack (React/FastAPI/MongoDB) pour la comptabilité carbone d'e
 - **Frontend**: React + TailwindCSS + Shadcn/UI, port 3000
 - **Backend**: FastAPI + MongoDB, port 8001
 - **Integrations**: Gemini Pro / GPT-4o-mini via emergentintegrations (suggestions IA + traductions)
+- **API URL Config**: Centralized in `utils/apiConfig.js` — uses relative URLs to avoid cross-origin issues
 
 ## Core Features Implemented
-- Auth (httpOnly cookies + JWT fallback)
+- Auth (localStorage + JWT Bearer Token)
 - Dashboard avec métriques GHG Protocol
 - Saisie de données (slide-over) + **Recherche globale de facteurs** (Fuse.js, toggle Expert)
 - Gestion de produits (slide-over)
@@ -20,14 +21,18 @@ Application full-stack (React/FastAPI/MongoDB) pour la comptabilité carbone d'e
 - **Vue tabulaire détaillée** : Slide-over panel pour activités par scope (Facteur, %, Source, Commentaire)
 - **Export MongoDB (mongodump)** : Bouton admin pour télécharger un dump complet de la base au format .archive (compatible mongorestore pour migration)
 
+## Production Deployment Fixes (April 2026)
+- **requirements.txt** regenerated via pip freeze — added `email-validator`, `dnspython`, `emergentintegrations` (were missing, causing ImportError crash)
+- **Health check** simplified to instant response (no DB ping) at both `/health` and `/api/health`
+- **MongoClient** set to `connect=False` (lazy connection) with timeouts to prevent startup blocking
+- **API URL config** centralized in `utils/apiConfig.js` — detects domain mismatch at runtime and falls back to relative URLs to prevent CORS issues from stale deployment secrets
+- **.env** cleaned (no comments) to avoid platform parser issues
+
 ## Code Quality Improvements (March 2026)
-- Auth migrated from localStorage to httpOnly secure cookies (XSS protection)
 - Console.log replaced with environment-aware logger utility
 - Array index keys replaced with stable identifiers
-- CORS configured with explicit origins (credentials-safe)
 - Python functions refactored for lower cyclomatic complexity
 - Test credentials centralized in conftest_credentials.py
-- Backend logout endpoint added (POST /api/auth/logout)
 
 ## Recherche globale de facteurs — Terminé
 - Barre de recherche en haut de la page Data Entry (Fuse.js client-side, lazy loading)
@@ -35,7 +40,7 @@ Application full-stack (React/FastAPI/MongoDB) pour la comptabilité carbone d'e
 - Fuzzy search sur 6 champs pondérés (nom simplifié FR/DE, nom FR/DE, source, tags)
 - Résultats en dropdown avec nom, catégorie, unité, valeur d'impact, badge Expert
 - Clic sur résultat → formulaire guidé directement à l'étape 4 (quantité)
-- **Résolution hybride de catégorie** : auto-dérivation quand unique, mini-sélecteur quand ambigu (89/100 sous-catégories ont 2+ catégories)
+- **Résolution hybride de catégorie** : auto-dérivation quand unique, mini-sélecteur quand ambigu
 - Scope correctement dérivé depuis `impacts[0].scope` du facteur
 - Toggle persisté en localStorage
 - Endpoint backend `GET /api/emission-factors/search-index` (8978 facteurs, ~4MB, aggregation avec scope)
@@ -50,13 +55,8 @@ Application full-stack (React/FastAPI/MongoDB) pour la comptabilité carbone d'e
 - Raccourcis clavier (Tab, Enter, Shift+Enter, Escape)
 - Dashboard de progression global et par sous-catégorie
 - **Colonne "Source BAFU"** (source_product_name) — lecture seule, nom technique ecoinvent
-- **Copie en masse** : 4 options de copie vers les noms simplifiés (cellules vides uniquement) :
-  - "Orig. → FR/DE" — copie name_fr/name_de → name_simple_fr/name_simple_de
-  - "Source → FR/DE" — copie source_product_name → name_simple_fr/name_simple_de
-- **Traduction en masse** : 3 options via IA (GPT-4o-mini) avec aperçu et validation :
-  - "Traduire FR → DE" — traduit name_simple_fr vers name_simple_de
-  - "Source+Trad → FR" — traduit et simplifie source_product_name (anglais ecoinvent) vers français
-  - "Source+Trad → DE" — traduit et simplifie source_product_name (anglais ecoinvent) vers allemand
+- **Copie en masse** : 4 options de copie vers les noms simplifiés (cellules vides uniquement)
+- **Traduction en masse** : 3 options via IA (GPT-4o-mini) avec aperçu et validation
 
 ## DB Schema - emission_factors
 ```
@@ -71,11 +71,15 @@ Application full-stack (React/FastAPI/MongoDB) pour la comptabilité carbone d'e
 ```
 
 ## Key Files
+- `frontend/src/utils/apiConfig.js` — Centralized API URL config (runtime domain check)
 - `frontend/src/pages/CurationWorkbench.jsx` — Page de curation
 - `backend/routes/curation.py` — API de curation (incl. copy, translate)
-- `backend/scripts/migrate_source_product_name.py` — Script de migration
+- `backend/config.py` — MongoDB connection (lazy, with timeouts)
+- `backend/server.py` — FastAPI app with health checks at / and /api/health
 
-## API Endpoints Curation
+## API Endpoints
+- `GET /health` — Pod health check (instant, no DB)
+- `GET /api/health` — Ingress health check (instant, no DB)
 - `GET /api/curation/factors` — Liste paginée avec filtres
 - `PATCH /api/curation/factors/{id}` — Édition en ligne
 - `POST /api/curation/bulk-copy-originals` — Copie originaux → simplifié (FR/DE)
@@ -84,6 +88,9 @@ Application full-stack (React/FastAPI/MongoDB) pour la comptabilité carbone d'e
 - `POST /api/curation/bulk-preview` / `bulk-apply` — Actions en masse
 - `POST /api/curation/suggest-titles` — Suggestions IA
 - `GET /api/curation/stats` — Dashboard progression
+- `GET /api/export/mongodump/info` — Métadonnées DB
+- `GET /api/export/mongodump` — Téléchargement dump
+- `POST /api/auth/login` — Authentification
 
 ## Backlog
 ### P0
@@ -92,13 +99,14 @@ Application full-stack (React/FastAPI/MongoDB) pour la comptabilité carbone d'e
 ### P1
 - **FEAT-03 — Multi-utilisateurs**: Rôles Admin/Éditeur/Lecteur
 - **Exports PDF/Excel**
-- **FEAT-DR — Dual Reporting (Location-based / Market-based)**: Gestion du double reporting pour le Scope 2 selon le GHG Protocol — approche basée sur la localisation vs. approche basée sur le marché (certificats d'énergie, contrats, mix résiduel)
-- **FEAT-PLAUS — Test de plausibilité global**: Vérification automatique de la cohérence des volumes saisis par rapport aux informations générales de l'entreprise (effectifs, surface, chiffre d'affaires, secteur d'activité). Alertes si les données semblent incohérentes
+- **FEAT-DR — Dual Reporting (Location-based / Market-based)**
+- **FEAT-PLAUS — Test de plausibilité global**
 
 ### P2
 - Base de données actions plan climat cantonal
 - Logs d'audit calculs d'émission
 - Optimisation requêtes DB (projections MongoDB dans dashboard.py)
+- Refactoring composants React monolithiques (GuidedEntryModal.js, Dashboard.js, AdminFactorsTab.jsx)
 
 ## Credentials
 - Email: newtest@x.com / Password: test123

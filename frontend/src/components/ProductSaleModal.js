@@ -21,7 +21,7 @@ import {
 import ProductVersionsModal from './ProductVersionsModal';
 import logger from '../utils/logger';
 
-const API_URL = process.env.REACT_APP_BACKEND_URL || '';
+import { API_URL } from '../utils/apiConfig';
 
 /**
  * Modal pour gérer les ventes totales d'un produit par exercice fiscal.

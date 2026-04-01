@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import logger from '../utils/logger';
 
-const API_URL = process.env.REACT_APP_BACKEND_URL;
+import { API_URL } from '../utils/apiConfig';
 
 // Cache storage with TTL
 const cache = {

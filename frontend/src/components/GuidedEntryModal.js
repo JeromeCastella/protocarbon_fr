@@ -9,7 +9,7 @@ import { getUnitLabel, formatUnitWithCode } from '../utils/unitLabels';
 import FactorSelectionStep from './FactorSelectionStep';
 import logger from '../utils/logger';
 
-const API_URL = process.env.REACT_APP_BACKEND_URL || '';
+import { API_URL } from '../utils/apiConfig';
 
 /**
  * Modal de saisie guidée pour les données d'activité

@@ -25,7 +25,7 @@ import {
   Tag
 } from 'lucide-react';
 
-const API_URL = process.env.REACT_APP_BACKEND_URL || '';
+import { API_URL } from '../utils/apiConfig';
 
 // FAQ Data Structure with placeholders
 const faqCategories = [

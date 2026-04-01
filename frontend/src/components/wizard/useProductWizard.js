@@ -3,7 +3,7 @@ import axios from 'axios';
 import { INITIAL_FORM } from './wizardConstants';
 import logger from '../../utils/logger';
 
-const API_URL = process.env.REACT_APP_BACKEND_URL || '';
+import { API_URL } from '../../utils/apiConfig';
 
 const enrichFactors = (factors) => factors.map(f => {
   const impacts = f.impacts || [];
