@@ -111,6 +111,15 @@ async def get_emission_factors_search_index(
     current_user: dict = Depends(get_current_user)
 ):
     """Return all emission factors with minimal fields for client-side Fuse.js search."""
+    # Build subcategory → category names lookup for search enrichment
+    sub_to_cat_names = {}
+    for sub in subcategories_collection.find({}, {"_id": 0, "code": 1, "categories": 1}):
+        sub_to_cat_names[sub["code"]] = sub.get("categories", [])
+
+    cat_name_map = {}
+    for cat in categories_collection.find({}, {"_id": 0, "code": 1, "name_fr": 1, "name_de": 1}):
+        cat_name_map[cat["code"]] = {"name_fr": cat.get("name_fr", ""), "name_de": cat.get("name_de", "")}
+
     pipeline = [
         {"$match": {"deleted_at": None}},
         {"$sort": {"is_public": -1, "popularity_score": -1}},
@@ -123,7 +132,18 @@ async def get_emission_factors_search_index(
             "scope": {"$ifNull": ["$scope", {"$arrayElemAt": ["$impacts.scope", 0]}]},
         }}
     ]
-    return list(emission_factors_collection.aggregate(pipeline))
+    factors = list(emission_factors_collection.aggregate(pipeline))
+
+    # Enrich each factor with parent category names for better search
+    for f in factors:
+        sub_code = f.get("subcategory", "")
+        cat_codes = sub_to_cat_names.get(sub_code, [])
+        cat_names_fr = [cat_name_map.get(c, {}).get("name_fr", "") for c in cat_codes if c in cat_name_map]
+        cat_names_de = [cat_name_map.get(c, {}).get("name_de", "") for c in cat_codes if c in cat_name_map]
+        f["category_names_fr"] = " ".join(cat_names_fr)
+        f["category_names_de"] = " ".join(cat_names_de)
+
+    return factors
 
 
 @router.get("/emission-factors/search")

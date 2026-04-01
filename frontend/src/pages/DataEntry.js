@@ -486,10 +486,13 @@ const FUSE_OPTIONS = {
     { name: 'name_simple_de', weight: 4 },
     { name: 'name_fr', weight: 2 },
     { name: 'name_de', weight: 2 },
+    { name: 'category_names_fr', weight: 2 },
+    { name: 'category_names_de', weight: 2 },
     { name: 'source_product_name', weight: 1.5 },
+    { name: 'subcategory', weight: 1.5 },
     { name: 'tags', weight: 1 },
   ],
-  threshold: 0.35,
+  threshold: 0.4,
   ignoreLocation: true,
   minMatchCharLength: 2,
   includeScore: true,
@@ -504,7 +507,8 @@ const GlobalFactorSearch = ({ isDark, language, showExpertFactors, onToggleExper
   const [query, setQuery] = useState('');
   const [results, setResults] = useState([]);
   const [allFactors, setAllFactors] = useState(null); // lazy loaded
-  const [fuseIndex, setFuseIndex] = useState(null);
+  const [fuseAll, setFuseAll] = useState(null);
+  const [fusePublic, setFusePublic] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
   const inputRef = useRef(null);
@@ -533,8 +537,8 @@ const GlobalFactorSearch = ({ isDark, language, showExpertFactors, onToggleExper
       });
       const data = await res.json();
       setAllFactors(data);
-      const fuse = new Fuse(data, FUSE_OPTIONS);
-      setFuseIndex(fuse);
+      setFuseAll(new Fuse(data, FUSE_OPTIONS));
+      setFusePublic(new Fuse(data.filter(f => f.is_public), FUSE_OPTIONS));
     } catch (err) {
       logger.error('Failed to load search index:', err);
     } finally {
@@ -542,23 +546,31 @@ const GlobalFactorSearch = ({ isDark, language, showExpertFactors, onToggleExper
     }
   };
 
-  // Re-build index when expert toggle changes (filter applied during search)
-  // Search with debounce
+  // Search with debounce — uses the correct index based on expert toggle
   useEffect(() => {
     if (debounceRef.current) clearTimeout(debounceRef.current);
+    const fuseIndex = showExpertFactors ? fuseAll : fusePublic;
     if (!query || query.length < 2 || !fuseIndex) {
       setResults([]);
       return;
     }
     debounceRef.current = setTimeout(() => {
-      const raw = fuseIndex.search(normalize(query), { limit: 50 });
-      const filtered = showExpertFactors
-        ? raw
-        : raw.filter(r => r.item.is_public);
-      setResults(filtered.slice(0, 12));
+      const raw = fuseIndex.search(normalize(query), { limit: 300 });
+      // Diversify results: max 3 per subcategory to avoid one subcategory dominating
+      const diversified = [];
+      const subCounts = {};
+      for (const r of raw) {
+        const sub = r.item.subcategory || '_other';
+        subCounts[sub] = (subCounts[sub] || 0) + 1;
+        if (subCounts[sub] <= 3) {
+          diversified.push(r);
+        }
+        if (diversified.length >= 20) break;
+      }
+      setResults(diversified);
     }, 150);
     return () => { if (debounceRef.current) clearTimeout(debounceRef.current); };
-  }, [query, fuseIndex, showExpertFactors]);
+  }, [query, fuseAll, fusePublic, showExpertFactors]);
 
   const handleSelect = (factor) => {
     setQuery('');
