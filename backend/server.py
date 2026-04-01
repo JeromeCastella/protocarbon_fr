@@ -33,14 +33,14 @@ app.add_middleware(
 # Include all API routes from modular router
 app.include_router(api_router)
 
-# Health check endpoint (outside /api prefix)
+# Health check endpoint (outside /api prefix for direct pod access)
 @app.get("/health")
 async def health_check():
-    """Health check endpoint for Kubernetes probes"""
-    from config import client
-    try:
-        client.admin.command("ping")
-        db_status = "connected"
-    except Exception:
-        db_status = "unreachable"
-    return {"status": "healthy", "db": db_status}
+    """Health check endpoint for Kubernetes probes - must respond instantly"""
+    return {"status": "healthy"}
+
+# Also expose under /api prefix for ingress routing
+@app.get("/api/health")
+async def api_health_check():
+    """Health check accessible through ingress"""
+    return {"status": "healthy"}

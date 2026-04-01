@@ -21,8 +21,14 @@ if not JWT_SECRET:
 JWT_ALGORITHM = os.environ.get("JWT_ALGORITHM", "HS256")
 ACCESS_TOKEN_EXPIRE_MINUTES = int(os.environ.get("ACCESS_TOKEN_EXPIRE_MINUTES", 1440))
 
-# MongoDB connection (with timeout for Atlas resilience)
-client = MongoClient(MONGO_URL, serverSelectionTimeoutMS=5000, connectTimeoutMS=5000)
+# MongoDB connection (with timeout for production resilience)
+client = MongoClient(
+    MONGO_URL,
+    serverSelectionTimeoutMS=5000,
+    connectTimeoutMS=5000,
+    socketTimeoutMS=10000,
+    connect=False,
+)
 db = client[DB_NAME]
 
 # Collections
