@@ -37,4 +37,10 @@ app.include_router(api_router)
 @app.get("/health")
 async def health_check():
     """Health check endpoint for Kubernetes probes"""
-    return {"status": "healthy"}
+    from config import client
+    try:
+        client.admin.command("ping")
+        db_status = "connected"
+    except Exception:
+        db_status = "unreachable"
+    return {"status": "healthy", "db": db_status}
