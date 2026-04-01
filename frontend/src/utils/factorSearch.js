@@ -55,8 +55,8 @@ export function sortFactorsByRelevance(factors, language = 'fr') {
     
     // Secondary: alphabetical by simple name
     const nameField = language === 'fr' ? 'name_simple_fr' : 'name_simple_de';
-    const nameA = a[nameField] || a.name_fr || '';
-    const nameB = b[nameField] || b.name_fr || '';
+    const nameA = a[nameField] || a.name_simple_fr || a.name_fr || '';
+    const nameB = b[nameField] || b.name_simple_fr || b.name_fr || '';
     return nameA.localeCompare(nameB);
   });
 }

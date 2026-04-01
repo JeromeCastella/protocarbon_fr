@@ -173,6 +173,8 @@ def create_factor_snapshot(factor: dict) -> dict:
     return {
         "factor_id": str(factor.get("_id", "")),
         "factor_version": factor.get("version", 1),
+        "name_simple_fr": factor.get("name_simple_fr", ""),
+        "name_simple_de": factor.get("name_simple_de", ""),
         "name_fr": factor.get("name_fr", factor.get("name", "")),
         "name_de": factor.get("name_de", ""),
         "subcategory": factor.get("subcategory", ""),

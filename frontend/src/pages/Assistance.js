@@ -240,7 +240,7 @@ const Assistance = () => {
     if (factorSearch.trim()) {
       const searchLower = factorSearch.toLowerCase();
       result = result.filter(f => {
-        const name = language === 'fr' ? (f.name_fr || f.name) : (f.name_de || f.name);
+        const name = language === 'fr' ? (f.name_simple_fr || f.name_fr || f.name) : (f.name_simple_de || f.name_de || f.name);
         return name?.toLowerCase().includes(searchLower) ||
                f.subcategory?.toLowerCase().includes(searchLower) ||
                f.tags?.some(t => t.toLowerCase().includes(searchLower));
@@ -590,7 +590,7 @@ const Assistance = () => {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {filteredFactors.slice(0, 50).map((factor, idx) => {
-                const name = language === 'fr' ? (factor.name_fr || factor.name) : (factor.name_de || factor.name);
+                const name = language === 'fr' ? (factor.name_simple_fr || factor.name_fr || factor.name) : (factor.name_simple_de || factor.name_de || factor.name);
                 const impacts = factor.impacts || [];
                 
                 return (
@@ -724,7 +724,7 @@ const Assistance = () => {
                     {language === 'fr' ? 'Nom' : 'Name'}
                   </p>
                   <p className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                    {language === 'fr' ? (selectedFactor.name_fr || selectedFactor.name) : (selectedFactor.name_de || selectedFactor.name)}
+                    {language === 'fr' ? (selectedFactor.name_simple_fr || selectedFactor.name_fr || selectedFactor.name) : (selectedFactor.name_simple_de || selectedFactor.name_de || selectedFactor.name)}
                   </p>
                 </div>
 

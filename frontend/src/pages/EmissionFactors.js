@@ -108,8 +108,8 @@ const EmissionFactors = () => {
         
         return [
           f.id || '',
-          `"${(f.name_fr || '').replace(/"/g, '""')}"`,
-          `"${(f.name_de || '').replace(/"/g, '""')}"`,
+          `"${(f.name_simple_fr || f.name_fr || '').replace(/"/g, '""')}"`,
+          `"${(f.name_simple_de || f.name_de || '').replace(/"/g, '""')}"`,
           f.subcategory || '',
           `"${(f.input_units || []).join(', ')}"`,
           f.default_unit || '',
@@ -155,10 +155,9 @@ const EmissionFactors = () => {
 
   // Helper to get factor name based on language
   const getFactorName = (factor) => {
-    if (factor.name_fr || factor.name_de) {
-      return language === 'de' ? (factor.name_de || factor.name_fr) : (factor.name_fr || factor.name_de);
-    }
-    return factor.name || 'Sans nom';
+    const simpleName = language === 'de' ? factor.name_simple_de : factor.name_simple_fr;
+    const originalName = language === 'de' ? factor.name_de : factor.name_fr;
+    return simpleName || originalName || factor.name || 'Sans nom';
   };
 
   // Helper to get primary impact (first one or scope2 preferred)

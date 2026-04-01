@@ -388,6 +388,8 @@ const GuidedEntryModal = ({
       const search = factorSearch.toLowerCase();
       const filtered = factors.filter(f => 
         f.name?.toLowerCase().includes(search) ||
+        f.name_simple_fr?.toLowerCase().includes(search) ||
+        f.name_simple_de?.toLowerCase().includes(search) ||
         f.name_fr?.toLowerCase().includes(search) ||
         f.name_de?.toLowerCase().includes(search) ||
         f.tags?.some(tag => tag.toLowerCase().includes(search))
@@ -533,8 +535,8 @@ const GuidedEntryModal = ({
       subcategory_id: selectedSubcategory?.code,
       scope: effectiveScope,
       name: language === 'fr' 
-        ? (selectedFactor.name_fr || selectedFactor.name) 
-        : (selectedFactor.name_de || selectedFactor.name),
+        ? (selectedFactor.name_simple_fr || selectedFactor.name_fr || selectedFactor.name) 
+        : (selectedFactor.name_simple_de || selectedFactor.name_de || selectedFactor.name),
       quantity: convertedQtyValue,           // Quantité convertie (pour calcul)
       unit: factorNativeUnit,                // Unité du facteur
       original_quantity: qty,                // Valeur saisie par l'utilisateur
@@ -551,8 +553,8 @@ const GuidedEntryModal = ({
 
   // Obtenir le nom du facteur selon la langue
   const getFactorName = (factor) => {
-    if (language === 'de' && factor.name_de) return factor.name_de;
-    return factor.name_fr || factor.name;
+    if (language === 'de') return factor.name_simple_de || factor.name_de || factor.name_simple_fr || factor.name_fr || factor.name;
+    return factor.name_simple_fr || factor.name_fr || factor.name;
   };
 
   // Couleurs des scopes

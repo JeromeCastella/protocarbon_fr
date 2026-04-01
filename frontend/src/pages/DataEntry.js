@@ -159,6 +159,7 @@ const TableViewPanel = ({
         return (a.name || '').toLowerCase().includes(q)
           || (a.emission_factor_name || '').toLowerCase().includes(q)
           || (getCategoryName(a.category_id) || '').toLowerCase().includes(q)
+          || (a.factor_snapshot?.name_simple_fr || '').toLowerCase().includes(q)
           || (a.factor_snapshot?.name_fr || '').toLowerCase().includes(q)
           || (a.comments || '').toLowerCase().includes(q);
       })
@@ -171,7 +172,7 @@ const TableViewPanel = ({
     switch (sortField) {
       case 'name': va = (a.name || '').toLowerCase(); vb = (b.name || '').toLowerCase(); break;
       case 'category': va = getCategoryName(a.category_id); vb = getCategoryName(b.category_id); break;
-      case 'factor': va = (a.factor_snapshot?.name_fr || '').toLowerCase(); vb = (b.factor_snapshot?.name_fr || '').toLowerCase(); break;
+      case 'factor': va = (a.factor_snapshot?.name_simple_fr || a.factor_snapshot?.name_fr || '').toLowerCase(); vb = (b.factor_snapshot?.name_simple_fr || b.factor_snapshot?.name_fr || '').toLowerCase(); break;
       case 'quantity': va = a.quantity || 0; vb = b.quantity || 0; break;
       case 'emissions': va = a.emissions || 0; vb = b.emissions || 0; break;
       case 'percent': va = a.emissions || 0; vb = b.emissions || 0; break;
@@ -307,7 +308,7 @@ const TableViewPanel = ({
                   const isSecondary = activity.group_index > 0;
                   const isLinkedActivity = isSecondary;
                   const pct = totalEmissions > 0 ? ((activity.emissions || 0) / totalEmissions * 100) : 0;
-                  const factorName = activity.factor_snapshot?.name_fr || activity.emission_factor_name || '—';
+                  const factorName = activity.factor_snapshot?.name_simple_fr || activity.factor_snapshot?.name_fr || activity.emission_factor_name || '—';
                   const factorValue = activity.factor_snapshot?.impacts?.[0]
                     ? `${activity.factor_snapshot.impacts[0].value} ${activity.factor_snapshot.impacts[0].unit}`
                     : (activity.impact_value ? `${activity.impact_value} ${activity.impact_unit || ''}` : '');

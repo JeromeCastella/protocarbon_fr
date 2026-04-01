@@ -440,12 +440,12 @@ const AdminFactorsTab = ({ factors, subcategories, pagination, onPageChange, onR
                 >
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-2">
-                      <div className="font-medium">{language === 'de' ? (factor.name_de || factor.name_fr || factor.name) : (factor.name_fr || factor.name)}</div>
+                      <div className="font-medium">{language === 'de' ? (factor.name_simple_de || factor.name_de || factor.name_simple_fr || factor.name_fr || factor.name) : (factor.name_simple_fr || factor.name_fr || factor.name)}</div>
                       {isArchived && <span className="px-1.5 py-0.5 text-xs rounded bg-red-500/20 text-red-500">{t('common.archived')}</span>}
                       {isReplaced && !isArchived && <span className="px-1.5 py-0.5 text-xs rounded bg-amber-500/20 text-amber-500">{t('common.replaced')}</span>}
                     </div>
-                    {language === 'fr' && factor.name_de && <div className={`text-xs ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>{factor.name_de}</div>}
-                    {language === 'de' && factor.name_fr && <div className={`text-xs ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>{factor.name_fr}</div>}
+                    {language === 'fr' && (factor.name_simple_de || factor.name_de) && <div className={`text-xs ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>{factor.name_simple_de || factor.name_de}</div>}
+                    {language === 'de' && (factor.name_simple_fr || factor.name_fr) && <div className={`text-xs ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>{factor.name_simple_fr || factor.name_fr}</div>}
                     {factor.tags?.length > 0 && (
                       <div className="flex flex-wrap gap-1 mt-1">
                         {factor.tags.slice(0, 3).map(tag => (
@@ -881,7 +881,7 @@ const AdminFactorsTab = ({ factors, subcategories, pagination, onPageChange, onR
                   <div className="p-2 rounded-xl bg-blue-500/20"><GitBranch className="w-6 h-6 text-blue-500" /></div>
                   <div>
                     <h2 className="text-xl font-bold">Nouvelle version</h2>
-                    <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>{versioningFactor.name_fr} - v{versioningFactor.factor_version || 1} → v{(versioningFactor.factor_version || 1) + 1}</p>
+                    <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>{versioningFactor.name_simple_fr || versioningFactor.name_fr} - v{versioningFactor.factor_version || 1} → v{(versioningFactor.factor_version || 1) + 1}</p>
                   </div>
                 </div>
               </div>
@@ -976,7 +976,7 @@ const AdminFactorsTab = ({ factors, subcategories, pagination, onPageChange, onR
                         <div className="flex items-center justify-between mb-2">
                           <div className="flex items-center gap-2">
                             <span className={`px-2 py-1 rounded text-sm font-medium ${version.id === factorHistory.factor_id ? 'bg-blue-500 text-white' : isDark ? 'bg-slate-600 text-slate-300' : 'bg-gray-200 text-gray-700'}`}>v{version.factor_version || 1}</span>
-                            <span className="font-medium">{version.name_fr}</span>
+                            <span className="font-medium">{version.name_simple_fr || version.name_fr}</span>
                             {version.deleted_at && <span className="px-1.5 py-0.5 text-xs rounded bg-red-500/20 text-red-500">Archivé</span>}
                             {version.replaced_by && !version.deleted_at && <span className="px-1.5 py-0.5 text-xs rounded bg-amber-500/20 text-amber-500">Remplacé</span>}
                           </div>

@@ -61,7 +61,7 @@ export const useProductWizard = (isOpen, editingProduct) => {
         const elecData = elecRes.data || [];
         const swissMix = elecData.find(f =>
           (f.name_simple_fr || f.name_fr || '').toLowerCase().includes('suisse') ||
-          (f.name_fr || '').toLowerCase().includes('schweiz')
+          (f.name_simple_fr || f.name_fr || '').toLowerCase().includes('schweiz')
         ) || elecData[0];
         if (swissMix) {
           setFormData(prev => ({
