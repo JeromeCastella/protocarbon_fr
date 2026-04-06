@@ -18,8 +18,8 @@ class TestCategoryResolution:
     def setup(self):
         """Login and get auth token"""
         response = requests.post(f"{BASE_URL}/api/auth/login", json={
-            "email": "newtest@x.com",
-            "password": "test123"
+            "email": TEST_ADMIN_EMAIL,
+            "password": TEST_ADMIN_PASSWORD
         })
         assert response.status_code == 200, f"Login failed: {response.text}"
         self.token = response.json()["token"]

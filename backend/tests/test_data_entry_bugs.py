@@ -17,8 +17,8 @@ class TestAuthentication:
     def auth_token(self):
         """Get auth token for tests"""
         response = requests.post(f"{BASE_URL}/api/auth/login", json={
-            "email": "newtest@x.com",
-            "password": "test123"
+            "email": TEST_ADMIN_EMAIL,
+            "password": TEST_ADMIN_PASSWORD
         })
         assert response.status_code == 200, f"Login failed: {response.text}"
         data = response.json()
@@ -83,8 +83,8 @@ class TestEmissionFactors:
     def auth_headers(self):
         """Get auth headers"""
         response = requests.post(f"{BASE_URL}/api/auth/login", json={
-            "email": "newtest@x.com",
-            "password": "test123"
+            "email": TEST_ADMIN_EMAIL,
+            "password": TEST_ADMIN_PASSWORD
         })
         token = response.json().get("token")
         return {"Authorization": f"Bearer {token}"}
@@ -155,8 +155,8 @@ class TestActivities:
     def auth_headers(self):
         """Get auth headers"""
         response = requests.post(f"{BASE_URL}/api/auth/login", json={
-            "email": "newtest@x.com",
-            "password": "test123"
+            "email": TEST_ADMIN_EMAIL,
+            "password": TEST_ADMIN_PASSWORD
         })
         token = response.json().get("token")
         return {"Authorization": f"Bearer {token}"}
@@ -362,8 +362,8 @@ class TestDashboard:
     @pytest.fixture(scope="class")
     def auth_headers(self):
         response = requests.post(f"{BASE_URL}/api/auth/login", json={
-            "email": "newtest@x.com",
-            "password": "test123"
+            "email": TEST_ADMIN_EMAIL,
+            "password": TEST_ADMIN_PASSWORD
         })
         token = response.json().get("token")
         return {"Authorization": f"Bearer {token}"}

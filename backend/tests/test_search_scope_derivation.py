@@ -23,8 +23,8 @@ class TestSearchIndexScopeDerivation:
     def setup(self):
         """Get auth token for tests"""
         response = requests.post(f"{BASE_URL}/api/auth/login", json={
-            "email": "newtest@x.com",
-            "password": "test123"
+            "email": TEST_ADMIN_EMAIL,
+            "password": TEST_ADMIN_PASSWORD
         })
         assert response.status_code == 200, f"Login failed: {response.text}"
         self.token = response.json()["token"]
@@ -138,8 +138,8 @@ class TestActivitySubmissionWithSearchFactor:
     def setup(self):
         """Get auth token and fiscal year for tests"""
         response = requests.post(f"{BASE_URL}/api/auth/login", json={
-            "email": "newtest@x.com",
-            "password": "test123"
+            "email": TEST_ADMIN_EMAIL,
+            "password": TEST_ADMIN_PASSWORD
         })
         assert response.status_code == 200, f"Login failed: {response.text}"
         self.token = response.json()["token"]

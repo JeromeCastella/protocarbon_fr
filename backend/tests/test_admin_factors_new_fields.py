@@ -9,6 +9,7 @@ Tests the new fields added to the edit form:
 import pytest
 import requests
 import os
+from conftest_credentials import TEST_BASE_URL, TEST_ADMIN_EMAIL, TEST_ADMIN_PASSWORD
 
 BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', '').rstrip('/')
 
@@ -21,7 +22,7 @@ class TestAdminFactorsNewFields:
         # Login
         login_response = requests.post(
             f"{BASE_URL}/api/auth/login",
-            json={"email": "newtest@x.com", "password": "test123"}
+            json={"email": TEST_ADMIN_EMAIL, "password": TEST_ADMIN_PASSWORD}
         )
         assert login_response.status_code == 200, f"Login failed: {login_response.text}"
         data = login_response.json()

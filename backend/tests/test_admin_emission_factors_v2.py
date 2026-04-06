@@ -17,7 +17,7 @@ from tests.conftest_credentials import TEST_BASE_URL, TEST_ADMIN_EMAIL, TEST_ADM
 BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', '').rstrip('/')
 
 # Test credentials - admin user
-ADMIN_EMAIL = "newtest@x.com"
+ADMIN_EMAIL = TEST_ADMIN_EMAIL
 # credentials imported from conftest_credentials
 
 
@@ -456,13 +456,13 @@ class TestEmissionFactorsV2AccessControl:
         user_email = f"test_regular_{uuid.uuid4().hex[:8]}@test.com"
         requests.post(f"{BASE_URL}/api/auth/register", json={
             "email": user_email,
-            "password": "test123",
+            "password": TEST_ADMIN_PASSWORD,
             "name": "Regular Test User"
         })
         
         login_response = requests.post(f"{BASE_URL}/api/auth/login", json={
             "email": user_email,
-            "password": "test123"
+            "password": TEST_ADMIN_PASSWORD
         })
         
         if login_response.status_code != 200:

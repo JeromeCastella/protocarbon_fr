@@ -11,7 +11,7 @@ from tests.conftest_credentials import TEST_BASE_URL, TEST_ADMIN_EMAIL, TEST_ADM
 BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', '').rstrip('/')
 
 # Test credentials
-ADMIN_EMAIL = "newtest@x.com"
+ADMIN_EMAIL = TEST_ADMIN_EMAIL
 # credentials imported from conftest_credentials
 REGULAR_USER_EMAIL = "regular_user_test@test.com"
 # credentials imported from conftest_credentials

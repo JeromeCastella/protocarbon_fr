@@ -290,7 +290,7 @@ def auth_token():
     """Get authentication token"""
     response = requests.post(
         f"{BASE_URL}/api/auth/login",
-        json={"email": "newtest@x.com", "password": "test123"}
+        json={"email": TEST_ADMIN_EMAIL, "password": TEST_ADMIN_PASSWORD}
     )
     if response.status_code == 200:
         return response.json().get("token")
