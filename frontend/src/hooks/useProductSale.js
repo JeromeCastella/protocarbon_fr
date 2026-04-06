@@ -35,33 +35,55 @@ export const useProductSale = (isOpen, preselectedProduct) => {
     setLoading(true);
     try {
       const response = await axios.get(`${API_URL}/api/products`);
-      setProducts(response.data || []);
+      const allProducts = response.data || [];
+      setProducts(allProducts);
+      if (preselectedProduct) {
+        const found = allProducts.find(p => p.id === preselectedProduct.id);
+        if (found) setSelectedProduct(found);
+      }
     } catch (error) { logger.error('Failed to fetch products:', error); }
     finally { setLoading(false); }
   };
 
   const fetchProductSales = async (productId) => {
     try {
-      const response = await axios.get(`${API_URL}/api/products/${productId}/sales?fiscal_year_id=${currentFiscalYear.id}`);
-      const sales = response.data || [];
+      const fiscalYearParam = currentFiscalYear?.id ? `?fiscal_year_id=${currentFiscalYear.id}` : '';
+      const [salesResponse, profilesResponse] = await Promise.all([
+        axios.get(`${API_URL}/api/products/${productId}/sales${fiscalYearParam}`),
+        axios.get(`${API_URL}/api/products/${productId}/emission-profiles`),
+      ]);
+
+      const sales = salesResponse.data?.sales || [];
+
+      // Determine active emission profile for this fiscal year
+      const defaultProfile = profilesResponse.data?.default_profile;
+      const profiles = profilesResponse.data?.profiles || [];
+      const specificProfile = profiles.find(p => p.fiscal_year_id === currentFiscalYear?.id);
+
+      if (specificProfile) {
+        setActiveProfile({ ...specificProfile, source: 'specific' });
+      } else if (defaultProfile) {
+        setActiveProfile({ ...defaultProfile, source: 'default' });
+      }
+
       if (sales.length > 0) {
         const sale = sales[0];
         setExistingSale(sale);
-        setQuantity(sale.total_units || 0);
+        setQuantity(sale.quantity || 0);
         setIsEditMode(true);
-        setSaleDate(sale.sale_date || '');
+        if (sale.date) setSaleDate(sale.date);
       } else {
         setExistingSale(null);
         setQuantity(0);
         setIsEditMode(false);
-        setSaleDate('');
+        if (currentFiscalYear?.start_date) setSaleDate(currentFiscalYear.start_date);
+        else setSaleDate('');
       }
-
-      const profileRes = await axios.get(`${API_URL}/api/products/${productId}/emission-profiles/active?fiscal_year_id=${currentFiscalYear.id}`);
-      setActiveProfile(profileRes.data);
     } catch (error) {
       logger.error('Failed to fetch product sales:', error);
       setExistingSale(null);
+      setQuantity(0);
+      setIsEditMode(false);
       setActiveProfile(null);
     }
   };
@@ -70,41 +92,34 @@ export const useProductSale = (isOpen, preselectedProduct) => {
     if (!selectedProduct || quantity <= 0) return;
     setSubmitting(true);
     try {
-      const payload = {
-        product_id: selectedProduct.id,
-        total_units: quantity,
-        fiscal_year_id: currentFiscalYear?.id,
-        sale_date: saleDate || undefined,
-      };
-      if (existingSale) {
-        await axios.put(`${API_URL}/api/products/${selectedProduct.id}/sales/${existingSale.id}`, payload);
+      if (isEditMode && existingSale?.sale_id) {
+        await axios.put(`${API_URL}/api/products/${selectedProduct.id}/sales/${existingSale.sale_id}`, {
+          quantity: quantity,
+        });
       } else {
-        await axios.post(`${API_URL}/api/products/${selectedProduct.id}/sales`, payload);
+        await axios.post(`${API_URL}/api/products/${selectedProduct.id}/sales`, {
+          product_id: selectedProduct.id,
+          quantity: quantity,
+          fiscal_year_id: currentFiscalYear?.id,
+        });
       }
       onSaleRecorded?.();
       onClose?.();
     } catch (error) {
-      logger.error('Failed to record sale:', error);
-      alert(error.response?.data?.detail || 'Erreur lors de l\'enregistrement');
+      logger.error('Failed to save sale:', error);
     } finally { setSubmitting(false); }
   };
 
   const handleDelete = async (onSaleRecorded, onClose) => {
-    if (!existingSale) return;
+    if (!selectedProduct || !existingSale?.sale_id) return;
+    setSubmitting(true);
     try {
-      await axios.delete(`${API_URL}/api/products/${selectedProduct.id}/sales/${existingSale.id}`);
+      await axios.delete(`${API_URL}/api/products/${selectedProduct.id}/sales/${existingSale.sale_id}`);
       onSaleRecorded?.();
       onClose?.();
     } catch (error) { logger.error('Failed to delete sale:', error); }
-    setShowDeleteConfirm(false);
+    finally { setSubmitting(false); setShowDeleteConfirm(false); }
   };
-
-  const estimatedEmissions = activeProfile ? {
-    manufacturing: (activeProfile.manufacturing_emissions || 0) * quantity,
-    usage: (activeProfile.usage_emissions || 0) * quantity,
-    disposal: (activeProfile.disposal_emissions || 0) * quantity,
-    total: ((activeProfile.manufacturing_emissions || 0) + (activeProfile.usage_emissions || 0) + (activeProfile.disposal_emissions || 0)) * quantity,
-  } : null;
 
   return {
     isDark, t, language, currentFiscalYear,
@@ -116,6 +131,5 @@ export const useProductSale = (isOpen, preselectedProduct) => {
     showVersionsModal, setShowVersionsModal,
     activeProfile, saleDate, setSaleDate,
     handleSubmit, handleDelete, fetchProductSales,
-    estimatedEmissions,
   };
 };
