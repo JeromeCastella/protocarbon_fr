@@ -26,9 +26,9 @@ Application full-stack (React/FastAPI/MongoDB) pour la comptabilité carbone d'e
 ### Completed Phases
 - **Phase 1-2**: Layout, Navigation, Dashboard (LanguageContext, useLanguage hook, t() function)
 - **Phase 3**: DataEntry page, GuidedEntryModal, FactorSelectionStep, GlobalFactorSearch, TableViewPanel — VALIDATED (April 2026)
+- **Phase 4**: Admin — AdminTabs, AdminFactorsTab, AdminUnitsTab, AdminExportTab, AdminUsersTab, AdminSubcategoriesTab — VALIDATED (April 2026)
 
 ### Remaining Phases
-- **Phase 4**: Admin (AdminFactorsTab, etc.)
 - **Phase 5**: Curation (CurationWorkbench)
 - **Phase 6**: Settings/Profile
 - **Phase 7**: Auth/Aide (AuthPage, Assistance, ForgotPassword)
