@@ -60,6 +60,15 @@ Application full-stack (React/FastAPI/MongoDB) pour la comptabilité carbone d'e
 - **FEAT-DR Dual Reporting** : Facteurs tagués Location/Market, liaison market→location via panneau latéral
 - **LocationLinkPanel** : Panneau latéral pour lier un facteur market à un facteur location, avec recherche pré-filtrée par sous-catégorie, affichage du nom (pas de l'ID)
 
+## Dual Reporting Dashboard — Terminé (April 2026)
+- Toggle Market-based / Location-based propage `reporting_view` à TOUS les endpoints dashboard:
+  - `GET /api/dashboard/summary` (existant)
+  - `GET /api/dashboard/kpis` (corrigé)
+  - `GET /api/dashboard/scope-breakdown/{id}` (corrigé)
+  - `GET /api/dashboard/fiscal-comparison` (corrigé)
+  - `GET /api/objectives/trajectory` (corrigé)
+- Les graphiques Résultats et Objectifs basculent correctement entre market et location
+
 ## DB Schema - emission_factors
 ```
 {
@@ -76,7 +85,11 @@ Application full-stack (React/FastAPI/MongoDB) pour la comptabilité carbone d'e
 - `frontend/src/utils/apiConfig.js` — Centralized API URL config (runtime domain check)
 - `frontend/src/pages/CurationWorkbench.jsx` — Page de curation
 - `frontend/src/components/curation/LocationLinkPanel.jsx` — Panneau latéral de liaison location
+- `frontend/src/pages/Dashboard.js` — Dashboard principal avec toggle dual reporting
+- `frontend/src/components/DashboardResultsTab.js` — Onglet Résultats avec graphiques
 - `backend/routes/curation.py` — API de curation (incl. copy, translate, search-location)
+- `backend/routes/dashboard.py` — API dashboard (summary, kpis, scope-breakdown, fiscal-comparison)
+- `backend/routes/objectives.py` — API objectifs SBTi (trajectory, recommendations)
 - `backend/services/emissions.py` — Calcul d'émissions (dual reporting)
 - `backend/config.py` — MongoDB connection (lazy, with timeouts)
 - `backend/server.py` — FastAPI app with health checks at / and /api/health
@@ -96,6 +109,11 @@ Application full-stack (React/FastAPI/MongoDB) pour la comptabilité carbone d'e
 - `GET /api/export/mongodump/info` — Métadonnées DB
 - `GET /api/export/mongodump` — Téléchargement dump
 - `POST /api/auth/login` — Authentification
+- `GET /api/dashboard/summary` — Résumé (reporting_view)
+- `GET /api/dashboard/kpis` — KPIs (reporting_view)
+- `GET /api/dashboard/scope-breakdown/{id}` — Breakdown scopes (reporting_view)
+- `GET /api/dashboard/fiscal-comparison` — Comparaison exercices (reporting_view)
+- `GET /api/objectives/trajectory` — Trajectoire SBTi (reporting_view)
 
 ## Backlog
 ### P0
