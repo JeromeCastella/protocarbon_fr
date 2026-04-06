@@ -1,78 +1,80 @@
 # Proto Carbon - Calculateur d'Empreinte Carbone
 
-## Problem Statement
-Application full-stack (React/FastAPI/MongoDB) pour la comptabilité carbone d'entreprise suivant le GHG Protocol. Inclut un calculateur d'émissions, un panneau d'administration avancé, des interfaces de saisie de données modernisées et un Atelier de Curation pour gérer ~9000 facteurs d'émission.
+## Problème Original
+Calculateur d'empreinte carbone pour entreprise suivant le GHG Protocol. Application full-stack React/FastAPI/MongoDB avec saisie de données, curation des facteurs d'émission, gestion multi-exercices, rapports détaillés, Dual Reporting, diagnostics de plausibilité et internationalisation (i18n FR/DE).
 
 ## Architecture
-- **Frontend**: React + TailwindCSS + Shadcn/UI, port 3000
-- **Backend**: FastAPI + MongoDB, port 8001
-- **Integrations**: Gemini Pro / GPT-4o-mini via emergentintegrations (suggestions IA + traductions)
+```
+/app/
+├── backend/
+│   ├── routes/ (dashboard.py, curation.py, activities.py, fiscal_years.py, ...)
+│   ├── services/ (dashboard_service.py, curation_service.py, activity_service.py, scope_mapping.py, plausibility.py, auth.py)
+│   ├── models/
+│   └── utils/
+└── frontend/
+    ├── src/
+    │   ├── components/
+    │   │   ├── admin/factors/ (Phase 3 refactoring)
+    │   │   ├── dashboard-page/ (Phase 4 refactoring)
+    │   │   ├── general-info/ (Phase 5 refactoring: CompanyIdentityCard, FiscalYearContextCard, ScopePerimeterCard, WizardModal)
+    │   │   ├── fiscal-years/ (Phase 5 refactoring: FiscalYearCard, FiscalYearModals)
+    │   │   └── data-entry/ (Phase 5 refactoring: TableViewPanel, GlobalFactorSearch)
+    │   ├── hooks/ (useAdminFactors, useDashboard, useGeneralInfo, useFiscalYearsPage)
+    │   ├── pages/
+    │   └── context/
+```
 
-## Core Features Implemented
-- Auth (sessionStorage + JWT Bearer Token, localStorage with "Remember Me")
-- Dashboard avec métriques GHG Protocol
-- Saisie de données (slide-over) + Recherche globale de facteurs (Fuse.js, toggle Expert)
-- Gestion de produits (slide-over)
-- Administration: Facteurs d'émission, Exercices fiscaux, Atelier de Curation (Phase 1 & 2)
-- Vue tabulaire détaillée : Slide-over panel pour activités par scope
-- Export MongoDB (mongodump)
-- FEAT-DR Dual Reporting : Toggle Market/Location sur Dashboard
-- FEAT-PLAUS Test de plausibilité : 11 règles métier
-- i18n (Internationalisation FR/DE) — 7 phases complètes
+## Ce qui est implémenté
+- Saisie de données par scope/catégorie (GHG Protocol complet)
+- Curation des facteurs d'émission (atelier admin, IA Gemini)
+- Gestion multi-exercices fiscaux + scénarios
+- Dashboard avec KPIs, breakdown par scope, comparaison inter-exercices
+- Dual Reporting (market/location-based)
+- Diagnostics de plausibilité
+- Internationalisation FR/DE
+- Gestion des produits vendus (fiches produit)
+- Configuration guidée du périmètre (wizard)
 
-## Refactoring — Réduction dette technique
+## Revue de Code (6 phases)
+### Phase 1 — Key Props ✅ (06/04/2026)
+- 6 instances d'index-as-key corrigées (StepEndOfLife, RecommendationsList, ProductWizard, ProductDetailModal, PasswordStrength)
+- Python `is` vs `==` : confirmé faux positif (0 vrais problèmes)
 
-### Frontend — Composants React
+### Phase 2 — React Hook Dependencies ✅ (06/04/2026)
+- fetchData → useCallback dans DataEntry.js, GeneralInfo.js, FiscalYears.js
+- Suppression des eslint-disable-next-line dans GeneralInfo.js et FiscalYears.js
 
-| Phase | Composant | Avant | Après | Status |
-|-------|-----------|-------|-------|--------|
-| 1 | DashboardResultsTab | monolithique | 5 sous-composants dans `/components/dashboard/` | DONE |
-| 2 | GuidedEntryModal | monolithique | hook `useGuidedEntry.js` + `LeftPanel.js` | DONE |
-| 3 | AdminFactorsTab | 1155 lignes | ~90 lignes + hook + 7 sous-composants dans `/components/admin/factors/` | DONE |
-| 4 | Dashboard.js | 1782 lignes | ~110 lignes + hook + 6 sous-composants dans `/components/dashboard-page/` | DONE |
+### Phase 3 — Sécurité Token Storage ⏸️ (Reporté par l'utilisateur)
+- Pros/cons présentés (HTTP-only cookies vs short-lived tokens vs statu quo)
+- Décision : reporter à plus tard
 
-### Backend — Services métier (April 2026)
+### Phase 4 — Refactoring Backend ✅ (06/04/2026)
+- dashboard.py : 461 → ~260 lignes. 6 helpers DRY extraits vers services/dashboard_service.py
+- curation.py : curation_stats (69→21 lignes), suggest_titles (80→23 lignes), logique extraite vers services/curation_service.py
+- fiscal_years.py : import corrigé de routes.dashboard → services.scope_mapping
 
-| Source | Cible | Fonctions extraites | Status |
-|--------|-------|---------------------|--------|
-| `routes/curation.py` | `services/curation_service.py` | `build_factor_id_filters`, `build_curation_query`, `resolve_sort_field`, `resolve_location_names`, `resolve_single_location_name` | DONE |
-| `routes/activities.py` | `services/activity_service.py` | `normalize_scope`, `apply_business_rules`, `resolve_activity_date`, `resolve_quantity`, `resolve_quantity_from_values`, `compute_dual_reporting`, `recalculate_emissions` | DONE |
+### Phase 5 — Refactoring Frontend ✅ (06/04/2026)
+- GeneralInfo.js : 1338 → 91 lignes (hook + 4 sous-composants)
+- FiscalYears.js : 1047 → 77 lignes (hook + 2 sous-composants)
+- DataEntry.js : 1506 → 883 lignes (2 composants inline extraits + bug token corrigé)
+- Bug corrigé : GlobalFactorSearch utilisait `token` non défini dans son scope
 
-**Gains backend :**
-- `curation.py` : 819 → ~720 lignes (-12%), DRY (5x `or_filters` → 1 helper)
-- `activities.py` : 703 → ~520 lignes (-26%), logique métier testable indépendamment
-- Tests de régression : 14 tests pytest dans `/backend/tests/test_refactored_services.py`
+### Phase 6 — Type Hints Python 🔜 (À venir)
 
-## Key Files
-- `frontend/src/pages/Dashboard.js` — Orchestrateur dashboard
-- `frontend/src/hooks/useDashboard.js` — Hook logique dashboard
-- `frontend/src/components/dashboard-page/` — Sous-composants dashboard
-- `frontend/src/components/admin/AdminFactorsTab.jsx` — Orchestrateur facteurs
-- `frontend/src/hooks/useAdminFactors.js` — Hook logique facteurs
-- `frontend/src/components/admin/factors/` — Sous-composants facteurs
-- `backend/services/curation_service.py` — Helpers curation
-- `backend/services/activity_service.py` — Logique métier activités
-- `backend/routes/curation.py` — Routes curation (allégé)
-- `backend/routes/activities.py` — Routes activités (allégé)
+## Backlog (P0-P2)
+- **P0**: FEAT-CUR-03 — Regroupement par patterns (atelier curation)
+- **P1**: FEAT-03 — Gestion multi-utilisateurs (rôles)
+- **P1**: Exports PDF/Excel
+- **P1**: Refactoring CurationWorkbench.jsx (1192 lignes) et Assistance.js (840 lignes)
+- **P2**: Base de données actions plan climat cantonal
+- **P2**: Logs d'audit
+- **P2**: Optimisation requêtes DB (projections MongoDB)
+- **P2**: Type hints Python progressif
+- **P2**: Sécurité Token Storage (HTTP-only cookies ou short-lived tokens)
 
-## Backlog
+## Intégrations 3P
+- Google Gemini Pro (Emergent LLM Key) — module de curation
+- MongoDB Atlas
 
-### P0
-- **FEAT-CUR-03 — Regroupement par patterns**: Vue qui groupe les facteurs similaires. Endpoint: `/api/curation/groups`.
-
-### P1
-- **FEAT-03 — Multi-utilisateurs**: Rôles Admin/Éditeur/Lecteur
-- **Exports PDF/Excel**
-
-### P2
-- Base de données actions plan climat cantonal
-- Logs d'audit calculs d'émission
-- Optimisation requêtes DB (projections MongoDB)
-- Type hints Python et Migration TypeScript (progressif)
-
-## Credentials
-- Email: newtest@x.com / Password: test123
-
-## Known Issues
-- Déploiement production KO (HTTP 520) — L'utilisateur doit configurer le secret FRONTEND_URL
-- ESLint plugin react-hooks v7 incompatible avec CRA ESLint 8 — contourné avec DISABLE_ESLINT_PLUGIN=true
+## Problème connu
+- Déploiement Production KO : secret FRONTEND_URL manquant (action utilisateur requise)
