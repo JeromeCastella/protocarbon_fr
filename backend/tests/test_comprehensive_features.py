@@ -7,7 +7,7 @@ import requests
 import os
 from tests.conftest_credentials import TEST_BASE_URL, TEST_ADMIN_EMAIL, TEST_ADMIN_PASSWORD
 
-BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://emission-tracker-17.preview.emergentagent.com')
+BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://carbonscope-preview.preview.emergentagent.com')
 
 # Test credentials
 # credentials imported from conftest_credentials
