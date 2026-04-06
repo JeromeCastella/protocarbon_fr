@@ -1,96 +1,55 @@
-# Proto Carbon - Calculateur d'empreinte carbone GHG Protocol
+# Proto Carbon - Calculateur d'Empreinte Carbone
 
 ## Problème Original
-Application de calcul d'empreinte carbone selon le protocole GHG avec interface user-friendly, gamification, multi-tenant, multi-langue (FR/DE), mode clair/sombre.
+Calculateur d'empreinte carbone pour entreprise suivant le GHG Protocol. Application full-stack React/FastAPI/MongoDB avec saisie de données, curation des facteurs d'émission, gestion multi-exercices, rapports détaillés, Dual Reporting, diagnostics de plausibilité et internationalisation (i18n FR/DE).
 
 ## Architecture
-- **Frontend**: React 18 + Tailwind CSS + Framer Motion
-- **Backend**: FastAPI (Python) avec routes préfixées `/api`
-- **Database**: MongoDB
-- **Auth**: JWT
+```
+/app/
+├── backend/
+│   ├── routes/ (auth.py avec cookies httpOnly, dashboard.py, curation.py, activities.py, ...)
+│   ├── services/ (auth.py: verify_token lit cookie en priorité, dashboard_service.py, curation_service.py)
+│   ├── models/
+│   └── utils/
+└── frontend/
+    ├── src/
+    │   ├── context/ (AuthContext: cookies httpOnly, FiscalYearContext: isAuthenticated)
+    │   ├── components/ (tous les fetch() convertis en axios)
+    │   ├── hooks/ (tous les hooks nettoyés des tokens)
+    │   └── pages/
+```
 
-## User Personas
-1. **Responsable RSE** - Saisit les données carbone de l'entreprise
-2. **Consultant carbone** - Gère plusieurs entreprises (multi-tenant)
-3. **Direction** - Consulte les rapports et dashboards
+## Fonctionnalités Implémentées
 
-## Core Requirements (Static)
-- [x] Authentification JWT
-- [x] Multi-tenant via tenant_id
-- [x] Multi-langue FR/DE
-- [x] Mode clair/sombre
-- [x] Gamification (barres de progression)
-- [x] Structure GHG Protocol (Scope 1, 2, 3 Amont, 3 Aval)
+### Sécurité Token Storage (06/04/2026) DONE
+- **Migration localStorage/sessionStorage → cookies HTTP-only**
+- Frontend : `axios.defaults.withCredentials = true` pour envoyer les cookies automatiquement
+- Suppression de tous les `Authorization: Bearer` headers manuels
+- Conversion de 16+ appels `fetch()` en `axios` dans 8 fichiers
+- Backend : `verify_token()` lit le cookie en priorité, fallback sur header Authorization
+- Cookie config : `HttpOnly; Secure; SameSite=Lax; Path=/`
+- Tests : iteration_72.json — 100% (18 backend + toutes pages frontend + tests sécurité)
 
-## What's Been Implemented
+### Phases de Refactoring Complétées
+- Phase 1 — Key Props DONE
+- Phase 2 — React Hook Dependencies (initial) DONE
+- Phase 4 — Backend Service Layer DONE
+- Phase 5 — Frontend Component Decomposition DONE
+- Phase A — Backend Complexity Refactoring DONE
+- Phase B — Frontend Complexity Refactoring DONE
+- Phase C — React Hook Dependencies (exhaustive-deps) DONE
 
-### 2026-01-23 (Session 4) - Gestion des Exercices Fiscaux
-- **Exercices fiscaux** avec année paramétrable :
-  - Création d'exercices avec nom, date début/fin
-  - Clôture avec verrouillage et génération de résumé (total émissions, par scope, par catégorie)
-  - Rectification (réouverture) avec justification obligatoire + historique des rectifications
-  - Duplication vers nouvel exercice avec option de copier les activités
-  - Reprise automatique des fiches produits
-- **Sélecteur d'exercice** dans la sidebar pour naviguer entre périodes
-- **Page dédiée** `/fiscal-years` pour gérer les exercices
+## Backlog (P0-P2)
+- **P0**: FEAT-CUR-03 — Regroupement par patterns (atelier curation)
+- **P1**: Phase D — Ternaires imbriqués (207) + Inline Objects Props (370) + Python `is` vs `==` (139)
+- **P1**: FEAT-03 — Gestion multi-utilisateurs (rôles)
+- **P1**: Exports PDF/Excel
+- **P2**: Type Hints Python progressif
+- **P2**: Base de données plan climat cantonal
+- **P2**: Logs d'audit, Optimisation DB, Migration TypeScript
 
-### 2026-01-23 (Session 3) - Produits et Cycle de Vie
-- **Wizard de création de produit** en 4-5 étapes (infos, matériaux, transformation, utilisation, résumé)
-- **Nouveaux facteurs d'émission** : 15 matériaux, 10 traitements fin de vie, 6 réfrigérants
-- **Enregistrement des ventes** avec ventilation Scope 3 Aval
-- **Deux chemins d'accès** : page Produits + catégories Scope 3 Aval
+## Intégrations 3P
+- Google Gemini Pro (Emergent LLM Key) — module de curation
 
-### Sessions précédentes
-- Auth System, Dashboard, Informations Générales
-- Saisie de données avec 22 catégories, modal guidé
-- Vue détaillée des activités avec édition via modal
-- Import/Export CSV et JSON
-- Gamification avec barres de progression
-
-## Prioritized Backlog
-
-### P0 - Critical
-- [x] MVP fonctionnel
-- [x] Gestion des produits avec cycle de vie
-- [x] Gestion des exercices fiscaux
-
-### P1 - High Priority
-- [ ] Corriger le mode sombre (arrière-plan principal reste clair)
-- [ ] Rapports PDF/Excel exportables
-- [ ] Graphiques de répartition par scope (pie chart, bar chart)
-- [ ] Comparaison N / N-1
-
-### P2 - Medium Priority
-- [ ] Améliorer la gamification (animations pour validations et jalons)
-- [ ] Historique des bilans par année avec visualisation
-- [ ] Refactoring DataEntry.js (800+ lignes → composants)
-
-### P3 - Low Priority
-- [ ] API externe pour intégration
-- [ ] Mode collaboratif multi-utilisateurs par entreprise
-- [ ] Import en masse CSV (bulk upload)
-
-## API Endpoints Clés
-
-### Exercices fiscaux
-- `GET /api/fiscal-years` - Liste des exercices
-- `GET /api/fiscal-years/current` - Exercice actif
-- `POST /api/fiscal-years` - Créer exercice
-- `POST /api/fiscal-years/{id}/close` - Clôturer (verrouillage + résumé)
-- `POST /api/fiscal-years/{id}/rectify` - Réouvrir avec justification
-- `POST /api/fiscal-years/{id}/duplicate` - Créer nouvel exercice depuis existant
-
-### Produits enrichis
-- `POST /api/products/enhanced` - Créer produit avec cycle de vie
-- `POST /api/products/{id}/sales/enhanced` - Ventes → activités Scope 3 Aval
-
-## Test Credentials
-- Email: newtest@x.com
-- Password: test123
-
-## Fichiers Clés
-- `/app/frontend/src/context/FiscalYearContext.js` - Context exercices fiscaux
-- `/app/frontend/src/components/FiscalYearSelector.js` - Sélecteur d'exercice
-- `/app/frontend/src/pages/FiscalYears.js` - Page gestion exercices
-- `/app/frontend/src/components/ProductWizard.js` - Wizard création produit
-- `/app/backend/server.py` - API complète
+## Problème connu
+- Déploiement Production KO : secret FRONTEND_URL manquant (action utilisateur requise)

@@ -1,0 +1,124 @@
+{
+  "summary": "Frontend testing completed for Dashboard with recharts. All requested features (KPIs, charts, scope cards, dark mode) are working correctly. Minor issue: fiscal year selector only shows 'Exercice actuel' option.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [
+      {
+        "flow": "Fiscal year selector in scope breakdown chart",
+        "issue": "Dropdown only shows 'Exercice actuel' option, other fiscal years not populated",
+        "affected_selectors": ["select in Répartition par scope section"],
+        "root_cause": "FiscalYearContext doesn't refresh fiscalYears after login - useEffect only runs once on mount",
+        "priority": "LOW"
+      }
+    ],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/test_reports/iteration_5.json"
+  ],
+  "action_items": [
+    "OPTIONAL: Fix FiscalYearContext to refresh fiscal years after login (add dependency on auth token or trigger refresh from AuthContext)"
+  ],
+  "critical_code_review_comments": [
+    "FiscalYearContext.js line 36-44: useEffect only checks token on mount, doesn't re-fetch when user logs in. Consider adding a refresh mechanism or listening to auth state changes."
+  ],
+  "updated_files": [],
+  "success_rate": {
+    "backend": "100% (all dashboard APIs working)",
+    "frontend": "95% (all features working, minor fiscal year selector issue)"
+  },
+  "test_credentials": {
+    "email": "newtest@x.com",
+    "password": "test123"
+  },
+  "seed_data_creation": "None",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Dashboard with recharts is fully functional. KPIs show current emissions (0 for current fiscal year 2029 as activities don't have fiscal_year_id). Scope cards show global data (2180.32 tCO2e for Scope 1, 468.04 tCO2e for Scope 3 Amont). Dark mode works correctly with proper chart styling.",
+  "features_tested": {
+    "kpi_cards": {
+      "status": "PASS",
+      "details": [
+        "Émissions totales - Shows 0 kgCO2e (current fiscal year has no activities)",
+        "Variation N-1 - Shows 0% (no previous year data)",
+        "Par employé - Shows '-' with '4 employés' subtitle",
+        "Exercice actuel - Shows '2029' with '5 exercice(s) enregistré(s)'"
+      ]
+    },
+    "evolution_chart": {
+      "status": "PASS",
+      "details": [
+        "Title: 'Évolution des émissions par exercice'",
+        "Stacked bar chart with years 2024, 2025, 2027, 2028, 2029",
+        "Legend shows: Scope 1, Scope 2, Scope 3 Amont, Scope 3 Aval",
+        "All bars show 0t as activities don't have fiscal_year_id"
+      ]
+    },
+    "scope_breakdown_chart": {
+      "status": "PASS",
+      "details": [
+        "Title: 'Répartition par scope'",
+        "Horizontal bar chart with Scope 1, Scope 2, Scope 3 Amont, Scope 3 Aval",
+        "Fiscal year selector present (shows 'Exercice actuel')",
+        "Drill-down hint: 'Cliquez sur une barre pour voir le détail par catégorie'",
+        "All bars show 0t for current fiscal year"
+      ]
+    },
+    "scope_cards": {
+      "status": "PASS",
+      "details": [
+        "Scope 1 - 2180,32 tCO2e, 2/4 catégories, 50%",
+        "Scope 2 - 0 kgCO2e, 0/3 catégories, 0%",
+        "Scope 3 - Amont - 468,04 tCO2e, 1/8 catégories, 12%",
+        "Scope 3 - Aval - 0 kgCO2e, 0/7 catégories, 0%",
+        "All cards have progress bars with correct percentages"
+      ]
+    },
+    "dark_mode": {
+      "status": "PASS",
+      "details": [
+        "Theme toggle button works correctly",
+        "Main area background: rgb(15, 23, 42) (slate-900)",
+        "Charts adapt to dark mode with proper grid lines",
+        "KPI cards and scope cards have dark backgrounds",
+        "Text contrast is good in dark mode"
+      ]
+    }
+  },
+  "api_tests": {
+    "/api/dashboard/kpis": {
+      "status": 200,
+      "response_sample": {
+        "current_emissions": 0,
+        "variation_percent": 0,
+        "fiscal_years_count": 5,
+        "current_fiscal_year": "Exercice 2029"
+      }
+    },
+    "/api/dashboard/fiscal-comparison": {
+      "status": 200,
+      "response_sample": "Array of 5 fiscal years (2024-2029) with scope breakdowns"
+    },
+    "/api/dashboard/scope-breakdown/current": {
+      "status": 200,
+      "response_sample": {
+        "scope_data": "4 scopes with 0 emissions",
+        "category_data": "Empty arrays for all scopes"
+      }
+    },
+    "/api/dashboard/summary": {
+      "status": 200,
+      "response_sample": {
+        "total_emissions": 2648363.75,
+        "scope_emissions": {
+          "scope1": 2180321.25,
+          "scope3_amont": 468042.5
+        }
+      }
+    }
+  }
+}

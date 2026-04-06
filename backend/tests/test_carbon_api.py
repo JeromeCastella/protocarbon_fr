@@ -5,12 +5,13 @@ Tests: Authentication, Activities CRUD, Dashboard, Categories, Emission Factors
 import pytest
 import requests
 import os
+from tests.conftest_credentials import TEST_BASE_URL, TEST_ADMIN_EMAIL, TEST_ADMIN_PASSWORD
 
-BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://eco-impact-18.preview.emergentagent.com').rstrip('/')
+BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'http://localhost:8001').rstrip('/')
 
 # Test credentials
-TEST_EMAIL = "newtest@x.com"
-TEST_PASSWORD = "test123"
+# credentials imported from conftest_credentials
+# credentials imported from conftest_credentials
 
 
 class TestHealthCheck:
@@ -31,8 +32,8 @@ class TestAuthentication:
     def test_login_success(self):
         """Test successful login with valid credentials"""
         response = requests.post(f"{BASE_URL}/api/auth/login", json={
-            "email": TEST_EMAIL,
-            "password": TEST_PASSWORD
+            "email": TEST_ADMIN_EMAIL,
+            "password": TEST_ADMIN_PASSWORD
         })
         assert response.status_code == 200
         data = response.json()
@@ -55,8 +56,8 @@ class TestAuthentication:
         """Test getting current user info"""
         # First login
         login_response = requests.post(f"{BASE_URL}/api/auth/login", json={
-            "email": TEST_EMAIL,
-            "password": TEST_PASSWORD
+            "email": TEST_ADMIN_EMAIL,
+            "password": TEST_ADMIN_PASSWORD
         })
         token = login_response.json()["token"]
         
@@ -142,8 +143,8 @@ class TestActivities:
     def auth_token(self):
         """Get authentication token"""
         response = requests.post(f"{BASE_URL}/api/auth/login", json={
-            "email": TEST_EMAIL,
-            "password": TEST_PASSWORD
+            "email": TEST_ADMIN_EMAIL,
+            "password": TEST_ADMIN_PASSWORD
         })
         return response.json()["token"]
     
@@ -179,8 +180,8 @@ class TestDashboard:
     def auth_token(self):
         """Get authentication token"""
         response = requests.post(f"{BASE_URL}/api/auth/login", json={
-            "email": TEST_EMAIL,
-            "password": TEST_PASSWORD
+            "email": TEST_ADMIN_EMAIL,
+            "password": TEST_ADMIN_PASSWORD
         })
         return response.json()["token"]
     
@@ -225,8 +226,8 @@ class TestCompany:
     def auth_token(self):
         """Get authentication token"""
         response = requests.post(f"{BASE_URL}/api/auth/login", json={
-            "email": TEST_EMAIL,
-            "password": TEST_PASSWORD
+            "email": TEST_ADMIN_EMAIL,
+            "password": TEST_ADMIN_PASSWORD
         })
         return response.json()["token"]
     
@@ -251,8 +252,8 @@ class TestActivityUpdate:
     def auth_token(self):
         """Get authentication token"""
         response = requests.post(f"{BASE_URL}/api/auth/login", json={
-            "email": TEST_EMAIL,
-            "password": TEST_PASSWORD
+            "email": TEST_ADMIN_EMAIL,
+            "password": TEST_ADMIN_PASSWORD
         })
         return response.json()["token"]
     

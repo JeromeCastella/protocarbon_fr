@@ -1,0 +1,78 @@
+{
+  "summary": "Unit conversion feature testing COMPLETE. All 9 backend tests pass. Frontend UI tests pass: Step 2 shows native/converted units, Step 4 shows conversion indicator, Modifier buttons work correctly. End-to-end submission with GJ to MJ conversion successful.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_unit_conversion.py",
+    "/app/test_reports/pytest/unit_conversion_results.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "Backend routes/units.py: UNIT_DIMENSIONS properly defines all 5 dimensions (energy, distance, mass, volume, monetary) with correct conversion factors",
+    "Backend routes/activities.py: Lines 123-133 properly handle frontend conversion data; Lines 186-194 correctly store original_quantity, original_unit, conversion_factor",
+    "Backend models/__init__.py: ActivityCreate model properly includes optional conversion fields (original_quantity, original_unit, conversion_factor)",
+    "Frontend utils/units.js: getAvailableUnitsWithConversions() correctly separates native and converted units",
+    "Frontend GuidedEntryModal.js: Step 2 shows native units first, then converted units with 'Autres unités (conversion automatique)' label and dashed border",
+    "Frontend GuidedEntryModal.js: convertedQty calculated and displayed correctly in step 4 when user selects converted unit",
+    "Frontend GuidedEntryModal.js: handleSubmit() sends original_quantity, original_unit, conversion_factor to backend"
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_unit_conversion.py"
+  ],
+  "success_rate": {
+    "backend": "100% (9/9 tests passed)",
+    "frontend": "100%"
+  },
+  "test_credentials": {
+    "email": "newtest@x.com",
+    "password": "test123"
+  },
+  "seed_data_creation": "None",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Unit conversion feature fully tested and working. Test file /app/backend/tests/test_unit_conversion.py can be used for regression testing.",
+  "features_tested": {
+    "backend_get_units_dimensions": {
+      "status": "PASS",
+      "description": "GET /api/units/dimensions returns all 5 dimensions (energy, distance, mass, volume, monetary) with correct conversion factors",
+      "details": "6 tests verify all dimensions and their units are correct"
+    },
+    "backend_activity_conversion_fields": {
+      "status": "PASS",
+      "description": "POST /api/activities accepts and stores original_quantity, original_unit, conversion_factor fields",
+      "details": "Activity created with GJ input stores original values + converted quantity"
+    },
+    "frontend_step2_native_converted_units": {
+      "status": "PASS",
+      "description": "Step 2 shows native units AND converted units (with 'conversion automatique' label and dashed border)",
+      "details": "For Combustion fixe > Combustibles: 3 native units (kg, L, MJ), 9 converted units (t, g, lb, m3, gal, kWh, MWh, GJ, therm) with dashed border"
+    },
+    "frontend_step3_compatible_factors": {
+      "status": "PASS",
+      "description": "When user selects converted unit, step 3 shows compatible factors",
+      "details": "Selected GJ → 15 compatible factor cards displayed"
+    },
+    "frontend_step4_conversion_indicator": {
+      "status": "PASS",
+      "description": "Step 4 shows 'Équivalent: X unit' indicator when converted unit is used",
+      "details": "Shows 'Équivalent : 9999.28 mégajoules' for 10 GJ input"
+    },
+    "frontend_modifier_buttons": {
+      "status": "PASS",
+      "description": "Modifier buttons still work after conversion feature",
+      "details": "Clicking Modifier for unit returns to step 2, 12 unit buttons visible"
+    },
+    "end_to_end_conversion_submission": {
+      "status": "PASS",
+      "description": "Create entry with GJ unit for MJ-based factor, verify emissions calculated correctly",
+      "details": "10 GJ → 9999.28 MJ → 0.3070 tCO2e. Modal closed successfully, total bilan increased from 391 to 392 tCO2e"
+    }
+  }
+}

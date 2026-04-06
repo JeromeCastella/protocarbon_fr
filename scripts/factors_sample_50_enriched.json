@@ -1,0 +1,2015 @@
+[
+  {
+    "id": "698418f3c1a4e9f26cd27459",
+    "name_fr": "Véhicule articulé lourd | Gaz comprimé | 32t | EURO-6",
+    "name_de": "Schwere Sattelzüge | Komprimiertes Gas | 32t | EURO-6",
+    "subcategory": "route",
+    "input_units": [
+      "tkm"
+    ],
+    "default_unit": "tkm",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 74.1296206,
+        "unit": "kgCO2e/tkm"
+      },
+      {
+        "scope": "scope2",
+        "value": 0.0,
+        "unit": "kgCO2e/tkm"
+      },
+      {
+        "scope": "scope3_3",
+        "value": 28.8440111,
+        "unit": "kgCO2e/tkm"
+      },
+      {
+        "scope": "scope3",
+        "value": 56.9503752,
+        "unit": "kgCO2e/tkm"
+      }
+    ],
+    "tags": [
+      "poids_lourd",
+      "gaz",
+      "methane",
+      "route",
+      "mobitool"
+    ],
+    "source": "Mobitool",
+    "region": "Suisse",
+    "name_simple_fr": "Camion lourd au gaz",
+    "name_simple_de": "Schwerer Gas-Lkw",
+    "description_fr": "Un camion léger, souvent utilisé pour transporter des marchandises lourdes. Exemple: camion Scania au gaz comprimé.",
+    "description_de": "Ein leichter Lastwagen, der häufig zum Transport schwerer Güter verwendet wird. Beispiel: Scania-Lkw mit komprimiertem Gas.",
+    "search_tags": [
+      "camion",
+      "poids lourd",
+      "véhicule",
+      "truck",
+      "transport",
+      "gaz",
+      "methane",
+      "road"
+    ],
+    "usage_hint_fr": "Utilisez ce facteur pour le transport de marchandises.",
+    "usage_hint_de": "Verwenden Sie diesen Faktor für den Gütertransport.",
+    "popularity_score": 70
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2740f",
+    "name_fr": "Camion | Pile à combustible électrique | 18t",
+    "name_de": "Lastwagen | Brennstoffzelle elektrisch | 18t",
+    "subcategory": "route",
+    "input_units": [
+      "tkm"
+    ],
+    "default_unit": "tkm",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 0.0,
+        "unit": "kgCO2e/tkm"
+      },
+      {
+        "scope": "scope2",
+        "value": 146.992918,
+        "unit": "kgCO2e/tkm"
+      },
+      {
+        "scope": "scope3_3",
+        "value": 0.0,
+        "unit": "kgCO2e/tkm"
+      },
+      {
+        "scope": "scope3",
+        "value": 146.992918,
+        "unit": "kgCO2e/tkm"
+      }
+    ],
+    "tags": [
+      "poids_lourd",
+      "hydrogene",
+      "route",
+      "mobitool"
+    ],
+    "source": "Mobitool",
+    "region": "Suisse",
+    "name_simple_fr": "Camion à hydrogène (18t)",
+    "name_simple_de": "Wasserstoff-Lkw (18t)",
+    "description_fr": "Camion de 18 tonnes alimenté par hydrogène. Utilisé pour le transport de marchandises, exemple : camion Tesla à hydrogène.",
+    "description_de": "18-Tonnen-Lkw, der mit Wasserstoff betrieben wird. Wird für den Gütertransport verwendet, z.B. Wasserstoff-Lkw von Tesla.",
+    "search_tags": [
+      "camion",
+      "poids lourd",
+      "hydrogène",
+      "transport",
+      "vehicle",
+      "Lkw"
+    ],
+    "usage_hint_fr": "Utiliser pour évaluer le transport de marchandises.",
+    "usage_hint_de": "Verwenden Sie es zur Bewertung des Gütertransports.",
+    "popularity_score": 50
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27401",
+    "name_fr": "Camion | Hybride diesel | 3.5t | EURO-6",
+    "name_de": "Lastwagen | Hybrid-Diesel | 3.5t | EURO-6",
+    "subcategory": "route",
+    "input_units": [
+      "tkm"
+    ],
+    "default_unit": "tkm",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 561.705686,
+        "unit": "kgCO2e/tkm"
+      },
+      {
+        "scope": "scope2",
+        "value": 0.0,
+        "unit": "kgCO2e/tkm"
+      },
+      {
+        "scope": "scope3_3",
+        "value": 122.219588,
+        "unit": "kgCO2e/tkm"
+      },
+      {
+        "scope": "scope3",
+        "value": 561.705686,
+        "unit": "kgCO2e/tkm"
+      }
+    ],
+    "tags": [
+      "utilitaire",
+      "fuel_routier",
+      "gasoil",
+      "gazole",
+      "route",
+      "mobitool"
+    ],
+    "source": "Mobitool",
+    "region": "Suisse",
+    "name_simple_fr": "Camion hybride",
+    "name_simple_de": "Hybrid-Lkw",
+    "description_fr": "Camion de 3.5 tonnes utilisant un moteur hybride diesel, idéal pour le transport local. Exemple : camion de livraison.",
+    "description_de": "3,5-Tonnen-Lkw mit Hybrid-Dieselmotor, ideal für lokalen Transport. Beispiel: Lieferwagen.",
+    "search_tags": [
+      "camion",
+      "utilitaire",
+      "véhicule",
+      "transport",
+      "hybride"
+    ],
+    "usage_hint_fr": "Utilisez pour le transport de marchandises légères.",
+    "usage_hint_de": "Verwenden Sie es für den Transport leichter Waren.",
+    "popularity_score": 70
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2745c",
+    "name_fr": "Véhicule articulé lourd | Hybride diesel | 40t | EURO-6",
+    "name_de": "Schwere Sattelzüge | Hybrid-Diesel | 40t | EURO-6",
+    "subcategory": "route",
+    "input_units": [
+      "tkm"
+    ],
+    "default_unit": "tkm",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 112.168818,
+        "unit": "kgCO2e/tkm"
+      },
+      {
+        "scope": "scope2",
+        "value": 0.0,
+        "unit": "kgCO2e/tkm"
+      },
+      {
+        "scope": "scope3_3",
+        "value": 24.4064232,
+        "unit": "kgCO2e/tkm"
+      },
+      {
+        "scope": "scope3",
+        "value": 84.54936,
+        "unit": "kgCO2e/tkm"
+      }
+    ],
+    "tags": [
+      "poids_lourd",
+      "fuel_routier",
+      "gasoil",
+      "route",
+      "mobitool"
+    ],
+    "source": "Mobitool",
+    "region": "Suisse",
+    "name_simple_fr": "Camion lourd hybride",
+    "name_simple_de": "Hybrid-Lkw",
+    "description_fr": "Camion de 40 tonnes, comme un Scania ou Volvo, utilisant une technologie hybride diesel. Idéal pour le transport routier.",
+    "description_de": "40-Tonnen-Lkw, wie Scania oder Volvo, der Hybrid-Diesel-Technologie nutzt. Ideal für den Straßentransport.",
+    "search_tags": [
+      "camion",
+      "poids lourd",
+      "véhicule",
+      "hybride",
+      "transport routier",
+      "truck",
+      "lkw",
+      "diesel"
+    ],
+    "usage_hint_fr": "Utilisez ce facteur pour calculer les trajets longue distance en camion.",
+    "usage_hint_de": "Verwenden Sie diesen Faktor für die Berechnung von Langstreckentransporten mit Lkw.",
+    "popularity_score": 70
+  },
+  {
+    "id": "698418f3c1a4e9f26cd273b8",
+    "name_fr": "Voiture de tourisme | Essence | Moyenne de la flotte",
+    "name_de": "Personenkraftwagen | Benzin | Flottendurchschnitt",
+    "subcategory": "route_transport_individuel",
+    "input_units": [
+      "pkm"
+    ],
+    "default_unit": "pkm",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 113.827081,
+        "unit": "kgCO2e/pkm"
+      },
+      {
+        "scope": "scope2",
+        "value": 0.0,
+        "unit": "kgCO2e/pkm"
+      },
+      {
+        "scope": "scope3_3",
+        "value": 30.4831154,
+        "unit": "kgCO2e/pkm"
+      },
+      {
+        "scope": "scope3",
+        "value": 113.827081,
+        "unit": "kgCO2e/pkm"
+      }
+    ],
+    "tags": [
+      "carburant_voiture",
+      "sans_plomb",
+      "route_transport_individuel",
+      "mobitool"
+    ],
+    "source": "Mobitool",
+    "region": "Suisse",
+    "name_simple_fr": "Voiture essence (moyenne)",
+    "name_simple_de": "Benzin-Pkw (Durchschnitt)",
+    "description_fr": "Voiture de tourisme essence moyenne, comme une Volkswagen Golf. Consommation typique de 6 à 8 litres aux 100 km.",
+    "description_de": "Durchschnittlicher Benzin-Pkw, wie ein Volkswagen Golf. Typischer Verbrauch von 6 bis 8 Litern pro 100 km.",
+    "search_tags": [
+      "voiture",
+      "auto",
+      "véhicule",
+      "car",
+      "essence",
+      "tourisme",
+      "mobilité",
+      "PKW",
+      "Volkswagen"
+    ],
+    "usage_hint_fr": "Utilisez ce facteur pour les trajets en voiture personnelle.",
+    "usage_hint_de": "Verwenden Sie diesen Faktor für Fahrten mit dem Privatwagen.",
+    "popularity_score": 90
+  },
+  {
+    "id": "698418f3c1a4e9f26cd273b7",
+    "name_fr": "Voiture de tourisme | Diesel | Grand SUV | EURO-6d",
+    "name_de": "Personenkraftwagen | Diesel | Grosser SUV | EURO-6d",
+    "subcategory": "route_transport_individuel",
+    "input_units": [
+      "pkm"
+    ],
+    "default_unit": "pkm",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 201.84754,
+        "unit": "kgCO2e/pkm"
+      },
+      {
+        "scope": "scope2",
+        "value": 0.0,
+        "unit": "kgCO2e/pkm"
+      },
+      {
+        "scope": "scope3_3",
+        "value": 43.5890746,
+        "unit": "kgCO2e/pkm"
+      },
+      {
+        "scope": "scope3",
+        "value": 201.84754,
+        "unit": "kgCO2e/pkm"
+      }
+    ],
+    "tags": [
+      "fuel_routier",
+      "gasoil",
+      "gazole",
+      "route_transport_individuel",
+      "mobitool"
+    ],
+    "source": "Mobitool",
+    "region": "Suisse",
+    "name_simple_fr": "SUV diesel",
+    "name_simple_de": "Diesel SUV",
+    "description_fr": "Un grand SUV diesel, comme un VW Touareg ou un BMW X5, consomme généralement 8-12 L/100 km.",
+    "description_de": "Ein großer Diesel-SUV, wie der VW Touareg oder der BMW X5, verbraucht normalerweise 8-12 L/100 km.",
+    "search_tags": [
+      "voiture",
+      "SUV",
+      "diesel",
+      "auto",
+      "gasoil",
+      "vehicle",
+      "car"
+    ],
+    "usage_hint_fr": "Utilisez ce facteur pour des trajets en SUV diesel.",
+    "usage_hint_de": "Verwenden Sie diesen Faktor für Fahrten mit einem Diesel-SUV.",
+    "popularity_score": 70
+  },
+  {
+    "id": "698418f3c1a4e9f26cd273bd",
+    "name_fr": "Voiture de tourisme | Gaz comprimé | Citadine | EURO-6d",
+    "name_de": "Personenkraftwagen | Komprimiertes Gas | Kompakt | EURO-6d",
+    "subcategory": "route_transport_individuel",
+    "input_units": [
+      "pkm"
+    ],
+    "default_unit": "pkm",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 79.711828,
+        "unit": "kgCO2e/pkm"
+      },
+      {
+        "scope": "scope2",
+        "value": 0.0,
+        "unit": "kgCO2e/pkm"
+      },
+      {
+        "scope": "scope3_3",
+        "value": 31.1290978,
+        "unit": "kgCO2e/pkm"
+      },
+      {
+        "scope": "scope3",
+        "value": 79.711828,
+        "unit": "kgCO2e/pkm"
+      }
+    ],
+    "tags": [
+      "gaz_naturel",
+      "methane",
+      "route_transport_individuel",
+      "mobitool"
+    ],
+    "source": "Mobitool",
+    "region": "Suisse"
+  },
+  {
+    "id": "698418f3c1a4e9f26cd273b4",
+    "name_fr": "Voiture de tourisme | Diesel | Citadine | EURO-6d",
+    "name_de": "Personenkraftwagen | Diesel | Kompakt | EURO-6d",
+    "subcategory": "route_transport_individuel",
+    "input_units": [
+      "pkm"
+    ],
+    "default_unit": "pkm",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 100.296914,
+        "unit": "kgCO2e/pkm"
+      },
+      {
+        "scope": "scope2",
+        "value": 0.0,
+        "unit": "kgCO2e/pkm"
+      },
+      {
+        "scope": "scope3_3",
+        "value": 21.6591675,
+        "unit": "kgCO2e/pkm"
+      },
+      {
+        "scope": "scope3",
+        "value": 100.296914,
+        "unit": "kgCO2e/pkm"
+      }
+    ],
+    "tags": [
+      "fuel_routier",
+      "gasoil",
+      "gazole",
+      "route_transport_individuel",
+      "mobitool"
+    ],
+    "source": "Mobitool",
+    "region": "Suisse"
+  },
+  {
+    "id": "698418f3c1a4e9f26cd273af",
+    "name_fr": "Autocar | Gaz comprimé | Double étage | EURO-6",
+    "name_de": "Reisebus | Komprimiertes Gas | Doppeldecker | EURO-6",
+    "subcategory": "route_transports_en_communs",
+    "input_units": [
+      "pkm"
+    ],
+    "default_unit": "pkm",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 24.694793,
+        "unit": "kgCO2e/pkm"
+      },
+      {
+        "scope": "scope2",
+        "value": 0.0,
+        "unit": "kgCO2e/pkm"
+      },
+      {
+        "scope": "scope3_3",
+        "value": 9.42269393,
+        "unit": "kgCO2e/pkm"
+      },
+      {
+        "scope": "scope3",
+        "value": 24.694793,
+        "unit": "kgCO2e/pkm"
+      }
+    ],
+    "tags": [
+      "gaz",
+      "methane",
+      "route_transports_en_communs",
+      "mobitool"
+    ],
+    "source": "Mobitool",
+    "region": "Suisse"
+  },
+  {
+    "id": "698418f3c1a4e9f26cd273ad",
+    "name_fr": "Autocar | Hybride diesel | Double étage | EURO-6",
+    "name_de": "Reisebus | Hybrid-Diesel | Doppeldecker | EURO-6",
+    "subcategory": "route_transports_en_communs",
+    "input_units": [
+      "pkm"
+    ],
+    "default_unit": "pkm",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 28.4466736,
+        "unit": "kgCO2e/pkm"
+      },
+      {
+        "scope": "scope2",
+        "value": 0.0,
+        "unit": "kgCO2e/pkm"
+      },
+      {
+        "scope": "scope3_3",
+        "value": 6.22701065,
+        "unit": "kgCO2e/pkm"
+      },
+      {
+        "scope": "scope3",
+        "value": 28.4466736,
+        "unit": "kgCO2e/pkm"
+      }
+    ],
+    "tags": [
+      "fuel_routier",
+      "gasoil",
+      "gazole",
+      "route_transports_en_communs",
+      "mobitool"
+    ],
+    "source": "Mobitool",
+    "region": "Suisse"
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2738d",
+    "name_fr": "Bus urbain (18m) | Diesel | Articulé | EURO-6",
+    "name_de": "Stadtbus (18m) | Diesel | Gelenkbusse | EURO-6",
+    "subcategory": "route_transports_en_communs",
+    "input_units": [
+      "pkm"
+    ],
+    "default_unit": "pkm",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 63.5330742,
+        "unit": "kgCO2e/pkm"
+      },
+      {
+        "scope": "scope2",
+        "value": 0.0,
+        "unit": "kgCO2e/pkm"
+      },
+      {
+        "scope": "scope3_3",
+        "value": 13.9074654,
+        "unit": "kgCO2e/pkm"
+      },
+      {
+        "scope": "scope3",
+        "value": 63.5330742,
+        "unit": "kgCO2e/pkm"
+      }
+    ],
+    "tags": [
+      "fuel_routier",
+      "gasoil",
+      "gazole",
+      "route_transports_en_communs",
+      "mobitool"
+    ],
+    "source": "Mobitool",
+    "region": "Suisse"
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2746b",
+    "name_fr": "Train Autriche | Mix électrique AT & diesel | locomotive électrique & diesel, y compris trajets de manœuvre",
+    "name_de": "Bahn Österreich | Strommix AT & Diesel | Elektro- & Diesellok, inkl. Rangierfahrten",
+    "subcategory": "ferroviaire",
+    "input_units": [
+      "tkm"
+    ],
+    "default_unit": "tkm",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 2.0900339,
+        "unit": "kgCO2e/tkm"
+      },
+      {
+        "scope": "scope2",
+        "value": 0.0,
+        "unit": "kgCO2e/tkm"
+      },
+      {
+        "scope": "scope3_3",
+        "value": 0.4575109,
+        "unit": "kgCO2e/tkm"
+      },
+      {
+        "scope": "scope3",
+        "value": 3.0249822,
+        "unit": "kgCO2e/tkm"
+      }
+    ],
+    "tags": [
+      "ferroviaire",
+      "mobitool"
+    ],
+    "source": "Mobitool",
+    "region": "Suisse"
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27463",
+    "name_fr": "Train Suisse | Diesel | Locomotive diesel avec filtre à particules",
+    "name_de": "Bahn Schweiz | Diesel | Diesellok mit Partikelfilter",
+    "subcategory": "ferroviaire",
+    "input_units": [
+      "tkm"
+    ],
+    "default_unit": "tkm",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 34.141429,
+        "unit": "kgCO2e/tkm"
+      },
+      {
+        "scope": "scope2",
+        "value": 0.0,
+        "unit": "kgCO2e/tkm"
+      },
+      {
+        "scope": "scope3_3",
+        "value": 8.4524211,
+        "unit": "kgCO2e/tkm"
+      },
+      {
+        "scope": "scope3",
+        "value": 34.141429,
+        "unit": "kgCO2e/tkm"
+      }
+    ],
+    "tags": [
+      "ferroviaire",
+      "mobitool"
+    ],
+    "source": "Mobitool",
+    "region": "Suisse"
+  },
+  {
+    "id": "698418f3c1a4e9f26cd273ed",
+    "name_fr": "Avion | Kérosène | en Europe, economy",
+    "name_de": "Flugzeug | Kerosen | innerhalb Europa, economy",
+    "subcategory": "aerien",
+    "input_units": [
+      "pkm"
+    ],
+    "default_unit": "pkm",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 235.51756,
+        "unit": "kgCO2e/pkm"
+      },
+      {
+        "scope": "scope2",
+        "value": 0.0,
+        "unit": "kgCO2e/pkm"
+      },
+      {
+        "scope": "scope3_3",
+        "value": 41.0544728,
+        "unit": "kgCO2e/pkm"
+      },
+      {
+        "scope": "scope3",
+        "value": 235.51756,
+        "unit": "kgCO2e/pkm"
+      }
+    ],
+    "tags": [
+      "carburant_avion",
+      "jet_fuel",
+      "aerien",
+      "mobitool"
+    ],
+    "source": "Mobitool",
+    "region": "Suisse"
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27479",
+    "name_fr": "Avion | Kérosène | Intercontinental, moyenne",
+    "name_de": "Flugzeug | Kerosen | Interkontinental, Durchschnitt",
+    "subcategory": "aerien",
+    "input_units": [
+      "tkm"
+    ],
+    "default_unit": "tkm",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 207.241725,
+        "unit": "kgCO2e/tkm"
+      },
+      {
+        "scope": "scope2",
+        "value": 0.0,
+        "unit": "kgCO2e/tkm"
+      },
+      {
+        "scope": "scope3_3",
+        "value": 28.1241686,
+        "unit": "kgCO2e/tkm"
+      },
+      {
+        "scope": "scope3",
+        "value": 1292.2689,
+        "unit": "kgCO2e/tkm"
+      }
+    ],
+    "tags": [
+      "carburant_avion",
+      "jet_fuel",
+      "aerien",
+      "mobitool"
+    ],
+    "source": "Mobitool",
+    "region": "Suisse"
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27160",
+    "name_fr": "Pompage-turbinage",
+    "name_de": "Pumpspeicher",
+    "subcategory": "electricite",
+    "input_units": [
+      "kWh"
+    ],
+    "default_unit": "kWh",
+    "impacts": [
+      {
+        "scope": "scope2",
+        "value": 0.00138329,
+        "unit": "kgCO2e/kWh"
+      },
+      {
+        "scope": "scope3_3",
+        "value": 0.13365184,
+        "unit": "kgCO2e/kWh"
+      },
+      {
+        "scope": "scope3",
+        "value": 0.00138329,
+        "unit": "kgCO2e/kWh"
+      }
+    ],
+    "tags": [
+      "electricite",
+      "bafu"
+    ],
+    "source": "BAFU",
+    "region": "Suisse"
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27161",
+    "name_fr": "Réseau (approche location-based)\"",
+    "name_de": "Netz (Location-based-Ansatz)",
+    "subcategory": "electricite",
+    "input_units": [
+      "kWh"
+    ],
+    "default_unit": "kWh",
+    "impacts": [
+      {
+        "scope": "scope2",
+        "value": 0.00487761,
+        "unit": "kgCO2e/kWh"
+      },
+      {
+        "scope": "scope3_3",
+        "value": 0.02175909,
+        "unit": "kgCO2e/kWh"
+      },
+      {
+        "scope": "scope3",
+        "value": 0.00487761,
+        "unit": "kgCO2e/kWh"
+      }
+    ],
+    "tags": [
+      "electricite",
+      "bafu"
+    ],
+    "source": "BAFU",
+    "region": "Suisse"
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2715f",
+    "name_fr": "Déchets",
+    "name_de": "Abfall",
+    "subcategory": "electricite",
+    "input_units": [
+      "kWh"
+    ],
+    "default_unit": "kWh",
+    "impacts": [
+      {
+        "scope": "scope2",
+        "value": 0.0,
+        "unit": "kgCO2e/kWh"
+      },
+      {
+        "scope": "scope3_3",
+        "value": 0.0,
+        "unit": "kgCO2e/kWh"
+      },
+      {
+        "scope": "scope3",
+        "value": 0.0,
+        "unit": "kgCO2e/kWh"
+      }
+    ],
+    "tags": [
+      "incineration",
+      "ordures",
+      "electricite",
+      "bafu"
+    ],
+    "source": "BAFU",
+    "region": "Suisse"
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2715b",
+    "name_fr": "Nucléaire",
+    "name_de": "Kernenergie",
+    "subcategory": "electricite",
+    "input_units": [
+      "kWh"
+    ],
+    "default_unit": "kWh",
+    "impacts": [
+      {
+        "scope": "scope2",
+        "value": 2.63e-05,
+        "unit": "kgCO2e/kWh"
+      },
+      {
+        "scope": "scope3_3",
+        "value": 0.01531023,
+        "unit": "kgCO2e/kWh"
+      },
+      {
+        "scope": "scope3",
+        "value": 2.631e-05,
+        "unit": "kgCO2e/kWh"
+      }
+    ],
+    "tags": [
+      "energie_atomique",
+      "electricite",
+      "bafu"
+    ],
+    "source": "BAFU",
+    "region": "Suisse"
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2715d",
+    "name_fr": "Gaz naturel",
+    "name_de": "Erdgas",
+    "subcategory": "electricite",
+    "input_units": [
+      "kWh"
+    ],
+    "default_unit": "kWh",
+    "impacts": [
+      {
+        "scope": "scope2",
+        "value": 0.43273224,
+        "unit": "kgCO2e/kWh"
+      },
+      {
+        "scope": "scope3_3",
+        "value": 0.14371469,
+        "unit": "kgCO2e/kWh"
+      },
+      {
+        "scope": "scope3",
+        "value": 0.43273224,
+        "unit": "kgCO2e/kWh"
+      }
+    ],
+    "tags": [
+      "gaz",
+      "methane",
+      "gnl",
+      "electricite",
+      "bafu"
+    ],
+    "source": "BAFU",
+    "region": "Suisse"
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27169",
+    "name_fr": "Coke de pétrole",
+    "name_de": "Petrolkoks",
+    "subcategory": "combustibles",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 2.9,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "tags": [
+      "combustibles",
+      "co2_emissionsfaktoren_des_treibhausgainventars_der_schweiz",
+      "comment:CH4 and N20 emissions added from the Latest Greenhouses Gas Inventory of Switzerland Tables"
+    ],
+    "source": "CO2-Emissionsfaktoren des Treibhausgainventars der Schweiz",
+    "region": "Suisse"
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27174",
+    "name_fr": "Méthane (biogène)",
+    "name_de": "Methan (biogen)",
+    "subcategory": "combustibles",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 28.0,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "tags": [
+      "ch4",
+      "combustibles",
+      "ar_5_chapter_8_anthropogenic_and_natural_radiative_forcing"
+    ],
+    "source": "AR 5 - Chapter 8: \"Anthropogenic and Natural Radiative Forcing\"",
+    "region": "Suisse"
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2716d",
+    "name_fr": "Déchets brûlés dans les UIOM (2022)",
+    "name_de": "Abfälle in KVA (2022)",
+    "subcategory": "combustibles",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 0.521,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "tags": [
+      "incineration",
+      "ordures",
+      "combustibles",
+      "co2_emissionsfaktoren_des_treibhausgainventars_der_schweiz",
+      "comment:47.8% Emission factor from Fossil (excluding biogene)"
+    ],
+    "source": "CO2-Emissionsfaktoren des Treibhausgainventars der Schweiz",
+    "region": "Suisse"
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27195",
+    "name_fr": "Gaz naturel moyen (à utiliser uniquement si le type de carburant est inconnu)",
+    "name_de": "Durchschnittliches Erdgas (nur verwenden, wenn die Kraftstoffart nicht bekannt ist)",
+    "subcategory": "combustibles",
+    "input_units": [
+      "L"
+    ],
+    "default_unit": "L",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 1.25,
+        "unit": "kgCO2e/litre"
+      }
+    ],
+    "tags": [
+      "gaz",
+      "methane",
+      "combustibles",
+      "mobitool_v3",
+      "comment:with 72.7% natural gas and 27.3% biomethane"
+    ],
+    "source": "mobitool v3",
+    "region": "Suisse",
+    "name_simple_fr": "Gaz naturel moyen",
+    "name_simple_de": "Durchschnittliches Erdgas",
+    "description_fr": "Utilisé pour le chauffage et les voitures. Ex : VW Passat au gaz naturel.",
+    "description_de": "Wird zum Heizen und für Autos verwendet. Z.B.: VW Passat mit Erdgas.",
+    "search_tags": [
+      "gaz",
+      "carburant",
+      "mobilité",
+      "chauffage",
+      "methane"
+    ],
+    "usage_hint_fr": "Utilisez-le si vous ne connaissez pas le carburant.",
+    "usage_hint_de": "Verwenden Sie es, wenn Sie den Kraftstoff nicht kennen.",
+    "popularity_score": 70
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2735e",
+    "name_fr": "Four à accumulation électrique (électricité CH)",
+    "name_de": "Elektrospeicherofen (Strom CH)",
+    "subcategory": "combustibles",
+    "input_units": [
+      "MJ"
+    ],
+    "default_unit": "MJ",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 0.0171,
+        "unit": "kgCO2e/MJ"
+      },
+      {
+        "scope": "scope3_3",
+        "value": 0.0136,
+        "unit": "kgCO2e/MJ"
+      },
+      {
+        "scope": "scope3",
+        "value": 0.0136,
+        "unit": "kgCO2e/MJ"
+      }
+    ],
+    "tags": [
+      "combustibles",
+      "bafu"
+    ],
+    "source": "BAFU",
+    "region": "Suisse",
+    "name_simple_fr": "Four électrique à accumulation",
+    "name_simple_de": "Elektrischer Speicherofen",
+    "description_fr": "Utilisé pour le chauffage, comme les modèles d'Evenia ou de Stiebel Eltron, ces fours consomment beaucoup d'électricité.",
+    "description_de": "Wird zur Heizung verwendet, z.B. Modelle von Evenia oder Stiebel Eltron, diese Öfen verbrauchen viel Strom.",
+    "search_tags": [
+      "four",
+      "chauffage",
+      "électricité",
+      "stroom",
+      "heizung",
+      "accumulation",
+      "appareil électrique",
+      "warmgerät"
+    ],
+    "usage_hint_fr": "Idéal pour chauffer des espaces durant l'hiver.",
+    "usage_hint_de": "Ideal zum Heizen von Räumen im Winter.",
+    "popularity_score": 65
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27494",
+    "name_fr": "Béton maigre, NovoCon Sohlenbeton, 150 kg CEM II/C-M (F-T) (sans armature)",
+    "name_de": "Magerbeton, NovoCon Sohlenbeton, 150 kg CEM II/C-M (F-T) (ohne Bewehrung)",
+    "subcategory": "beton",
+    "input_units": [],
+    "default_unit": null,
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.066,
+        "unit": "kgCO2e/unknown"
+      }
+    ],
+    "tags": [
+      "beton",
+      "kbob",
+      "unit_unknown"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "name_simple_fr": "Béton léger",
+    "name_simple_de": "Leichtbeton",
+    "description_fr": "Béton utilisé pour des constructions légères comme des dalles de sol. Exemples : maisons, allées.",
+    "description_de": "Beton für leichte Konstruktionen wie Bodenplatten. Beispiele: Häuser, Wege.",
+    "search_tags": [
+      "béton",
+      "construction",
+      "matériau",
+      "construction légère",
+      "lightweight concrete"
+    ],
+    "usage_hint_fr": "Utilisé lors de la construction ou rénovation.",
+    "usage_hint_de": "Verwendet beim Bau oder Renovierung.",
+    "popularity_score": 50
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2749b",
+    "name_fr": "Béton pour bâtiment, zirkulit® NPK C, 300kg CEM II/B (sans armature)",
+    "name_de": "Hochbaubeton, zirkulit® NPK C, 300kg CEM II/B (ohne Bewehrung)",
+    "subcategory": "beton",
+    "input_units": [],
+    "default_unit": null,
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.102,
+        "unit": "kgCO2e/unknown"
+      }
+    ],
+    "tags": [
+      "beton",
+      "kbob",
+      "unit_unknown"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "name_simple_fr": "Béton pour construction",
+    "name_simple_de": "Beton für Bau",
+    "description_fr": "Béton utilisé dans les bâtiments, comme pour les fondations ou murs. Par exemple, béton standard sans renfort.",
+    "description_de": "Beton, der in Gebäuden verwendet wird, z.B. für Fundamente oder Wände. Beispielsweise Standardbeton ohne Verstärkung.",
+    "search_tags": [
+      "béton",
+      "construction",
+      "matériaux de construction",
+      "building",
+      "material"
+    ],
+    "usage_hint_fr": "Utilisez ce facteur pour évaluer l'impact des constructions.",
+    "usage_hint_de": "Verwenden Sie diesen Faktor zur Bewertung der Auswirkungen von Bauten.",
+    "popularity_score": 70
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2749c",
+    "name_fr": "Béton pour bâtiment, Möckli Primärbeton, NPK A, 280 kg CEM II/B-LL (sans armature)",
+    "name_de": "Hochbaubeton, Möckli Primärbeton, NPK A, 280 kg CEM II/B-LL (ohne Bewehrung)",
+    "subcategory": "beton",
+    "input_units": [],
+    "default_unit": null,
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.0904,
+        "unit": "kgCO2e/unknown"
+      }
+    ],
+    "tags": [
+      "beton",
+      "kbob",
+      "unit_unknown"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "name_simple_fr": "Béton standard",
+    "name_simple_de": "Standardbeton",
+    "description_fr": "Utilisé pour la construction de bâtiments, comme les maisons. Exemple: 1 m³ équivaut à environ 2400 kg.",
+    "description_de": "Verwendet für den Bau von Gebäuden, wie z.B. Häuser. Beispiel: 1 m³ entspricht etwa 2400 kg.",
+    "search_tags": [
+      "béton",
+      "construction",
+      "matériaux",
+      "beton",
+      "building"
+    ],
+    "usage_hint_fr": "À utiliser pour le calcul des bâtiments en béton.",
+    "usage_hint_de": "Zur Berechnung von Betongebäuden verwenden.",
+    "popularity_score": 70
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2752d",
+    "name_fr": "Panneau de particules, colle UF, enduit, zone sèche",
+    "name_de": "Spanplatte, UF-gebunden, beschichtet, Trockenbereich",
+    "subcategory": "bois_et_produits_en_bois",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.735,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "tags": [
+      "bois_et_produits_en_bois",
+      "source_missing"
+    ],
+    "source": null,
+    "region": "Suisse",
+    "name_simple_fr": "Panneau de particules (sec)",
+    "name_simple_de": "Spanplatte (trocken)",
+    "description_fr": "Panneaux utilisés pour le mobilier comme les tables IKEA. Émis environ 0,735 kg CO2 par kg.",
+    "description_de": "Platten für Möbel wie Tische von IKEA. Emissionen von ca. 0,735 kg CO2 pro kg.",
+    "search_tags": [
+      "panneaux",
+      "bois",
+      "mobilier",
+      "matériaux",
+      "furniture",
+      "platten"
+    ],
+    "usage_hint_fr": "Utiliser pour évaluer le mobilier et les constructions légères.",
+    "usage_hint_de": "Verwenden, um Möbel und leichte Konstruktionen zu bewerten.",
+    "popularity_score": 60
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2751a",
+    "name_fr": "fascine Howolis Quickquader en laine de bois Lindner Suisse GmbH",
+    "name_de": "Holzwolle Quickquader-Faschine Howolis Lindner Suisse GmbH",
+    "subcategory": "bois_et_produits_en_bois",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.296,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "tags": [
+      "bois_et_produits_en_bois",
+      "source_missing"
+    ],
+    "source": null,
+    "region": "Suisse",
+    "name_simple_fr": "Fascine en laine de bois",
+    "name_simple_de": "Holzwolle-Faschine",
+    "description_fr": "Matériau isolant utilisé pour divers projets, comme l'isolation des murs. Exemple : laine de bois de Lindner.",
+    "description_de": "Isoliermaterial, das für verschiedene Projekte verwendet wird, zum Beispiel für die Wanddämmung. Beispiel: Holzwolle von Lindner.",
+    "search_tags": [
+      "fascine",
+      "chaud",
+      "isolant",
+      "bois",
+      "material"
+    ],
+    "usage_hint_fr": "À utiliser pour des projets de construction éco-responsables.",
+    "usage_hint_de": "Für umweltfreundliche Bauprojekte verwenden.",
+    "popularity_score": 50
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27514",
+    "name_fr": "Bois lamellé-collé, colle UF, zone sèche, production Suisse",
+    "name_de": "Brettschichtholz, Produktion Schweiz",
+    "subcategory": "bois_et_produits_en_bois",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.253,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "tags": [
+      "bois_et_produits_en_bois",
+      "source_missing"
+    ],
+    "source": null,
+    "region": "Suisse",
+    "name_simple_fr": "Bois collé",
+    "name_simple_de": "Klebstoffholz",
+    "description_fr": "Matériau courant pour la construction, utilisé dans des meubles ou des structures. Exemple : poutres en bois collé.",
+    "description_de": "Häufiges Baumaterial für den Bau, verwendet in Möbeln oder Strukturen. Beispiel: verleimtes Holzträger.",
+    "search_tags": [
+      "bois",
+      "construction",
+      "matériau",
+      "poutre",
+      "furniture",
+      "wood"
+    ],
+    "usage_hint_fr": "Utiliser pour les projets de construction ou de rénovation.",
+    "usage_hint_de": "Verwenden für Bau- oder Renovierungsprojekte.",
+    "popularity_score": 70
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2727c",
+    "name_fr": "Elimination, bâtiment, porte intérieure, bois, vitrage, huisserie métallique (m2)",
+    "name_de": "Entsorgung, Gebäude, Innentüre, Holz, Glaseinsatz, Stahlzarge (m2)",
+    "subcategory": "building_elements_and_structures",
+    "input_units": [
+      "m2"
+    ],
+    "default_unit": "m2",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 6.54,
+        "unit": "kgCO2e/m2"
+      }
+    ],
+    "tags": [
+      "elimination_elements_techniques_du_batiment",
+      "building_elements_and_structures",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "name_simple_fr": "Déchets de portes en bois",
+    "name_simple_de": "Abfall von Holztüren",
+    "description_fr": "Élimination de portes intérieures en bois, comme les modèles de marque IKEA ou Leroy Merlin, nécessitant environ 6,54 kg de CO2 par m².",
+    "description_de": "Entsorgung von Innentüren aus Holz, wie Modelle von IKEA oder Leroy Merlin, mit etwa 6,54 kg CO2 pro m².",
+    "search_tags": [
+      "bâtiment",
+      "portes",
+      "déchets",
+      "élimination",
+      "bois",
+      "building",
+      "waste",
+      "wood"
+    ],
+    "usage_hint_fr": "Utilisez ce facteur pour évaluer l'impact des rénovations.",
+    "usage_hint_de": "Verwenden Sie diesen Faktor zur Bewertung der Renovierungsauswirkungen.",
+    "popularity_score": 50
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2723a",
+    "name_fr": "Elimination, panneau de façade, composite aluminium, 4 mm (m2)",
+    "name_de": "Entsorgung, Fassadenplatte, Aluverbund, 4 mm (m2)",
+    "subcategory": "building_elements_and_structures",
+    "input_units": [
+      "m2"
+    ],
+    "default_unit": "m2",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 7.65,
+        "unit": "kgCO2e/m2"
+      }
+    ],
+    "tags": [
+      "elimination_elements_techniques_du_batiment",
+      "building_elements_and_structures",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "name_simple_fr": "Élimination panneau façade alu",
+    "name_simple_de": "Entsorgung Alu-Fassadenplatte",
+    "description_fr": "Panneaux en aluminium de façade. Exemples : façades d'immeubles modernes. Évalue l'impact carbone lors de leur élimination.",
+    "description_de": "Aluminium-Fassadenplatten. Beispiele: Fassaden von modernen Gebäuden. Bewertet den CO2-Ausstoß bei der Entsorgung.",
+    "search_tags": [
+      "panneau",
+      "façade",
+      "alu",
+      "construction",
+      "bâtiment",
+      "entretien",
+      "dispose",
+      "recycle"
+    ],
+    "usage_hint_fr": "Utilisez ce facteur lors de la planification d'élimination.",
+    "usage_hint_de": "Verwenden Sie diesen Faktor bei der Entsorgungsplanung.",
+    "popularity_score": 50
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27297",
+    "name_fr": "Élimination, système de ventilation résidentiel, gaines en tôle, y compris l'évacuation de l'air de la cuisine (m2)",
+    "name_de": "Entsorgung, Lüftungsanlage Wohnen, Blechkanäle, inkl. Küchenabluft (m2)",
+    "subcategory": "building_elements_and_structures",
+    "input_units": [
+      "m2"
+    ],
+    "default_unit": "m2",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.298,
+        "unit": "kgCO2e/m2"
+      }
+    ],
+    "tags": [
+      "elimination_elements_techniques_du_batiment",
+      "building_elements_and_structures",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "name_simple_fr": "Ventilation résidentielle en métal",
+    "name_simple_de": "Lüftungssystem aus Metall für Wohnungen",
+    "description_fr": "Système de ventilation en tôle pour maisons, comme ceux utilisés pour évacuer l'air de la cuisine.",
+    "description_de": "Belüftungssystem aus Blech für Wohnhäuser, wie sie zur Absaugung von Küchenluft verwendet werden.",
+    "search_tags": [
+      "ventilation",
+      "maison",
+      "air",
+      "système",
+      "bâtiment",
+      "lufthäuser",
+      "küche",
+      "lüftung"
+    ],
+    "usage_hint_fr": "Utilisez ce facteur pour des rénovations ou nouvelles constructions.",
+    "usage_hint_de": "Verwenden Sie diesen Faktor für Renovierungen oder Neubauten.",
+    "popularity_score": 50
+  },
+  {
+    "id": "698418f3c1a4e9f26cd274ff",
+    "name_fr": "Tôle d'aluminium, nue",
+    "name_de": "Aluminiumblech, blank",
+    "subcategory": "produits_en_metal",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 5.58,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "tags": [
+      "produits_en_metal",
+      "source_missing"
+    ],
+    "source": null,
+    "region": "Suisse",
+    "name_simple_fr": "Tôle d'aluminium",
+    "name_simple_de": "Aluminiumblech",
+    "description_fr": "Matériau utilisé dans les voitures ou les emballages. Exemples : carrosseries de véhicules ou canettes.",
+    "description_de": "Material, das in Autos oder Verpackungen verwendet wird. Beispiele: Fahrzeugkarosserien oder Dosen.",
+    "search_tags": [
+      "aluminium",
+      "tôle",
+      "métal",
+      "materials",
+      "canettes",
+      "carrosserie",
+      "vehicle parts"
+    ],
+    "usage_hint_fr": "Utilisez ce facteur pour évaluer les matériaux en aluminium.",
+    "usage_hint_de": "Verwenden Sie diesen Faktor zur Bewertung von Aluminiumprodukten.",
+    "popularity_score": 50
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27502",
+    "name_fr": "Acier d'armature",
+    "name_de": "Armierungsstahl",
+    "subcategory": "produits_en_metal",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.785,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "tags": [
+      "produits_en_metal",
+      "source_missing"
+    ],
+    "source": null,
+    "region": "Suisse",
+    "name_simple_fr": "Acier pour construction",
+    "name_simple_de": "Baustahl",
+    "description_fr": "Acier utilisé pour renforcer les bâtiments, comme celui des barres dans les fondations. Exemple : projets de construction ou rénovation.",
+    "description_de": "Stahl, der zum Verstärken von Gebäuden verwendet wird, wie z. B. Stäbe in Fundamenten. Beispiel: Bau- oder Renovierungsprojekte.",
+    "search_tags": [
+      "acier",
+      "construction",
+      "bâtiment",
+      "renovation",
+      "metal",
+      "steel",
+      "armierungsstahl"
+    ],
+    "usage_hint_fr": "Utiliser pour les projets de construction.",
+    "usage_hint_de": "Verwenden für Bauprojekte.",
+    "popularity_score": 70
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27212",
+    "name_fr": "Elimination, gravier et sable (kg)",
+    "name_de": "Entsorgung, Kies und Sand (kg)",
+    "subcategory": "building_and_construction_materials",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.0128,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "tags": [
+      "elimination_materiaux_de_construction",
+      "building_and_construction_materials",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "name_simple_fr": "Déchets de gravier et sable",
+    "name_simple_de": "Gravel- und Sandabfall",
+    "description_fr": "Utilisé pour éliminer les déchets de gravier et de sable lors de chantiers, comme ceux de grandes marques de construction.",
+    "description_de": "Verwendet zur Beseitigung von Kies- und Sandabfällen auf Baustellen, z.B. von großen Bauunternehmen.",
+    "search_tags": [
+      "déchet",
+      "gravillon",
+      "chantier",
+      "construction",
+      "sable",
+      "material",
+      "disposal",
+      "elimination"
+    ],
+    "usage_hint_fr": "À utiliser pour des projets de construction et d'aménagement.",
+    "usage_hint_de": "Für Bau- und Entwicklungsprojekte verwenden.",
+    "popularity_score": 60
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27203",
+    "name_fr": "Elimination, panneau trois plis (kg)",
+    "name_de": "Entsorgung, Dreischichtplatte (kg)",
+    "subcategory": "building_and_construction_materials",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.0555,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "tags": [
+      "elimination_materiaux_de_construction",
+      "building_and_construction_materials",
+      "kbob"
+    ],
+    "source": "KBOB",
+    "region": "Suisse",
+    "name_simple_fr": "Élimination panneau bois",
+    "name_simple_de": "Entsorgung Holzplatte",
+    "description_fr": "L'élimination des panneaux de bois trois plis, par exemple, ceux utilisés pour des meubles ou des constructions.",
+    "description_de": "Die Entsorgung von Dreischichtplatten, wie sie zum Beispiel in Möbeln oder Bauten verwendet werden.",
+    "search_tags": [
+      "panneau",
+      "bois",
+      "construction",
+      "élimination",
+      "matériaux",
+      "wood",
+      "disposal",
+      "building"
+    ],
+    "usage_hint_fr": "Utilisez ce facteur pour les déchets de construction.",
+    "usage_hint_de": "Verwenden Sie diesen Faktor für Bauabfälle.",
+    "popularity_score": 50
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2757a",
+    "name_fr": "Parquet en liège, huilé et vitrifié, 5,3 mm",
+    "name_de": "Korkparkett geölt/versiegelt, 5.3 mm",
+    "subcategory": "revetements_de_sol",
+    "input_units": [
+      "m2"
+    ],
+    "default_unit": "m2",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 3.26,
+        "unit": "kgCO2e/m2"
+      }
+    ],
+    "tags": [
+      "revetements_de_sol",
+      "source_missing"
+    ],
+    "source": null,
+    "region": "Suisse",
+    "name_simple_fr": "Parquet en liège",
+    "name_simple_de": "Korkparkett",
+    "description_fr": "Sol en liège huilé et vitrifié, confortable et doux sous les pieds. Parfait pour les pièces à vivre.",
+    "description_de": "Geölter und versiegelter Korkboden, bequem und weich unter den Füßen. Ideal für Wohnräume.",
+    "search_tags": [
+      "parquet",
+      "sol",
+      "revêtement",
+      "floor",
+      "belag",
+      "construction",
+      "eco",
+      "durabilité"
+    ],
+    "usage_hint_fr": "Utilisez pour les rénovations de maison.",
+    "usage_hint_de": "Verwenden Sie es für Renovierungsarbeiten.",
+    "popularity_score": 60
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27575",
+    "name_fr": "Béton dur, 2 couches, 35 mm",
+    "name_de": "Hartbeton zweischichtig, 35 mm",
+    "subcategory": "revetements_de_sol",
+    "input_units": [
+      "m2"
+    ],
+    "default_unit": "m2",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 16.4,
+        "unit": "kgCO2e/m2"
+      }
+    ],
+    "tags": [
+      "revetements_de_sol",
+      "source_missing"
+    ],
+    "source": null,
+    "region": "Suisse",
+    "name_simple_fr": "Béton durable (sol intérieur)",
+    "name_simple_de": "Haltbarer Beton (Innenboden)",
+    "description_fr": "Béton utilisé pour des sols intérieurs, comme dans les garages ou les entrepôts. Environ 16,4 kg CO2 par m².",
+    "description_de": "Beton, der für Innenböden verwendet wird, wie in Garagen oder Lagerräumen. Etwa 16,4 kg CO2 pro m².",
+    "search_tags": [
+      "béton",
+      "sol",
+      "revêtement",
+      "dallage",
+      "flooring",
+      "Innenboden",
+      "Bodenbelag",
+      "construcion"
+    ],
+    "usage_hint_fr": "Utilisez ce facteur pour des projets de construction intérieure.",
+    "usage_hint_de": "Verwenden Sie diesen Faktor für Innenbauprojekte.",
+    "popularity_score": 50
+  },
+  {
+    "id": "698418f3c1a4e9f26cd272d3",
+    "name_fr": "Élimination, bâtiment, plâtre minéral, à l'élimination finale {CH}",
+    "name_de": "Entsorgung, Gebäude, mineralischer Gips, zur endgültigen Entsorgung {CH}",
+    "subcategory": "construction_waste",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.00394351,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "tags": [
+      "dechets_de_construction",
+      "construction_waste",
+      "uvek_database"
+    ],
+    "source": "UVEK Database",
+    "region": "Suisse",
+    "name_simple_fr": "Déchets plâtre bâtiment",
+    "name_simple_de": "Gipsabfälle Gebäude",
+    "description_fr": "Déchets de plâtre issus de la démolition ou construction. Exemples: plaques de plâtre des murs ou plafonds.",
+    "description_de": "Gipsabfälle aus Abbruch- oder Neubau. Beispiele: Gipsplatten von Wänden oder Decken.",
+    "search_tags": [
+      "déchet",
+      "plâtre",
+      "construction",
+      "gips",
+      "démolition",
+      "building waste",
+      "construction waste"
+    ],
+    "usage_hint_fr": "Utilisez pour le recyclage des déchets de plâtre.",
+    "usage_hint_de": "Verwenden Sie für das Recycling von Gipsabfällen.",
+    "popularity_score": 50
+  },
+  {
+    "id": "698418f3c1a4e9f26cd272ca",
+    "name_fr": "Élimination, bâtiment, béton, non armé, à l'élimination finale {CH}",
+    "name_de": "Entsorgung, Gebäude, Beton, nicht bewehrt, zur endgültigen Entsorgung {CH}",
+    "subcategory": "construction_waste",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.00876995,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "tags": [
+      "dechets_de_construction",
+      "construction_waste",
+      "uvek_database"
+    ],
+    "source": "UVEK Database",
+    "region": "Suisse",
+    "name_simple_fr": "Déchets de béton non armé",
+    "name_simple_de": "Nicht bewehrte Betondeponie",
+    "description_fr": "Béton non armé issu de chantiers. Exemples : dalles, murs. Utilisé pour l'élimination finale.",
+    "description_de": "Unbewehrter Beton von Baustellen. Beispiele: Platten, Wände. Für die endgültige Entsorgung.",
+    "search_tags": [
+      "béton",
+      "déchets",
+      "construction",
+      "déconstruction",
+      "bâtiment"
+    ],
+    "usage_hint_fr": "Utilisez ce facteur pour évaluer l'impact des déchets de béton.",
+    "usage_hint_de": "Verwenden Sie diesen Faktor zur Bewertung der Auswirkungen von Betonabfällen.",
+    "popularity_score": 50
+  },
+  {
+    "id": "698418f3c1a4e9f26cd272b0",
+    "name_fr": "Démontage, écran LCD, manuellement, à l'usine {CH}",
+    "name_de": "Demontage, LCD-Bildschirm, manuell, im Werk {CH}",
+    "subcategory": "electronics_waste",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 1.31457309,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "tags": [
+      "dechets_electroniques",
+      "electronics_waste",
+      "uvek_database"
+    ],
+    "source": "UVEK Database",
+    "region": "Suisse",
+    "name_simple_fr": "Démontage écran LCD",
+    "name_simple_de": "Demontage LCD-Bildschirm",
+    "description_fr": "Démontage d'écrans LCD en usine, par exemple pour récupération des matériaux. Environ 1,31 kg CO2 par kg d'appareil.",
+    "description_de": "Demontage von LCD-Bildschirmen in der Fabrik, z. B. zur Materialrückgewinnung. Ungefähr 1,31 kg CO2 pro kg Gerät.",
+    "search_tags": [
+      "démontage",
+      "écran",
+      "LCD",
+      "déchets électroniques",
+      "recyclage",
+      "electronics waste",
+      "recovery"
+    ],
+    "usage_hint_fr": "Utilisez ce facteur pour évaluer les déchets électroniques.",
+    "usage_hint_de": "Verwenden Sie diesen Faktor zur Bewertung von Elektronikabfällen.",
+    "popularity_score": 50
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27305",
+    "name_fr": "Élimination, batteries Li-ions, hydrométallurgique {GLO}",
+    "name_de": "Entsorgung, Li-Ionen-Batterien, hydrometallurgisch {GLO}",
+    "subcategory": "electronics_waste",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.54075992,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "tags": [
+      "dechets_electroniques",
+      "electronics_waste",
+      "uvek_database"
+    ],
+    "source": "UVEK Database",
+    "region": "Suisse",
+    "name_simple_fr": "Recyclage de batteries",
+    "name_simple_de": "Recycling von Batterien",
+    "description_fr": "Le traitement des batteries au lithium-ion, comme celles d'ordinateur ou de voiture électrique, pour récupérer les matériaux.",
+    "description_de": "Die Verarbeitung von Lithium-Ionen-Batterien, z. B. aus Computern oder Elektroautos, zur Rückgewinnung von Materialien.",
+    "search_tags": [
+      "batteries",
+      "recyclage",
+      "déchets électroniques",
+      "électronique",
+      "lithium-ion"
+    ],
+    "usage_hint_fr": "Utiliser pour évaluer le recyclage des batteries.",
+    "usage_hint_de": "Verwendung zur Bewertung des Recyclings von Batterien.",
+    "popularity_score": 50
+  },
+  {
+    "id": "698418f3c1a4e9f26cd2735a",
+    "name_fr": "Traitement, effluent de production de panneaux de fibres souples, vers le traitement des eaux usées, classe 3 {CH}",
+    "name_de": "Behandlung, Abwasser aus der Weichfaserplattenproduktion, zur Abwasserbehandlung, Klasse 3 {CH}",
+    "subcategory": "wastewater_treatment",
+    "input_units": [
+      "m3"
+    ],
+    "default_unit": "m3",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 0.91031543,
+        "unit": "kgCO2e/m3"
+      }
+    ],
+    "tags": [
+      "eaux_usees",
+      "wastewater_treatment",
+      "uvek_database"
+    ],
+    "source": "UVEK Database",
+    "region": "Suisse",
+    "name_simple_fr": "Eaux usées de panneaux de fibres",
+    "name_simple_de": "Abwasser von Faserplatten",
+    "description_fr": "Les eaux usées issues de la production de panneaux de fibres, souvent présentes dans les meubles IKEA ou des cloisons en bois.",
+    "description_de": "Abwasser aus der Produktion von Faserplatten, oft in IKEA-Möbeln oder Holztrennwänden vorkommend.",
+    "search_tags": [
+      "eaux usées",
+      "déchets",
+      "panneaux de fibres",
+      "traitement des eaux",
+      "environment"
+    ],
+    "usage_hint_fr": "À utiliser pour évaluer l'impact des usines de panneaux de fibres.",
+    "usage_hint_de": "Zur Bewertung der Auswirkungen von Faserplattenfabriken verwenden.",
+    "popularity_score": 30
+  },
+  {
+    "id": "698418f3c1a4e9f26cd271be",
+    "name_fr": "Location de personnel et personnel temporaire, à l'exclusion du domaine des TIC",
+    "name_de": "Personalverleih und temporäres Personal, exkl. Bereich IKT",
+    "subcategory": "services",
+    "input_units": [
+      "kCHF"
+    ],
+    "default_unit": "kCHF",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 115.471207,
+        "unit": "kgCO2e/parkCHF"
+      }
+    ],
+    "tags": [
+      "services",
+      "environmental_impacts_of_swiss_consumption_and_production"
+    ],
+    "source": "Environmental Impacts of Swiss Consumption and Production",
+    "region": "Suisse",
+    "name_simple_fr": "Location de personnel",
+    "name_simple_de": "Personalverleih",
+    "description_fr": "Engager du personnel temporaire pour divers travaux, par exemple des intérimaires dans le secteur de la construction.",
+    "description_de": "Temporäre Arbeitskräfte für verschiedene Aufgaben einstellen, z. B. Zeitarbeitskräfte im Bauwesen.",
+    "search_tags": [
+      "intérim",
+      "locaux",
+      "travailleurs",
+      "services",
+      "personal"
+    ],
+    "usage_hint_fr": "Utilisez ce facteur pour évaluer des services temporaires.",
+    "usage_hint_de": "Verwenden Sie diesen Faktor zur Bewertung von Temporärdiensten.",
+    "popularity_score": 70
+  },
+  {
+    "id": "698418f3c1a4e9f26cd271bb",
+    "name_fr": "Travail d'information",
+    "name_de": "Informationsarbeit",
+    "subcategory": "services",
+    "input_units": [
+      "kCHF"
+    ],
+    "default_unit": "kCHF",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 115.471207,
+        "unit": "kgCO2e/parkCHF"
+      }
+    ],
+    "tags": [
+      "services",
+      "environmental_impacts_of_swiss_consumption_and_production"
+    ],
+    "source": "Environmental Impacts of Swiss Consumption and Production",
+    "region": "Suisse",
+    "name_simple_fr": "Services d'information",
+    "name_simple_de": "Informationsdienste",
+    "description_fr": "Travaux liés à la diffusion d'informations, comme la publicité ou la formation, par exemple pour des entreprises locales.",
+    "description_de": "Arbeiten, die mit der Verbreitung von Informationen zu tun haben, z.B. Werbung oder Schulungen, beispielsweise für lokale Unternehmen.",
+    "search_tags": [
+      "services",
+      "information",
+      "publicité",
+      "formation",
+      "services d'information",
+      "Umwelt",
+      "Werbung",
+      "Ausbildung"
+    ],
+    "usage_hint_fr": "Utilisez ce facteur pour évaluer les services d'information.",
+    "usage_hint_de": "Verwenden Sie diesen Faktor zur Bewertung von Informationsdiensten.",
+    "popularity_score": 70
+  },
+  {
+    "id": "698418f3c1a4e9f26cd271c2",
+    "name_fr": "Formation et perfectionnement",
+    "name_de": "Aus- und Weiterbildung",
+    "subcategory": "services",
+    "input_units": [
+      "kCHF"
+    ],
+    "default_unit": "kCHF",
+    "impacts": [
+      {
+        "scope": "scope3",
+        "value": 108.075772,
+        "unit": "kgCO2e/parkCHF"
+      }
+    ],
+    "tags": [
+      "services",
+      "environmental_impacts_of_swiss_consumption_and_production"
+    ],
+    "source": "Environmental Impacts of Swiss Consumption and Production",
+    "region": "Suisse",
+    "name_simple_fr": "Formation professionnelle",
+    "name_simple_de": "Berufsausbildung",
+    "description_fr": "Coûts liés à la formation en entreprise, par exemple pour les stages et séminaires.",
+    "description_de": "Kosten für betriebliche Weiterbildung, z.B. für Praktika und Seminare.",
+    "search_tags": [
+      "formation",
+      "stage",
+      "séminaire",
+      "Weiterbildung",
+      "Training"
+    ],
+    "usage_hint_fr": "Utilisez lors de l'évaluation des formations en entreprise.",
+    "usage_hint_de": "Verwenden Sie bei der Bewertung von Unternehmensschulungen.",
+    "popularity_score": 70
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27186",
+    "name_fr": "Diesel moyen (à utiliser uniquement si le type de carburant est inconnu)",
+    "name_de": "Durchschnittlicher Diesel (nur verwenden, wenn die Kraftstoffart unbekannt ist)",
+    "subcategory": "carburants",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 2.96,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "tags": [
+      "fuel_routier",
+      "gasoil",
+      "gazole",
+      "carburants",
+      "mobitool_v3",
+      "comment:with 94.1% diesel and 5.9% biodiesel"
+    ],
+    "source": "mobitool v3",
+    "region": "Suisse",
+    "name_simple_fr": "Diesel moyen",
+    "name_simple_de": "Durchschnittlicher Diesel",
+    "description_fr": "Carburant utilisé dans de nombreux véhicules, comme les berlines ou fourgons. Par exemple, un véhicule Peugeot ou un Renault.",
+    "description_de": "Kraftstoff, der in vielen Fahrzeugen wie Limousinen oder Transportern verwendet wird. Zum Beispiel in einem Peugeot oder Renault.",
+    "search_tags": [
+      "diesel",
+      "gasoil",
+      "carburant",
+      "auto",
+      "vehicle",
+      "musiktool_v3",
+      "dieselmedium"
+    ],
+    "usage_hint_fr": "À utiliser si le type de carburant est inconnu.",
+    "usage_hint_de": "Verwenden, wenn die Kraftstoffart unbekannt ist.",
+    "popularity_score": 75
+  },
+  {
+    "id": "698418f3c1a4e9f26cd27188",
+    "name_fr": "Gaz naturel moyen (à utiliser uniquement si le type de carburant est inconnu)",
+    "name_de": "Durchschnittliches Erdgas (nur verwenden, wenn die Kraftstoffart nicht bekannt ist)",
+    "subcategory": "carburants",
+    "input_units": [
+      "kg"
+    ],
+    "default_unit": "kg",
+    "impacts": [
+      {
+        "scope": "scope1",
+        "value": 1.95,
+        "unit": "kgCO2e/kg"
+      }
+    ],
+    "tags": [
+      "gaz",
+      "methane",
+      "carburants",
+      "mobitool_v3",
+      "comment:with 72.7% natural gas and 27.3% biomethane"
+    ],
+    "source": "mobitool v3",
+    "region": "Suisse",
+    "name_simple_fr": "Gaz naturel moyen",
+    "name_simple_de": "Durchschnittliches Erdgas",
+    "description_fr": "Carburant courant utilisé dans les chauffages et certaines voitures. Exemples : chaudières à gaz, véhicules au gaz.",
+    "description_de": "Verbreiteter Kraftstoff, der in Heizungen und einigen Autos verwendet wird. Beispiele: Gasheizungen, Gasmobile.",
+    "search_tags": [
+      "gaz",
+      "carburant",
+      "énergie",
+      "vehicle",
+      "heating",
+      "auto",
+      "bagnole"
+    ],
+    "usage_hint_fr": "Utilisez-le lorsque vous ne connaissez pas le carburant exact.",
+    "usage_hint_de": "Verwenden Sie es, wenn Sie den genauen Kraftstofftyp nicht kennen.",
+    "popularity_score": 70
+  }
+]

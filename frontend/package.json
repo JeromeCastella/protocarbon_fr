@@ -19,13 +19,16 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "framer-motion": "^10.16.0",
+    "fuse.js": "^7.1.0",
     "http-proxy-middleware": "^3.0.5",
     "lucide-react": "^0.294.0",
     "postcss": "^8.4.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-joyride": "^2.9.3",
     "react-router-dom": "^6.20.0",
     "react-scripts": "5.0.1",
+    "recharts": "^3.7.0",
     "tailwind-merge": "^2.0.0",
     "tailwindcss": "^3.3.0"
   },
@@ -46,5 +49,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "eslint-plugin-react-hooks": "4.6.2"
   }
 }
