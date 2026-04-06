@@ -13,10 +13,12 @@ const GeneralInfo = () => {
   const { isDark } = useTheme();
   const g = useGeneralInfo();
 
-  useEffect(() => { g.fetchData(); }, [g.fetchData]);
+  const { fetchData, fetchFiscalYearContext, selectedFiscalYear } = g;
+
+  useEffect(() => { fetchData(); }, [fetchData]);
   useEffect(() => {
-    if (g.selectedFiscalYear?.id) g.fetchFiscalYearContext(g.selectedFiscalYear.id);
-  }, [g.selectedFiscalYear?.id, g.fetchFiscalYearContext]);
+    if (selectedFiscalYear?.id) fetchFiscalYearContext(selectedFiscalYear.id);
+  }, [selectedFiscalYear?.id, fetchFiscalYearContext]);
 
   if (g.loading) {
     return (

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import Joyride, { STATUS } from 'react-joyride';
 import { useTheme } from '../context/ThemeContext';
 import { useAuth } from '../context/AuthContext';
@@ -19,7 +19,7 @@ const OnboardingTour = () => {
   const language = user?.language || 'fr';
 
   // Define tour steps with bilingual content
-  const steps = [
+  const steps = useMemo(() => [
     {
       target: '[data-testid="fiscal-year-selector"]',
       content: language === 'fr'
@@ -70,7 +70,7 @@ const OnboardingTour = () => {
       placement: 'right',
       route: '/data-entry'
     }
-  ];
+  ], [language]);
 
   // Auto-trigger on first login
   useEffect(() => {

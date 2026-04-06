@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import axios from 'axios';
 import logger from '../utils/logger';
@@ -23,13 +23,7 @@ export const useAssistance = () => {
   const [showFilters, setShowFilters] = useState(false);
   const [selectedFactor, setSelectedFactor] = useState(null);
 
-  useEffect(() => {
-    if (activeTab === 'factors' && factors.length === 0) {
-      fetchFactors();
-    }
-  }, [activeTab]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  const fetchFactors = async () => {
+  const fetchFactors = useCallback(async () => {
     setFactorsLoading(true);
     try {
       const response = await axios.get(`${API_URL}/api/emission-factors`);
@@ -39,7 +33,13 @@ export const useAssistance = () => {
     } finally {
       setFactorsLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    if (activeTab === 'factors' && factors.length === 0) {
+      fetchFactors();
+    }
+  }, [activeTab, factors.length, fetchFactors]);
 
   const toggleQuestion = (questionId) => {
     setExpandedQuestions(prev => ({ ...prev, [questionId]: !prev[questionId] }));

@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import logger from '../utils/logger';
 
@@ -37,17 +37,14 @@ export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(() => getStoredToken());
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    if (token) {
-      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-      fetchUser();
-    } else {
-      setLoading(false);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [token]);
+  const logout = useCallback(() => {
+    clearStoredToken();
+    delete axios.defaults.headers.common['Authorization'];
+    setToken(null);
+    setUser(null);
+  }, []);
 
-  const fetchUser = async () => {
+  const fetchUser = useCallback(async () => {
     try {
       const response = await axios.get(`${API_URL}/api/auth/me`);
       setUser(response.data);
@@ -57,7 +54,16 @@ export const AuthProvider = ({ children }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [logout]);
+
+  useEffect(() => {
+    if (token) {
+      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      fetchUser();
+    } else {
+      setLoading(false);
+    }
+  }, [token, fetchUser]);
 
   const login = async (email, password, rememberMe = false) => {
     const response = await axios.post(`${API_URL}/api/auth/login`, { 
@@ -78,13 +84,6 @@ export const AuthProvider = ({ children }) => {
       email, password, name, language 
     });
     return response.data;
-  };
-
-  const logout = () => {
-    clearStoredToken();
-    delete axios.defaults.headers.common['Authorization'];
-    setToken(null);
-    setUser(null);
   };
 
   const updateLanguage = async (language) => {

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { INITIAL_FORM } from './wizardConstants';
 import logger from '../../utils/logger';
@@ -31,18 +31,21 @@ export const useProductWizard = (isOpen, editingProduct) => {
   // Emissions preview
   const [emissionsPreview, setEmissionsPreview] = useState({ transformation: 0, usage: 0, disposal: 0, total: 0 });
 
-  useEffect(() => {
-    if (isOpen) {
-      loadEmissionFactors();
-      if (editingProduct) loadProductData(editingProduct);
-    }
-  }, [isOpen, editingProduct]);
+  // loadProductData must be defined BEFORE the useEffect that uses it
+  const loadProductData = useCallback((product) => {
+    setFormData({
+      name: product.name || '',
+      description: product.description || '',
+      product_type: product.product_type || 'finished',
+      unit: product.unit || 'unit',
+      lifespan_years: product.lifespan_years || 0,
+      transformation: product.transformation || { ...INITIAL_FORM.transformation },
+      usage: product.usage || { ...INITIAL_FORM.usage },
+      end_of_life: product.end_of_life || []
+    });
+  }, []);
 
-  useEffect(() => {
-    calculateEmissionsPreview();
-  }, [formData, treatments, electricityFactors, fuelFactors, carburantFactors, refrigerantFactors]);
-
-  const loadEmissionFactors = async () => {
+  const loadEmissionFactors = useCallback(async () => {
     try {
       const [treatRes, elecRes, fuelRes, carbuRes, refrigRes] = await Promise.all([
         axios.get(`${API_URL}/api/emission-factors/by-category/fin_vie_produits`),
@@ -74,22 +77,16 @@ export const useProductWizard = (isOpen, editingProduct) => {
     } catch (error) {
       logger.error('Failed to load emission factors:', error);
     }
-  };
+  }, [editingProduct]);
 
-  const loadProductData = (product) => {
-    setFormData({
-      name: product.name || '',
-      description: product.description || '',
-      product_type: product.product_type || 'finished',
-      unit: product.unit || 'unit',
-      lifespan_years: product.lifespan_years || 0,
-      transformation: product.transformation || { ...INITIAL_FORM.transformation },
-      usage: product.usage || { ...INITIAL_FORM.usage },
-      end_of_life: product.end_of_life || []
-    });
-  };
+  useEffect(() => {
+    if (isOpen) {
+      loadEmissionFactors();
+      if (editingProduct) loadProductData(editingProduct);
+    }
+  }, [isOpen, editingProduct, loadEmissionFactors, loadProductData]);
 
-  const calculateEmissionsPreview = () => {
+  const calculateEmissionsPreview = useCallback(() => {
     let transformation = 0, usage = 0, disposal = 0;
     if (formData.product_type === 'semi_finished') {
       const t = formData.transformation;
@@ -116,7 +113,11 @@ export const useProductWizard = (isOpen, editingProduct) => {
       disposal: Math.round(disposal * 1000) / 1000,
       total: Math.round((transformation + usage + disposal) * 1000) / 1000
     });
-  };
+  }, [formData, treatments, electricityFactors, fuelFactors, carburantFactors, refrigerantFactors]);
+
+  useEffect(() => {
+    calculateEmissionsPreview();
+  }, [calculateEmissionsPreview]);
 
   // End of life helpers
   const addEndOfLifeEntry = () => setFormData(prev => ({ ...prev, end_of_life: [...prev.end_of_life, { _key: Math.random().toString(36).slice(2), name: '', quantity: 0, unit: 'kg', emission_factor_id: '' }] }));

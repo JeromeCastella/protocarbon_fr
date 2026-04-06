@@ -38,7 +38,7 @@ const VerifyEmail = () => {
     };
 
     verifyEmail();
-  }, [token, language, navigate]);
+  }, [token, language, navigate, t]);
 
   return (
     <div className={`min-h-screen flex items-center justify-center p-8 ${isDark ? 'bg-slate-900' : 'bg-gradient-to-br from-blue-50 via-white to-green-50'}`}>

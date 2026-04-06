@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useTheme } from '../context/ThemeContext';
 import { useLanguage } from '../context/LanguageContext';
 import { useFiscalYear } from '../context/FiscalYearContext';
@@ -24,14 +24,7 @@ export const useProductSale = (isOpen, preselectedProduct) => {
   const [activeProfile, setActiveProfile] = useState(null);
   const [saleDate, setSaleDate] = useState('');
 
-  useEffect(() => { if (isOpen) fetchProducts(); }, [isOpen]); // eslint-disable-line react-hooks/exhaustive-deps
-  useEffect(() => { if (preselectedProduct) setSelectedProduct(preselectedProduct); }, [preselectedProduct]);
-  useEffect(() => {
-    if (selectedProduct && currentFiscalYear) fetchProductSales(selectedProduct.id);
-    else { setExistingSale(null); setQuantity(0); setIsEditMode(false); }
-  }, [selectedProduct, currentFiscalYear]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  const fetchProducts = async () => {
+  const fetchProducts = useCallback(async () => {
     setLoading(true);
     try {
       const response = await axios.get(`${API_URL}/api/products`);
@@ -43,9 +36,9 @@ export const useProductSale = (isOpen, preselectedProduct) => {
       }
     } catch (error) { logger.error('Failed to fetch products:', error); }
     finally { setLoading(false); }
-  };
+  }, [preselectedProduct]);
 
-  const fetchProductSales = async (productId) => {
+  const fetchProductSales = useCallback(async (productId) => {
     try {
       const fiscalYearParam = currentFiscalYear?.id ? `?fiscal_year_id=${currentFiscalYear.id}` : '';
       const [salesResponse, profilesResponse] = await Promise.all([
@@ -86,7 +79,14 @@ export const useProductSale = (isOpen, preselectedProduct) => {
       setIsEditMode(false);
       setActiveProfile(null);
     }
-  };
+  }, [currentFiscalYear]);
+
+  useEffect(() => { if (isOpen) fetchProducts(); }, [isOpen, fetchProducts]);
+  useEffect(() => { if (preselectedProduct) setSelectedProduct(preselectedProduct); }, [preselectedProduct]);
+  useEffect(() => {
+    if (selectedProduct && currentFiscalYear) fetchProductSales(selectedProduct.id);
+    else { setExistingSale(null); setQuantity(0); setIsEditMode(false); }
+  }, [selectedProduct, currentFiscalYear, fetchProductSales]);
 
   const handleSubmit = async (onSaleRecorded, onClose) => {
     if (!selectedProduct || quantity <= 0) return;

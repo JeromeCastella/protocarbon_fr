@@ -57,7 +57,22 @@ const useGuidedEntry = ({
     setAvailableUnits(result.all);
   };
 
-  const fetchSubcategories = async () => {
+  const fetchFactorsForCategory = useCallback(async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get(`${API_URL}/api/emission-factors/search?category=${category.code}`);
+      const allFactors = response.data || [];
+      setFactors(allFactors);
+      setFilteredFactors(allFactors);
+      extractAvailableUnits(allFactors);
+    } catch (error) {
+      logger.error('Failed to fetch factors:', error);
+    } finally {
+      setLoading(false);
+    }
+  }, [category]);
+
+  const fetchSubcategories = useCallback(async () => {
     try {
       setLoading(true);
       const response = await axios.get(`${API_URL}/api/subcategories?category=${category.code}`);
@@ -72,22 +87,7 @@ const useGuidedEntry = ({
     } finally {
       setLoading(false);
     }
-  };
-
-  const fetchFactorsForCategory = async () => {
-    try {
-      setLoading(true);
-      const response = await axios.get(`${API_URL}/api/emission-factors/search?category=${category.code}`);
-      const allFactors = response.data || [];
-      setFactors(allFactors);
-      setFilteredFactors(allFactors);
-      extractAvailableUnits(allFactors);
-    } catch (error) {
-      logger.error('Failed to fetch factors:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  }, [category, fetchFactorsForCategory]);
 
   const fetchFactorsForSubcategory = async (subcatCode) => {
     try {
@@ -118,7 +118,7 @@ const useGuidedEntry = ({
     }
   };
 
-  const loadForEditing = async (activity) => {
+  const loadForEditing = useCallback(async (activity) => {
     setLoading(true);
     try {
       const subcatsRes = await axios.get(`${API_URL}/api/subcategories?category=${category.code}`);
@@ -162,9 +162,9 @@ const useGuidedEntry = ({
     } finally {
       setLoading(false);
     }
-  };
+  }, [category]);
 
-  const loadForPreSelectedFactor = async (factor) => {
+  const loadForPreSelectedFactor = useCallback(async (factor) => {
     setLoading(true);
     try {
       let fullFactor = factor;
@@ -207,7 +207,7 @@ const useGuidedEntry = ({
     } finally {
       setLoading(false);
     }
-  };
+  }, [category]);
 
   // Init effect
   useEffect(() => {
@@ -224,7 +224,7 @@ const useGuidedEntry = ({
         fetchSubcategories();
       }
     }
-  }, [isOpen, category, editingActivity?.id, preSelectedFactor?.id]);
+  }, [isOpen, category, editingActivity, preSelectedFactor, resetState, loadForEditing, loadForPreSelectedFactor, fetchSubcategories]);
 
   // Search filter
   useEffect(() => {
@@ -243,7 +243,7 @@ const useGuidedEntry = ({
     } else {
       setFilteredFactors(factors);
     }
-  }, [factorSearch]);
+  }, [factorSearch, factors, selectedUnit]);
 
   const goBackToStep = (targetStep) => {
     setStep(targetStep);

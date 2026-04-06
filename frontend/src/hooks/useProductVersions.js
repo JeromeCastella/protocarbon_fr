@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useTheme } from '../context/ThemeContext';
 import { useLanguage } from '../context/LanguageContext';
 import axios from 'axios';
@@ -20,11 +20,7 @@ export const useProductVersions = (isOpen, productId) => {
   });
   const [expandedProfiles, setExpandedProfiles] = useState({});
 
-  useEffect(() => {
-    if (isOpen && productId) fetchData();
-  }, [isOpen, productId]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     setLoading(true);
     try {
       const [profilesRes, fyRes] = await Promise.all([
@@ -36,7 +32,11 @@ export const useProductVersions = (isOpen, productId) => {
       setFiscalYears(fyRes.data || []);
     } catch (error) { logger.error('Failed to fetch data:', error); }
     finally { setLoading(false); }
-  };
+  }, [productId]);
+
+  useEffect(() => {
+    if (isOpen && productId) fetchData();
+  }, [isOpen, productId, fetchData]);
 
   const handleCreateProfile = () => {
     const usedFyIds = profiles.map(p => p.fiscal_year_id);

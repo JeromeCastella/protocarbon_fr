@@ -72,7 +72,7 @@ export const useFiscalYearsPage = () => {
         if (firstFree) setCreateForm(prev => ({ ...prev, year: firstFree.year }));
       }
     }
-  }, [createForm.selectedScenarioId, scenarioTakenYears]);
+  }, [createForm.selectedScenarioId, scenarioTakenYears, createForm.isScenario, createForm.year, availableYears]);
 
   useEffect(() => {
     const first = availableYears.find(y => y.available);

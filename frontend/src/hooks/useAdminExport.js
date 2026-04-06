@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useTheme } from '../context/ThemeContext';
 import { useLanguage } from '../context/LanguageContext';
 import { useAuth } from '../context/AuthContext';
@@ -22,24 +22,24 @@ export const useAdminExport = () => {
   const [dumpInfoLoading, setDumpInfoLoading] = useState(false);
   const [dumpResult, setDumpResult] = useState(null);
 
-  useEffect(() => { fetchFiscalYears(); fetchDumpInfo(); }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
-  const fetchFiscalYears = async () => {
+  const fetchFiscalYears = useCallback(async () => {
     try {
       const res = await fetch(`${API_URL}/api/fiscal-years`, { headers: { Authorization: `Bearer ${token}` } });
       if (res.ok) setFiscalYears(await res.json());
     } catch (error) { logger.error('Error fetching fiscal years:', error); }
     finally { setLoadingFY(false); }
-  };
+  }, [token]);
 
-  const fetchDumpInfo = async () => {
+  const fetchDumpInfo = useCallback(async () => {
     setDumpInfoLoading(true);
     try {
       const res = await fetch(`${API_URL}/api/export/mongodump/info`, { headers: { Authorization: `Bearer ${token}` } });
       if (res.ok) setDumpInfo(await res.json());
     } catch (error) { logger.error('Error fetching dump info:', error); }
     finally { setDumpInfoLoading(false); }
-  };
+  }, [token]);
+
+  useEffect(() => { fetchFiscalYears(); fetchDumpInfo(); }, [fetchFiscalYears, fetchDumpInfo]);
 
   const triggerDownload = (blob, filename) => {
     const url = window.URL.createObjectURL(blob);

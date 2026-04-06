@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useTheme } from '../context/ThemeContext';
 import { useLanguage } from '../context/LanguageContext';
 import axios from 'axios';
@@ -38,13 +38,7 @@ const SaleEditModal = ({ isOpen, onClose, saleId, productId, onSaleUpdated }) =>
   const [quantity, setQuantity] = useState(1);
   const [saleDate, setSaleDate] = useState('');
 
-  useEffect(() => {
-    if (isOpen && saleId && productId) {
-      fetchSaleDetails();
-    }
-  }, [isOpen, saleId, productId]);
-
-  const fetchSaleDetails = async () => {
+  const fetchSaleDetails = useCallback(async () => {
     setLoading(true);
     try {
       // Fetch sale details including linked activities
@@ -65,7 +59,13 @@ const SaleEditModal = ({ isOpen, onClose, saleId, productId, onSaleUpdated }) =>
     } finally {
       setLoading(false);
     }
-  };
+  }, [productId, saleId]);
+
+  useEffect(() => {
+    if (isOpen && saleId && productId) {
+      fetchSaleDetails();
+    }
+  }, [isOpen, saleId, productId, fetchSaleDetails]);
 
   const handleUpdate = async () => {
     if (!saleId || !productId) return;

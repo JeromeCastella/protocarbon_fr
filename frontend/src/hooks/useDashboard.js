@@ -177,13 +177,13 @@ const useDashboard = () => {
     setScenarioDataPoints([]);
     setScenarioSummary(null);
     setPlausibilityResult(null);
-  }, [currentFiscalYear?.id, reportingView]);
+  }, [currentFiscalYear?.id, reportingView, fetchAllData, fetchObjectiveData, fetchScenarioEntities]);
 
   useEffect(() => {
     if (selectedFiscalYearForChart && selectedFiscalYearForChart !== 'current') {
       fetchScopeBreakdown(selectedFiscalYearForChart);
     }
-  }, [selectedFiscalYearForChart, reportingView]);
+  }, [selectedFiscalYearForChart, reportingView, fetchScopeBreakdown]);
 
   // Fetch all periods for selected scenario entity
   useEffect(() => {
