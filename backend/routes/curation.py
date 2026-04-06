@@ -173,7 +173,8 @@ async def inline_edit_factor(
     payload: InlineEditPayload,
     current_user: dict = Depends(require_admin),
 ):
-    update_data = {k: v for k, v in payload.model_dump().items() if v is not None}
+    # Use exclude_unset to allow explicitly sending null (e.g. clearing location_factor_id)
+    update_data = payload.model_dump(exclude_unset=True)
     if not update_data:
         raise HTTPException(400, "Rien à mettre à jour")
 
@@ -198,7 +199,19 @@ async def inline_edit_factor(
 
     from utils import find_emission_factor
     updated = find_emission_factor(emission_factors_collection, factor_id)
-    return serialize_doc(updated)
+    doc = serialize_doc(updated)
+
+    # Resolve location factor name for the response
+    lid = doc.get("location_factor_id")
+    if lid:
+        loc_factor = emission_factors_collection.find_one(
+            {"$or": [{"id": lid}, {"_id": ObjectId(lid) if len(lid) == 24 else None}], "deleted_at": None},
+            {"_id": 0, "name_simple_fr": 1, "name_fr": 1}
+        )
+        if loc_factor:
+            doc["_locationName"] = loc_factor.get("name_simple_fr") or loc_factor.get("name_fr") or lid
+
+    return doc
 
 
 # ==================== BULK PREVIEW ====================
@@ -739,6 +752,8 @@ Retourne un JSON array:
 @router.get("/factors/search-location")
 async def search_location_factors(
     q: str = "",
+    subcategory: str = "",
+    limit: int = 30,
     current_user: dict = Depends(require_admin),
 ):
     """Search factors suitable as location-based counterparts (for linking)."""
@@ -750,14 +765,18 @@ async def search_location_factors(
             {"name_fr": {"$regex": q, "$options": "i"}},
             {"name_de": {"$regex": q, "$options": "i"}},
         ]
+    if subcategory:
+        query["subcategory"] = subcategory
     # Only return factors that are location-based (or unset = default location)
     query["reporting_method"] = {"$in": [None, "location"]}
 
+    capped_limit = min(limit, 50)
     factors = list(emission_factors_collection.find(
         query,
         {"_id": 0, "id": 1, "name_fr": 1, "name_simple_fr": 1, "name_de": 1,
-         "name_simple_de": 1, "subcategory": 1, "default_unit": 1, "impacts": 1},
-    ).sort([("is_public", -1), ("popularity_score", -1)]).limit(20))
+         "name_simple_de": 1, "subcategory": 1, "default_unit": 1, "impacts": 1,
+         "source_product_name": 1, "is_public": 1},
+    ).sort([("is_public", -1), ("popularity_score", -1)]).limit(capped_limit))
 
     return factors
 

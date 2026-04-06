@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 
 import { API_URL as API } from '../utils/apiConfig';
+import LocationLinkPanel from '../components/curation/LocationLinkPanel';
 
 // ==================== STATS DASHBOARD ====================
 const StatsDashboard = ({ stats, isDark, onSubcategoryClick, activeSubcategory }) => {
@@ -728,40 +729,14 @@ export default function CurationWorkbench() {
   // Translate preview
   const [translateModal, setTranslateModal] = useState(null); // { factorIds, direction }
 
-  // Location factor search (for linking market-based factors)
-  const [locSearchQuery, setLocSearchQuery] = useState({});  // { [factorId]: query }
-  const [locSearchResults, setLocSearchResults] = useState({});  // { [factorId]: results[] }
-  const locSearchTimeout = useRef({});
+  // Location link panel
+  const [linkPanelFactor, setLinkPanelFactor] = useState(null);
 
-  const searchLocationFactors = useCallback(async (factorId, query) => {
-    if (!query || query.length < 2) {
-      setLocSearchResults(prev => ({ ...prev, [factorId]: [] }));
-      return;
-    }
-    try {
-      const res = await fetch(`${API}/api/curation/factors/search-location?q=${encodeURIComponent(query)}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      if (res.ok) {
-        const data = await res.json();
-        setLocSearchResults(prev => ({ ...prev, [factorId]: data }));
-      }
-    } catch (e) { logger.error(e); }
-  }, [token]);
-
-  const handleLocSearchInput = (factorId, value) => {
-    setLocSearchQuery(prev => ({ ...prev, [factorId]: value }));
-    if (locSearchTimeout.current[factorId]) clearTimeout(locSearchTimeout.current[factorId]);
-    locSearchTimeout.current[factorId] = setTimeout(() => searchLocationFactors(factorId, value), 300);
+  const handleLinkLocation = (factorId, locationFactorId) => {
+    inlineEdit(factorId, 'location_factor_id', locationFactorId);
   };
 
-  const selectLocationFactor = (factorId, locFactor) => {
-    inlineEdit(factorId, 'location_factor_id', locFactor.id);
-    setLocSearchResults(prev => ({ ...prev, [factorId]: [] }));
-    setLocSearchQuery(prev => ({ ...prev, [factorId]: '' }));
-  };
-
-  const clearLocationFactor = (factorId) => {
+  const handleUnlinkLocation = (factorId) => {
     inlineEdit(factorId, 'location_factor_id', null);
   };
   const handleTranslateApply = (modifiedCount) => {
@@ -1068,45 +1043,34 @@ export default function CurationWorkbench() {
                     </select>
                   </td>
                   {/* Facteur location lié */}
-                  <td className="py-1.5 px-2 relative">
+                  <td className="py-1.5 px-2">
                     {f.reporting_method === 'market' ? (
-                      <div className="relative">
-                        {f.location_factor_id ? (
-                          <div className={`flex items-center gap-1 text-[10px] rounded px-1.5 py-0.5 ${isDark ? 'bg-green-500/10 text-green-400' : 'bg-green-50 text-green-700'}`}>
-                            <Link2 className="w-3 h-3 flex-shrink-0" />
-                            <span className="truncate max-w-[140px]" title={f._locationName || f.location_factor_id}>
-                              {f._locationName || f.location_factor_id}
-                            </span>
-                            <button onClick={() => clearLocationFactor(f.id)} className="ml-auto flex-shrink-0 hover:text-red-500">
-                              <X className="w-3 h-3" />
-                            </button>
-                          </div>
-                        ) : (
-                          <div>
-                            <input
-                              type="text"
-                              value={locSearchQuery[f.id] || ''}
-                              onChange={e => handleLocSearchInput(f.id, e.target.value)}
-                              placeholder="Chercher facteur..."
-                              data-testid={`loc-search-${f.id}`}
-                              className={`w-full text-[11px] rounded border py-0.5 px-1.5 ${isDark ? 'bg-slate-800 border-slate-700 text-white placeholder-slate-600' : 'bg-white border-gray-200 text-gray-700 placeholder-gray-400'}`}
-                            />
-                            {(locSearchResults[f.id] || []).length > 0 && (
-                              <div className={`absolute z-50 left-0 right-0 mt-0.5 rounded-lg border shadow-lg max-h-40 overflow-y-auto ${isDark ? 'bg-slate-800 border-slate-700' : 'bg-white border-gray-200'}`}>
-                                {locSearchResults[f.id].map(loc => (
-                                  <button key={loc.id} onClick={() => selectLocationFactor(f.id, loc)}
-                                    className={`w-full text-left px-2 py-1 text-[10px] hover:bg-blue-500/10 border-b last:border-0 ${isDark ? 'border-slate-700 text-slate-300' : 'border-gray-100 text-gray-700'}`}>
-                                    <div className="font-medium truncate">{loc.name_simple_fr || loc.name_fr}</div>
-                                    <div className={`${isDark ? 'text-slate-500' : 'text-gray-400'}`}>{loc.subcategory} · {loc.default_unit}</div>
-                                  </button>
-                                ))}
-                              </div>
-                            )}
-                          </div>
-                        )}
-                      </div>
+                      f.location_factor_id ? (
+                        <button
+                          onClick={() => setLinkPanelFactor(f)}
+                          data-testid={`loc-linked-${f.id}`}
+                          className={`flex items-center gap-1.5 text-[11px] rounded-lg px-2 py-1 max-w-[180px] transition-colors ${
+                            isDark ? 'bg-green-500/10 text-green-400 hover:bg-green-500/20' : 'bg-green-50 text-green-700 hover:bg-green-100'
+                          }`}
+                          title={`Lié à: ${f._locationName || f.location_factor_id}\nCliquer pour modifier`}
+                        >
+                          <Link2 className="w-3 h-3 flex-shrink-0" />
+                          <span className="truncate">{f._locationName || f.location_factor_id}</span>
+                        </button>
+                      ) : (
+                        <button
+                          onClick={() => setLinkPanelFactor(f)}
+                          data-testid={`loc-link-btn-${f.id}`}
+                          className={`flex items-center gap-1 text-[11px] rounded-lg px-2 py-1 transition-colors ${
+                            isDark ? 'bg-slate-700/50 text-slate-400 hover:bg-blue-500/10 hover:text-blue-400' : 'bg-gray-100 text-gray-400 hover:bg-blue-50 hover:text-blue-600'
+                          }`}
+                        >
+                          <Link2 className="w-3 h-3" />
+                          Lier...
+                        </button>
+                      )
                     ) : (
-                      <span className={`text-[10px] ${isDark ? 'text-slate-600' : 'text-gray-300'}`}>—</span>
+                      <span className={`text-[10px] ${isDark ? 'text-slate-600' : 'text-gray-300'}`}></span>
                     )}
                   </td>
                   <td className="py-1.5 px-1">
@@ -1170,6 +1134,18 @@ export default function CurationWorkbench() {
         <TranslatePreviewModal factorIds={translateModal.factorIds} direction={translateModal.direction}
           isDark={isDark} onApply={handleTranslateApply} onClose={() => setTranslateModal(null)} />
       )}
+
+      {/* Location link side panel */}
+      <LocationLinkPanel
+        isOpen={!!linkPanelFactor}
+        onClose={() => setLinkPanelFactor(null)}
+        factor={linkPanelFactor}
+        isDark={isDark}
+        token={token}
+        subcategoriesList={subcategoriesList}
+        onLink={handleLinkLocation}
+        onUnlink={handleUnlinkLocation}
+      />
 
       {/* JSON viewer modal */}
       {jsonModalFactor && (
