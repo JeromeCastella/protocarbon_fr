@@ -265,7 +265,7 @@ const TableViewPanel = ({
             <div className="text-center py-20">
               <Table className={`w-16 h-16 mx-auto mb-4 ${isDark ? 'text-slate-700' : 'text-gray-300'}`} />
               <p className={`text-lg ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-                {searchQuery ? 'Aucun résultat pour cette recherche' : 'Aucune donnée saisie'}
+                {searchQuery ? t('dataEntry.noResults') : t('dataEntry.noData')}
               </p>
             </div>
           ) : (
@@ -420,7 +420,7 @@ const TableViewPanel = ({
                               onClick={() => handleEditActivityInModal(activity)}
                               data-testid={`edit-activity-${activity.id}`}
                               className={`p-1.5 rounded-lg transition-colors ${isDark ? 'hover:bg-slate-700 hover:text-blue-400' : 'hover:bg-blue-50 hover:text-blue-500'}`}
-                              title="Modifier"
+                              title={t('dataEntry.edit')}
                             >
                               <Edit3 className={`w-3.5 h-3.5 ${isDark ? 'text-slate-500' : 'text-gray-400'}`} />
                             </button>
@@ -434,7 +434,7 @@ const TableViewPanel = ({
                               }}
                               data-testid={`delete-activity-${activity.id}`}
                               className="p-1.5 rounded-lg transition-colors hover:bg-red-500/10"
-                              title={activity.sale_id ? 'Gérer la vente' : 'Supprimer'}
+                              title={activity.sale_id ? t('dataEntry.manageSale') : t('dataEntry.delete')}
                             >
                               <Trash2 className="w-3.5 h-3.5 text-red-500/70" />
                             </button>
@@ -448,7 +448,7 @@ const TableViewPanel = ({
               <tfoot>
                 <tr className={`sticky bottom-0 ${isDark ? 'bg-slate-800 border-t border-slate-700' : 'bg-white border-t border-gray-200'}`}>
                   <td colSpan={tableViewScope === null ? 5 : 4} className={`py-3 px-3 font-semibold text-sm ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                    {tableViewScope === null ? 'Total général' : `Total ${scopeLabels[tableViewScope]?.name}`}
+                    {tableViewScope === null ? t('dataEntry.totalGeneral') : `${t('dataEntry.totalScope')} ${scopeLabels[tableViewScope]?.name}`}
                     {searchQuery && ` (${activities.length} résultats)`}
                   </td>
                   <td className={`py-3 px-3 text-right font-bold text-sm ${
@@ -607,7 +607,7 @@ const GlobalFactorSearch = ({ isDark, language, showExpertFactors, onToggleExper
           onChange={(e) => setQuery(e.target.value)}
           onFocus={() => { setIsFocused(true); loadFactors(); }}
           placeholder={language === 'fr'
-            ? 'Rechercher un facteur d\'émission (ex: acier, électricité, transport...)'
+            ? t('dataEntry.globalSearchPlaceholder')
             : 'Emissionsfaktor suchen (z.B. Stahl, Strom, Transport...)'}
           className={`flex-1 bg-transparent outline-none text-sm ${isDark ? 'text-white placeholder-slate-500' : 'text-gray-900 placeholder-gray-400'}`}
           data-testid="global-search-input"
@@ -651,7 +651,7 @@ const GlobalFactorSearch = ({ isDark, language, showExpertFactors, onToggleExper
             {isLoading ? (
               <div className={`px-4 py-6 text-center text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
                 <RefreshCw className="w-5 h-5 mx-auto mb-2 animate-spin text-blue-500" />
-                {language === 'fr' ? 'Chargement de l\'index...' : 'Index wird geladen...'}
+                {t('dataEntry.loadingIndex')}
               </div>
             ) : results.length === 0 && query.length >= 2 ? (
               <div className={`px-4 py-6 text-center text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
@@ -1046,7 +1046,7 @@ const DataEntry = () => {
     if (activity.group_id && activity.group_size > 1) {
       setConfirmDialog({
         isOpen: true,
-        title: 'Supprimer le groupe',
+        title: t('dataEntry.deleteGroup'),
         message: `Cette saisie contient ${activity.group_size} impacts liés. Voulez-vous supprimer les ${activity.group_size} activités ?`,
         onConfirm: performDelete,
       });
@@ -1072,10 +1072,10 @@ const DataEntry = () => {
   };
 
   const scopeLabels = {
-    scope1: { name: 'Scope 1', subtitle: 'Émissions directes', color: 'blue' },
-    scope2: { name: 'Scope 2', subtitle: 'Énergie indirecte', color: 'cyan' },
-    scope3_amont: { name: 'Scope 3 Amont', subtitle: 'Amont', color: 'purple' },
-    scope3_aval: { name: 'Scope 3 Aval', subtitle: 'Aval', color: 'indigo' },
+    scope1: { name: t('dataEntry.scopeLabels.scope1'), subtitle: t('dataEntry.scopeLabels.scope1Sub'), color: 'blue' },
+    scope2: { name: t('dataEntry.scopeLabels.scope2'), subtitle: t('dataEntry.scopeLabels.scope2Sub'), color: 'cyan' },
+    scope3_amont: { name: t('dataEntry.scopeLabels.scope3_amont'), subtitle: t('dataEntry.scopeLabels.scope3_amontSub'), color: 'purple' },
+    scope3_aval: { name: t('dataEntry.scopeLabels.scope3_aval'), subtitle: t('dataEntry.scopeLabels.scope3_avalSub'), color: 'indigo' },
   };
 
   if (loading) {
@@ -1494,8 +1494,8 @@ const DataEntry = () => {
         onConfirm={confirmDialog.onConfirm}
         title={confirmDialog.title}
         message={confirmDialog.message}
-        confirmText="Supprimer"
-        cancelText="Annuler"
+        confirmText={t('common.delete')}
+        cancelText={t('common.cancel')}
         isDark={isDark}
         variant="danger"
       />

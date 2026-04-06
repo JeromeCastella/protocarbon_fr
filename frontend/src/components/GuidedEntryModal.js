@@ -8,6 +8,7 @@ import { normalizeUnit, filterFactorsByUnitStrict, filterFactorsByDimension, get
 import { getUnitLabel, formatUnitWithCode } from '../utils/unitLabels';
 import FactorSelectionStep from './FactorSelectionStep';
 import logger from '../utils/logger';
+import { useLanguage } from '../context/LanguageContext';
 
 import { API_URL } from '../utils/apiConfig';
 
@@ -29,6 +30,7 @@ const GuidedEntryModal = ({
   showExpertFactors = false,
   onToggleExpert = null,
 }) => {
+  const { t } = useLanguage();
   // État du parcours
   const [step, setStep] = useState(1);
   const [subcategories, setSubcategories] = useState([]);
@@ -576,7 +578,7 @@ const GuidedEntryModal = ({
       <div className={`p-5 border-b ${isDark ? 'border-slate-700' : 'border-gray-200'}`}>
         <div className="flex items-center justify-between">
           <h3 className={`text-lg font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-            {editingActivity ? (language === 'fr' ? 'Modifier l\'entrée' : 'Eintrag bearbeiten') : (language === 'fr' ? 'Nouvelle saisie' : 'Neue Eingabe')}
+            {editingActivity ? t('guidedEntry.editTitle') : t('guidedEntry.newTitle')}
           </h3>
           <button
             onClick={onClose}
@@ -599,7 +601,7 @@ const GuidedEntryModal = ({
           <div className="flex flex-col items-center justify-center h-48">
             <Loader2 className="w-10 h-10 text-blue-500 animate-spin mb-4" />
             <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-              {language === 'fr' ? 'Chargement...' : 'Laden...'}
+              {t('guidedEntry.loading')}
             </p>
           </div>
         ) : (
@@ -608,7 +610,7 @@ const GuidedEntryModal = ({
             {subcategories.length > 0 && (
               <div>
                 <label className={`block text-xs font-medium mb-2 uppercase tracking-wider ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>
-                  {language === 'fr' ? '1. Sous-catégorie' : '1. Unterkategorie'}
+                  {t('guidedEntry.step1')}
                 </label>
                 {selectedSubcategory && step >= 2 ? (
                   <button
@@ -654,7 +656,7 @@ const GuidedEntryModal = ({
             {step >= 2 && availableUnits.length > 0 && (
               <div>
                 <label className={`block text-xs font-medium mb-2 uppercase tracking-wider ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>
-                  {language === 'fr' ? '2. Unité' : '2. Einheit'}
+                  {t('guidedEntry.step2')}
                 </label>
                 {selectedUnit && step >= 3 ? (
                   <button
@@ -696,7 +698,7 @@ const GuidedEntryModal = ({
                     {convertedUnits.length > 0 && (
                       <div className="mt-2">
                         <p className={`text-xs mb-1.5 ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>
-                          {language === 'fr' ? 'Conversion auto' : 'Auto. Konvertierung'}
+                          {t('guidedEntry.autoConversion')}
                         </p>
                         <div className="flex flex-wrap gap-1.5">
                           {convertedUnits.map(unit => (
@@ -728,7 +730,7 @@ const GuidedEntryModal = ({
             {selectedFactor && (
               <div>
                 <label className={`block text-xs font-medium mb-2 uppercase tracking-wider ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>
-                  {language === 'fr' ? '3. Facteur sélectionné' : '3. Ausgewählter Faktor'}
+                  {t('guidedEntry.step3')}
                 </label>
                 <button
                   type="button"
@@ -761,7 +763,7 @@ const GuidedEntryModal = ({
             {selectedFactor && pendingCategoryChoice && pendingCategoryChoice.length > 1 && (
               <div data-testid="category-picker">
                 <label className={`block text-xs font-medium mb-2 uppercase tracking-wider ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>
-                  {language === 'fr' ? 'Catégorie' : 'Kategorie'}
+                  {t('guidedEntry.category')}
                 </label>
                 <div className="flex flex-wrap gap-2">
                   {pendingCategoryChoice.map(cat => {
@@ -792,7 +794,7 @@ const GuidedEntryModal = ({
             {selectedFactor && (
               <div>
                 <label className={`block text-xs font-medium mb-2 uppercase tracking-wider ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>
-                  {language === 'fr' ? '4. Quantité' : '4. Menge'}
+                  {t('guidedEntry.step4')}
                 </label>
                 <div className="relative">
                   <input
@@ -869,9 +871,7 @@ const GuidedEntryModal = ({
                 {/* Business rule notice */}
                 {quantity && hasFilteredImpacts && (
                   <div className={`mt-2 p-2 rounded-lg text-xs ${isDark ? 'bg-amber-500/10 text-amber-400' : 'bg-amber-50 text-amber-700'}`}>
-                    {language === 'fr' 
-                      ? `Règle métier: ${allImpacts.length - filteredImpacts.length} impact(s) exclu(s)`
-                      : `Geschäftsregel: ${allImpacts.length - filteredImpacts.length} Auswirkung(en) ausgeschlossen`}
+                    {t('guidedEntry.businessRule').replace('{count}', allImpacts.length - filteredImpacts.length)}
                   </div>
                 )}
               </div>
@@ -881,7 +881,7 @@ const GuidedEntryModal = ({
             {selectedFactor && (
               <div>
                 <label className={`block text-xs font-medium mb-2 uppercase tracking-wider ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>
-                  {language === 'fr' ? 'Commentaire' : 'Kommentar'}
+                  {t('guidedEntry.comment')}
                 </label>
                 <textarea
                   value={comments}
@@ -892,7 +892,7 @@ const GuidedEntryModal = ({
                       ? 'bg-slate-700 border-slate-600 text-white' 
                       : 'bg-white border-gray-200 text-gray-900'
                   }`}
-                  placeholder={language === 'fr' ? 'Notes, source...' : 'Notizen, Quelle...'}
+                  placeholder={t('guidedEntry.commentPlaceholder')}
                 />
               </div>
             )}
@@ -912,7 +912,7 @@ const GuidedEntryModal = ({
                 : 'border-gray-200 hover:bg-gray-50 text-gray-900'
             }`}
           >
-            {language === 'fr' ? 'Annuler' : 'Abbrechen'}
+            {t('guidedEntry.cancel')}
           </button>
           <button
             onClick={handleSubmit}
@@ -922,8 +922,8 @@ const GuidedEntryModal = ({
           >
             <Check className="w-5 h-5" />
             {editingActivity 
-              ? (language === 'fr' ? 'Modifier' : 'Speichern')
-              : (language === 'fr' ? 'Enregistrer' : 'Speichern')
+              ? t('guidedEntry.update')
+              : t('guidedEntry.save')
             }
           </button>
         </div>
@@ -950,9 +950,9 @@ const GuidedEntryModal = ({
             ))}
           </div>
           <span className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-            {step === 1 && (language === 'fr' ? 'Sous-catégorie' : 'Unterkategorie')}
-            {step === 2 && (language === 'fr' ? 'Unité' : 'Einheit')}
-            {step >= 3 && (language === 'fr' ? 'Facteur d\'émission' : 'Emissionsfaktor')}
+            {step === 1 && t('guidedEntry.subcategory')}
+            {step === 2 && t('guidedEntry.unit')}
+            {step >= 3 && t('guidedEntry.emissionFactor')}
           </span>
         </div>
         <button
@@ -973,8 +973,8 @@ const GuidedEntryModal = ({
             </div>
             <p className={`text-base font-medium ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
               {step === 1 
-                ? (language === 'fr' ? 'Sélectionnez une sous-catégorie' : 'Wählen Sie eine Unterkategorie')
-                : (language === 'fr' ? 'Sélectionnez une unité' : 'Wählen Sie eine Einheit')
+                ? t('guidedEntry.selectSubcategory')
+                : t('guidedEntry.selectUnit')
               }
             </p>
             <p className={`text-sm mt-1 ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>

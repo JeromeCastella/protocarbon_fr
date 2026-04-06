@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { Search, X, Info, FlaskConical, LayoutGrid, Table2, Check } from 'lucide-react';
 import FactorCard from './FactorCard';
 import { createFactorSearchIndex, searchFactors, sortFactorsByRelevance } from '../utils/factorSearch';
+import { useLanguage } from '../context/LanguageContext';
 
 /**
  * FactorSelectionStep - Enhanced factor selection with search and cards
@@ -17,6 +18,7 @@ const FactorSelectionStep = ({
   showExpertFactors = false,
   onToggleExpert = null,
 }) => {
+  const { t } = useLanguage();
   const [searchQuery, setSearchQuery] = useState('');
   const [searchIndex, setSearchIndex] = useState(null);
   const [viewMode, setViewMode] = useState('grid'); // 'grid' | 'table'
@@ -69,14 +71,10 @@ const FactorSelectionStep = ({
       }`}>
         <Info className={`w-8 h-8 mx-auto mb-3 ${isDark ? 'text-amber-400' : 'text-amber-500'}`} />
         <p className={`font-medium ${isDark ? 'text-amber-400' : 'text-amber-600'}`}>
-          {language === 'fr' 
-            ? `Aucun facteur compatible avec l'unité "${selectedUnit}"` 
-            : `Kein kompatibler Faktor für die Einheit "${selectedUnit}"`}
+          {t('factorSelection.noFactorsForUnit')}
         </p>
         <p className={`text-sm mt-2 ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-          {language === 'fr' 
-            ? 'Veuillez sélectionner une autre unité' 
-            : 'Bitte wählen Sie eine andere Einheit'}
+          {t('factorSelection.selectOtherUnit')}
         </p>
       </div>
     );
@@ -87,13 +85,11 @@ const FactorSelectionStep = ({
       {/* Header with count, view toggle and expert toggle */}
       <div className="flex items-center justify-between flex-shrink-0">
         <label className={`block text-sm font-medium ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
-          {language === 'fr' 
-            ? '3. Sélectionner le facteur d\'émission' 
-            : '3. Emissionsfaktor auswählen'}
+          {t('factorSelection.title')}
         </label>
         <div className="flex items-center gap-2">
           <span className={`text-xs ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>
-            {displayFactors.length} {language === 'fr' ? 'facteur(s)' : 'Faktor(en)'}
+            {displayFactors.length} {t('factorSelection.factors')}
           </span>
           {/* View mode toggle */}
           <div className={`flex rounded-lg border overflow-hidden ${isDark ? 'border-slate-600' : 'border-gray-200'}`}>
@@ -101,7 +97,7 @@ const FactorSelectionStep = ({
               type="button"
               onClick={() => setViewMode('grid')}
               data-testid="view-mode-grid"
-              title={language === 'fr' ? 'Vue grille' : 'Gitteransicht'}
+              title={t('factorSelection.gridView')}
               className={`p-1.5 transition-all ${
                 viewMode === 'grid'
                   ? isDark ? 'bg-blue-500/20 text-blue-400' : 'bg-blue-50 text-blue-600'
@@ -114,7 +110,7 @@ const FactorSelectionStep = ({
               type="button"
               onClick={() => setViewMode('table')}
               data-testid="view-mode-table"
-              title={language === 'fr' ? 'Vue tableau' : 'Tabellenansicht'}
+              title={t('factorSelection.tableView')}
               className={`p-1.5 transition-all ${
                 viewMode === 'table'
                   ? isDark ? 'bg-blue-500/20 text-blue-400' : 'bg-blue-50 text-blue-600'
@@ -141,8 +137,8 @@ const FactorSelectionStep = ({
             >
               <FlaskConical className="w-3.5 h-3.5" />
               {showExpertFactors 
-                ? (language === 'fr' ? 'Masquer experts' : 'Experten ausblenden')
-                : (language === 'fr' ? `+ ${expertCount} experts` : `+ ${expertCount} Experten`)
+                ? t('factorSelection.hideExperts')
+                : `+ ${expertCount} ${t('factorSelection.showExperts')}`
               }
             </button>
           )}
@@ -158,10 +154,7 @@ const FactorSelectionStep = ({
           type="text"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          placeholder={language === 'fr' 
-            ? 'Rechercher un facteur (ex: voiture, diesel, train...)' 
-            : 'Faktor suchen (z.B. Auto, Diesel, Zug...)'
-          }
+          placeholder={t('factorSelection.searchPlaceholder')}
           data-testid="factor-search-input"
           className={`w-full pl-12 pr-10 py-3 rounded-xl border transition-all focus:ring-2 focus:ring-blue-500 ${
             isDark 
@@ -184,10 +177,7 @@ const FactorSelectionStep = ({
       {/* Search hint */}
       {!searchQuery && enrichedCount > 0 && (
         <p className={`text-xs mt-2 flex-shrink-0 ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>
-          💡 {language === 'fr' 
-            ? `Conseil : tapez des mots simples comme "voiture", "avion", "électricité"...`
-            : `Tipp: Geben Sie einfache Wörter ein wie "Auto", "Flugzeug", "Strom"...`
-          }
+          {t('factorSelection.searchHint')}
         </p>
       )}
       
@@ -211,10 +201,10 @@ const FactorSelectionStep = ({
               isDark ? 'bg-slate-800 text-slate-500' : 'bg-white text-gray-400'
             }`}>
               <tr>
-                <th className="py-2 pr-2 font-medium">{language === 'fr' ? 'Nom' : 'Name'}</th>
-                <th className="py-2 px-2 font-medium text-right whitespace-nowrap">{language === 'fr' ? 'Valeur' : 'Wert'}</th>
-                <th className="py-2 px-2 font-medium">{language === 'fr' ? 'Unité' : 'Einheit'}</th>
-                <th className="py-2 pl-2 font-medium">{language === 'fr' ? 'Source' : 'Quelle'}</th>
+                <th className="py-2 pr-2 font-medium">{t('factorSelection.name')}</th>
+                <th className="py-2 px-2 font-medium text-right whitespace-nowrap">{t('factorSelection.value')}</th>
+                <th className="py-2 px-2 font-medium">{t('factorSelection.unit')}</th>
+                <th className="py-2 pl-2 font-medium">{t('factorSelection.source')}</th>
               </tr>
             </thead>
             <tbody>
@@ -286,15 +276,13 @@ const FactorSelectionStep = ({
           isDark ? 'bg-slate-700' : 'bg-gray-50'
         }`}>
           <p className={isDark ? 'text-slate-400' : 'text-gray-500'}>
-            {language === 'fr' 
-              ? `Aucun résultat pour "${searchQuery}"` 
-              : `Keine Ergebnisse für "${searchQuery}"`}
+            {t('factorSelection.noResults')}
           </p>
           <button
             onClick={() => setSearchQuery('')}
             className="mt-2 text-sm text-blue-500 hover:underline"
           >
-            {language === 'fr' ? 'Effacer la recherche' : 'Suche löschen'}
+            {t('factorSelection.clearSearch')}
           </button>
         </div>
       )}
@@ -313,7 +301,7 @@ const FactorSelectionStep = ({
               </svg>
             </div>
             <span className={`font-medium ${isDark ? 'text-green-400' : 'text-green-700'}`}>
-              {language === 'fr' ? 'Facteur sélectionné' : 'Faktor ausgewählt'}
+              {t('factorSelection.selectedFactor')}
             </span>
           </div>
           <p className={`mt-2 text-sm ${isDark ? 'text-slate-300' : 'text-gray-600'}`}>
