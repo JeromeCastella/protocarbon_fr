@@ -22,37 +22,44 @@ Application full-stack (React/FastAPI/MongoDB) pour la comptabilité carbone d'e
 - FEAT-DR Dual Reporting : Toggle Market/Location sur Dashboard (tous endpoints)
 - FEAT-PLAUS Test de plausibilité : Diagnostic de cohérence des données (11 règles V1)
 
+## i18n (Internationalisation FR/DE)
+### Completed Phases
+- **Phase 1-2**: Layout, Navigation, Dashboard (LanguageContext, useLanguage hook, t() function)
+- **Phase 3**: DataEntry page, GuidedEntryModal, FactorSelectionStep, GlobalFactorSearch, TableViewPanel — VALIDATED (April 2026)
+
+### Remaining Phases
+- **Phase 4**: Admin (AdminFactorsTab, etc.)
+- **Phase 5**: Curation (CurationWorkbench)
+- **Phase 6**: Settings/Profile
+- **Phase 7**: Auth/Aide (AuthPage, Assistance, ForgotPassword)
+
 ## Admin Factors Form — Réorganisé (April 2026)
-- **Noms simplifiés FR/DE** en position principale (ce sont les noms affichés dans l'app)
+- **Noms simplifiés FR/DE** en position principale
 - **source_product_name** : nouveau champ éditable (nom technique BAFU/ecoinvent)
 - **Noms techniques (name_fr/name_de)** : section repliable "Noms techniques (import)"
 - **reporting_method** : sélecteur Location / Market / Non défini
 - **popularity_score** : slider 0-100 (Rare → Courant)
-- Tableau liste : affiche source_product_name en sous-titre + badge reporting_method
-- Modèles Pydantic backend mis à jour (EmissionFactorV2Create/Update)
-
-## Recommandations Dashboard — Supprimées (April 2026)
-- Bloc "Mesures recommandées" retiré de l'onglet Objectifs (obsolète)
-- Appel API /api/objectives/recommendations supprimé du frontend
 
 ## Key Files
-- `frontend/src/pages/Dashboard.js` — Dashboard principal
+- `frontend/src/pages/DataEntry.js` — Dashboard principal
 - `frontend/src/components/admin/AdminFactorsTab.jsx` — Formulaire facteurs restructuré
 - `backend/routes/plausibility.py` — POST /check endpoint
 - `backend/services/plausibility.py` — 11 règles métier
 - `backend/routes/dashboard.py` — API dashboard (reporting_view sur tous endpoints)
-- `backend/routes/objectives.py` — API objectifs SBTi
-- `backend/models/__init__.py` — Modèles Pydantic (source_product_name, reporting_method ajoutés)
+- `frontend/src/context/LanguageContext.js` — Hook i18n
+- `frontend/src/locales/fr.json` — Traductions FR (~549 lignes)
+- `frontend/src/locales/de.json` — Traductions DE (~549 lignes)
 
 ## API Endpoints
 - `POST /api/plausibility/check` — Diagnostic de plausibilité
-- `PUT /api/admin/emission-factors-v2/{id}` — Mise à jour facteur (accepte source_product_name, reporting_method, name_simple_fr/de, popularity_score)
+- `PUT /api/admin/emission-factors-v2/{id}` — Mise à jour facteur
 - `GET /api/dashboard/summary|kpis|scope-breakdown|fiscal-comparison` — reporting_view
 - `GET /api/objectives/trajectory` — reporting_view
 
 ## Backlog
 ### P0
 - **FEAT-CUR-03 — Regroupement par patterns**: Vue qui groupe les facteurs similaires
+- **i18n Phases 4-7**: Admin, Curation, Settings, Auth/Aide
 
 ### P1
 - **FEAT-03 — Multi-utilisateurs**: Rôles Admin/Éditeur/Lecteur
@@ -66,3 +73,7 @@ Application full-stack (React/FastAPI/MongoDB) pour la comptabilité carbone d'e
 
 ## Credentials
 - Email: newtest@x.com / Password: test123
+
+## Known Issues
+- Déploiement production KO (HTTP 520) — L'utilisateur doit configurer le secret FRONTEND_URL
+- ESLint plugin react-hooks v7 incompatible avec CRA ESLint 8 — contourné avec DISABLE_ESLINT_PLUGIN=true
