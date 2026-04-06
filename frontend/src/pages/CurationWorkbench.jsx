@@ -606,7 +606,7 @@ export default function CurationWorkbench() {
       const res = await fetch(`${API}/api/curation/stats`, { headers: { Authorization: `Bearer ${token}` } });
       if (res.ok) setStats(await res.json());
     } catch (e) { logger.error(e); }
-  }, []);
+  }, [token]);
 
   // Fetch factors
   const fetchFactors = useCallback(async () => {
@@ -629,7 +629,7 @@ export default function CurationWorkbench() {
       }
     } catch (e) { logger.error(e); }
     setLoadingFactors(false);
-  }, [page, pageSize, searchDebounced, subcategory, curationStatus, isPublic, defaultUnit, reportingMethodFilter, sortBy, sortOrder]);
+  }, [page, pageSize, searchDebounced, subcategory, curationStatus, isPublic, defaultUnit, reportingMethodFilter, sortBy, sortOrder, token]);
 
   useEffect(() => { fetchStats(); }, [fetchStats]);
   useEffect(() => { fetchFactors(); }, [fetchFactors]);
@@ -653,7 +653,7 @@ export default function CurationWorkbench() {
     };
     fetchAllSubcategories();
     fetchUnits();
-  }, []);
+  }, [token]);
 
   // Inline edit
   const inlineEdit = async (factorId, field, value) => {
