@@ -1,7 +1,7 @@
 """
 Routes de curation des facteurs d'émission — atelier d'édition en masse
 """
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, HTTPException, Depends, Query
 from datetime import datetime, timezone
 from typing import Optional, List
 from pydantic import BaseModel
@@ -59,6 +59,37 @@ class BulkSetReportingMethodPayload(BaseModel):
     reporting_method: str  # "location" or "market"
     location_factor_id: Optional[str] = None  # required if market
 
+# ==================== FILTER DEPENDENCY ====================
+
+class CurationFilters:
+    """Group all curation filter query parameters into a single dependency."""
+
+    def __init__(
+        self,
+        page: int = Query(1),
+        page_size: int = Query(50),
+        search: str = Query(""),
+        subcategory: str = Query(""),
+        curation_status: str = Query(""),
+        is_public: str = Query(""),
+        has_simple_name: str = Query(""),
+        default_unit: str = Query(""),
+        reporting_method: str = Query(""),
+        sort_by: str = Query("subcategory"),
+        sort_order: str = Query("asc"),
+    ):
+        self.page = page
+        self.page_size = page_size
+        self.search = search
+        self.subcategory = subcategory
+        self.curation_status = curation_status
+        self.is_public = is_public
+        self.has_simple_name = has_simple_name
+        self.default_unit = default_unit
+        self.reporting_method = reporting_method
+        self.sort_by = sort_by
+        self.sort_order = sort_order
+
 # ==================== FACTORS LIST (PAGINATED) ====================
 
 CURATION_PROJECTION = {
@@ -70,30 +101,24 @@ CURATION_PROJECTION = {
 
 @router.get("/factors")
 async def list_curation_factors(
-    page: int = 1,
-    page_size: int = 50,
-    search: str = "",
-    subcategory: str = "",
-    curation_status: str = "",
-    is_public: str = "",
-    has_simple_name: str = "",
-    default_unit: str = "",
-    reporting_method: str = "",
-    sort_by: str = "subcategory",
-    sort_order: str = "asc",
+    filters: CurationFilters = Depends(),
     current_user: dict = Depends(require_admin),
 ):
-    query = build_curation_query(search, subcategory, curation_status, is_public, has_simple_name, default_unit, reporting_method)
-    sort_dir = 1 if sort_order == "asc" else -1
-    sort_field = resolve_sort_field(sort_by)
+    query = build_curation_query(
+        filters.search, filters.subcategory, filters.curation_status,
+        filters.is_public, filters.has_simple_name, filters.default_unit,
+        filters.reporting_method,
+    )
+    sort_dir = 1 if filters.sort_order == "asc" else -1
+    sort_field = resolve_sort_field(filters.sort_by)
 
     total = emission_factors_collection.count_documents(query)
-    skip = (page - 1) * page_size
+    skip = (filters.page - 1) * filters.page_size
     factors = list(
         emission_factors_collection.find(query)
         .sort(sort_field, sort_dir)
         .skip(skip)
-        .limit(page_size)
+        .limit(filters.page_size)
     )
 
     items = [serialize_doc(f) for f in factors]
@@ -102,9 +127,9 @@ async def list_curation_factors(
     return {
         "items": items,
         "total": total,
-        "page": page,
-        "page_size": page_size,
-        "total_pages": max(1, (total + page_size - 1) // page_size),
+        "page": filters.page,
+        "page_size": filters.page_size,
+        "total_pages": max(1, (total + filters.page_size - 1) // filters.page_size),
     }
 
 

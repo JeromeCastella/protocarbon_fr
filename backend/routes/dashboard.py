@@ -24,42 +24,12 @@ from services.dashboard_service import (
     calculate_scope_completion,
     resolve_current_and_previous_fy,
     calculate_kpi_metrics,
+    get_fiscal_year_context_with_fallback,
+    fetch_fy_emissions,
 )
 from utils import serialize_doc
 
 router = APIRouter(prefix="/dashboard", tags=["Dashboard"])
-
-
-def get_fiscal_year_context_with_fallback(fiscal_year_id: str, tenant_id: str) -> dict:
-    """
-    Helper function to get context from fiscal year with fallback to company.
-    Returns: dict with employees, revenue, surface_area, excluded_categories
-    """
-    company = companies_collection.find_one({"tenant_id": tenant_id})
-
-    if fiscal_year_id:
-        try:
-            fy = fiscal_years_collection.find_one({"_id": ObjectId(fiscal_year_id)})
-            if fy:
-                fy_context = fy.get("context", {})
-                return {
-                    "employees": fy_context.get("employees") if fy_context.get("employees") is not None else (company.get("employees") if company else None),
-                    "revenue": fy_context.get("revenue") if fy_context.get("revenue") is not None else (company.get("revenue") if company else None),
-                    "surface_area": fy_context.get("surface_area") if fy_context.get("surface_area") is not None else (company.get("surface_area") if company else None),
-                    "excluded_categories": fy_context.get("excluded_categories", []),
-                }
-        except Exception:
-            pass
-
-    if company:
-        return {
-            "employees": company.get("employees"),
-            "revenue": company.get("revenue"),
-            "surface_area": company.get("surface_area"),
-            "excluded_categories": [],
-        }
-
-    return {"employees": None, "revenue": None, "surface_area": None, "excluded_categories": []}
 
 
 @router.get("/summary")
@@ -235,40 +205,27 @@ async def get_dashboard_kpis(
     current_fy_id = str(current_fy["_id"]) if current_fy else None
     context = get_fiscal_year_context_with_fallback(current_fy_id, current_user["id"])
 
-    # Current emissions
-    current_emissions = 0
-    current_activities_count = 0
-    if current_fy:
-        activities = list(activities_collection.find({
-            "tenant_id": current_user["id"],
-            "fiscal_year_id": current_fy_id,
-        }))
-        current_emissions = sum(get_activity_emissions(a, reporting_view) for a in activities)
-        current_activities_count = len(activities)
+    current_emissions, current_activities_count = fetch_fy_emissions(
+        current_user["id"], current_fy, reporting_view,
+    )
 
-    # Previous emissions
+    # Previous emissions: prefer cached summary when available
     previous_emissions = 0
     if previous_fy:
-        if not reporting_view and previous_fy.get("summary") and previous_fy["summary"].get("total_emissions_tco2e"):
-            previous_emissions = previous_fy["summary"].get("total_emissions_tco2e", 0) * 1000
+        cached = (not reporting_view and previous_fy.get("summary", {}).get("total_emissions_tco2e"))
+        if cached:
+            previous_emissions = cached * 1000
         else:
-            prev_activities = list(activities_collection.find({
-                "tenant_id": current_user["id"],
-                "fiscal_year_id": str(previous_fy["_id"]),
-            }))
-            previous_emissions = sum(get_activity_emissions(a, reporting_view) for a in prev_activities)
+            previous_emissions, _ = fetch_fy_emissions(current_user["id"], previous_fy, reporting_view)
 
-    # Calculate metrics
     metrics = calculate_kpi_metrics(current_emissions, previous_emissions, context)
-
-    products_count = products_collection.count_documents({"tenant_id": current_user["id"]})
 
     return {
         "current_emissions": round(current_emissions, 2),
         "previous_emissions": round(previous_emissions, 2),
         **metrics,
         "activities_count": current_activities_count,
-        "products_count": products_count,
+        "products_count": products_collection.count_documents({"tenant_id": current_user["id"]}),
         "fiscal_years_count": len(fiscal_years),
         "current_fiscal_year": current_fy.get("name") if current_fy else None,
         "previous_fiscal_year": previous_fy.get("name") if previous_fy else None,

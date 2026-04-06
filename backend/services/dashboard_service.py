@@ -160,3 +160,54 @@ def calculate_kpi_metrics(
         "emissions_per_revenue": emissions_per_revenue,
         "year_over_year_change": year_over_year_change,
     }
+
+
+def get_fiscal_year_context_with_fallback(
+    fiscal_year_id: str, tenant_id: str,
+    fiscal_years_col=None, companies_col=None,
+) -> dict:
+    """Get context from fiscal year with fallback to company."""
+    from config import fiscal_years_collection, companies_collection
+    fy_col = fiscal_years_col or fiscal_years_collection
+    comp_col = companies_col or companies_collection
+
+    company = comp_col.find_one({"tenant_id": tenant_id})
+
+    if fiscal_year_id:
+        try:
+            fy = fy_col.find_one({"_id": ObjectId(fiscal_year_id)})
+            if fy:
+                ctx = fy.get("context", {})
+                return {
+                    "employees": ctx.get("employees") if ctx.get("employees") is not None else (company.get("employees") if company else None),
+                    "revenue": ctx.get("revenue") if ctx.get("revenue") is not None else (company.get("revenue") if company else None),
+                    "surface_area": ctx.get("surface_area") if ctx.get("surface_area") is not None else (company.get("surface_area") if company else None),
+                    "excluded_categories": ctx.get("excluded_categories", []),
+                }
+        except Exception:
+            pass
+
+    if company:
+        return {
+            "employees": company.get("employees"),
+            "revenue": company.get("revenue"),
+            "surface_area": company.get("surface_area"),
+            "excluded_categories": [],
+        }
+
+    return {"employees": None, "revenue": None, "surface_area": None, "excluded_categories": []}
+
+
+def fetch_fy_emissions(tenant_id: str, fy: dict, reporting_view: str = None,
+                       activities_col=None) -> tuple:
+    """Fetch total emissions and activity count for a fiscal year."""
+    from config import activities_collection
+    col = activities_col or activities_collection
+
+    if not fy:
+        return 0, 0
+    activities = list(col.find({
+        "tenant_id": tenant_id, "fiscal_year_id": str(fy["_id"]),
+    }))
+    total = sum(get_activity_emissions(a, reporting_view) for a in activities)
+    return total, len(activities)

@@ -29,6 +29,37 @@ from utils import serialize_doc, find_emission_factor
 router = APIRouter(prefix="/activities", tags=["Activities"])
 
 
+def _compute_impact_emissions(activity: ActivityCreate, factor: dict, impact: dict) -> dict:
+    """Compute emissions, scope normalization, and dual reporting for an impact."""
+    quantity = resolve_quantity(activity, factor)
+    emissions = quantity * impact.get("value", 0)
+    activity_date = resolve_activity_date(activity.date, activity.fiscal_year_id)
+    impact_scope = normalize_scope(impact.get("scope", activity.scope))
+    display_category = "activites_combustibles_energie" if impact_scope == "scope3_3" else activity.category_id
+    stored_scope = normalize_scope_for_reporting(impact_scope, display_category)
+    emissions_location, location_factor_snapshot = compute_dual_reporting(factor, impact_scope, quantity)
+    return {
+        "quantity": quantity, "emissions": emissions, "activity_date": activity_date,
+        "impact_scope": impact_scope, "display_category": display_category,
+        "stored_scope": stored_scope, "emissions_location": emissions_location,
+        "location_factor_snapshot": location_factor_snapshot,
+    }
+
+
+def _get_factor_impacts(factor: dict, activity: ActivityCreate) -> list:
+    """Get impacts from factor, with fallback for legacy format."""
+    all_impacts = factor.get("impacts", [])
+    if all_impacts:
+        return all_impacts
+    return [{
+        "scope": factor.get("scope", activity.scope),
+        "category": factor.get("category", activity.category_id),
+        "value": factor.get("value", 0),
+        "unit": factor.get("unit", "kgCO2e"),
+        "type": "direct",
+    }]
+
+
 async def create_activity_for_impact(
     activity: ActivityCreate,
     current_user: dict,
@@ -38,38 +69,20 @@ async def create_activity_for_impact(
     group_index: int,
     group_size: int
 ) -> dict:
-    """Crée une activité pour un impact spécifique"""
-    
-    quantity = resolve_quantity(activity, factor)
-    emissions = quantity * impact.get("value", 0)
-    activity_date = resolve_activity_date(activity.date, activity.fiscal_year_id)
-    
-    impact_scope = normalize_scope(impact.get("scope", activity.scope))
-    display_category = 'activites_combustibles_energie' if impact_scope == 'scope3_3' else activity.category_id
-    stored_scope = normalize_scope_for_reporting(impact_scope, display_category)
-    
-    # Dual reporting
-    emissions_location, location_factor_snapshot = compute_dual_reporting(factor, impact_scope, quantity)
+    """Cree une activite pour un impact specifique"""
+    calc = _compute_impact_emissions(activity, factor, impact)
 
-    # Construire le document
     activity_doc = {
-        # Groupement
         "group_id": group_id,
         "group_index": group_index,
         "group_size": group_size,
-        
-        # Contexte de saisie original
         "entry_scope": activity.entry_scope or activity.scope,
         "entry_category": activity.entry_category or activity.category_id,
-        
-        # Données de l'impact (scope résolu pour le reporting)
-        "scope": stored_scope,
-        "category_id": display_category,  # Catégorie d'affichage selon les règles GHG
+        "scope": calc["stored_scope"],
+        "category_id": calc["display_category"],
         "subcategory_id": activity.subcategory_id,
         "impact_value": impact.get("value", 0),
         "impact_unit": impact.get("unit", "kgCO2e"),
-        
-        # Données communes
         "name": activity.name,
         "quantity": activity.quantity,
         "unit": activity.unit,
@@ -78,31 +91,25 @@ async def create_activity_for_impact(
         "original_quantity": activity.original_quantity if activity.original_quantity is not None else activity.quantity,
         "original_unit": activity.original_unit or activity.unit,
         "conversion_factor": activity.conversion_factor,
-        
-        # Émissions calculées
-        "emissions": emissions,
-        "calculated_emissions": emissions,
-        
-        # Dual reporting (location-based)
+        "emissions": calc["emissions"],
+        "calculated_emissions": calc["emissions"],
         "reporting_method": factor.get("reporting_method", "location"),
-        "emissions_location": emissions_location,
-        "location_factor_snapshot": location_factor_snapshot,
-        
-        # Métadonnées
+        "emissions_location": calc["emissions_location"],
+        "location_factor_snapshot": calc["location_factor_snapshot"],
         "tenant_id": current_user["id"],
         "company_id": current_user.get("company_id"),
         "fiscal_year_id": activity.fiscal_year_id,
-        "date": activity_date,
+        "date": calc["activity_date"],
         "comments": activity.comments,
         "description": activity.description,
         "source": activity.source,
         "created_at": datetime.now(timezone.utc).isoformat(),
-        "updated_at": None
+        "updated_at": None,
     }
-    
+
     result = activities_collection.insert_one(activity_doc)
     activity_doc["id"] = str(result.inserted_id)
-    
+
     return serialize_doc(activity_doc)
 
 
@@ -167,76 +174,40 @@ async def get_activities(
 @router.post("")
 async def create_activity(activity: ActivityCreate, current_user: dict = Depends(get_current_user)):
     """
-    Crée une ou plusieurs activités selon les impacts du facteur.
-    
-    Pour les facteurs multi-impacts, applique les règles métier GHG Protocol
-    et crée une activité par impact filtré, liées par un group_id commun.
+    Cree une ou plusieurs activites selon les impacts du facteur.
+    Pour les facteurs multi-impacts, applique les regles metier GHG Protocol
+    et cree une activite par impact filtre, liees par un group_id commun.
     """
-    
-    # Récupérer le facteur d'émission
     factor = find_emission_factor(emission_factors_collection, activity.emission_factor_id)
-    
-    # Si pas de facteur ou facteur manuel, créer une activité simple
+
     if not factor:
         return await create_single_activity(activity, current_user)
-    
-    # Récupérer les impacts du facteur
-    all_impacts = factor.get("impacts", [])
-    
-    # Fallback si pas d'impacts structurés (ancien format de facteur)
-    if not all_impacts:
-        all_impacts = [{
-            "scope": factor.get("scope", activity.scope),
-            "category": factor.get("category", activity.category_id),
-            "value": factor.get("value", 0),
-            "unit": factor.get("unit", "kgCO2e"),
-            "type": "direct"
-        }]
-    
-    # Déterminer le scope et la catégorie de saisie
+
+    all_impacts = _get_factor_impacts(factor, activity)
     entry_scope = activity.entry_scope or activity.scope
     entry_category = activity.entry_category or activity.category_id
-    
-    # Appliquer les règles métier pour filtrer les impacts
     filtered_impacts = apply_business_rules(all_impacts, entry_scope, entry_category)
-    
-    # Si aucun impact applicable après filtrage
+
     if not filtered_impacts:
         raise HTTPException(
-            status_code=400, 
+            status_code=400,
             detail="Aucun impact applicable pour ce facteur dans ce contexte de saisie. "
-                   "Vérifiez la compatibilité entre le scope de saisie et le facteur sélectionné."
+                   "Verifiez la compatibilite entre le scope de saisie et le facteur selectionne.",
         )
-    
-    # Générer un group_id unique
+
     group_id = f"grp_{uuid.uuid4().hex[:12]}"
-    group_size = len(filtered_impacts)
-    
-    # Créer une activité par impact filtré
-    created_activities = []
-    for index, impact in enumerate(filtered_impacts):
-        activity_doc = await create_activity_for_impact(
-            activity=activity,
-            current_user=current_user,
-            factor=factor,
-            impact=impact,
-            group_id=group_id,
-            group_index=index,
-            group_size=group_size
+    created_activities = [
+        await create_activity_for_impact(
+            activity=activity, current_user=current_user, factor=factor,
+            impact=impact, group_id=group_id, group_index=idx, group_size=len(filtered_impacts),
         )
-        created_activities.append(activity_doc)
-    
-    # Retourner la réponse
-    # Si une seule activité, retourner le format simple pour compatibilité
+        for idx, impact in enumerate(filtered_impacts)
+    ]
+
     if len(created_activities) == 1:
         return created_activities[0]
-    
-    # Sinon, retourner le format groupe
-    return {
-        "group_id": group_id,
-        "activities": created_activities,
-        "count": len(created_activities)
-    }
+
+    return {"group_id": group_id, "activities": created_activities, "count": len(created_activities)}
 
 
 async def create_single_activity(activity: ActivityCreate, current_user: dict) -> dict:

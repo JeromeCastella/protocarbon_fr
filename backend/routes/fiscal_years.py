@@ -23,6 +23,95 @@ from services.scope_mapping import normalize_scope_for_reporting
 router = APIRouter(prefix="/fiscal-years", tags=["Fiscal Years"])
 
 
+# ==================== HELPERS ====================
+
+def _copy_context_fields(source: dict) -> dict:
+    """Copy context-related fields from a dictionary."""
+    return {
+        "employees": source.get("employees"),
+        "revenue": source.get("revenue"),
+        "surface_area": source.get("surface_area"),
+        "excluded_categories": source.get("excluded_categories", []),
+    }
+
+
+def _resolve_context_from_source_or_company(source_context: dict, tenant_id: str) -> dict:
+    """Build FY context from a source context dict, falling back to company info."""
+    if source_context:
+        return _copy_context_fields(source_context)
+    company = companies_collection.find_one({"tenant_id": tenant_id})
+    return _copy_context_fields(company) if company else {}
+
+
+def _initialize_fy_context(tenant_id: str, year: int) -> dict:
+    """Initialize context for a new FY from previous year or company fallback."""
+    previous_fy = fiscal_years_collection.find_one({"tenant_id": tenant_id, "year": year - 1})
+    if previous_fy and previous_fy.get("context"):
+        return _copy_context_fields(previous_fy["context"])
+    company = companies_collection.find_one({"tenant_id": tenant_id})
+    return _copy_context_fields(company) if company else {}
+
+
+def _resolve_scenario_info(data: FiscalYearDuplicate):
+    """Validate and resolve scenario name and ID from request data."""
+    if not data.is_scenario:
+        return None, None
+    if data.scenario_id:
+        scenario_doc = scenarios_collection.find_one({"_id": ObjectId(data.scenario_id)})
+        if not scenario_doc:
+            raise HTTPException(status_code=404, detail="Scenario introuvable")
+        return scenario_doc["name"], data.scenario_id
+    if data.scenario_name:
+        return data.scenario_name, None
+    raise HTTPException(status_code=400, detail="Un scenario (scenario_id ou scenario_name) est requis")
+
+
+def _validate_duplicate_target(data: FiscalYearDuplicate, tenant_id: str, scenario_id: str = None):
+    """Check that the target year/scenario doesn't already have a fiscal year."""
+    if not data.is_scenario:
+        existing = fiscal_years_collection.find_one({
+            "tenant_id": tenant_id, "year": data.new_year, "type": {"$ne": "scenario"}
+        })
+        if existing:
+            raise HTTPException(status_code=400, detail=f"Un exercice fiscal existe deja pour l'annee {data.new_year}")
+    elif scenario_id:
+        existing = fiscal_years_collection.find_one({
+            "scenario_id": scenario_id, "year": data.new_year, "type": "scenario"
+        })
+        if existing:
+            raise HTTPException(status_code=400, detail=f"Ce scenario a deja un exercice pour l'annee {data.new_year}")
+
+
+def _duplicate_activities(source_fy_id: str, new_fy_id: str, new_start_date: str,
+                          tenant_id: str, activity_ids: list = None) -> int:
+    """Duplicate activities from source to new fiscal year. Returns count."""
+    query = {"tenant_id": tenant_id, "fiscal_year_id": source_fy_id}
+    if activity_ids:
+        query["_id"] = {"$in": [ObjectId(aid) for aid in activity_ids]}
+
+    activities = list(activities_collection.find(query))
+    new_year = int(new_start_date[:4])
+    count = 0
+
+    for activity in activities:
+        old_date = activity.get("date", "")
+        try:
+            new_date = datetime.strptime(old_date, "%Y-%m-%d").replace(year=new_year).strftime("%Y-%m-%d") if old_date else new_start_date
+        except (ValueError, TypeError):
+            new_date = new_start_date
+
+        new_activity = {k: v for k, v in activity.items() if k not in ["_id", "created_at"]}
+        new_activity.update({
+            "date": new_date,
+            "fiscal_year_id": new_fy_id,
+            "created_at": datetime.now(timezone.utc).isoformat(),
+            "duplicated_from": str(activity["_id"]),
+        })
+        activities_collection.insert_one(new_activity)
+        count += 1
+    return count
+
+
 @router.get("")
 async def get_fiscal_years(current_user: dict = Depends(get_current_user)):
     """Get all fiscal years for the current user with activity counts"""
@@ -109,9 +198,6 @@ async def update_fiscal_year_context(
             detail="Cannot modify context of a closed fiscal year"
         )
     
-    # Get existing context or initialize empty
-    existing_context = fy.get("context", {})
-    
     # Update only the fields that were provided
     update_data = {}
     if context_update.employees is not None:
@@ -177,71 +263,30 @@ async def get_fiscal_year_context(
 @router.post("")
 async def create_fiscal_year(fy: FiscalYearCreate, current_user: dict = Depends(get_current_user)):
     """Create a new fiscal year (one per calendar year)"""
-    # Get company_id
     company = companies_collection.find_one({"tenant_id": current_user["id"]})
     company_id = str(company["_id"]) if company else None
-    
-    # Check if fiscal year already exists for this year (actual only, not scenarios)
+
     existing = fiscal_years_collection.find_one({
-        "tenant_id": current_user["id"],
-        "year": fy.year,
-        "type": {"$ne": "scenario"}
+        "tenant_id": current_user["id"], "year": fy.year, "type": {"$ne": "scenario"}
     })
-    
     if existing:
-        raise HTTPException(
-            status_code=400, 
-            detail=f"Un exercice fiscal existe déjà pour l'année {fy.year}"
-        )
-    
-    # Auto-generate dates (calendar year)
-    start_date = f"{fy.year}-01-01"
-    end_date = f"{fy.year}-12-31"
-    name = f"Exercice {fy.year}"
-    
-    # Initialize context from previous fiscal year or company
-    context = {}
-    
-    # Try to get context from previous fiscal year (year - 1)
-    previous_fy = fiscal_years_collection.find_one({
-        "tenant_id": current_user["id"],
-        "year": fy.year - 1
-    })
-    
-    if previous_fy and previous_fy.get("context"):
-        # Copy context from previous year
-        prev_context = previous_fy["context"]
-        context = {
-            "employees": prev_context.get("employees"),
-            "revenue": prev_context.get("revenue"),
-            "surface_area": prev_context.get("surface_area"),
-            "excluded_categories": prev_context.get("excluded_categories", [])
-        }
-    elif company:
-        # Fallback to company values (first fiscal year)
-        context = {
-            "employees": company.get("employees"),
-            "revenue": company.get("revenue"),
-            "surface_area": company.get("surface_area"),
-            "excluded_categories": company.get("excluded_categories", [])
-        }
-    
+        raise HTTPException(status_code=400, detail=f"Un exercice fiscal existe deja pour l'annee {fy.year}")
+
     fy_doc = {
-        "name": name,
+        "name": f"Exercice {fy.year}",
         "year": fy.year,
-        "start_date": start_date,
-        "end_date": end_date,
+        "start_date": f"{fy.year}-01-01",
+        "end_date": f"{fy.year}-12-31",
         "status": "draft",
         "type": "actual",
         "tenant_id": current_user["id"],
         "company_id": company_id,
-        "context": context,
-        "created_at": datetime.now(timezone.utc).isoformat()
+        "context": _initialize_fy_context(current_user["id"], fy.year),
+        "created_at": datetime.now(timezone.utc).isoformat(),
     }
-    
+
     result = fiscal_years_collection.insert_one(fy_doc)
     fy_doc["id"] = str(result.inserted_id)
-    
     return serialize_doc(fy_doc)
 
 
@@ -347,156 +392,52 @@ async def duplicate_fiscal_year(
 ):
     """Duplicate a fiscal year to a new year, optionally as a scenario"""
     fy = fiscal_years_collection.find_one({
-        "_id": ObjectId(fiscal_year_id),
-        "tenant_id": current_user["id"]
+        "_id": ObjectId(fiscal_year_id), "tenant_id": current_user["id"]
     })
-    
     if not fy:
         raise HTTPException(status_code=404, detail="Fiscal year not found")
-    
-    # Validate scenario fields
-    if data.is_scenario:
-        # Resolve scenario name from scenario_id or fallback to scenario_name
-        resolved_scenario_name = None
-        resolved_scenario_id = None
-        if data.scenario_id:
-            scenario_doc = scenarios_collection.find_one({"_id": ObjectId(data.scenario_id)})
-            if not scenario_doc:
-                raise HTTPException(status_code=404, detail="Scénario introuvable")
-            resolved_scenario_name = scenario_doc["name"]
-            resolved_scenario_id = data.scenario_id
-        elif data.scenario_name:
-            resolved_scenario_name = data.scenario_name
-        else:
-            raise HTTPException(status_code=400, detail="Un scénario (scenario_id ou scenario_name) est requis")
-    
-    # Check if target year already exists (only for actual exercises, not scenarios)
-    if not data.is_scenario:
-        existing = fiscal_years_collection.find_one({
-            "tenant_id": current_user["id"],
-            "year": data.new_year,
-            "type": {"$ne": "scenario"}
-        })
-        
-        if existing:
-            raise HTTPException(
-                status_code=400, 
-                detail=f"Un exercice fiscal existe déjà pour l'année {data.new_year}"
-            )
-    
-    # Check if scenario already has a fiscal year for this year
-    if data.is_scenario and resolved_scenario_id:
-        existing_scenario_fy = fiscal_years_collection.find_one({
-            "scenario_id": resolved_scenario_id,
-            "year": data.new_year,
-            "type": "scenario"
-        })
-        if existing_scenario_fy:
-            raise HTTPException(
-                status_code=400,
-                detail=f"Ce scénario a déjà un exercice pour l'année {data.new_year}"
-            )
-    
-    # Auto-generate dates for new year
+
+    scenario_name, scenario_id = _resolve_scenario_info(data)
+    _validate_duplicate_target(data, current_user["id"], scenario_id)
+
     new_start_date = f"{data.new_year}-01-01"
-    new_end_date = f"{data.new_year}-12-31"
-    
-    if data.is_scenario:
-        new_name = f"Scénario {data.new_year} — {resolved_scenario_name}"
-    else:
-        new_name = f"Exercice {data.new_year}"
-    
-    # Copy context from source fiscal year
-    source_context = fy.get("context", {})
-    new_context = {
-        "employees": source_context.get("employees"),
-        "revenue": source_context.get("revenue"),
-        "surface_area": source_context.get("surface_area"),
-        "excluded_categories": source_context.get("excluded_categories", [])
-    }
-    
-    # If source has no context, try company fallback
-    company = companies_collection.find_one({"tenant_id": current_user["id"]})
-    if not source_context and company:
-        new_context = {
-            "employees": company.get("employees"),
-            "revenue": company.get("revenue"),
-            "surface_area": company.get("surface_area"),
-            "excluded_categories": company.get("excluded_categories", [])
-        }
-    
-    # Create new fiscal year
+    name = f"Scenario {data.new_year} — {scenario_name}" if data.is_scenario else f"Exercice {data.new_year}"
+
     new_fy = {
-        "name": new_name,
+        "name": name,
         "year": data.new_year,
         "start_date": new_start_date,
-        "end_date": new_end_date,
+        "end_date": f"{data.new_year}-12-31",
         "status": "draft",
         "type": "scenario" if data.is_scenario else "actual",
         "tenant_id": current_user["id"],
         "company_id": fy.get("company_id"),
-        "context": new_context,
+        "context": _resolve_context_from_source_or_company(fy.get("context", {}), current_user["id"]),
         "created_at": datetime.now(timezone.utc).isoformat(),
-        "duplicated_from": fiscal_year_id
+        "duplicated_from": fiscal_year_id,
     }
-    
-    # Scenario-specific fields
+
     if data.is_scenario:
-        new_fy["scenario_name"] = resolved_scenario_name
+        new_fy["scenario_name"] = scenario_name
         new_fy["reference_fiscal_year_id"] = fiscal_year_id
-        if resolved_scenario_id:
-            new_fy["scenario_id"] = resolved_scenario_id
-    
+        if scenario_id:
+            new_fy["scenario_id"] = scenario_id
+
     result = fiscal_years_collection.insert_one(new_fy)
     new_fy_id = str(result.inserted_id)
-    
-    duplicated_activities = 0
-    
+
+    duplicated_count = 0
     if data.duplicate_activities:
-        # Get activities to duplicate (by fiscal_year_id)
-        source_fy_id = str(fy["_id"])
-        
-        query = {
-            "tenant_id": current_user["id"],
-            "fiscal_year_id": source_fy_id
-        }
-        
-        if data.activity_ids_to_duplicate:
-            query["_id"] = {"$in": [ObjectId(aid) for aid in data.activity_ids_to_duplicate]}
-        
-        activities = list(activities_collection.find(query))
-        
-        for activity in activities:
-            # Calculate new date (shift to new fiscal year)
-            old_date = activity.get("date", "")
-            if old_date:
-                # Simple date shift: same day/month in new year
-                try:
-                    old_dt = datetime.strptime(old_date, "%Y-%m-%d")
-                    new_year = int(new_start_date[:4])
-                    new_date = old_dt.replace(year=new_year).strftime("%Y-%m-%d")
-                except:
-                    new_date = new_start_date
-            else:
-                new_date = new_start_date
-            
-            new_activity = {
-                k: v for k, v in activity.items() 
-                if k not in ["_id", "created_at"]
-            }
-            new_activity["date"] = new_date
-            new_activity["fiscal_year_id"] = new_fy_id  # Associate with new fiscal year
-            new_activity["created_at"] = datetime.now(timezone.utc).isoformat()
-            new_activity["duplicated_from"] = str(activity["_id"])
-            
-            activities_collection.insert_one(new_activity)
-            duplicated_activities += 1
-    
+        duplicated_count = _duplicate_activities(
+            str(fy["_id"]), new_fy_id, new_start_date,
+            current_user["id"], data.activity_ids_to_duplicate,
+        )
+
     return {
         "id": new_fy_id,
         "message": "Fiscal year duplicated successfully",
-        "duplicated_activities": duplicated_activities,
-        "type": "scenario" if data.is_scenario else "actual"
+        "duplicated_activities": duplicated_count,
+        "type": "scenario" if data.is_scenario else "actual",
     }
 
 
