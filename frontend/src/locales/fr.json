@@ -199,7 +199,58 @@
       "recalculate": "Recalculer",
       "noChange": "Aucun changement",
       "increase": "Augmentation",
-      "decrease": "Diminution"
+      "decrease": "Diminution",
+      "noActivityData": "Aucune donnée d'activité pour cet exercice fiscal."
+    },
+    "plausibility": {
+      "title": "Diagnostic de plausibilité",
+      "subtitle": "Vérifie la cohérence de vos données",
+      "runBtn": "Lancer le diagnostic",
+      "running": "Analyse...",
+      "noIssues": "Aucune anomalie détectée",
+      "critical": "critique",
+      "criticals": "critiques",
+      "warning": "attention",
+      "warnings": "attentions",
+      "info": "info",
+      "infos": "infos",
+      "contextExercise": "Exercice",
+      "contextActivities": "activités",
+      "contextSector": "Secteur"
+    },
+    "gamification": {
+      "defaultMsg": "Continuez comme ça !",
+      "defaultNext": "Complétez plus de catégories pour débloquer des badges",
+      "completed": "complété"
+    },
+    "reporting": {
+      "marketBased": "Market-based",
+      "locationBased": "Location-based"
+    },
+    "emptyState": "Le tableau de bord affichera vos émissions une fois que vous aurez créé un exercice fiscal et saisi des données.",
+    "scopes": {
+      "scope1": "Scope 1",
+      "scope2": "Scope 2",
+      "scope3_amont": "Scope 3 Amont",
+      "scope3_aval": "Scope 3 Aval"
+    },
+    "scenario": {
+      "label": "Scénario",
+      "remove": "Retirer le scénario",
+      "coverage": "Couverture de l'effort",
+      "s1": "Scénario S1",
+      "s2": "Scénario S2",
+      "s3": "Scénario S3"
+    },
+    "chart": {
+      "clickToSeeCategories": "Cliquez pour voir les catégories",
+      "clickToDetail": "Cliquez pour détailler",
+      "topSubcategories": "Top 7 sous-catégories",
+      "noData": "Aucune donnée disponible",
+      "emissionsByScope": "Émissions par Scope",
+      "categories": "Catégories",
+      "emissionsPerKCHF": "Émissions par kCHF",
+      "fiscalComparison": "Évolution des émissions"
     }
   },
   "fiscalYear": {
@@ -374,7 +425,9 @@
     "fin_vie_produits": "Traitement en fin de vie des produits vendus",
     "actifs_loues_aval": "Actifs loués en aval",
     "franchises": "Franchises",
-    "investissements": "Investissements"
+    "investissements": "Investissements",
+    "unknown": "Non catégorisé",
+    "other": "Autre"
   },
   "sectors": {
     "manufacturing": "Industrie manufacturière",

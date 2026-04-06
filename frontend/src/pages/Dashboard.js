@@ -346,10 +346,10 @@ const Dashboard = () => {
       
       // Transform scopes data for the chart
       const scopeLabels = {
-        scope1: 'Scope 1',
-        scope2: 'Scope 2',
-        scope3_amont: 'Scope 3 Amont',
-        scope3_aval: 'Scope 3 Aval'
+        scope1: t('dashboard.scopes.scope1'),
+        scope2: t('dashboard.scopes.scope2'),
+        scope3_amont: t('dashboard.scopes.scope3_amont'),
+        scope3_aval: t('dashboard.scopes.scope3_aval')
       };
       
       const scope_data = Object.entries(data.scopes || {}).map(([scope, values]) => ({
@@ -408,10 +408,10 @@ const Dashboard = () => {
   };
 
   const scopeNames = {
-    scope1: 'Scope 1',
-    scope2: 'Scope 2',
-    scope3_amont: 'Scope 3 - Amont',
-    scope3_aval: 'Scope 3 - Aval',
+    scope1: t('dashboard.scopes.scope1'),
+    scope2: t('dashboard.scopes.scope2'),
+    scope3_amont: t('dashboard.scopes.scope3_amont'),
+    scope3_aval: t('dashboard.scopes.scope3_aval'),
   };
 
   const scopeIcons = {
@@ -444,16 +444,16 @@ const Dashboard = () => {
   if (!fiscalYears || fiscalYears.length === 0) {
     return (
       <EmptyFiscalYearState 
-        contextMessage="Le tableau de bord affichera vos émissions une fois que vous aurez créé un exercice fiscal et saisi des activités."
+        contextMessage={t('dashboard.emptyState')}
       />
     );
   }
 
   // Tab definitions
   const tabs = [
-    { id: 'suivi', label: 'Suivi de saisie', icon: ClipboardList },
-    { id: 'resultats', label: 'Résultats', icon: BarChart3 },
-    { id: 'objectifs', label: 'Objectifs', icon: Target }
+    { id: 'suivi', label: t('dashboard.tabs.tracking'), icon: ClipboardList },
+    { id: 'resultats', label: t('dashboard.tabs.results'), icon: BarChart3 },
+    { id: 'objectifs', label: t('dashboard.tabs.objectives'), icon: Target }
   ];
 
   return (
@@ -670,10 +670,10 @@ const Dashboard = () => {
                 </div>
                 <div className="flex-1">
                   <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                    {summary.gamification.message || "Continuez comme ça !"}
+                    {summary.gamification.message || t('dashboard.gamification.defaultMsg')}
                   </h3>
                   <p className={`text-sm mt-1 ${isDark ? 'text-slate-300' : 'text-gray-600'}`}>
-                    {summary.gamification.next_milestone || "Complétez plus de catégories pour débloquer des badges"}
+                    {summary.gamification.next_milestone || t('dashboard.gamification.defaultNext')}
                   </p>
                 </div>
                 <div className="text-right">
@@ -682,7 +682,7 @@ const Dashboard = () => {
                       ? Math.round((stats.completedCategories / stats.totalCategories) * 100) 
                       : 0}%
                   </div>
-                  <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>complété</p>
+                  <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>{t('dashboard.gamification.completed')}</p>
                 </div>
               </div>
             </motion.div>
@@ -703,10 +703,10 @@ const Dashboard = () => {
                 </div>
                 <div>
                   <h2 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                    Diagnostic de plausibilité
+                    {t('dashboard.plausibility.title')}
                   </h2>
                   <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-                    Vérifie la cohérence de vos données
+                    {t('dashboard.plausibility.subtitle')}
                   </p>
                 </div>
               </div>
@@ -725,7 +725,7 @@ const Dashboard = () => {
                 ) : (
                   <ShieldCheck className="w-4 h-4" />
                 )}
-                {plausibilityLoading ? 'Analyse...' : 'Lancer le diagnostic'}
+                {plausibilityLoading ? t('dashboard.plausibility.running') : t('dashboard.plausibility.runBtn')}
               </button>
             </div>
 
@@ -743,25 +743,25 @@ const Dashboard = () => {
                     {plausibilityResult.summary.critical > 0 && (
                       <span className="flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-full bg-red-500/15 text-red-500">
                         <AlertTriangle className="w-3.5 h-3.5" />
-                        {plausibilityResult.summary.critical} critique{plausibilityResult.summary.critical > 1 ? 's' : ''}
+                        {plausibilityResult.summary.critical} {plausibilityResult.summary.critical > 1 ? t('dashboard.plausibility.criticals') : t('dashboard.plausibility.critical')}
                       </span>
                     )}
                     {plausibilityResult.summary.warning > 0 && (
                       <span className="flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-full bg-amber-500/15 text-amber-500">
                         <AlertTriangle className="w-3.5 h-3.5" />
-                        {plausibilityResult.summary.warning} attention{plausibilityResult.summary.warning > 1 ? 's' : ''}
+                        {plausibilityResult.summary.warning} {plausibilityResult.summary.warning > 1 ? t('dashboard.plausibility.warnings') : t('dashboard.plausibility.warning')}
                       </span>
                     )}
                     {plausibilityResult.summary.info > 0 && (
                       <span className="flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-full bg-sky-500/15 text-sky-500">
                         <Info className="w-3.5 h-3.5" />
-                        {plausibilityResult.summary.info} info{plausibilityResult.summary.info > 1 ? 's' : ''}
+                        {plausibilityResult.summary.info} {plausibilityResult.summary.info > 1 ? t('dashboard.plausibility.infos') : t('dashboard.plausibility.info')}
                       </span>
                     )}
                     {plausibilityResult.summary.total_alerts === 0 && (
                       <span className="flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-full bg-green-500/15 text-green-500">
                         <CheckCircle className="w-3.5 h-3.5" />
-                        Aucune anomalie détectée
+                        {t('dashboard.plausibility.noIssues')}
                       </span>
                     )}
                   </div>
@@ -806,9 +806,9 @@ const Dashboard = () => {
 
                   {/* Context info */}
                   <p className={`text-xs mt-3 ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>
-                    Exercice : {plausibilityResult.context_used.fiscal_year || '—'}
-                    {' · '}{plausibilityResult.context_used.activities_count} activités
-                    {' · '}Secteur : {plausibilityResult.context_used.sector}
+                    {t('dashboard.plausibility.contextExercise')} : {plausibilityResult.context_used.fiscal_year || '—'}
+                    {' · '}{plausibilityResult.context_used.activities_count} {t('dashboard.plausibility.contextActivities')}
+                    {' · '}{t('dashboard.plausibility.contextSector')} : {plausibilityResult.context_used.sector}
                   </p>
                 </motion.div>
               )}
@@ -1076,7 +1076,7 @@ const Dashboard = () => {
                     <button
                       onClick={() => setSelectedScenarioEntityId(null)}
                       className="p-1 rounded-lg hover:bg-red-500/10 transition-colors"
-                      title="Retirer le scénario"
+                      title={t('dashboard.scenario.remove')}
                     >
                       <X className="w-4 h-4 text-red-500" />
                     </button>
@@ -1095,7 +1095,7 @@ const Dashboard = () => {
                   <div className="flex items-center gap-2 mb-3">
                     <FlaskConical className="w-4 h-4 text-violet-500" />
                     <span className={`text-sm font-semibold ${isDark ? 'text-violet-300' : 'text-violet-700'}`}>
-                      Couverture de l'effort — {scenarioEntities.find(s => s.id === selectedScenarioEntityId)?.name || 'Scénario'}
+                      {t('dashboard.scenario.coverage')} — {scenarioEntities.find(s => s.id === selectedScenarioEntityId)?.name || t('dashboard.scenario.label')}
                     </span>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -1258,13 +1258,13 @@ const Dashboard = () => {
                               <p className={`text-sm font-semibold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>Année {label}</p>
                               {items.map((item, i) => {
                                 const nameMap = {
-                                  target_total: 'Cible totale',
-                                  actual_scope1: 'Scope 1',
-                                  actual_scope2: 'Scope 2',
-                                  actual_scope3: 'Scope 3',
-                                  scenario_scope1: 'Scénario S1',
-                                  scenario_scope2: 'Scénario S2',
-                                  scenario_scope3: 'Scénario S3',
+                                  target_total: t('dashboard.objectives.targetTotal'),
+                                  actual_scope1: t('dashboard.scopes.scope1'),
+                                  actual_scope2: t('dashboard.scopes.scope2'),
+                                  actual_scope3: t('dashboard.objectives.scope3'),
+                                  scenario_scope1: t('dashboard.scenario.s1'),
+                                  scenario_scope2: t('dashboard.scenario.s2'),
+                                  scenario_scope3: t('dashboard.scenario.s3'),
                                 };
                                 return (
                                   <div key={item.dataKey || `legend-${i}`} className="flex items-center gap-2 text-xs py-0.5">
@@ -1310,16 +1310,16 @@ const Dashboard = () => {
                       />
                       
                       {/* Actual emissions - stacked bars */}
-                      <Bar dataKey="actual_scope1" name="Scope 1" stackId="actual" fill="#FB923C" radius={[0, 0, 0, 0]} maxBarSize={32} />
-                      <Bar dataKey="actual_scope2" name="Scope 2" stackId="actual" fill="#60A5FA" radius={[0, 0, 0, 0]} maxBarSize={32} />
-                      <Bar dataKey="actual_scope3" name="Scope 3" stackId="actual" fill="#A78BFA" radius={[4, 4, 0, 0]} maxBarSize={32} />
+                      <Bar dataKey="actual_scope1" name={t('dashboard.scopes.scope1')} stackId="actual" fill="#FB923C" radius={[0, 0, 0, 0]} maxBarSize={32} />
+                      <Bar dataKey="actual_scope2" name={t('dashboard.scopes.scope2')} stackId="actual" fill="#60A5FA" radius={[0, 0, 0, 0]} maxBarSize={32} />
+                      <Bar dataKey="actual_scope3" name={t('dashboard.objectives.scope3')} stackId="actual" fill="#A78BFA" radius={[4, 4, 0, 0]} maxBarSize={32} />
 
                       {/* Scenario emissions - stacked bars with transparency */}
                       {selectedScenarioEntityId && scenarioDataPoints.length > 0 && (
                         <>
-                          <Bar dataKey="scenario_scope1" name="Scénario S1" stackId="scenario" fill="#FB923C" fillOpacity={0.4} stroke="#FB923C" strokeDasharray="4 2" strokeWidth={1} radius={[0, 0, 0, 0]} maxBarSize={32} />
-                          <Bar dataKey="scenario_scope2" name="Scénario S2" stackId="scenario" fill="#60A5FA" fillOpacity={0.4} stroke="#60A5FA" strokeDasharray="4 2" strokeWidth={1} radius={[0, 0, 0, 0]} maxBarSize={32} />
-                          <Bar dataKey="scenario_scope3" name="Scénario S3" stackId="scenario" fill="#A78BFA" fillOpacity={0.4} stroke="#A78BFA" strokeDasharray="4 2" strokeWidth={1} radius={[4, 4, 0, 0]} maxBarSize={32} />
+                          <Bar dataKey="scenario_scope1" name={t('dashboard.scenario.s1')} stackId="scenario" fill="#FB923C" fillOpacity={0.4} stroke="#FB923C" strokeDasharray="4 2" strokeWidth={1} radius={[0, 0, 0, 0]} maxBarSize={32} />
+                          <Bar dataKey="scenario_scope2" name={t('dashboard.scenario.s2')} stackId="scenario" fill="#60A5FA" fillOpacity={0.4} stroke="#60A5FA" strokeDasharray="4 2" strokeWidth={1} radius={[0, 0, 0, 0]} maxBarSize={32} />
+                          <Bar dataKey="scenario_scope3" name={t('dashboard.scenario.s3')} stackId="scenario" fill="#A78BFA" fillOpacity={0.4} stroke="#A78BFA" strokeDasharray="4 2" strokeWidth={1} radius={[4, 4, 0, 0]} maxBarSize={32} />
                         </>
                       )}
                     </ComposedChart>
@@ -1619,7 +1619,7 @@ const Dashboard = () => {
                         <AlertTriangle className="w-12 h-12 mx-auto mb-3 text-amber-500 opacity-50" />
                         <h3 className="text-lg font-bold mb-2">Aucune activité trouvée</h3>
                         <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-                          {recalcResult.message || "Aucune donnée d'activité pour cet exercice fiscal."}
+                          {recalcResult.message || t('dashboard.recalculate.noActivityData')}
                         </p>
                         <button
                           onClick={() => setRecalcResult(null)}

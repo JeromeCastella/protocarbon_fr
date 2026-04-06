@@ -199,7 +199,58 @@
       "recalculate": "Neu berechnen",
       "noChange": "Keine Änderung",
       "increase": "Zunahme",
-      "decrease": "Abnahme"
+      "decrease": "Abnahme",
+      "noActivityData": "Keine Aktivitätsdaten für dieses Geschäftsjahr."
+    },
+    "plausibility": {
+      "title": "Plausibilitätsdiagnose",
+      "subtitle": "Überprüft die Konsistenz Ihrer Daten",
+      "runBtn": "Diagnose starten",
+      "running": "Analyse...",
+      "noIssues": "Keine Anomalien festgestellt",
+      "critical": "kritisch",
+      "criticals": "kritisch",
+      "warning": "Warnung",
+      "warnings": "Warnungen",
+      "info": "Info",
+      "infos": "Infos",
+      "contextExercise": "Geschäftsjahr",
+      "contextActivities": "Aktivitäten",
+      "contextSector": "Branche"
+    },
+    "gamification": {
+      "defaultMsg": "Weiter so!",
+      "defaultNext": "Vervollständigen Sie mehr Kategorien, um Abzeichen freizuschalten",
+      "completed": "abgeschlossen"
+    },
+    "reporting": {
+      "marketBased": "Market-based",
+      "locationBased": "Location-based"
+    },
+    "emptyState": "Das Dashboard zeigt Ihre Emissionen an, sobald Sie ein Geschäftsjahr erstellt und Daten eingegeben haben.",
+    "scopes": {
+      "scope1": "Scope 1",
+      "scope2": "Scope 2",
+      "scope3_amont": "Scope 3 Vorgelagert",
+      "scope3_aval": "Scope 3 Nachgelagert"
+    },
+    "scenario": {
+      "label": "Szenario",
+      "remove": "Szenario entfernen",
+      "coverage": "Massnahmenabdeckung",
+      "s1": "Szenario S1",
+      "s2": "Szenario S2",
+      "s3": "Szenario S3"
+    },
+    "chart": {
+      "clickToSeeCategories": "Klicken für Kategorien",
+      "clickToDetail": "Klicken für Details",
+      "topSubcategories": "Top 7 Unterkategorien",
+      "noData": "Keine Daten verfügbar",
+      "emissionsByScope": "Emissionen nach Scope",
+      "categories": "Kategorien",
+      "emissionsPerKCHF": "Emissionen pro kCHF",
+      "fiscalComparison": "Emissionsentwicklung"
     }
   },
   "fiscalYear": {
@@ -374,7 +425,9 @@
     "fin_vie_produits": "Entsorgung verkaufter Produkte",
     "actifs_loues_aval": "Nachgelagerte Leasinggüter",
     "franchises": "Franchise",
-    "investissements": "Investitionen"
+    "investissements": "Investitionen",
+    "unknown": "Nicht kategorisiert",
+    "other": "Andere"
   },
   "sectors": {
     "manufacturing": "Fertigungsindustrie",

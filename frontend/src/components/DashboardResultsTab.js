@@ -134,7 +134,7 @@ const DashboardResultsTab = ({
     
     if (scopes.scope1?.total > 0) {
       data.push({
-        name: 'Scope 1',
+        name: t('dashboard.scopes.scope1'),
         key: 'scope1',
         emissions: scopes.scope1.total,
         categories: scopes.scope1.categories || {},
@@ -144,7 +144,7 @@ const DashboardResultsTab = ({
     
     if (scopes.scope2?.total > 0) {
       data.push({
-        name: 'Scope 2',
+        name: t('dashboard.scopes.scope2'),
         key: 'scope2',
         emissions: scopes.scope2.total,
         categories: scopes.scope2.categories || {},
@@ -154,7 +154,7 @@ const DashboardResultsTab = ({
     
     if (scope3Total > 0) {
       data.push({
-        name: 'Scope 3',
+        name: t('dashboard.objectives.scope3'),
         key: 'scope3',
         emissions: scope3Total,
         categories: scope3Categories,
@@ -163,7 +163,7 @@ const DashboardResultsTab = ({
     }
     
     return data;
-  }, [scopeBreakdown]);
+  }, [scopeBreakdown, t]);
   
   // Prepare drill-down data for categories
   const categoryDrillDownData = useMemo(() => {
@@ -201,7 +201,7 @@ const DashboardResultsTab = ({
     });
     
     return Object.entries(allCategories)
-      .map(([name, value]) => ({ name, emissions: value }))
+      .map(([name, value]) => ({ name, displayName: t(`categories.${name}`) || name, emissions: value }))
       .sort((a, b) => b.emissions - a.emissions)
       .slice(0, 7);
   }, [scopeBreakdown]);
@@ -236,7 +236,7 @@ const DashboardResultsTab = ({
           {formatChartValue(data.emissions)}
         </p>
         <p className={`text-xs mt-1 ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-          {language === 'fr' ? 'Cliquez pour voir les catégories' : 'Klicken für Kategorien'}
+          {t('dashboard.chart.clickToSeeCategories')}
         </p>
       </div>
     );
@@ -293,7 +293,7 @@ const DashboardResultsTab = ({
             </div>
             <div className="flex-1">
               <p className={`text-xs uppercase tracking-wide ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-                {language === 'fr' ? 'Émissions totales' : 'Gesamtemissionen'}
+                {t('dashboard.results.totalEmissions')}
               </p>
               <div className="flex items-baseline gap-1.5 mt-1">
                 <span className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
@@ -320,7 +320,7 @@ const DashboardResultsTab = ({
             </div>
             <div className="flex-1">
               <p className={`text-xs uppercase tracking-wide ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-                {language === 'fr' ? 'Émissions par kCHF' : 'Emissionen pro kCHF'}
+                {t('dashboard.chart.emissionsPerKCHF')}
               </p>
               <div className="flex items-baseline gap-1.5 mt-1">
                 <span className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
@@ -477,7 +477,7 @@ const DashboardResultsTab = ({
           className={`p-6 rounded-2xl ${isDark ? 'bg-slate-800' : 'bg-white shadow-sm border border-gray-100'}`}
         >
           <h3 className={`text-lg font-semibold mb-4 ${isDark ? 'text-white' : 'text-gray-900'}`}>
-            {language === 'fr' ? 'Top 7 sous-catégories' : 'Top 7 Unterkategorien'}
+            {t('dashboard.chart.topSubcategories')}
           </h3>
           
           <div className="space-y-3">
@@ -516,7 +516,7 @@ const DashboardResultsTab = ({
             
             {top10Subcategories.length === 0 && (
               <p className={`text-center py-8 ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>
-                {language === 'fr' ? 'Aucune donnée disponible' : 'Keine Daten verfügbar'}
+                {t('dashboard.chart.noData')}
               </p>
             )}
           </div>
@@ -531,7 +531,7 @@ const DashboardResultsTab = ({
         className={`p-6 rounded-2xl ${isDark ? 'bg-slate-800' : 'bg-white shadow-sm border border-gray-100'}`}
       >
         <h3 className={`text-lg font-semibold mb-4 ${isDark ? 'text-white' : 'text-gray-900'}`}>
-          {language === 'fr' ? 'Évolution des émissions' : 'Emissionsentwicklung'}
+          {t('dashboard.chart.fiscalComparison')}
         </h3>
         
         <div className="h-72">
@@ -579,7 +579,7 @@ const DashboardResultsTab = ({
               <Area
                 type="monotone"
                 dataKey="scope1"
-                name="Scope 1"
+                name={t('dashboard.scopes.scope1')}
                 stackId="stack"
                 stroke={SCOPE_COLORS.scope1}
                 strokeWidth={2}
@@ -590,7 +590,7 @@ const DashboardResultsTab = ({
               <Area
                 type="monotone"
                 dataKey="scope2"
-                name="Scope 2"
+                name={t('dashboard.scopes.scope2')}
                 stackId="stack"
                 stroke={SCOPE_COLORS.scope2}
                 strokeWidth={2}
@@ -601,7 +601,7 @@ const DashboardResultsTab = ({
               <Area
                 type="monotone"
                 dataKey="scope3"
-                name="Scope 3"
+                name={t('dashboard.objectives.scope3')}
                 stackId="stack"
                 stroke={SCOPE_COLORS.scope3}
                 strokeWidth={2}
