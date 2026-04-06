@@ -25,13 +25,6 @@ Application full-stack (React/FastAPI/MongoDB) pour la comptabilité carbone d'e
 ## i18n (Internationalisation FR/DE) — COMPLETED
 - Phase 1-7 complètes: Layout, Navigation, Dashboard, DataEntry, Admin, Curation, Settings, Auth/Aide
 
-## Admin Factors Form — Réorganisé (April 2026)
-- **Noms simplifiés FR/DE** en position principale
-- **source_product_name** : nouveau champ éditable (nom technique BAFU/ecoinvent)
-- **Noms techniques (name_fr/name_de)** : section repliable "Noms techniques (import)"
-- **reporting_method** : sélecteur Location / Market / Non défini
-- **popularity_score** : slider 0-100 (Rare → Courant)
-
 ## Refactoring — Réduction dette technique
 
 ### Phase 1 — DashboardResultsTab (COMPLETED)
@@ -46,48 +39,41 @@ Application full-stack (React/FastAPI/MongoDB) pour la comptabilité carbone d'e
 ### Phase 3 — AdminFactorsTab (COMPLETED — April 2026)
 - **Avant**: 1155 lignes monolithiques
 - **Après**: Orchestrateur ~90 lignes + hook + 7 sous-composants
-- Hook: `/hooks/useAdminFactors.js` (~400 lignes — toute la logique métier)
+- Hook: `/hooks/useAdminFactors.js` (~400 lignes)
 - Composants: `/components/admin/factors/`
-  - `FactorsToolbar.jsx` — barre de recherche, filtres, boutons action
-  - `FactorsTable.jsx` — tableau de données avec actions par ligne
-  - `FactorsPagination.jsx` — contrôles de pagination
-  - `FactorFormModal.jsx` — modal création/édition facteur + `ImpactsSection`
-  - `ImportModal.jsx` — modal import JSON
-  - `VersionModal.jsx` — modal création nouvelle version
-  - `HistoryModal.jsx` — modal historique des versions
+  - `FactorsToolbar.jsx`, `FactorsTable.jsx`, `FactorsPagination.jsx`, `FactorFormModal.jsx`, `ImportModal.jsx`, `VersionModal.jsx`, `HistoryModal.jsx`, `index.js`
+- Tests: 100% frontend (12/12 tests PASS)
+
+### Phase 4 — Dashboard.js (COMPLETED — April 2026)
+- **Avant**: 1782 lignes monolithiques
+- **Après**: Orchestrateur ~110 lignes + hook + 6 sous-composants + constants
+- Hook: `/hooks/useDashboard.js` (~336 lignes)
+- Composants: `/components/dashboard-page/`
+  - `DashboardHeader.jsx` (~80 lignes) — En-tête + toggle reporting + onglets
+  - `TrackingTab.jsx` (~293 lignes) — Tab Suivi (stats, scope completion, gamification, plausibilité)
+  - `ObjectivesTab.jsx` (~333 lignes) — Tab Objectifs (SBTi, scénarios, progression)
+  - `TrajectoryChart.jsx` (~183 lignes) — Graphique recharts trajectoire de réduction
+  - `ObjectiveModal.jsx` (~141 lignes) — Modal création objectif SBTi
+  - `RecalcModal.jsx` (~239 lignes) — Modal recalcul émissions
+  - `constants.js` (~47 lignes) — Utilitaires et constantes partagées
   - `index.js` — barrel export
-- Tests: 100% frontend (12/12 tests PASS) — validated by testing agent
+- Tests: 100% frontend (11/11 tests PASS)
 
 ## Key Files
-- `frontend/src/pages/DataEntry.js` — Dashboard principal
-- `frontend/src/components/admin/AdminFactorsTab.jsx` — Orchestrateur facteurs (refactoré)
+- `frontend/src/pages/Dashboard.js` — Orchestrateur dashboard (refactoré Phase 4)
+- `frontend/src/hooks/useDashboard.js` — Hook logique dashboard
+- `frontend/src/components/dashboard-page/` — Sous-composants dashboard
+- `frontend/src/components/admin/AdminFactorsTab.jsx` — Orchestrateur facteurs (refactoré Phase 3)
 - `frontend/src/hooks/useAdminFactors.js` — Hook logique facteurs
 - `frontend/src/components/admin/factors/` — Sous-composants facteurs
 - `backend/routes/plausibility.py` — POST /check endpoint
 - `backend/services/plausibility.py` — 11 règles métier
 - `backend/routes/dashboard.py` — API dashboard (reporting_view sur tous endpoints)
 - `frontend/src/context/LanguageContext.js` — Hook i18n
-- `frontend/src/locales/fr.json` — Traductions FR (~1100 clés)
-- `frontend/src/locales/de.json` — Traductions DE (~1100 clés)
-
-## API Endpoints
-- `POST /api/plausibility/check` — Diagnostic de plausibilité
-- `PUT /api/admin/emission-factors-v2/{id}` — Mise à jour facteur
-- `GET /api/dashboard/summary|kpis|scope-breakdown|fiscal-comparison` — reporting_view
-- `GET /api/objectives/trajectory` — reporting_view
-
-## Code Quality Fixes (April 2026)
-- Hardcoded secrets removed from 16 test files → centralized in conftest_credentials.py
-- Token storage: sessionStorage by default, localStorage only with "Remember Me"
-- All components use useAuth().token instead of direct localStorage access
-- React hook dependencies fixed (token added to CurationWorkbench useCallback/useEffect)
-- Array index keys replaced with stable identifiers (AdminFactorsTab, GuidedEntryModal)
-- console.log replaced with logger utility (LocationLinkPanel)
 
 ## Backlog
 
 ### P0
-- **Refactoring Phase 4 — Dashboard.js** (1696 lignes): Découpage du composant le plus lourd
 - **Refactoring Backend** — `curation.py` (list_curation_factors), `activities.py` (create_activity_for_impact, apply_business_rules)
 - **FEAT-CUR-03 — Regroupement par patterns**: Vue qui groupe les facteurs similaires
 
