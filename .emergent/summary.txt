@@ -1,136 +1,149 @@
 <analysis>**original_problem_statement**: 
-L'utilisateur a initialement demandé un calculateur d'empreinte carbone pour entreprise (Proto Carbon) suivant le GHG Protocol. Dans cette session, l'utilisateur a demandé d'implémenter une fonctionnalité d'export complet de la base de données (mongodump) pour des raisons légales de localisation, de corriger un rapport complet de qualité de code (sécurité, refactoring, hook dependencies), et de basculer la base de production vers MongoDB Atlas.
+L'utilisateur a initialement demandé un calculateur d'empreinte carbone pour entreprise (Proto Carbon) suivant le GHG Protocol. PRODUCT REQUIREMENTS: Calculateur complet avec saisie de données, curation des facteurs, gestion multi-utilisateurs, rapports détaillés, Dual Reporting, diagnostics de plausibilité et internationalisation (i18n) de l'interface.
 
-**User's preferred language**: Français (INSTRUCT next agent to respond in French).
+**User's preferred language**: French (INSTRUCT next agent to respond in French only)
 
 **what currently exists?** 
-Une application full-stack (React/FastAPI/MongoDB) de comptabilité carbone. L'application possède un mode de saisie de données robuste, un atelier de curation pour la gestion des facteurs d'émission, des exports administratifs (dont un nouveau système de dump MongoDB avec fallback en pur Python), et une authentification par JWT classique.
+Une application full-stack (React/FastAPI/MongoDB) de comptabilité carbone. L'application possède un mode de saisie de données, un atelier de curation, un dashboard détaillé avec dual reporting (market/location), un module de test de plausibilité (basé sur des règles Python), des formulaires d'administration des facteurs d'émission mis à jour, et un système i18n en cours d'intégration.
 
 **Last working item**: 
-    - Last item agent was working: Résolution du crash du backend en production (Erreurs HTTP 520 sur  et ).
-    - Status: IN PROGRESS
-    - Agent Testing Done: Y (Testé avec succès en preview, mais échec en production)
-    - Which testing method agent to use? manual testing by curl / Kubernetes logs inspection
+    - Last item agent was working: Validation de la Phase 3 de l'i18n (Modals + Wizard de saisie : , , ). L'agent a vérifié la compilation frontend. Une erreur temporaire de double export par défaut dans  a été auto-corrigée par le hot reload (Webpack affiche Compiled successfully). L'agent a ensuite envoyé un  pour valider les prochaines étapes.
+    - Status: USER VERIFICATION PENDING
+    - Agent Testing Done: N (Backend ping et logs Webpack vérifiés uniquement).
+    - Which testing method agent to use? screenshot tool (pour vérifier visuellement la modale de saisie après l'intégration i18n), puis testing_agent_v3_fork.
     - User Testing Done: N
 
 **All Pending/In progress Issue list**: 
-  Issue 1: Production deployment is returning HTTP 520 (P0)
+  Issue 1: Redéploiement Production (Action utilisateur requise) - P0
+  Issue 2: Validation visuelle bloquée sur Data Entry (Timeout Ajouter du fork précédent) - P1
   
   Issues Detail:
   - Issue 1: 
-     - Attempted fixes: L'agent a corrigé le fichier  qui était corrompu (il bloquait l'inclusion des fichiers  dans le build). L'agent a également annulé une tentative de migration vers des cookies  car cela cassait les règles CORS via le proxy Kubernetes. Malgré la correction du , le serveur de production crashe toujours.
-     - Next debug checklist: 
-        1. Utiliser le  ou des commandes  pour lire les logs d'exécution (runtime logs) du pod backend en production (pas seulement les logs de build).
-        2. Vérifier si le crash est dû à une erreur de connexion à MongoDB Atlas (TimeOut) à cause d'une IP non whitelistée dans Atlas. 
-        3. S'assurer que les variables d'environnement de production sont correctement injectées.
-     - Why fix this issue and what will be achieved with the fix? L'application de production est actuellement totalement indisponible pour l'utilisateur.
-     - Status: IN PROGRESS
+     - Attempted fixes: Les correctifs de code ont été faits dans des sessions précédentes.
+     - Next debug checklist: Il faut informer/rappeler à l'utilisateur qu'il doit mettre à jour le secret  dans les paramètres de déploiement Emergent avec la valeur correcte et relancer un déploiement pour que la production refonctionne.
+     - Why fix this issue and what will be achieved with the fix? La production est actuellement cassée (HTTP 520).
+     - Status: USER VERIFICATION PENDING
      - Is recurring issue? Y
-     - Should Test frontend/backend/both after fix? both
+     - Should Test frontend/backend/both after fix: both
+     - Blocked on other issue: None
+
+  - Issue 2: 
+     - Attempted fixes: Vérification des logs de compilation (le composant  compile avec succès maintenant).
+     - Next debug checklist: Prendre un screenshot de la page  et interagir avec la modale (bouton Ajouter) pour s'assurer qu'elle s'ouvre bien sans erreur de rendu liée aux traductions i18n.
+     - Why fix this issue and what will be achieved with the fix? Confirmer que la Phase 3 de l'i18n n'a pas introduit de régression bloquante.
+     - Status: TESTING PENDING
+     - Is recurring issue? N
+     - Should Test frontend/backend/both after fix: frontend
      - Blocked on other issue: None
 
 **In progress Task List**: 
-  Aucune tâche de développement de fonctionnalité en cours (le blocage de production est la priorité absolue).
+  Task 1: Poursuite et finalisation du plan d'internationalisation (i18n) - Phase 3 & Suivantes
+
+ Task Detail:
+  - Task 1: 
+     - Where to resume: Lire la réponse de l'utilisateur au message  laissé en suspens. Procéder au test de la Phase 3 (Screenshot sur DataEntry), puis enchaîner sur la Phase 4 (Admin), Phase 5 (Curation), Phase 6 (Settings/Profile), Phase 7 (Auth/Aide).
+     - What will be achieved with this? Une application entièrement bilingue (FR/DE) utilisant dynamiquement .
+     - Status: IN PROGRESS
+     - Should Test frontend/backend/both after fix: frontend
+     - Blocked on something: Attente réponse  + Validation UI (Issue 2).
 
 **Upcoming and Future Tasks**
     Upcoming Tasks:
-    - **P0: FEAT-CUR-03 — Atelier de Curation (Phase 3)**: Regroupement par patterns (grouper les facteurs ayant des noms similaires pour des corrections en masse). .
+    - **P0: FEAT-CUR-03 — Atelier de Curation (Phase 3)**: Regroupement par patterns (grouper les facteurs ayant des noms similaires pour des corrections en masse). Endpoint: .
     - **P1: FEAT-03 — Gestion multi-utilisateurs**: Rôles Admin, Éditeur, Lecteur.
     - **P1: Exports PDF/Excel**: Export des données et rapports.
-    - **P1: FEAT-DR — Dual Reporting Location-based / Market-based**: Double reporting Scope 2 selon GHG Protocol.
-    - **P1: FEAT-PLAUS — Test de plausibilité global**: Cohérence des volumes vs. informations générales.
 
     Future Tasks:
     - **P2: Base de données actions plan climat cantonal**.
     - **P2: Logs d'audit pour les calculs d'émission**.
     - **P2: Optimisation requêtes DB**: Projections MongoDB dans .
-    - **Refactoring (Important)**: Découper les composants React massifs signalés par le rapport de qualité de code (ex:  1016 lignes,  1579 lignes,  970 lignes).
+    - **Refactoring (Important)**: Découper les composants React massifs signalés par le rapport de qualité de code (ex: , , , ).
 
 **Completed work in this session**
-- Test global de tous les chemins de saisie de données via  (100% SUCCESS) (DONE)
-- Implémentation du téléchargement d'export MongoDB () dans le panel Admin (DONE)
-- Implémentation d'un fallback pur Python BSON/ZIP pour l'export MongoDB si le binaire  n'est pas présent sur l'hôte (DONE)
-- Sécurité: Extraction des secrets hardcodés dans les fichiers de tests Python vers  (DONE)
-- Clean up: Remplacement des  par un utilitaire  (DONE)
-- React: Correction des  (DONE)
-- Refactoring Python: Réduction de la complexité cyclomatique dans  et  (DONE)
-- DevOps: Réparation du  corrompu (DONE)
-
-*(Note: Une migration de localStorage vers des cookies httpOnly a été réalisée puis annulée/reverted car le proxy Kubernetes force un  qui est incompatible avec l'envoi de credentials).*
+- Vérification de l'état des services via supervisor (Tous RUNNING) (DONE)
+- Vérification des logs de compilation Webpack confirmant la résolution de l'erreur Syntax error: Only one default export allowed per module sur  (DONE)
+- Contrôle de l'état de santé du backend (Ping local renvoyant 200 OK) (DONE)
 
 **Earlier issues found/mentioned but not fixed**
    - Issue 1: Composants React monolithiques
-     - Debug checklist: Analyser et scinder , , et .
-     - Why to solve this issue and what will be achieved with this? La maintenabilité du code frontend devient critique, ces fichiers dépassent les 1000 lignes.
+     - Debug checklist: Analyser et scinder  (1040 lignes) et  (~ 1800 lignes).
+     - Why to solve this issue and what will be achieved with this? La maintenabilité du code frontend devient critique.
      - Should Test frontend/backend/both after fix: frontend
-     - Is recurring issue? N
+     - Is recurring issue? Y
 
 **Known issue recurrence from previous fork**
-  - Recurrence count: 0
-  - Status: RESOLVED
+  - Issue recurrence in previous fork: Déploiement en production KO (L'utilisateur doit configurer le secret FRONTEND_URL).
+  - Recurrence count: 4
+  - Status: BLOCKED (Attente de l'action de l'utilisateur sur la console de déploiement)
 
 **Code Architecture**
 
 
 **Key Technical Concepts**
-- **Fallback Mongodump**: Si le serveur ne dispose pas de l'exécutable natif , le backend FastAPI utilise Pymongo pour créer un fichier  contenant les BSONs compatibles avec un .
-- **CORS et Proxy**: Le frontend et backend communiquent via  JWT. Ne **pas** utiliser de cookies  ni modifier . Le framework Starlette gère très bien le wildcard en reflétant l'origine exacte, ce qui passe les règles CORS du proxy.
-- **Base de données Production**: L'utilisateur veut connecter la production à MongoDB Atlas. **Attention**: Ne mettez pas l'URL Atlas dans le  du code source, sinon l'environnement  crashera (à cause des restrictions d'IP Atlas). Le  local () doit rester dans le , et l'URL Atlas doit être définie exclusivement via les variables d'environnement de la plateforme de déploiement.
+- **Système i18n**: Suppression des conditions inline de type  au profit du hook  et de . 
+- **Tests Visuels Front**: L'interface i18n modifie fortement l'arborescence des textes, les localators textuels stricts dans les tests auto peuvent échouer (timeout). Préférer le screenshot_tool pour valider le layout.
 
 **key DB schema**
-  - : {_id, code, name_fr, name_de, source_product_name, is_public, impacts: [{scope, value, unit}], ...}
+  - : {_id, code, name_fr, name_de, name_simple_fr, name_simple_de, reporting_method, source_product_name, location_factor_id, impacts: [{scope, value, unit}], ...}
   - : {_id, email, password_hash, role}
 
 **changes in tech stack**
-  - Ajout de  dans les dépendances Python pour permettre la connexion à MongoDB Atlas ().
+  - None
 
-**All files of reference**
-  - : Logique de l'export Mongo.
-  - : Fichier vital pour s'assurer que  passe bien au build.
-  - : Utilitaires de logs pour remplacer les console.log en prod.
-
-**Areas that need refactoring**:
+**All files of reference** 
   - 
+  - 
+  - 
+  - 
+  - 
+
+**Areas that need refactoring**: 
   - 
   - 
 
 **key api endpoints**
-  - : Récupère les métadonnées de la DB.
-  - : Télécharge le dump (.archive ou .zip).
-  - : (Point de blocage actuel en production).
+  - : Endpoint de diagnostic.
+  - : Health check (utilisé localement pour ping le serveur).
 
-**Critical Info for New Agent**
-  - **LA PRODUCTION EST CASSÉE (HTTP 520)**. Le serveur Cloudflare renvoie une erreur 520 car le backend FastAPI crashe silencieusement au démarrage.
-  - L'environnement  fonctionne parfaitement à 100%. 
-  - La cause la plus probable du crash en production est que l'URL MongoDB pointe vers Atlas mais que l'IP du serveur n'est pas autorisée dans Atlas, provoquant un TimeOut au démarrage de FastAPI. **Allez chercher les logs runtime Kubernetes du backend pour confirmer.**
-  - **Ne touchez plus au système d'authentification**. Il a été restauré à son état fonctionnel (localStorage + Bearer Token).
+**Critical Info for New Agent** 
+- L'agent vient de terminer sa réflexion par un . **La toute première chose à faire est de lire le message de l'utilisateur (le pending HUMAN message) pour avoir son accord ou ses nouvelles instructions.**
+- Le bug de syntaxe ( double export) est **résolu**. Webpack compile parfaitement. Ne cherchez pas à réparer ce fichier sauf si une nouvelle erreur apparaît.
+- Rappelez toujours l'utilisateur à propos de la variable d'environnement manquante  pour son déploiement en production, cela traîne depuis plusieurs forks.
 
-**documents and test reports created in this job**
-  -  (Tests Data Entry)
-  -  (Tests de non-regression auth)
-  - 
+**documents and test reports created in this job** 
+  - None (job très court centré sur la vérification et l'attente du retour humain).
+  -  (Toujours présent et à jour)
 
 **Last 10 User Messages and any pending HUMAN messages** 
-- **User**: Demande de vérifier une analyse externe qui suggérait de modifier  vers un domaine explicite. -> **Agent**: Explique que l'analyse est erronée car Starlette gère le  de façon sécurisée en reflétant l'origine.
-- **User**: Signale qu'il ne peut toujours pas se connecter en production, obtenant une erreur 520 sur  et . -> **Agent**: Utilise le deployment_agent. Constate que le preview est sain (), mais que les routes de la production renvoient effectivement un code Cloudflare 520 (Le backend ne répond pas).
+ - *Agent:* (Exécute les vérifications logs/supervisors et la résolution du frontend compile).
+ - *Agent:* Appelle l'outil  pour proposer le plan de test (validation Phase 3 i18n) et la poursuite des tâches.
+ - **PENDING HUMAN MESSAGE:** L'utilisateur va répondre au . Lisez la toute dernière interaction de l'historique de chat pour obtenir cette réponse.
 
 **Project Health Check:**
-- Broken: L'environnement de PRODUCTION est totalement cassé (HTTP 520).
+- Broken: None
 - Mocked: None
 
 **3rd Party Integrations** 
-- Google Gemini Pro via Emergent LLM Key (Atelier Curation)
-- MongoDB Atlas (En cours de configuration pour la production - nécessite whitelist IP).
+- Google Gemini Pro — uses Emergent LLM Key (Curation)
+- MongoDB Atlas — requires User-provided Configuration
 
 **Testing status**
-  - Testing agent used after significant changes: YES (Itérations 52, 53)
+  - Testing agent used after significant changes: NO (En attente d'implémentation / accord utilisateur)
   - Troubleshoot agent used after agent stuck in loop: NO
-  - Test files created: 
-  - Known regressions: La production crashe (HTTP 520) au démarrage.
+  - Test files created: None
+  - Known regressions: Timeout UI dans le workflow de test automatisé lors de l'accès à la modale Ajouter après les modifications i18n (à revérifier via screenshot_tool).
 
 **Credentials to test flow:**
-  - Email: 
-  - Password: 
+- Email: 
+- Password: 
 
 **What agent forgot to execute**
-L'agent précédent s'est arrêté après avoir constaté le code 520 en production. Il a oublié de chercher et d'analyser les **logs d'exécution du backend déployé** (runtime logs du pod Kubernetes) pour prouver avec certitude la cause du crash (probablement le NetworkTimeout Pymongo vers Atlas). Vous devez commencer par là.</analysis>
+Rien n'a été oublié. L'agent s'est arrêté à la barrière de confirmation () avant de déclencher des tests interactifs lourds.
+
+**Debugging checklist for current issue**
+    Issue: Vérification visuelle de la Phase 3 i18n
+    Frontend files to check: 
+       - 
+       - 
+    Backend files to check: N/A
+    </analysis>
