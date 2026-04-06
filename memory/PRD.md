@@ -13,69 +13,52 @@ Application full-stack (React/FastAPI/MongoDB) pour la comptabilité carbone d'e
 - Dashboard avec métriques GHG Protocol
 - Saisie de données (slide-over) + Recherche globale de facteurs (Fuse.js, toggle Expert)
 - Gestion de produits (slide-over)
-- Administration
-- Facteurs d'émission avec grille/tableau
-- Exercices fiscaux
-- Atelier de Curation (Phase 1 & 2)
+- Administration: Facteurs d'émission, Exercices fiscaux, Atelier de Curation (Phase 1 & 2)
 - Vue tabulaire détaillée : Slide-over panel pour activités par scope
 - Export MongoDB (mongodump)
-- FEAT-DR Dual Reporting : Toggle Market/Location sur Dashboard (tous endpoints)
-- FEAT-PLAUS Test de plausibilité : Diagnostic de cohérence des données (11 règles V1)
-
-## i18n (Internationalisation FR/DE) — COMPLETED
-- Phase 1-7 complètes: Layout, Navigation, Dashboard, DataEntry, Admin, Curation, Settings, Auth/Aide
+- FEAT-DR Dual Reporting : Toggle Market/Location sur Dashboard
+- FEAT-PLAUS Test de plausibilité : 11 règles métier
+- i18n (Internationalisation FR/DE) — 7 phases complètes
 
 ## Refactoring — Réduction dette technique
 
-### Phase 1 — DashboardResultsTab (COMPLETED)
-- Composants: `EvolutionChart`, `KPICards`, `ScopeChart`, `TopSubcategories`, `RecommendationsList`, `constants`, `index`
-- Dossier: `/components/dashboard/`
+### Frontend — Composants React
 
-### Phase 2 — GuidedEntryModal (COMPLETED)
-- Hook: `useGuidedEntry.js` (~390 lignes)
-- Composant: `LeftPanel.js`
-- Dossier: `/components/guided-entry/`
+| Phase | Composant | Avant | Après | Status |
+|-------|-----------|-------|-------|--------|
+| 1 | DashboardResultsTab | monolithique | 5 sous-composants dans `/components/dashboard/` | DONE |
+| 2 | GuidedEntryModal | monolithique | hook `useGuidedEntry.js` + `LeftPanel.js` | DONE |
+| 3 | AdminFactorsTab | 1155 lignes | ~90 lignes + hook + 7 sous-composants dans `/components/admin/factors/` | DONE |
+| 4 | Dashboard.js | 1782 lignes | ~110 lignes + hook + 6 sous-composants dans `/components/dashboard-page/` | DONE |
 
-### Phase 3 — AdminFactorsTab (COMPLETED — April 2026)
-- **Avant**: 1155 lignes monolithiques
-- **Après**: Orchestrateur ~90 lignes + hook + 7 sous-composants
-- Hook: `/hooks/useAdminFactors.js` (~400 lignes)
-- Composants: `/components/admin/factors/`
-  - `FactorsToolbar.jsx`, `FactorsTable.jsx`, `FactorsPagination.jsx`, `FactorFormModal.jsx`, `ImportModal.jsx`, `VersionModal.jsx`, `HistoryModal.jsx`, `index.js`
-- Tests: 100% frontend (12/12 tests PASS)
+### Backend — Services métier (April 2026)
 
-### Phase 4 — Dashboard.js (COMPLETED — April 2026)
-- **Avant**: 1782 lignes monolithiques
-- **Après**: Orchestrateur ~110 lignes + hook + 6 sous-composants + constants
-- Hook: `/hooks/useDashboard.js` (~336 lignes)
-- Composants: `/components/dashboard-page/`
-  - `DashboardHeader.jsx` (~80 lignes) — En-tête + toggle reporting + onglets
-  - `TrackingTab.jsx` (~293 lignes) — Tab Suivi (stats, scope completion, gamification, plausibilité)
-  - `ObjectivesTab.jsx` (~333 lignes) — Tab Objectifs (SBTi, scénarios, progression)
-  - `TrajectoryChart.jsx` (~183 lignes) — Graphique recharts trajectoire de réduction
-  - `ObjectiveModal.jsx` (~141 lignes) — Modal création objectif SBTi
-  - `RecalcModal.jsx` (~239 lignes) — Modal recalcul émissions
-  - `constants.js` (~47 lignes) — Utilitaires et constantes partagées
-  - `index.js` — barrel export
-- Tests: 100% frontend (11/11 tests PASS)
+| Source | Cible | Fonctions extraites | Status |
+|--------|-------|---------------------|--------|
+| `routes/curation.py` | `services/curation_service.py` | `build_factor_id_filters`, `build_curation_query`, `resolve_sort_field`, `resolve_location_names`, `resolve_single_location_name` | DONE |
+| `routes/activities.py` | `services/activity_service.py` | `normalize_scope`, `apply_business_rules`, `resolve_activity_date`, `resolve_quantity`, `resolve_quantity_from_values`, `compute_dual_reporting`, `recalculate_emissions` | DONE |
+
+**Gains backend :**
+- `curation.py` : 819 → ~720 lignes (-12%), DRY (5x `or_filters` → 1 helper)
+- `activities.py` : 703 → ~520 lignes (-26%), logique métier testable indépendamment
+- Tests de régression : 14 tests pytest dans `/backend/tests/test_refactored_services.py`
 
 ## Key Files
-- `frontend/src/pages/Dashboard.js` — Orchestrateur dashboard (refactoré Phase 4)
+- `frontend/src/pages/Dashboard.js` — Orchestrateur dashboard
 - `frontend/src/hooks/useDashboard.js` — Hook logique dashboard
 - `frontend/src/components/dashboard-page/` — Sous-composants dashboard
-- `frontend/src/components/admin/AdminFactorsTab.jsx` — Orchestrateur facteurs (refactoré Phase 3)
+- `frontend/src/components/admin/AdminFactorsTab.jsx` — Orchestrateur facteurs
 - `frontend/src/hooks/useAdminFactors.js` — Hook logique facteurs
 - `frontend/src/components/admin/factors/` — Sous-composants facteurs
-- `backend/routes/plausibility.py` — POST /check endpoint
-- `backend/services/plausibility.py` — 11 règles métier
-- `backend/routes/dashboard.py` — API dashboard (reporting_view sur tous endpoints)
-- `frontend/src/context/LanguageContext.js` — Hook i18n
+- `backend/services/curation_service.py` — Helpers curation
+- `backend/services/activity_service.py` — Logique métier activités
+- `backend/routes/curation.py` — Routes curation (allégé)
+- `backend/routes/activities.py` — Routes activités (allégé)
 
 ## Backlog
 
 ### P0
-- **Refactoring Backend** — `curation.py` (list_curation_factors), `activities.py` (create_activity_for_impact, apply_business_rules)
-- **FEAT-CUR-03 — Regroupement par patterns**: Vue qui groupe les facteurs similaires
+- **FEAT-CUR-03 — Regroupement par patterns**: Vue qui groupe les facteurs similaires. Endpoint: `/api/curation/groups`.
 
 ### P1
 - **FEAT-03 — Multi-utilisateurs**: Rôles Admin/Éditeur/Lecteur
@@ -84,7 +67,7 @@ Application full-stack (React/FastAPI/MongoDB) pour la comptabilité carbone d'e
 ### P2
 - Base de données actions plan climat cantonal
 - Logs d'audit calculs d'émission
-- Optimisation requêtes DB (projections MongoDB dans dashboard.py)
+- Optimisation requêtes DB (projections MongoDB)
 - Type hints Python et Migration TypeScript (progressif)
 
 ## Credentials
