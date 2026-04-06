@@ -12,6 +12,10 @@ sys.path.append('/app/backend')
 
 from config import emission_factors_collection, subcategories_collection, categories_collection
 from services.auth import require_admin
+from services.curation_service import (
+    build_factor_id_filters, build_curation_query,
+    resolve_sort_field, resolve_location_names, resolve_single_location_name,
+)
 from utils import serialize_doc, ef_id_filter
 
 router = APIRouter(prefix="/curation", tags=["Curation"])
@@ -78,49 +82,9 @@ async def list_curation_factors(
     sort_order: str = "asc",
     current_user: dict = Depends(require_admin),
 ):
-    query = {"deleted_at": None}
-
-    if search:
-        query["$or"] = [
-            {"name_fr": {"$regex": search, "$options": "i"}},
-            {"name_de": {"$regex": search, "$options": "i"}},
-            {"name_simple_fr": {"$regex": search, "$options": "i"}},
-            {"name_simple_de": {"$regex": search, "$options": "i"}},
-            {"source_product_name": {"$regex": search, "$options": "i"}},
-            {"tags": {"$regex": search, "$options": "i"}},
-        ]
-    if subcategory:
-        query["subcategory"] = subcategory
-    if default_unit:
-        query["default_unit"] = default_unit
-    if curation_status:
-        if curation_status == "untreated":
-            # Match factors with null or "untreated" curation_status
-            query["curation_status"] = {"$in": [None, "untreated"]}
-        else:
-            query["curation_status"] = curation_status
-    if is_public == "true":
-        query["is_public"] = True
-    elif is_public == "false":
-        query["is_public"] = False
-    if reporting_method == "market":
-        query["reporting_method"] = "market"
-    elif reporting_method == "location":
-        query["reporting_method"] = {"$in": [None, "location"]}
-    if has_simple_name == "true":
-        query["$and"] = query.get("$and", []) + [
-            {"name_simple_fr": {"$exists": True, "$ne": None}},
-            {"$expr": {"$ne": ["$name_simple_fr", "$name_fr"]}}
-        ]
-    elif has_simple_name == "false":
-        query["$or"] = [
-            {"name_simple_fr": {"$exists": False}},
-            {"name_simple_fr": None},
-            {"$expr": {"$eq": ["$name_simple_fr", "$name_fr"]}}
-        ]
-
+    query = build_curation_query(search, subcategory, curation_status, is_public, has_simple_name, default_unit, reporting_method)
     sort_dir = 1 if sort_order == "asc" else -1
-    sort_field = sort_by if sort_by in ["name_fr", "subcategory", "popularity_score", "is_public", "curation_status", "source_product_name", "reporting_method"] else "subcategory"
+    sort_field = resolve_sort_field(sort_by)
 
     total = emission_factors_collection.count_documents(query)
     skip = (page - 1) * page_size
@@ -131,22 +95,8 @@ async def list_curation_factors(
         .limit(page_size)
     )
 
-    # Resolve location factor names for market-based factors
     items = [serialize_doc(f) for f in factors]
-    loc_ids = [f.get("location_factor_id") for f in items if f.get("location_factor_id")]
-    if loc_ids:
-        loc_factors = {
-            str(lf.get("id", lf.get("_id"))): lf
-            for lf in emission_factors_collection.find(
-                {"$or": [{"id": {"$in": loc_ids}}, {"_id": {"$in": [ObjectId(i) for i in loc_ids if len(i) == 24]}}]},
-                {"_id": 0, "id": 1, "name_simple_fr": 1, "name_fr": 1}
-            )
-        }
-        for item in items:
-            lid = item.get("location_factor_id")
-            if lid and lid in loc_factors:
-                lf = loc_factors[lid]
-                item["_locationName"] = lf.get("name_simple_fr") or lf.get("name_fr") or lid
+    resolve_location_names(items, emission_factors_collection)
 
     return {
         "items": items,
@@ -200,17 +150,7 @@ async def inline_edit_factor(
     from utils import find_emission_factor
     updated = find_emission_factor(emission_factors_collection, factor_id)
     doc = serialize_doc(updated)
-
-    # Resolve location factor name for the response
-    lid = doc.get("location_factor_id")
-    if lid:
-        loc_factor = emission_factors_collection.find_one(
-            {"$or": [{"id": lid}, {"_id": ObjectId(lid) if len(lid) == 24 else None}], "deleted_at": None},
-            {"_id": 0, "name_simple_fr": 1, "name_fr": 1}
-        )
-        if loc_factor:
-            doc["_locationName"] = loc_factor.get("name_simple_fr") or loc_factor.get("name_fr") or lid
-
+    resolve_single_location_name(doc, emission_factors_collection)
     return doc
 
 
@@ -225,17 +165,7 @@ async def bulk_preview(
     if not changes:
         raise HTTPException(400, "Aucun changement spécifié")
 
-    from bson import ObjectId
-
-    # Build filter for the selected factors
-    or_filters = []
-    for fid in payload.factor_ids:
-        try:
-            or_filters.append({"_id": ObjectId(fid)})
-        except Exception:
-            pass
-        or_filters.append({"id": fid})
-
+    or_filters = build_factor_id_filters(payload.factor_ids)
     if not or_filters:
         raise HTTPException(400, "Aucun facteur sélectionné")
 
@@ -270,14 +200,7 @@ async def bulk_apply(
 
     from bson import ObjectId
 
-    or_filters = []
-    for fid in payload.factor_ids:
-        try:
-            or_filters.append({"_id": ObjectId(fid)})
-        except Exception:
-            pass
-        or_filters.append({"id": fid})
-
+    or_filters = build_factor_id_filters(payload.factor_ids)
     if not or_filters:
         raise HTTPException(400, "Aucun facteur sélectionné")
 
@@ -424,14 +347,7 @@ async def bulk_copy_originals(
         copy_from = f"name_{payload.lang}"
     target_field = f"name_simple_{payload.lang}"
 
-    or_filters = []
-    for fid in payload.factor_ids:
-        try:
-            or_filters.append({"_id": ObjectId(fid)})
-        except Exception:
-            pass
-        or_filters.append({"id": fid})
-
+    or_filters = build_factor_id_filters(payload.factor_ids)
     if not or_filters:
         raise HTTPException(400, "Aucun facteur sélectionné")
 
@@ -575,14 +491,7 @@ async def translate_preview(
     source_field = cfg["source_field"]
     target_field = cfg["target_field"]
 
-    or_filters = []
-    for fid in payload.factor_ids:
-        try:
-            or_filters.append({"_id": ObjectId(fid)})
-        except Exception:
-            pass
-        or_filters.append({"id": fid})
-
+    or_filters = build_factor_id_filters(payload.factor_ids)
     if not or_filters:
         raise HTTPException(400, "Aucun facteur sélectionné")
 
@@ -666,13 +575,7 @@ async def suggest_titles(
 
     from bson import ObjectId
 
-    or_filters = []
-    for fid in payload.factor_ids:
-        try:
-            or_filters.append({"_id": ObjectId(fid)})
-        except Exception:
-            pass
-        or_filters.append({"id": fid})
+    or_filters = build_factor_id_filters(payload.factor_ids)
 
     factors = list(emission_factors_collection.find(
         {"$or": or_filters, "deleted_at": None},

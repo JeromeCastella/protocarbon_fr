@@ -19,129 +19,14 @@ from models import ActivityCreate, ActivityUpdate, ActivityGroupUpdate
 from services.auth import get_current_user
 from services.emissions import create_factor_snapshot
 from services.scope_mapping import normalize_scope_for_reporting
+from services.activity_service import (
+    normalize_scope, apply_business_rules, resolve_activity_date,
+    resolve_quantity, resolve_quantity_from_values,
+    compute_dual_reporting, recalculate_emissions,
+)
 from utils import serialize_doc, find_emission_factor
 
 router = APIRouter(prefix="/activities", tags=["Activities"])
-
-
-# ==================== RÈGLES MÉTIER MULTI-IMPACTS ====================
-
-def normalize_scope(scope: str) -> str:
-    """Normalise les différentes notations de scope vers un format standard."""
-    if not scope:
-        return ''
-    
-    scope_lower = scope.lower().strip()
-    
-    # Normalisation du Scope 3.3 (amont énergie) - catégorie spécifique du GHG Protocol
-    # NOTE: scope3_amont (Scope 3 Amont) n'est PAS scope3_3 (catégorie 3.3)
-    if scope_lower in ['scope3_3', 'scope3.3', 'scope33']:
-        return 'scope3_3'
-    
-    return scope_lower
-
-
-def apply_business_rules(impacts: list, entry_scope: str, entry_category: str) -> list:
-    """
-    Filtre les impacts selon les règles GHG Protocol.
-    
-    Règles:
-    - Saisie Scope 1 ou Scope 2 → inclure impacts scope1, scope2, scope3_3
-    - Saisie Scope 3.3 (catégorie activites_combustibles_energie) → inclure uniquement scope3_3
-    - Saisie Scope 3 (autres catégories) → inclure uniquement scope3
-    - Si value = 0 → ne pas créer de ligne
-    
-    Les impacts sont identifiés par leur champ 'scope' uniquement :
-    - scope1 : Émissions directes
-    - scope2 : Émissions indirectes (électricité)
-    - scope3_3 : Amont énergie (catégorie 3.3 du GHG Protocol)
-    - scope3 : Autres émissions Scope 3
-    """
-    if not impacts:
-        return impacts
-    
-    # Normaliser le scope de saisie
-    normalized_entry_scope = normalize_scope(entry_scope) if entry_scope else ''
-    
-    # Déterminer le type de saisie
-    is_scope1_or_2_entry = normalized_entry_scope in ['scope1', 'scope2']
-    
-    # Catégorie 3.3 du GHG Protocol : activités liées aux combustibles et à l'énergie
-    is_scope3_3_entry = (
-        entry_category == 'activites_combustibles_energie' or 
-        normalized_entry_scope == 'scope3_3'
-    )
-    
-    # Autres catégories Scope 3
-    is_scope3_entry = (
-        normalized_entry_scope.startswith('scope3') and 
-        not is_scope3_3_entry
-    )
-    
-    filtered = []
-    for impact in impacts:
-        # Normaliser le scope de l'impact
-        impact_scope = normalize_scope(impact.get('scope', ''))
-        impact_value = impact.get('value', 0)
-        
-        # Règle : Exclure les impacts avec valeur = 0
-        if impact_value == 0:
-            continue
-        
-        if is_scope1_or_2_entry:
-            # Saisie Scope 1 ou 2 : inclure scope1, scope2, scope3_3
-            if impact_scope not in ['scope1', 'scope2', 'scope3_3']:
-                continue
-        elif is_scope3_3_entry:
-            # Saisie Scope 3.3 (amont énergie) : inclure uniquement scope3_3
-            if impact_scope != 'scope3_3':
-                continue
-        elif is_scope3_entry:
-            # Saisie Scope 3 (autres) : inclure uniquement scope3
-            if impact_scope != 'scope3':
-                continue
-        else:
-            # Fallback : inclure tous les impacts non-nuls
-            pass
-        
-        filtered.append(impact)
-    
-    return filtered
-
-
-def resolve_activity_date(activity_date, fiscal_year_id):
-    """Résout la date d'activité : date fournie > milieu de l'exercice fiscal > date du jour."""
-    if activity_date:
-        return activity_date
-    if fiscal_year_id:
-        fy = fiscal_years_collection.find_one({"_id": ObjectId(fiscal_year_id)})
-        if fy:
-            start = fy.get("start_date", "")[:10]
-            end = fy.get("end_date", "")[:10]
-            if start and end:
-                from datetime import datetime as dt
-                start_dt = dt.strptime(start, "%Y-%m-%d")
-                end_dt = dt.strptime(end, "%Y-%m-%d")
-                mid_dt = start_dt + (end_dt - start_dt) / 2
-                return mid_dt.strftime("%Y-%m-%d")
-    return datetime.now(timezone.utc).strftime("%Y-%m-%d")
-
-
-def resolve_quantity(activity, factor):
-    """Résout la quantité en tenant compte des conversions d'unité."""
-    quantity = activity.quantity
-    default_unit = factor.get("default_unit", activity.unit)
-
-    if activity.original_quantity is not None and activity.conversion_factor is not None:
-        return quantity
-
-    if activity.unit != default_unit:
-        unit_conversions = factor.get("unit_conversions", {})
-        conversion_key = f"{activity.unit}_to_{default_unit}"
-        if conversion_key in unit_conversions:
-            quantity = quantity * unit_conversions[conversion_key]
-
-    return quantity
 
 
 async def create_activity_for_impact(
@@ -163,29 +48,8 @@ async def create_activity_for_impact(
     display_category = 'activites_combustibles_energie' if impact_scope == 'scope3_3' else activity.category_id
     stored_scope = normalize_scope_for_reporting(impact_scope, display_category)
     
-    # Dual reporting: if factor is market-based, calculate location-based emissions
-    emissions_location = None
-    location_factor_snapshot = None
-    if factor.get("reporting_method") == "market" and factor.get("location_factor_id"):
-        loc_factor = emission_factors_collection.find_one(
-            {"id": factor["location_factor_id"], "deleted_at": None}
-        )
-        if not loc_factor:
-            try:
-                loc_factor = emission_factors_collection.find_one(
-                    {"_id": ObjectId(factor["location_factor_id"]), "deleted_at": None}
-                )
-            except Exception:
-                pass
-        if loc_factor:
-            loc_impacts = loc_factor.get("impacts", [])
-            matching_impact = next(
-                (i for i in loc_impacts if normalize_scope(i.get("scope", "")) == impact_scope),
-                loc_impacts[0] if loc_impacts else None
-            )
-            if matching_impact:
-                emissions_location = quantity * matching_impact.get("value", 0)
-            location_factor_snapshot = create_factor_snapshot(loc_factor)
+    # Dual reporting
+    emissions_location, location_factor_snapshot = compute_dual_reporting(factor, impact_scope, quantity)
 
     # Construire le document
     activity_doc = {
@@ -391,23 +255,7 @@ async def create_single_activity(activity: ActivityCreate, current_user: dict) -
     
     # Set date based on fiscal year if provided
     if not activity_doc.get("date"):
-        if activity_doc.get("fiscal_year_id"):
-            fy = fiscal_years_collection.find_one({"_id": ObjectId(activity_doc["fiscal_year_id"])})
-            if fy:
-                start = fy.get("start_date", "")[:10]
-                end = fy.get("end_date", "")[:10]
-                if start and end:
-                    from datetime import datetime as dt
-                    start_dt = dt.strptime(start, "%Y-%m-%d")
-                    end_dt = dt.strptime(end, "%Y-%m-%d")
-                    mid_dt = start_dt + (end_dt - start_dt) / 2
-                    activity_doc["date"] = mid_dt.strftime("%Y-%m-%d")
-                else:
-                    activity_doc["date"] = datetime.now(timezone.utc).strftime("%Y-%m-%d")
-            else:
-                activity_doc["date"] = datetime.now(timezone.utc).strftime("%Y-%m-%d")
-        else:
-            activity_doc["date"] = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+        activity_doc["date"] = resolve_activity_date(None, activity_doc.get("fiscal_year_id"))
     
     # Calculate emissions for manual factor
     emissions = 0
@@ -439,40 +287,6 @@ async def get_activity(activity_id: str, current_user: dict = Depends(get_curren
         raise HTTPException(status_code=404, detail="Activity not found")
     
     return serialize_doc(activity)
-
-
-@router.put("/{activity_id}")
-def recalculate_emissions(existing: dict, update_data: dict) -> dict:
-    """Recalcule les émissions si la quantité ou le facteur a changé."""
-    quantity = update_data.get("quantity", existing.get("quantity", 0))
-    factor_id = update_data.get("emission_factor_id", existing.get("emission_factor_id"))
-    if not factor_id:
-        return update_data
-
-    factor = find_emission_factor(emission_factors_collection, factor_id)
-    if not factor:
-        return update_data
-
-    unit = update_data.get("unit", existing.get("unit", ""))
-    quantity = resolve_quantity_from_values(quantity, unit, factor)
-
-    emissions = sum(quantity * imp.get("value", 0) for imp in factor.get("impacts", []))
-    update_data["emissions"] = emissions
-    update_data["calculated_emissions"] = emissions
-    update_data["factor_snapshot"] = create_factor_snapshot(factor)
-    return update_data
-
-
-def resolve_quantity_from_values(quantity: float, unit: str, factor: dict) -> float:
-    """Applique la conversion d'unité si nécessaire."""
-    default_unit = factor.get("default_unit", unit)
-    if unit == default_unit:
-        return quantity
-    unit_conversions = factor.get("unit_conversions", {})
-    conversion_key = f"{unit}_to_{default_unit}"
-    if conversion_key in unit_conversions:
-        return quantity * unit_conversions[conversion_key]
-    return quantity
 
 
 @router.put("/{activity_id}")
