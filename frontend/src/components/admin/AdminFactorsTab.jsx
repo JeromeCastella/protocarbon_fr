@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Search, Plus, Edit2, Trash2, Download, Upload, 
   Sparkles, GitBranch, History, Archive, X, Check, Tag, Layers,
-  ChevronLeft, ChevronRight, FlaskConical, ChevronDown, ChevronUp, MapPin
+  ChevronLeft, ChevronRight, FlaskConical, ChevronDown, ChevronUp, MapPin, Copy
 } from 'lucide-react';
 import axios from 'axios';
 import logger from '../../utils/logger';
@@ -240,6 +240,36 @@ const AdminFactorsTab = ({ factors, subcategories, pagination, onPageChange, onR
         value: imp.value?.toString() || ''
       })),
       unit_conversions: factor.unit_conversions || {},
+      tags: (factor.tags || []).join(', '),
+      source: factor.source || 'OFEV',
+      region: factor.region || 'Suisse',
+      year: factor.year || 2024,
+      is_public: factor.is_public !== false,
+      reporting_method: factor.reporting_method || '',
+      popularity_score: factor.popularity_score ?? 50
+    });
+    setShowFactorModal(true);
+  };
+
+  const handleDuplicateFactor = (factor) => {
+    setEditingFactor(null); // Mode création (pas édition)
+    const impacts = factor.impacts || [{ scope: factor.scope, category: factor.category, value: factor.value, unit: factor.unit }];
+
+    setFactorForm({
+      name_simple_fr: factor.name_simple_fr ? `${factor.name_simple_fr} (copie)` : '',
+      name_simple_de: factor.name_simple_de ? `${factor.name_simple_de} (Kopie)` : '',
+      source_product_name: factor.source_product_name || '',
+      name_fr: factor.name_fr ? `${factor.name_fr} (copie)` : '',
+      name_de: factor.name_de ? `${factor.name_de} (Kopie)` : '',
+      subcategory: factor.subcategory || '',
+      input_units: factor.input_units?.length ? [...factor.input_units] : [''],
+      default_unit: factor.default_unit || '',
+      impacts: impacts.map((imp) => ({
+        impactKey: imp.scope === 'scope1' ? 'scope1' : imp.scope === 'scope2' ? 'scope2' : imp.category === 'activites_combustibles_energie' ? 'scope3_3' : 'scope3',
+        ...imp,
+        value: imp.value?.toString() || ''
+      })),
+      unit_conversions: factor.unit_conversions ? { ...factor.unit_conversions } : {},
       tags: (factor.tags || []).join(', '),
       source: factor.source || 'OFEV',
       region: factor.region || 'Suisse',
@@ -526,6 +556,9 @@ const AdminFactorsTab = ({ factors, subcategories, pagination, onPageChange, onR
                           </button>
                           <button onClick={() => handleEditFactor(factor)} className={`p-2 rounded-lg ${isDark ? 'hover:bg-slate-600' : 'hover:bg-gray-100'}`} title={t('common.edit')}>
                             <Edit2 className="w-4 h-4" />
+                          </button>
+                          <button onClick={() => handleDuplicateFactor(factor)} className={`p-2 rounded-lg text-green-500 ${isDark ? 'hover:bg-green-500/20' : 'hover:bg-green-100'}`} title="Dupliquer">
+                            <Copy className="w-4 h-4" />
                           </button>
                           <button onClick={() => handleSoftDelete(factor.id)} className="p-2 rounded-lg text-amber-500 hover:bg-amber-500/10" title={t('common.archive')}>
                             <Archive className="w-4 h-4" />
