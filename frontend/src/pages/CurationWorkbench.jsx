@@ -329,7 +329,7 @@ const AISuggestModal = ({ factorIds, isDark, onApply, onClose }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selected, setSelected] = useState({});
-  const authToken = localStorage.getItem('token');
+  const { token: authToken } = useAuth();
 
   useEffect(() => {
     const fetchSuggestions = async () => {
@@ -409,7 +409,7 @@ const TranslatePreviewModal = ({ factorIds, direction, isDark, onApply, onClose 
   const [selected, setSelected] = useState({});
   const [targetField, setTargetField] = useState('');
   const [skipped, setSkipped] = useState(0);
-  const authToken = localStorage.getItem('token');
+  const { token: authToken } = useAuth();
 
   const dirLabels = {
     'fr_to_de': t('curation.translate.frToDe'),

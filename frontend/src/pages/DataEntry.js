@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useTheme } from '../context/ThemeContext';
 import { useLanguage } from '../context/LanguageContext';
+import { useAuth } from '../context/AuthContext';
 import { useFiscalYear } from '../context/FiscalYearContext';
 import axios from 'axios';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -534,7 +535,6 @@ const GlobalFactorSearch = ({ isDark, showExpertFactors, onToggleExpert, onSelec
     if (allFactors || isLoading) return;
     setIsLoading(true);
     try {
-      const token = localStorage.getItem('token');
       const res = await fetch(`${API_URL}/api/emission-factors/search-index`, {
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -719,6 +719,7 @@ const DataEntry = () => {
   const { isDark } = useTheme();
   const { t, language } = useLanguage();
   const { currentFiscalYear, fiscalYears } = useFiscalYear();
+  const { token } = useAuth();
   const [activeScope, setActiveScope] = useState('scope1');
   const [categories, setCategories] = useState([]);
   const [allSubcategories, setAllSubcategories] = useState([]); // For search category resolution

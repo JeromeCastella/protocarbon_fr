@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Download, FileJson, CheckCircle, AlertCircle, Loader2, Database, Package, Activity, Layers, FileCode, HardDrive, Shield, Info } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import { useLanguage } from '../../context/LanguageContext';
+import { useAuth } from '../../context/AuthContext';
 import logger from '../../utils/logger';
 
 import { API_URL } from '../../utils/apiConfig';
@@ -9,6 +10,7 @@ import { API_URL } from '../../utils/apiConfig';
 const AdminExportTab = () => {
   const { isDark } = useTheme();
   const { t, language } = useLanguage();
+  const { token } = useAuth();
   
   const [fiscalYears, setFiscalYears] = useState([]);
   const [selectedFiscalYear, setSelectedFiscalYear] = useState('all');
@@ -31,7 +33,7 @@ const AdminExportTab = () => {
   const fetchFiscalYears = async () => {
     try {
       const res = await fetch(`${API_URL}/api/fiscal-years`, {
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+        headers: { Authorization: `Bearer ${token}` }
       });
       if (res.ok) {
         const data = await res.json();
@@ -48,7 +50,7 @@ const AdminExportTab = () => {
     setDumpInfoLoading(true);
     try {
       const res = await fetch(`${API_URL}/api/export/mongodump/info`, {
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+        headers: { Authorization: `Bearer ${token}` }
       });
       if (res.ok) {
         const data = await res.json();
@@ -66,7 +68,7 @@ const AdminExportTab = () => {
     setDumpResult(null);
     try {
       const res = await fetch(`${API_URL}/api/export/mongodump`, {
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+        headers: { Authorization: `Bearer ${token}` }
       });
 
       if (!res.ok) {
@@ -124,7 +126,7 @@ const AdminExportTab = () => {
       }
       
       const res = await fetch(endpoint, {
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+        headers: { Authorization: `Bearer ${token}` }
       });
       
       if (!res.ok) {

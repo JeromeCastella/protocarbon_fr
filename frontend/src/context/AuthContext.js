@@ -6,6 +6,24 @@ import { API_URL } from '../utils/apiConfig';
 
 const AuthContext = createContext();
 
+// Token storage helpers - sessionStorage by default, localStorage only with "Remember Me"
+const getStoredToken = () => localStorage.getItem('token') || sessionStorage.getItem('token');
+
+const storeToken = (newToken, rememberMe) => {
+  if (rememberMe) {
+    localStorage.setItem('token', newToken);
+    sessionStorage.removeItem('token');
+  } else {
+    sessionStorage.setItem('token', newToken);
+    localStorage.removeItem('token');
+  }
+};
+
+const clearStoredToken = () => {
+  localStorage.removeItem('token');
+  sessionStorage.removeItem('token');
+};
+
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
@@ -16,7 +34,7 @@ export const useAuth = () => {
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [token, setToken] = useState(() => localStorage.getItem('token'));
+  const [token, setToken] = useState(() => getStoredToken());
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -48,7 +66,7 @@ export const AuthProvider = ({ children }) => {
       remember_me: rememberMe
     });
     const { token: newToken, user: userData } = response.data;
-    localStorage.setItem('token', newToken);
+    storeToken(newToken, rememberMe);
     axios.defaults.headers.common['Authorization'] = `Bearer ${newToken}`;
     setToken(newToken);
     setUser(userData);
@@ -63,7 +81,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = () => {
-    localStorage.removeItem('token');
+    clearStoredToken();
     delete axios.defaults.headers.common['Authorization'];
     setToken(null);
     setUser(null);
