@@ -7,7 +7,7 @@ import requests
 import os
 from tests.conftest_credentials import TEST_BASE_URL, TEST_ADMIN_EMAIL, TEST_ADMIN_PASSWORD
 
-BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://proto-carbon-phase7.preview.emergentagent.com')
+BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://carbon-refactor.preview.emergentagent.com')
 
 # Test credentials
 # credentials from conftest_credentials
