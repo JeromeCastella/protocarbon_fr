@@ -123,7 +123,7 @@ const AdminFactorsTab = ({ factors, subcategories, pagination, onPageChange, onR
                cat.value !== 'activites_combustibles_energie';
       }
       return false;
-    });
+    }).map(cat => ({ ...cat, label: t(`categories.${cat.value}`) }));
   };
 
   // Handle subcategory change - auto-generate impacts
@@ -862,8 +862,8 @@ const AdminFactorsTab = ({ factors, subcategories, pagination, onPageChange, onR
                           <div key={impact.impactKey} className={`rounded-xl border-2 overflow-hidden ${colorClasses[impact.impactKey] || 'border-gray-300'}`}>
                             <div className={`px-4 py-2 ${headerColors[impact.impactKey] || 'bg-gray-500'} text-white`}>
                               <div className="flex items-center justify-between">
-                                <span className="font-medium">{config?.label || impact.impactKey}</span>
-                                <span className="text-xs opacity-80">{config?.description}</span>
+                                <span className="font-medium">{config ? t(config.labelKey) : impact.impactKey}</span>
+                                <span className="text-xs opacity-80">{config ? t(config.descKey) : ''}</span>
                               </div>
                             </div>
                             <div className="p-4">
@@ -1055,7 +1055,7 @@ const AdminFactorsTab = ({ factors, subcategories, pagination, onPageChange, onR
                       <div key={`${impact.scope}-${impact.category || i}`} className={`p-4 rounded-xl border ${isDark ? 'bg-slate-700/50 border-slate-600' : 'bg-gray-50 border-gray-200'}`}>
                         <div className="flex items-center gap-3 mb-3">
                           <span className={`px-2 py-1 rounded text-xs font-medium text-white ${getScopeColor(impact.scope)}`}>{impact.scope?.replace('_', ' ')}</span>
-                          <span className={`text-sm ${isDark ? 'text-slate-300' : 'text-gray-600'}`}>{ALL_CATEGORIES.find(c => c.value === impact.category)?.label || impact.category}</span>
+                          <span className={`text-sm ${isDark ? 'text-slate-300' : 'text-gray-600'}`}>{t(`categories.${impact.category}`) || impact.category}</span>
                         </div>
                         <div className="grid grid-cols-2 gap-3">
                           <div>

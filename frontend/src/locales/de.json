@@ -106,12 +106,22 @@
     "perimeterDesc": "Wählen Sie die Kategorien aus, die in Ihrer CO2-Bilanz enthalten sein sollen. Nicht ausgewählte Kategorien werden nicht in der Dateneingabe angezeigt. Wählen Sie die geführte Konfiguration, um Sie bei der ersten Eingabe zu unterstützen.",
     "scope1": "Scope 1",
     "scope1Title": "Direkte Emissionen",
+    "scope1Desc": "Direkte Emissionen aus eigenen oder kontrollierten Quellen",
     "scope2": "Scope 2",
     "scope2Title": "Indirekte Energie",
+    "scope2Desc": "Indirekte Emissionen aus eingekaufter Energie",
     "scope3Amont": "Scope 3 Vorgelagert",
     "scope3AmontTitle": "Vorgelagert",
+    "scope3AmontDesc": "Indirekte Emissionen der vorgelagerten Wertschöpfungskette",
     "scope3Aval": "Scope 3 Nachgelagert",
-    "scope3AvalTitle": "Nachgelagert"
+    "scope3AvalTitle": "Nachgelagert",
+    "scope3AvalDesc": "Indirekte Emissionen der nachgelagerten Wertschöpfungskette"
+  },
+  "impactTypes": {
+    "direct": "Direkt",
+    "indirect": "Indirekt",
+    "upstream": "Vorgelagert",
+    "downstream": "Nachgelagert"
   },
   "dashboard": {
     "title": "Dashboard",

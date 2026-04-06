@@ -76,43 +76,44 @@ export const useAdminData = (isAdmin) => {
 };
 
 // Catégories GHG Protocol
+// Labels are resolved via t('categories.<value>') in consuming components
 export const ALL_CATEGORIES = [
-  { value: 'combustion_mobile', label: 'Combustion mobile', scope: 'scope1' },
-  { value: 'combustion_fixe', label: 'Combustion fixe', scope: 'scope1' },
-  { value: 'emissions_procedes', label: 'Émissions de procédés', scope: 'scope1' },
-  { value: 'emissions_fugitives', label: 'Émissions fugitives', scope: 'scope1' },
-  { value: 'electricite', label: 'Électricité', scope: 'scope2' },
-  { value: 'chaleur_vapeur', label: 'Chaleur et vapeur', scope: 'scope2' },
-  { value: 'refroidissement', label: 'Refroidissement', scope: 'scope2' },
-  { value: 'biens_services_achetes', label: 'Biens et services achetés', scope: 'scope3_amont' },
-  { value: 'biens_equipement', label: "Biens d'équipement", scope: 'scope3_amont' },
-  { value: 'activites_combustibles_energie', label: 'Activités liées aux combustibles et à l\'énergie', scope: 'scope3_amont' },
-  { value: 'transport_distribution_amont', label: 'Transport et distribution amont', scope: 'scope3_amont' },
-  { value: 'dechets_operations', label: 'Déchets générés par les opérations', scope: 'scope3_amont' },
-  { value: 'deplacements_professionnels', label: 'Déplacements professionnels', scope: 'scope3_amont' },
-  { value: 'deplacements_domicile_travail', label: 'Déplacements pendulaires des employés', scope: 'scope3_amont' },
-  { value: 'actifs_loues_amont', label: 'Actifs loués en amont', scope: 'scope3_amont' },
-  { value: 'transport_distribution_aval', label: 'Transport et distribution aval', scope: 'scope3_aval' },
-  { value: 'transformation_produits', label: 'Transformation des produits vendus', scope: 'scope3_aval' },
-  { value: 'utilisation_produits', label: 'Utilisation des produits vendus', scope: 'scope3_aval' },
-  { value: 'fin_vie_produits', label: 'Traitement en fin de vie des produits vendus', scope: 'scope3_aval' },
-  { value: 'actifs_loues_aval', label: 'Actifs loués en aval', scope: 'scope3_aval' },
-  { value: 'franchises', label: 'Franchises', scope: 'scope3_aval' },
-  { value: 'investissements', label: 'Investissements', scope: 'scope3_aval' },
+  { value: 'combustion_mobile', scope: 'scope1' },
+  { value: 'combustion_fixe', scope: 'scope1' },
+  { value: 'emissions_procedes', scope: 'scope1' },
+  { value: 'emissions_fugitives', scope: 'scope1' },
+  { value: 'electricite', scope: 'scope2' },
+  { value: 'chaleur_vapeur', scope: 'scope2' },
+  { value: 'refroidissement', scope: 'scope2' },
+  { value: 'biens_services_achetes', scope: 'scope3_amont' },
+  { value: 'biens_equipement', scope: 'scope3_amont' },
+  { value: 'activites_combustibles_energie', scope: 'scope3_amont' },
+  { value: 'transport_distribution_amont', scope: 'scope3_amont' },
+  { value: 'dechets_operations', scope: 'scope3_amont' },
+  { value: 'deplacements_professionnels', scope: 'scope3_amont' },
+  { value: 'deplacements_domicile_travail', scope: 'scope3_amont' },
+  { value: 'actifs_loues_amont', scope: 'scope3_amont' },
+  { value: 'transport_distribution_aval', scope: 'scope3_aval' },
+  { value: 'transformation_produits', scope: 'scope3_aval' },
+  { value: 'utilisation_produits', scope: 'scope3_aval' },
+  { value: 'fin_vie_produits', scope: 'scope3_aval' },
+  { value: 'actifs_loues_aval', scope: 'scope3_aval' },
+  { value: 'franchises', scope: 'scope3_aval' },
+  { value: 'investissements', scope: 'scope3_aval' },
 ];
 
 export const SCOPES = [
-  { value: 'scope1', label: 'Scope 1' },
-  { value: 'scope2', label: 'Scope 2' },
-  { value: 'scope3_amont', label: 'Scope 3 Amont' },
-  { value: 'scope3_aval', label: 'Scope 3 Aval' }
+  { value: 'scope1', labelKey: 'scope.scope1' },
+  { value: 'scope2', labelKey: 'scope.scope2' },
+  { value: 'scope3_amont', labelKey: 'scope.scope3Amont' },
+  { value: 'scope3_aval', labelKey: 'scope.scope3Aval' }
 ];
 
 export const IMPACT_TYPES = [
-  { value: 'direct', label: 'Direct' },
-  { value: 'indirect', label: 'Indirect' },
-  { value: 'upstream', label: 'Amont' },
-  { value: 'downstream', label: 'Aval' }
+  { value: 'direct', labelKey: 'impactTypes.direct' },
+  { value: 'indirect', labelKey: 'impactTypes.indirect' },
+  { value: 'upstream', labelKey: 'impactTypes.upstream' },
+  { value: 'downstream', labelKey: 'impactTypes.downstream' }
 ];
 
 export const COMMON_UNITS = ['L', 'kWh', 'MWh', 'kg', 't', 'km', 'm3', 'GJ', 'tep', 'passager.km', 'CHF', 'kCHF'];

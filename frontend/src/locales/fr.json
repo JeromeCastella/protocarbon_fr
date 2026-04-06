@@ -106,12 +106,22 @@
     "perimeterDesc": "Sélectionnez les catégories à inclure de votre bilan carbone. Les catégories non-sélectionnées n'apparaîtront pas dans la saisie de données. Choisissez la configuration guidée pour vous aider lors de la première saisie.",
     "scope1": "Scope 1",
     "scope1Title": "Émissions directes",
+    "scope1Desc": "Émissions directes de sources détenues ou contrôlées",
     "scope2": "Scope 2",
     "scope2Title": "Énergie indirecte",
+    "scope2Desc": "Émissions indirectes liées à l'énergie achetée",
     "scope3Amont": "Scope 3 Amont",
     "scope3AmontTitle": "Amont",
+    "scope3AmontDesc": "Émissions indirectes de la chaîne de valeur amont",
     "scope3Aval": "Scope 3 Aval",
-    "scope3AvalTitle": "Aval"
+    "scope3AvalTitle": "Aval",
+    "scope3AvalDesc": "Émissions indirectes de la chaîne de valeur aval"
+  },
+  "impactTypes": {
+    "direct": "Direct",
+    "indirect": "Indirect",
+    "upstream": "Amont",
+    "downstream": "Aval"
   },
   "dashboard": {
     "title": "Tableau de bord",
