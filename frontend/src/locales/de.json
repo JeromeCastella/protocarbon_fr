@@ -155,6 +155,7 @@
       "title": "Ergebnisse",
       "subtitle": "Analyse Ihrer CO2-Emissionen",
       "totalEmissions": "Gesamtemissionen",
+      "yearOverYearChange": "Veränderung N-1",
       "comparedToPrevious": "vs. vorheriges Geschäftsjahr",
       "byScope": "Aufteilung nach Scope",
       "byCategory": "Aufteilung nach Kategorie",
@@ -252,6 +253,9 @@
     },
     "chart": {
       "clickToSeeCategories": "Klicken für Kategorien",
+      "categories": "Kategorien",
+      "emissionsByScope": "Emissionen nach Scope",
+      "clickToDetail": "Klicken für Details",
       "clickToDetail": "Klicken für Details",
       "topSubcategories": "Top 7 Unterkategorien",
       "noData": "Keine Daten verfügbar",

@@ -824,10 +824,6 @@ const Dashboard = () => {
           kpis={kpis}
           scopeBreakdown={scopeBreakdown}
           fiscalComparison={fiscalComparison}
-          fiscalYears={fiscalYears.filter(fy => fy.type !== 'scenario')}
-          selectedFiscalYearForChart={selectedFiscalYearForChart}
-          setSelectedFiscalYearForChart={setSelectedFiscalYearForChart}
-          onOpenRecalcModal={openRecalcModal}
         />
       )}
 

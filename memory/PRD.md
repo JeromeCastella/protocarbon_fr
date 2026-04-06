@@ -56,6 +56,14 @@ Application full-stack (React/FastAPI/MongoDB) pour la comptabilité carbone d'e
 - `GET /api/dashboard/summary|kpis|scope-breakdown|fiscal-comparison` — reporting_view
 - `GET /api/objectives/trajectory` — reporting_view
 
+## Code Quality Fixes (April 2026)
+- Hardcoded secrets removed from 16 test files → centralized in conftest_credentials.py
+- Token storage: sessionStorage by default, localStorage only with "Remember Me"
+- All components use useAuth().token instead of direct localStorage access
+- React hook dependencies fixed (token added to CurationWorkbench useCallback/useEffect)
+- Array index keys replaced with stable identifiers (AdminFactorsTab, GuidedEntryModal)
+- console.log replaced with logger utility (LocationLinkPanel)
+
 ## Backlog
 ### P0
 - **FEAT-CUR-03 — Regroupement par patterns**: Vue qui groupe les facteurs similaires
