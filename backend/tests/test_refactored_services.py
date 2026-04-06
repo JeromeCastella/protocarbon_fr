@@ -15,14 +15,14 @@ class TestAuth:
     def test_login_success(self):
         """POST /api/auth/login returns token"""
         response = requests.post(f"{BASE_URL}/api/auth/login", json={
-            "email": "newtest@x.com",
-            "password": "test123"
+            "email": TEST_EMAIL,
+            "password": TEST_PASSWORD
         })
         assert response.status_code == 200
         data = response.json()
         assert "token" in data
         assert "user" in data
-        assert data["user"]["email"] == "newtest@x.com"
+        assert data["user"]["email"] == TEST_EMAIL
         assert data["user"]["role"] == "admin"
 
 
@@ -30,8 +30,8 @@ class TestAuth:
 def auth_token():
     """Get authentication token for tests"""
     response = requests.post(f"{BASE_URL}/api/auth/login", json={
-        "email": "newtest@x.com",
-        "password": "test123"
+        "email": TEST_EMAIL,
+        "password": TEST_PASSWORD
     })
     if response.status_code == 200:
         return response.json().get("token")

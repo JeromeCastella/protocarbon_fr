@@ -10,8 +10,8 @@ import os
 BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', '').rstrip('/')
 
 # Test credentials
-TEST_EMAIL = "newtest@x.com"
-TEST_PASSWORD = "test123"
+TEST_EMAIL = os.environ.get("TEST_EMAIL", "")
+TEST_PASSWORD = os.environ.get("TEST_PASSWORD", "")
 
 
 class TestPhaseC_BackendAPIs:

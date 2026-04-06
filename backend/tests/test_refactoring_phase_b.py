@@ -15,8 +15,8 @@ class TestAuth:
     def auth_token(self):
         """Get authentication token"""
         response = requests.post(f"{BASE_URL}/api/auth/login", json={
-            "email": "newtest@x.com",
-            "password": "test123"
+            "email": TEST_EMAIL,
+            "password": TEST_PASSWORD
         })
         assert response.status_code == 200, f"Login failed: {response.text}"
         return response.json()["token"]
@@ -24,14 +24,14 @@ class TestAuth:
     def test_login_success(self):
         """Test login with valid credentials"""
         response = requests.post(f"{BASE_URL}/api/auth/login", json={
-            "email": "newtest@x.com",
-            "password": "test123"
+            "email": TEST_EMAIL,
+            "password": TEST_PASSWORD
         })
         assert response.status_code == 200
         data = response.json()
         assert "token" in data
         assert "user" in data
-        assert data["user"]["email"] == "newtest@x.com"
+        assert data["user"]["email"] == TEST_EMAIL
 
 
 class TestDataEntryAPIs:
@@ -41,8 +41,8 @@ class TestDataEntryAPIs:
     def auth_headers(self):
         """Get auth headers"""
         response = requests.post(f"{BASE_URL}/api/auth/login", json={
-            "email": "newtest@x.com",
-            "password": "test123"
+            "email": TEST_EMAIL,
+            "password": TEST_PASSWORD
         })
         token = response.json()["token"]
         return {"Authorization": f"Bearer {token}"}
@@ -98,8 +98,8 @@ class TestAdminExportAPIs:
     def auth_headers(self):
         """Get auth headers"""
         response = requests.post(f"{BASE_URL}/api/auth/login", json={
-            "email": "newtest@x.com",
-            "password": "test123"
+            "email": TEST_EMAIL,
+            "password": TEST_PASSWORD
         })
         token = response.json()["token"]
         return {"Authorization": f"Bearer {token}"}
@@ -150,8 +150,8 @@ class TestProductVersionsAPIs:
     def auth_headers(self):
         """Get auth headers"""
         response = requests.post(f"{BASE_URL}/api/auth/login", json={
-            "email": "newtest@x.com",
-            "password": "test123"
+            "email": TEST_EMAIL,
+            "password": TEST_PASSWORD
         })
         token = response.json()["token"]
         return {"Authorization": f"Bearer {token}"}
@@ -191,8 +191,8 @@ class TestProductSaleAPIs:
     def auth_headers(self):
         """Get auth headers"""
         response = requests.post(f"{BASE_URL}/api/auth/login", json={
-            "email": "newtest@x.com",
-            "password": "test123"
+            "email": TEST_EMAIL,
+            "password": TEST_PASSWORD
         })
         token = response.json()["token"]
         return {"Authorization": f"Bearer {token}"}
@@ -226,8 +226,8 @@ class TestDashboardAPIs:
     def auth_headers(self):
         """Get auth headers"""
         response = requests.post(f"{BASE_URL}/api/auth/login", json={
-            "email": "newtest@x.com",
-            "password": "test123"
+            "email": TEST_EMAIL,
+            "password": TEST_PASSWORD
         })
         token = response.json()["token"]
         return {"Authorization": f"Bearer {token}"}
