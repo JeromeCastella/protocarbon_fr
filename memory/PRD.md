@@ -99,7 +99,6 @@ Application full-stack (React/FastAPI/MongoDB) pour la comptabilité carbone d'e
 ### P1
 - **FEAT-03 — Multi-utilisateurs**: Rôles Admin/Éditeur/Lecteur
 - **Exports PDF/Excel**
-- **FEAT-DR — Dual Reporting (Location-based / Market-based)**
 - **FEAT-PLAUS — Test de plausibilité global**
 
 ### P2

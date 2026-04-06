@@ -128,6 +128,7 @@ async def get_emission_factors_search_index(
             "name_simple_de": 1, "source_product_name": 1,
             "is_public": 1, "subcategory": 1, "default_unit": 1,
             "popularity_score": 1, "tags": 1, "category": 1,
+            "reporting_method": 1, "location_factor_id": 1,
             "impact": {"$arrayElemAt": ["$impacts", 0]},
             "scope": {"$ifNull": ["$scope", {"$arrayElemAt": ["$impacts.scope", 0]}]},
         }}

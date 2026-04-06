@@ -6,7 +6,7 @@ import {
   Search, X, Filter, CheckSquare, Square, ChevronLeft, ChevronRight,
   BarChart3, Eye, EyeOff, Flag, CheckCircle2, CircleDot, Sparkles,
   ArrowUpDown, ArrowUp, ArrowDown, Layers, Save, Loader2, Code2, Copy, Check,
-  Languages, CopyPlus
+  Languages, CopyPlus, Link2
 } from 'lucide-react';
 
 import { API_URL as API } from '../utils/apiConfig';
@@ -108,6 +108,7 @@ const BulkActionsBar = ({ selectedIds, isDark, onClearSelection, onBulkAction, l
         <option value="is_public">Public / Expert</option>
         <option value="popularity_score">Score de popularité</option>
         <option value="subcategory">Sous-catégorie</option>
+        <option value="reporting_method">Méthode (Location/Market)</option>
       </select>
 
       {bulkField === 'curation_status' && (
@@ -140,6 +141,14 @@ const BulkActionsBar = ({ selectedIds, isDark, onClearSelection, onBulkAction, l
           {subcategoriesList.map(sc => (
             <option key={sc.code} value={sc.code}>{sc.name_fr}</option>
           ))}
+        </select>
+      )}
+      {bulkField === 'reporting_method' && (
+        <select value={bulkValue} onChange={e => setBulkValue(e.target.value)}
+          className={`text-xs rounded-lg px-2 py-1.5 border ${isDark ? 'bg-slate-800 border-slate-600 text-white' : 'bg-white border-gray-300'}`}>
+          <option value="">Choisir...</option>
+          <option value="location">Location</option>
+          <option value="market">Market</option>
         </select>
       )}
 
@@ -553,6 +562,7 @@ export default function CurationWorkbench() {
   const [curationStatus, setCurationStatus] = useState('');
   const [isPublic, setIsPublic] = useState('');
   const [defaultUnit, setDefaultUnit] = useState('');
+  const [reportingMethodFilter, setReportingMethodFilter] = useState('');
   const [unitsList, setUnitsList] = useState([]);
   const [sortBy, setSortBy] = useState('subcategory');
   const [sortOrder, setSortOrder] = useState('asc');
@@ -576,7 +586,7 @@ export default function CurationWorkbench() {
   }, [search]);
 
   // Reset page on filter change
-  useEffect(() => { setPage(1); }, [searchDebounced, subcategory, curationStatus, isPublic, defaultUnit]);
+  useEffect(() => { setPage(1); }, [searchDebounced, subcategory, curationStatus, isPublic, defaultUnit, reportingMethodFilter]);
 
   // Fetch stats
   const fetchStats = useCallback(async () => {
@@ -596,6 +606,7 @@ export default function CurationWorkbench() {
       if (curationStatus) params.set('curation_status', curationStatus);
       if (isPublic) params.set('is_public', isPublic);
       if (defaultUnit) params.set('default_unit', defaultUnit);
+      if (reportingMethodFilter) params.set('reporting_method', reportingMethodFilter);
 
       const res = await fetch(`${API}/api/curation/factors?${params}`, { headers: { Authorization: `Bearer ${token}` } });
       if (res.ok) {
@@ -606,7 +617,7 @@ export default function CurationWorkbench() {
       }
     } catch (e) { logger.error(e); }
     setLoadingFactors(false);
-  }, [page, pageSize, searchDebounced, subcategory, curationStatus, isPublic, defaultUnit, sortBy, sortOrder]);
+  }, [page, pageSize, searchDebounced, subcategory, curationStatus, isPublic, defaultUnit, reportingMethodFilter, sortBy, sortOrder]);
 
   useEffect(() => { fetchStats(); }, [fetchStats]);
   useEffect(() => { fetchFactors(); }, [fetchFactors]);
@@ -716,6 +727,43 @@ export default function CurationWorkbench() {
 
   // Translate preview
   const [translateModal, setTranslateModal] = useState(null); // { factorIds, direction }
+
+  // Location factor search (for linking market-based factors)
+  const [locSearchQuery, setLocSearchQuery] = useState({});  // { [factorId]: query }
+  const [locSearchResults, setLocSearchResults] = useState({});  // { [factorId]: results[] }
+  const locSearchTimeout = useRef({});
+
+  const searchLocationFactors = useCallback(async (factorId, query) => {
+    if (!query || query.length < 2) {
+      setLocSearchResults(prev => ({ ...prev, [factorId]: [] }));
+      return;
+    }
+    try {
+      const res = await fetch(`${API}/api/curation/factors/search-location?q=${encodeURIComponent(query)}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setLocSearchResults(prev => ({ ...prev, [factorId]: data }));
+      }
+    } catch (e) { logger.error(e); }
+  }, [token]);
+
+  const handleLocSearchInput = (factorId, value) => {
+    setLocSearchQuery(prev => ({ ...prev, [factorId]: value }));
+    if (locSearchTimeout.current[factorId]) clearTimeout(locSearchTimeout.current[factorId]);
+    locSearchTimeout.current[factorId] = setTimeout(() => searchLocationFactors(factorId, value), 300);
+  };
+
+  const selectLocationFactor = (factorId, locFactor) => {
+    inlineEdit(factorId, 'location_factor_id', locFactor.id);
+    setLocSearchResults(prev => ({ ...prev, [factorId]: [] }));
+    setLocSearchQuery(prev => ({ ...prev, [factorId]: '' }));
+  };
+
+  const clearLocationFactor = (factorId) => {
+    inlineEdit(factorId, 'location_factor_id', null);
+  };
   const handleTranslateApply = (modifiedCount) => {
     setTranslateModal(null);
     alert(`${modifiedCount} traduction(s) appliquée(s)`);
@@ -837,6 +885,14 @@ export default function CurationWorkbench() {
           ))}
         </select>
 
+        <select value={reportingMethodFilter} onChange={e => setReportingMethodFilter(e.target.value)}
+          data-testid="filter-reporting-method"
+          className={`text-xs rounded-lg px-2 py-1.5 border ${isDark ? 'bg-slate-800 border-slate-600 text-white' : 'bg-white border-gray-300'}`}>
+          <option value="">Toutes méthodes</option>
+          <option value="location">Location</option>
+          <option value="market">Market</option>
+        </select>
+
         {selectedIds.length > 0 && (
           <button onClick={() => setShowAISuggest(true)} data-testid="ai-suggest-btn"
             className="px-3 py-1.5 bg-purple-500 text-white text-xs rounded-lg hover:bg-purple-600 flex items-center gap-1.5">
@@ -884,6 +940,10 @@ export default function CurationWorkbench() {
               <th className="py-2 px-2 cursor-pointer" onClick={() => toggleSort('curation_status')}>
                 <div className="flex items-center gap-1">Statut <SortIcon field="curation_status" /></div>
               </th>
+              <th className="py-2 px-2 cursor-pointer" onClick={() => toggleSort('reporting_method')}>
+                <div className="flex items-center gap-1">Méthode <SortIcon field="reporting_method" /></div>
+              </th>
+              <th className="py-2 px-2">Facteur location lié</th>
               <th className="py-2 px-1 w-8"></th>
             </tr>
           </thead>
@@ -990,6 +1050,64 @@ export default function CurationWorkbench() {
                   </td>
                   <td className="py-1.5 px-2">
                     <StatusBadge status={f.curation_status} isDark={isDark} onCycle={s => inlineEdit(f.id, 'curation_status', s)} />
+                  </td>
+                  {/* Méthode (location/market) */}
+                  <td className="py-1.5 px-2">
+                    <select
+                      value={f.reporting_method || 'location'}
+                      onChange={e => inlineEdit(f.id, 'reporting_method', e.target.value)}
+                      data-testid={`method-select-${f.id}`}
+                      className={`text-[11px] rounded border py-0.5 px-1 cursor-pointer ${
+                        f.reporting_method === 'market'
+                          ? 'bg-amber-500/10 border-amber-500/30 text-amber-600 font-medium'
+                          : isDark ? 'bg-slate-800 border-slate-700 text-slate-400' : 'bg-white border-gray-200 text-gray-500'
+                      }`}
+                    >
+                      <option value="location">Location</option>
+                      <option value="market">Market</option>
+                    </select>
+                  </td>
+                  {/* Facteur location lié */}
+                  <td className="py-1.5 px-2 relative">
+                    {f.reporting_method === 'market' ? (
+                      <div className="relative">
+                        {f.location_factor_id ? (
+                          <div className={`flex items-center gap-1 text-[10px] rounded px-1.5 py-0.5 ${isDark ? 'bg-green-500/10 text-green-400' : 'bg-green-50 text-green-700'}`}>
+                            <Link2 className="w-3 h-3 flex-shrink-0" />
+                            <span className="truncate max-w-[140px]" title={f._locationName || f.location_factor_id}>
+                              {f._locationName || f.location_factor_id}
+                            </span>
+                            <button onClick={() => clearLocationFactor(f.id)} className="ml-auto flex-shrink-0 hover:text-red-500">
+                              <X className="w-3 h-3" />
+                            </button>
+                          </div>
+                        ) : (
+                          <div>
+                            <input
+                              type="text"
+                              value={locSearchQuery[f.id] || ''}
+                              onChange={e => handleLocSearchInput(f.id, e.target.value)}
+                              placeholder="Chercher facteur..."
+                              data-testid={`loc-search-${f.id}`}
+                              className={`w-full text-[11px] rounded border py-0.5 px-1.5 ${isDark ? 'bg-slate-800 border-slate-700 text-white placeholder-slate-600' : 'bg-white border-gray-200 text-gray-700 placeholder-gray-400'}`}
+                            />
+                            {(locSearchResults[f.id] || []).length > 0 && (
+                              <div className={`absolute z-50 left-0 right-0 mt-0.5 rounded-lg border shadow-lg max-h-40 overflow-y-auto ${isDark ? 'bg-slate-800 border-slate-700' : 'bg-white border-gray-200'}`}>
+                                {locSearchResults[f.id].map(loc => (
+                                  <button key={loc.id} onClick={() => selectLocationFactor(f.id, loc)}
+                                    className={`w-full text-left px-2 py-1 text-[10px] hover:bg-blue-500/10 border-b last:border-0 ${isDark ? 'border-slate-700 text-slate-300' : 'border-gray-100 text-gray-700'}`}>
+                                    <div className="font-medium truncate">{loc.name_simple_fr || loc.name_fr}</div>
+                                    <div className={`${isDark ? 'text-slate-500' : 'text-gray-400'}`}>{loc.subcategory} · {loc.default_unit}</div>
+                                  </button>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    ) : (
+                      <span className={`text-[10px] ${isDark ? 'text-slate-600' : 'text-gray-300'}`}>—</span>
+                    )}
                   </td>
                   <td className="py-1.5 px-1">
                     <button onClick={() => setJsonModalFactor(f)} title="Voir JSON complet"

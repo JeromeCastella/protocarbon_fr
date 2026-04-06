@@ -94,6 +94,7 @@ const Dashboard = () => {
   
   // Data states
   const [summary, setSummary] = useState(null);
+  const [reportingView, setReportingView] = useState('market'); // 'market' or 'location'
   const [kpis, setKpis] = useState(null);
   const [fiscalComparison, setFiscalComparison] = useState([]);
   const [scopeBreakdown, setScopeBreakdown] = useState(null);
@@ -147,7 +148,7 @@ const Dashboard = () => {
     setSelectedScenarioEntityId(null);
     setScenarioDataPoints([]);
     setScenarioSummary(null);
-  }, [currentFiscalYear?.id]);
+  }, [currentFiscalYear?.id, reportingView]);
 
   useEffect(() => {
     if (selectedFiscalYearForChart && selectedFiscalYearForChart !== 'current') {
@@ -272,9 +273,10 @@ const Dashboard = () => {
       // Build fiscal year query param
       const fyParam = currentFiscalYear?.id ? `?fiscal_year_id=${currentFiscalYear.id}` : '';
       const fyParamAmp = currentFiscalYear?.id ? `&fiscal_year_id=${currentFiscalYear.id}` : '';
+      const rvParam = reportingView === 'location' ? `${fyParam ? '&' : '?'}reporting_view=location` : '';
       
       const [summaryRes, kpisRes, comparisonRes, breakdownRes, activitiesRes, productsRes] = await Promise.all([
-        axios.get(`${API_URL}/api/dashboard/summary${fyParam}`),
+        axios.get(`${API_URL}/api/dashboard/summary${fyParam}${rvParam}`),
         axios.get(`${API_URL}/api/dashboard/kpis${fyParam}`),
         axios.get(`${API_URL}/api/dashboard/fiscal-comparison`),
         axios.get(`${API_URL}/api/dashboard/scope-breakdown/${currentFiscalYear?.id || 'current'}`),
@@ -434,13 +436,35 @@ const Dashboard = () => {
   return (
     <div data-testid="dashboard" className="space-y-6">
       {/* Header */}
-      <div>
-        <h1 className={`text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-          {t('nav.dashboard')}
-        </h1>
-        <p className={`mt-2 ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-          Vue d'ensemble de votre bilan carbone
-        </p>
+      <div className="flex items-start justify-between">
+        <div>
+          <h1 className={`text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+            {t('nav.dashboard')}
+          </h1>
+          <p className={`mt-2 ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+            Vue d'ensemble de votre bilan carbone
+          </p>
+        </div>
+        {summary?.has_market_based && (
+          <div data-testid="reporting-view-toggle" className={`flex items-center gap-1 p-0.5 rounded-lg text-xs font-medium ${isDark ? 'bg-slate-800' : 'bg-gray-100'}`}>
+            <button
+              onClick={() => setReportingView('market')}
+              className={`px-3 py-1.5 rounded-md transition-all ${
+                reportingView === 'market'
+                  ? 'bg-blue-500 text-white shadow-sm'
+                  : isDark ? 'text-slate-400 hover:text-white' : 'text-gray-500 hover:text-gray-900'
+              }`}
+            >Market-based</button>
+            <button
+              onClick={() => setReportingView('location')}
+              className={`px-3 py-1.5 rounded-md transition-all ${
+                reportingView === 'location'
+                  ? 'bg-blue-500 text-white shadow-sm'
+                  : isDark ? 'text-slate-400 hover:text-white' : 'text-gray-500 hover:text-gray-900'
+              }`}
+            >Location-based</button>
+          </div>
+        )}
       </div>
 
       {/* Tabs */}

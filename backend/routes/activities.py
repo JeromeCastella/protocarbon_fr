@@ -163,6 +163,30 @@ async def create_activity_for_impact(
     display_category = 'activites_combustibles_energie' if impact_scope == 'scope3_3' else activity.category_id
     stored_scope = normalize_scope_for_reporting(impact_scope, display_category)
     
+    # Dual reporting: if factor is market-based, calculate location-based emissions
+    emissions_location = None
+    location_factor_snapshot = None
+    if factor.get("reporting_method") == "market" and factor.get("location_factor_id"):
+        loc_factor = emission_factors_collection.find_one(
+            {"id": factor["location_factor_id"], "deleted_at": None}
+        )
+        if not loc_factor:
+            try:
+                loc_factor = emission_factors_collection.find_one(
+                    {"_id": ObjectId(factor["location_factor_id"]), "deleted_at": None}
+                )
+            except Exception:
+                pass
+        if loc_factor:
+            loc_impacts = loc_factor.get("impacts", [])
+            matching_impact = next(
+                (i for i in loc_impacts if normalize_scope(i.get("scope", "")) == impact_scope),
+                loc_impacts[0] if loc_impacts else None
+            )
+            if matching_impact:
+                emissions_location = quantity * matching_impact.get("value", 0)
+            location_factor_snapshot = create_factor_snapshot(loc_factor)
+
     # Construire le document
     activity_doc = {
         # Groupement
@@ -194,6 +218,11 @@ async def create_activity_for_impact(
         # Émissions calculées
         "emissions": emissions,
         "calculated_emissions": emissions,
+        
+        # Dual reporting (location-based)
+        "reporting_method": factor.get("reporting_method", "location"),
+        "emissions_location": emissions_location,
+        "location_factor_snapshot": location_factor_snapshot,
         
         # Métadonnées
         "tenant_id": current_user["id"],

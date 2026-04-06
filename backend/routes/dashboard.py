@@ -68,9 +68,11 @@ def get_fiscal_year_context_with_fallback(fiscal_year_id: str, tenant_id: str):
 @router.get("/summary")
 async def get_dashboard_summary(
     fiscal_year_id: Optional[str] = None,
+    reporting_view: Optional[str] = None,
     current_user: dict = Depends(get_current_user)
 ):
-    """Get dashboard summary with emissions by scope"""
+    """Get dashboard summary with emissions by scope.
+    reporting_view: 'location' to use location-based values for market activities."""
     # Get context (from fiscal year or company fallback)
     context = get_fiscal_year_context_with_fallback(fiscal_year_id, current_user["id"])
     excluded_categories = context.get("excluded_categories", [])
@@ -85,6 +87,9 @@ async def get_dashboard_summary(
     # Get activities (filtered by fiscal year if specified)
     activities = list(activities_collection.find(query))
     
+    # Check if any market-based activity exists (to show toggle in frontend)
+    has_market_based = any(a.get("reporting_method") == "market" for a in activities)
+    
     # Calculate emissions by scope
     scope_emissions = {
         "scope1": 0,
@@ -98,7 +103,12 @@ async def get_dashboard_summary(
     for activity in activities:
         raw_scope = activity.get("scope", "scope1")
         category = activity.get("category_id", "other")
-        emissions = activity.get("emissions", 0) or activity.get("calculated_emissions", 0) or 0
+
+        # Dual reporting: use location-based emissions when requested
+        if reporting_view == "location" and activity.get("reporting_method") == "market" and activity.get("emissions_location") is not None:
+            emissions = activity["emissions_location"]
+        else:
+            emissions = activity.get("emissions", 0) or activity.get("calculated_emissions", 0) or 0
         
         # Normaliser le scope pour le reporting (scope3_3 → scope3_amont, etc.)
         normalized_scope = normalize_scope_for_reporting(raw_scope, category)
@@ -153,13 +163,16 @@ async def get_dashboard_summary(
         "scope_completion": scope_completion,
         "activities_count": len(activities),
         "products_count": products_count,
-        "excluded_categories": excluded_categories
+        "excluded_categories": excluded_categories,
+        "has_market_based": has_market_based,
+        "reporting_view": reporting_view or "market"
     }
 
 
 @router.get("/category-stats")
 async def get_category_stats(
     fiscal_year_id: Optional[str] = None,
+    reporting_view: Optional[str] = None,
     current_user: dict = Depends(get_current_user)
 ):
     """Get statistics by category"""
@@ -177,7 +190,10 @@ async def get_category_stats(
         if category not in stats:
             stats[category] = {"count": 0, "emissions": 0}
         stats[category]["count"] += 1
-        stats[category]["emissions"] += activity.get("emissions", 0) or 0
+        if reporting_view == "location" and activity.get("reporting_method") == "market" and activity.get("emissions_location") is not None:
+            stats[category]["emissions"] += activity["emissions_location"]
+        else:
+            stats[category]["emissions"] += activity.get("emissions", 0) or 0
     
     return stats
 

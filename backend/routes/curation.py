@@ -5,6 +5,7 @@ from fastapi import APIRouter, HTTPException, Depends
 from datetime import datetime, timezone
 from typing import Optional, List
 from pydantic import BaseModel
+from bson import ObjectId
 
 import sys
 sys.path.append('/app/backend')
@@ -25,6 +26,8 @@ class InlineEditPayload(BaseModel):
     popularity_score: Optional[int] = None
     curation_status: Optional[str] = None
     default_unit: Optional[str] = None
+    reporting_method: Optional[str] = None
+    location_factor_id: Optional[str] = None
 
 class BulkPayload(BaseModel):
     factor_ids: List[str]
@@ -46,12 +49,18 @@ class TranslateApplyPayload(BaseModel):
     translations: List[dict]  # [{"factor_id": "...", "value": "..."}]
     target_field: str  # "name_simple_de" or "name_simple_fr"
 
+class BulkSetReportingMethodPayload(BaseModel):
+    factor_ids: List[str]
+    reporting_method: str  # "location" or "market"
+    location_factor_id: Optional[str] = None  # required if market
+
 # ==================== FACTORS LIST (PAGINATED) ====================
 
 CURATION_PROJECTION = {
     "id": 1, "name_fr": 1, "name_de": 1, "name_simple_fr": 1, "name_simple_de": 1,
     "subcategory": 1, "is_public": 1, "popularity_score": 1, "curation_status": 1,
     "default_unit": 1, "input_units": 1, "source": 1, "impacts": 1, "tags": 1,
+    "reporting_method": 1, "location_factor_id": 1,
 }
 
 @router.get("/factors")
@@ -64,6 +73,7 @@ async def list_curation_factors(
     is_public: str = "",
     has_simple_name: str = "",
     default_unit: str = "",
+    reporting_method: str = "",
     sort_by: str = "subcategory",
     sort_order: str = "asc",
     current_user: dict = Depends(require_admin),
@@ -93,6 +103,10 @@ async def list_curation_factors(
         query["is_public"] = True
     elif is_public == "false":
         query["is_public"] = False
+    if reporting_method == "market":
+        query["reporting_method"] = "market"
+    elif reporting_method == "location":
+        query["reporting_method"] = {"$in": [None, "location"]}
     if has_simple_name == "true":
         query["$and"] = query.get("$and", []) + [
             {"name_simple_fr": {"$exists": True, "$ne": None}},
@@ -106,7 +120,7 @@ async def list_curation_factors(
         ]
 
     sort_dir = 1 if sort_order == "asc" else -1
-    sort_field = sort_by if sort_by in ["name_fr", "subcategory", "popularity_score", "is_public", "curation_status", "source_product_name"] else "subcategory"
+    sort_field = sort_by if sort_by in ["name_fr", "subcategory", "popularity_score", "is_public", "curation_status", "source_product_name", "reporting_method"] else "subcategory"
 
     total = emission_factors_collection.count_documents(query)
     skip = (page - 1) * page_size
@@ -117,8 +131,25 @@ async def list_curation_factors(
         .limit(page_size)
     )
 
+    # Resolve location factor names for market-based factors
+    items = [serialize_doc(f) for f in factors]
+    loc_ids = [f.get("location_factor_id") for f in items if f.get("location_factor_id")]
+    if loc_ids:
+        loc_factors = {
+            str(lf.get("id", lf.get("_id"))): lf
+            for lf in emission_factors_collection.find(
+                {"$or": [{"id": {"$in": loc_ids}}, {"_id": {"$in": [ObjectId(i) for i in loc_ids if len(i) == 24]}}]},
+                {"_id": 0, "id": 1, "name_simple_fr": 1, "name_fr": 1}
+            )
+        }
+        for item in items:
+            lid = item.get("location_factor_id")
+            if lid and lid in loc_factors:
+                lf = loc_factors[lid]
+                item["_locationName"] = lf.get("name_simple_fr") or lf.get("name_fr") or lid
+
     return {
-        "items": [serialize_doc(f) for f in factors],
+        "items": items,
         "total": total,
         "page": page,
         "page_size": page_size,
@@ -148,6 +179,13 @@ async def inline_edit_factor(
 
     if "curation_status" in update_data and update_data["curation_status"] not in ("untreated", "reviewed", "flagged"):
         raise HTTPException(400, "curation_status invalide")
+
+    if "reporting_method" in update_data and update_data["reporting_method"] not in ("location", "market"):
+        raise HTTPException(400, "reporting_method invalide (location ou market)")
+
+    # If switching to location, clear the linked factor
+    if update_data.get("reporting_method") == "location":
+        update_data["location_factor_id"] = None
 
     update_data["updated_at"] = datetime.now(timezone.utc).isoformat()
 
@@ -693,3 +731,69 @@ Retourne un JSON array:
 
     except Exception as e:
         raise HTTPException(500, f"Erreur de génération IA: {str(e)}")
+
+
+
+# ==================== DUAL REPORTING ====================
+
+@router.get("/factors/search-location")
+async def search_location_factors(
+    q: str = "",
+    current_user: dict = Depends(require_admin),
+):
+    """Search factors suitable as location-based counterparts (for linking)."""
+    query = {"deleted_at": None}
+    if q and len(q) >= 2:
+        query["$or"] = [
+            {"name_simple_fr": {"$regex": q, "$options": "i"}},
+            {"name_simple_de": {"$regex": q, "$options": "i"}},
+            {"name_fr": {"$regex": q, "$options": "i"}},
+            {"name_de": {"$regex": q, "$options": "i"}},
+        ]
+    # Only return factors that are location-based (or unset = default location)
+    query["reporting_method"] = {"$in": [None, "location"]}
+
+    factors = list(emission_factors_collection.find(
+        query,
+        {"_id": 0, "id": 1, "name_fr": 1, "name_simple_fr": 1, "name_de": 1,
+         "name_simple_de": 1, "subcategory": 1, "default_unit": 1, "impacts": 1},
+    ).sort([("is_public", -1), ("popularity_score", -1)]).limit(20))
+
+    return factors
+
+
+@router.post("/bulk-set-reporting-method")
+async def bulk_set_reporting_method(
+    payload: BulkSetReportingMethodPayload,
+    current_user: dict = Depends(require_admin),
+):
+    """Bulk set reporting_method and optionally link a location factor."""
+    if payload.reporting_method not in ("location", "market"):
+        raise HTTPException(400, "reporting_method invalide")
+
+    if payload.reporting_method == "market" and not payload.location_factor_id:
+        raise HTTPException(400, "location_factor_id requis pour les facteurs market-based")
+
+    update = {
+        "reporting_method": payload.reporting_method,
+        "updated_at": datetime.now(timezone.utc).isoformat(),
+    }
+    if payload.reporting_method == "market":
+        update["location_factor_id"] = payload.location_factor_id
+    else:
+        update["location_factor_id"] = None
+
+    oid_filters = []
+    for fid in payload.factor_ids:
+        f = ef_id_filter(fid)
+        if "_id" in f:
+            oid_filters.append(f["_id"])
+        elif "id" in f:
+            oid_filters.append(f["id"])
+
+    result = emission_factors_collection.update_many(
+        {"$or": [{"_id": {"$in": oid_filters}}, {"id": {"$in": payload.factor_ids}}], "deleted_at": None},
+        {"$set": update},
+    )
+
+    return {"modified": result.modified_count}
