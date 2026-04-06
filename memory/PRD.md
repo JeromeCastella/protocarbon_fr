@@ -9,7 +9,7 @@ Application full-stack (React/FastAPI/MongoDB) pour la comptabilité carbone d'e
 - **Integrations**: Gemini Pro / GPT-4o-mini via emergentintegrations (suggestions IA + traductions)
 
 ## Core Features Implemented
-- Auth (localStorage + JWT Bearer Token)
+- Auth (sessionStorage + JWT Bearer Token, localStorage with "Remember Me")
 - Dashboard avec métriques GHG Protocol
 - Saisie de données (slide-over) + Recherche globale de facteurs (Fuse.js, toggle Expert)
 - Gestion de produits (slide-over)
@@ -22,16 +22,8 @@ Application full-stack (React/FastAPI/MongoDB) pour la comptabilité carbone d'e
 - FEAT-DR Dual Reporting : Toggle Market/Location sur Dashboard (tous endpoints)
 - FEAT-PLAUS Test de plausibilité : Diagnostic de cohérence des données (11 règles V1)
 
-## i18n (Internationalisation FR/DE)
-### Completed Phases
-- **Phase 1-2**: Layout, Navigation, Dashboard (LanguageContext, useLanguage hook, t() function)
-- **Phase 3**: DataEntry page, GuidedEntryModal, FactorSelectionStep, GlobalFactorSearch, TableViewPanel — VALIDATED (April 2026)
-- **Phase 4**: Admin — AdminTabs, AdminFactorsTab, AdminUnitsTab, AdminExportTab, AdminUsersTab, AdminSubcategoriesTab — VALIDATED (April 2026)
-- **Phase 5**: Curation — CurationWorkbench (StatsDashboard, BulkActionsBar, StatusBadge, EditableCell, AISuggestModal, TranslatePreviewModal, BulkPreviewModal) + LocationLinkPanel — VALIDATED (April 2026)
-- **Phase 6**: Settings/Profile — FiscalYears, Products (EmissionsBar, ActionsMenu, ProductCard), GeneralInfo, ProductDetailModal, ProductSaleModal, ProductVersionsModal, EmptyFiscalYearState — VALIDATED (April 2026)
-
-### Remaining Phases
-- **Phase 7**: Auth/Aide (AuthPage, Assistance, ForgotPassword)
+## i18n (Internationalisation FR/DE) — COMPLETED
+- Phase 1-7 complètes: Layout, Navigation, Dashboard, DataEntry, Admin, Curation, Settings, Auth/Aide
 
 ## Admin Factors Form — Réorganisé (April 2026)
 - **Noms simplifiés FR/DE** en position principale
@@ -40,9 +32,37 @@ Application full-stack (React/FastAPI/MongoDB) pour la comptabilité carbone d'e
 - **reporting_method** : sélecteur Location / Market / Non défini
 - **popularity_score** : slider 0-100 (Rare → Courant)
 
+## Refactoring — Réduction dette technique
+
+### Phase 1 — DashboardResultsTab (COMPLETED)
+- Composants: `EvolutionChart`, `KPICards`, `ScopeChart`, `TopSubcategories`, `RecommendationsList`, `constants`, `index`
+- Dossier: `/components/dashboard/`
+
+### Phase 2 — GuidedEntryModal (COMPLETED)
+- Hook: `useGuidedEntry.js` (~390 lignes)
+- Composant: `LeftPanel.js`
+- Dossier: `/components/guided-entry/`
+
+### Phase 3 — AdminFactorsTab (COMPLETED — April 2026)
+- **Avant**: 1155 lignes monolithiques
+- **Après**: Orchestrateur ~90 lignes + hook + 7 sous-composants
+- Hook: `/hooks/useAdminFactors.js` (~400 lignes — toute la logique métier)
+- Composants: `/components/admin/factors/`
+  - `FactorsToolbar.jsx` — barre de recherche, filtres, boutons action
+  - `FactorsTable.jsx` — tableau de données avec actions par ligne
+  - `FactorsPagination.jsx` — contrôles de pagination
+  - `FactorFormModal.jsx` — modal création/édition facteur + `ImpactsSection`
+  - `ImportModal.jsx` — modal import JSON
+  - `VersionModal.jsx` — modal création nouvelle version
+  - `HistoryModal.jsx` — modal historique des versions
+  - `index.js` — barrel export
+- Tests: 100% frontend (12/12 tests PASS) — validated by testing agent
+
 ## Key Files
 - `frontend/src/pages/DataEntry.js` — Dashboard principal
-- `frontend/src/components/admin/AdminFactorsTab.jsx` — Formulaire facteurs restructuré
+- `frontend/src/components/admin/AdminFactorsTab.jsx` — Orchestrateur facteurs (refactoré)
+- `frontend/src/hooks/useAdminFactors.js` — Hook logique facteurs
+- `frontend/src/components/admin/factors/` — Sous-composants facteurs
 - `backend/routes/plausibility.py` — POST /check endpoint
 - `backend/services/plausibility.py` — 11 règles métier
 - `backend/routes/dashboard.py` — API dashboard (reporting_view sur tous endpoints)
@@ -65,7 +85,10 @@ Application full-stack (React/FastAPI/MongoDB) pour la comptabilité carbone d'e
 - console.log replaced with logger utility (LocationLinkPanel)
 
 ## Backlog
+
 ### P0
+- **Refactoring Phase 4 — Dashboard.js** (1696 lignes): Découpage du composant le plus lourd
+- **Refactoring Backend** — `curation.py` (list_curation_factors), `activities.py` (create_activity_for_impact, apply_business_rules)
 - **FEAT-CUR-03 — Regroupement par patterns**: Vue qui groupe les facteurs similaires
 
 ### P1
@@ -75,8 +98,8 @@ Application full-stack (React/FastAPI/MongoDB) pour la comptabilité carbone d'e
 ### P2
 - Base de données actions plan climat cantonal
 - Logs d'audit calculs d'émission
-- Optimisation requêtes DB
-- Refactoring composants React monolithiques
+- Optimisation requêtes DB (projections MongoDB dans dashboard.py)
+- Type hints Python et Migration TypeScript (progressif)
 
 ## Credentials
 - Email: newtest@x.com / Password: test123
