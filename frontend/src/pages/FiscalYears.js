@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useTheme } from '../context/ThemeContext';
+import { useLanguage } from '../context/LanguageContext';
 import { useFiscalYear } from '../context/FiscalYearContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import axios from 'axios';
@@ -29,6 +30,7 @@ const YEARS_AHEAD = 10;
 
 const FiscalYears = () => {
   const { isDark } = useTheme();
+  const { t } = useLanguage();
   const { 
     fiscalYears, 
     currentFiscalYear,
@@ -150,7 +152,7 @@ const FiscalYears = () => {
         <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-violet-500/20 text-violet-500 text-xs font-medium"
               data-testid={`badge-scenario-${fy.id}`}>
           <FlaskConical className="w-3 h-3" />
-          Scénario
+          {t('fiscalYears.status.scenario')}
         </span>
       );
     }
@@ -191,18 +193,18 @@ const FiscalYears = () => {
     // Scenario validation
     if (createForm.isScenario) {
       if (createForm.selectedScenarioId === '') {
-        setCreateError('Veuillez sélectionner ou créer un scénario');
+        setCreateError(t('fiscalYears.errors.selectOrCreateScenario'));
         return;
       }
       if (createForm.selectedScenarioId === 'new' && !createForm.newScenarioName.trim()) {
-        setCreateError('Un nom est requis pour le nouveau scénario');
+        setCreateError(t('fiscalYears.errors.scenarioNameRequired'));
         return;
       }
     }
     
     // Check if year is available (only for actual exercises)
     if (!createForm.isScenario && existingYears.has(createForm.year)) {
-      setCreateError(`Un exercice existe déjà pour l'année ${createForm.year}`);
+      setCreateError(t('fiscalYears.errors.yearAlreadyExists').replace('{year}', createForm.year));
       return;
     }
     
@@ -238,7 +240,7 @@ const FiscalYears = () => {
       } else if (!createForm.isScenario) {
         await createFiscalYear({ year: createForm.year });
       } else {
-        setCreateError('Un scénario doit être basé sur un exercice existant');
+        setCreateError(t('fiscalYears.errors.scenarioNeedBase'));
         setLoading(false);
         return;
       }
@@ -247,7 +249,7 @@ const FiscalYears = () => {
       setCreateForm({ year: new Date().getFullYear() + 1, duplicateFrom: null, duplicateActivities: false, isScenario: false, selectedScenarioId: '', newScenarioName: '' });
     } catch (error) {
       logger.error('Failed to create fiscal year:', error);
-      setCreateError(error.response?.data?.detail || 'Erreur lors de la création');
+      setCreateError(error.response?.data?.detail || t('fiscalYears.errors.createError'));
     } finally {
       setLoading(false);
     }
@@ -263,7 +265,7 @@ const FiscalYears = () => {
       setSelectedFY(null);
     } catch (error) {
       logger.error('Failed to close fiscal year:', error);
-      alert(error.response?.data?.detail || 'Erreur lors de la clôture');
+      alert(error.response?.data?.detail || t('fiscalYears.errors.closeError'));
     } finally {
       setLoading(false);
     }
@@ -280,7 +282,7 @@ const FiscalYears = () => {
       setRectifyReason('');
     } catch (error) {
       logger.error('Failed to rectify fiscal year:', error);
-      alert(error.response?.data?.detail || 'Erreur lors de la rectification');
+      alert(error.response?.data?.detail || t('fiscalYears.errors.rectifyError'));
     } finally {
       setLoading(false);
     }
@@ -326,7 +328,7 @@ const FiscalYears = () => {
       setDeleteConfirmText('');
     } catch (error) {
       logger.error('Failed to delete fiscal year:', error);
-      setDeleteError(error.response?.data?.detail || 'Erreur lors de la suppression');
+      setDeleteError(error.response?.data?.detail || t('fiscalYears.errors.deleteError'));
     } finally {
       setLoading(false);
     }
@@ -337,22 +339,22 @@ const FiscalYears = () => {
     const actions = [];
     
     if (fy.status === 'draft') {
-      actions.push({ key: 'close', label: 'Clôturer', icon: Lock, color: 'green' });
+      actions.push({ key: 'close', label: t('fiscalYears.actions.close'), icon: Lock, color: 'green' });
     }
     
     if (fy.status === 'closed') {
-      actions.push({ key: 'rectify', label: 'Rectifier', icon: Unlock, color: 'orange' });
+      actions.push({ key: 'rectify', label: t('fiscalYears.actions.rectify'), icon: Unlock, color: 'orange' });
     }
     
     if (fy.status === 'rectified') {
-      actions.push({ key: 'close', label: 'Re-clôturer', icon: Lock, color: 'green' });
+      actions.push({ key: 'close', label: t('fiscalYears.actions.reclose'), icon: Lock, color: 'green' });
     }
     
     // Duplicate is always available
-    actions.push({ key: 'duplicate', label: 'Dupliquer vers...', icon: Copy, color: 'blue' });
+    actions.push({ key: 'duplicate', label: t('fiscalYears.actions.duplicateTo'), icon: Copy, color: 'blue' });
     
     // Delete is always available with warning
-    actions.push({ key: 'delete', label: 'Supprimer', icon: Trash2, color: 'red' });
+    actions.push({ key: 'delete', label: t('fiscalYears.actions.delete'), icon: Trash2, color: 'red' });
     
     return actions;
   };
@@ -410,10 +412,10 @@ const FiscalYears = () => {
       <div className="flex items-center justify-between">
         <div>
           <h1 className={`text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-            Exercices fiscaux
+            {t('fiscalYears.title')}
           </h1>
           <p className={`mt-1 ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-            Gérez vos exercices fiscaux et leurs données
+            {t('fiscalYears.subtitle')}
           </p>
         </div>
         <button
@@ -431,7 +433,7 @@ const FiscalYears = () => {
           className="flex items-center gap-2 px-4 py-2.5 bg-blue-500 hover:bg-blue-600 text-white rounded-xl transition-colors"
         >
           <Plus className="w-5 h-5" />
-          Nouvel exercice
+          {t('fiscalYears.newExercise')}
         </button>
       </div>
 
@@ -533,7 +535,7 @@ const FiscalYears = () => {
             <div className="flex items-center justify-between">
               {getStatusBadge(fy)}
               <span className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-                {getActivityCount(fy)} saisies
+                {getActivityCount(fy)} {t('fiscalYears.entries')}
               </span>
             </div>
 
@@ -659,11 +661,11 @@ const FiscalYears = () => {
                             : 'bg-white border-gray-200 text-gray-900'
                         }`}
                       >
-                        <option value="">— Choisir un scénario —</option>
+                        <option value="">{t('fiscalYears.createModal.chooseScenario')}</option>
                         {scenarios.map(s => (
                           <option key={s.id} value={s.id}>{s.name}</option>
                         ))}
-                        <option value="new">+ Créer un nouveau scénario</option>
+                        <option value="new">{t('fiscalYears.createModal.createNewScenario')}</option>
                       </select>
                       <ChevronDown className={`absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 pointer-events-none ${
                         isDark ? 'text-slate-400' : 'text-gray-500'
@@ -676,7 +678,7 @@ const FiscalYears = () => {
                         type="text"
                         value={createForm.newScenarioName}
                         onChange={(e) => setCreateForm(prev => ({ ...prev, newScenarioName: e.target.value }))}
-                        placeholder="Nom du nouveau scénario..."
+                        placeholder={t('fiscalYears.createModal.newScenarioPlaceholder')}
                         data-testid="new-scenario-name-input"
                         className={`w-full mt-2 px-4 py-3 rounded-xl border transition-all focus:ring-2 focus:ring-violet-500 ${
                           isDark 
@@ -714,7 +716,7 @@ const FiscalYears = () => {
                             disabled={isDisabled}
                             className={isDisabled ? 'text-gray-400' : ''}
                           >
-                            {year} {isActualTaken ? '(déjà créé)' : isScenarioTaken ? '(scénario existant)' : ''}
+                            {year} {isActualTaken ? t('fiscalYears.createModal.alreadyCreated') : isScenarioTaken ? t('fiscalYears.createModal.existingScenario') : ''}
                           </option>
                         );
                       })}
@@ -725,8 +727,8 @@ const FiscalYears = () => {
                   </div>
                   <p className={`mt-1.5 text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
                     {createForm.isScenario 
-                      ? `Projection pour l'année ${createForm.year}`
-                      : `Période : 1er janvier ${createForm.year} → 31 décembre ${createForm.year}`
+                      ? t('fiscalYears.createModal.projectionFor').replace('{year}', createForm.year)
+                      : t('fiscalYears.createModal.periodFor').replaceAll('{year}', createForm.year)
                     }
                   </p>
                 </div>
@@ -844,8 +846,7 @@ const FiscalYears = () => {
 
                 <div className={`p-4 rounded-xl mb-6 ${isDark ? 'bg-slate-700/50' : 'bg-gray-50'}`}>
                   <p className={`text-sm ${isDark ? 'text-slate-300' : 'text-gray-600'}`}>
-                    La clôture calcule le bilan final et verrouille les modifications. 
-                    Vous pourrez rectifier l'exercice si nécessaire.
+                    {t('fiscalYears.closeModal.description')}
                   </p>
                 </div>
 
@@ -912,7 +913,7 @@ const FiscalYears = () => {
                   <textarea
                     value={rectifyReason}
                     onChange={(e) => setRectifyReason(e.target.value)}
-                    placeholder="Ex: Correction des données de consommation électrique..."
+                    placeholder={t('fiscalYears.rectifyModal.reasonPlaceholder')}
                     rows={3}
                     className={`w-full px-4 py-3 rounded-xl border transition-all focus:ring-2 focus:ring-orange-500 ${
                       isDark 
@@ -984,15 +985,15 @@ const FiscalYears = () => {
                     Cette action supprimera définitivement :
                   </p>
                   <ul className={`space-y-1 text-sm ${isDark ? 'text-red-300' : 'text-red-700'}`}>
-                    <li>• <strong>{deleteStats?.activitiesCount || 0}</strong> activités saisies</li>
-                    <li>• <strong>{((deleteStats?.totalEmissions || 0) / 1000).toLocaleString('fr-FR', { maximumFractionDigits: 1 })}</strong> tCO₂e d'émissions</li>
+                    <li>• <strong>{deleteStats?.activitiesCount || 0}</strong> {t('fiscalYears.deleteModal.activitiesCount')}</li>
+                    <li>• <strong>{((deleteStats?.totalEmissions || 0) / 1000).toLocaleString('fr-FR', { maximumFractionDigits: 1 })}</strong> {t('fiscalYears.deleteModal.emissionsCount')}</li>
                   </ul>
                 </div>
 
                 {/* Confirmation input */}
                 <div className="mb-5">
                   <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
-                    Pour confirmer, tapez <strong className="text-red-500">"{selectedFY.name}"</strong>
+                    {t('fiscalYears.deleteModal.confirmLabel')} <strong className="text-red-500">"{selectedFY.name}"</strong>
                   </label>
                   <input
                     type="text"

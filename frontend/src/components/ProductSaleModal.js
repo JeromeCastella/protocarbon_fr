@@ -31,7 +31,7 @@ import { API_URL } from '../utils/apiConfig';
  */
 const ProductSaleModal = ({ isOpen, onClose, onSaleRecorded, preselectedProduct = null }) => {
   const { isDark } = useTheme();
-  const { language } = useLanguage();
+  const { t, language } = useLanguage();
   const { currentFiscalYear } = useFiscalYear();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -252,12 +252,12 @@ const ProductSaleModal = ({ isOpen, onClose, onSaleRecorded, preselectedProduct 
               <div>
                 <h2 className={`text-lg font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
                   {isEditMode 
-                    ? (language === 'fr' ? 'Modifier les ventes' : 'Verkäufe bearbeiten')
-                    : (language === 'fr' ? 'Enregistrer des ventes' : 'Verkäufe erfassen')
+                    ? (t('products.saleModal.editSales'))
+                    : (t('products.saleModal.recordSales'))
                   }
                 </h2>
                 <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-                  {currentFiscalYear?.name || (language === 'fr' ? 'Exercice courant' : 'Aktuelles Geschäftsjahr')}
+                  {currentFiscalYear?.name || (t('products.saleModal.currentExercise'))}
                 </p>
               </div>
             </div>
@@ -278,10 +278,7 @@ const ProductSaleModal = ({ isOpen, onClose, onSaleRecorded, preselectedProduct 
             <div className="space-y-4">
               <div className={`p-4 rounded-xl ${isDark ? 'bg-red-500/20 border border-red-500/30' : 'bg-red-50 border border-red-200'}`}>
                 <p className={`text-sm ${isDark ? 'text-red-200' : 'text-red-700'}`}>
-                  {language === 'fr' 
-                    ? `Supprimer les ventes de "${selectedProduct?.name}" pour cet exercice (${existingSale?.quantity} unités) ?`
-                    : `Verkäufe von "${selectedProduct?.name}" für dieses Geschäftsjahr löschen (${existingSale?.quantity} Einheiten)?`
-                  }
+                  {t('products.saleModal.deleteConfirmMsg').replace('{name}', selectedProduct?.name).replace('{qty}', existingSale?.quantity)}
                 </p>
               </div>
               <div className="flex gap-3">
@@ -291,7 +288,7 @@ const ProductSaleModal = ({ isOpen, onClose, onSaleRecorded, preselectedProduct 
                     isDark ? 'border-slate-600 hover:bg-slate-700 text-white' : 'border-gray-200 hover:bg-gray-50'
                   }`}
                 >
-                  {language === 'fr' ? 'Annuler' : 'Abbrechen'}
+                  {t('products.saleModal.cancel')}
                 </button>
                 <button
                   onClick={handleDelete}
@@ -303,7 +300,7 @@ const ProductSaleModal = ({ isOpen, onClose, onSaleRecorded, preselectedProduct 
                   ) : (
                     <Trash2 className="w-4 h-4" />
                   )}
-                  {language === 'fr' ? 'Supprimer' : 'Löschen'}
+                  {t('products.saleModal.delete')}
                 </button>
               </div>
             </div>
@@ -311,13 +308,10 @@ const ProductSaleModal = ({ isOpen, onClose, onSaleRecorded, preselectedProduct 
             <div className="text-center py-8">
               <Package className={`w-12 h-12 mx-auto mb-3 ${isDark ? 'text-slate-600' : 'text-gray-300'}`} />
               <p className={isDark ? 'text-slate-400' : 'text-gray-500'}>
-                {language === 'fr' ? 'Aucune fiche produit disponible.' : 'Keine Produktkarte verfügbar.'}
+                {t('products.saleModal.noProductAvailable')}
               </p>
               <p className={`text-sm mt-1 ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>
-                {language === 'fr' 
-                  ? "Créez d'abord une fiche produit depuis le menu Produits."
-                  : 'Erstellen Sie zuerst eine Produktkarte im Menü Produkte.'
-                }
+                {t('products.saleModal.createProductFromMenu')}
               </p>
             </div>
           ) : (
@@ -325,7 +319,7 @@ const ProductSaleModal = ({ isOpen, onClose, onSaleRecorded, preselectedProduct 
               {/* Product selection */}
               <div>
                 <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
-                  {language === 'fr' ? 'Produit' : 'Produkt'} *
+                  {t('products.saleModal.product')} *
                 </label>
                 <select
                   value={selectedProduct?.id || ''}
@@ -339,10 +333,10 @@ const ProductSaleModal = ({ isOpen, onClose, onSaleRecorded, preselectedProduct 
                   } ${preselectedProduct ? 'opacity-75' : ''}`}
                   data-testid="product-select"
                 >
-                  <option value="">{language === 'fr' ? 'Sélectionner un produit...' : 'Produkt auswählen...'}</option>
+                  <option value="">{t('products.saleModal.selectProduct')}</option>
                   {products.map(p => (
                     <option key={p.id} value={p.id}>
-                      {p.name} ({(p.total_emissions_per_unit || 0).toFixed(2)} kgCO₂e/{language === 'fr' ? 'unité' : 'Einheit'})
+                      {p.name} ({(p.total_emissions_per_unit || 0).toFixed(2)} kgCO₂e/{t('products.saleModal.perUnit')})
                     </option>
                   ))}
                 </select>
@@ -354,10 +348,7 @@ const ProductSaleModal = ({ isOpen, onClose, onSaleRecorded, preselectedProduct 
                   <div className="flex items-center gap-2">
                     <Edit3 className="w-4 h-4 text-blue-500" />
                     <span className={`text-sm ${isDark ? 'text-blue-300' : 'text-blue-700'}`}>
-                      {language === 'fr' 
-                        ? `Vente existante : ${existingSale?.quantity} unités. Modifiez le total ci-dessous.`
-                        : `Bestehender Verkauf: ${existingSale?.quantity} Einheiten. Ändern Sie die Gesamtzahl unten.`
-                      }
+                      {t('products.saleModal.existingSale').replace('{qty}', existingSale?.quantity)}
                     </span>
                   </div>
                 </div>
@@ -374,12 +365,12 @@ const ProductSaleModal = ({ isOpen, onClose, onSaleRecorded, preselectedProduct 
                     <History className={`w-4 h-4 ${activeProfile.source === 'specific' ? 'text-purple-500' : (isDark ? 'text-slate-400' : 'text-gray-500')}`} />
                     <span className={`text-sm ${activeProfile.source === 'specific' ? (isDark ? 'text-purple-300' : 'text-purple-700') : (isDark ? 'text-slate-300' : 'text-gray-600')}`}>
                       {activeProfile.source === 'specific'
-                        ? (language === 'fr' ? `Profil ${currentFiscalYear?.name}` : `Profil ${currentFiscalYear?.name}`)
-                        : (language === 'fr' ? 'Profil par défaut' : 'Standardprofil')
+                        ? (t('products.saleModal.profileFY').replace('{name}', currentFiscalYear?.name))
+                        : (t('products.saleModal.defaultProfile'))
                       }
                     </span>
                     <span className={`text-xs ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-                      ({(profileManufacturing + profileUsage + profileDisposal).toFixed(2)} kgCO₂e/{language === 'fr' ? 'unité' : 'Einheit'})
+                      ({(profileManufacturing + profileUsage + profileDisposal).toFixed(2)} kgCO₂e/{t('products.saleModal.perUnit')})
                     </span>
                   </div>
                   <button
@@ -390,7 +381,7 @@ const ProductSaleModal = ({ isOpen, onClose, onSaleRecorded, preselectedProduct 
                     data-testid="manage-versions-btn"
                   >
                     <Edit3 className="w-3 h-3" />
-                    {language === 'fr' ? 'Gérer' : 'Verwalten'}
+                    {t('products.saleModal.manage')}
                   </button>
                 </div>
               )}
@@ -398,7 +389,7 @@ const ProductSaleModal = ({ isOpen, onClose, onSaleRecorded, preselectedProduct 
               {/* Quantity */}
               <div>
                 <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
-                  {language === 'fr' ? 'Total vendu' : 'Gesamtverkauf'} *
+                  {t('products.saleModal.totalSold')} *
                 </label>
                 <input
                   type="number"
@@ -417,7 +408,7 @@ const ProductSaleModal = ({ isOpen, onClose, onSaleRecorded, preselectedProduct 
               {selectedProduct && (
                 <div className="space-y-3">
                   <p className={`text-sm font-medium ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-                    {language === 'fr' ? 'Émissions estimées' : 'Geschätzte Emissionen'}
+                    {t('products.saleModal.estimatedEmissions')}
                   </p>
                   
                   <div className="grid grid-cols-3 gap-3">
@@ -434,7 +425,7 @@ const ProductSaleModal = ({ isOpen, onClose, onSaleRecorded, preselectedProduct 
                       <div className="flex items-center gap-1.5 mb-1">
                         <Leaf className={`w-3.5 h-3.5 ${isDark ? 'text-slate-400' : 'text-gray-400'}`} />
                         <span className={`text-xs ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-                          {language === 'fr' ? 'Utilisation' : 'Nutzung'}
+                          {t('products.saleModal.utilisation')}
                         </span>
                       </div>
                       <p className={`text-sm font-semibold tabular-nums ${isDark ? 'text-slate-200' : 'text-gray-800'}`} data-testid="preview-usage">
@@ -445,7 +436,7 @@ const ProductSaleModal = ({ isOpen, onClose, onSaleRecorded, preselectedProduct 
                       <div className="flex items-center gap-1.5 mb-1">
                         <Recycle className={`w-3.5 h-3.5 ${isDark ? 'text-slate-400' : 'text-gray-400'}`} />
                         <span className={`text-xs ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-                          {language === 'fr' ? 'Fin de vie' : 'Lebensende'}
+                          {t('products.saleModal.endOfLife')}
                         </span>
                       </div>
                       <p className={`text-sm font-semibold tabular-nums ${isDark ? 'text-slate-200' : 'text-gray-800'}`} data-testid="preview-disposal">
@@ -466,10 +457,7 @@ const ProductSaleModal = ({ isOpen, onClose, onSaleRecorded, preselectedProduct 
                   {quantity > 0 && (
                     <p className={`flex items-center gap-1.5 text-xs ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>
                       <ArrowRight className="w-3 h-3" />
-                      {language === 'fr' 
-                        ? 'Ventilé automatiquement dans le Scope 3 Aval'
-                        : 'Automatisch in Scope 3 Downstream aufgeteilt'
-                      }
+                      {t('products.saleModal.autoScope3')}
                     </p>
                   )}
                 </div>
@@ -501,7 +489,7 @@ const ProductSaleModal = ({ isOpen, onClose, onSaleRecorded, preselectedProduct 
                   isDark ? 'border-slate-600 hover:bg-slate-700 text-white' : 'border-gray-200 hover:bg-gray-50 text-gray-900'
                 }`}
               >
-                {language === 'fr' ? 'Annuler' : 'Abbrechen'}
+                {t('products.saleModal.cancel')}
               </button>
               <button
                 onClick={handleSubmit}
@@ -517,8 +505,8 @@ const ProductSaleModal = ({ isOpen, onClose, onSaleRecorded, preselectedProduct 
                   <Plus className="w-5 h-5" />
                 )}
                 {isEditMode 
-                  ? (language === 'fr' ? 'Mettre à jour' : 'Aktualisieren')
-                  : (language === 'fr' ? 'Enregistrer' : 'Speichern')
+                  ? (t('products.saleModal.update'))
+                  : (t('products.saleModal.save'))
                 }
               </button>
             </div>

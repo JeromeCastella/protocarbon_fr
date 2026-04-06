@@ -28,7 +28,7 @@ import { API_URL } from '../utils/apiConfig';
  */
 const ProductVersionsModal = ({ isOpen, onClose, productId, productName, onProfileUpdated }) => {
   const { isDark } = useTheme();
-  const { language } = useLanguage();
+  const { t, language } = useLanguage();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   
@@ -80,9 +80,7 @@ const ProductVersionsModal = ({ isOpen, onClose, productId, productName, onProfi
     const availableFys = fiscalYears.filter(fy => !usedFyIds.includes(fy.id));
     
     if (availableFys.length === 0) {
-      alert(language === 'fr' 
-        ? 'Tous les exercices fiscaux ont déjà un profil.' 
-        : 'Alle Geschäftsjahre haben bereits ein Profil.');
+      alert(t('products.versions.allFYHaveProfile'));
       return;
     }
     
@@ -155,9 +153,7 @@ const ProductVersionsModal = ({ isOpen, onClose, productId, productName, onProfi
   };
 
   const handleDeleteProfile = async (fiscalYearId) => {
-    if (!confirm(language === 'fr' 
-      ? 'Supprimer ce profil ? Les ventes futures utiliseront les valeurs par défaut.'
-      : 'Dieses Profil löschen? Zukünftige Verkäufe verwenden die Standardwerte.')) {
+    if (!confirm(t('products.versions.deleteProfileConfirm'))) {
       return;
     }
     
@@ -207,7 +203,7 @@ const ProductVersionsModal = ({ isOpen, onClose, productId, productName, onProfi
               </div>
               <div>
                 <h2 className={`text-lg font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                  {language === 'fr' ? 'Versions du produit' : 'Produktversionen'}
+                  {t('products.versions.title')}
                 </h2>
                 <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
                   {productName}
@@ -235,12 +231,10 @@ const ProductVersionsModal = ({ isOpen, onClose, productId, productName, onProfi
               <div className={`p-4 rounded-xl ${isDark ? 'bg-purple-500/20 border border-purple-500/30' : 'bg-purple-50 border border-purple-200'}`}>
                 <p className={`text-sm ${isDark ? 'text-purple-200' : 'text-purple-700'}`}>
                   {editingProfile?.is_default
-                    ? (language === 'fr' 
-                        ? 'Modifier les valeurs par défaut (utilisées quand aucun profil spécifique n\'existe)'
-                        : 'Standardwerte bearbeiten (verwendet wenn kein spezifisches Profil existiert)')
+                    ? t('products.versions.editDefaultValues')
                     : editingProfile
-                      ? (language === 'fr' ? 'Modifier le profil existant' : 'Bestehendes Profil bearbeiten')
-                      : (language === 'fr' ? 'Créer un nouveau profil pour un exercice spécifique' : 'Neues Profil für ein bestimmtes Geschäftsjahr erstellen')
+                      ? (t('products.versions.editProfile'))
+                      : (t('products.versions.createProfile'))
                   }
                 </p>
               </div>
@@ -249,7 +243,7 @@ const ProductVersionsModal = ({ isOpen, onClose, productId, productName, onProfi
               {!editingProfile && (
                 <div>
                   <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
-                    {language === 'fr' ? 'Exercice fiscal' : 'Geschäftsjahr'} *
+                    {t('products.versions.fiscalYear')} *
                   </label>
                   <select
                     value={formData.fiscal_year_id}
@@ -270,7 +264,7 @@ const ProductVersionsModal = ({ isOpen, onClose, productId, productName, onProfi
                 <div>
                   <label className={`flex items-center gap-2 text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
                     <Factory className="w-4 h-4 text-orange-500" />
-                    {language === 'fr' ? 'Transformation' : 'Transformation'}
+                    {t('products.versions.transformation')}
                   </label>
                   <div className="relative">
                     <input
@@ -291,7 +285,7 @@ const ProductVersionsModal = ({ isOpen, onClose, productId, productName, onProfi
                 <div>
                   <label className={`flex items-center gap-2 text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
                     <Leaf className="w-4 h-4 text-green-500" />
-                    {language === 'fr' ? 'Utilisation' : 'Nutzung'}
+                    {t('products.versions.utilisation')}
                   </label>
                   <div className="relative">
                     <input
@@ -312,7 +306,7 @@ const ProductVersionsModal = ({ isOpen, onClose, productId, productName, onProfi
                 <div>
                   <label className={`flex items-center gap-2 text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
                     <Recycle className="w-4 h-4 text-blue-500" />
-                    {language === 'fr' ? 'Fin de vie' : 'Lebensende'}
+                    {t('products.versions.endOfLife')}
                   </label>
                   <div className="relative">
                     <input
@@ -334,7 +328,7 @@ const ProductVersionsModal = ({ isOpen, onClose, productId, productName, onProfi
               {/* Total Preview */}
               <div className={`p-4 rounded-xl bg-gradient-to-r from-purple-500 to-purple-600 text-white`}>
                 <div className="flex items-center justify-between">
-                  <span className="text-purple-200">{language === 'fr' ? 'Total par unité' : 'Gesamt pro Einheit'}</span>
+                  <span className="text-purple-200">{t('products.versions.totalPerUnit')}</span>
                   <span className="text-xl font-bold">{totalEmissions.toFixed(2)} kgCO₂e</span>
                 </div>
               </div>
@@ -343,13 +337,13 @@ const ProductVersionsModal = ({ isOpen, onClose, productId, productName, onProfi
               {!editingProfile?.is_default && (
                 <div>
                   <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
-                    {language === 'fr' ? 'Raison du changement' : 'Änderungsgrund'}
+                    {t('products.versions.changeReason')}
                   </label>
                   <input
                     type="text"
                     value={formData.change_reason}
                     onChange={(e) => setFormData(prev => ({ ...prev, change_reason: e.target.value }))}
-                    placeholder={language === 'fr' ? 'Ex: Nouveau fournisseur, optimisation process...' : 'z.B.: Neuer Lieferant, Prozessoptimierung...'}
+                    placeholder={t('products.versions.changeReasonPlaceholder')}
                     className={`w-full px-4 py-3 rounded-xl border ${isDark ? 'bg-slate-700 border-slate-600 text-white placeholder:text-slate-500' : 'bg-white border-gray-200 placeholder:text-gray-400'}`}
                   />
                 </div>
@@ -361,7 +355,7 @@ const ProductVersionsModal = ({ isOpen, onClose, productId, productName, onProfi
                   onClick={() => setShowForm(false)}
                   className={`flex-1 px-4 py-3 rounded-xl border ${isDark ? 'border-slate-600 hover:bg-slate-700 text-white' : 'border-gray-200 hover:bg-gray-50'}`}
                 >
-                  {language === 'fr' ? 'Annuler' : 'Abbrechen'}
+                  {t('products.versions.cancel')}
                 </button>
                 <button
                   onClick={handleSaveProfile}
@@ -373,7 +367,7 @@ const ProductVersionsModal = ({ isOpen, onClose, productId, productName, onProfi
                   ) : (
                     <Check className="w-5 h-5" />
                   )}
-                  {language === 'fr' ? 'Enregistrer' : 'Speichern'}
+                  {t('products.versions.save')}
                 </button>
               </div>
             </div>
@@ -383,10 +377,7 @@ const ProductVersionsModal = ({ isOpen, onClose, productId, productName, onProfi
               {/* Info */}
               <div className={`p-3 rounded-xl ${isDark ? 'bg-slate-700/50' : 'bg-gray-50'}`}>
                 <p className={`text-sm ${isDark ? 'text-slate-300' : 'text-gray-600'}`}>
-                  {language === 'fr' 
-                    ? 'Les profils permettent de définir des émissions différentes selon l\'exercice fiscal. Les ventes utiliseront automatiquement le profil correspondant.'
-                    : 'Profile ermöglichen unterschiedliche Emissionen je nach Geschäftsjahr. Verkäufe verwenden automatisch das entsprechende Profil.'
-                  }
+                  {t('products.versions.profilesExplanation')}
                 </p>
               </div>
               
@@ -396,10 +387,10 @@ const ProductVersionsModal = ({ isOpen, onClose, productId, productName, onProfi
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center gap-2">
                       <span className={`px-2 py-1 text-xs font-medium rounded-full ${isDark ? 'bg-slate-600 text-slate-200' : 'bg-gray-200 text-gray-700'}`}>
-                        {language === 'fr' ? 'PAR DÉFAUT' : 'STANDARD'}
+                        {t('products.versions.defaultProfile')}
                       </span>
                       <span className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-                        {language === 'fr' ? 'Utilisé si aucun profil spécifique' : 'Verwendet wenn kein spezifisches Profil'}
+                        {t('products.versions.usedIfNoSpecific')}
                       </span>
                     </div>
                     <button
@@ -416,11 +407,11 @@ const ProductVersionsModal = ({ isOpen, onClose, productId, productName, onProfi
                     </div>
                     <div className={`p-2 rounded-lg ${isDark ? 'bg-green-500/20' : 'bg-green-50'}`}>
                       <span className="text-green-500 font-medium">{defaultProfile.usage_emissions} kgCO₂e</span>
-                      <p className={`text-xs ${isDark ? 'text-green-300/70' : 'text-green-600/70'}`}>{language === 'fr' ? 'Utilisation' : 'Nutzung'}</p>
+                      <p className={`text-xs ${isDark ? 'text-green-300/70' : 'text-green-600/70'}`}>{t('products.versions.utilisation')}</p>
                     </div>
                     <div className={`p-2 rounded-lg ${isDark ? 'bg-blue-500/20' : 'bg-blue-50'}`}>
                       <span className="text-blue-500 font-medium">{defaultProfile.disposal_emissions} kgCO₂e</span>
-                      <p className={`text-xs ${isDark ? 'text-blue-300/70' : 'text-blue-600/70'}`}>{language === 'fr' ? 'Fin de vie' : 'Lebensende'}</p>
+                      <p className={`text-xs ${isDark ? 'text-blue-300/70' : 'text-blue-600/70'}`}>{t('products.versions.endOfLife')}</p>
                     </div>
                   </div>
                 </div>
@@ -430,7 +421,7 @@ const ProductVersionsModal = ({ isOpen, onClose, productId, productName, onProfi
               {profiles.length > 0 && (
                 <div className="space-y-3">
                   <h3 className={`text-sm font-medium ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
-                    {language === 'fr' ? 'Profils par exercice' : 'Profile nach Geschäftsjahr'}
+                    {t('products.versions.profilesByFY')}
                   </h3>
                   
                   {profiles.map((profile) => (
@@ -483,11 +474,11 @@ const ProductVersionsModal = ({ isOpen, onClose, productId, productName, onProfi
                                 </div>
                                 <div className={`p-2 rounded-lg ${isDark ? 'bg-green-500/20' : 'bg-green-50'}`}>
                                   <span className="text-green-500 font-medium">{profile.usage_emissions} kgCO₂e</span>
-                                  <p className={`text-xs ${isDark ? 'text-green-300/70' : 'text-green-600/70'}`}>{language === 'fr' ? 'Utilisation' : 'Nutzung'}</p>
+                                  <p className={`text-xs ${isDark ? 'text-green-300/70' : 'text-green-600/70'}`}>{t('products.versions.utilisation')}</p>
                                 </div>
                                 <div className={`p-2 rounded-lg ${isDark ? 'bg-blue-500/20' : 'bg-blue-50'}`}>
                                   <span className="text-blue-500 font-medium">{profile.disposal_emissions} kgCO₂e</span>
-                                  <p className={`text-xs ${isDark ? 'text-blue-300/70' : 'text-blue-600/70'}`}>{language === 'fr' ? 'Fin de vie' : 'Lebensende'}</p>
+                                  <p className={`text-xs ${isDark ? 'text-blue-300/70' : 'text-blue-600/70'}`}>{t('products.versions.endOfLife')}</p>
                                 </div>
                               </div>
                               <div className="flex gap-2 mt-3">
@@ -498,7 +489,7 @@ const ProductVersionsModal = ({ isOpen, onClose, productId, productName, onProfi
                                   }`}
                                 >
                                   <Edit3 className="w-4 h-4" />
-                                  {language === 'fr' ? 'Modifier' : 'Bearbeiten'}
+                                  {t('products.versions.edit')}
                                 </button>
                                 <button
                                   onClick={(e) => { e.stopPropagation(); handleDeleteProfile(profile.fiscal_year_id); }}
@@ -529,7 +520,7 @@ const ProductVersionsModal = ({ isOpen, onClose, productId, productName, onProfi
                   }`}
                 >
                   <Plus className="w-5 h-5" />
-                  {language === 'fr' ? 'Ajouter un profil pour un exercice' : 'Profil für ein Geschäftsjahr hinzufügen'}
+                  {t('products.versions.addProfileForFY')}
                 </button>
               )}
               
@@ -538,10 +529,7 @@ const ProductVersionsModal = ({ isOpen, onClose, productId, productName, onProfi
                 <div className={`p-3 rounded-xl flex items-center gap-2 ${isDark ? 'bg-amber-500/20' : 'bg-amber-50'}`}>
                   <AlertCircle className="w-4 h-4 text-amber-500" />
                   <span className={`text-sm ${isDark ? 'text-amber-300' : 'text-amber-700'}`}>
-                    {language === 'fr' 
-                      ? 'Tous les exercices fiscaux ont déjà un profil défini.'
-                      : 'Alle Geschäftsjahre haben bereits ein definiertes Profil.'
-                    }
+                    {t('products.versions.allFYHaveProfileDefined')}
                   </span>
                 </div>
               )}

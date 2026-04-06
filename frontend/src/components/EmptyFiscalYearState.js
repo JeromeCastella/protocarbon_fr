@@ -11,8 +11,8 @@ import { useLanguage } from '../context/LanguageContext';
  */
 const EmptyFiscalYearState = ({ contextMessage }) => {
   const { isDark } = useTheme();
-  const { language } = useLanguage();
-
+  const { t } = useLanguage();
+  
   return (
     <div data-testid="empty-fiscal-year-state" className="flex items-center justify-center min-h-[60vh]">
       <motion.div
@@ -37,7 +37,7 @@ const EmptyFiscalYearState = ({ contextMessage }) => {
 
         {/* Title */}
         <h2 className={`text-2xl font-bold mb-3 ${isDark ? 'text-white' : 'text-gray-900'}`}>
-          {language === 'fr' ? 'Créez votre premier exercice fiscal' : 'Erstellen Sie Ihr erstes Geschäftsjahr'}
+          {t('emptyFiscalYear.createFirst')}
         </h2>
 
         {/* Context-specific message */}
@@ -49,10 +49,7 @@ const EmptyFiscalYearState = ({ contextMessage }) => {
 
         {/* Description */}
         <p className={`mb-6 ${isDark ? 'text-slate-400' : 'text-gray-600'}`}>
-          {language === 'fr' 
-            ? 'Pour commencer, vous devez créer un exercice fiscal. Cela permettra d\'organiser vos données par période.'
-            : 'Um zu beginnen, müssen Sie ein Geschäftsjahr erstellen. Dadurch können Ihre Daten nach Zeitraum organisiert werden.'
-          }
+          {t('emptyFiscalYear.mainDesc')}
         </p>
 
         {/* Info box */}
@@ -60,10 +57,7 @@ const EmptyFiscalYearState = ({ contextMessage }) => {
           <div className="flex items-start gap-3">
             <Info className={`w-5 h-5 mt-0.5 flex-shrink-0 ${isDark ? 'text-blue-400' : 'text-blue-500'}`} />
             <div className={`text-sm ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
-              {language === 'fr' 
-                ? 'Un exercice fiscal correspond généralement à une année calendaire (janvier-décembre) ou à l\'année comptable de votre entreprise.'
-                : 'Ein Geschäftsjahr entspricht in der Regel einem Kalenderjahr (Januar-Dezember) oder dem Buchhaltungsjahr Ihres Unternehmens.'
-              }
+              {t('emptyFiscalYear.infoText')}
             </div>
           </div>
         </div>
@@ -75,14 +69,14 @@ const EmptyFiscalYearState = ({ contextMessage }) => {
           className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl font-medium hover:from-blue-600 hover:to-blue-700 transition-all shadow-lg shadow-blue-500/30"
         >
           <PlusCircle className="w-5 h-5" />
-          {language === 'fr' ? 'Créer un exercice fiscal' : 'Geschäftsjahr erstellen'}
+          {t('emptyFiscalYear.createBtn')}
         </Link>
 
         {/* Secondary link */}
         <p className={`mt-4 text-sm ${isDark ? 'text-slate-500' : 'text-gray-500'}`}>
-          {language === 'fr' ? 'Rendez-vous dans ' : 'Gehen Sie zu '}
+          {t('emptyFiscalYear.goTo')}
           <Link to="/fiscal-years" className="text-blue-500 hover:underline">
-            {language === 'fr' ? 'Exercices' : 'Geschäftsjahre'}
+            {t('emptyFiscalYear.exercisesLink')}
           </Link>
         </p>
       </motion.div>

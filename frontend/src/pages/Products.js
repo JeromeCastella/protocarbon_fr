@@ -19,6 +19,7 @@ import { API_URL } from '../utils/apiConfig';
 
 // ── Emissions stacked bar ──────────────────────────────────────────
 const EmissionsBar = ({ manufacturing, usage, disposal, isDark }) => {
+  const { t } = useLanguage();
   const total = manufacturing + usage + disposal;
   if (total <= 0) return null;
 
@@ -29,9 +30,9 @@ const EmissionsBar = ({ manufacturing, usage, disposal, isDark }) => {
   const [hovered, setHovered] = useState(null);
 
   const segments = [
-    { key: 'mfg', pct: pctMfg, value: manufacturing, color: 'bg-orange-400', label: 'Transformation' },
-    { key: 'use', pct: pctUse, value: usage, color: 'bg-emerald-400', label: 'Utilisation' },
-    { key: 'end', pct: pctEnd, value: disposal, color: 'bg-sky-400', label: 'Fin de vie' },
+    { key: 'mfg', pct: pctMfg, value: manufacturing, color: 'bg-orange-400', label: t('products.transformation') },
+    { key: 'use', pct: pctUse, value: usage, color: 'bg-emerald-400', label: t('products.utilisation') },
+    { key: 'end', pct: pctEnd, value: disposal, color: 'bg-sky-400', label: t('products.endOfLife') },
   ].filter(s => s.pct > 0);
 
   return (
@@ -65,7 +66,8 @@ const EmissionsBar = ({ manufacturing, usage, disposal, isDark }) => {
 };
 
 // ── Actions dropdown ───────────────────────────────────────────────
-const ActionsMenu = ({ onEdit, onDuplicate, onDelete, onVersions, isDark, language }) => {
+const ActionsMenu = ({ onEdit, onDuplicate, onDelete, onVersions, isDark }) => {
+  const { t } = useLanguage();
   const [open, setOpen] = useState(false);
   const ref = useRef(null);
 
@@ -76,10 +78,10 @@ const ActionsMenu = ({ onEdit, onDuplicate, onDelete, onVersions, isDark, langua
   }, []);
 
   const items = [
-    { icon: Edit3, label: language === 'fr' ? 'Modifier' : 'Bearbeiten', action: onEdit, testId: 'action-edit' },
-    { icon: Copy, label: language === 'fr' ? 'Dupliquer' : 'Duplizieren', action: onDuplicate, testId: 'action-duplicate' },
-    { icon: Clock, label: language === 'fr' ? 'Versions' : 'Versionen', action: onVersions, testId: 'action-versions' },
-    { icon: Trash2, label: language === 'fr' ? 'Supprimer' : 'Löschen', action: onDelete, danger: true, testId: 'action-delete' },
+    { icon: Edit3, label: t('products.actions.edit'), action: onEdit, testId: 'action-edit' },
+    { icon: Copy, label: t('products.actions.duplicate'), action: onDuplicate, testId: 'action-duplicate' },
+    { icon: Clock, label: t('products.actions.versions'), action: onVersions, testId: 'action-versions' },
+    { icon: Trash2, label: t('products.actions.delete'), action: onDelete, danger: true, testId: 'action-delete' },
   ].filter(Boolean);
 
   return (
@@ -126,7 +128,8 @@ const ActionsMenu = ({ onEdit, onDuplicate, onDelete, onVersions, isDark, langua
 };
 
 // ── Product card ───────────────────────────────────────────────────
-const ProductCard = ({ product, index, isDark, language, onEdit, onDelete, onDuplicate, onVersions, onSale, onRecalculate, onClick }) => {
+const ProductCard = ({ product, index, isDark, onEdit, onDelete, onDuplicate, onVersions, onSale, onRecalculate, onClick }) => {
+  const { t, language } = useLanguage();
   const mfg = product.active_manufacturing_emissions ?? product.manufacturing_emissions ?? 0;
   const usage = product.active_usage_emissions ?? product.usage_emissions ?? 0;
   const disposal = product.active_disposal_emissions ?? product.disposal_emissions ?? 0;
@@ -158,7 +161,7 @@ const ProductCard = ({ product, index, isDark, language, onEdit, onDelete, onDup
             onClick={(e) => { e.stopPropagation(); onEdit(product); }}
             data-testid="card-edit-btn"
             className={`p-1.5 rounded-lg transition-colors ${isDark ? 'hover:bg-slate-600 text-slate-400 hover:text-blue-400' : 'hover:bg-blue-100 text-gray-400 hover:text-blue-600'}`}
-            title={language === 'fr' ? 'Modifier' : 'Bearbeiten'}
+            title={t('products.actions.edit')}
           >
             <Edit3 className="w-4 h-4" />
           </button>
@@ -168,7 +171,6 @@ const ProductCard = ({ product, index, isDark, language, onEdit, onDelete, onDup
             onDelete={() => onDelete(product.id)}
             onVersions={() => onVersions(product)}
             isDark={isDark}
-            language={language}
           />
         </div>
       </div>
@@ -183,7 +185,7 @@ const ProductCard = ({ product, index, isDark, language, onEdit, onDelete, onDup
               isDark ? 'bg-amber-500/10 text-amber-300 hover:bg-amber-500/20' : 'bg-amber-50 text-amber-700 hover:bg-amber-100'
             }`}
           >
-            <span>{language === 'fr' ? 'Recalcul disponible' : 'Neuberechnung verfügbar'}</span>
+            <span>{t('products.recalcAvailable')}</span>
             <RefreshCw className="w-3.5 h-3.5" />
           </button>
         </div>
@@ -194,7 +196,7 @@ const ProductCard = ({ product, index, isDark, language, onEdit, onDelete, onDup
         <p className={`text-3xl font-bold tracking-tight ${isDark ? 'text-white' : 'text-gray-900'}`} data-testid="total-emissions">
           {total.toFixed(1)}
           <span className={`text-base font-normal ml-1.5 ${isDark ? 'text-slate-400' : 'text-gray-400'}`}>
-            kgCO₂e / {language === 'fr' ? 'unité' : 'Einheit'}
+            kgCO₂e / {t('products.perUnit')}
           </span>
         </p>
       </div>
@@ -208,8 +210,8 @@ const ProductCard = ({ product, index, isDark, language, onEdit, onDelete, onDup
       <div className={`px-5 py-3 border-t flex items-center justify-between ${isDark ? 'border-slate-700' : 'border-gray-100'}`}>
         <span className={`text-xs ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
           {fyQty > 0
-            ? `${fyQty} ${language === 'fr' ? 'ventes' : 'Verkäufe'} · ${(fyEmissions / 1000).toFixed(2)} tCO₂e`
-            : (language === 'fr' ? 'Aucune vente' : 'Keine Verkäufe')}
+            ? `${fyQty} ${t('products.sales')} · ${(fyEmissions / 1000).toFixed(2)} tCO₂e`
+            : (t('products.noSales'))}
         </span>
         <button
           onClick={(e) => { e.stopPropagation(); onSale(product); }}
@@ -219,7 +221,7 @@ const ProductCard = ({ product, index, isDark, language, onEdit, onDelete, onDup
           }`}
         >
           <Plus className="w-3.5 h-3.5" />
-          {language === 'fr' ? 'Vente' : 'Verkauf'}
+          {t('products.sale')}
         </button>
       </div>
     </motion.div>
@@ -252,16 +254,12 @@ const Products = () => {
   useEffect(() => { fetchProducts(); }, [fetchProducts]);
 
   const handleDelete = async (productId) => {
-    const msg = language === 'fr'
-      ? 'Êtes-vous sûr de vouloir supprimer ce produit ?'
-      : 'Sind Sie sicher, dass Sie dieses Produkt löschen möchten?';
+    const msg = t('products.deleteConfirm');
     if (!window.confirm(msg)) return;
     try {
       const res = await axios.delete(`${API_URL}/api/products/${productId}`);
       if (res.data?.archived) {
-        alert(language === 'fr'
-          ? 'Le produit a été archivé car il a des ventes enregistrées.'
-          : 'Das Produkt wurde archiviert, da es Verkäufe gibt.');
+        alert(t('products.archivedMsg'));
       }
       fetchProducts();
     } catch (err) { logger.error('Failed to delete product:', err); }
@@ -299,9 +297,7 @@ const Products = () => {
   if (!fiscalYears || fiscalYears.length === 0) {
     return (
       <EmptyFiscalYearState
-        contextMessage={language === 'fr'
-          ? 'Créez un exercice fiscal pour pouvoir enregistrer des produits et suivre leurs ventes.'
-          : 'Erstellen Sie ein Geschäftsjahr, um Produkte zu erfassen und deren Verkäufe zu verfolgen.'}
+        contextMessage={t('products.emptyFiscalYear')}
       />
     );
   }
@@ -315,9 +311,7 @@ const Products = () => {
             {t('products.title')}
           </h1>
           <p className={`mt-2 ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-            {language === 'fr'
-              ? 'Gérez vos fiches produits et leurs impacts carbone sur tout le cycle de vie'
-              : 'Verwalten Sie Ihre Produktkarten und deren CO₂-Auswirkungen über den gesamten Lebenszyklus'}
+            {t('products.subtitle')}
           </p>
           {currentFiscalYear && (
             <div className={`mt-2 inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm ${
@@ -334,7 +328,7 @@ const Products = () => {
           className="flex items-center gap-2 px-6 py-3 bg-blue-500 text-white rounded-xl hover:bg-blue-600 transition-all shadow-lg shadow-blue-500/30"
         >
           <Plus className="w-5 h-5" />
-          {language === 'fr' ? 'Créer une fiche produit' : 'Produktkarte erstellen'}
+          {t('products.createProduct')}
         </button>
       </div>
 
@@ -343,19 +337,17 @@ const Products = () => {
         <div className={`text-center py-16 rounded-2xl ${isDark ? 'bg-slate-800' : 'bg-white shadow-sm border border-gray-100'}`}>
           <Package className={`w-16 h-16 mx-auto mb-4 ${isDark ? 'text-slate-600' : 'text-gray-300'}`} />
           <p className={`text-lg mb-2 ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-            {language === 'fr' ? 'Aucun produit défini' : 'Keine Produkte definiert'}
+            {t('products.noProduct')}
           </p>
           <p className={`text-sm mb-6 ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>
-            {language === 'fr'
-              ? 'Créez votre première fiche produit pour commencer à suivre les émissions de vos produits vendus.'
-              : 'Erstellen Sie Ihre erste Produktkarte, um die Emissionen Ihrer verkauften Produkte zu verfolgen.'}
+            {t('products.noProductDesc')}
           </p>
           <button
             onClick={() => setShowWizard(true)}
             className="inline-flex items-center gap-2 px-6 py-3 bg-blue-500 text-white rounded-xl hover:bg-blue-600 transition-all"
           >
             <Plus className="w-5 h-5" />
-            {language === 'fr' ? 'Créer une fiche produit' : 'Produktkarte erstellen'}
+            {t('products.createProduct')}
           </button>
         </div>
       ) : (
@@ -366,7 +358,6 @@ const Products = () => {
               product={product}
               index={i}
               isDark={isDark}
-              language={language}
               onEdit={handleEdit}
               onDelete={handleDelete}
               onDuplicate={handleDuplicate}

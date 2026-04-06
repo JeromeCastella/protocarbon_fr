@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   X, Factory, Leaf, Recycle, Package, ShoppingBag, Edit3, Plus, Clock
 } from 'lucide-react';
+import { useLanguage } from '../context/LanguageContext';
 
 /**
  * Modale pleine page pour le détail d'un produit.
@@ -11,6 +12,8 @@ import {
 const ProductDetailModal = ({
   isOpen, onClose, product, isDark, language, currentFiscalYear, onEdit, onSale
 }) => {
+  const { t } = useLanguage();
+  
   if (!isOpen || !product) return null;
 
   const mfg = product.active_manufacturing_emissions ?? product.manufacturing_emissions ?? 0;
@@ -23,9 +26,9 @@ const ProductDetailModal = ({
   const fyEmissions = product.fiscal_year_sales_emissions ?? 0;
 
   const phases = [
-    { key: 'mfg', label: language === 'fr' ? 'Transformation (3.10)' : 'Transformation (3.10)', value: mfg, icon: Factory, color: 'orange' },
-    { key: 'use', label: language === 'fr' ? 'Utilisation' : 'Nutzung', value: usage, icon: Leaf, color: 'emerald' },
-    { key: 'end', label: language === 'fr' ? 'Fin de vie' : 'Lebensende', value: disposal, icon: Recycle, color: 'sky' },
+    { key: 'mfg', label: t('products.transformation') + ' (3.10)', value: mfg, icon: Factory, color: 'orange' },
+    { key: 'use', label: t('products.detail.utilisation'), value: usage, icon: Leaf, color: 'emerald' },
+    { key: 'end', label: t('products.detail.endOfLife'), value: disposal, icon: Recycle, color: 'sky' },
   ].filter(p => p.value > 0);
 
   const totalPhases = phases.reduce((s, p) => s + p.value, 0);
@@ -68,12 +71,12 @@ const ProductDetailModal = ({
                         : (isDark ? 'bg-blue-500/20 text-blue-300' : 'bg-blue-100 text-blue-700')
                     }`}>
                       {product.product_type === 'semi_finished'
-                        ? (language === 'fr' ? 'Semi-fini' : 'Halbfertig')
-                        : (language === 'fr' ? 'Fini' : 'Fertig')}
+                        ? (t('products.detail.semiFinished'))
+                        : (t('products.detail.finished'))}
                     </span>
                     {product.lifespan_years > 0 && (
                       <span className={`text-xs flex items-center gap-1 ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>
-                        <Clock className="w-3 h-3" /> {product.lifespan_years} {language === 'fr' ? 'ans' : 'Jahre'}
+                        <Clock className="w-3 h-3" /> {product.lifespan_years} {t('products.detail.years')}
                       </span>
                     )}
                   </div>
@@ -86,7 +89,7 @@ const ProductDetailModal = ({
                   className={`flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium transition-colors ${isDark ? 'hover:bg-slate-700 text-blue-400' : 'hover:bg-blue-50 text-blue-600'}`}
                 >
                   <Edit3 className="w-4 h-4" />
-                  {language === 'fr' ? 'Modifier' : 'Bearbeiten'}
+                  {t('products.detail.edit')}
                 </button>
                 <button onClick={onClose} className={`p-2.5 rounded-xl transition-colors ${isDark ? 'hover:bg-slate-700' : 'hover:bg-gray-100'}`}>
                   <X className={`w-5 h-5 ${isDark ? 'text-slate-400' : 'text-gray-400'}`} />
@@ -101,7 +104,7 @@ const ProductDetailModal = ({
                 <p className={`text-5xl font-bold tracking-tight ${isDark ? 'text-white' : 'text-gray-900'}`} data-testid="detail-total">
                   {total.toFixed(total >= 100 ? 0 : total >= 1 ? 1 : 2)}
                   <span className={`text-lg font-normal ml-2 ${isDark ? 'text-slate-400' : 'text-gray-400'}`}>
-                    kgCO₂e / {language === 'fr' ? 'unité' : 'Einheit'}
+                    kgCO₂e / {t('products.detail.perUnit')}
                   </span>
                 </p>
               </div>
@@ -132,17 +135,17 @@ const ProductDetailModal = ({
                 <div>
                   <h3 className={`text-sm font-semibold mb-3 flex items-center gap-2 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
                     <Recycle className="w-4 h-4" />
-                    {language === 'fr' ? `Fin de vie (${endOfLife.length})` : `Lebensende (${endOfLife.length})`}
+                    {`${t('products.detail.endOfLifeTitle')} (${endOfLife.length})`}
                   </h3>
                   <div className={`rounded-xl overflow-hidden border ${isDark ? 'border-slate-700' : 'border-gray-200'}`}>
                     <table className="w-full text-sm">
                       <thead>
                         <tr className={isDark ? 'bg-slate-700/50' : 'bg-gray-50'}>
                           <th className={`text-left px-4 py-2.5 font-medium ${isDark ? 'text-slate-300' : 'text-gray-600'}`}>
-                            {language === 'fr' ? 'Traitement' : 'Behandlung'}
+                            {t('products.detail.treatment')}
                           </th>
                           <th className={`text-right px-4 py-2.5 font-medium ${isDark ? 'text-slate-300' : 'text-gray-600'}`}>
-                            {language === 'fr' ? 'Quantité' : 'Menge'}
+                            {t('products.detail.quantity')}
                           </th>
                         </tr>
                       </thead>
@@ -167,14 +170,14 @@ const ProductDetailModal = ({
               <div>
                 <h3 className={`text-sm font-semibold mb-3 flex items-center gap-2 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
                   <ShoppingBag className="w-4 h-4" />
-                  {language === 'fr' ? 'Ventes' : 'Verkäufe'}
+                  {t('products.detail.salesTitle')}
                   {currentFiscalYear && <span className={`font-normal text-xs ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>({currentFiscalYear.name})</span>}
                 </h3>
                 {fyQty > 0 ? (
                   <div className={`p-4 rounded-xl ${isDark ? 'bg-slate-700/50' : 'bg-gray-50'}`}>
                     <div className="flex items-center justify-between">
                       <span className={isDark ? 'text-slate-300' : 'text-gray-600'}>
-                        {fyQty} {language === 'fr' ? 'unités vendues' : 'verkaufte Einheiten'}
+                        {fyQty} {t('products.detail.unitsSold')}
                       </span>
                       <span className={`font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
                         {(fyEmissions / 1000).toFixed(2)} tCO₂e
@@ -183,7 +186,7 @@ const ProductDetailModal = ({
                   </div>
                 ) : (
                   <p className={`text-sm ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>
-                    {language === 'fr' ? 'Aucune vente enregistrée pour cet exercice.' : 'Keine Verkäufe für dieses Geschäftsjahr.'}
+                    {t('products.detail.noSalesMsg')}
                   </p>
                 )}
               </div>
@@ -199,7 +202,7 @@ const ProductDetailModal = ({
                 }`}
               >
                 <Plus className="w-4 h-4" />
-                {language === 'fr' ? 'Enregistrer une vente' : 'Verkauf erfassen'}
+                {t('products.detail.recordSale')}
               </button>
               <button
                 onClick={onClose}
@@ -207,7 +210,7 @@ const ProductDetailModal = ({
                   isDark ? 'bg-slate-700 hover:bg-slate-600 text-white' : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
                 }`}
               >
-                {language === 'fr' ? 'Fermer' : 'Schließen'}
+                {t('products.detail.close')}
               </button>
             </div>
           </motion.div>

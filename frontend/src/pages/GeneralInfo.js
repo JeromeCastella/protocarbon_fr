@@ -496,11 +496,11 @@ const GeneralInfo = () => {
   const isPrivateCompany = company.entity_type === 'private_company';
 
   const entityTypes = [
-    { value: 'private_company', label: language === 'fr' ? 'Entreprise privée' : 'Privatunternehmen' },
-    { value: 'public_admin', label: language === 'fr' ? 'Administration publique' : 'Öffentliche Verwaltung' },
-    { value: 'association', label: language === 'fr' ? 'Association' : 'Verein' },
-    { value: 'foundation', label: language === 'fr' ? 'Fondation' : 'Stiftung' },
-    { value: 'other', label: language === 'fr' ? 'Autre' : 'Andere' }
+    { value: 'private_company', label: t('generalInfo.entityTypes.privateCompany') },
+    { value: 'public_admin', label: t('generalInfo.entityTypes.publicAdmin') },
+    { value: 'association', label: t('generalInfo.entityTypes.association') },
+    { value: 'foundation', label: t('generalInfo.entityTypes.foundation') },
+    { value: 'other', label: t('generalInfo.entityTypes.other') }
   ];
 
   const sectors = [
@@ -534,10 +534,7 @@ const GeneralInfo = () => {
   if (!fiscalYears || fiscalYears.length === 0) {
     return (
       <EmptyFiscalYearState 
-        contextMessage={language === 'fr' 
-          ? 'Créez un exercice fiscal pour pouvoir configurer les données spécifiques à chaque période.'
-          : 'Erstellen Sie ein Geschäftsjahr, um periodenspezifische Daten konfigurieren zu können.'
-        }
+        contextMessage={t('generalInfo.emptyFiscalYear')}
       />
     );
   }
@@ -569,10 +566,10 @@ const GeneralInfo = () => {
             </div>
             <div>
               <h2 className={`text-xl font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                {language === 'fr' ? "Identité de l'entreprise" : 'Unternehmensidentität'}
+                {t('generalInfo.companyIdentity')}
               </h2>
               <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-                {language === 'fr' ? "Données stables, communes à tous les exercices" : 'Stabile Daten, gemeinsam für alle Geschäftsjahre'}
+                {t('generalInfo.companyIdentityDesc')}
               </p>
             </div>
           </div>
@@ -671,7 +668,7 @@ const GeneralInfo = () => {
           <div>
             <label className={`flex items-center gap-2 text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
               <Building2 className="w-4 h-4" />
-              {language === 'fr' ? "Type d'entité" : 'Unternehmenstyp'}
+              {t('generalInfo.entityType')}
             </label>
             <select
               value={company.entity_type || 'private_company'}
@@ -729,12 +726,10 @@ const GeneralInfo = () => {
             </div>
             <div>
               <h2 className={`text-xl font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                {language === 'fr' ? `Données de l'exercice ${selectedFiscalYear?.year || ''}` : `Daten Geschäftsjahr ${selectedFiscalYear?.year || ''}`}
+                {t('generalInfo.fiscalYearData').replace('{year}', selectedFiscalYear?.year || '')}
               </h2>
               <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-                {language === 'fr' 
-                  ? "Ces données sont spécifiques à l'exercice sélectionné" 
-                  : 'Diese Daten sind spezifisch für das ausgewählte Geschäftsjahr'}
+                {t('generalInfo.fiscalYearDataDesc2')}
               </p>
             </div>
           </div>
@@ -772,9 +767,7 @@ const GeneralInfo = () => {
           <div className={`flex items-center gap-2 p-3 rounded-xl mb-4 ${isDark ? 'bg-amber-900/30 text-amber-300' : 'bg-amber-50 text-amber-700'}`}>
             <AlertCircle className="w-5 h-5 flex-shrink-0" />
             <span className="text-sm">
-              {language === 'fr' 
-                ? "Cet exercice est clôturé. Les données ne peuvent plus être modifiées." 
-                : 'Dieses Geschäftsjahr ist abgeschlossen. Die Daten können nicht mehr geändert werden.'}
+              {t('generalInfo.closedExercise')}
             </span>
           </div>
         )}
@@ -784,9 +777,7 @@ const GeneralInfo = () => {
           <div className={`flex items-center gap-2 p-3 rounded-xl mb-4 ${isDark ? 'bg-blue-900/30 text-blue-300' : 'bg-blue-50 text-blue-700'}`}>
             <Info className="w-5 h-5 flex-shrink-0" />
             <span className="text-sm">
-              {language === 'fr' 
-                ? "Veuillez sélectionner un exercice fiscal pour modifier ces données." 
-                : 'Bitte wählen Sie ein Geschäftsjahr aus, um diese Daten zu ändern.'}
+              {t('generalInfo.selectFiscalYear')}
             </span>
           </div>
         )}
@@ -889,9 +880,7 @@ const GeneralInfo = () => {
           <div className={`flex items-center gap-2 p-3 rounded-xl mb-4 ${isDark ? 'bg-purple-900/30 text-purple-300' : 'bg-purple-50 text-purple-700'}`}>
             <Calendar className="w-4 h-4 flex-shrink-0" />
             <span className="text-sm">
-              {language === 'fr' 
-                ? `Configuration du périmètre pour l'exercice ${selectedFiscalYear.year}` 
-                : `Perimeterkonfiguration für das Geschäftsjahr ${selectedFiscalYear.year}`}
+              {t('generalInfo.perimeterConfig').replace('{year}', selectedFiscalYear.year)}
             </span>
           </div>
         )}
@@ -1064,12 +1053,10 @@ const GeneralInfo = () => {
                     />
                     <div className="flex-1">
                       <span className={`font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                        {language === 'fr' ? 'Produits vendus' : 'Verkaufte Produkte'}
+                        {t('generalInfo.soldProducts')}
                       </span>
                       <p className={`text-xs mt-0.5 ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-                        {language === 'fr' 
-                          ? 'Inclut : Transformation (3.10), Utilisation (3.11), Fin de vie (3.12)' 
-                          : 'Enthält: Verarbeitung (3.10), Nutzung (3.11), Lebensende (3.12)'}
+                        {t('generalInfo.soldProductsIncludes')}
                       </p>
                     </div>
                   </label>
@@ -1143,7 +1130,7 @@ const GeneralInfo = () => {
                         ? 'hover:bg-slate-700 text-slate-400 hover:text-white' 
                         : 'hover:bg-gray-100 text-gray-400 hover:text-gray-600'
                     }`}
-                    title={language === 'fr' ? 'Fermer' : 'Schließen'}
+                    title={t('generalInfo.close')}
                   >
                     <X className="w-5 h-5" />
                   </button>
