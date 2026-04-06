@@ -1,1191 +1,134 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React from 'react';
 import { useTheme } from '../context/ThemeContext';
-import { useLanguage } from '../context/LanguageContext';
-import { useAuth } from '../context/AuthContext';
-import logger from '../utils/logger';
-import {
-  Search, X, Filter, CheckSquare, Square, ChevronLeft, ChevronRight,
-  BarChart3, Eye, EyeOff, Flag, CheckCircle2, CircleDot, Sparkles,
-  ArrowUpDown, ArrowUp, ArrowDown, Layers, Save, Loader2, Code2, Copy, Check,
-  Languages, CopyPlus, Link2
-} from 'lucide-react';
-
-import { API_URL as API } from '../utils/apiConfig';
+import { Search, X, Sparkles, ChevronLeft, ChevronRight, Layers } from 'lucide-react';
+import { useCurationWorkbench } from '../hooks/useCurationWorkbench';
 import LocationLinkPanel from '../components/curation/LocationLinkPanel';
+import StatsDashboard from '../components/curation-workbench/StatsDashboard';
+import BulkActionsBar from '../components/curation-workbench/BulkActionsBar';
+import CurationTable from '../components/curation-workbench/CurationTable';
+import BulkPreviewModal from '../components/curation-workbench/BulkPreviewModal';
+import AISuggestModal from '../components/curation-workbench/AISuggestModal';
+import TranslatePreviewModal from '../components/curation-workbench/TranslatePreviewModal';
+import JsonViewerModal from '../components/curation-workbench/JsonViewerModal';
 
-// ==================== STATS DASHBOARD ====================
-const StatsDashboard = ({ stats, isDark, onSubcategoryClick, activeSubcategory }) => {
-  const { t } = useLanguage();
-  if (!stats) return null;
-  const g = stats.global;
-  return (
-    <div className={`border-b ${isDark ? 'border-slate-700' : 'border-gray-200'}`}>
-      {/* Global progress */}
-      <div className="px-4 py-3 flex items-center gap-6">
-        <div className="flex items-center gap-2">
-          <BarChart3 className="w-4 h-4 text-blue-500" />
-          <span className={`text-sm font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-            {t('curation.stats.globalProgress')}
-          </span>
-        </div>
-        <div className="flex-1 flex items-center gap-3">
-          <div className={`flex-1 h-2 rounded-full overflow-hidden ${isDark ? 'bg-slate-700' : 'bg-gray-200'}`}>
-            <div className="h-full bg-green-500 rounded-full transition-all" style={{ width: `${g.progress_pct}%` }} />
-          </div>
-          <span className={`text-xs font-mono ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-            {g.reviewed}/{g.total} ({g.progress_pct}%)
-          </span>
-        </div>
-        <div className="flex gap-4 text-xs">
-          <span className="flex items-center gap-1"><CheckCircle2 className="w-3 h-3 text-green-500" />{g.reviewed} {t('curation.stats.treated')}</span>
-          <span className="flex items-center gap-1"><Flag className="w-3 h-3 text-amber-500" />{g.flagged} {t('curation.stats.flaggedLabel')}</span>
-          <span className="flex items-center gap-1"><CircleDot className="w-3 h-3 text-slate-400" />{g.untreated} {t('curation.stats.remaining')}</span>
-        </div>
-      </div>
-
-      {/* Subcategory filter chips */}
-      <div className="px-4 pb-3 flex flex-wrap gap-1.5 max-h-[100px] overflow-y-auto">
-        <button
-          onClick={() => onSubcategoryClick('')}
-          className={`px-2.5 py-1 rounded-lg text-[11px] font-medium transition-all ${
-            !activeSubcategory
-              ? 'bg-blue-500 text-white'
-              : isDark ? 'bg-slate-700 text-slate-300 hover:bg-slate-600' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-          }`}
-        >
-          Tous ({g.total})
-        </button>
-        {stats.by_subcategory.map(sc => (
-          <button
-            key={sc.subcategory}
-            onClick={() => onSubcategoryClick(sc.subcategory)}
-            className={`px-2.5 py-1 rounded-lg text-[11px] transition-all flex items-center gap-1 ${
-              activeSubcategory === sc.subcategory
-                ? 'bg-blue-500 text-white'
-                : isDark ? 'bg-slate-700 text-slate-400 hover:bg-slate-600' : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
-            }`}
-          >
-            {sc.name_fr}
-            <span className={`font-mono ${activeSubcategory === sc.subcategory ? 'text-blue-200' : isDark ? 'text-slate-500' : 'text-gray-400'}`}>
-              {sc.reviewed}/{sc.total}
-            </span>
-          </button>
-        ))}
-      </div>
-    </div>
-  );
-};
-
-// ==================== BULK ACTIONS BAR ====================
-const BulkActionsBar = ({ selectedIds, isDark, onClearSelection, onBulkAction, loading, subcategoriesList, onCopyOriginals, onTranslate }) => {
-  const { t } = useLanguage();
-  const [bulkField, setBulkField] = useState('');
-  const [bulkValue, setBulkValue] = useState('');
-
-  if (selectedIds.length === 0) return null;
-
-  const handleApply = () => {
-    if (!bulkField) return;
-    let value = bulkValue;
-    if (bulkField === 'is_public') value = bulkValue === 'true';
-    if (bulkField === 'popularity_score') value = parseInt(bulkValue) || 50;
-    onBulkAction({ [bulkField]: value });
-    setBulkField('');
-    setBulkValue('');
-  };
-
-  return (
-    <div className={`sticky top-0 z-20 px-4 py-2 flex items-center gap-3 border-b ${
-      isDark ? 'bg-blue-900/30 border-blue-500/30' : 'bg-blue-50 border-blue-200'
-    }`}>
-      <span className="text-sm font-medium text-blue-500">{selectedIds.length} {t('curation.bulk.selected')}</span>
-      <button onClick={onClearSelection} className="text-xs text-blue-400 hover:text-blue-300">{t('curation.bulk.deselect')}</button>
-      <div className="flex-1" />
-
-      <select
-        value={bulkField}
-        onChange={e => { setBulkField(e.target.value); setBulkValue(''); }}
-        className={`text-xs rounded-lg px-2 py-1.5 border ${isDark ? 'bg-slate-800 border-slate-600 text-white' : 'bg-white border-gray-300'}`}
-      >
-        <option value="">{t('curation.bulk.bulkAction')}</option>
-        <option value="curation_status">{t('curation.bulk.curationStatus')}</option>
-        <option value="is_public">{t('curation.bulk.publicExpert')}</option>
-        <option value="popularity_score">{t('curation.bulk.popularityScore')}</option>
-        <option value="subcategory">{t('curation.bulk.subcategory')}</option>
-        <option value="reporting_method">{t('curation.bulk.reportingMethod')}</option>
-      </select>
-
-      {bulkField === 'curation_status' && (
-        <select value={bulkValue} onChange={e => setBulkValue(e.target.value)}
-          className={`text-xs rounded-lg px-2 py-1.5 border ${isDark ? 'bg-slate-800 border-slate-600 text-white' : 'bg-white border-gray-300'}`}>
-          <option value="">{t('curation.bulk.choose')}</option>
-          <option value="reviewed">{t('curation.bulk.treated')}</option>
-          <option value="flagged">{t('curation.bulk.flaggedLabel')}</option>
-          <option value="untreated">{t('curation.bulk.untreated')}</option>
-        </select>
-      )}
-      {bulkField === 'is_public' && (
-        <select value={bulkValue} onChange={e => setBulkValue(e.target.value)}
-          className={`text-xs rounded-lg px-2 py-1.5 border ${isDark ? 'bg-slate-800 border-slate-600 text-white' : 'bg-white border-gray-300'}`}>
-          <option value="">{t('curation.bulk.choose')}</option>
-          <option value="true">{t('curation.bulk.publicLabel')}</option>
-          <option value="false">{t('curation.bulk.expertLabel')}</option>
-        </select>
-      )}
-      {bulkField === 'popularity_score' && (
-        <input type="number" min={0} max={100} placeholder={t('curation.bulk.scorePlaceholder')} value={bulkValue}
-          onChange={e => setBulkValue(e.target.value)}
-          className={`text-xs rounded-lg px-2 py-1.5 border w-24 ${isDark ? 'bg-slate-800 border-slate-600 text-white' : 'bg-white border-gray-300'}`}
-        />
-      )}
-      {bulkField === 'subcategory' && (
-        <select value={bulkValue} onChange={e => setBulkValue(e.target.value)}
-          className={`text-xs rounded-lg px-2 py-1.5 border max-w-[200px] ${isDark ? 'bg-slate-800 border-slate-600 text-white' : 'bg-white border-gray-300'}`}>
-          <option value="">{t('curation.bulk.choose')}</option>
-          {subcategoriesList.map(sc => (
-            <option key={sc.code} value={sc.code}>{sc.name_fr}</option>
-          ))}
-        </select>
-      )}
-      {bulkField === 'reporting_method' && (
-        <select value={bulkValue} onChange={e => setBulkValue(e.target.value)}
-          className={`text-xs rounded-lg px-2 py-1.5 border ${isDark ? 'bg-slate-800 border-slate-600 text-white' : 'bg-white border-gray-300'}`}>
-          <option value="">{t('curation.bulk.choose')}</option>
-          <option value="location">Location</option>
-          <option value="market">Market</option>
-        </select>
-      )}
-
-      {bulkField && bulkValue && (
-        <button onClick={handleApply} disabled={loading}
-          className="px-3 py-1.5 bg-blue-500 text-white text-xs rounded-lg hover:bg-blue-600 flex items-center gap-1.5 disabled:opacity-50">
-          {loading ? <Loader2 className="w-3 h-3 animate-spin" /> : <Save className="w-3 h-3" />}
-          {t('curation.bulk.apply')}
-        </button>
-      )}
-
-      {/* Separator */}
-      <div className={`mx-1 h-6 w-px ${isDark ? 'bg-slate-600' : 'bg-gray-300'}`} />
-
-      {/* Copy originals */}
-      <button onClick={() => onCopyOriginals('fr', 'original')} disabled={loading}
-        className={`px-3 py-1.5 text-xs rounded-lg flex items-center gap-1.5 ${isDark ? 'bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20' : 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100'}`}
-        data-testid="copy-originals-fr-btn" title="Copier name_fr → name_simple_fr (cellules vides uniquement)">
-        <CopyPlus className="w-3 h-3" /> {t('curation.bulk.origToFr')}
-      </button>
-      <button onClick={() => onCopyOriginals('de', 'original')} disabled={loading}
-        className={`px-3 py-1.5 text-xs rounded-lg flex items-center gap-1.5 ${isDark ? 'bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20' : 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100'}`}
-        data-testid="copy-originals-de-btn" title="Copier name_de → name_simple_de (cellules vides uniquement)">
-        <CopyPlus className="w-3 h-3" /> {t('curation.bulk.origToDe')}
-      </button>
-      {/* Copy from source_product_name */}
-      <button onClick={() => onCopyOriginals('fr', 'source_product_name')} disabled={loading}
-        className={`px-3 py-1.5 text-xs rounded-lg flex items-center gap-1.5 ${isDark ? 'bg-amber-500/10 text-amber-400 hover:bg-amber-500/20' : 'bg-amber-50 text-amber-700 hover:bg-amber-100'}`}
-        data-testid="copy-source-fr-btn" title="Copier source_product_name → name_simple_fr (cellules vides uniquement)">
-        <CopyPlus className="w-3 h-3" /> {t('curation.bulk.sourceToFr')}
-      </button>
-      <button onClick={() => onCopyOriginals('de', 'source_product_name')} disabled={loading}
-        className={`px-3 py-1.5 text-xs rounded-lg flex items-center gap-1.5 ${isDark ? 'bg-amber-500/10 text-amber-400 hover:bg-amber-500/20' : 'bg-amber-50 text-amber-700 hover:bg-amber-100'}`}
-        data-testid="copy-source-de-btn" title="Copier source_product_name → name_simple_de (cellules vides uniquement)">
-        <CopyPlus className="w-3 h-3" /> {t('curation.bulk.sourceToDe')}
-      </button>
-
-      {/* Separator */}
-      <div className={`mx-1 h-6 w-px ${isDark ? 'bg-slate-600' : 'bg-gray-300'}`} />
-
-      {/* Translate source_product_name */}
-      <button onClick={() => onTranslate('source_to_fr')} disabled={loading}
-        className={`px-3 py-1.5 text-xs rounded-lg flex items-center gap-1.5 ${isDark ? 'bg-orange-500/10 text-orange-400 hover:bg-orange-500/20' : 'bg-orange-50 text-orange-700 hover:bg-orange-100'}`}
-        data-testid="translate-source-fr-btn" title="Traduire source_product_name → français simplifié (IA)">
-        <Languages className="w-3 h-3" /> {t('curation.bulk.sourceTransFr')}
-      </button>
-      <button onClick={() => onTranslate('source_to_de')} disabled={loading}
-        className={`px-3 py-1.5 text-xs rounded-lg flex items-center gap-1.5 ${isDark ? 'bg-orange-500/10 text-orange-400 hover:bg-orange-500/20' : 'bg-orange-50 text-orange-700 hover:bg-orange-100'}`}
-        data-testid="translate-source-de-btn" title="Traduire source_product_name → allemand simplifié (IA)">
-        <Languages className="w-3 h-3" /> {t('curation.bulk.sourceTransDe')}
-      </button>
-
-      {/* Translate */}
-      <button onClick={() => onTranslate('fr_to_de')} disabled={loading}
-        className={`px-3 py-1.5 text-xs rounded-lg flex items-center gap-1.5 ${isDark ? 'bg-sky-500/10 text-sky-400 hover:bg-sky-500/20' : 'bg-sky-50 text-sky-700 hover:bg-sky-100'}`}
-        data-testid="translate-fr-de-btn" title="Traduire les noms simplifiés FR → DE (IA)">
-        <Languages className="w-3 h-3" /> {t('curation.bulk.translateFrDe')}
-      </button>
-    </div>
-  );
-};
-
-// ==================== INLINE EDITABLE CELL ====================
-const EditableCell = ({ value, onSave, isDark, placeholder = '', className = '', type = 'text', cellId = '', onNavigate }) => {
-  const { t } = useLanguage();
-  const [editing, setEditing] = useState(false);
-  const [draft, setDraft] = useState(value || '');
-  const ref = useRef(null);
-  const committedRef = useRef(false);
-  const lastSavedRef = useRef(null);
-
-  // Sync draft from value ONLY when not editing (prevents overwrite during typing)
-  useEffect(() => {
-    if (!editing) {
-      setDraft(value || '');
-    }
-  }, [value, editing]);
-
-  // Clear optimistic display when API responds (value changes)
-  useEffect(() => {
-    lastSavedRef.current = null;
-  }, [value]);
-
-  useEffect(() => {
-    if (editing && ref.current) {
-      ref.current.focus();
-      ref.current.select();
-      committedRef.current = false;
-    }
-  }, [editing]);
-
-  const commit = (navigateDir) => {
-    if (committedRef.current) return;
-    committedRef.current = true;
-    const currentDraft = draft;
-    setEditing(false);
-    if (currentDraft !== (value || '')) {
-      const saveValue = type === 'number' ? Number(currentDraft) : currentDraft;
-      lastSavedRef.current = String(saveValue);
-      onSave(saveValue);
-    }
-    if (navigateDir && onNavigate) onNavigate(cellId, navigateDir);
-  };
-
-  // Show optimistic value while API hasn't responded yet
-  const displayValue = lastSavedRef.current !== null ? lastSavedRef.current : value;
-
-  if (!editing) {
-    return (
-      <div
-        onClick={() => setEditing(true)}
-        data-cell-id={cellId}
-        title={t('curation.cell.clickToEdit')}
-        className={`cursor-text min-h-[24px] ${!displayValue ? `italic ${isDark ? 'text-slate-600' : 'text-gray-300'}` : ''} ${className}`}
-      >
-        {displayValue || placeholder}
-      </div>
-    );
-  }
-
-  return (
-    <input
-      ref={ref}
-      type={type}
-      value={draft}
-      data-cell-id={cellId}
-      onChange={e => setDraft(e.target.value)}
-      onBlur={() => commit(null)}
-      onKeyDown={e => {
-        if (e.key === 'Tab') {
-          e.preventDefault();
-          commit(e.shiftKey ? 'prev' : 'next');
-        } else if (e.key === 'Enter' && e.shiftKey) {
-          e.preventDefault();
-          commit('mark-reviewed');
-        } else if (e.key === 'Enter') {
-          commit('down');
-        } else if (e.key === 'Escape') {
-          setDraft(value || '');
-          committedRef.current = true;
-          setEditing(false);
-        }
-      }}
-      className={`w-full bg-transparent border-b-2 border-blue-500 outline-none text-xs py-0.5 ${isDark ? 'text-white' : 'text-gray-900'}`}
-    />
-  );
-};
-
-// ==================== STATUS BADGE ====================
-const StatusBadge = ({ status, isDark, onCycle }) => {
-  const { t } = useLanguage();
-  const configs = {
-    reviewed: { icon: CheckCircle2, label: t('curation.status.reviewed'), cls: 'text-green-500 bg-green-500/10' },
-    flagged: { icon: Flag, label: t('curation.status.flagged'), cls: 'text-amber-500 bg-amber-500/10' },
-    untreated: { icon: CircleDot, label: t('curation.status.toTreat'), cls: isDark ? 'text-slate-500 bg-slate-700' : 'text-gray-400 bg-gray-100' },
-  };
-  const s = status || 'untreated';
-  const c = configs[s] || configs.untreated;
-  const Icon = c.icon;
-  const next = s === 'untreated' ? 'reviewed' : s === 'reviewed' ? 'flagged' : 'untreated';
-
-  return (
-    <button onClick={() => onCycle(next)} title={`${t('curation.status.switchTo')}: ${configs[next].label}`}
-      className={`flex items-center gap-1 px-2 py-1 rounded-lg text-[10px] font-medium transition-all ${c.cls} hover:opacity-80`}>
-      <Icon className="w-3 h-3" />{c.label}
-    </button>
-  );
-};
-
-// ==================== AI SUGGEST MODAL ====================
-const AISuggestModal = ({ factorIds, isDark, onApply, onClose }) => {
-  const { t } = useLanguage();
-  const [suggestions, setSuggestions] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [selected, setSelected] = useState({});
-  const { token: authToken } = useAuth();
-
-  useEffect(() => {
-    const fetchSuggestions = async () => {
-      try {
-        const res = await fetch(`${API}/api/curation/suggest-titles`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${authToken}` },
-          body: JSON.stringify({ factor_ids: factorIds }),
-        });
-        if (!res.ok) throw new Error(t('curation.aiSuggest.aiError'));
-        const data = await res.json();
-        setSuggestions(data.suggestions || []);
-        const sel = {};
-        (data.suggestions || []).forEach(s => { sel[s.factor_id] = true; });
-        setSelected(sel);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchSuggestions();
-  }, [factorIds]);
-
-  const handleApply = () => {
-    const toApply = suggestions.filter(s => selected[s.factor_id]);
-    onApply(toApply);
-  };
-
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm" onClick={onClose}>
-      <div onClick={e => e.stopPropagation()} className={`w-full max-w-2xl mx-4 rounded-2xl shadow-2xl max-h-[80vh] flex flex-col ${isDark ? 'bg-slate-800' : 'bg-white'}`}>
-        <div className={`p-5 border-b flex items-center gap-3 ${isDark ? 'border-slate-700' : 'border-gray-200'}`}>
-          <Sparkles className="w-5 h-5 text-purple-500" />
-          <h3 className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>{t('curation.aiSuggest.title')}</h3>
-          <button onClick={onClose} className="ml-auto p-1 rounded hover:bg-slate-700"><X className="w-4 h-4" /></button>
-        </div>
-        <div className="flex-1 overflow-y-auto p-5">
-          {loading && <div className="flex items-center justify-center py-12"><Loader2 className="w-8 h-8 animate-spin text-purple-500" /><span className="ml-3 text-sm">{t('curation.aiSuggest.generating')}</span></div>}
-          {error && <p className="text-red-500 text-sm">{error}</p>}
-          {!loading && !error && suggestions.map(s => (
-            <div key={s.factor_id} className={`mb-3 p-3 rounded-xl border ${selected[s.factor_id] ? isDark ? 'border-purple-500/30 bg-purple-500/5' : 'border-purple-200 bg-purple-50' : isDark ? 'border-slate-700' : 'border-gray-200'}`}>
-              <div className="flex items-start gap-2">
-                <button onClick={() => setSelected(p => ({ ...p, [s.factor_id]: !p[s.factor_id] }))}
-                  className="mt-0.5 flex-shrink-0">
-                  {selected[s.factor_id] ? <CheckSquare className="w-4 h-4 text-purple-500" /> : <Square className="w-4 h-4 text-slate-500" />}
-                </button>
-                <div className="flex-1 min-w-0">
-                  <p className={`text-xs ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>{s.name_fr_original}</p>
-                  <p className={`text-sm font-medium mt-0.5 ${isDark ? 'text-white' : 'text-gray-900'}`}>FR: {s.name_simple_fr}</p>
-                  <p className={`text-sm mt-0.5 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>DE: {s.name_simple_de}</p>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-        {!loading && !error && suggestions.length > 0 && (
-          <div className={`p-4 border-t flex justify-end gap-3 ${isDark ? 'border-slate-700' : 'border-gray-200'}`}>
-            <button onClick={onClose} className={`px-4 py-2 rounded-xl text-sm ${isDark ? 'hover:bg-slate-700 text-white' : 'hover:bg-gray-100 text-gray-700'}`}>{t('common.cancel')}</button>
-            <button onClick={handleApply} className="px-4 py-2 bg-purple-500 text-white rounded-xl text-sm hover:bg-purple-600 flex items-center gap-2">
-              <Sparkles className="w-4 h-4" />{t('curation.aiSuggest.applySuggestions').replace('{count}', Object.values(selected).filter(Boolean).length)}
-            </button>
-          </div>
-        )}
-      </div>
-    </div>
-  );
-};
-
-// ==================== TRANSLATE PREVIEW MODAL ====================
-const TranslatePreviewModal = ({ factorIds, direction, isDark, onApply, onClose }) => {
-  const { t } = useLanguage();
-  const [translations, setTranslations] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [applying, setApplying] = useState(false);
-  const [error, setError] = useState(null);
-  const [selected, setSelected] = useState({});
-  const [targetField, setTargetField] = useState('');
-  const [skipped, setSkipped] = useState(0);
-  const { token: authToken } = useAuth();
-
-  const dirLabels = {
-    'fr_to_de': t('curation.translate.frToDe'),
-    'de_to_fr': t('curation.translate.deToFr'),
-    'source_to_fr': t('curation.translate.sourceToFr'),
-    'source_to_de': t('curation.translate.sourceToDe'),
-  };
-  const dirLabel = dirLabels[direction] || direction;
-
-  useEffect(() => {
-    const fetchTranslations = async () => {
-      try {
-        const res = await fetch(`${API}/api/curation/translate-preview`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${authToken}` },
-          body: JSON.stringify({ factor_ids: factorIds, direction }),
-        });
-        if (!res.ok) {
-          const errData = await res.json().catch(() => ({}));
-          throw new Error(errData.detail || `${t('curation.translate.translationError')} (${res.status})`);
-        }
-        const data = await res.json();
-        setTranslations(data.translations || []);
-        setTargetField(data.target_field || '');
-        setSkipped(data.skipped || 0);
-        const sel = {};
-        (data.translations || []).forEach(t => { sel[t.factor_id] = true; });
-        setSelected(sel);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchTranslations();
-  }, [factorIds, direction]);
-
-  const handleApply = async () => {
-    const toApply = translations.filter(t => selected[t.factor_id]);
-    if (toApply.length === 0) return;
-    setApplying(true);
-    try {
-      const res = await fetch(`${API}/api/curation/translate-apply`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${authToken}` },
-        body: JSON.stringify({
-          translations: toApply.map(t => ({ factor_id: t.factor_id, value: t.translation })),
-          target_field: targetField,
-        }),
-      });
-      if (res.ok) {
-        const result = await res.json();
-        onApply(result.modified_count);
-      }
-    } catch (err) {
-      setError(err.message);
-    }
-    setApplying(false);
-  };
-
-  const selectedCount = Object.values(selected).filter(Boolean).length;
-
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm" onClick={onClose}>
-      <div onClick={e => e.stopPropagation()} className={`w-full max-w-2xl mx-4 rounded-2xl shadow-2xl max-h-[80vh] flex flex-col ${isDark ? 'bg-slate-800' : 'bg-white'}`}
-        data-testid="translate-preview-modal">
-        <div className={`p-5 border-b flex items-center gap-3 ${isDark ? 'border-slate-700' : 'border-gray-200'}`}>
-          <Languages className="w-5 h-5 text-sky-500" />
-          <h3 className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>{t('curation.translate.title')} {dirLabel}</h3>
-          {skipped > 0 && <span className={`text-xs ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>({skipped} {t('curation.translate.skippedNote')})</span>}
-          <button onClick={onClose} className="ml-auto p-1 rounded hover:bg-slate-700"><X className="w-4 h-4" /></button>
-        </div>
-        <div className="flex-1 overflow-y-auto p-5">
-          {loading && <div className="flex items-center justify-center py-12"><Loader2 className="w-8 h-8 animate-spin text-sky-500" /><span className="ml-3 text-sm">{t('curation.translate.translating')}</span></div>}
-          {error && <p className="text-red-500 text-sm">{error}</p>}
-          {!loading && !error && translations.length === 0 && (
-            <p className={`text-sm text-center py-8 ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>
-              {t('curation.translate.noFactorToTranslate')}
-            </p>
-          )}
-          {!loading && !error && translations.map(t => (
-            <div key={t.factor_id} className={`mb-3 p-3 rounded-xl border ${selected[t.factor_id] ? isDark ? 'border-sky-500/30 bg-sky-500/5' : 'border-sky-200 bg-sky-50' : isDark ? 'border-slate-700' : 'border-gray-200'}`}>
-              <div className="flex items-start gap-2">
-                <button onClick={() => setSelected(p => ({ ...p, [t.factor_id]: !p[t.factor_id] }))}
-                  className="mt-0.5 flex-shrink-0">
-                  {selected[t.factor_id] ? <CheckSquare className="w-4 h-4 text-sky-500" /> : <Square className="w-4 h-4 text-slate-500" />}
-                </button>
-                <div className="flex-1 min-w-0">
-                  <p className={`text-xs ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>Source: {t.source_name}</p>
-                  <p className={`text-sm font-medium mt-1 ${isDark ? 'text-white' : 'text-gray-900'}`}>→ {t.translation}</p>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-        {!loading && !error && translations.length > 0 && (
-          <div className={`p-4 border-t flex justify-end gap-3 ${isDark ? 'border-slate-700' : 'border-gray-200'}`}>
-            <button onClick={onClose} className={`px-4 py-2 rounded-xl text-sm ${isDark ? 'hover:bg-slate-700 text-white' : 'hover:bg-gray-100 text-gray-700'}`}>{t('common.cancel')}</button>
-            <button onClick={handleApply} disabled={applying || selectedCount === 0}
-              className="px-4 py-2 bg-sky-500 text-white rounded-xl text-sm hover:bg-sky-600 disabled:opacity-50 flex items-center gap-2">
-              {applying ? <Loader2 className="w-4 h-4 animate-spin" /> : <Languages className="w-4 h-4" />}
-              {t('curation.translate.applyTranslations').replace('{count}', selectedCount)}
-            </button>
-          </div>
-        )}
-      </div>
-    </div>
-  );
-};
-
-// ==================== BULK PREVIEW MODAL ====================
-const BulkPreviewModal = ({ preview, isDark, onConfirm, onCancel, loading }) => {
-  const { t } = useLanguage();
-  return (
-  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm" onClick={onCancel}>
-    <div onClick={e => e.stopPropagation()} className={`w-full max-w-md mx-4 rounded-2xl shadow-2xl p-6 ${isDark ? 'bg-slate-800' : 'bg-white'}`} data-testid="bulk-preview-modal">
-      <h3 className={`font-semibold mb-4 ${isDark ? 'text-white' : 'text-gray-900'}`}>{t('curation.bulkPreview.title')}</h3>
-      <p className={`text-sm mb-3 ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-        <strong>{preview.count}</strong> {t('curation.bulkPreview.factorsModified')}
-      </p>
-      <div className={`p-3 rounded-xl mb-4 ${isDark ? 'bg-slate-700' : 'bg-gray-50'}`}>
-        {Object.entries(preview.changes).map(([k, v]) => (
-          <p key={k} className={`text-xs ${isDark ? 'text-slate-300' : 'text-gray-600'}`}>
-            <strong>{k}</strong> → {String(v)}
-          </p>
-        ))}
-      </div>
-      <p className={`text-xs mb-4 ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>
-        {t('curation.bulkPreview.examples')} {preview.sample?.map(s => s.name_fr).join(', ')}
-      </p>
-      <div className="flex justify-end gap-3">
-        <button onClick={onCancel} className={`px-4 py-2 rounded-xl text-sm ${isDark ? 'hover:bg-slate-700 text-white' : 'hover:bg-gray-100'}`}>{t('common.cancel')}</button>
-        <button onClick={onConfirm} disabled={loading}
-          className="px-4 py-2 bg-blue-500 text-white rounded-xl text-sm hover:bg-blue-600 disabled:opacity-50 flex items-center gap-2">
-          {loading ? <Loader2 className="w-3 h-3 animate-spin" /> : <Save className="w-3 h-3" />}
-          Confirmer
-        </button>
-      </div>
-    </div>
-  </div>
-  );
-};
-
-// ==================== MAIN CURATION PAGE ====================
 export default function CurationWorkbench() {
   const { isDark } = useTheme();
-  const { token } = useAuth();
-  const { t } = useLanguage();
-
-  // Data state
-  const [stats, setStats] = useState(null);
-  const [factors, setFactors] = useState([]);
-  const [total, setTotal] = useState(0);
-  const [totalPages, setTotalPages] = useState(1);
-
-  // Filters
-  const [page, setPage] = useState(1);
-  const [pageSize] = useState(50);
-  const [search, setSearch] = useState('');
-  const [searchDebounced, setSearchDebounced] = useState('');
-  const [subcategory, setSubcategory] = useState('');
-  const [curationStatus, setCurationStatus] = useState('');
-  const [isPublic, setIsPublic] = useState('');
-  const [defaultUnit, setDefaultUnit] = useState('');
-  const [reportingMethodFilter, setReportingMethodFilter] = useState('');
-  const [unitsList, setUnitsList] = useState([]);
-  const [sortBy, setSortBy] = useState('subcategory');
-  const [sortOrder, setSortOrder] = useState('asc');
-
-  // Selection
-  const [selectedIds, setSelectedIds] = useState([]);
-
-  // UI
-  const [loadingFactors, setLoadingFactors] = useState(false);
-  const [bulkLoading, setBulkLoading] = useState(false);
-  const [bulkPreview, setBulkPreview] = useState(null);
-  const [pendingBulkChanges, setPendingBulkChanges] = useState(null);
-  const [showAISuggest, setShowAISuggest] = useState(false);
-  const [jsonModalFactor, setJsonModalFactor] = useState(null);
-  const [subcategoriesList, setSubcategoriesList] = useState([]);
-
-  // Debounce search
-  useEffect(() => {
-    const t = setTimeout(() => setSearchDebounced(search), 300);
-    return () => clearTimeout(t);
-  }, [search]);
-
-  // Reset page on filter change
-  useEffect(() => { setPage(1); }, [searchDebounced, subcategory, curationStatus, isPublic, defaultUnit, reportingMethodFilter]);
-
-  // Fetch stats
-  const fetchStats = useCallback(async () => {
-    try {
-      const res = await fetch(`${API}/api/curation/stats`, { headers: { Authorization: `Bearer ${token}` } });
-      if (res.ok) setStats(await res.json());
-    } catch (e) { logger.error(e); }
-  }, [token]);
-
-  // Fetch factors
-  const fetchFactors = useCallback(async () => {
-    setLoadingFactors(true);
-    try {
-      const params = new URLSearchParams({ page, page_size: pageSize, sort_by: sortBy, sort_order: sortOrder });
-      if (searchDebounced) params.set('search', searchDebounced);
-      if (subcategory) params.set('subcategory', subcategory);
-      if (curationStatus) params.set('curation_status', curationStatus);
-      if (isPublic) params.set('is_public', isPublic);
-      if (defaultUnit) params.set('default_unit', defaultUnit);
-      if (reportingMethodFilter) params.set('reporting_method', reportingMethodFilter);
-
-      const res = await fetch(`${API}/api/curation/factors?${params}`, { headers: { Authorization: `Bearer ${token}` } });
-      if (res.ok) {
-        const data = await res.json();
-        setFactors(data.items);
-        setTotal(data.total);
-        setTotalPages(data.total_pages);
-      }
-    } catch (e) { logger.error(e); }
-    setLoadingFactors(false);
-  }, [page, pageSize, searchDebounced, subcategory, curationStatus, isPublic, defaultUnit, reportingMethodFilter, sortBy, sortOrder, token]);
-
-  useEffect(() => { fetchStats(); }, [fetchStats]);
-  useEffect(() => { fetchFactors(); }, [fetchFactors]);
-
-  // Extract subcategories list from stats for dropdown
-  useEffect(() => {
-    const fetchAllSubcategories = async () => {
-      try {
-        const res = await fetch(`${API}/api/subcategories`, { headers: { Authorization: `Bearer ${token}` } });
-        if (res.ok) {
-          const data = await res.json();
-          setSubcategoriesList(data.map(sc => ({ code: sc.code, name_fr: sc.name_fr || sc.code })).sort((a, b) => a.name_fr.localeCompare(b.name_fr)));
-        }
-      } catch (e) { logger.error(e); }
-    };
-    const fetchUnits = async () => {
-      try {
-        const res = await fetch(`${API}/api/curation/units`, { headers: { Authorization: `Bearer ${token}` } });
-        if (res.ok) setUnitsList(await res.json());
-      } catch (e) { logger.error(e); }
-    };
-    fetchAllSubcategories();
-    fetchUnits();
-  }, [token]);
-
-  // Inline edit
-  const inlineEdit = async (factorId, field, value) => {
-    try {
-      const res = await fetch(`${API}/api/curation/factors/${factorId}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify({ [field]: value }),
-      });
-      if (res.ok) {
-        const updated = await res.json();
-        setFactors(prev => prev.map(f => f.id === factorId ? updated : f));
-        fetchStats();
-      }
-    } catch (e) { logger.error(e); }
-  };
-
-  // Bulk action
-  const handleBulkAction = async (changes) => {
-    setBulkLoading(true);
-    try {
-      const res = await fetch(`${API}/api/curation/bulk-preview`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify({ factor_ids: selectedIds, changes }),
-      });
-      if (res.ok) {
-        const preview = await res.json();
-        setBulkPreview(preview);
-        setPendingBulkChanges(changes);
-      }
-    } catch (e) { logger.error(e); }
-    setBulkLoading(false);
-  };
-
-  const confirmBulkApply = async () => {
-    setBulkLoading(true);
-    try {
-      await fetch(`${API}/api/curation/bulk-apply`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify({ factor_ids: selectedIds, changes: pendingBulkChanges }),
-      });
-      setSelectedIds([]);
-      setBulkPreview(null);
-      setPendingBulkChanges(null);
-      fetchFactors();
-      fetchStats();
-    } catch (e) { logger.error(e); }
-    setBulkLoading(false);
-  };
-
-  // AI suggest apply
-  const handleAISuggestApply = async (suggestions) => {
-    setShowAISuggest(false);
-    for (const s of suggestions) {
-      await inlineEdit(s.factor_id, 'name_simple_fr', s.name_simple_fr);
-      await inlineEdit(s.factor_id, 'name_simple_de', s.name_simple_de);
-    }
-    fetchFactors();
-    fetchStats();
-  };
-
-  // Copy originals -> simplified
-  const [copyLoading, setCopyLoading] = useState(false);
-  const handleCopyOriginals = async (lang, sourceField = 'original') => {
-    setCopyLoading(true);
-    try {
-      const res = await fetch(`${API}/api/curation/bulk-copy-originals`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify({ factor_ids: selectedIds, lang, source_field: sourceField }),
-      });
-      if (res.ok) {
-        const data = await res.json();
-        alert(t('curation.alerts.namesCopied').replace('{modified}', data.modified_count).replace('{skipped}', data.skipped_count));
-        fetchFactors();
-        fetchStats();
-      }
-    } catch (e) { logger.error(e); }
-    setCopyLoading(false);
-  };
-
-  // Translate preview
-  const [translateModal, setTranslateModal] = useState(null); // { factorIds, direction }
-
-  // Location link panel
-  const [linkPanelFactor, setLinkPanelFactor] = useState(null);
-
-  const handleLinkLocation = (factorId, locationFactorId) => {
-    inlineEdit(factorId, 'location_factor_id', locationFactorId);
-  };
-
-  const handleUnlinkLocation = (factorId) => {
-    inlineEdit(factorId, 'location_factor_id', null);
-  };
-  const handleTranslateApply = (modifiedCount) => {
-    setTranslateModal(null);
-    alert(t('curation.alerts.translationsApplied').replace('{count}', modifiedCount));
-    fetchFactors();
-    fetchStats();
-  };
-
-  // Cell navigation: cellId format = "row-{idx}-col-{colIdx}" where col 0=FR, 1=DE
-  const handleCellNavigate = useCallback((cellId, direction) => {
-    const match = cellId.match(/row-(\d+)-col-(\d+)/);
-    if (!match) return;
-    let rowIdx = parseInt(match[1]);
-    let colIdx = parseInt(match[2]);
-
-    if (direction === 'next' || direction === 'down') {
-      // Tab: next cell (FR→DE→next row FR) / Enter: same col next row
-      if (direction === 'next') {
-        colIdx++;
-        if (colIdx > 1) { colIdx = 0; rowIdx++; }
-      } else {
-        rowIdx++;
-      }
-    } else if (direction === 'prev') {
-      colIdx--;
-      if (colIdx < 0) { colIdx = 1; rowIdx--; }
-    } else if (direction === 'mark-reviewed') {
-      // Mark current row as reviewed then move to next row FR
-      if (factors[rowIdx]) {
-        inlineEdit(factors[rowIdx].id, 'curation_status', 'reviewed');
-      }
-      rowIdx++;
-      colIdx = 0;
-    }
-
-    // Focus the target cell
-    if (rowIdx >= 0 && rowIdx < factors.length) {
-      const targetId = `row-${rowIdx}-col-${colIdx}`;
-      setTimeout(() => {
-        const el = document.querySelector(`[data-cell-id="${targetId}"]`);
-        if (el) el.click();
-      }, 50);
-    }
-  }, [factors, inlineEdit]);
-
-  // Sort toggle
-  const toggleSort = (field) => {
-    if (sortBy === field) {
-      setSortOrder(prev => prev === 'asc' ? 'desc' : 'asc');
-    } else {
-      setSortBy(field);
-      setSortOrder('asc');
-    }
-  };
-
-  // Selection helpers
-  const toggleSelect = (id) => setSelectedIds(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]);
-  const toggleSelectAll = () => {
-    const pageIds = factors.map(f => f.id);
-    const allSelected = pageIds.every(id => selectedIds.includes(id));
-    setSelectedIds(prev => allSelected ? prev.filter(id => !pageIds.includes(id)) : [...new Set([...prev, ...pageIds])]);
-  };
-  const allPageSelected = factors.length > 0 && factors.every(f => selectedIds.includes(f.id));
-
-  const SortIcon = ({ field }) => {
-    if (sortBy !== field) return <ArrowUpDown className="w-3 h-3 opacity-30" />;
-    return sortOrder === 'asc' ? <ArrowUp className="w-3 h-3 text-blue-500" /> : <ArrowDown className="w-3 h-3 text-blue-500" />;
-  };
+  const cw = useCurationWorkbench();
 
   return (
     <div className={`h-full flex flex-col ${isDark ? 'bg-slate-900 text-white' : 'bg-gray-50 text-gray-900'}`} data-testid="curation-workbench">
       {/* Header */}
       <div className={`px-4 py-3 border-b flex items-center gap-4 flex-shrink-0 ${isDark ? 'border-slate-700' : 'border-gray-200'}`}>
         <Layers className="w-5 h-5 text-blue-500" />
-        <h1 className="text-lg font-bold">{t('curation.title')}</h1>
-        <span className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>{total} {t('curation.factors')}</span>
+        <h1 className="text-lg font-bold">{cw.t('curation.title')}</h1>
+        <span className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>{cw.total} {cw.t('curation.factors')}</span>
         <div className="flex-1" />
 
-        {/* Filters */}
         <div className="relative">
           <Search className={`absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 ${isDark ? 'text-slate-500' : 'text-gray-400'}`} />
-          <input
-            type="text"
-            placeholder={t('curation.searchPlaceholder')}
-            value={search}
-            onChange={e => setSearch(e.target.value)}
+          <input type="text" placeholder={cw.t('curation.searchPlaceholder')} value={cw.search} onChange={e => cw.setSearch(e.target.value)}
             data-testid="curation-search"
-            className={`pl-8 pr-8 py-1.5 rounded-lg border text-xs w-56 ${isDark ? 'bg-slate-800 border-slate-600 text-white placeholder:text-slate-500' : 'bg-white border-gray-300 placeholder:text-gray-400'}`}
-          />
-          {search && (
-            <button onClick={() => setSearch('')} className="absolute right-2 top-1/2 -translate-y-1/2">
-              <X className="w-3 h-3" />
-            </button>
-          )}
+            className={`pl-8 pr-8 py-1.5 rounded-lg border text-xs w-56 ${isDark ? 'bg-slate-800 border-slate-600 text-white placeholder:text-slate-500' : 'bg-white border-gray-300 placeholder:text-gray-400'}`} />
+          {cw.search && <button onClick={() => cw.setSearch('')} className="absolute right-2 top-1/2 -translate-y-1/2"><X className="w-3 h-3" /></button>}
         </div>
 
-        <select value={curationStatus} onChange={e => setCurationStatus(e.target.value)}
-          data-testid="filter-curation-status"
+        <select value={cw.curationStatus} onChange={e => cw.setCurationStatus(e.target.value)} data-testid="filter-curation-status"
           className={`text-xs rounded-lg px-2 py-1.5 border ${isDark ? 'bg-slate-800 border-slate-600 text-white' : 'bg-white border-gray-300'}`}>
-          <option value="">{t('curation.allStatuses')}</option>
-          <option value="untreated">{t('curation.untreated')}</option>
-          <option value="reviewed">{t('curation.reviewed')}</option>
-          <option value="flagged">{t('curation.flagged')}</option>
+          <option value="">{cw.t('curation.allStatuses')}</option>
+          <option value="untreated">{cw.t('curation.untreated')}</option>
+          <option value="reviewed">{cw.t('curation.reviewed')}</option>
+          <option value="flagged">{cw.t('curation.flagged')}</option>
         </select>
 
-        <select value={isPublic} onChange={e => setIsPublic(e.target.value)}
-          data-testid="filter-is-public"
+        <select value={cw.isPublic} onChange={e => cw.setIsPublic(e.target.value)} data-testid="filter-is-public"
           className={`text-xs rounded-lg px-2 py-1.5 border ${isDark ? 'bg-slate-800 border-slate-600 text-white' : 'bg-white border-gray-300'}`}>
-          <option value="">{t('curation.all')}</option>
-          <option value="true">{t('curation.public')}</option>
-          <option value="false">{t('curation.expert')}</option>
+          <option value="">{cw.t('curation.all')}</option>
+          <option value="true">{cw.t('curation.public')}</option>
+          <option value="false">{cw.t('curation.expert')}</option>
         </select>
 
-        <select value={defaultUnit} onChange={e => setDefaultUnit(e.target.value)}
-          data-testid="filter-unit"
+        <select value={cw.defaultUnit} onChange={e => cw.setDefaultUnit(e.target.value)} data-testid="filter-unit"
           className={`text-xs rounded-lg px-2 py-1.5 border ${isDark ? 'bg-slate-800 border-slate-600 text-white' : 'bg-white border-gray-300'}`}>
-          <option value="">{t('curation.allUnits')}</option>
-          {unitsList.map(u => (
-            <option key={u} value={u}>{u}</option>
-          ))}
+          <option value="">{cw.t('curation.allUnits')}</option>
+          {cw.unitsList.map(u => <option key={u} value={u}>{u}</option>)}
         </select>
 
-        <select value={reportingMethodFilter} onChange={e => setReportingMethodFilter(e.target.value)}
-          data-testid="filter-reporting-method"
+        <select value={cw.reportingMethodFilter} onChange={e => cw.setReportingMethodFilter(e.target.value)} data-testid="filter-reporting-method"
           className={`text-xs rounded-lg px-2 py-1.5 border ${isDark ? 'bg-slate-800 border-slate-600 text-white' : 'bg-white border-gray-300'}`}>
-          <option value="">{t('curation.allMethods')}</option>
+          <option value="">{cw.t('curation.allMethods')}</option>
           <option value="location">Location</option>
           <option value="market">Market</option>
         </select>
 
-        {selectedIds.length > 0 && (
-          <button onClick={() => setShowAISuggest(true)} data-testid="ai-suggest-btn"
+        {cw.selectedIds.length > 0 && (
+          <button onClick={() => cw.setShowAISuggest(true)} data-testid="ai-suggest-btn"
             className="px-3 py-1.5 bg-purple-500 text-white text-xs rounded-lg hover:bg-purple-600 flex items-center gap-1.5">
-            <Sparkles className="w-3.5 h-3.5" />{t('curation.aiTitles')} ({Math.min(selectedIds.length, 20)})
+            <Sparkles className="w-3.5 h-3.5" />{cw.t('curation.aiTitles')} ({Math.min(cw.selectedIds.length, 20)})
           </button>
         )}
       </div>
 
-      {/* Stats dashboard */}
-      <StatsDashboard stats={stats} isDark={isDark} onSubcategoryClick={setSubcategory} activeSubcategory={subcategory} />
+      <StatsDashboard stats={cw.stats} isDark={isDark} onSubcategoryClick={cw.setSubcategory} activeSubcategory={cw.subcategory} />
 
-      {/* Bulk actions bar */}
-      <BulkActionsBar selectedIds={selectedIds} isDark={isDark} onClearSelection={() => setSelectedIds([])} onBulkAction={handleBulkAction} loading={bulkLoading || copyLoading} subcategoriesList={subcategoriesList}
-        onCopyOriginals={handleCopyOriginals} onTranslate={(dir) => setTranslateModal({ factorIds: selectedIds, direction: dir })} />
+      <BulkActionsBar selectedIds={cw.selectedIds} isDark={isDark} onClearSelection={() => cw.setSelectedIds([])}
+        onBulkAction={cw.handleBulkAction} loading={cw.bulkLoading || cw.copyLoading} subcategoriesList={cw.subcategoriesList}
+        onCopyOriginals={cw.handleCopyOriginals} onTranslate={(dir) => cw.setTranslateModal({ factorIds: cw.selectedIds, direction: dir })} />
 
-      {/* Table */}
-      <div className="flex-1 overflow-auto">
-        <table className="w-full text-left" data-testid="curation-table">
-          <thead className={`sticky top-0 z-10 ${isDark ? 'bg-slate-800' : 'bg-white'}`}>
-            <tr className={`text-[10px] uppercase tracking-wider ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>
-              <th className="py-2 px-2 w-8">
-                <button onClick={toggleSelectAll} data-testid="select-all-btn">
-                  {allPageSelected ? <CheckSquare className="w-3.5 h-3.5 text-blue-500" /> : <Square className="w-3.5 h-3.5" />}
-                </button>
-              </th>
-              <th className="py-2 px-2 cursor-pointer" onClick={() => toggleSort('name_fr')}>
-                <div className="flex items-center gap-1">{t('curation.table.originalName')} <SortIcon field="name_fr" /></div>
-              </th>
-              <th className="py-2 px-2 cursor-pointer" onClick={() => toggleSort('source_product_name')}>
-                <div className="flex items-center gap-1">{t('curation.table.sourceBAFU')} <SortIcon field="source_product_name" /></div>
-              </th>
-              <th className="py-2 px-2">{t('curation.table.simplifiedFr')}</th>
-              <th className="py-2 px-2">{t('curation.table.simplifiedDe')}</th>
-              <th className="py-2 px-2 cursor-pointer" onClick={() => toggleSort('subcategory')}>
-                <div className="flex items-center gap-1">{t('curation.table.subcategory')} <SortIcon field="subcategory" /></div>
-              </th>
-              <th className="py-2 px-2 cursor-pointer text-center" onClick={() => toggleSort('is_public')}>
-                <div className="flex items-center gap-1 justify-center"><Eye className="w-3 h-3" /><SortIcon field="is_public" /></div>
-              </th>
-              <th className="py-2 px-2 cursor-pointer text-center" onClick={() => toggleSort('popularity_score')}>
-                <div className="flex items-center gap-1 justify-center">Pop. <SortIcon field="popularity_score" /></div>
-              </th>
-              <th className="py-2 px-2">{t('curation.table.unit')}</th>
-              <th className="py-2 px-2">{t('curation.table.value')}</th>
-              <th className="py-2 px-2 cursor-pointer" onClick={() => toggleSort('curation_status')}>
-                <div className="flex items-center gap-1">{t('curation.table.status')} <SortIcon field="curation_status" /></div>
-              </th>
-              <th className="py-2 px-2 cursor-pointer" onClick={() => toggleSort('reporting_method')}>
-                <div className="flex items-center gap-1">{t('curation.table.method')} <SortIcon field="reporting_method" /></div>
-              </th>
-              <th className="py-2 px-2">{t('curation.table.linkedLocationFactor')}</th>
-              <th className="py-2 px-1 w-8"></th>
-            </tr>
-          </thead>
-          <tbody>
-            {loadingFactors ? (
-              <tr><td colSpan={12} className="text-center py-12"><Loader2 className="w-6 h-6 animate-spin mx-auto text-blue-500" /></td></tr>
-            ) : factors.length === 0 ? (
-              <tr><td colSpan={12} className={`text-center py-12 text-sm ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>{t('curation.noFactorFound')}</td></tr>
-            ) : factors.map((f, rowIdx) => {
-              const isSelected = selectedIds.includes(f.id);
-              const hasFrCustom = f.name_simple_fr != null && f.name_simple_fr !== f.name_fr;
-              const hasDeCustom = f.name_simple_de != null && f.name_simple_de !== f.name_de;
-              const impact = f.impacts?.[0];
-              return (
-                <tr key={f.id} data-testid={`factor-row-${f.id}`}
-                  className={`border-b transition-colors ${
-                    isSelected
-                      ? isDark ? 'bg-blue-500/10 border-blue-500/20' : 'bg-blue-50 border-blue-100'
-                      : isDark ? 'border-slate-800 hover:bg-slate-800/50' : 'border-gray-100 hover:bg-gray-50'
-                  }`}>
-                  <td className="py-1.5 px-2">
-                    <button onClick={() => toggleSelect(f.id)}>
-                      {isSelected ? <CheckSquare className="w-3.5 h-3.5 text-blue-500" /> : <Square className="w-3.5 h-3.5 text-slate-500" />}
-                    </button>
-                  </td>
-                  <td className={`py-1.5 px-2 text-xs max-w-[220px] truncate ${isDark ? 'text-slate-300' : 'text-gray-700'}`} title={f.name_fr}>
-                    {f.name_fr}
-                  </td>
-                  <td className={`py-1.5 px-2 text-[10px] max-w-[200px] truncate ${isDark ? 'text-slate-500' : 'text-gray-400'}`}
-                    title={f.source_product_name || ''} data-testid={`source-name-${f.id}`}>
-                    {f.source_product_name || '—'}
-                  </td>
-                  <td className={`py-1.5 px-2 text-xs max-w-[200px] ${hasFrCustom ? 'font-medium' : ''} ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                    <EditableCell
-                      value={f.name_simple_fr || ''}
-                      placeholder="—"
-                      isDark={isDark}
-                      onSave={v => inlineEdit(f.id, 'name_simple_fr', v)}
-                      cellId={`row-${rowIdx}-col-0`}
-                      onNavigate={handleCellNavigate}
-                    />
-                  </td>
-                  <td className="py-1.5 px-2 text-xs max-w-[200px]">
-                    <EditableCell
-                      value={f.name_simple_de || ''}
-                      placeholder="—"
-                      isDark={isDark}
-                      onSave={v => inlineEdit(f.id, 'name_simple_de', v)}
-                      cellId={`row-${rowIdx}-col-1`}
-                      onNavigate={handleCellNavigate}
-                    />
-                  </td>
-                  <td className={`py-1.5 px-2 text-[11px] ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-                    <select
-                      value={f.subcategory || ''}
-                      onChange={e => inlineEdit(f.id, 'subcategory', e.target.value)}
-                      data-testid={`subcat-select-${f.id}`}
-                      className={`w-full text-[11px] rounded border py-0.5 px-1 cursor-pointer ${
-                        isDark ? 'bg-slate-800 border-slate-700 text-slate-300' : 'bg-white border-gray-200 text-gray-600'
-                      }`}
-                    >
-                      {subcategoriesList.map(sc => (
-                        <option key={sc.code} value={sc.code}>{sc.name_fr}</option>
-                      ))}
-                    </select>
-                  </td>
-                  <td className="py-1.5 px-2 text-center">
-                    <button onClick={() => inlineEdit(f.id, 'is_public', !f.is_public)}
-                      className={`p-1 rounded ${f.is_public ? 'text-green-500' : isDark ? 'text-slate-600' : 'text-gray-300'}`}
-                      title={f.is_public ? t('curation.bulk.publicLabel') : t('curation.bulk.expertLabel')}>
-                      {f.is_public ? <Eye className="w-3.5 h-3.5" /> : <EyeOff className="w-3.5 h-3.5" />}
-                    </button>
-                  </td>
-                  <td className={`py-1.5 px-2 text-center font-mono text-[11px] ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-                    <EditableCell
-                      value={String(f.popularity_score || 0)}
-                      isDark={isDark}
-                      type="number"
-                      onSave={v => inlineEdit(f.id, 'popularity_score', v)}
-                      className="text-center w-10 mx-auto"
-                    />
-                  </td>
-                  <td className={`py-1.5 px-2 text-[11px] ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-                    <input
-                      list="units-datalist"
-                      defaultValue={f.default_unit || ''}
-                      onBlur={e => {
-                        const val = e.target.value.trim();
-                        if (val && val !== f.default_unit) inlineEdit(f.id, 'default_unit', val);
-                      }}
-                      onKeyDown={e => {
-                        if (e.key === 'Enter') { e.target.blur(); }
-                        if (e.key === 'Escape') { e.target.value = f.default_unit || ''; e.target.blur(); }
-                      }}
-                      data-testid={`unit-input-${f.id}`}
-                      className={`w-full text-[11px] rounded border py-0.5 px-1 ${
-                        isDark ? 'bg-slate-800 border-slate-700 text-slate-300' : 'bg-white border-gray-200 text-gray-600'
-                      }`}
-                      placeholder={t('curation.unitPlaceholder')}
-                    />
-                  </td>
-                  <td className={`py-1.5 px-2 font-mono text-[11px] whitespace-nowrap ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>
-                    {impact ? `${impact.value < 0.001 ? impact.value.toExponential(2) : impact.value.toFixed(4)} ${impact.unit}` : '—'}
-                  </td>
-                  <td className="py-1.5 px-2">
-                    <StatusBadge status={f.curation_status} isDark={isDark} onCycle={s => inlineEdit(f.id, 'curation_status', s)} />
-                  </td>
-                  {/* Méthode (location/market) */}
-                  <td className="py-1.5 px-2">
-                    <select
-                      value={f.reporting_method || 'location'}
-                      onChange={e => inlineEdit(f.id, 'reporting_method', e.target.value)}
-                      data-testid={`method-select-${f.id}`}
-                      className={`text-[11px] rounded border py-0.5 px-1 cursor-pointer ${
-                        f.reporting_method === 'market'
-                          ? 'bg-amber-500/10 border-amber-500/30 text-amber-600 font-medium'
-                          : isDark ? 'bg-slate-800 border-slate-700 text-slate-400' : 'bg-white border-gray-200 text-gray-500'
-                      }`}
-                    >
-                      <option value="location">Location</option>
-                      <option value="market">Market</option>
-                    </select>
-                  </td>
-                  {/* Facteur location lié */}
-                  <td className="py-1.5 px-2">
-                    {f.reporting_method === 'market' ? (
-                      f.location_factor_id ? (
-                        <button
-                          onClick={() => setLinkPanelFactor(f)}
-                          data-testid={`loc-linked-${f.id}`}
-                          className={`flex items-center gap-1.5 text-[11px] rounded-lg px-2 py-1 max-w-[180px] transition-colors ${
-                            isDark ? 'bg-green-500/10 text-green-400 hover:bg-green-500/20' : 'bg-green-50 text-green-700 hover:bg-green-100'
-                          }`}
-                          title={`${t('curation.link.linkedTo')}: ${f._locationName || f.location_factor_id}\n${t('curation.link.clickToEdit')}`}
-                        >
-                          <Link2 className="w-3 h-3 flex-shrink-0" />
-                          <span className="truncate">{f._locationName || f.location_factor_id}</span>
-                        </button>
-                      ) : (
-                        <button
-                          onClick={() => setLinkPanelFactor(f)}
-                          data-testid={`loc-link-btn-${f.id}`}
-                          className={`flex items-center gap-1 text-[11px] rounded-lg px-2 py-1 transition-colors ${
-                            isDark ? 'bg-slate-700/50 text-slate-400 hover:bg-blue-500/10 hover:text-blue-400' : 'bg-gray-100 text-gray-400 hover:bg-blue-50 hover:text-blue-600'
-                          }`}
-                        >
-                          <Link2 className="w-3 h-3" />
-                          Lier...
-                        </button>
-                      )
-                    ) : (
-                      <span className={`text-[10px] ${isDark ? 'text-slate-600' : 'text-gray-300'}`}></span>
-                    )}
-                  </td>
-                  <td className="py-1.5 px-1">
-                    <button onClick={() => setJsonModalFactor(f)} title={t('curation.link.viewJson')}
-                      data-testid={`json-btn-${f.id}`}
-                      className={`p-1 rounded transition-colors ${isDark ? 'text-slate-600 hover:text-slate-300 hover:bg-slate-700' : 'text-gray-300 hover:text-gray-600 hover:bg-gray-100'}`}>
-                      <Code2 className="w-3.5 h-3.5" />
-                    </button>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-        <datalist id="units-datalist">
-          {unitsList.map(u => <option key={u} value={u} />)}
-        </datalist>
-      </div>
+      <CurationTable factors={cw.factors} loadingFactors={cw.loadingFactors} isDark={isDark}
+        selectedIds={cw.selectedIds} toggleSelect={cw.toggleSelect} allPageSelected={cw.allPageSelected} toggleSelectAll={cw.toggleSelectAll}
+        toggleSort={cw.toggleSort} sortBy={cw.sortBy} sortOrder={cw.sortOrder}
+        subcategoriesList={cw.subcategoriesList} unitsList={cw.unitsList}
+        inlineEdit={cw.inlineEdit} handleCellNavigate={cw.handleCellNavigate}
+        setJsonModalFactor={cw.setJsonModalFactor} setLinkPanelFactor={cw.setLinkPanelFactor} />
 
-      {/* Pagination + keyboard hints */}
+      {/* Pagination */}
       <div className={`px-4 py-2 border-t flex items-center justify-between flex-shrink-0 ${isDark ? 'border-slate-700' : 'border-gray-200'}`}>
         <div className="flex items-center gap-4">
           <span className={`text-xs ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>
-            {t('curation.pagination.page')} {page}/{totalPages} — {total} {t('curation.pagination.factorsCount')}
+            {cw.t('curation.pagination.page')} {cw.page}/{cw.totalPages} {'\u2014'} {cw.total} {cw.t('curation.pagination.factorsCount')}
           </span>
           <div className={`flex items-center gap-3 text-[10px] ${isDark ? 'text-slate-600' : 'text-gray-300'}`} data-testid="keyboard-hints">
-            <span><kbd className={`px-1 py-0.5 rounded text-[9px] font-mono ${isDark ? 'bg-slate-700 text-slate-400' : 'bg-gray-100 text-gray-500'}`}>Tab</kbd> {t('curation.keyboard.nextCell')}</span>
-            <span><kbd className={`px-1 py-0.5 rounded text-[9px] font-mono ${isDark ? 'bg-slate-700 text-slate-400' : 'bg-gray-100 text-gray-500'}`}>Enter</kbd> {t('curation.keyboard.nextRow')}</span>
-            <span><kbd className={`px-1 py-0.5 rounded text-[9px] font-mono ${isDark ? 'bg-slate-700 text-slate-400' : 'bg-gray-100 text-gray-500'}`}>Shift+Enter</kbd> {t('curation.keyboard.reviewedNext')}</span>
-            <span><kbd className={`px-1 py-0.5 rounded text-[9px] font-mono ${isDark ? 'bg-slate-700 text-slate-400' : 'bg-gray-100 text-gray-500'}`}>Esc</kbd> {t('curation.keyboard.cancel')}</span>
+            <span><kbd className={`px-1 py-0.5 rounded text-[9px] font-mono ${isDark ? 'bg-slate-700 text-slate-400' : 'bg-gray-100 text-gray-500'}`}>Tab</kbd> {cw.t('curation.keyboard.nextCell')}</span>
+            <span><kbd className={`px-1 py-0.5 rounded text-[9px] font-mono ${isDark ? 'bg-slate-700 text-slate-400' : 'bg-gray-100 text-gray-500'}`}>Enter</kbd> {cw.t('curation.keyboard.nextRow')}</span>
+            <span><kbd className={`px-1 py-0.5 rounded text-[9px] font-mono ${isDark ? 'bg-slate-700 text-slate-400' : 'bg-gray-100 text-gray-500'}`}>Shift+Enter</kbd> {cw.t('curation.keyboard.reviewedNext')}</span>
+            <span><kbd className={`px-1 py-0.5 rounded text-[9px] font-mono ${isDark ? 'bg-slate-700 text-slate-400' : 'bg-gray-100 text-gray-500'}`}>Esc</kbd> {cw.t('curation.keyboard.cancel')}</span>
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page <= 1}
-            data-testid="page-prev"
-            className={`p-1.5 rounded-lg ${page <= 1 ? 'opacity-30' : isDark ? 'hover:bg-slate-700' : 'hover:bg-gray-100'}`}>
+          <button onClick={() => cw.setPage(p => Math.max(1, p - 1))} disabled={cw.page <= 1} data-testid="page-prev"
+            className={`p-1.5 rounded-lg ${cw.page <= 1 ? 'opacity-30' : isDark ? 'hover:bg-slate-700' : 'hover:bg-gray-100'}`}>
             <ChevronLeft className="w-4 h-4" />
           </button>
-          <input type="number" value={page} min={1} max={totalPages}
-            onChange={e => { const v = parseInt(e.target.value); if (v >= 1 && v <= totalPages) setPage(v); }}
-            className={`w-14 text-center text-xs rounded-lg border py-1 ${isDark ? 'bg-slate-800 border-slate-600 text-white' : 'bg-white border-gray-300'}`}
-          />
-          <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page >= totalPages}
-            data-testid="page-next"
-            className={`p-1.5 rounded-lg ${page >= totalPages ? 'opacity-30' : isDark ? 'hover:bg-slate-700' : 'hover:bg-gray-100'}`}>
+          <input type="number" value={cw.page} min={1} max={cw.totalPages}
+            onChange={e => { const v = parseInt(e.target.value); if (v >= 1 && v <= cw.totalPages) cw.setPage(v); }}
+            className={`w-14 text-center text-xs rounded-lg border py-1 ${isDark ? 'bg-slate-800 border-slate-600 text-white' : 'bg-white border-gray-300'}`} />
+          <button onClick={() => cw.setPage(p => Math.min(cw.totalPages, p + 1))} disabled={cw.page >= cw.totalPages} data-testid="page-next"
+            className={`p-1.5 rounded-lg ${cw.page >= cw.totalPages ? 'opacity-30' : isDark ? 'hover:bg-slate-700' : 'hover:bg-gray-100'}`}>
             <ChevronRight className="w-4 h-4" />
           </button>
         </div>
       </div>
 
       {/* Modals */}
-      {bulkPreview && (
-        <BulkPreviewModal preview={bulkPreview} isDark={isDark} loading={bulkLoading}
-          onConfirm={confirmBulkApply} onCancel={() => { setBulkPreview(null); setPendingBulkChanges(null); }} />
+      {cw.bulkPreview && (
+        <BulkPreviewModal preview={cw.bulkPreview} isDark={isDark} loading={cw.bulkLoading}
+          onConfirm={cw.confirmBulkApply} onCancel={() => { cw.setBulkPreview(null); cw.setPendingBulkChanges(null); }} />
       )}
-      {showAISuggest && (
-        <AISuggestModal factorIds={selectedIds.slice(0, 20)} isDark={isDark}
-          onApply={handleAISuggestApply} onClose={() => setShowAISuggest(false)} />
+      {cw.showAISuggest && (
+        <AISuggestModal factorIds={cw.selectedIds.slice(0, 20)} isDark={isDark}
+          onApply={cw.handleAISuggestApply} onClose={() => cw.setShowAISuggest(false)} />
       )}
-      {translateModal && (
-        <TranslatePreviewModal factorIds={translateModal.factorIds} direction={translateModal.direction}
-          isDark={isDark} onApply={handleTranslateApply} onClose={() => setTranslateModal(null)} />
+      {cw.translateModal && (
+        <TranslatePreviewModal factorIds={cw.translateModal.factorIds} direction={cw.translateModal.direction}
+          isDark={isDark} onApply={cw.handleTranslateApply} onClose={() => cw.setTranslateModal(null)} />
       )}
-
-      {/* Location link side panel */}
       <LocationLinkPanel
-        isOpen={!!linkPanelFactor}
-        onClose={() => setLinkPanelFactor(null)}
-        factor={linkPanelFactor}
-        isDark={isDark}
-        token={token}
-        subcategoriesList={subcategoriesList}
-        onLink={handleLinkLocation}
-        onUnlink={handleUnlinkLocation}
-      />
-
-      {/* JSON viewer modal */}
-      {jsonModalFactor && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm" onClick={() => setJsonModalFactor(null)}>
-          <div onClick={e => e.stopPropagation()} data-testid="json-modal"
-            className={`w-full max-w-3xl mx-4 rounded-2xl shadow-2xl max-h-[85vh] flex flex-col ${isDark ? 'bg-slate-800' : 'bg-white'}`}>
-            <div className={`p-4 border-b flex items-center gap-3 ${isDark ? 'border-slate-700' : 'border-gray-200'}`}>
-              <Code2 className="w-5 h-5 text-blue-500" />
-              <div className="flex-1 min-w-0">
-                <h3 className={`font-semibold text-sm truncate ${isDark ? 'text-white' : 'text-gray-900'}`}>{jsonModalFactor.name_fr}</h3>
-                <p className={`text-xs ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>ID: {jsonModalFactor.id}</p>
-              </div>
-              <button
-                onClick={() => { navigator.clipboard.writeText(JSON.stringify(jsonModalFactor, null, 2)); }}
-                title={t('curation.link.copyJson')}
-                className={`p-2 rounded-lg transition-colors ${isDark ? 'hover:bg-slate-700 text-slate-400' : 'hover:bg-gray-100 text-gray-500'}`}>
-                <Copy className="w-4 h-4" />
-              </button>
-              <button onClick={() => setJsonModalFactor(null)} className={`p-2 rounded-lg ${isDark ? 'hover:bg-slate-700' : 'hover:bg-gray-100'}`}>
-                <X className="w-4 h-4" />
-              </button>
-            </div>
-            <div className="flex-1 overflow-auto p-4">
-              <pre className={`text-xs font-mono whitespace-pre-wrap leading-relaxed ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
-                {JSON.stringify(jsonModalFactor, null, 2)}
-              </pre>
-            </div>
-          </div>
-        </div>
+        isOpen={!!cw.linkPanelFactor} onClose={() => cw.setLinkPanelFactor(null)}
+        factor={cw.linkPanelFactor} isDark={isDark} token={cw.token}
+        subcategoriesList={cw.subcategoriesList}
+        onLink={cw.handleLinkLocation} onUnlink={cw.handleUnlinkLocation} />
+      {cw.jsonModalFactor && (
+        <JsonViewerModal factor={cw.jsonModalFactor} isDark={isDark} onClose={() => cw.setJsonModalFactor(null)} />
       )}
     </div>
   );
