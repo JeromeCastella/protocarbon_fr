@@ -154,7 +154,7 @@ class TestCORSWithCredentials:
         response = requests.options(
             f"{BASE_URL}/api/auth/login",
             headers={
-                "Origin": "https://emission-hub-3.preview.emergentagent.com",
+                "Origin": "http://localhost:8001",
                 "Access-Control-Request-Method": "POST",
                 "Access-Control-Request-Headers": "Content-Type"
             }
@@ -179,7 +179,7 @@ class TestCORSWithCredentials:
         response = session.post(
             f"{BASE_URL}/api/auth/login",
             json={"email": TEST_ADMIN_EMAIL, "password": TEST_ADMIN_PASSWORD},
-            headers={"Origin": "https://emission-hub-3.preview.emergentagent.com"}
+            headers={"Origin": "http://localhost:8001"}
         )
         
         # Should succeed (CORS allows the request)

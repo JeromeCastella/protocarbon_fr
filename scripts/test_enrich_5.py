@@ -14,9 +14,7 @@ import os
 from dotenv import load_dotenv
 load_dotenv('/app/backend/.env')
 
-from emergentintegrations.llm.chat import LlmChat, UserMessage
-
-EMERGENT_KEY = os.environ.get("EMERGENT_LLM_KEY", "")
+OPENAI_KEY = os.environ.get("OPENAI_API_KEY", "")
 
 ENRICHMENT_PROMPT = """Tu es un expert en bilan carbone pour des entreprises suisses. Tu dois enrichir les facteurs d'émission pour les rendre compréhensibles par des utilisateurs novices.
 
@@ -58,14 +56,16 @@ async def enrich_factor(factor: dict) -> dict:
     
     prompt = ENRICHMENT_PROMPT + json.dumps(factor_context, ensure_ascii=False, indent=2)
     
-    chat = LlmChat(
-        api_key=EMERGENT_KEY,
-        session_id=f"enrich-{uuid.uuid4()}",
-        system_message="Tu es un assistant expert en bilan carbone. Réponds uniquement en JSON valide."
-    ).with_model("openai", "gpt-4o-mini")
-    
-    user_message = UserMessage(text=prompt)
-    response = await chat.send_message(user_message)
+    from openai import AsyncOpenAI
+    client = AsyncOpenAI(api_key=OPENAI_KEY)
+    completion = await client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[
+            {"role": "system", "content": "Tu es un assistant expert en bilan carbone. Réponds uniquement en JSON valide."},
+            {"role": "user", "content": prompt},
+        ],
+    )
+    response = completion.choices[0].message.content
     
     clean_response = response.strip()
     if clean_response.startswith("```"):

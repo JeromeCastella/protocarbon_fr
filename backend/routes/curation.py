@@ -485,15 +485,20 @@ async def translate_preview(
 
     try:
         import os
-        from emergentintegrations.llm.chat import LlmChat, UserMessage
+        from openai import AsyncOpenAI
 
-        chat = LlmChat(
-            api_key=os.environ.get("EMERGENT_LLM_KEY"),
-            session_id=f"curation-translate-{current_user['id']}",
-            system_message=f"Tu es un traducteur expert {cfg['source_lang']}-{cfg['target_lang']} spécialisé dans le domaine du bilan carbone suisse.",
-        ).with_model("openai", "gpt-4o-mini")
-
-        response = await chat.send_message(UserMessage(text=prompt))
+        client = AsyncOpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
+        completion = await client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {
+                    "role": "system",
+                    "content": f"Tu es un traducteur expert {cfg['source_lang']}-{cfg['target_lang']} spécialisé dans le domaine du bilan carbone suisse.",
+                },
+                {"role": "user", "content": prompt},
+            ],
+        )
+        response = completion.choices[0].message.content
         result = parse_translation_response(response, factors, cfg)
         skipped = len(payload.factor_ids) - len(factors)
         return {"translations": result, "skipped": skipped, "target_field": target_field}

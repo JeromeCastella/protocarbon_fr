@@ -218,16 +218,20 @@ Retourne un JSON array:
 
 async def call_llm_suggest(prompt: str, user_id: str) -> list:
     """Appelle le LLM pour obtenir les suggestions et parse la réponse JSON."""
-    from emergentintegrations.llm.chat import LlmChat, UserMessage
+    from openai import AsyncOpenAI
 
-    chat = LlmChat(
-        api_key=os.environ.get("EMERGENT_LLM_KEY"),
-        session_id=f"curation-suggest-{user_id}",
-        system_message="Tu es un expert en bilan carbone suisse. Tu simplifies les noms techniques de facteurs d'émission.",
-    ).with_model("openai", "gpt-4o-mini")
-
-    text = await chat.send_message(UserMessage(text=prompt))
-
+    client = AsyncOpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
+    message = await client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[
+            {
+                "role": "system",
+                "content": "Tu es un expert en bilan carbone suisse. Tu simplifies les noms techniques de facteurs d'émission. Réponds uniquement en JSON valide.",
+            },
+            {"role": "user", "content": prompt},
+        ],
+    )
+    text = message.choices[0].message.content
     match = re.search(r'\[.*\]', text, re.DOTALL)
     if match:
         return json.loads(match.group())

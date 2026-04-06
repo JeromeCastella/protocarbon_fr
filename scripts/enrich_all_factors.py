@@ -21,9 +21,7 @@ from bson import ObjectId
 from dotenv import load_dotenv
 load_dotenv('/app/backend/.env')
 
-from emergentintegrations.llm.chat import LlmChat, UserMessage
-
-EMERGENT_KEY = os.environ.get("EMERGENT_LLM_KEY", "")
+OPENAI_KEY = os.environ.get("OPENAI_API_KEY", "")
 
 # Logging
 logging.basicConfig(
@@ -69,13 +67,16 @@ async def enrich_factor(factor_context: dict, max_retries: int = 5) -> dict:
 
     for attempt in range(max_retries):
         try:
-            chat = LlmChat(
-                api_key=EMERGENT_KEY,
-                session_id=f"enrich-{uuid.uuid4()}",
-                system_message="Tu es un assistant expert en bilan carbone. Réponds uniquement en JSON valide."
-            ).with_model("openai", "gpt-4o-mini")
-
-            response = await chat.send_message(UserMessage(text=prompt))
+            from openai import AsyncOpenAI
+            client = AsyncOpenAI(api_key=OPENAI_KEY)
+            completion = await client.chat.completions.create(
+                model="gpt-4o-mini",
+                messages=[
+                    {"role": "system", "content": "Tu es un assistant expert en bilan carbone. Réponds uniquement en JSON valide."},
+                    {"role": "user", "content": prompt},
+                ],
+            )
+            response = completion.choices[0].message.content
 
             clean = response.strip()
             if clean.startswith("```"):
