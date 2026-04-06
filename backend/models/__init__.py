@@ -100,6 +100,8 @@ class EmissionFactorV2Create(BaseModel):
     # Champs enrichis pour UX simplifiée
     name_simple_fr: Optional[str] = None
     name_simple_de: Optional[str] = None
+    source_product_name: Optional[str] = None
+    reporting_method: Optional[str] = None
     description_fr: Optional[str] = None
     description_de: Optional[str] = None
     search_tags: List[str] = []
@@ -123,6 +125,8 @@ class EmissionFactorV2Update(BaseModel):
     # Champs enrichis pour UX simplifiée
     name_simple_fr: Optional[str] = None
     name_simple_de: Optional[str] = None
+    source_product_name: Optional[str] = None
+    reporting_method: Optional[str] = None
     description_fr: Optional[str] = None
     description_de: Optional[str] = None
     search_tags: Optional[List[str]] = None

@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Search, Plus, Edit2, Trash2, Download, Upload, 
   Sparkles, GitBranch, History, Archive, X, Check, Tag, Layers,
-  ChevronLeft, ChevronRight, FlaskConical
+  ChevronLeft, ChevronRight, FlaskConical, ChevronDown, ChevronUp, MapPin
 } from 'lucide-react';
 import axios from 'axios';
 import logger from '../../utils/logger';
@@ -18,6 +18,9 @@ import {
 import { API_URL } from '../../utils/apiConfig';
 
 const INITIAL_FORM = {
+  name_simple_fr: '',
+  name_simple_de: '',
+  source_product_name: '',
   name_fr: '',
   name_de: '',
   subcategory: '',
@@ -29,7 +32,9 @@ const INITIAL_FORM = {
   source: 'OFEV',
   region: 'Suisse',
   year: 2024,
-  is_public: true
+  is_public: true,
+  reporting_method: '',
+  popularity_score: 50
 };
 
 const AdminFactorsTab = ({ factors, subcategories, pagination, onPageChange, onRefetch }) => {
@@ -56,6 +61,7 @@ const AdminFactorsTab = ({ factors, subcategories, pagination, onPageChange, onR
   // Form states
   const [editingFactor, setEditingFactor] = useState(null);
   const [factorForm, setFactorForm] = useState(INITIAL_FORM);
+  const [showAdvanced, setShowAdvanced] = useState(false);
   const [importData, setImportData] = useState('');
   const [importReplaceAll, setImportReplaceAll] = useState(false);
   const [versioningFactor, setVersioningFactor] = useState(null);
@@ -182,6 +188,11 @@ const AdminFactorsTab = ({ factors, subcategories, pagination, onPageChange, onR
     try {
       const factorData = {
         ...factorForm,
+        name_simple_fr: factorForm.name_simple_fr || null,
+        name_simple_de: factorForm.name_simple_de || null,
+        source_product_name: factorForm.source_product_name || null,
+        reporting_method: factorForm.reporting_method || null,
+        popularity_score: parseInt(factorForm.popularity_score) || 50,
         tags: factorForm.tags.split(',').map(t => t.trim()).filter(Boolean),
         impacts: factorForm.impacts.map(imp => ({
           scope: imp.scope,
@@ -215,6 +226,9 @@ const AdminFactorsTab = ({ factors, subcategories, pagination, onPageChange, onR
     const impacts = factor.impacts || [{ scope: factor.scope, category: factor.category, value: factor.value, unit: factor.unit }];
     
     setFactorForm({
+      name_simple_fr: factor.name_simple_fr || '',
+      name_simple_de: factor.name_simple_de || '',
+      source_product_name: factor.source_product_name || '',
       name_fr: factor.name_fr || factor.name || '',
       name_de: factor.name_de || '',
       subcategory: factor.subcategory || '',
@@ -230,7 +244,9 @@ const AdminFactorsTab = ({ factors, subcategories, pagination, onPageChange, onR
       source: factor.source || 'OFEV',
       region: factor.region || 'Suisse',
       year: factor.year || 2024,
-      is_public: factor.is_public !== false
+      is_public: factor.is_public !== false,
+      reporting_method: factor.reporting_method || '',
+      popularity_score: factor.popularity_score ?? 50
     });
     setShowFactorModal(true);
   };
@@ -443,7 +459,13 @@ const AdminFactorsTab = ({ factors, subcategories, pagination, onPageChange, onR
                       <div className="font-medium">{language === 'de' ? (factor.name_simple_de || factor.name_de || factor.name_simple_fr || factor.name_fr || factor.name) : (factor.name_simple_fr || factor.name_fr || factor.name)}</div>
                       {isArchived && <span className="px-1.5 py-0.5 text-xs rounded bg-red-500/20 text-red-500">{t('common.archived')}</span>}
                       {isReplaced && !isArchived && <span className="px-1.5 py-0.5 text-xs rounded bg-amber-500/20 text-amber-500">{t('common.replaced')}</span>}
+                      {factor.reporting_method && (
+                        <span className={`px-1.5 py-0.5 text-xs rounded ${factor.reporting_method === 'market' ? 'bg-purple-500/20 text-purple-500' : 'bg-teal-500/20 text-teal-500'}`}>
+                          {factor.reporting_method}
+                        </span>
+                      )}
                     </div>
+                    {factor.source_product_name && <div className={`text-xs truncate max-w-xs ${isDark ? 'text-slate-500' : 'text-gray-400'}`} title={factor.source_product_name}>{factor.source_product_name}</div>}
                     {language === 'fr' && (factor.name_simple_de || factor.name_de) && <div className={`text-xs ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>{factor.name_simple_de || factor.name_de}</div>}
                     {language === 'de' && (factor.name_simple_fr || factor.name_fr) && <div className={`text-xs ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>{factor.name_simple_fr || factor.name_fr}</div>}
                     {factor.tags?.length > 0 && (
@@ -588,28 +610,86 @@ const AdminFactorsTab = ({ factors, subcategories, pagination, onPageChange, onR
               </div>
 
               <div className="flex-1 overflow-y-auto p-6 space-y-6">
-                {/* Names */}
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>{t('admin.factors.nameFr')} *</label>
-                    <input
-                      type="text"
-                      value={factorForm.name_fr}
-                      onChange={(e) => setFactorForm(prev => ({ ...prev, name_fr: e.target.value }))}
-                      className={`w-full px-4 py-2 rounded-lg border ${isDark ? 'bg-slate-700 border-slate-600 text-white' : 'bg-white border-gray-200'}`}
-                      placeholder="Diesel - Véhicules légers"
-                    />
+                {/* Noms simplifiés (principaux) */}
+                <div>
+                  <div className="flex items-center gap-2 mb-3">
+                    <span className={`text-xs font-semibold uppercase tracking-wider ${isDark ? 'text-sky-400' : 'text-sky-600'}`}>Noms affichés dans l'application</span>
                   </div>
-                  <div>
-                    <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>{t('admin.factors.nameDe')} *</label>
-                    <input
-                      type="text"
-                      value={factorForm.name_de}
-                      onChange={(e) => setFactorForm(prev => ({ ...prev, name_de: e.target.value }))}
-                      className={`w-full px-4 py-2 rounded-lg border ${isDark ? 'bg-slate-700 border-slate-600 text-white' : 'bg-white border-gray-200'}`}
-                      placeholder="Diesel - Leichte Fahrzeuge"
-                    />
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>Nom simplifié FR</label>
+                      <input
+                        type="text"
+                        data-testid="input-name-simple-fr"
+                        value={factorForm.name_simple_fr}
+                        onChange={(e) => setFactorForm(prev => ({ ...prev, name_simple_fr: e.target.value }))}
+                        className={`w-full px-4 py-2 rounded-lg border ${isDark ? 'bg-slate-700 border-slate-600 text-white' : 'bg-white border-gray-200'}`}
+                        placeholder="Diesel — Véhicules légers"
+                      />
+                    </div>
+                    <div>
+                      <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>Nom simplifié DE</label>
+                      <input
+                        type="text"
+                        data-testid="input-name-simple-de"
+                        value={factorForm.name_simple_de}
+                        onChange={(e) => setFactorForm(prev => ({ ...prev, name_simple_de: e.target.value }))}
+                        className={`w-full px-4 py-2 rounded-lg border ${isDark ? 'bg-slate-700 border-slate-600 text-white' : 'bg-white border-gray-200'}`}
+                        placeholder="Diesel — Leichte Fahrzeuge"
+                      />
+                    </div>
                   </div>
+                </div>
+
+                {/* Source BAFU */}
+                <div>
+                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>Nom source BAFU (ecoinvent)</label>
+                  <input
+                    type="text"
+                    data-testid="input-source-product-name"
+                    value={factorForm.source_product_name}
+                    onChange={(e) => setFactorForm(prev => ({ ...prev, source_product_name: e.target.value }))}
+                    className={`w-full px-4 py-2 rounded-lg border text-sm ${isDark ? 'bg-slate-700 border-slate-600 text-white' : 'bg-white border-gray-200'}`}
+                    placeholder="Light fuel oil, burned in boiler 100kW condensing {CH} MJ"
+                  />
+                </div>
+
+                {/* Noms techniques (section repliable) */}
+                <div className={`rounded-xl border ${isDark ? 'border-slate-700' : 'border-gray-200'}`}>
+                  <button
+                    type="button"
+                    onClick={() => setShowAdvanced(!showAdvanced)}
+                    className={`w-full flex items-center justify-between px-4 py-3 text-sm font-medium ${isDark ? 'text-slate-400 hover:text-slate-300' : 'text-gray-500 hover:text-gray-700'}`}
+                  >
+                    <span>Noms techniques (import) {factorForm.name_fr && <span className={`ml-2 font-normal ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>— {factorForm.name_fr.substring(0, 40)}{factorForm.name_fr.length > 40 ? '…' : ''}</span>}</span>
+                    {showAdvanced ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                  </button>
+                  {showAdvanced && (
+                    <div className="px-4 pb-4 grid grid-cols-2 gap-4">
+                      <div>
+                        <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>{t('admin.factors.nameFr')} *</label>
+                        <input
+                          type="text"
+                          data-testid="input-name-fr"
+                          value={factorForm.name_fr}
+                          onChange={(e) => setFactorForm(prev => ({ ...prev, name_fr: e.target.value }))}
+                          className={`w-full px-4 py-2 rounded-lg border ${isDark ? 'bg-slate-700 border-slate-600 text-white' : 'bg-white border-gray-200'}`}
+                          placeholder="Mazout (combustion) — FR"
+                        />
+                      </div>
+                      <div>
+                        <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>{t('admin.factors.nameDe')} *</label>
+                        <input
+                          type="text"
+                          data-testid="input-name-de"
+                          value={factorForm.name_de}
+                          onChange={(e) => setFactorForm(prev => ({ ...prev, name_de: e.target.value }))}
+                          className={`w-full px-4 py-2 rounded-lg border ${isDark ? 'bg-slate-700 border-slate-600 text-white' : 'bg-white border-gray-200'}`}
+                          placeholder="Heizölverbrennung — FR"
+                        />
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 {/* Subcategory & Default Unit */}
@@ -642,6 +722,43 @@ const AdminFactorsTab = ({ factors, subcategories, pagination, onPageChange, onR
                       <option value="">Sélectionner...</option>
                       {COMMON_UNITS.map(u => <option key={u} value={u}>{u}</option>)}
                     </select>
+                  </div>
+                </div>
+
+                {/* Reporting method & Popularity */}
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
+                      <MapPin className="w-4 h-4 inline mr-1" />Méthode de reporting
+                    </label>
+                    <select
+                      data-testid="select-reporting-method"
+                      value={factorForm.reporting_method}
+                      onChange={(e) => setFactorForm(prev => ({ ...prev, reporting_method: e.target.value }))}
+                      className={`w-full px-4 py-2 rounded-lg border ${isDark ? 'bg-slate-700 border-slate-600 text-white' : 'bg-white border-gray-200'}`}
+                    >
+                      <option value="">Non défini</option>
+                      <option value="location">Location-based</option>
+                      <option value="market">Market-based</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
+                      Popularité ({factorForm.popularity_score})
+                    </label>
+                    <input
+                      type="range"
+                      data-testid="input-popularity"
+                      min="0"
+                      max="100"
+                      value={factorForm.popularity_score}
+                      onChange={(e) => setFactorForm(prev => ({ ...prev, popularity_score: parseInt(e.target.value) }))}
+                      className="w-full h-2 rounded-lg appearance-none cursor-pointer accent-blue-500"
+                    />
+                    <div className={`flex justify-between text-xs mt-1 ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>
+                      <span>Rare</span>
+                      <span>Courant</span>
+                    </div>
                   </div>
                 </div>
 
@@ -834,7 +951,7 @@ const AdminFactorsTab = ({ factors, subcategories, pagination, onPageChange, onR
                   </button>
                   <button
                     onClick={handleSaveFactor}
-                    disabled={!factorForm.name_fr || !factorForm.subcategory || factorForm.impacts.length === 0 || factorForm.impacts.some(i => !i.value || !i.category || !i.unit)}
+                    disabled={!(factorForm.name_simple_fr || factorForm.name_fr) || !factorForm.subcategory || factorForm.impacts.length === 0 || factorForm.impacts.some(i => !i.value || !i.category || !i.unit)}
                     className="flex-1 px-4 py-3 bg-blue-500 text-white rounded-xl hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                   >
                     <Check className="w-5 h-5" />
