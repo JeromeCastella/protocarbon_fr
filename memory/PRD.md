@@ -18,46 +18,45 @@ Calculateur d'empreinte carbone pour entreprise suivant le GHG Protocol. Applica
     │   │   ├── fiscal-years/ (2 composants)
     │   │   ├── data-entry/ (GlobalFactorSearch, TableViewPanel, dataEntryConstants)
     │   │   ├── curation-workbench/ (9 composants)
-    │   │   └── assistance/ (4 composants)
-    │   ├── hooks/ (useGeneralInfo, useFiscalYearsPage, useCurationWorkbench, useAssistance, useDataEntry, useAdminExport, useProductVersions, useProductSale, ...)
+    │   │   ├── assistance/ (4 composants)
+    │   │   └── wizard/ (useProductWizard.js refactorisé)
+    │   ├── hooks/ (useGeneralInfo, useFiscalYearsPage, useCurationWorkbench, useAssistance, useDataEntry, useAdminExport, useProductVersions, useProductSale, useDashboard, useGuidedEntry)
     │   ├── pages/
-    │   └── context/
+    │   └── context/ (AuthContext refactorisé)
 ```
 
 ## Revue de Code — Phases Complétées
 
-### Phase 1 — Key Props (06/04/2026) DONE
-### Phase 2 — React Hook Dependencies (06/04/2026) DONE
-### Phase 3 — Sécurité Token Storage → BACKLOG (décision utilisateur)
-### Phase 4 — Backend Service Layer (06/04/2026) DONE
-### Phase 5 — Frontend Component Decomposition (06/04/2026) DONE
-- GeneralInfo.js : 1338 → 91 lignes
-- FiscalYears.js : 1047 → 77 lignes
-- DataEntry.js : 1506 → 883 lignes (partiel)
-- CurationWorkbench.jsx : 1193 → 135 lignes
-- Assistance.js : 841 → 71 lignes
-
-### Phase A — Backend Complexity Refactoring (06/04/2026) DONE
-- **fiscal_years.py** : `duplicate_fiscal_year` (complexité 25 → ~10). Extraits : `_copy_context_fields`, `_resolve_context_from_source_or_company`, `_initialize_fy_context`, `_resolve_scenario_info`, `_validate_duplicate_target`, `_duplicate_activities`. `create_fiscal_year` réduit aussi.
-- **dashboard.py** : `get_dashboard_kpis` simplifié. `get_fiscal_year_context_with_fallback` et `fetch_fy_emissions` migrés vers `dashboard_service.py`.
-- **export.py** : `serialize_for_export` réduit (22 → 15 lignes). Extraits : `_collect_export_data`, `_write_collection_to_zip`.
-- **activities.py** : `create_activity_for_impact` et `create_activity` réduits. Extraits : `_compute_impact_emissions`, `_get_factor_impacts`.
-- **curation.py** : 12 paramètres query → classe `CurationFilters` (Depends).
-- **tests** : Secret hardcodé supprimé de `test_code_refactoring_phase5.py`.
-- Tests : iteration_69.json — 100% (26 backend + 3 frontend)
-
-### Phase B — Frontend Complexity Refactoring (06/04/2026) DONE
-- **DataEntry.js** : 884 → 445 lignes. Hook `useDataEntry.js` (235L) extrait avec toute la logique métier. Sous-composants `EmptyFiscalYearState`, `SidebarProgress`, `Category33Modal`.
-- **AdminExportTab.jsx** : 527 → 265 lignes. Hook `useAdminExport.js` (108L). Sous-composants `ResultMessage`, `MongoDumpSection`.
-- **ProductVersionsModal.js** : 544 → 286 lignes. Hook `useProductVersions.js` (126L). Sous-composants `ProfileForm`, `EmissionBadges`, `ProfilesList`.
-- **ProductSaleModal.js** : 530 → 297 lignes. Hook `useProductSale.js` (122L). Sous-composants `ProductSelector`, `ActiveProfileBadge`, `EmissionsPreview`, `DeleteConfirmation`, `EmptyProducts`.
-- **dataEntryConstants.js** : Constantes partagées (PRODUCT_SALE_CATEGORIES, iconMap, formatEmissions, normalizeScope).
-- Tests : iteration_70.json — 100% (16 backend + all frontend)
+### Phase 1 — Key Props DONE
+### Phase 2 — React Hook Dependencies (initial) DONE
+### Phase 3 — Sécurité Token Storage → BACKLOG
+### Phase 4 — Backend Service Layer DONE
+### Phase 5 — Frontend Component Decomposition DONE
+### Phase A — Backend Complexity Refactoring DONE
+### Phase B — Frontend Complexity Refactoring DONE
+### Phase C — React Hook Dependencies (exhaustive-deps) DONE (06/04/2026)
+- **18 problèmes corrigés** : 12 warnings ESLint + 6 suppressions `eslint-disable`
+- **0 warnings restants**, **0 eslint-disable** dans tout le codebase
+- Fichiers modifiés (13) :
+  - `AuthContext.js` : `fetchUser`/`logout` → `useCallback`, effect avec deps `[token, fetchUser]`
+  - `useDashboard.js` : `fetchAllData`/`fetchObjectiveData`/`fetchScenarioEntities`/`fetchScopeBreakdown` → `useCallback`
+  - `useGuidedEntry.js` : `fetchSubcategories`/`fetchFactorsForCategory`/`loadForEditing`/`loadForPreSelectedFactor` → `useCallback`
+  - `useProductWizard.js` : `loadEmissionFactors`/`loadProductData`/`calculateEmissionsPreview` → `useCallback`
+  - `useAdminExport.js` : `fetchFiscalYears`/`fetchDumpInfo` → `useCallback`
+  - `useProductVersions.js` : `fetchData` → `useCallback`
+  - `useProductSale.js` : `fetchProducts`/`fetchProductSales` → `useCallback`
+  - `useAssistance.js` : `fetchFactors` → `useCallback`
+  - `useFiscalYearsPage.js` : deps manquantes ajoutées
+  - `OnboardingTour.js` : `steps` array → `useMemo([language])`
+  - `SaleEditModal.js` : `fetchSaleDetails` → `useCallback`
+  - `GeneralInfo.js` : destructuration propre pour deps correctes
+  - `VerifyEmail.js` : ajout de `t` aux deps
+- Bug critique corrigé par testing agent : temporal dead zone dans `useProductWizard.js`
+- Tests : iteration_71.json — 100% (26 backend + toutes pages frontend)
 
 ## Backlog (P0-P2)
+- **P1**: Phase D — Ternaires imbriqués (207) + Inline Objects Props (370) + Python `is` vs `==` (139)
 - **P0**: FEAT-CUR-03 — Regroupement par patterns (atelier curation)
-- **P1**: Phase C — React Hook Dependencies (107 instances de stale closures)
-- **P1**: Phase D — Ternaires imbriqués (207) + Inline Objects Props (370)
 - **P1**: FEAT-03 — Gestion multi-utilisateurs (rôles)
 - **P1**: Exports PDF/Excel
 - **P2**: Type Hints Python progressif
