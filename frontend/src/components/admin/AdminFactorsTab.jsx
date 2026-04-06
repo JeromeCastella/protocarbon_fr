@@ -1132,7 +1132,7 @@ const AdminFactorsTab = ({ factors, subcategories, pagination, onPageChange, onR
                         </div>
                         <div className="flex flex-wrap gap-2">
                           {(version.impacts || []).map((imp, j) => (
-                            <span key={j} className={`text-xs px-2 py-1 rounded ${isDark ? 'bg-slate-600' : 'bg-gray-200'}`}>{imp.scope?.replace('_', ' ')}: {imp.value} {imp.unit}</span>
+                            <span key={`${imp.scope}-${imp.unit}`} className={`text-xs px-2 py-1 rounded ${isDark ? 'bg-slate-600' : 'bg-gray-200'}`}>{imp.scope?.replace('_', ' ')}: {imp.value} {imp.unit}</span>
                           ))}
                         </div>
                       </div>

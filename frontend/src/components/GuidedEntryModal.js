@@ -854,7 +854,7 @@ const GuidedEntryModal = ({
                     {emissions.map((e, i) => {
                       const scopeInfo = scopeColors[e.scope] || { bg: 'bg-gray-500', label: e.scope };
                       return (
-                        <div key={i} className="flex items-center justify-between">
+                        <div key={e.scope} className="flex items-center justify-between">
                           <div className="flex items-center gap-2">
                             <span className={`w-2 h-2 rounded-full ${scopeInfo.bg}`}></span>
                             <span className={`text-xs ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>{scopeInfo.label}</span>
