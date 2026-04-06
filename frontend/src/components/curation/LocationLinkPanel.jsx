@@ -60,7 +60,7 @@ export default function LocationLinkPanel({
         setResults(data);
       }
     } catch (e) {
-      console.error(e);
+      logger.error(e);
     }
     setLoading(false);
     setInitialLoaded(true);
