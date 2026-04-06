@@ -7,74 +7,52 @@ Application full-stack (React/FastAPI/MongoDB) pour la comptabilité carbone d'e
 - **Frontend**: React + TailwindCSS + Shadcn/UI, port 3000
 - **Backend**: FastAPI + MongoDB, port 8001
 - **Integrations**: Gemini Pro / GPT-4o-mini via emergentintegrations (suggestions IA + traductions)
-- **API URL Config**: Centralized in `utils/apiConfig.js` — uses relative URLs to avoid cross-origin issues
 
 ## Core Features Implemented
 - Auth (localStorage + JWT Bearer Token)
 - Dashboard avec métriques GHG Protocol
-- Saisie de données (slide-over) + **Recherche globale de facteurs** (Fuse.js, toggle Expert)
+- Saisie de données (slide-over) + Recherche globale de facteurs (Fuse.js, toggle Expert)
 - Gestion de produits (slide-over)
 - Administration
 - Facteurs d'émission avec grille/tableau
 - Exercices fiscaux
-- **Atelier de Curation (Phase 1 & 2)** — feature majeure
-- **Vue tabulaire détaillée** : Slide-over panel pour activités par scope
-- **Export MongoDB (mongodump)** : Bouton admin pour télécharger un dump complet
-- **FEAT-DR Dual Reporting** : Toggle Market/Location sur Dashboard (tous endpoints)
-- **FEAT-PLAUS Test de plausibilité** : Diagnostic de cohérence des données (11 règles V1)
+- Atelier de Curation (Phase 1 & 2)
+- Vue tabulaire détaillée : Slide-over panel pour activités par scope
+- Export MongoDB (mongodump)
+- FEAT-DR Dual Reporting : Toggle Market/Location sur Dashboard (tous endpoints)
+- FEAT-PLAUS Test de plausibilité : Diagnostic de cohérence des données (11 règles V1)
 
-## FEAT-PLAUS — Test de plausibilité (April 2026)
-- Bouton "Lancer le diagnostic" dans l'onglet Suivi de saisie du Dashboard
-- 11 règles métier indépendantes réparties en 3 familles :
-  - **A. Cohérence vs. contexte** : émissions/ETP, émissions/m², émissions/kCHF, Scope 2 = 0 avec locaux, total = 0
-  - **B. Cohérence interne** : activité dominante > 80%, outlier 10x moyenne, Scope 3 amont = 0
-  - **C. Complétude** : catégories attendues par secteur, couverture catégories, activités vs taille
-- Seuils placeholder dans `THRESHOLDS` (à affiner)
-- Catégories attendues par secteur (13 secteurs configurés)
-- Alertes classées par sévérité : critical (rouge), warning (ambre), info (bleu)
-- Résultats animés avec badges résumé et contexte utilisé
+## Admin Factors Form — Réorganisé (April 2026)
+- **Noms simplifiés FR/DE** en position principale (ce sont les noms affichés dans l'app)
+- **source_product_name** : nouveau champ éditable (nom technique BAFU/ecoinvent)
+- **Noms techniques (name_fr/name_de)** : section repliable "Noms techniques (import)"
+- **reporting_method** : sélecteur Location / Market / Non défini
+- **popularity_score** : slider 0-100 (Rare → Courant)
+- Tableau liste : affiche source_product_name en sous-titre + badge reporting_method
+- Modèles Pydantic backend mis à jour (EmissionFactorV2Create/Update)
 
-## Dual Reporting Dashboard (April 2026)
-- Toggle Market-based / Location-based propage `reporting_view` à TOUS les endpoints
-
-## DB Schema - emission_factors
-```
-{
-  id, name_fr, name_de, name_simple_fr, name_simple_de,
-  source_product_name, subcategory, default_unit, is_public,
-  popularity_score, curation_status, impacts[], region, source, year
-}
-```
+## Recommandations Dashboard — Supprimées (April 2026)
+- Bloc "Mesures recommandées" retiré de l'onglet Objectifs (obsolète)
+- Appel API /api/objectives/recommendations supprimé du frontend
 
 ## Key Files
-- `frontend/src/pages/Dashboard.js` — Dashboard principal, onglet Suivi avec diagnostic plausibilité
-- `frontend/src/components/DashboardResultsTab.js` — Onglet Résultats
-- `frontend/src/pages/CurationWorkbench.jsx` — Page de curation
-- `frontend/src/components/curation/LocationLinkPanel.jsx` — Panneau latéral liaison location
+- `frontend/src/pages/Dashboard.js` — Dashboard principal
+- `frontend/src/components/admin/AdminFactorsTab.jsx` — Formulaire facteurs restructuré
 - `backend/routes/plausibility.py` — POST /check endpoint
-- `backend/services/plausibility.py` — 11 règles métier, seuils, catégories par secteur
-- `backend/routes/dashboard.py` — API dashboard (summary, kpis, scope-breakdown, fiscal-comparison)
+- `backend/services/plausibility.py` — 11 règles métier
+- `backend/routes/dashboard.py` — API dashboard (reporting_view sur tous endpoints)
 - `backend/routes/objectives.py` — API objectifs SBTi
-- `backend/routes/curation.py` — API de curation
-- `backend/services/emissions.py` — Calcul d'émissions (dual reporting)
-- `backend/config.py` — MongoDB connection
-- `backend/server.py` — FastAPI app
+- `backend/models/__init__.py` — Modèles Pydantic (source_product_name, reporting_method ajoutés)
 
 ## API Endpoints
-- `POST /api/plausibility/check` — Diagnostic de plausibilité (fiscal_year_id optionnel)
-- `GET /api/dashboard/summary` — Résumé (reporting_view)
-- `GET /api/dashboard/kpis` — KPIs (reporting_view)
-- `GET /api/dashboard/scope-breakdown/{id}` — Breakdown scopes (reporting_view)
-- `GET /api/dashboard/fiscal-comparison` — Comparaison exercices (reporting_view)
-- `GET /api/objectives/trajectory` — Trajectoire SBTi (reporting_view)
-- `GET /api/curation/factors` — Liste paginée avec filtres
-- `PATCH /api/curation/factors/{id}` — Édition en ligne
-- `GET /api/curation/factors/search-location` — Recherche facteurs location
-- `POST /api/auth/login` — Authentification
+- `POST /api/plausibility/check` — Diagnostic de plausibilité
+- `PUT /api/admin/emission-factors-v2/{id}` — Mise à jour facteur (accepte source_product_name, reporting_method, name_simple_fr/de, popularity_score)
+- `GET /api/dashboard/summary|kpis|scope-breakdown|fiscal-comparison` — reporting_view
+- `GET /api/objectives/trajectory` — reporting_view
 
 ## Backlog
 ### P0
-- **FEAT-CUR-03 — Regroupement par patterns**: Vue qui groupe les facteurs similaires pour corrections en masse rapides
+- **FEAT-CUR-03 — Regroupement par patterns**: Vue qui groupe les facteurs similaires
 
 ### P1
 - **FEAT-03 — Multi-utilisateurs**: Rôles Admin/Éditeur/Lecteur
@@ -83,8 +61,8 @@ Application full-stack (React/FastAPI/MongoDB) pour la comptabilité carbone d'e
 ### P2
 - Base de données actions plan climat cantonal
 - Logs d'audit calculs d'émission
-- Optimisation requêtes DB (projections MongoDB dans dashboard.py)
-- Refactoring composants React monolithiques (GuidedEntryModal.js, Dashboard.js, AdminFactorsTab.jsx, CurationWorkbench.jsx)
+- Optimisation requêtes DB
+- Refactoring composants React monolithiques
 
 ## Credentials
 - Email: newtest@x.com / Password: test123
