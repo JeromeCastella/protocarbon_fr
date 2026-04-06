@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { X, Search, Link2, Unlink, Loader2, Filter, ChevronRight } from 'lucide-react';
+import { useLanguage } from '../../context/LanguageContext';
 import { API_URL as API } from '../../utils/apiConfig';
 
 /**
@@ -16,6 +17,7 @@ export default function LocationLinkPanel({
   onLink,         // (factorId, locationFactorId) => void
   onUnlink,       // (factorId) => void
 }) {
+  const { t } = useLanguage();
   const [query, setQuery] = useState('');
   const [subcatFilter, setSubcatFilter] = useState('');
   const [results, setResults] = useState([]);
@@ -126,7 +128,7 @@ export default function LocationLinkPanel({
             <div className="flex items-center gap-2">
               <Link2 className="w-4 h-4 text-amber-500" />
               <h2 className={`font-semibold text-sm ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                Lier un facteur location
+                {t('curation.locationPanel.title')}
               </h2>
             </div>
             <button
@@ -141,7 +143,7 @@ export default function LocationLinkPanel({
           {/* Current factor info */}
           <div className={`rounded-lg p-3 mb-3 ${isDark ? 'bg-amber-500/10 border border-amber-500/20' : 'bg-amber-50 border border-amber-200'}`}>
             <p className={`text-[10px] uppercase tracking-wider mb-1 ${isDark ? 'text-amber-400/60' : 'text-amber-600/60'}`}>
-              Facteur market-based
+              {t('curation.locationPanel.marketBased')}
             </p>
             <p className={`text-sm font-medium ${isDark ? 'text-amber-300' : 'text-amber-800'}`}>
               {factorDisplayName}
@@ -157,7 +159,7 @@ export default function LocationLinkPanel({
               <Link2 className={`w-3.5 h-3.5 flex-shrink-0 ${isDark ? 'text-green-400' : 'text-green-600'}`} />
               <div className="flex-1 min-w-0">
                 <p className={`text-[10px] uppercase tracking-wider ${isDark ? 'text-green-400/60' : 'text-green-600/60'}`}>
-                  Actuellement lié a
+                  {t('curation.locationPanel.currentlyLinked')}
                 </p>
                 <p className={`text-sm font-medium truncate ${isDark ? 'text-green-300' : 'text-green-800'}`}>
                   {linkedName || linkedId}
@@ -169,7 +171,7 @@ export default function LocationLinkPanel({
                 className={`p-1.5 rounded-lg text-xs flex items-center gap-1 transition-colors ${
                   isDark ? 'bg-red-500/10 text-red-400 hover:bg-red-500/20' : 'bg-red-50 text-red-600 hover:bg-red-100'
                 }`}
-                title="Supprimer le lien"
+                title={t('curation.locationPanel.unlinkTitle')}
               >
                 <Unlink className="w-3.5 h-3.5" />
               </button>
@@ -184,7 +186,7 @@ export default function LocationLinkPanel({
               type="text"
               value={query}
               onChange={e => setQuery(e.target.value)}
-              placeholder="Rechercher un facteur location..."
+              placeholder={t('curation.locationPanel.searchPlaceholder')}
               data-testid="location-panel-search"
               className={`w-full pl-10 pr-4 py-2.5 rounded-lg border text-sm ${
                 isDark
@@ -205,7 +207,7 @@ export default function LocationLinkPanel({
                 isDark ? 'bg-slate-800 border-slate-600 text-white' : 'bg-gray-50 border-gray-300 text-gray-700'
               }`}
             >
-              <option value="">Toutes sous-categories</option>
+              <option value="">{t('curation.locationPanel.allSubcategories')}</option>
               {subcategoriesList.map(sc => (
                 <option key={sc.code} value={sc.code}>{sc.name_fr}</option>
               ))}
@@ -218,15 +220,15 @@ export default function LocationLinkPanel({
           {loading && (
             <div className="flex items-center justify-center py-12">
               <Loader2 className="w-5 h-5 animate-spin text-blue-500" />
-              <span className={`ml-2 text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>Recherche...</span>
+              <span className={`ml-2 text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>{t('curation.locationPanel.searching')}</span>
             </div>
           )}
 
           {!loading && results.length === 0 && initialLoaded && (
             <div className={`text-center py-12 ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>
               <Search className="w-8 h-8 mx-auto mb-2 opacity-30" />
-              <p className="text-sm">Aucun facteur location trouve</p>
-              <p className="text-xs mt-1">Essayez d'elargir la recherche ou de changer la sous-categorie</p>
+              <p className="text-sm">{t('curation.locationPanel.noResult')}</p>
+              <p className="text-xs mt-1">{t('curation.locationPanel.widenSearch')}</p>
             </div>
           )}
 
@@ -276,12 +278,12 @@ export default function LocationLinkPanel({
                       <span className="font-mono">{formatImpact(loc.impacts)}</span>
                       {loc.is_public && (
                         <span className={`px-1.5 py-0.5 rounded ${isDark ? 'bg-blue-500/10 text-blue-400' : 'bg-blue-50 text-blue-600'}`}>
-                          public
+                          {t('curation.locationPanel.publicLabel')}
                         </span>
                       )}
                       {isCurrentlyLinked && (
                         <span className={`px-1.5 py-0.5 rounded font-medium ${isDark ? 'bg-green-500/10 text-green-400' : 'bg-green-50 text-green-600'}`}>
-                          lie
+                          {t('curation.locationPanel.linkedLabel')}
                         </span>
                       )}
                     </div>
@@ -295,7 +297,7 @@ export default function LocationLinkPanel({
         {/* Footer */}
         <div className={`px-5 py-3 border-t flex-shrink-0 ${isDark ? 'border-slate-700' : 'border-gray-200'}`}>
           <p className={`text-[10px] ${isDark ? 'text-slate-600' : 'text-gray-400'}`}>
-            {results.length} resultat(s) · Cliquez pour lier
+            {results.length} {t('curation.locationPanel.resultsCount')}
           </p>
         </div>
       </div>

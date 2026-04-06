@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useTheme } from '../context/ThemeContext';
+import { useLanguage } from '../context/LanguageContext';
 import { useAuth } from '../context/AuthContext';
 import logger from '../utils/logger';
 import {
@@ -14,6 +15,7 @@ import LocationLinkPanel from '../components/curation/LocationLinkPanel';
 
 // ==================== STATS DASHBOARD ====================
 const StatsDashboard = ({ stats, isDark, onSubcategoryClick, activeSubcategory }) => {
+  const { t } = useLanguage();
   if (!stats) return null;
   const g = stats.global;
   return (
@@ -23,7 +25,7 @@ const StatsDashboard = ({ stats, isDark, onSubcategoryClick, activeSubcategory }
         <div className="flex items-center gap-2">
           <BarChart3 className="w-4 h-4 text-blue-500" />
           <span className={`text-sm font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-            Progression globale
+            {t('curation.stats.globalProgress')}
           </span>
         </div>
         <div className="flex-1 flex items-center gap-3">
@@ -35,9 +37,9 @@ const StatsDashboard = ({ stats, isDark, onSubcategoryClick, activeSubcategory }
           </span>
         </div>
         <div className="flex gap-4 text-xs">
-          <span className="flex items-center gap-1"><CheckCircle2 className="w-3 h-3 text-green-500" />{g.reviewed} traités</span>
-          <span className="flex items-center gap-1"><Flag className="w-3 h-3 text-amber-500" />{g.flagged} signalés</span>
-          <span className="flex items-center gap-1"><CircleDot className="w-3 h-3 text-slate-400" />{g.untreated} restants</span>
+          <span className="flex items-center gap-1"><CheckCircle2 className="w-3 h-3 text-green-500" />{g.reviewed} {t('curation.stats.treated')}</span>
+          <span className="flex items-center gap-1"><Flag className="w-3 h-3 text-amber-500" />{g.flagged} {t('curation.stats.flaggedLabel')}</span>
+          <span className="flex items-center gap-1"><CircleDot className="w-3 h-3 text-slate-400" />{g.untreated} {t('curation.stats.remaining')}</span>
         </div>
       </div>
 
@@ -76,6 +78,7 @@ const StatsDashboard = ({ stats, isDark, onSubcategoryClick, activeSubcategory }
 
 // ==================== BULK ACTIONS BAR ====================
 const BulkActionsBar = ({ selectedIds, isDark, onClearSelection, onBulkAction, loading, subcategoriesList, onCopyOriginals, onTranslate }) => {
+  const { t } = useLanguage();
   const [bulkField, setBulkField] = useState('');
   const [bulkValue, setBulkValue] = useState('');
 
@@ -95,8 +98,8 @@ const BulkActionsBar = ({ selectedIds, isDark, onClearSelection, onBulkAction, l
     <div className={`sticky top-0 z-20 px-4 py-2 flex items-center gap-3 border-b ${
       isDark ? 'bg-blue-900/30 border-blue-500/30' : 'bg-blue-50 border-blue-200'
     }`}>
-      <span className="text-sm font-medium text-blue-500">{selectedIds.length} sélectionné(s)</span>
-      <button onClick={onClearSelection} className="text-xs text-blue-400 hover:text-blue-300">Désélectionner</button>
+      <span className="text-sm font-medium text-blue-500">{selectedIds.length} {t('curation.bulk.selected')}</span>
+      <button onClick={onClearSelection} className="text-xs text-blue-400 hover:text-blue-300">{t('curation.bulk.deselect')}</button>
       <div className="flex-1" />
 
       <select
@@ -104,33 +107,33 @@ const BulkActionsBar = ({ selectedIds, isDark, onClearSelection, onBulkAction, l
         onChange={e => { setBulkField(e.target.value); setBulkValue(''); }}
         className={`text-xs rounded-lg px-2 py-1.5 border ${isDark ? 'bg-slate-800 border-slate-600 text-white' : 'bg-white border-gray-300'}`}
       >
-        <option value="">Action en masse...</option>
-        <option value="curation_status">Statut de curation</option>
-        <option value="is_public">Public / Expert</option>
-        <option value="popularity_score">Score de popularité</option>
-        <option value="subcategory">Sous-catégorie</option>
-        <option value="reporting_method">Méthode (Location/Market)</option>
+        <option value="">{t('curation.bulk.bulkAction')}</option>
+        <option value="curation_status">{t('curation.bulk.curationStatus')}</option>
+        <option value="is_public">{t('curation.bulk.publicExpert')}</option>
+        <option value="popularity_score">{t('curation.bulk.popularityScore')}</option>
+        <option value="subcategory">{t('curation.bulk.subcategory')}</option>
+        <option value="reporting_method">{t('curation.bulk.reportingMethod')}</option>
       </select>
 
       {bulkField === 'curation_status' && (
         <select value={bulkValue} onChange={e => setBulkValue(e.target.value)}
           className={`text-xs rounded-lg px-2 py-1.5 border ${isDark ? 'bg-slate-800 border-slate-600 text-white' : 'bg-white border-gray-300'}`}>
-          <option value="">Choisir...</option>
-          <option value="reviewed">Traité</option>
-          <option value="flagged">Signalé</option>
-          <option value="untreated">Non traité</option>
+          <option value="">{t('curation.bulk.choose')}</option>
+          <option value="reviewed">{t('curation.bulk.treated')}</option>
+          <option value="flagged">{t('curation.bulk.flaggedLabel')}</option>
+          <option value="untreated">{t('curation.bulk.untreated')}</option>
         </select>
       )}
       {bulkField === 'is_public' && (
         <select value={bulkValue} onChange={e => setBulkValue(e.target.value)}
           className={`text-xs rounded-lg px-2 py-1.5 border ${isDark ? 'bg-slate-800 border-slate-600 text-white' : 'bg-white border-gray-300'}`}>
-          <option value="">Choisir...</option>
-          <option value="true">Public</option>
-          <option value="false">Expert</option>
+          <option value="">{t('curation.bulk.choose')}</option>
+          <option value="true">{t('curation.bulk.publicLabel')}</option>
+          <option value="false">{t('curation.bulk.expertLabel')}</option>
         </select>
       )}
       {bulkField === 'popularity_score' && (
-        <input type="number" min={0} max={100} placeholder="Score (0-100)" value={bulkValue}
+        <input type="number" min={0} max={100} placeholder={t('curation.bulk.scorePlaceholder')} value={bulkValue}
           onChange={e => setBulkValue(e.target.value)}
           className={`text-xs rounded-lg px-2 py-1.5 border w-24 ${isDark ? 'bg-slate-800 border-slate-600 text-white' : 'bg-white border-gray-300'}`}
         />
@@ -138,7 +141,7 @@ const BulkActionsBar = ({ selectedIds, isDark, onClearSelection, onBulkAction, l
       {bulkField === 'subcategory' && (
         <select value={bulkValue} onChange={e => setBulkValue(e.target.value)}
           className={`text-xs rounded-lg px-2 py-1.5 border max-w-[200px] ${isDark ? 'bg-slate-800 border-slate-600 text-white' : 'bg-white border-gray-300'}`}>
-          <option value="">Choisir...</option>
+          <option value="">{t('curation.bulk.choose')}</option>
           {subcategoriesList.map(sc => (
             <option key={sc.code} value={sc.code}>{sc.name_fr}</option>
           ))}
@@ -147,7 +150,7 @@ const BulkActionsBar = ({ selectedIds, isDark, onClearSelection, onBulkAction, l
       {bulkField === 'reporting_method' && (
         <select value={bulkValue} onChange={e => setBulkValue(e.target.value)}
           className={`text-xs rounded-lg px-2 py-1.5 border ${isDark ? 'bg-slate-800 border-slate-600 text-white' : 'bg-white border-gray-300'}`}>
-          <option value="">Choisir...</option>
+          <option value="">{t('curation.bulk.choose')}</option>
           <option value="location">Location</option>
           <option value="market">Market</option>
         </select>
@@ -157,7 +160,7 @@ const BulkActionsBar = ({ selectedIds, isDark, onClearSelection, onBulkAction, l
         <button onClick={handleApply} disabled={loading}
           className="px-3 py-1.5 bg-blue-500 text-white text-xs rounded-lg hover:bg-blue-600 flex items-center gap-1.5 disabled:opacity-50">
           {loading ? <Loader2 className="w-3 h-3 animate-spin" /> : <Save className="w-3 h-3" />}
-          Appliquer
+          {t('curation.bulk.apply')}
         </button>
       )}
 
@@ -168,23 +171,23 @@ const BulkActionsBar = ({ selectedIds, isDark, onClearSelection, onBulkAction, l
       <button onClick={() => onCopyOriginals('fr', 'original')} disabled={loading}
         className={`px-3 py-1.5 text-xs rounded-lg flex items-center gap-1.5 ${isDark ? 'bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20' : 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100'}`}
         data-testid="copy-originals-fr-btn" title="Copier name_fr → name_simple_fr (cellules vides uniquement)">
-        <CopyPlus className="w-3 h-3" /> Orig. → FR
+        <CopyPlus className="w-3 h-3" /> {t('curation.bulk.origToFr')}
       </button>
       <button onClick={() => onCopyOriginals('de', 'original')} disabled={loading}
         className={`px-3 py-1.5 text-xs rounded-lg flex items-center gap-1.5 ${isDark ? 'bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20' : 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100'}`}
         data-testid="copy-originals-de-btn" title="Copier name_de → name_simple_de (cellules vides uniquement)">
-        <CopyPlus className="w-3 h-3" /> Orig. → DE
+        <CopyPlus className="w-3 h-3" /> {t('curation.bulk.origToDe')}
       </button>
       {/* Copy from source_product_name */}
       <button onClick={() => onCopyOriginals('fr', 'source_product_name')} disabled={loading}
         className={`px-3 py-1.5 text-xs rounded-lg flex items-center gap-1.5 ${isDark ? 'bg-amber-500/10 text-amber-400 hover:bg-amber-500/20' : 'bg-amber-50 text-amber-700 hover:bg-amber-100'}`}
         data-testid="copy-source-fr-btn" title="Copier source_product_name → name_simple_fr (cellules vides uniquement)">
-        <CopyPlus className="w-3 h-3" /> Source → FR
+        <CopyPlus className="w-3 h-3" /> {t('curation.bulk.sourceToFr')}
       </button>
       <button onClick={() => onCopyOriginals('de', 'source_product_name')} disabled={loading}
         className={`px-3 py-1.5 text-xs rounded-lg flex items-center gap-1.5 ${isDark ? 'bg-amber-500/10 text-amber-400 hover:bg-amber-500/20' : 'bg-amber-50 text-amber-700 hover:bg-amber-100'}`}
         data-testid="copy-source-de-btn" title="Copier source_product_name → name_simple_de (cellules vides uniquement)">
-        <CopyPlus className="w-3 h-3" /> Source → DE
+        <CopyPlus className="w-3 h-3" /> {t('curation.bulk.sourceToDe')}
       </button>
 
       {/* Separator */}
@@ -194,19 +197,19 @@ const BulkActionsBar = ({ selectedIds, isDark, onClearSelection, onBulkAction, l
       <button onClick={() => onTranslate('source_to_fr')} disabled={loading}
         className={`px-3 py-1.5 text-xs rounded-lg flex items-center gap-1.5 ${isDark ? 'bg-orange-500/10 text-orange-400 hover:bg-orange-500/20' : 'bg-orange-50 text-orange-700 hover:bg-orange-100'}`}
         data-testid="translate-source-fr-btn" title="Traduire source_product_name → français simplifié (IA)">
-        <Languages className="w-3 h-3" /> Source+Trad → FR
+        <Languages className="w-3 h-3" /> {t('curation.bulk.sourceTransFr')}
       </button>
       <button onClick={() => onTranslate('source_to_de')} disabled={loading}
         className={`px-3 py-1.5 text-xs rounded-lg flex items-center gap-1.5 ${isDark ? 'bg-orange-500/10 text-orange-400 hover:bg-orange-500/20' : 'bg-orange-50 text-orange-700 hover:bg-orange-100'}`}
         data-testid="translate-source-de-btn" title="Traduire source_product_name → allemand simplifié (IA)">
-        <Languages className="w-3 h-3" /> Source+Trad → DE
+        <Languages className="w-3 h-3" /> {t('curation.bulk.sourceTransDe')}
       </button>
 
       {/* Translate */}
       <button onClick={() => onTranslate('fr_to_de')} disabled={loading}
         className={`px-3 py-1.5 text-xs rounded-lg flex items-center gap-1.5 ${isDark ? 'bg-sky-500/10 text-sky-400 hover:bg-sky-500/20' : 'bg-sky-50 text-sky-700 hover:bg-sky-100'}`}
         data-testid="translate-fr-de-btn" title="Traduire les noms simplifiés FR → DE (IA)">
-        <Languages className="w-3 h-3" /> Traduire FR → DE
+        <Languages className="w-3 h-3" /> {t('curation.bulk.translateFrDe')}
       </button>
     </div>
   );
@@ -214,6 +217,7 @@ const BulkActionsBar = ({ selectedIds, isDark, onClearSelection, onBulkAction, l
 
 // ==================== INLINE EDITABLE CELL ====================
 const EditableCell = ({ value, onSave, isDark, placeholder = '', className = '', type = 'text', cellId = '', onNavigate }) => {
+  const { t } = useLanguage();
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState(value || '');
   const ref = useRef(null);
@@ -261,7 +265,7 @@ const EditableCell = ({ value, onSave, isDark, placeholder = '', className = '',
       <div
         onClick={() => setEditing(true)}
         data-cell-id={cellId}
-        title="Cliquer pour éditer"
+        title={t('curation.cell.clickToEdit')}
         className={`cursor-text min-h-[24px] ${!displayValue ? `italic ${isDark ? 'text-slate-600' : 'text-gray-300'}` : ''} ${className}`}
       >
         {displayValue || placeholder}
@@ -299,10 +303,11 @@ const EditableCell = ({ value, onSave, isDark, placeholder = '', className = '',
 
 // ==================== STATUS BADGE ====================
 const StatusBadge = ({ status, isDark, onCycle }) => {
+  const { t } = useLanguage();
   const configs = {
-    reviewed: { icon: CheckCircle2, label: 'Traité', cls: 'text-green-500 bg-green-500/10' },
-    flagged: { icon: Flag, label: 'Signalé', cls: 'text-amber-500 bg-amber-500/10' },
-    untreated: { icon: CircleDot, label: 'À traiter', cls: isDark ? 'text-slate-500 bg-slate-700' : 'text-gray-400 bg-gray-100' },
+    reviewed: { icon: CheckCircle2, label: t('curation.status.reviewed'), cls: 'text-green-500 bg-green-500/10' },
+    flagged: { icon: Flag, label: t('curation.status.flagged'), cls: 'text-amber-500 bg-amber-500/10' },
+    untreated: { icon: CircleDot, label: t('curation.status.toTreat'), cls: isDark ? 'text-slate-500 bg-slate-700' : 'text-gray-400 bg-gray-100' },
   };
   const s = status || 'untreated';
   const c = configs[s] || configs.untreated;
@@ -310,7 +315,7 @@ const StatusBadge = ({ status, isDark, onCycle }) => {
   const next = s === 'untreated' ? 'reviewed' : s === 'reviewed' ? 'flagged' : 'untreated';
 
   return (
-    <button onClick={() => onCycle(next)} title={`Passer à: ${configs[next].label}`}
+    <button onClick={() => onCycle(next)} title={`${t('curation.status.switchTo')}: ${configs[next].label}`}
       className={`flex items-center gap-1 px-2 py-1 rounded-lg text-[10px] font-medium transition-all ${c.cls} hover:opacity-80`}>
       <Icon className="w-3 h-3" />{c.label}
     </button>
@@ -319,6 +324,7 @@ const StatusBadge = ({ status, isDark, onCycle }) => {
 
 // ==================== AI SUGGEST MODAL ====================
 const AISuggestModal = ({ factorIds, isDark, onApply, onClose }) => {
+  const { t } = useLanguage();
   const [suggestions, setSuggestions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -333,7 +339,7 @@ const AISuggestModal = ({ factorIds, isDark, onApply, onClose }) => {
           headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${authToken}` },
           body: JSON.stringify({ factor_ids: factorIds }),
         });
-        if (!res.ok) throw new Error('Erreur IA');
+        if (!res.ok) throw new Error(t('curation.aiSuggest.aiError'));
         const data = await res.json();
         setSuggestions(data.suggestions || []);
         const sel = {};
@@ -358,11 +364,11 @@ const AISuggestModal = ({ factorIds, isDark, onApply, onClose }) => {
       <div onClick={e => e.stopPropagation()} className={`w-full max-w-2xl mx-4 rounded-2xl shadow-2xl max-h-[80vh] flex flex-col ${isDark ? 'bg-slate-800' : 'bg-white'}`}>
         <div className={`p-5 border-b flex items-center gap-3 ${isDark ? 'border-slate-700' : 'border-gray-200'}`}>
           <Sparkles className="w-5 h-5 text-purple-500" />
-          <h3 className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>Suggestions IA — Titres simplifiés</h3>
+          <h3 className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>{t('curation.aiSuggest.title')}</h3>
           <button onClick={onClose} className="ml-auto p-1 rounded hover:bg-slate-700"><X className="w-4 h-4" /></button>
         </div>
         <div className="flex-1 overflow-y-auto p-5">
-          {loading && <div className="flex items-center justify-center py-12"><Loader2 className="w-8 h-8 animate-spin text-purple-500" /><span className="ml-3 text-sm">Génération en cours...</span></div>}
+          {loading && <div className="flex items-center justify-center py-12"><Loader2 className="w-8 h-8 animate-spin text-purple-500" /><span className="ml-3 text-sm">{t('curation.aiSuggest.generating')}</span></div>}
           {error && <p className="text-red-500 text-sm">{error}</p>}
           {!loading && !error && suggestions.map(s => (
             <div key={s.factor_id} className={`mb-3 p-3 rounded-xl border ${selected[s.factor_id] ? isDark ? 'border-purple-500/30 bg-purple-500/5' : 'border-purple-200 bg-purple-50' : isDark ? 'border-slate-700' : 'border-gray-200'}`}>
@@ -382,9 +388,9 @@ const AISuggestModal = ({ factorIds, isDark, onApply, onClose }) => {
         </div>
         {!loading && !error && suggestions.length > 0 && (
           <div className={`p-4 border-t flex justify-end gap-3 ${isDark ? 'border-slate-700' : 'border-gray-200'}`}>
-            <button onClick={onClose} className={`px-4 py-2 rounded-xl text-sm ${isDark ? 'hover:bg-slate-700 text-white' : 'hover:bg-gray-100 text-gray-700'}`}>Annuler</button>
+            <button onClick={onClose} className={`px-4 py-2 rounded-xl text-sm ${isDark ? 'hover:bg-slate-700 text-white' : 'hover:bg-gray-100 text-gray-700'}`}>{t('common.cancel')}</button>
             <button onClick={handleApply} className="px-4 py-2 bg-purple-500 text-white rounded-xl text-sm hover:bg-purple-600 flex items-center gap-2">
-              <Sparkles className="w-4 h-4" />Appliquer {Object.values(selected).filter(Boolean).length} suggestion(s)
+              <Sparkles className="w-4 h-4" />{t('curation.aiSuggest.applySuggestions').replace('{count}', Object.values(selected).filter(Boolean).length)}
             </button>
           </div>
         )}
@@ -395,6 +401,7 @@ const AISuggestModal = ({ factorIds, isDark, onApply, onClose }) => {
 
 // ==================== TRANSLATE PREVIEW MODAL ====================
 const TranslatePreviewModal = ({ factorIds, direction, isDark, onApply, onClose }) => {
+  const { t } = useLanguage();
   const [translations, setTranslations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [applying, setApplying] = useState(false);
@@ -405,10 +412,10 @@ const TranslatePreviewModal = ({ factorIds, direction, isDark, onApply, onClose 
   const authToken = localStorage.getItem('token');
 
   const dirLabels = {
-    'fr_to_de': 'FR → DE',
-    'de_to_fr': 'DE → FR',
-    'source_to_fr': 'Source → FR (traduit)',
-    'source_to_de': 'Source → DE (traduit)',
+    'fr_to_de': t('curation.translate.frToDe'),
+    'de_to_fr': t('curation.translate.deToFr'),
+    'source_to_fr': t('curation.translate.sourceToFr'),
+    'source_to_de': t('curation.translate.sourceToDe'),
   };
   const dirLabel = dirLabels[direction] || direction;
 
@@ -422,7 +429,7 @@ const TranslatePreviewModal = ({ factorIds, direction, isDark, onApply, onClose 
         });
         if (!res.ok) {
           const errData = await res.json().catch(() => ({}));
-          throw new Error(errData.detail || `Erreur de traduction (${res.status})`);
+          throw new Error(errData.detail || `${t('curation.translate.translationError')} (${res.status})`);
         }
         const data = await res.json();
         setTranslations(data.translations || []);
@@ -471,16 +478,16 @@ const TranslatePreviewModal = ({ factorIds, direction, isDark, onApply, onClose 
         data-testid="translate-preview-modal">
         <div className={`p-5 border-b flex items-center gap-3 ${isDark ? 'border-slate-700' : 'border-gray-200'}`}>
           <Languages className="w-5 h-5 text-sky-500" />
-          <h3 className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>Traduction {dirLabel}</h3>
-          {skipped > 0 && <span className={`text-xs ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>({skipped} ignoré(s) — source vide ou cible déjà remplie)</span>}
+          <h3 className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>{t('curation.translate.title')} {dirLabel}</h3>
+          {skipped > 0 && <span className={`text-xs ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>({skipped} {t('curation.translate.skippedNote')})</span>}
           <button onClick={onClose} className="ml-auto p-1 rounded hover:bg-slate-700"><X className="w-4 h-4" /></button>
         </div>
         <div className="flex-1 overflow-y-auto p-5">
-          {loading && <div className="flex items-center justify-center py-12"><Loader2 className="w-8 h-8 animate-spin text-sky-500" /><span className="ml-3 text-sm">Traduction en cours...</span></div>}
+          {loading && <div className="flex items-center justify-center py-12"><Loader2 className="w-8 h-8 animate-spin text-sky-500" /><span className="ml-3 text-sm">{t('curation.translate.translating')}</span></div>}
           {error && <p className="text-red-500 text-sm">{error}</p>}
           {!loading && !error && translations.length === 0 && (
             <p className={`text-sm text-center py-8 ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>
-              Aucun facteur à traduire. Vérifiez que les noms source sont renseignés et que les cibles sont vides.
+              {t('curation.translate.noFactorToTranslate')}
             </p>
           )}
           {!loading && !error && translations.map(t => (
@@ -500,11 +507,11 @@ const TranslatePreviewModal = ({ factorIds, direction, isDark, onApply, onClose 
         </div>
         {!loading && !error && translations.length > 0 && (
           <div className={`p-4 border-t flex justify-end gap-3 ${isDark ? 'border-slate-700' : 'border-gray-200'}`}>
-            <button onClick={onClose} className={`px-4 py-2 rounded-xl text-sm ${isDark ? 'hover:bg-slate-700 text-white' : 'hover:bg-gray-100 text-gray-700'}`}>Annuler</button>
+            <button onClick={onClose} className={`px-4 py-2 rounded-xl text-sm ${isDark ? 'hover:bg-slate-700 text-white' : 'hover:bg-gray-100 text-gray-700'}`}>{t('common.cancel')}</button>
             <button onClick={handleApply} disabled={applying || selectedCount === 0}
               className="px-4 py-2 bg-sky-500 text-white rounded-xl text-sm hover:bg-sky-600 disabled:opacity-50 flex items-center gap-2">
               {applying ? <Loader2 className="w-4 h-4 animate-spin" /> : <Languages className="w-4 h-4" />}
-              Appliquer {selectedCount} traduction(s)
+              {t('curation.translate.applyTranslations').replace('{count}', selectedCount)}
             </button>
           </div>
         )}
@@ -514,12 +521,14 @@ const TranslatePreviewModal = ({ factorIds, direction, isDark, onApply, onClose 
 };
 
 // ==================== BULK PREVIEW MODAL ====================
-const BulkPreviewModal = ({ preview, isDark, onConfirm, onCancel, loading }) => (
+const BulkPreviewModal = ({ preview, isDark, onConfirm, onCancel, loading }) => {
+  const { t } = useLanguage();
+  return (
   <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm" onClick={onCancel}>
     <div onClick={e => e.stopPropagation()} className={`w-full max-w-md mx-4 rounded-2xl shadow-2xl p-6 ${isDark ? 'bg-slate-800' : 'bg-white'}`} data-testid="bulk-preview-modal">
-      <h3 className={`font-semibold mb-4 ${isDark ? 'text-white' : 'text-gray-900'}`}>Confirmer la modification en masse</h3>
+      <h3 className={`font-semibold mb-4 ${isDark ? 'text-white' : 'text-gray-900'}`}>{t('curation.bulkPreview.title')}</h3>
       <p className={`text-sm mb-3 ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-        <strong>{preview.count}</strong> facteur(s) seront modifiés :
+        <strong>{preview.count}</strong> {t('curation.bulkPreview.factorsModified')}
       </p>
       <div className={`p-3 rounded-xl mb-4 ${isDark ? 'bg-slate-700' : 'bg-gray-50'}`}>
         {Object.entries(preview.changes).map(([k, v]) => (
@@ -529,10 +538,10 @@ const BulkPreviewModal = ({ preview, isDark, onConfirm, onCancel, loading }) => 
         ))}
       </div>
       <p className={`text-xs mb-4 ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>
-        Exemples : {preview.sample?.map(s => s.name_fr).join(', ')}
+        {t('curation.bulkPreview.examples')} {preview.sample?.map(s => s.name_fr).join(', ')}
       </p>
       <div className="flex justify-end gap-3">
-        <button onClick={onCancel} className={`px-4 py-2 rounded-xl text-sm ${isDark ? 'hover:bg-slate-700 text-white' : 'hover:bg-gray-100'}`}>Annuler</button>
+        <button onClick={onCancel} className={`px-4 py-2 rounded-xl text-sm ${isDark ? 'hover:bg-slate-700 text-white' : 'hover:bg-gray-100'}`}>{t('common.cancel')}</button>
         <button onClick={onConfirm} disabled={loading}
           className="px-4 py-2 bg-blue-500 text-white rounded-xl text-sm hover:bg-blue-600 disabled:opacity-50 flex items-center gap-2">
           {loading ? <Loader2 className="w-3 h-3 animate-spin" /> : <Save className="w-3 h-3" />}
@@ -541,12 +550,14 @@ const BulkPreviewModal = ({ preview, isDark, onConfirm, onCancel, loading }) => 
       </div>
     </div>
   </div>
-);
+  );
+};
 
 // ==================== MAIN CURATION PAGE ====================
 export default function CurationWorkbench() {
   const { isDark } = useTheme();
   const { token } = useAuth();
+  const { t } = useLanguage();
 
   // Data state
   const [stats, setStats] = useState(null);
@@ -718,7 +729,7 @@ export default function CurationWorkbench() {
       });
       if (res.ok) {
         const data = await res.json();
-        alert(`${data.modified_count} nom(s) copié(s), ${data.skipped_count} ignoré(s) (déjà remplis)`);
+        alert(t('curation.alerts.namesCopied').replace('{modified}', data.modified_count).replace('{skipped}', data.skipped_count));
         fetchFactors();
         fetchStats();
       }
@@ -741,7 +752,7 @@ export default function CurationWorkbench() {
   };
   const handleTranslateApply = (modifiedCount) => {
     setTranslateModal(null);
-    alert(`${modifiedCount} traduction(s) appliquée(s)`);
+    alert(t('curation.alerts.translationsApplied').replace('{count}', modifiedCount));
     fetchFactors();
     fetchStats();
   };
@@ -812,8 +823,8 @@ export default function CurationWorkbench() {
       {/* Header */}
       <div className={`px-4 py-3 border-b flex items-center gap-4 flex-shrink-0 ${isDark ? 'border-slate-700' : 'border-gray-200'}`}>
         <Layers className="w-5 h-5 text-blue-500" />
-        <h1 className="text-lg font-bold">Atelier de curation</h1>
-        <span className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>{total} facteur(s)</span>
+        <h1 className="text-lg font-bold">{t('curation.title')}</h1>
+        <span className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>{total} {t('curation.factors')}</span>
         <div className="flex-1" />
 
         {/* Filters */}
@@ -821,7 +832,7 @@ export default function CurationWorkbench() {
           <Search className={`absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 ${isDark ? 'text-slate-500' : 'text-gray-400'}`} />
           <input
             type="text"
-            placeholder="Rechercher..."
+            placeholder={t('curation.searchPlaceholder')}
             value={search}
             onChange={e => setSearch(e.target.value)}
             data-testid="curation-search"
@@ -837,24 +848,24 @@ export default function CurationWorkbench() {
         <select value={curationStatus} onChange={e => setCurationStatus(e.target.value)}
           data-testid="filter-curation-status"
           className={`text-xs rounded-lg px-2 py-1.5 border ${isDark ? 'bg-slate-800 border-slate-600 text-white' : 'bg-white border-gray-300'}`}>
-          <option value="">Tous statuts</option>
-          <option value="untreated">Non traités</option>
-          <option value="reviewed">Traités</option>
-          <option value="flagged">Signalés</option>
+          <option value="">{t('curation.allStatuses')}</option>
+          <option value="untreated">{t('curation.untreated')}</option>
+          <option value="reviewed">{t('curation.reviewed')}</option>
+          <option value="flagged">{t('curation.flagged')}</option>
         </select>
 
         <select value={isPublic} onChange={e => setIsPublic(e.target.value)}
           data-testid="filter-is-public"
           className={`text-xs rounded-lg px-2 py-1.5 border ${isDark ? 'bg-slate-800 border-slate-600 text-white' : 'bg-white border-gray-300'}`}>
-          <option value="">Tous</option>
-          <option value="true">Publics</option>
-          <option value="false">Experts</option>
+          <option value="">{t('curation.all')}</option>
+          <option value="true">{t('curation.public')}</option>
+          <option value="false">{t('curation.expert')}</option>
         </select>
 
         <select value={defaultUnit} onChange={e => setDefaultUnit(e.target.value)}
           data-testid="filter-unit"
           className={`text-xs rounded-lg px-2 py-1.5 border ${isDark ? 'bg-slate-800 border-slate-600 text-white' : 'bg-white border-gray-300'}`}>
-          <option value="">Toutes unités</option>
+          <option value="">{t('curation.allUnits')}</option>
           {unitsList.map(u => (
             <option key={u} value={u}>{u}</option>
           ))}
@@ -863,7 +874,7 @@ export default function CurationWorkbench() {
         <select value={reportingMethodFilter} onChange={e => setReportingMethodFilter(e.target.value)}
           data-testid="filter-reporting-method"
           className={`text-xs rounded-lg px-2 py-1.5 border ${isDark ? 'bg-slate-800 border-slate-600 text-white' : 'bg-white border-gray-300'}`}>
-          <option value="">Toutes méthodes</option>
+          <option value="">{t('curation.allMethods')}</option>
           <option value="location">Location</option>
           <option value="market">Market</option>
         </select>
@@ -871,7 +882,7 @@ export default function CurationWorkbench() {
         {selectedIds.length > 0 && (
           <button onClick={() => setShowAISuggest(true)} data-testid="ai-suggest-btn"
             className="px-3 py-1.5 bg-purple-500 text-white text-xs rounded-lg hover:bg-purple-600 flex items-center gap-1.5">
-            <Sparkles className="w-3.5 h-3.5" />IA Titres ({Math.min(selectedIds.length, 20)})
+            <Sparkles className="w-3.5 h-3.5" />{t('curation.aiTitles')} ({Math.min(selectedIds.length, 20)})
           </button>
         )}
       </div>
@@ -894,15 +905,15 @@ export default function CurationWorkbench() {
                 </button>
               </th>
               <th className="py-2 px-2 cursor-pointer" onClick={() => toggleSort('name_fr')}>
-                <div className="flex items-center gap-1">Nom original <SortIcon field="name_fr" /></div>
+                <div className="flex items-center gap-1">{t('curation.table.originalName')} <SortIcon field="name_fr" /></div>
               </th>
               <th className="py-2 px-2 cursor-pointer" onClick={() => toggleSort('source_product_name')}>
-                <div className="flex items-center gap-1">Source BAFU <SortIcon field="source_product_name" /></div>
+                <div className="flex items-center gap-1">{t('curation.table.sourceBAFU')} <SortIcon field="source_product_name" /></div>
               </th>
-              <th className="py-2 px-2">Nom simplifié FR</th>
-              <th className="py-2 px-2">Nom simplifié DE</th>
+              <th className="py-2 px-2">{t('curation.table.simplifiedFr')}</th>
+              <th className="py-2 px-2">{t('curation.table.simplifiedDe')}</th>
               <th className="py-2 px-2 cursor-pointer" onClick={() => toggleSort('subcategory')}>
-                <div className="flex items-center gap-1">Sous-catégorie <SortIcon field="subcategory" /></div>
+                <div className="flex items-center gap-1">{t('curation.table.subcategory')} <SortIcon field="subcategory" /></div>
               </th>
               <th className="py-2 px-2 cursor-pointer text-center" onClick={() => toggleSort('is_public')}>
                 <div className="flex items-center gap-1 justify-center"><Eye className="w-3 h-3" /><SortIcon field="is_public" /></div>
@@ -910,15 +921,15 @@ export default function CurationWorkbench() {
               <th className="py-2 px-2 cursor-pointer text-center" onClick={() => toggleSort('popularity_score')}>
                 <div className="flex items-center gap-1 justify-center">Pop. <SortIcon field="popularity_score" /></div>
               </th>
-              <th className="py-2 px-2">Unité</th>
-              <th className="py-2 px-2">Valeur</th>
+              <th className="py-2 px-2">{t('curation.table.unit')}</th>
+              <th className="py-2 px-2">{t('curation.table.value')}</th>
               <th className="py-2 px-2 cursor-pointer" onClick={() => toggleSort('curation_status')}>
-                <div className="flex items-center gap-1">Statut <SortIcon field="curation_status" /></div>
+                <div className="flex items-center gap-1">{t('curation.table.status')} <SortIcon field="curation_status" /></div>
               </th>
               <th className="py-2 px-2 cursor-pointer" onClick={() => toggleSort('reporting_method')}>
-                <div className="flex items-center gap-1">Méthode <SortIcon field="reporting_method" /></div>
+                <div className="flex items-center gap-1">{t('curation.table.method')} <SortIcon field="reporting_method" /></div>
               </th>
-              <th className="py-2 px-2">Facteur location lié</th>
+              <th className="py-2 px-2">{t('curation.table.linkedLocationFactor')}</th>
               <th className="py-2 px-1 w-8"></th>
             </tr>
           </thead>
@@ -926,7 +937,7 @@ export default function CurationWorkbench() {
             {loadingFactors ? (
               <tr><td colSpan={12} className="text-center py-12"><Loader2 className="w-6 h-6 animate-spin mx-auto text-blue-500" /></td></tr>
             ) : factors.length === 0 ? (
-              <tr><td colSpan={12} className={`text-center py-12 text-sm ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>Aucun facteur trouvé</td></tr>
+              <tr><td colSpan={12} className={`text-center py-12 text-sm ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>{t('curation.noFactorFound')}</td></tr>
             ) : factors.map((f, rowIdx) => {
               const isSelected = selectedIds.includes(f.id);
               const hasFrCustom = f.name_simple_fr != null && f.name_simple_fr !== f.name_fr;
@@ -988,7 +999,7 @@ export default function CurationWorkbench() {
                   <td className="py-1.5 px-2 text-center">
                     <button onClick={() => inlineEdit(f.id, 'is_public', !f.is_public)}
                       className={`p-1 rounded ${f.is_public ? 'text-green-500' : isDark ? 'text-slate-600' : 'text-gray-300'}`}
-                      title={f.is_public ? 'Public' : 'Expert'}>
+                      title={f.is_public ? t('curation.bulk.publicLabel') : t('curation.bulk.expertLabel')}>
                       {f.is_public ? <Eye className="w-3.5 h-3.5" /> : <EyeOff className="w-3.5 h-3.5" />}
                     </button>
                   </td>
@@ -1017,7 +1028,7 @@ export default function CurationWorkbench() {
                       className={`w-full text-[11px] rounded border py-0.5 px-1 ${
                         isDark ? 'bg-slate-800 border-slate-700 text-slate-300' : 'bg-white border-gray-200 text-gray-600'
                       }`}
-                      placeholder="Unité..."
+                      placeholder={t('curation.unitPlaceholder')}
                     />
                   </td>
                   <td className={`py-1.5 px-2 font-mono text-[11px] whitespace-nowrap ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>
@@ -1052,7 +1063,7 @@ export default function CurationWorkbench() {
                           className={`flex items-center gap-1.5 text-[11px] rounded-lg px-2 py-1 max-w-[180px] transition-colors ${
                             isDark ? 'bg-green-500/10 text-green-400 hover:bg-green-500/20' : 'bg-green-50 text-green-700 hover:bg-green-100'
                           }`}
-                          title={`Lié à: ${f._locationName || f.location_factor_id}\nCliquer pour modifier`}
+                          title={`${t('curation.link.linkedTo')}: ${f._locationName || f.location_factor_id}\n${t('curation.link.clickToEdit')}`}
                         >
                           <Link2 className="w-3 h-3 flex-shrink-0" />
                           <span className="truncate">{f._locationName || f.location_factor_id}</span>
@@ -1074,7 +1085,7 @@ export default function CurationWorkbench() {
                     )}
                   </td>
                   <td className="py-1.5 px-1">
-                    <button onClick={() => setJsonModalFactor(f)} title="Voir JSON complet"
+                    <button onClick={() => setJsonModalFactor(f)} title={t('curation.link.viewJson')}
                       data-testid={`json-btn-${f.id}`}
                       className={`p-1 rounded transition-colors ${isDark ? 'text-slate-600 hover:text-slate-300 hover:bg-slate-700' : 'text-gray-300 hover:text-gray-600 hover:bg-gray-100'}`}>
                       <Code2 className="w-3.5 h-3.5" />
@@ -1094,13 +1105,13 @@ export default function CurationWorkbench() {
       <div className={`px-4 py-2 border-t flex items-center justify-between flex-shrink-0 ${isDark ? 'border-slate-700' : 'border-gray-200'}`}>
         <div className="flex items-center gap-4">
           <span className={`text-xs ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>
-            Page {page}/{totalPages} — {total} facteur(s)
+            {t('curation.pagination.page')} {page}/{totalPages} — {total} {t('curation.pagination.factorsCount')}
           </span>
           <div className={`flex items-center gap-3 text-[10px] ${isDark ? 'text-slate-600' : 'text-gray-300'}`} data-testid="keyboard-hints">
-            <span><kbd className={`px-1 py-0.5 rounded text-[9px] font-mono ${isDark ? 'bg-slate-700 text-slate-400' : 'bg-gray-100 text-gray-500'}`}>Tab</kbd> cellule suivante</span>
-            <span><kbd className={`px-1 py-0.5 rounded text-[9px] font-mono ${isDark ? 'bg-slate-700 text-slate-400' : 'bg-gray-100 text-gray-500'}`}>Enter</kbd> ligne suivante</span>
-            <span><kbd className={`px-1 py-0.5 rounded text-[9px] font-mono ${isDark ? 'bg-slate-700 text-slate-400' : 'bg-gray-100 text-gray-500'}`}>Shift+Enter</kbd> traité + suivant</span>
-            <span><kbd className={`px-1 py-0.5 rounded text-[9px] font-mono ${isDark ? 'bg-slate-700 text-slate-400' : 'bg-gray-100 text-gray-500'}`}>Esc</kbd> annuler</span>
+            <span><kbd className={`px-1 py-0.5 rounded text-[9px] font-mono ${isDark ? 'bg-slate-700 text-slate-400' : 'bg-gray-100 text-gray-500'}`}>Tab</kbd> {t('curation.keyboard.nextCell')}</span>
+            <span><kbd className={`px-1 py-0.5 rounded text-[9px] font-mono ${isDark ? 'bg-slate-700 text-slate-400' : 'bg-gray-100 text-gray-500'}`}>Enter</kbd> {t('curation.keyboard.nextRow')}</span>
+            <span><kbd className={`px-1 py-0.5 rounded text-[9px] font-mono ${isDark ? 'bg-slate-700 text-slate-400' : 'bg-gray-100 text-gray-500'}`}>Shift+Enter</kbd> {t('curation.keyboard.reviewedNext')}</span>
+            <span><kbd className={`px-1 py-0.5 rounded text-[9px] font-mono ${isDark ? 'bg-slate-700 text-slate-400' : 'bg-gray-100 text-gray-500'}`}>Esc</kbd> {t('curation.keyboard.cancel')}</span>
           </div>
         </div>
         <div className="flex items-center gap-2">
@@ -1160,7 +1171,7 @@ export default function CurationWorkbench() {
               </div>
               <button
                 onClick={() => { navigator.clipboard.writeText(JSON.stringify(jsonModalFactor, null, 2)); }}
-                title="Copier JSON"
+                title={t('curation.link.copyJson')}
                 className={`p-2 rounded-lg transition-colors ${isDark ? 'hover:bg-slate-700 text-slate-400' : 'hover:bg-gray-100 text-gray-500'}`}>
                 <Copy className="w-4 h-4" />
               </button>

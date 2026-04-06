@@ -644,5 +644,135 @@
     "delete": "Sind Sie sicher, dass Sie löschen möchten?",
     "archive": "Dieses Element archivieren? Es bleibt für historische Daten verfügbar.",
     "removeAdminSelf": "Sie werden Ihre Administratorrechte entfernen. Fortfahren?"
+  },
+  "curation": {
+    "title": "Kurations-Werkstatt",
+    "factors": "Faktor(en)",
+    "searchPlaceholder": "Suchen...",
+    "allStatuses": "Alle Status",
+    "untreated": "Unbehandelt",
+    "reviewed": "Bearbeitet",
+    "flagged": "Markiert",
+    "all": "Alle",
+    "public": "Öffentlich",
+    "expert": "Experten",
+    "allUnits": "Alle Einheiten",
+    "allMethods": "Alle Methoden",
+    "aiTitles": "KI-Titel",
+    "noFactorFound": "Kein Faktor gefunden",
+    "unitPlaceholder": "Einheit...",
+    "stats": {
+      "globalProgress": "Gesamtfortschritt",
+      "treated": "bearbeitet",
+      "flaggedLabel": "markiert",
+      "remaining": "verbleibend"
+    },
+    "bulk": {
+      "selected": "ausgewählt",
+      "deselect": "Abwählen",
+      "bulkAction": "Massenaktion...",
+      "curationStatus": "Kurationsstatus",
+      "publicExpert": "Öffentlich / Experte",
+      "popularityScore": "Beliebtheitswert",
+      "subcategory": "Unterkategorie",
+      "reportingMethod": "Methode (Location/Market)",
+      "choose": "Wählen...",
+      "treated": "Bearbeitet",
+      "flaggedLabel": "Markiert",
+      "untreated": "Unbehandelt",
+      "publicLabel": "Öffentlich",
+      "expertLabel": "Experte",
+      "scorePlaceholder": "Wert (0-100)",
+      "apply": "Anwenden",
+      "origToFr": "Orig. → FR",
+      "origToDe": "Orig. → DE",
+      "sourceToFr": "Quelle → FR",
+      "sourceToDe": "Quelle → DE",
+      "sourceTransFr": "Quelle+Übers. → FR",
+      "sourceTransDe": "Quelle+Übers. → DE",
+      "translateFrDe": "Übersetzen FR → DE"
+    },
+    "cell": {
+      "clickToEdit": "Klicken zum Bearbeiten"
+    },
+    "status": {
+      "reviewed": "Bearbeitet",
+      "flagged": "Markiert",
+      "toTreat": "Zu bearbeiten",
+      "switchTo": "Wechseln zu"
+    },
+    "aiSuggest": {
+      "title": "KI-Vorschläge — Vereinfachte Titel",
+      "aiError": "KI-Fehler",
+      "generating": "Generierung läuft...",
+      "applySuggestions": "{count} Vorschlag/Vorschläge anwenden"
+    },
+    "translate": {
+      "title": "Übersetzung",
+      "frToDe": "FR → DE",
+      "deToFr": "DE → FR",
+      "sourceToFr": "Quelle → FR (übersetzt)",
+      "sourceToDe": "Quelle → DE (übersetzt)",
+      "translationError": "Übersetzungsfehler",
+      "skippedNote": "übersprungen — Quelle leer oder Ziel bereits ausgefüllt",
+      "translating": "Übersetzung läuft...",
+      "noFactorToTranslate": "Kein Faktor zu übersetzen. Prüfen Sie, ob die Quellnamen ausgefüllt und die Ziele leer sind.",
+      "applyTranslations": "{count} Übersetzung(en) anwenden"
+    },
+    "bulkPreview": {
+      "title": "Massenänderung bestätigen",
+      "factorsModified": "Faktor(en) werden geändert:",
+      "examples": "Beispiele:",
+      "confirm": "Bestätigen"
+    },
+    "pagination": {
+      "page": "Seite",
+      "of": "/",
+      "factorsCount": "Faktor(en)"
+    },
+    "keyboard": {
+      "nextCell": "nächste Zelle",
+      "nextRow": "nächste Zeile",
+      "reviewedNext": "bearbeitet + nächste",
+      "cancel": "abbrechen"
+    },
+    "table": {
+      "originalName": "Originalname",
+      "sourceBAFU": "Quelle BAFU",
+      "simplifiedFr": "Vereinfachter Name FR",
+      "simplifiedDe": "Vereinfachter Name DE",
+      "subcategory": "Unterkategorie",
+      "popularity": "Pop.",
+      "unit": "Einheit",
+      "value": "Wert",
+      "status": "Status",
+      "method": "Methode",
+      "linkedLocationFactor": "Verknüpfter Location-Faktor"
+    },
+    "alerts": {
+      "namesCopied": "{modified} Name(n) kopiert, {skipped} übersprungen (bereits ausgefüllt)",
+      "translationsApplied": "{count} Übersetzung(en) angewendet"
+    },
+    "link": {
+      "linkBtn": "Verknüpfen...",
+      "linkedTo": "Verknüpft mit",
+      "clickToEdit": "Klicken zum Bearbeiten",
+      "viewJson": "Vollständiges JSON anzeigen",
+      "copyJson": "JSON kopieren"
+    },
+    "locationPanel": {
+      "title": "Location-Faktor verknüpfen",
+      "marketBased": "Market-based Faktor",
+      "currentlyLinked": "Aktuell verknüpft mit",
+      "unlinkTitle": "Verknüpfung entfernen",
+      "searchPlaceholder": "Location-Faktor suchen...",
+      "allSubcategories": "Alle Unterkategorien",
+      "searching": "Suche...",
+      "noResult": "Kein Location-Faktor gefunden",
+      "widenSearch": "Versuchen Sie, die Suche zu erweitern oder die Unterkategorie zu ändern",
+      "publicLabel": "öffentlich",
+      "linkedLabel": "verknüpft",
+      "resultsCount": "Ergebnis(se) · Klicken zum Verknüpfen"
+    }
   }
 }

@@ -644,5 +644,135 @@
     "delete": "Êtes-vous sûr de vouloir supprimer ?",
     "archive": "Archiver cet élément ? Il restera disponible pour les données historiques.",
     "removeAdminSelf": "Vous allez retirer vos droits admin. Continuer ?"
+  },
+  "curation": {
+    "title": "Atelier de curation",
+    "factors": "facteur(s)",
+    "searchPlaceholder": "Rechercher...",
+    "allStatuses": "Tous statuts",
+    "untreated": "Non traités",
+    "reviewed": "Traités",
+    "flagged": "Signalés",
+    "all": "Tous",
+    "public": "Publics",
+    "expert": "Experts",
+    "allUnits": "Toutes unités",
+    "allMethods": "Toutes méthodes",
+    "aiTitles": "IA Titres",
+    "noFactorFound": "Aucun facteur trouvé",
+    "unitPlaceholder": "Unité...",
+    "stats": {
+      "globalProgress": "Progression globale",
+      "treated": "traités",
+      "flaggedLabel": "signalés",
+      "remaining": "restants"
+    },
+    "bulk": {
+      "selected": "sélectionné(s)",
+      "deselect": "Désélectionner",
+      "bulkAction": "Action en masse...",
+      "curationStatus": "Statut de curation",
+      "publicExpert": "Public / Expert",
+      "popularityScore": "Score de popularité",
+      "subcategory": "Sous-catégorie",
+      "reportingMethod": "Méthode (Location/Market)",
+      "choose": "Choisir...",
+      "treated": "Traité",
+      "flaggedLabel": "Signalé",
+      "untreated": "Non traité",
+      "publicLabel": "Public",
+      "expertLabel": "Expert",
+      "scorePlaceholder": "Score (0-100)",
+      "apply": "Appliquer",
+      "origToFr": "Orig. → FR",
+      "origToDe": "Orig. → DE",
+      "sourceToFr": "Source → FR",
+      "sourceToDe": "Source → DE",
+      "sourceTransFr": "Source+Trad → FR",
+      "sourceTransDe": "Source+Trad → DE",
+      "translateFrDe": "Traduire FR → DE"
+    },
+    "cell": {
+      "clickToEdit": "Cliquer pour éditer"
+    },
+    "status": {
+      "reviewed": "Traité",
+      "flagged": "Signalé",
+      "toTreat": "À traiter",
+      "switchTo": "Passer à"
+    },
+    "aiSuggest": {
+      "title": "Suggestions IA — Titres simplifiés",
+      "aiError": "Erreur IA",
+      "generating": "Génération en cours...",
+      "applySuggestions": "Appliquer {count} suggestion(s)"
+    },
+    "translate": {
+      "title": "Traduction",
+      "frToDe": "FR → DE",
+      "deToFr": "DE → FR",
+      "sourceToFr": "Source → FR (traduit)",
+      "sourceToDe": "Source → DE (traduit)",
+      "translationError": "Erreur de traduction",
+      "skippedNote": "ignoré(s) — source vide ou cible déjà remplie",
+      "translating": "Traduction en cours...",
+      "noFactorToTranslate": "Aucun facteur à traduire. Vérifiez que les noms source sont renseignés et que les cibles sont vides.",
+      "applyTranslations": "Appliquer {count} traduction(s)"
+    },
+    "bulkPreview": {
+      "title": "Confirmer la modification en masse",
+      "factorsModified": "facteur(s) seront modifiés :",
+      "examples": "Exemples :",
+      "confirm": "Confirmer"
+    },
+    "pagination": {
+      "page": "Page",
+      "of": "/",
+      "factorsCount": "facteur(s)"
+    },
+    "keyboard": {
+      "nextCell": "cellule suivante",
+      "nextRow": "ligne suivante",
+      "reviewedNext": "traité + suivant",
+      "cancel": "annuler"
+    },
+    "table": {
+      "originalName": "Nom original",
+      "sourceBAFU": "Source BAFU",
+      "simplifiedFr": "Nom simplifié FR",
+      "simplifiedDe": "Nom simplifié DE",
+      "subcategory": "Sous-catégorie",
+      "popularity": "Pop.",
+      "unit": "Unité",
+      "value": "Valeur",
+      "status": "Statut",
+      "method": "Méthode",
+      "linkedLocationFactor": "Facteur location lié"
+    },
+    "alerts": {
+      "namesCopied": "{modified} nom(s) copié(s), {skipped} ignoré(s) (déjà remplis)",
+      "translationsApplied": "{count} traduction(s) appliquée(s)"
+    },
+    "link": {
+      "linkBtn": "Lier...",
+      "linkedTo": "Lié à",
+      "clickToEdit": "Cliquer pour modifier",
+      "viewJson": "Voir JSON complet",
+      "copyJson": "Copier JSON"
+    },
+    "locationPanel": {
+      "title": "Lier un facteur location",
+      "marketBased": "Facteur market-based",
+      "currentlyLinked": "Actuellement lié à",
+      "unlinkTitle": "Supprimer le lien",
+      "searchPlaceholder": "Rechercher un facteur location...",
+      "allSubcategories": "Toutes sous-catégories",
+      "searching": "Recherche...",
+      "noResult": "Aucun facteur location trouvé",
+      "widenSearch": "Essayez d'élargir la recherche ou de changer la sous-catégorie",
+      "publicLabel": "public",
+      "linkedLabel": "lié",
+      "resultsCount": "résultat(s) · Cliquez pour lier"
+    }
   }
 }
