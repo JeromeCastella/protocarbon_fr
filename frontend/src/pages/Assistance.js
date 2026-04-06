@@ -163,7 +163,7 @@ const scopeConfig = {
 
 const Assistance = () => {
   const { isDark } = useTheme();
-  const { language } = useLanguage();
+  const { t, language } = useLanguage();
   
   // Tab state
   const [activeTab, setActiveTab] = useState('faq');
@@ -264,8 +264,8 @@ const Assistance = () => {
   };
 
   const tabs = [
-    { id: 'faq', label: language === 'fr' ? 'FAQ' : 'FAQ', icon: HelpCircle },
-    { id: 'factors', label: language === 'fr' ? 'Facteurs d\'émission' : 'Emissionsfaktoren', icon: Database }
+    { id: 'faq', label: t('assistance.tabs.faq'), icon: HelpCircle },
+    { id: 'factors', label: t('assistance.tabs.factors'), icon: Database }
   ];
 
   return (
@@ -273,13 +273,10 @@ const Assistance = () => {
       {/* Header */}
       <div>
         <h1 className={`text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-          {language === 'fr' ? 'Assistance' : 'Hilfe'}
+          {t('assistance.title')}
         </h1>
         <p className={`mt-2 ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-          {language === 'fr' 
-            ? 'Trouvez des réponses à vos questions et explorez les facteurs d\'émission'
-            : 'Finden Sie Antworten auf Ihre Fragen und erkunden Sie die Emissionsfaktoren'
-          }
+          {t('assistance.subtitle')}
         </p>
       </div>
 
@@ -317,7 +314,7 @@ const Assistance = () => {
               type="text"
               value={faqSearch}
               onChange={(e) => setFaqSearch(e.target.value)}
-              placeholder={language === 'fr' ? 'Rechercher dans la FAQ...' : 'In FAQ suchen...'}
+              placeholder={t('assistance.faqSearch')}
               data-testid="faq-search"
               className={`w-full pl-12 pr-4 py-3 rounded-xl border transition-all focus:ring-2 focus:ring-blue-500 ${
                 isDark 
@@ -366,7 +363,7 @@ const Assistance = () => {
                           {title}
                         </h3>
                         <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-                          {category.questions.length} {language === 'fr' ? 'questions' : 'Fragen'}
+                          {category.questions.length} {t('assistance.questions')}
                         </p>
                       </div>
                     </div>
@@ -445,10 +442,7 @@ const Assistance = () => {
             <div className={`text-center py-12 rounded-2xl ${isDark ? 'bg-slate-800' : 'bg-white shadow-sm border border-gray-100'}`}>
               <Search className={`w-12 h-12 mx-auto mb-4 ${isDark ? 'text-slate-600' : 'text-gray-300'}`} />
               <p className={isDark ? 'text-slate-400' : 'text-gray-500'}>
-                {language === 'fr' 
-                  ? 'Aucun résultat pour cette recherche'
-                  : 'Keine Ergebnisse für diese Suche'
-                }
+                {t('assistance.noFaqResults')}
               </p>
             </div>
           )}
@@ -466,13 +460,10 @@ const Assistance = () => {
               </div>
               <div className="flex-1">
                 <h3 className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                  {language === 'fr' ? 'Vous ne trouvez pas la réponse ?' : 'Sie finden die Antwort nicht?'}
+                  {t('assistance.contactTitle')}
                 </h3>
                 <p className={`text-sm mt-1 ${isDark ? 'text-slate-400' : 'text-gray-600'}`}>
-                  {language === 'fr' 
-                    ? 'Notre équipe est là pour vous aider'
-                    : 'Unser Team ist für Sie da'
-                  }
+                  {t('assistance.contactSubtitle')}
                 </p>
               </div>
               <a
@@ -481,7 +472,7 @@ const Assistance = () => {
                 className="flex items-center gap-2 px-5 py-3 bg-blue-500 text-white rounded-xl hover:bg-blue-600 transition-colors font-medium"
               >
                 <Mail className="w-5 h-5" />
-                {language === 'fr' ? 'Contacter le support' : 'Support kontaktieren'}
+                {t('assistance.contactBtn')}
               </a>
             </div>
           </motion.div>
@@ -499,7 +490,7 @@ const Assistance = () => {
                 type="text"
                 value={factorSearch}
                 onChange={(e) => setFactorSearch(e.target.value)}
-                placeholder={language === 'fr' ? 'Rechercher un facteur d\'émission...' : 'Emissionsfaktor suchen...'}
+                placeholder={t('assistance.factorSearch')}
                 data-testid="factors-search"
                 className={`w-full pl-12 pr-4 py-3 rounded-xl border transition-all focus:ring-2 focus:ring-blue-500 ${
                   isDark 
@@ -529,7 +520,7 @@ const Assistance = () => {
               }`}
             >
               <Filter className="w-5 h-5" />
-              {language === 'fr' ? 'Filtres' : 'Filter'}
+              {t('assistance.filters')}
               {scopeFilter && (
                 <span className="px-2 py-0.5 text-xs bg-white/20 rounded-full">1</span>
               )}
@@ -546,7 +537,7 @@ const Assistance = () => {
                 className={`p-4 rounded-xl ${isDark ? 'bg-slate-800' : 'bg-white shadow-sm border border-gray-100'}`}
               >
                 <p className={`text-sm font-medium mb-3 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
-                  {language === 'fr' ? 'Filtrer par scope' : 'Nach Scope filtern'}
+                  {t('assistance.filterByScope')}
                 </p>
                 <div className="flex flex-wrap gap-2">
                   <button
@@ -557,7 +548,7 @@ const Assistance = () => {
                         : isDark ? 'bg-slate-700 text-slate-300 hover:bg-slate-600' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                     }`}
                   >
-                    {language === 'fr' ? 'Tous' : 'Alle'}
+                    {t('assistance.all')}
                   </button>
                   {Object.entries(scopeConfig).slice(0, 4).map(([key, config]) => (
                     <button
@@ -579,7 +570,7 @@ const Assistance = () => {
 
           {/* Results count */}
           <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-            {filteredFactors.length} {language === 'fr' ? 'facteur(s) trouvé(s)' : 'Faktor(en) gefunden'}
+            {filteredFactors.length} {t('assistance.factorsFound')}
           </p>
 
           {/* Factors List */}
@@ -655,10 +646,7 @@ const Assistance = () => {
           {/* Show more info */}
           {filteredFactors.length > 50 && (
             <p className={`text-center text-sm ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>
-              {language === 'fr' 
-                ? `Affichage des 50 premiers résultats sur ${filteredFactors.length}. Affinez votre recherche.`
-                : `Anzeige der ersten 50 von ${filteredFactors.length} Ergebnissen. Verfeinern Sie Ihre Suche.`
-              }
+              {t('assistance.showFirst50').replace('{count}', filteredFactors.length)}
             </p>
           )}
 
@@ -667,10 +655,7 @@ const Assistance = () => {
             <div className={`text-center py-12 rounded-2xl ${isDark ? 'bg-slate-800' : 'bg-white shadow-sm border border-gray-100'}`}>
               <Database className={`w-12 h-12 mx-auto mb-4 ${isDark ? 'text-slate-600' : 'text-gray-300'}`} />
               <p className={isDark ? 'text-slate-400' : 'text-gray-500'}>
-                {language === 'fr' 
-                  ? 'Aucun facteur trouvé pour ces critères'
-                  : 'Keine Faktoren für diese Kriterien gefunden'
-                }
+                {t('assistance.noFactors')}
               </p>
             </div>
           )}
@@ -703,7 +688,7 @@ const Assistance = () => {
                     </div>
                     <div>
                       <h2 className={`text-lg font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                        {language === 'fr' ? 'Détail du facteur' : 'Faktordetails'}
+                        {t('assistance.factorDetail')}
                       </h2>
                     </div>
                   </div>
@@ -721,7 +706,7 @@ const Assistance = () => {
                 {/* Name */}
                 <div>
                   <p className={`text-sm font-medium mb-1 ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-                    {language === 'fr' ? 'Nom' : 'Name'}
+                    {t('assistance.name')}
                   </p>
                   <p className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
                     {language === 'fr' ? (selectedFactor.name_simple_fr || selectedFactor.name_fr || selectedFactor.name) : (selectedFactor.name_simple_de || selectedFactor.name_de || selectedFactor.name)}
@@ -732,7 +717,7 @@ const Assistance = () => {
                 {selectedFactor.subcategory && (
                   <div>
                     <p className={`text-sm font-medium mb-1 ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-                      {language === 'fr' ? 'Sous-catégorie' : 'Unterkategorie'}
+                      {t('assistance.subcategory')}
                     </p>
                     <p className={isDark ? 'text-slate-300' : 'text-gray-700'}>
                       {selectedFactor.subcategory}
@@ -743,7 +728,7 @@ const Assistance = () => {
                 {/* Impacts */}
                 <div>
                   <p className={`text-sm font-medium mb-2 ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-                    {language === 'fr' ? 'Impacts par scope' : 'Auswirkungen pro Scope'}
+                    {t('assistance.impactsByScope')}
                   </p>
                   <div className="space-y-2">
                     {(selectedFactor.impacts || []).map((impact, i) => {
@@ -776,7 +761,7 @@ const Assistance = () => {
                 {selectedFactor.input_units?.length > 0 && (
                   <div>
                     <p className={`text-sm font-medium mb-2 ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-                      {language === 'fr' ? 'Unités acceptées' : 'Akzeptierte Einheiten'}
+                      {t('assistance.acceptedUnits')}
                     </p>
                     <div className="flex flex-wrap gap-2">
                       {selectedFactor.input_units.map((unit) => (
@@ -796,7 +781,7 @@ const Assistance = () => {
                   {selectedFactor.source && (
                     <div>
                       <p className={`text-sm font-medium mb-1 ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-                        {language === 'fr' ? 'Source' : 'Quelle'}
+                        {t('assistance.source')}
                       </p>
                       <p className={isDark ? 'text-slate-300' : 'text-gray-700'}>
                         {selectedFactor.source}
@@ -806,7 +791,7 @@ const Assistance = () => {
                   {selectedFactor.region && (
                     <div>
                       <p className={`text-sm font-medium mb-1 ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-                        {language === 'fr' ? 'Région' : 'Region'}
+                        {t('assistance.region')}
                       </p>
                       <p className={isDark ? 'text-slate-300' : 'text-gray-700'}>
                         {selectedFactor.region}
@@ -841,7 +826,7 @@ const Assistance = () => {
                   onClick={() => setSelectedFactor(null)}
                   className={`w-full px-4 py-3 rounded-xl border ${isDark ? 'border-slate-600 hover:bg-slate-700' : 'border-gray-200 hover:bg-gray-50'}`}
                 >
-                  {language === 'fr' ? 'Fermer' : 'Schließen'}
+                  {t('assistance.close')}
                 </button>
               </div>
             </motion.div>

@@ -15,7 +15,7 @@ const ForgotPassword = () => {
   const [error, setError] = useState('');
   
   const { isDark } = useTheme();
-  const { language } = useLanguage();
+  const { t } = useLanguage();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -26,7 +26,7 @@ const ForgotPassword = () => {
       await axios.post(`${API_URL}/api/auth/forgot-password`, { email });
       setSuccess(true);
     } catch (err) {
-      setError(err.response?.data?.detail || (language === 'fr' ? 'Une erreur est survenue' : 'Ein Fehler ist aufgetreten'));
+      setError(err.response?.data?.detail || t('errors.generic'));
     } finally {
       setLoading(false);
     }
@@ -47,12 +47,10 @@ const ForgotPassword = () => {
               <Leaf className="w-10 h-10 text-white" />
             </div>
             <h2 className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-              {language === 'fr' ? 'Mot de passe oublié ?' : 'Passwort vergessen?'}
+              {t('forgotPassword.title')}
             </h2>
             <p className={`mt-2 ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-              {language === 'fr' 
-                ? 'Entrez votre email pour recevoir un lien de réinitialisation'
-                : 'Geben Sie Ihre E-Mail ein, um einen Reset-Link zu erhalten'}
+              {t('forgotPassword.subtitle')}
             </p>
           </div>
 
@@ -66,19 +64,17 @@ const ForgotPassword = () => {
                 <CheckCircle className="w-8 h-8 text-green-500" />
               </div>
               <h3 className={`text-lg font-semibold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                {language === 'fr' ? 'Email envoyé !' : 'E-Mail gesendet!'}
+                {t('forgotPassword.successTitle')}
               </h3>
               <p className={`mb-6 ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-                {language === 'fr'
-                  ? 'Si un compte existe avec cette adresse, vous recevrez un email avec les instructions de réinitialisation.'
-                  : 'Wenn ein Konto mit dieser Adresse existiert, erhalten Sie eine E-Mail mit Anweisungen zum Zurücksetzen.'}
+                {t('forgotPassword.successMessage')}
               </p>
               <Link
                 to="/auth"
                 className="inline-flex items-center gap-2 text-blue-500 font-medium hover:underline"
               >
                 <ArrowLeft className="w-4 h-4" />
-                {language === 'fr' ? 'Retour à la connexion' : 'Zurück zur Anmeldung'}
+                {t('forgotPassword.backToLogin')}
               </Link>
             </motion.div>
           ) : (
@@ -93,7 +89,7 @@ const ForgotPassword = () => {
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
                   <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
-                    {language === 'fr' ? 'Adresse email' : 'E-Mail-Adresse'}
+                    {t('forgotPassword.emailLabel')}
                   </label>
                   <div className="relative">
                     <Mail className={`absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 ${isDark ? 'text-slate-400' : 'text-gray-400'}`} />
@@ -107,7 +103,7 @@ const ForgotPassword = () => {
                           ? 'bg-slate-700 border-slate-600 text-white placeholder-slate-400' 
                           : 'bg-white border-gray-200 text-gray-900 placeholder-gray-400'
                       }`}
-                      placeholder={language === 'fr' ? 'votre@email.com' : 'ihre@email.com'}
+                      placeholder={t('forgotPassword.emailPlaceholder')}
                       required
                     />
                   </div>
@@ -122,7 +118,7 @@ const ForgotPassword = () => {
                   {loading ? (
                     <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
                   ) : (
-                    language === 'fr' ? 'Envoyer le lien' : 'Link senden'
+                    t('forgotPassword.submit')
                   )}
                 </button>
               </form>
@@ -133,7 +129,7 @@ const ForgotPassword = () => {
                   className="inline-flex items-center gap-1 text-blue-500 font-medium hover:underline"
                 >
                   <ArrowLeft className="w-4 h-4" />
-                  {language === 'fr' ? 'Retour à la connexion' : 'Zurück zur Anmeldung'}
+                  {t('forgotPassword.backToLogin')}
                 </Link>
               </p>
             </>

@@ -13,17 +13,17 @@ const VerifyEmail = () => {
   const navigate = useNavigate();
   const token = searchParams.get('token');
   
-  const [status, setStatus] = useState('loading'); // loading, success, error
+  const [status, setStatus] = useState('loading');
   const [error, setError] = useState('');
   
   const { isDark } = useTheme();
-  const { language } = useLanguage();
+  const { t, language } = useLanguage();
 
   useEffect(() => {
     const verifyEmail = async () => {
       if (!token) {
         setStatus('error');
-        setError(language === 'fr' ? 'Lien de vérification invalide' : 'Ungültiger Bestätigungslink');
+        setError(t('verifyEmail.invalidLink'));
         return;
       }
 
@@ -33,7 +33,7 @@ const VerifyEmail = () => {
         setTimeout(() => navigate('/auth'), 3000);
       } catch (err) {
         setStatus('error');
-        setError(err.response?.data?.detail || (language === 'fr' ? 'Le lien a expiré ou est invalide' : 'Der Link ist abgelaufen oder ungültig'));
+        setError(err.response?.data?.detail || t('verifyEmail.linkExpired'));
       }
     };
 
@@ -55,7 +55,7 @@ const VerifyEmail = () => {
               <Leaf className="w-10 h-10 text-white" />
             </div>
             <h2 className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-              {language === 'fr' ? 'Vérification email' : 'E-Mail-Bestätigung'}
+              {t('verifyEmail.title')}
             </h2>
           </div>
 
@@ -63,7 +63,7 @@ const VerifyEmail = () => {
             <div className="text-center py-8">
               <Loader2 className="w-12 h-12 text-blue-500 mx-auto mb-4 animate-spin" />
               <p className={isDark ? 'text-slate-400' : 'text-gray-500'}>
-                {language === 'fr' ? 'Vérification en cours...' : 'Überprüfung läuft...'}
+                {t('verifyEmail.verifying')}
               </p>
             </div>
           )}
@@ -78,12 +78,10 @@ const VerifyEmail = () => {
                 <CheckCircle className="w-8 h-8 text-green-500" />
               </div>
               <h3 className={`text-lg font-semibold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                {language === 'fr' ? 'Email vérifié !' : 'E-Mail bestätigt!'}
+                {t('verifyEmail.successTitle')}
               </h3>
               <p className={`mb-6 ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-                {language === 'fr'
-                  ? 'Votre adresse email a été confirmée avec succès. Vous allez être redirigé...'
-                  : 'Ihre E-Mail-Adresse wurde erfolgreich bestätigt. Sie werden weitergeleitet...'}
+                {t('verifyEmail.successMessage')}
               </p>
               <div className="w-6 h-6 border-2 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto"></div>
             </motion.div>
@@ -99,7 +97,7 @@ const VerifyEmail = () => {
                 <AlertCircle className="w-8 h-8 text-red-500" />
               </div>
               <h3 className={`text-lg font-semibold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                {language === 'fr' ? 'Échec de la vérification' : 'Überprüfung fehlgeschlagen'}
+                {t('verifyEmail.failTitle')}
               </h3>
               <p className={`mb-6 ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
                 {error}
@@ -109,11 +107,10 @@ const VerifyEmail = () => {
                   to="/auth"
                   className="block w-full py-3 px-4 bg-blue-500 text-white rounded-xl font-medium hover:bg-blue-600 transition-colors"
                 >
-                  {language === 'fr' ? 'Aller à la connexion' : 'Zur Anmeldung'}
+                  {t('verifyEmail.goToLogin')}
                 </Link>
                 <button
                   onClick={() => {
-                    // TODO: Implement resend from here
                     window.location.href = '/auth';
                   }}
                   className={`block w-full py-3 px-4 rounded-xl font-medium border transition-colors ${
@@ -122,7 +119,7 @@ const VerifyEmail = () => {
                       : 'border-gray-200 text-gray-700 hover:bg-gray-50'
                   }`}
                 >
-                  {language === 'fr' ? 'Renvoyer le lien' : 'Link erneut senden'}
+                  {t('verifyEmail.resendLink')}
                 </button>
               </div>
             </motion.div>

@@ -69,7 +69,15 @@
     "user": "Utilisateur",
     "you": "Vous",
     "promoteAdmin": "Promouvoir admin",
-    "removeAdmin": "Retirer admin"
+    "removeAdmin": "Retirer admin",
+    "tagline": "Calculez et réduisez votre empreinte carbone selon le protocole GHG",
+    "rememberMe": "Se souvenir de moi",
+    "welcomeProtoCarbon": "Bienvenue sur Proto Carbon !",
+    "congratsMessage": "Félicitations {name} ! Votre compte a été créé avec succès.",
+    "nextStep": "Prochaine étape",
+    "nextStepDesc": "Créez votre premier exercice fiscal pour commencer à saisir vos données d'émissions.",
+    "start": "Commencer",
+    "brandLogoAlt": "Mon Plan Climat"
   },
   "nav": {
     "tagline": "Comptabilité carbone",
@@ -1021,5 +1029,71 @@
     "infoText": "Un exercice fiscal correspond généralement à une année calendaire (janvier-décembre) ou à l'année comptable de votre entreprise.",
     "goTo": "Rendez-vous dans ",
     "exercisesLink": "Exercices"
+  },
+  "forgotPassword": {
+    "title": "Mot de passe oublié ?",
+    "subtitle": "Entrez votre email pour recevoir un lien de réinitialisation",
+    "emailLabel": "Adresse email",
+    "emailPlaceholder": "votre@email.com",
+    "submit": "Envoyer le lien",
+    "successTitle": "Email envoyé !",
+    "successMessage": "Si un compte existe avec cette adresse, vous recevrez un email avec les instructions de réinitialisation.",
+    "backToLogin": "Retour à la connexion"
+  },
+  "resetPassword": {
+    "title": "Nouveau mot de passe",
+    "subtitle": "Créez un nouveau mot de passe sécurisé",
+    "newPasswordLabel": "Nouveau mot de passe",
+    "confirmLabel": "Confirmer le mot de passe",
+    "mismatch": "Les mots de passe ne correspondent pas",
+    "tooShort": "Le mot de passe doit contenir au moins 8 caractères",
+    "invalidLink": "Lien invalide",
+    "linkExpired": "Ce lien de réinitialisation est invalide ou a expiré.",
+    "requestNew": "Demander un nouveau lien",
+    "successTitle": "Mot de passe modifié !",
+    "successMessage": "Vous allez être redirigé vers la page de connexion...",
+    "submit": "Réinitialiser le mot de passe",
+    "backToLogin": "Retour à la connexion",
+    "invalidOrExpired": "Lien invalide ou expiré"
+  },
+  "verifyEmail": {
+    "title": "Vérification email",
+    "verifying": "Vérification en cours...",
+    "successTitle": "Email vérifié !",
+    "successMessage": "Votre adresse email a été confirmée avec succès. Vous allez être redirigé...",
+    "failTitle": "Échec de la vérification",
+    "invalidLink": "Lien de vérification invalide",
+    "linkExpired": "Le lien a expiré ou est invalide",
+    "goToLogin": "Aller à la connexion",
+    "resendLink": "Renvoyer le lien"
+  },
+  "assistance": {
+    "title": "Assistance",
+    "subtitle": "Trouvez des réponses à vos questions et explorez les facteurs d'émission",
+    "tabs": {
+      "faq": "FAQ",
+      "factors": "Facteurs d'émission"
+    },
+    "faqSearch": "Rechercher dans la FAQ...",
+    "questions": "questions",
+    "noFaqResults": "Aucun résultat pour cette recherche",
+    "contactTitle": "Vous ne trouvez pas la réponse ?",
+    "contactSubtitle": "Notre équipe est là pour vous aider",
+    "contactBtn": "Contacter le support",
+    "factorSearch": "Rechercher un facteur d'émission...",
+    "filterByScope": "Filtrer par scope",
+    "all": "Tous",
+    "filters": "Filtres",
+    "factorsFound": "facteur(s) trouvé(s)",
+    "showFirst50": "Affichage des 50 premiers résultats sur {count}. Affinez votre recherche.",
+    "noFactors": "Aucun facteur trouvé pour ces critères",
+    "factorDetail": "Détail du facteur",
+    "name": "Nom",
+    "subcategory": "Sous-catégorie",
+    "impactsByScope": "Impacts par scope",
+    "acceptedUnits": "Unités acceptées",
+    "source": "Source",
+    "region": "Région",
+    "close": "Fermer"
   }
 }

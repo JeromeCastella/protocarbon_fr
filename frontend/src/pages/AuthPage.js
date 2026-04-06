@@ -39,7 +39,7 @@ const AuthPage = () => {
         setShowWelcomeModal(true);
       }
     } catch (err) {
-      setError(err.response?.data?.detail || 'Une erreur est survenue');
+      setError(err.response?.data?.detail || t('errors.generic'));
     } finally {
       setLoading(false);
     }
@@ -71,10 +71,7 @@ const AuthPage = () => {
             </div>
             <h1 className="text-5xl font-bold mb-6">CarbonScope</h1>
             <p className="text-xl text-blue-100 mb-8">
-              {language === 'fr' 
-                ? 'Calculez et réduisez votre empreinte carbone selon le protocole GHG'
-                : 'Berechnen und reduzieren Sie Ihren CO2-Fußabdruck nach dem GHG-Protokoll'
-              }
+              {t('auth.tagline')}
             </p>
           </motion.div>
         </div>
@@ -82,7 +79,7 @@ const AuthPage = () => {
         <div className="absolute bottom-8 left-12 z-10">
           <img
             src={language === 'fr' ? '/logo-plan-climat-fr.png' : '/logo-plan-climat-de.png'}
-            alt={language === 'fr' ? 'Mon Plan Climat' : 'Mein Klimaplan'}
+            alt={t('auth.brandLogoAlt')}
             className="h-12 w-auto opacity-90"
             data-testid="brand-logo"
           />
@@ -227,7 +224,7 @@ const AuthPage = () => {
                       className="w-4 h-4 rounded border-gray-300 text-blue-500 focus:ring-blue-500"
                     />
                     <span className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-                      {language === 'fr' ? 'Se souvenir de moi' : 'Angemeldet bleiben'}
+                      {t('auth.rememberMe')}
                     </span>
                   </label>
                   <Link
@@ -235,7 +232,7 @@ const AuthPage = () => {
                     data-testid="forgot-password-link"
                     className="text-sm text-blue-500 hover:underline"
                   >
-                    {language === 'fr' ? 'Mot de passe oublié ?' : 'Passwort vergessen?'}
+                    {t('auth.forgotPassword')}
                   </Link>
                 </div>
               )}
@@ -305,7 +302,7 @@ const AuthPage = () => {
                   transition={{ delay: 0.3 }}
                   className="text-2xl font-bold"
                 >
-                  {language === 'fr' ? 'Bienvenue sur Proto Carbon !' : 'Willkommen bei Proto Carbon!'}
+                  {t('auth.welcomeProtoCarbon')}
                 </motion.h2>
               </div>
 
@@ -317,10 +314,7 @@ const AuthPage = () => {
                   transition={{ delay: 0.4 }}
                 >
                   <p className={`text-center mb-6 ${isDark ? 'text-slate-300' : 'text-gray-600'}`}>
-                    {language === 'fr' 
-                      ? `Félicitations ${registeredName || ''} ! Votre compte a été créé avec succès.`
-                      : `Herzlichen Glückwunsch ${registeredName || ''}! Ihr Konto wurde erfolgreich erstellt.`
-                    }
+                    {t('auth.congratsMessage').replace('{name}', registeredName || '')}
                   </p>
 
                   {/* Next steps */}
@@ -329,13 +323,10 @@ const AuthPage = () => {
                       <Sparkles className={`w-5 h-5 mt-0.5 ${isDark ? 'text-blue-400' : 'text-blue-500'}`} />
                       <div>
                         <p className={`font-medium mb-1 ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                          {language === 'fr' ? 'Prochaine étape' : 'Nächster Schritt'}
+                          {t('auth.nextStep')}
                         </p>
                         <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-600'}`}>
-                          {language === 'fr' 
-                            ? 'Créez votre premier exercice fiscal pour commencer à saisir vos données d\'émissions.'
-                            : 'Erstellen Sie Ihr erstes Geschäftsjahr, um mit der Eingabe Ihrer Emissionsdaten zu beginnen.'
-                          }
+                          {t('auth.nextStepDesc')}
                         </p>
                       </div>
                     </div>
@@ -346,7 +337,7 @@ const AuthPage = () => {
                     data-testid="welcome-start-btn"
                     className="w-full py-3 px-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-xl font-medium flex items-center justify-center gap-2 hover:from-green-600 hover:to-emerald-700 transition-all shadow-lg shadow-green-500/30"
                   >
-                    {language === 'fr' ? 'Commencer' : 'Loslegen'}
+                    {t('auth.start')}
                     <ArrowRight className="w-5 h-5" />
                   </button>
                 </motion.div>

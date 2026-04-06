@@ -69,7 +69,15 @@
     "user": "Benutzer",
     "you": "Sie",
     "promoteAdmin": "Zum Admin befördern",
-    "removeAdmin": "Admin entfernen"
+    "removeAdmin": "Admin entfernen",
+    "tagline": "Berechnen und reduzieren Sie Ihren CO2-Fußabdruck nach dem GHG-Protokoll",
+    "rememberMe": "Angemeldet bleiben",
+    "welcomeProtoCarbon": "Willkommen bei Proto Carbon!",
+    "congratsMessage": "Herzlichen Glückwunsch {name}! Ihr Konto wurde erfolgreich erstellt.",
+    "nextStep": "Nächster Schritt",
+    "nextStepDesc": "Erstellen Sie Ihr erstes Geschäftsjahr, um mit der Eingabe Ihrer Emissionsdaten zu beginnen.",
+    "start": "Loslegen",
+    "brandLogoAlt": "Mein Klimaplan"
   },
   "nav": {
     "tagline": "Kohlenstoffbuchhaltung",
@@ -1021,5 +1029,71 @@
     "infoText": "Ein Geschäftsjahr entspricht in der Regel einem Kalenderjahr (Januar-Dezember) oder dem Buchhaltungsjahr Ihres Unternehmens.",
     "goTo": "Gehen Sie zu ",
     "exercisesLink": "Geschäftsjahre"
+  },
+  "forgotPassword": {
+    "title": "Passwort vergessen?",
+    "subtitle": "Geben Sie Ihre E-Mail ein, um einen Reset-Link zu erhalten",
+    "emailLabel": "E-Mail-Adresse",
+    "emailPlaceholder": "ihre@email.com",
+    "submit": "Link senden",
+    "successTitle": "E-Mail gesendet!",
+    "successMessage": "Wenn ein Konto mit dieser Adresse existiert, erhalten Sie eine E-Mail mit Anweisungen zum Zurücksetzen.",
+    "backToLogin": "Zurück zur Anmeldung"
+  },
+  "resetPassword": {
+    "title": "Neues Passwort",
+    "subtitle": "Erstellen Sie ein neues sicheres Passwort",
+    "newPasswordLabel": "Neues Passwort",
+    "confirmLabel": "Passwort bestätigen",
+    "mismatch": "Passwörter stimmen nicht überein",
+    "tooShort": "Das Passwort muss mindestens 8 Zeichen enthalten",
+    "invalidLink": "Ungültiger Link",
+    "linkExpired": "Dieser Reset-Link ist ungültig oder abgelaufen.",
+    "requestNew": "Neuen Link anfordern",
+    "successTitle": "Passwort geändert!",
+    "successMessage": "Sie werden zur Anmeldeseite weitergeleitet...",
+    "submit": "Passwort zurücksetzen",
+    "backToLogin": "Zurück zur Anmeldung",
+    "invalidOrExpired": "Ungültiger oder abgelaufener Link"
+  },
+  "verifyEmail": {
+    "title": "E-Mail-Bestätigung",
+    "verifying": "Überprüfung läuft...",
+    "successTitle": "E-Mail bestätigt!",
+    "successMessage": "Ihre E-Mail-Adresse wurde erfolgreich bestätigt. Sie werden weitergeleitet...",
+    "failTitle": "Überprüfung fehlgeschlagen",
+    "invalidLink": "Ungültiger Bestätigungslink",
+    "linkExpired": "Der Link ist abgelaufen oder ungültig",
+    "goToLogin": "Zur Anmeldung",
+    "resendLink": "Link erneut senden"
+  },
+  "assistance": {
+    "title": "Hilfe",
+    "subtitle": "Finden Sie Antworten auf Ihre Fragen und erkunden Sie die Emissionsfaktoren",
+    "tabs": {
+      "faq": "FAQ",
+      "factors": "Emissionsfaktoren"
+    },
+    "faqSearch": "In FAQ suchen...",
+    "questions": "Fragen",
+    "noFaqResults": "Keine Ergebnisse für diese Suche",
+    "contactTitle": "Sie finden die Antwort nicht?",
+    "contactSubtitle": "Unser Team ist für Sie da",
+    "contactBtn": "Support kontaktieren",
+    "factorSearch": "Emissionsfaktor suchen...",
+    "filterByScope": "Nach Scope filtern",
+    "all": "Alle",
+    "filters": "Filter",
+    "factorsFound": "Faktor(en) gefunden",
+    "showFirst50": "Anzeige der ersten 50 von {count} Ergebnissen. Verfeinern Sie Ihre Suche.",
+    "noFactors": "Keine Faktoren für diese Kriterien gefunden",
+    "factorDetail": "Faktordetails",
+    "name": "Name",
+    "subcategory": "Unterkategorie",
+    "impactsByScope": "Auswirkungen pro Scope",
+    "acceptedUnits": "Akzeptierte Einheiten",
+    "source": "Quelle",
+    "region": "Region",
+    "close": "Schließen"
   }
 }
