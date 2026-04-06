@@ -20,7 +20,7 @@ SMTP_FROM_EMAIL = os.environ.get("SMTP_FROM_EMAIL", "")
 SMTP_FROM_NAME = os.environ.get("SMTP_FROM_NAME", "Proto Carbon")
 
 # Frontend URL for links in emails
-FRONTEND_URL = os.environ.get("FRONTEND_URL", "http://localhost:3000")
+FRONTEND_URL = os.environ.get("FRONTEND_URL")
 
 
 def send_email(
