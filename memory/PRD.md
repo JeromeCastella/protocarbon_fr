@@ -50,13 +50,15 @@ Application full-stack (React/FastAPI/MongoDB) pour la comptabilité carbone d'e
 - Cellules éditables: name_simple_fr, name_simple_de, sous-catégorie, unité, popularité
 - Suivi statut curation (À traiter, Traité, Signalé)
 - Actions en masse (statut, sous-catégorie, suggestions IA)
-- Filtres avancés (texte, statut, visibilité, unité)
+- Filtres avancés (texte, statut, visibilité, unité, méthode reporting)
 - IA Gemini Pro pour suggestions de titres simplifiés
 - Raccourcis clavier (Tab, Enter, Shift+Enter, Escape)
 - Dashboard de progression global et par sous-catégorie
 - **Colonne "Source BAFU"** (source_product_name) — lecture seule, nom technique ecoinvent
 - **Copie en masse** : 4 options de copie vers les noms simplifiés (cellules vides uniquement)
 - **Traduction en masse** : 3 options via IA (GPT-4o-mini) avec aperçu et validation
+- **FEAT-DR Dual Reporting** : Facteurs tagués Location/Market, liaison market→location via panneau latéral
+- **LocationLinkPanel** : Panneau latéral pour lier un facteur market à un facteur location, avec recherche pré-filtrée par sous-catégorie, affichage du nom (pas de l'ID)
 
 ## DB Schema - emission_factors
 ```
@@ -73,7 +75,9 @@ Application full-stack (React/FastAPI/MongoDB) pour la comptabilité carbone d'e
 ## Key Files
 - `frontend/src/utils/apiConfig.js` — Centralized API URL config (runtime domain check)
 - `frontend/src/pages/CurationWorkbench.jsx` — Page de curation
-- `backend/routes/curation.py` — API de curation (incl. copy, translate)
+- `frontend/src/components/curation/LocationLinkPanel.jsx` — Panneau latéral de liaison location
+- `backend/routes/curation.py` — API de curation (incl. copy, translate, search-location)
+- `backend/services/emissions.py` — Calcul d'émissions (dual reporting)
 - `backend/config.py` — MongoDB connection (lazy, with timeouts)
 - `backend/server.py` — FastAPI app with health checks at / and /api/health
 
@@ -88,6 +92,7 @@ Application full-stack (React/FastAPI/MongoDB) pour la comptabilité carbone d'e
 - `POST /api/curation/bulk-preview` / `bulk-apply` — Actions en masse
 - `POST /api/curation/suggest-titles` — Suggestions IA
 - `GET /api/curation/stats` — Dashboard progression
+- `GET /api/curation/factors/search-location` — Recherche facteurs location (filtre subcategory)
 - `GET /api/export/mongodump/info` — Métadonnées DB
 - `GET /api/export/mongodump` — Téléchargement dump
 - `POST /api/auth/login` — Authentification
@@ -105,7 +110,7 @@ Application full-stack (React/FastAPI/MongoDB) pour la comptabilité carbone d'e
 - Base de données actions plan climat cantonal
 - Logs d'audit calculs d'émission
 - Optimisation requêtes DB (projections MongoDB dans dashboard.py)
-- Refactoring composants React monolithiques (GuidedEntryModal.js, Dashboard.js, AdminFactorsTab.jsx)
+- Refactoring composants React monolithiques (GuidedEntryModal.js, Dashboard.js, AdminFactorsTab.jsx, CurationWorkbench.jsx)
 
 ## Credentials
 - Email: newtest@x.com / Password: test123
