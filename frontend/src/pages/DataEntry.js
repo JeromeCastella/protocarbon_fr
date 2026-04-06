@@ -129,8 +129,9 @@ const TableViewPanel = ({
   isDark, tableViewScope, scopeLabels, scopes, getScopeActivities,
   getCategoryName, summary, formatEmissions, formatEmissionsForTable,
   handleEditActivityInModal, handleDeleteActivity, PRODUCT_SALE_CATEGORIES,
-  language, onClose
+  onClose
 }) => {
+  const { t, language } = useLanguage();
   const [searchQuery, setSearchQuery] = useState('');
   const [sortField, setSortField] = useState(null);
   const [sortDir, setSortDir] = useState('asc');
@@ -504,7 +505,8 @@ const FUSE_OPTIONS = {
   },
 };
 
-const GlobalFactorSearch = ({ isDark, language, showExpertFactors, onToggleExpert, onSelectFactor }) => {
+const GlobalFactorSearch = ({ isDark, showExpertFactors, onToggleExpert, onSelectFactor }) => {
+  const { t, language } = useLanguage();
   const [query, setQuery] = useState('');
   const [results, setResults] = useState([]);
   const [allFactors, setAllFactors] = useState(null); // lazy loaded
@@ -606,9 +608,7 @@ const GlobalFactorSearch = ({ isDark, language, showExpertFactors, onToggleExper
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           onFocus={() => { setIsFocused(true); loadFactors(); }}
-          placeholder={language === 'fr'
-            ? t('dataEntry.globalSearchPlaceholder')
-            : 'Emissionsfaktor suchen (z.B. Stahl, Strom, Transport...)'}
+          placeholder={t('dataEntry.globalSearchPlaceholder')}
           className={`flex-1 bg-transparent outline-none text-sm ${isDark ? 'text-white placeholder-slate-500' : 'text-gray-900 placeholder-gray-400'}`}
           data-testid="global-search-input"
         />
@@ -1175,7 +1175,6 @@ const DataEntry = () => {
         <div className="mb-6">
           <GlobalFactorSearch
             isDark={isDark}
-            language={language}
             showExpertFactors={showExpertFactors}
             onToggleExpert={toggleExpertFactors}
             onSelectFactor={handleSearchFactorSelect}
@@ -1377,7 +1376,6 @@ const DataEntry = () => {
             handleEditActivityInModal={handleEditActivityInModal}
             handleDeleteActivity={handleDeleteActivity}
             PRODUCT_SALE_CATEGORIES={PRODUCT_SALE_CATEGORIES}
-            language={language}
             onClose={() => setShowTableView(false)}
           />
         )}
