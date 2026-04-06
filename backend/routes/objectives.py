@@ -182,8 +182,12 @@ async def create_carbon_objective(
 
 
 @router.get("/trajectory")
-async def get_objective_trajectory(current_user: dict = Depends(get_current_user)):
-    """Get trajectory data for charts"""
+async def get_objective_trajectory(
+    reporting_view: Optional[str] = None,
+    current_user: dict = Depends(get_current_user)
+):
+    """Get trajectory data for charts.
+    reporting_view: 'location' to use location-based values for market activities."""
     if not current_user.get("company_id"):
         return {"trajectory": [], "actuals": []}
     
@@ -242,7 +246,11 @@ async def get_objective_trajectory(current_user: dict = Depends(get_current_user
         actual_scope3 = 0
         
         for act in activities:
-            emissions = act.get("emissions", 0) or act.get("calculated_emissions", 0) or 0
+            # Dual reporting: use location-based emissions when requested
+            if reporting_view == "location" and act.get("reporting_method") == "market" and act.get("emissions_location") is not None:
+                emissions = act["emissions_location"]
+            else:
+                emissions = act.get("emissions", 0) or act.get("calculated_emissions", 0) or 0
             raw_scope = act.get("scope", "")
             category_id = act.get("category_id", "")
             scope = normalize_scope_for_reporting(raw_scope, category_id)

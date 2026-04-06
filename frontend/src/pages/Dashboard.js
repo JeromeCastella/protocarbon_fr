@@ -154,13 +154,14 @@ const Dashboard = () => {
     if (selectedFiscalYearForChart && selectedFiscalYearForChart !== 'current') {
       fetchScopeBreakdown(selectedFiscalYearForChart);
     }
-  }, [selectedFiscalYearForChart]);
+  }, [selectedFiscalYearForChart, reportingView]);
 
   const fetchObjectiveData = async () => {
     try {
+      const rvParam = reportingView === 'location' ? '?reporting_view=location' : '';
       const [objRes, trajRes, recoRes] = await Promise.all([
         axios.get(`${API_URL}/api/objectives`).catch(() => ({ data: null })),
-        axios.get(`${API_URL}/api/objectives/trajectory`).catch(() => ({ data: { trajectory: [], actuals: [] } })),
+        axios.get(`${API_URL}/api/objectives/trajectory${rvParam}`).catch(() => ({ data: { trajectory: [], actuals: [] } })),
         axios.get(`${API_URL}/api/objectives/recommendations`).catch(() => ({ data: { recommendations: [] } }))
       ]);
       
@@ -274,12 +275,14 @@ const Dashboard = () => {
       const fyParam = currentFiscalYear?.id ? `?fiscal_year_id=${currentFiscalYear.id}` : '';
       const fyParamAmp = currentFiscalYear?.id ? `&fiscal_year_id=${currentFiscalYear.id}` : '';
       const rvParam = reportingView === 'location' ? `${fyParam ? '&' : '?'}reporting_view=location` : '';
+      const rvParamAmp = reportingView === 'location' ? '&reporting_view=location' : '';
+      const rvParamOnly = reportingView === 'location' ? '?reporting_view=location' : '';
       
       const [summaryRes, kpisRes, comparisonRes, breakdownRes, activitiesRes, productsRes] = await Promise.all([
         axios.get(`${API_URL}/api/dashboard/summary${fyParam}${rvParam}`),
-        axios.get(`${API_URL}/api/dashboard/kpis${fyParam}`),
-        axios.get(`${API_URL}/api/dashboard/fiscal-comparison`),
-        axios.get(`${API_URL}/api/dashboard/scope-breakdown/${currentFiscalYear?.id || 'current'}`),
+        axios.get(`${API_URL}/api/dashboard/kpis${fyParam}${rvParam}`),
+        axios.get(`${API_URL}/api/dashboard/fiscal-comparison${rvParamOnly}`),
+        axios.get(`${API_URL}/api/dashboard/scope-breakdown/${currentFiscalYear?.id || 'current'}${rvParamOnly}`),
         axios.get(`${API_URL}/api/activities?limit=100${fyParamAmp}`).catch(() => ({ data: { data: [] } })),
         axios.get(`${API_URL}/api/products`).catch(() => ({ data: [] }))
       ]);
@@ -318,7 +321,8 @@ const Dashboard = () => {
 
   const fetchScopeBreakdown = async (fyId) => {
     try {
-      const response = await axios.get(`${API_URL}/api/dashboard/scope-breakdown/${fyId}`);
+      const rvParam = reportingView === 'location' ? '?reporting_view=location' : '';
+      const response = await axios.get(`${API_URL}/api/dashboard/scope-breakdown/${fyId}${rvParam}`);
       const data = response.data;
       
       // Transform scopes data for the chart
