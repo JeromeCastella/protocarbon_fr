@@ -31,7 +31,6 @@ import {
   Package,
   FileText,
   Flag,
-  Lightbulb,
   TrendingDown as TrendDown,
   Sparkles,
   X,
@@ -167,15 +166,13 @@ const Dashboard = () => {
   const fetchObjectiveData = async () => {
     try {
       const rvParam = reportingView === 'location' ? '?reporting_view=location' : '';
-      const [objRes, trajRes, recoRes] = await Promise.all([
+      const [objRes, trajRes] = await Promise.all([
         axios.get(`${API_URL}/api/objectives`).catch(() => ({ data: null })),
         axios.get(`${API_URL}/api/objectives/trajectory${rvParam}`).catch(() => ({ data: { trajectory: [], actuals: [] } })),
-        axios.get(`${API_URL}/api/objectives/recommendations`).catch(() => ({ data: { recommendations: [] } }))
       ]);
       
       setObjective(objRes.data);
       setTrajectoryData(trajRes.data);
-      setRecommendations(recoRes.data.recommendations || []);
     } catch (error) {
       logger.error('Failed to fetch objective data:', error);
     }
@@ -285,7 +282,6 @@ const Dashboard = () => {
       await axios.delete(`${API_URL}/api/objectives/${objective.id}`);
       setObjective(null);
       setTrajectoryData({ trajectory: [], actuals: [] });
-      setRecommendations([]);
     } catch (error) {
       logger.error('Failed to archive objective:', error);
       alert('Erreur lors de l\'archivage: ' + (error.response?.data?.detail || error.message));
@@ -1362,62 +1358,6 @@ const Dashboard = () => {
                 </p>
               </motion.div>
 
-              {/* Recommended Measures */}
-              {recommendations.length > 0 && (
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.2 }}
-                  className={`p-6 rounded-2xl ${isDark ? 'bg-slate-800' : 'bg-white shadow-sm border border-gray-100'}`}
-                >
-                  <div className="flex items-center gap-3 mb-4">
-                    <Lightbulb className="w-6 h-6 text-amber-500" />
-                    <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                      Mesures recommandées
-                    </h3>
-                  </div>
-                  <p className={`text-sm mb-6 ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-                    Basées sur vos principales sources d'émissions
-                  </p>
-
-                  <div className="space-y-6">
-                    {recommendations.map((rec, idx) => (
-                      <div key={idx} className={`p-4 rounded-xl ${isDark ? 'bg-slate-700/50' : 'bg-gray-50'}`}>
-                        <div className="flex items-center justify-between mb-3">
-                          <span className={`font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                            {rec.category.replace(/_/g, ' ').replace(/^\w/, c => c.toUpperCase())}
-                          </span>
-                          <span className={`text-sm px-2 py-1 rounded-lg ${isDark ? 'bg-slate-600 text-slate-300' : 'bg-gray-200 text-gray-600'}`}>
-                            {formatEmissions(rec.emissions).value} {formatEmissions(rec.emissions).unit}
-                          </span>
-                        </div>
-                        <div className="space-y-2">
-                          {rec.measures.map((measure, mIdx) => (
-                            <div key={mIdx} className="flex items-center gap-3">
-                              <div className={`w-2 h-2 rounded-full ${
-                                measure.impact === 'high' ? 'bg-green-500' :
-                                measure.impact === 'medium' ? 'bg-amber-500' : 'bg-gray-400'
-                              }`}></div>
-                              <span className={`text-sm ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
-                                {measure.title_fr}
-                              </span>
-                              <span className={`text-xs px-2 py-0.5 rounded ${
-                                measure.impact === 'high' 
-                                  ? 'bg-green-500/20 text-green-600' 
-                                  : measure.impact === 'medium'
-                                    ? 'bg-amber-500/20 text-amber-600'
-                                    : 'bg-gray-500/20 text-gray-500'
-                              }`}>
-                                {measure.impact === 'high' ? 'Impact fort' : measure.impact === 'medium' ? 'Impact moyen' : 'Impact faible'}
-                              </span>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </motion.div>
-              )}
 
               {/* Change objective button */}
               <motion.div
