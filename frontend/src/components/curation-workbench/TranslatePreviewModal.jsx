@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { X, CheckSquare, Square, Languages, Loader2 } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
-import { useAuth } from '../../context/AuthContext';
+import axios from 'axios';
 import { API_URL as API } from '../../utils/apiConfig';
 
 const TranslatePreviewModal = ({ factorIds, direction, isDark, onApply, onClose }) => {
@@ -13,7 +13,6 @@ const TranslatePreviewModal = ({ factorIds, direction, isDark, onApply, onClose 
   const [selected, setSelected] = useState({});
   const [targetField, setTargetField] = useState('');
   const [skipped, setSkipped] = useState(0);
-  const { token: authToken } = useAuth();
 
   const dirLabels = {
     'fr_to_de': t('curation.translate.frToDe'),
@@ -26,48 +25,32 @@ const TranslatePreviewModal = ({ factorIds, direction, isDark, onApply, onClose 
   useEffect(() => {
     const fetchTranslations = async () => {
       try {
-        const res = await fetch(`${API}/api/curation/translate-preview`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${authToken}` },
-          body: JSON.stringify({ factor_ids: factorIds, direction }),
-        });
-        if (!res.ok) {
-          const errData = await res.json().catch(() => ({}));
-          throw new Error(errData.detail || `${t('curation.translate.translationError')} (${res.status})`);
-        }
-        const data = await res.json();
-        setTranslations(data.translations || []);
-        setTargetField(data.target_field || '');
-        setSkipped(data.skipped || 0);
+        const res = await axios.post(`${API}/api/curation/translate-preview`, { factor_ids: factorIds, direction });
+        setTranslations(res.data.translations || []);
+        setTargetField(res.data.target_field || '');
+        setSkipped(res.data.skipped || 0);
         const sel = {};
-        (data.translations || []).forEach(tr => { sel[tr.factor_id] = true; });
+        (res.data.translations || []).forEach(tr => { sel[tr.factor_id] = true; });
         setSelected(sel);
       } catch (err) {
-        setError(err.message);
+        setError(err.response?.data?.detail || err.message);
       } finally {
         setLoading(false);
       }
     };
     fetchTranslations();
-  }, [factorIds, direction, authToken, t]);
+  }, [factorIds, direction]);
 
   const handleApply = async () => {
     const toApply = translations.filter(tr => selected[tr.factor_id]);
     if (toApply.length === 0) return;
     setApplying(true);
     try {
-      const res = await fetch(`${API}/api/curation/translate-apply`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${authToken}` },
-        body: JSON.stringify({
-          translations: toApply.map(tr => ({ factor_id: tr.factor_id, value: tr.translation })),
-          target_field: targetField,
-        }),
+      const res = await axios.post(`${API}/api/curation/translate-apply`, {
+        translations: toApply.map(tr => ({ factor_id: tr.factor_id, value: tr.translation })),
+        target_field: targetField,
       });
-      if (res.ok) {
-        const result = await res.json();
-        onApply(result.modified_count);
-      }
+      onApply(res.data.modified_count);
     } catch (err) {
       setError(err.message);
     }

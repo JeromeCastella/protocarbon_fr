@@ -1,9 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
-import { useAuth } from '../../context/AuthContext';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Search, ChevronRight, Sparkles, RefreshCw } from 'lucide-react';
 import Fuse from 'fuse.js';
+import axios from 'axios';
 import logger from '../../utils/logger';
 import { API_URL } from '../../utils/apiConfig';
 
@@ -34,7 +34,6 @@ const FUSE_OPTIONS = {
 
 const GlobalFactorSearch = ({ isDark, showExpertFactors, onToggleExpert, onSelectFactor }) => {
   const { t, language } = useLanguage();
-  const { token } = useAuth();
   const [query, setQuery] = useState('');
   const [results, setResults] = useState([]);
   const [allFactors, setAllFactors] = useState(null);
@@ -58,10 +57,8 @@ const GlobalFactorSearch = ({ isDark, showExpertFactors, onToggleExpert, onSelec
     if (allFactors || isLoading) return;
     setIsLoading(true);
     try {
-      const res = await fetch(`${API_URL}/api/emission-factors/search-index`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      const data = await res.json();
+      const res = await axios.get(`${API_URL}/api/emission-factors/search-index`);
+      const data = res.data;
       setAllFactors(data);
       setFuseAll(new Fuse(data, FUSE_OPTIONS));
       setFusePublic(new Fuse(data.filter(f => f.is_public), FUSE_OPTIONS));

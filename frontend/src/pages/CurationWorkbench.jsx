@@ -124,7 +124,7 @@ export default function CurationWorkbench() {
       )}
       <LocationLinkPanel
         isOpen={!!cw.linkPanelFactor} onClose={() => cw.setLinkPanelFactor(null)}
-        factor={cw.linkPanelFactor} isDark={isDark} token={cw.token}
+        factor={cw.linkPanelFactor} isDark={isDark}
         subcategoriesList={cw.subcategoriesList}
         onLink={cw.handleLinkLocation} onUnlink={cw.handleUnlinkLocation} />
       {cw.jsonModalFactor && (

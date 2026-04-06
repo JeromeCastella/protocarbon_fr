@@ -1,28 +1,12 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import logger from '../utils/logger';
-
 import { API_URL } from '../utils/apiConfig';
 
 const AuthContext = createContext();
 
-// Token storage helpers - sessionStorage by default, localStorage only with "Remember Me"
-const getStoredToken = () => localStorage.getItem('token') || sessionStorage.getItem('token');
-
-const storeToken = (newToken, rememberMe) => {
-  if (rememberMe) {
-    localStorage.setItem('token', newToken);
-    sessionStorage.removeItem('token');
-  } else {
-    sessionStorage.setItem('token', newToken);
-    localStorage.removeItem('token');
-  }
-};
-
-const clearStoredToken = () => {
-  localStorage.removeItem('token');
-  sessionStorage.removeItem('token');
-};
+// Configure axios to always send cookies
+axios.defaults.withCredentials = true;
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
@@ -34,13 +18,14 @@ export const useAuth = () => {
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [token, setToken] = useState(() => getStoredToken());
   const [loading, setLoading] = useState(true);
 
-  const logout = useCallback(() => {
-    clearStoredToken();
-    delete axios.defaults.headers.common['Authorization'];
-    setToken(null);
+  const logout = useCallback(async () => {
+    try {
+      await axios.post(`${API_URL}/api/auth/logout`);
+    } catch (error) {
+      logger.error('Logout API call failed:', error);
+    }
     setUser(null);
   }, []);
 
@@ -49,21 +34,16 @@ export const AuthProvider = ({ children }) => {
       const response = await axios.get(`${API_URL}/api/auth/me`);
       setUser(response.data);
     } catch (error) {
-      logger.error('Failed to fetch user:', error);
-      logout();
+      // Cookie absent ou expiré → pas connecté
+      setUser(null);
     } finally {
       setLoading(false);
     }
-  }, [logout]);
+  }, []);
 
   useEffect(() => {
-    if (token) {
-      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-      fetchUser();
-    } else {
-      setLoading(false);
-    }
-  }, [token, fetchUser]);
+    fetchUser();
+  }, [fetchUser]);
 
   const login = async (email, password, rememberMe = false) => {
     const response = await axios.post(`${API_URL}/api/auth/login`, { 
@@ -71,10 +51,7 @@ export const AuthProvider = ({ children }) => {
       password,
       remember_me: rememberMe
     });
-    const { token: newToken, user: userData } = response.data;
-    storeToken(newToken, rememberMe);
-    axios.defaults.headers.common['Authorization'] = `Bearer ${newToken}`;
-    setToken(newToken);
+    const { user: userData } = response.data;
     setUser(userData);
     return userData;
   };
@@ -95,7 +72,6 @@ export const AuthProvider = ({ children }) => {
     <AuthContext.Provider value={{ 
       user, 
       setUser,
-      token, 
       loading, 
       login, 
       register, 

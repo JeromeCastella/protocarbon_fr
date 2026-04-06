@@ -1,6 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useLanguage } from '../context/LanguageContext';
-import { useAuth } from '../context/AuthContext';
 import { useFiscalYear } from '../context/FiscalYearContext';
 import axios from 'axios';
 import logger from '../utils/logger';
@@ -12,7 +11,6 @@ import {
 export const useDataEntry = () => {
   const { t, language } = useLanguage();
   const { currentFiscalYear, fiscalYears } = useFiscalYear();
-  const { token } = useAuth();
 
   const [activeScope, setActiveScope] = useState('scope1');
   const [categories, setCategories] = useState([]);
@@ -215,7 +213,7 @@ export const useDataEntry = () => {
   };
 
   return {
-    t, language, token, fiscalYears, currentFiscalYear,
+    t, language, fiscalYears, currentFiscalYear,
     activeScope, setActiveScope, categories, activities, summary, categoryStats, loading,
     showModal, setShowModal, selectedCategory, setSelectedCategory,
     showTableView, setShowTableView, tableViewScope, editingActivity, editingActivityData, setEditingActivityData,

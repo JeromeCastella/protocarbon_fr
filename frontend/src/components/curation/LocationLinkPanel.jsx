@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { X, Search, Link2, Unlink, Loader2, Filter, ChevronRight } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
+import axios from 'axios';
+import logger from '../../utils/logger';
 import { API_URL as API } from '../../utils/apiConfig';
 
 /**
@@ -12,7 +14,6 @@ export default function LocationLinkPanel({
   onClose,
   factor,         // the market-based factor being linked
   isDark,
-  token,
   subcategoriesList,
   onLink,         // (factorId, locationFactorId) => void
   onUnlink,       // (factorId) => void
@@ -45,26 +46,20 @@ export default function LocationLinkPanel({
 
   // Fetch results
   const fetchResults = useCallback(async (searchQuery, subcat) => {
-    if (!token) return;
     setLoading(true);
     try {
       const params = new URLSearchParams({ limit: '30' });
       if (searchQuery && searchQuery.length >= 2) params.set('q', searchQuery);
       if (subcat) params.set('subcategory', subcat);
 
-      const res = await fetch(`${API}/api/curation/factors/search-location?${params}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      if (res.ok) {
-        const data = await res.json();
-        setResults(data);
-      }
+      const res = await axios.get(`${API}/api/curation/factors/search-location?${params}`);
+      setResults(res.data || []);
     } catch (e) {
       logger.error(e);
     }
     setLoading(false);
     setInitialLoaded(true);
-  }, [token]);
+  }, []);
 
   // Initial load with subcategory pre-filter
   useEffect(() => {

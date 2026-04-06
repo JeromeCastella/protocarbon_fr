@@ -16,7 +16,7 @@ export const useFiscalYear = () => {
 };
 
 export const FiscalYearProvider = ({ children }) => {
-  const { token } = useAuth();
+  const { isAuthenticated } = useAuth();
   const [fiscalYears, setFiscalYears] = useState([]);
   const [currentFiscalYear, setCurrentFiscalYear] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -37,14 +37,14 @@ export const FiscalYearProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    if (token) {
+    if (isAuthenticated) {
       fetchFiscalYears();
     } else {
       setFiscalYears([]);
       setCurrentFiscalYear(null);
       setLoading(false);
     }
-  }, [token]);
+  }, [isAuthenticated]);
 
   const selectFiscalYear = (fiscalYear) => {
     setCurrentFiscalYear(fiscalYear);

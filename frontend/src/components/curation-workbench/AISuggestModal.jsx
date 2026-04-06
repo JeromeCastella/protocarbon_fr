@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { X, CheckSquare, Square, Sparkles, Loader2 } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
-import { useAuth } from '../../context/AuthContext';
+import axios from 'axios';
 import { API_URL as API } from '../../utils/apiConfig';
 
 const AISuggestModal = ({ factorIds, isDark, onApply, onClose }) => {
@@ -10,30 +10,23 @@ const AISuggestModal = ({ factorIds, isDark, onApply, onClose }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selected, setSelected] = useState({});
-  const { token: authToken } = useAuth();
 
   useEffect(() => {
     const fetchSuggestions = async () => {
       try {
-        const res = await fetch(`${API}/api/curation/suggest-titles`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${authToken}` },
-          body: JSON.stringify({ factor_ids: factorIds }),
-        });
-        if (!res.ok) throw new Error(t('curation.aiSuggest.aiError'));
-        const data = await res.json();
-        setSuggestions(data.suggestions || []);
+        const res = await axios.post(`${API}/api/curation/suggest-titles`, { factor_ids: factorIds });
+        setSuggestions(res.data.suggestions || []);
         const sel = {};
-        (data.suggestions || []).forEach(s => { sel[s.factor_id] = true; });
+        (res.data.suggestions || []).forEach(s => { sel[s.factor_id] = true; });
         setSelected(sel);
       } catch (err) {
-        setError(err.message);
+        setError(err.response?.data?.detail || err.message);
       } finally {
         setLoading(false);
       }
     };
     fetchSuggestions();
-  }, [factorIds, authToken, t]);
+  }, [factorIds, t]);
 
   const handleApply = () => {
     const toApply = suggestions.filter(s => selected[s.factor_id]);

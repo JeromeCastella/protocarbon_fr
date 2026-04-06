@@ -1,11 +1,10 @@
 import { useState, useEffect, useCallback } from 'react';
-import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../context/LanguageContext';
+import axios from 'axios';
 import logger from '../utils/logger';
 import { API_URL as API } from '../utils/apiConfig';
 
 export const useCurationWorkbench = () => {
-  const { token } = useAuth();
   const { t } = useLanguage();
 
   // Data state
@@ -54,10 +53,10 @@ export const useCurationWorkbench = () => {
 
   const fetchStats = useCallback(async () => {
     try {
-      const res = await fetch(`${API}/api/curation/stats`, { headers: { Authorization: `Bearer ${token}` } });
-      if (res.ok) setStats(await res.json());
+      const res = await axios.get(`${API}/api/curation/stats`);
+      setStats(res.data);
     } catch (e) { logger.error(e); }
-  }, [token]);
+  }, []);
 
   const fetchFactors = useCallback(async () => {
     setLoadingFactors(true);
@@ -70,16 +69,13 @@ export const useCurationWorkbench = () => {
       if (defaultUnit) params.set('default_unit', defaultUnit);
       if (reportingMethodFilter) params.set('reporting_method', reportingMethodFilter);
 
-      const res = await fetch(`${API}/api/curation/factors?${params}`, { headers: { Authorization: `Bearer ${token}` } });
-      if (res.ok) {
-        const data = await res.json();
-        setFactors(data.items);
-        setTotal(data.total);
-        setTotalPages(data.total_pages);
-      }
+      const res = await axios.get(`${API}/api/curation/factors?${params}`);
+      setFactors(res.data.items);
+      setTotal(res.data.total);
+      setTotalPages(res.data.total_pages);
     } catch (e) { logger.error(e); }
     setLoadingFactors(false);
-  }, [page, pageSize, searchDebounced, subcategory, curationStatus, isPublic, defaultUnit, reportingMethodFilter, sortBy, sortOrder, token]);
+  }, [page, pageSize, searchDebounced, subcategory, curationStatus, isPublic, defaultUnit, reportingMethodFilter, sortBy, sortOrder]);
 
   useEffect(() => { fetchStats(); }, [fetchStats]);
   useEffect(() => { fetchFactors(); }, [fetchFactors]);
@@ -88,50 +84,34 @@ export const useCurationWorkbench = () => {
   useEffect(() => {
     const fetchAllSubcategories = async () => {
       try {
-        const res = await fetch(`${API}/api/subcategories`, { headers: { Authorization: `Bearer ${token}` } });
-        if (res.ok) {
-          const data = await res.json();
-          setSubcategoriesList(data.map(sc => ({ code: sc.code, name_fr: sc.name_fr || sc.code })).sort((a, b) => a.name_fr.localeCompare(b.name_fr)));
-        }
+        const res = await axios.get(`${API}/api/subcategories`);
+        setSubcategoriesList(res.data.map(sc => ({ code: sc.code, name_fr: sc.name_fr || sc.code })).sort((a, b) => a.name_fr.localeCompare(b.name_fr)));
       } catch (e) { logger.error(e); }
     };
     const fetchUnits = async () => {
       try {
-        const res = await fetch(`${API}/api/curation/units`, { headers: { Authorization: `Bearer ${token}` } });
-        if (res.ok) setUnitsList(await res.json());
+        const res = await axios.get(`${API}/api/curation/units`);
+        setUnitsList(res.data);
       } catch (e) { logger.error(e); }
     };
     fetchAllSubcategories();
     fetchUnits();
-  }, [token]);
+  }, []);
 
   const inlineEdit = useCallback(async (factorId, field, value) => {
     try {
-      const res = await fetch(`${API}/api/curation/factors/${factorId}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify({ [field]: value }),
-      });
-      if (res.ok) {
-        const updated = await res.json();
-        setFactors(prev => prev.map(f => f.id === factorId ? updated : f));
-        fetchStats();
-      }
+      const res = await axios.patch(`${API}/api/curation/factors/${factorId}`, { [field]: value });
+      setFactors(prev => prev.map(f => f.id === factorId ? res.data : f));
+      fetchStats();
     } catch (e) { logger.error(e); }
-  }, [token, fetchStats]);
+  }, [fetchStats]);
 
   const handleBulkAction = async (changes) => {
     setBulkLoading(true);
     try {
-      const res = await fetch(`${API}/api/curation/bulk-preview`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify({ factor_ids: selectedIds, changes }),
-      });
-      if (res.ok) {
-        setBulkPreview(await res.json());
-        setPendingBulkChanges(changes);
-      }
+      const res = await axios.post(`${API}/api/curation/bulk-preview`, { factor_ids: selectedIds, changes });
+      setBulkPreview(res.data);
+      setPendingBulkChanges(changes);
     } catch (e) { logger.error(e); }
     setBulkLoading(false);
   };
@@ -139,11 +119,7 @@ export const useCurationWorkbench = () => {
   const confirmBulkApply = async () => {
     setBulkLoading(true);
     try {
-      await fetch(`${API}/api/curation/bulk-apply`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify({ factor_ids: selectedIds, changes: pendingBulkChanges }),
-      });
+      await axios.post(`${API}/api/curation/bulk-apply`, { factor_ids: selectedIds, changes: pendingBulkChanges });
       setSelectedIds([]);
       setBulkPreview(null);
       setPendingBulkChanges(null);
@@ -166,17 +142,10 @@ export const useCurationWorkbench = () => {
   const handleCopyOriginals = async (lang, sourceField = 'original') => {
     setCopyLoading(true);
     try {
-      const res = await fetch(`${API}/api/curation/bulk-copy-originals`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify({ factor_ids: selectedIds, lang, source_field: sourceField }),
-      });
-      if (res.ok) {
-        const data = await res.json();
-        alert(t('curation.alerts.namesCopied').replace('{modified}', data.modified_count).replace('{skipped}', data.skipped_count));
-        fetchFactors();
-        fetchStats();
-      }
+      const res = await axios.post(`${API}/api/curation/bulk-copy-originals`, { factor_ids: selectedIds, lang, source_field: sourceField });
+      alert(t('curation.alerts.namesCopied').replace('{modified}', res.data.modified_count).replace('{skipped}', res.data.skipped_count));
+      fetchFactors();
+      fetchStats();
     } catch (e) { logger.error(e); }
     setCopyLoading(false);
   };
@@ -255,6 +224,6 @@ export const useCurationWorkbench = () => {
     inlineEdit, handleBulkAction, confirmBulkApply,
     handleAISuggestApply, handleCopyOriginals,
     handleLinkLocation, handleUnlinkLocation, handleTranslateApply,
-    handleCellNavigate, t, token,
+    handleCellNavigate, t,
   };
 };

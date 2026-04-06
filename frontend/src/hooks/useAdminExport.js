@@ -1,14 +1,13 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useTheme } from '../context/ThemeContext';
 import { useLanguage } from '../context/LanguageContext';
-import { useAuth } from '../context/AuthContext';
+import axios from 'axios';
 import logger from '../utils/logger';
 import { API_URL } from '../utils/apiConfig';
 
 export const useAdminExport = () => {
   const { isDark } = useTheme();
   const { t, language } = useLanguage();
-  const { token } = useAuth();
 
   const [fiscalYears, setFiscalYears] = useState([]);
   const [selectedFiscalYear, setSelectedFiscalYear] = useState('all');
@@ -24,20 +23,20 @@ export const useAdminExport = () => {
 
   const fetchFiscalYears = useCallback(async () => {
     try {
-      const res = await fetch(`${API_URL}/api/fiscal-years`, { headers: { Authorization: `Bearer ${token}` } });
-      if (res.ok) setFiscalYears(await res.json());
+      const res = await axios.get(`${API_URL}/api/fiscal-years`);
+      setFiscalYears(res.data || []);
     } catch (error) { logger.error('Error fetching fiscal years:', error); }
     finally { setLoadingFY(false); }
-  }, [token]);
+  }, []);
 
   const fetchDumpInfo = useCallback(async () => {
     setDumpInfoLoading(true);
     try {
-      const res = await fetch(`${API_URL}/api/export/mongodump/info`, { headers: { Authorization: `Bearer ${token}` } });
-      if (res.ok) setDumpInfo(await res.json());
+      const res = await axios.get(`${API_URL}/api/export/mongodump/info`);
+      setDumpInfo(res.data);
     } catch (error) { logger.error('Error fetching dump info:', error); }
     finally { setDumpInfoLoading(false); }
-  }, [token]);
+  }, []);
 
   useEffect(() => { fetchFiscalYears(); fetchDumpInfo(); }, [fetchFiscalYears, fetchDumpInfo]);
 
@@ -56,16 +55,13 @@ export const useAdminExport = () => {
     setDumpLoading(true);
     setDumpResult(null);
     try {
-      const res = await fetch(`${API_URL}/api/export/mongodump`, { headers: { Authorization: `Bearer ${token}` } });
-      if (!res.ok) { const err = await res.json().catch(() => ({})); throw new Error(err.detail || 'Export failed'); }
-
-      const disposition = res.headers.get('Content-Disposition');
+      const res = await axios.get(`${API_URL}/api/export/mongodump`, { responseType: 'blob' });
+      const disposition = res.headers['content-disposition'];
       const filename = disposition?.match(/filename="(.+)"/)?.[1] || `mongodump_${new Date().toISOString().split('T')[0]}.archive`;
-      const exportMethod = res.headers.get('X-Export-Method') || 'unknown';
-      const blob = await res.blob();
-      triggerDownload(blob, filename);
+      const exportMethod = res.headers['x-export-method'] || 'unknown';
+      triggerDownload(res.data, filename);
 
-      const sizeMB = (blob.size / (1024 * 1024)).toFixed(1);
+      const sizeMB = (res.data.size / (1024 * 1024)).toFixed(1);
       const methodLabel = exportMethod === 'mongodump' ? 'mongodump native' : 'BSON Python';
       setDumpResult({ success: true, message: `${t('admin.export.exportSuccess')} — ${filename} (${sizeMB} MB) — ${methodLabel}` });
     } catch (error) {
@@ -80,17 +76,15 @@ export const useAdminExport = () => {
     try {
       let endpoint = `${API_URL}/api/export/${exportType}`;
       if (selectedFiscalYear !== 'all') endpoint += `?fiscal_year_id=${selectedFiscalYear}`;
-      const res = await fetch(endpoint, { headers: { Authorization: `Bearer ${token}` } });
-      if (!res.ok) throw new Error('Export failed');
-      const data = await res.json();
+      const res = await axios.get(endpoint);
 
-      const jsonString = JSON.stringify(data, null, 2);
+      const jsonString = JSON.stringify(res.data, null, 2);
       const blob = new Blob([jsonString], { type: 'application/json;charset=utf-8' });
       const fyName = selectedFiscalYear === 'all' ? 'tous' : (fiscalYears.find(fy => fy.id === selectedFiscalYear)?.name || selectedFiscalYear).replace(/\s+/g, '_');
       const filename = `carbon_export_${exportType}_${fyName}_${new Date().toISOString().split('T')[0]}.json`;
       triggerDownload(blob, filename);
 
-      setResult({ success: true, message: t('admin.export.exportSuccess'), stats: data.statistics || { count: data[exportType]?.length || 0 } });
+      setResult({ success: true, message: t('admin.export.exportSuccess'), stats: res.data.statistics || { count: res.data[exportType]?.length || 0 } });
     } catch (error) {
       logger.error('Export error:', error);
       setResult({ success: false, message: t('admin.export.exportError') });
