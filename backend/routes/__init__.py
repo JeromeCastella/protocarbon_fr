@@ -17,6 +17,7 @@ from .export import router as export_router
 from .units import router as units_router
 from .scenarios import router as scenarios_router
 from .curation import router as curation_router
+from .plausibility import router as plausibility_router
 
 # Create main API router
 api_router = APIRouter(prefix="/api")
@@ -35,6 +36,7 @@ api_router.include_router(export_router)
 api_router.include_router(units_router)
 api_router.include_router(scenarios_router)
 api_router.include_router(curation_router)
+api_router.include_router(plausibility_router)
 
 # Export for use in main app
 __all__ = ["api_router"]

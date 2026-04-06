@@ -35,7 +35,9 @@ import {
   TrendingDown as TrendDown,
   Sparkles,
   X,
-  FlaskConical
+  FlaskConical,
+  ShieldCheck,
+  Info
 } from 'lucide-react';
 import {
   BarChart,
@@ -128,6 +130,10 @@ const Dashboard = () => {
   const [objective, setObjective] = useState(null);
   const [trajectoryData, setTrajectoryData] = useState({ trajectory: [], actuals: [] });
   const [recommendations, setRecommendations] = useState([]);
+
+  // Plausibility state
+  const [plausibilityResult, setPlausibilityResult] = useState(null);
+  const [plausibilityLoading, setPlausibilityLoading] = useState(false);
   const [showObjectiveModal, setShowObjectiveModal] = useState(false);
   const [objectiveForm, setObjectiveForm] = useState({
     reference_fiscal_year_id: '',
@@ -148,6 +154,8 @@ const Dashboard = () => {
     setSelectedScenarioEntityId(null);
     setScenarioDataPoints([]);
     setScenarioSummary(null);
+    // Reset plausibility when fiscal year changes
+    setPlausibilityResult(null);
   }, [currentFiscalYear?.id, reportingView]);
 
   useEffect(() => {
@@ -180,6 +188,21 @@ const Dashboard = () => {
       setScenarioEntities(response.data || []);
     } catch (error) {
       setScenarioEntities([]);
+    }
+  };
+
+  // Plausibility check
+  const runPlausibilityCheck = async () => {
+    setPlausibilityLoading(true);
+    setPlausibilityResult(null);
+    try {
+      const fyParam = currentFiscalYear?.id ? `?fiscal_year_id=${currentFiscalYear.id}` : '';
+      const response = await axios.post(`${API_URL}/api/plausibility/check${fyParam}`);
+      setPlausibilityResult(response.data);
+    } catch (error) {
+      logger.error('Failed to run plausibility check:', error);
+    } finally {
+      setPlausibilityLoading(false);
     }
   };
 
@@ -668,6 +691,133 @@ const Dashboard = () => {
               </div>
             </motion.div>
           )}
+
+          {/* ── Diagnostic de plausibilité ── */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }}
+            data-testid="plausibility-section"
+            className={`p-6 rounded-2xl ${isDark ? 'bg-slate-800' : 'bg-white shadow-sm border border-gray-100'}`}
+          >
+            <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center gap-3">
+                <div className="p-2 rounded-xl bg-sky-500/20">
+                  <ShieldCheck className="w-6 h-6 text-sky-500" />
+                </div>
+                <div>
+                  <h2 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                    Diagnostic de plausibilité
+                  </h2>
+                  <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+                    Vérifie la cohérence de vos données
+                  </p>
+                </div>
+              </div>
+              <button
+                data-testid="run-plausibility-btn"
+                onClick={runPlausibilityCheck}
+                disabled={plausibilityLoading}
+                className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all ${
+                  plausibilityLoading
+                    ? 'bg-sky-500/50 text-white cursor-wait'
+                    : 'bg-sky-500 text-white hover:bg-sky-600'
+                }`}
+              >
+                {plausibilityLoading ? (
+                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                ) : (
+                  <ShieldCheck className="w-4 h-4" />
+                )}
+                {plausibilityLoading ? 'Analyse...' : 'Lancer le diagnostic'}
+              </button>
+            </div>
+
+            {/* Results */}
+            <AnimatePresence>
+              {plausibilityResult && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  exit={{ opacity: 0, height: 0 }}
+                  className="mt-4"
+                >
+                  {/* Summary badges */}
+                  <div className="flex items-center gap-3 mb-4">
+                    {plausibilityResult.summary.critical > 0 && (
+                      <span className="flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-full bg-red-500/15 text-red-500">
+                        <AlertTriangle className="w-3.5 h-3.5" />
+                        {plausibilityResult.summary.critical} critique{plausibilityResult.summary.critical > 1 ? 's' : ''}
+                      </span>
+                    )}
+                    {plausibilityResult.summary.warning > 0 && (
+                      <span className="flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-full bg-amber-500/15 text-amber-500">
+                        <AlertTriangle className="w-3.5 h-3.5" />
+                        {plausibilityResult.summary.warning} attention{plausibilityResult.summary.warning > 1 ? 's' : ''}
+                      </span>
+                    )}
+                    {plausibilityResult.summary.info > 0 && (
+                      <span className="flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-full bg-sky-500/15 text-sky-500">
+                        <Info className="w-3.5 h-3.5" />
+                        {plausibilityResult.summary.info} info{plausibilityResult.summary.info > 1 ? 's' : ''}
+                      </span>
+                    )}
+                    {plausibilityResult.summary.total_alerts === 0 && (
+                      <span className="flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-full bg-green-500/15 text-green-500">
+                        <CheckCircle className="w-3.5 h-3.5" />
+                        Aucune anomalie détectée
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Alert list */}
+                  {plausibilityResult.alerts.length > 0 && (
+                    <div className="space-y-2">
+                      {plausibilityResult.alerts.map((alert, idx) => {
+                        const severityConfig = {
+                          critical: {
+                            bg: isDark ? 'bg-red-500/10 border-red-500/30' : 'bg-red-50 border-red-200',
+                            icon: <AlertTriangle className="w-4 h-4 text-red-500 flex-shrink-0" />,
+                            text: isDark ? 'text-red-300' : 'text-red-800',
+                          },
+                          warning: {
+                            bg: isDark ? 'bg-amber-500/10 border-amber-500/30' : 'bg-amber-50 border-amber-200',
+                            icon: <AlertTriangle className="w-4 h-4 text-amber-500 flex-shrink-0" />,
+                            text: isDark ? 'text-amber-300' : 'text-amber-800',
+                          },
+                          info: {
+                            bg: isDark ? 'bg-sky-500/10 border-sky-500/30' : 'bg-sky-50 border-sky-200',
+                            icon: <Info className="w-4 h-4 text-sky-500 flex-shrink-0" />,
+                            text: isDark ? 'text-sky-300' : 'text-sky-800',
+                          },
+                        };
+                        const cfg = severityConfig[alert.severity] || severityConfig.info;
+                        return (
+                          <motion.div
+                            key={idx}
+                            initial={{ opacity: 0, x: -10 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: idx * 0.05 }}
+                            className={`flex items-start gap-3 p-3 rounded-xl border ${cfg.bg}`}
+                          >
+                            {cfg.icon}
+                            <span className={`text-sm ${cfg.text}`}>{alert.message}</span>
+                          </motion.div>
+                        );
+                      })}
+                    </div>
+                  )}
+
+                  {/* Context info */}
+                  <p className={`text-xs mt-3 ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>
+                    Exercice : {plausibilityResult.context_used.fiscal_year || '—'}
+                    {' · '}{plausibilityResult.context_used.activities_count} activités
+                    {' · '}Secteur : {plausibilityResult.context_used.sector}
+                  </p>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </motion.div>
         </div>
       )}
 
