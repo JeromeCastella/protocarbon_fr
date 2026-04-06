@@ -54,7 +54,7 @@ export const StepEndOfLife = ({ formData, treatments, filteredTreatments, eolSea
             const entryEmissions = selectedFactor && entry.quantity > 0 ? entry.quantity * (selectedFactor.value || 0) : 0;
 
             return (
-              <div key={index} className={s.section} data-testid={`eol-entry-${index}`}>
+              <div key={entry._key || index} className={s.section} data-testid={`eol-entry-${index}`}>
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-2">
                     <Recycle className={`w-4 h-4 ${isDark ? 'text-sky-400' : 'text-sky-600'}`} />

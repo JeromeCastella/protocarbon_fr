@@ -263,7 +263,7 @@ const ProductWizard = ({ isOpen, onClose, onProductCreated, editingProduct = nul
           <div className={`mb-4 p-3 rounded-xl flex items-start gap-2 ${isDark ? 'bg-red-500/15 border border-red-500/30' : 'bg-red-50 border border-red-200'}`} data-testid="validation-errors">
             <AlertTriangle className="w-4 h-4 text-red-500 mt-0.5 flex-shrink-0" />
             <ul className="text-sm space-y-0.5">
-              {w.validationErrors.map((err, i) => <li key={i} className={isDark ? 'text-red-300' : 'text-red-600'}>{err}</li>)}
+              {w.validationErrors.map((err) => <li key={err} className={isDark ? 'text-red-300' : 'text-red-600'}>{err}</li>)}
             </ul>
           </div>
         )}

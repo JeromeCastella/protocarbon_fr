@@ -119,7 +119,7 @@ export const useProductWizard = (isOpen, editingProduct) => {
   };
 
   // End of life helpers
-  const addEndOfLifeEntry = () => setFormData(prev => ({ ...prev, end_of_life: [...prev.end_of_life, { name: '', quantity: 0, unit: 'kg', emission_factor_id: '' }] }));
+  const addEndOfLifeEntry = () => setFormData(prev => ({ ...prev, end_of_life: [...prev.end_of_life, { _key: Math.random().toString(36).slice(2), name: '', quantity: 0, unit: 'kg', emission_factor_id: '' }] }));
   const updateEndOfLifeEntry = (index, field, value) => setFormData(prev => ({ ...prev, end_of_life: prev.end_of_life.map((e, i) => i === index ? { ...e, [field]: value } : e) }));
   const removeEndOfLifeEntry = (index) => setFormData(prev => ({ ...prev, end_of_life: prev.end_of_life.filter((_, i) => i !== index) }));
 

@@ -7,7 +7,7 @@ import random
 import requests
 import os
 
-API_URL = os.environ.get('API_URL', 'https://carbon-refactor.preview.emergentagent.com')
+API_URL = os.environ.get('API_URL', 'https://curation-workshop.preview.emergentagent.com')
 
 def main():
     # Login

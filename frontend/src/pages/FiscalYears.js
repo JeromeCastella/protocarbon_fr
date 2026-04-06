@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useTheme } from '../context/ThemeContext';
 import { useLanguage } from '../context/LanguageContext';
 import { useFiscalYear } from '../context/FiscalYearContext';
@@ -65,17 +65,17 @@ const FiscalYears = () => {
   // Scenarios list
   const [scenarios, setScenarios] = useState([]);
   
-  const fetchScenarios = async () => {
+  const fetchScenarios = useCallback(async () => {
     try {
       const res = await axios.get(`${API_URL}/api/scenarios`);
       setScenarios(res.data || []);
     } catch (e) {
       logger.error('Failed to fetch scenarios:', e);
     }
-  };
-  
-  useEffect(() => { fetchScenarios(); // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  
+  useEffect(() => { fetchScenarios();
+  }, [fetchScenarios]);
   
   // Rectify form state
   const [rectifyReason, setRectifyReason] = useState('');

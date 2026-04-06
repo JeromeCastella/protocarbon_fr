@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { useTheme } from '../context/ThemeContext';
 import { useLanguage } from '../context/LanguageContext';
@@ -771,11 +771,6 @@ const DataEntry = () => {
     });
   };
 
-  // Reload data when fiscal year changes
-  useEffect(() => {
-    fetchData();
-  }, [currentFiscalYear?.id]);
-
   // Handle factor selected from global search bar
   const handleSearchFactorSelect = (factor) => {
     // Derive scope from factor or its first impact
@@ -809,7 +804,7 @@ const DataEntry = () => {
     setShowModal(true);
   };
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       // Build query params with fiscal year filter
       const fiscalYearParam = currentFiscalYear?.id ? `&fiscal_year_id=${currentFiscalYear.id}` : '';
@@ -834,7 +829,12 @@ const DataEntry = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [currentFiscalYear?.id]);
+
+  // Reload data when fiscal year changes
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
   const scopes = [
     { id: 'scope1', name: t('scope.scope1'), subtitle: t('scope.scope1Title'), color: 'bg-blue-500' },

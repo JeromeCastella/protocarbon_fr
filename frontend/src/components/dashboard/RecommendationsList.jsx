@@ -26,9 +26,9 @@ const RecommendationsList = ({ recommendations = [], formatEmissions, isDark = f
       </p>
 
       <div className="space-y-6">
-        {recommendations.map((rec, idx) => (
+        {recommendations.map((rec) => (
           <RecommendationCard 
-            key={idx} 
+            key={rec.category} 
             recommendation={rec} 
             formatEmissions={formatEmissions}
             isDark={isDark} 
@@ -54,8 +54,8 @@ const RecommendationCard = ({ recommendation, formatEmissions, isDark }) => {
         </span>
       </div>
       <div className="space-y-2">
-        {measures.map((measure, mIdx) => (
-          <MeasureItem key={mIdx} measure={measure} isDark={isDark} />
+        {measures.map((measure) => (
+          <MeasureItem key={measure.title_fr} measure={measure} isDark={isDark} />
         ))}
       </div>
     </div>

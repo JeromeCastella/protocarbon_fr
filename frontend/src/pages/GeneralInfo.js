@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useTheme } from '../context/ThemeContext';
 import { useLanguage } from '../context/LanguageContext';
 import { useFiscalYear } from '../context/FiscalYearContext';
@@ -108,21 +108,7 @@ const GeneralInfo = () => {
   // Codes des catégories "Produits vendus" groupées (3.10, 3.11, 3.12)
   const PRODUCT_CATEGORIES = ['transformation_produits', 'utilisation_produits', 'fin_vie_produits'];
 
-  // Load company data on mount
-  useEffect(() => {
-    fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  // Load fiscal year context when selected fiscal year changes
-  useEffect(() => {
-    if (selectedFiscalYear?.id) {
-      fetchFiscalYearContext(selectedFiscalYear.id);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedFiscalYear?.id]);
-
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       const [companyRes, categoriesRes] = await Promise.all([
         axios.get(`${API_URL}/api/companies`),
@@ -145,9 +131,9 @@ const GeneralInfo = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
-  const fetchFiscalYearContext = async (fiscalYearId) => {
+  const fetchFiscalYearContext = useCallback(async (fiscalYearId) => {
     setContextLoading(true);
     try {
       const response = await axios.get(`${API_URL}/api/fiscal-years/${fiscalYearId}/context`);
@@ -164,7 +150,19 @@ const GeneralInfo = () => {
     } finally {
       setContextLoading(false);
     }
-  };
+  }, []);
+
+  // Load company data on mount
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+
+  // Load fiscal year context when selected fiscal year changes
+  useEffect(() => {
+    if (selectedFiscalYear?.id) {
+      fetchFiscalYearContext(selectedFiscalYear.id);
+    }
+  }, [selectedFiscalYear?.id, fetchFiscalYearContext]);
 
   const handleSave = async () => {
     setSaving(true);
@@ -1336,3 +1334,4 @@ const GeneralInfo = () => {
 };
 
 export default GeneralInfo;
+fo;

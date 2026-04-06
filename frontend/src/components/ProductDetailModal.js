@@ -151,7 +151,7 @@ const ProductDetailModal = ({
                       </thead>
                       <tbody>
                         {endOfLife.map((e, i) => (
-                          <tr key={i} className={isDark ? 'border-t border-slate-700' : 'border-t border-gray-100'}>
+                          <tr key={e.emission_factor_id || e.name || i} className={isDark ? 'border-t border-slate-700' : 'border-t border-gray-100'}>
                             <td className={`px-4 py-2.5 ${isDark ? 'text-slate-200' : 'text-gray-800'}`}>
                               {e.name || `Traitement ${i + 1}`}
                             </td>

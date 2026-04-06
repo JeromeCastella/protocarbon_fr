@@ -85,9 +85,9 @@ const PasswordStrength = ({ password }) => {
 
       {/* Requirements checklist */}
       <div className="grid grid-cols-1 gap-1">
-        {requirements.map((req, idx) => (
+        {requirements.map((req) => (
           <div 
-            key={idx}
+            key={req.label}
             className={`flex items-center gap-2 text-xs ${
               req.met 
                 ? 'text-green-500' 
