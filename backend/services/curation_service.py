@@ -1,6 +1,9 @@
 """
 Service de curation : helpers pour les routes curation.py
 """
+import os
+import json
+import re
 from bson import ObjectId
 from utils import serialize_doc
 
@@ -130,3 +133,118 @@ def resolve_single_location_name(doc: dict, collection) -> dict:
         doc["_locationName"] = loc_factor.get("name_simple_fr") or loc_factor.get("name_fr") or lid
 
     return doc
+
+
+def enrich_stats_rows(raw_rows: list, subcategories_collection, categories_collection) -> dict:
+    """
+    Enrichit les résultats bruts de l'agrégation stats avec les noms de
+    sous-catégories et catégories, et calcule les totaux globaux.
+    """
+    subcat_map = {}
+    for sc in subcategories_collection.find({}):
+        subcat_map[sc["code"]] = {
+            "name_fr": sc.get("name_fr", sc["code"]),
+            "name_de": sc.get("name_de", sc["code"]),
+            "categories": sc.get("categories", []),
+        }
+
+    cat_map = {}
+    for c in categories_collection.find({}):
+        cat_map[c["code"]] = {"name_fr": c.get("name_fr", c["code"]), "scope": c.get("scope", "")}
+
+    result = []
+    for row in raw_rows:
+        code = row["_id"] or "unknown"
+        sc_info = subcat_map.get(code, {})
+        untreated = row["total"] - row["reviewed"] - row["flagged"]
+        result.append({
+            "subcategory": code,
+            "name_fr": sc_info.get("name_fr", code),
+            "name_de": sc_info.get("name_de", code),
+            "categories": sc_info.get("categories", []),
+            "total": row["total"],
+            "public": row["public"],
+            "reviewed": row["reviewed"],
+            "flagged": row["flagged"],
+            "untreated": untreated,
+            "has_custom_name": row["has_custom_name"],
+            "progress_pct": round(row["reviewed"] / row["total"] * 100) if row["total"] > 0 else 0,
+        })
+
+    g_total = sum(r["total"] for r in result)
+    g_reviewed = sum(r["reviewed"] for r in result)
+    g_flagged = sum(r["flagged"] for r in result)
+
+    return {
+        "global": {
+            "total": g_total,
+            "reviewed": g_reviewed,
+            "flagged": g_flagged,
+            "untreated": g_total - g_reviewed - g_flagged,
+            "progress_pct": round(g_reviewed / g_total * 100) if g_total > 0 else 0,
+        },
+        "by_subcategory": result,
+        "categories": {k: v for k, v in cat_map.items()},
+    }
+
+
+def build_suggest_prompt(factors: list) -> str:
+    """Construit le prompt LLM pour la suggestion de titres simplifiés."""
+    lines = []
+    for f in factors:
+        fid = str(f["_id"])
+        lines.append(
+            f'- ID: {fid} | Original FR: "{f.get("name_fr", "")}" '
+            f'| Original DE: "{f.get("name_de", "")}" '
+            f'| Unité: {f.get("default_unit", "")}'
+        )
+
+    return f"""Tu es un expert en bilan carbone suisse. Simplifie les noms techniques de facteurs d'émission pour les rendre compréhensibles par un utilisateur non-technique.
+
+Règles:
+- Le titre simplifié doit être court (3-8 mots max)
+- Garde l'information essentielle (matériau, type d'énergie, usage)
+- Supprime les codes pays, variantes techniques et références
+- Le titre FR doit être en français courant suisse
+- Le titre DE doit être en allemand courant suisse (Hochdeutsch)
+- Retourne UNIQUEMENT un JSON valide, sans commentaires
+
+Facteurs à simplifier:
+{chr(10).join(lines)}
+
+Retourne un JSON array:
+[{{"id": "...", "name_simple_fr": "...", "name_simple_de": "..."}}]"""
+
+
+async def call_llm_suggest(prompt: str, user_id: str) -> list:
+    """Appelle le LLM pour obtenir les suggestions et parse la réponse JSON."""
+    from emergentintegrations.llm.chat import LlmChat, UserMessage
+
+    chat = LlmChat(
+        api_key=os.environ.get("EMERGENT_LLM_KEY"),
+        session_id=f"curation-suggest-{user_id}",
+        system_message="Tu es un expert en bilan carbone suisse. Tu simplifies les noms techniques de facteurs d'émission.",
+    ).with_model("openai", "gpt-4o-mini")
+
+    text = await chat.send_message(UserMessage(text=prompt))
+
+    match = re.search(r'\[.*\]', text, re.DOTALL)
+    if match:
+        return json.loads(match.group())
+    return json.loads(text)
+
+
+def map_suggestions_to_factors(suggestions: list, factors: list) -> list:
+    """Map les suggestions LLM aux facteurs originaux par ID."""
+    factor_map = {str(f["_id"]): f for f in factors}
+    result = []
+    for s in suggestions:
+        fid = s.get("id", "")
+        if fid in factor_map:
+            result.append({
+                "factor_id": fid,
+                "name_fr_original": factor_map[fid].get("name_fr", ""),
+                "name_simple_fr": s.get("name_simple_fr", ""),
+                "name_simple_de": s.get("name_simple_de", ""),
+            })
+    return result

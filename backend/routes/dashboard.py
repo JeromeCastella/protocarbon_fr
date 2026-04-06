@@ -17,19 +17,26 @@ from config import (
     categories_collection
 )
 from services.auth import get_current_user
-from services.scope_mapping import normalize_scope_for_reporting, SCOPE3_AMONT_CATEGORIES, SCOPE3_AVAL_CATEGORIES
+from services.dashboard_service import (
+    get_activity_emissions,
+    calculate_scope_emissions,
+    calculate_category_emissions,
+    calculate_scope_completion,
+    resolve_current_and_previous_fy,
+    calculate_kpi_metrics,
+)
 from utils import serialize_doc
 
 router = APIRouter(prefix="/dashboard", tags=["Dashboard"])
 
 
-def get_fiscal_year_context_with_fallback(fiscal_year_id: str, tenant_id: str):
+def get_fiscal_year_context_with_fallback(fiscal_year_id: str, tenant_id: str) -> dict:
     """
     Helper function to get context from fiscal year with fallback to company.
     Returns: dict with employees, revenue, surface_area, excluded_categories
     """
     company = companies_collection.find_one({"tenant_id": tenant_id})
-    
+
     if fiscal_year_id:
         try:
             fy = fiscal_years_collection.find_one({"_id": ObjectId(fiscal_year_id)})
@@ -39,123 +46,48 @@ def get_fiscal_year_context_with_fallback(fiscal_year_id: str, tenant_id: str):
                     "employees": fy_context.get("employees") if fy_context.get("employees") is not None else (company.get("employees") if company else None),
                     "revenue": fy_context.get("revenue") if fy_context.get("revenue") is not None else (company.get("revenue") if company else None),
                     "surface_area": fy_context.get("surface_area") if fy_context.get("surface_area") is not None else (company.get("surface_area") if company else None),
-                    "excluded_categories": fy_context.get("excluded_categories") if fy_context.get("excluded_categories") is not None else (company.get("excluded_categories", []) if company else [])
+                    "excluded_categories": fy_context.get("excluded_categories", []),
                 }
-        except:
+        except Exception:
             pass
-    
-    # Fallback to company only
+
     if company:
         return {
             "employees": company.get("employees"),
             "revenue": company.get("revenue"),
             "surface_area": company.get("surface_area"),
-            "excluded_categories": company.get("excluded_categories", [])
+            "excluded_categories": [],
         }
-    
-    return {
-        "employees": None,
-        "revenue": None,
-        "surface_area": None,
-        "excluded_categories": []
-    }
 
-
-
-
+    return {"employees": None, "revenue": None, "surface_area": None, "excluded_categories": []}
 
 
 @router.get("/summary")
 async def get_dashboard_summary(
     fiscal_year_id: Optional[str] = None,
     reporting_view: Optional[str] = None,
-    current_user: dict = Depends(get_current_user)
+    current_user: dict = Depends(get_current_user),
 ):
-    """Get dashboard summary with emissions by scope.
-    reporting_view: 'location' to use location-based values for market activities."""
-    # Get context (from fiscal year or company fallback)
+    """Get dashboard summary with emissions by scope."""
     context = get_fiscal_year_context_with_fallback(fiscal_year_id, current_user["id"])
     excluded_categories = context.get("excluded_categories", [])
-    
-    # Build query - filter by fiscal year if specified using fiscal_year_id
+
     query = {"tenant_id": current_user["id"]}
-    
     if fiscal_year_id:
-        # Use fiscal_year_id directly for correct filtering
         query["fiscal_year_id"] = fiscal_year_id
-    
-    # Get activities (filtered by fiscal year if specified)
+
     activities = list(activities_collection.find(query))
-    
-    # Check if any market-based activity exists (to show toggle in frontend)
     has_market_based = any(a.get("reporting_method") == "market" for a in activities)
-    
-    # Calculate emissions by scope
-    scope_emissions = {
-        "scope1": 0,
-        "scope2": 0,
-        "scope3_amont": 0,
-        "scope3_aval": 0
-    }
-    
-    category_emissions = {}
-    
-    for activity in activities:
-        raw_scope = activity.get("scope", "scope1")
-        category = activity.get("category_id", "other")
 
-        # Dual reporting: use location-based emissions when requested
-        if reporting_view == "location" and activity.get("reporting_method") == "market" and activity.get("emissions_location") is not None:
-            emissions = activity["emissions_location"]
-        else:
-            emissions = activity.get("emissions", 0) or activity.get("calculated_emissions", 0) or 0
-        
-        # Normaliser le scope pour le reporting (scope3_3 → scope3_amont, etc.)
-        normalized_scope = normalize_scope_for_reporting(raw_scope, category)
-        
-        if normalized_scope in scope_emissions:
-            scope_emissions[normalized_scope] += emissions
-        
-        if category not in category_emissions:
-            category_emissions[category] = 0
-        category_emissions[category] += emissions
-    
+    scope_emissions = calculate_scope_emissions(activities, reporting_view)
+    category_emissions = calculate_category_emissions(activities, reporting_view)
     total_emissions = sum(scope_emissions.values())
-    
-    # Calculate scope completion
-    # Use real categories from DB (same source as frontend), not the hardcoded list
+
     real_categories = list(categories_collection.find({}))
-    scope_completion = {}
+    scope_completion = calculate_scope_completion(activities, real_categories, excluded_categories)
 
-    for scope_code in ["scope1", "scope2", "scope3_amont", "scope3_aval"]:
-        # Only keep categories that belong to this scope and are not excluded
-        open_cats = [
-            c for c in real_categories
-            if c.get("scope") == scope_code
-            and c.get("code") not in excluded_categories
-        ]
-        effective_total = len(open_cats)
-
-        # Count how many of those categories have at least one activity
-        filled = 0
-        for cat in open_cats:
-            has_activity = any(
-                normalize_scope_for_reporting(a.get("scope", ""), a.get("category_id", "")) == scope_code
-                and a.get("category_id") == cat["code"]
-                for a in activities
-            )
-            if has_activity:
-                filled += 1
-
-        scope_completion[scope_code] = {
-            "categories_filled": filled,
-            "total_categories": effective_total,
-            "percentage": round((filled / effective_total * 100) if effective_total > 0 else 0)
-        }
-    
-    # Count products
     products_count = products_collection.count_documents({"tenant_id": current_user["id"]})
-    
+
     return {
         "total_emissions": total_emissions,
         "scope_emissions": scope_emissions,
@@ -165,7 +97,7 @@ async def get_dashboard_summary(
         "products_count": products_count,
         "excluded_categories": excluded_categories,
         "has_market_based": has_market_based,
-        "reporting_view": reporting_view or "market"
+        "reporting_view": reporting_view or "market",
     }
 
 
@@ -173,99 +105,66 @@ async def get_dashboard_summary(
 async def get_category_stats(
     fiscal_year_id: Optional[str] = None,
     reporting_view: Optional[str] = None,
-    current_user: dict = Depends(get_current_user)
+    current_user: dict = Depends(get_current_user),
 ):
-    """Get statistics by category"""
-    # Build query - filter by fiscal year if specified using fiscal_year_id
+    """Get emissions per category for a fiscal year."""
     query = {"tenant_id": current_user["id"]}
-    
     if fiscal_year_id:
         query["fiscal_year_id"] = fiscal_year_id
-    
+
     activities = list(activities_collection.find(query))
-    
+
     stats = {}
     for activity in activities:
         category = activity.get("category_id", "other")
         if category not in stats:
             stats[category] = {"count": 0, "emissions": 0}
         stats[category]["count"] += 1
-        if reporting_view == "location" and activity.get("reporting_method") == "market" and activity.get("emissions_location") is not None:
-            stats[category]["emissions"] += activity["emissions_location"]
-        else:
-            stats[category]["emissions"] += activity.get("emissions", 0) or 0
-    
+        stats[category]["emissions"] += get_activity_emissions(activity, reporting_view)
+
     return stats
 
 
 @router.get("/fiscal-comparison")
 async def get_fiscal_comparison(
     reporting_view: Optional[str] = None,
-    current_user: dict = Depends(get_current_user)
+    current_user: dict = Depends(get_current_user),
 ):
-    """Get emissions comparison across fiscal years (actual only, excludes scenarios).
-    reporting_view: 'location' to use location-based values for market activities."""
+    """Get emissions comparison across fiscal years (actual only, excludes scenarios)."""
     fiscal_years = list(fiscal_years_collection.find({
         "tenant_id": current_user["id"],
-        "type": {"$ne": "scenario"}
+        "type": {"$ne": "scenario"},
     }).sort("start_date", 1))
-    
+
     comparison = []
-    
     for fy in fiscal_years:
         fy_id = str(fy["_id"])
-        fy_start = fy.get("start_date", "")
-        fy_end = fy.get("end_date", "")
-        
-        # Get activities for this fiscal year by fiscal_year_id (primary method)
-        # This correctly associates activities with their assigned fiscal year
-        query = {
+
+        activities = list(activities_collection.find({
             "tenant_id": current_user["id"],
-            "fiscal_year_id": fy_id
-        }
-        
-        activities = list(activities_collection.find(query))
-        
-        scope_emissions = {"scope1": 0, "scope2": 0, "scope3_amont": 0, "scope3_aval": 0}
-        
-        for activity in activities:
-            raw_scope = activity.get("scope", "scope1")
-            category = activity.get("category_id", "other")
-            
-            # Dual reporting: use location-based emissions when requested
-            if reporting_view == "location" and activity.get("reporting_method") == "market" and activity.get("emissions_location") is not None:
-                emissions = activity["emissions_location"]
-            else:
-                emissions = activity.get("emissions", 0) or activity.get("calculated_emissions", 0) or 0
-            
-            # Normaliser le scope pour le reporting (scope3_3 → scope3_amont, etc.)
-            normalized_scope = normalize_scope_for_reporting(raw_scope, category)
-            
-            if normalized_scope in scope_emissions:
-                scope_emissions[normalized_scope] += emissions
-        
+            "fiscal_year_id": fy_id,
+        }))
+
+        scope_emissions = calculate_scope_emissions(activities, reporting_view)
         total = sum(scope_emissions.values())
-        
-        # Extract year from name for chart display (e.g., "Exercice 2026" -> "2026")
         year_label = fy.get("name", "").replace("Exercice ", "")
-        
+
         comparison.append({
             "fiscal_year_id": fy_id,
             "name": fy.get("name", ""),
-            "year": year_label,  # For chart X-axis
+            "year": year_label,
             "status": fy.get("status", "draft"),
-            "start_date": fy_start,
-            "end_date": fy_end,
+            "start_date": fy.get("start_date", ""),
+            "end_date": fy.get("end_date", ""),
             "total_emissions": total,
-            # Flat scope emissions for direct chart usage
             "scope1": scope_emissions["scope1"],
             "scope2": scope_emissions["scope2"],
             "scope3_amont": scope_emissions["scope3_amont"],
             "scope3_aval": scope_emissions["scope3_aval"],
-            "scope_emissions": scope_emissions,  # Keep nested for backward compatibility
-            "activities_count": len(activities)
+            "scope_emissions": scope_emissions,
+            "activities_count": len(activities),
         })
-    
+
     return comparison
 
 
@@ -273,60 +172,48 @@ async def get_fiscal_comparison(
 async def get_scope_breakdown(
     fiscal_year_id: str,
     reporting_view: Optional[str] = None,
-    current_user: dict = Depends(get_current_user)
+    current_user: dict = Depends(get_current_user),
 ):
-    """Get detailed breakdown by scope for a fiscal year.
-    reporting_view: 'location' to use location-based values for market activities."""
+    """Get detailed breakdown by scope for a fiscal year."""
     if fiscal_year_id == "current":
-        fy = fiscal_years_collection.find_one({
-            "tenant_id": current_user["id"],
-            "status": "draft"
-        }, sort=[("start_date", -1)])
+        fy = fiscal_years_collection.find_one(
+            {"tenant_id": current_user["id"], "status": "draft"},
+            sort=[("start_date", -1)],
+        )
     else:
         fy = fiscal_years_collection.find_one({"_id": ObjectId(fiscal_year_id)})
-    
+
     if not fy:
         return {"scopes": {}, "total": 0}
-    
+
     fy_id = str(fy["_id"])
-    
-    # Use fiscal_year_id for correct filtering
-    query = {
+    activities = list(activities_collection.find({
         "tenant_id": current_user["id"],
-        "fiscal_year_id": fy_id
-    }
-    
-    activities = list(activities_collection.find(query))
-    
+        "fiscal_year_id": fy_id,
+    }))
+
     scopes = {
         "scope1": {"total": 0, "categories": {}},
         "scope2": {"total": 0, "categories": {}},
         "scope3_amont": {"total": 0, "categories": {}},
-        "scope3_aval": {"total": 0, "categories": {}}
+        "scope3_aval": {"total": 0, "categories": {}},
     }
-    
+
     for activity in activities:
         scope = activity.get("scope", "scope1")
         category = activity.get("category_id", "other")
-        
-        # Dual reporting: use location-based emissions when requested
-        if reporting_view == "location" and activity.get("reporting_method") == "market" and activity.get("emissions_location") is not None:
-            emissions = activity["emissions_location"]
-        else:
-            emissions = activity.get("emissions", 0) or activity.get("calculated_emissions", 0) or 0
-        
+        emissions = get_activity_emissions(activity, reporting_view)
+
         if scope in scopes:
             scopes[scope]["total"] += emissions
-            if category not in scopes[scope]["categories"]:
-                scopes[scope]["categories"][category] = 0
-            scopes[scope]["categories"][category] += emissions
-    
+            scopes[scope]["categories"][category] = scopes[scope]["categories"].get(category, 0) + emissions
+
     total = sum(s["total"] for s in scopes.values())
-    
+
     return {
         "fiscal_year": serialize_doc(fy),
         "scopes": scopes,
-        "total": total
+        "total": total,
     }
 
 
@@ -334,127 +221,58 @@ async def get_scope_breakdown(
 async def get_dashboard_kpis(
     fiscal_year_id: Optional[str] = None,
     reporting_view: Optional[str] = None,
-    current_user: dict = Depends(get_current_user)
+    current_user: dict = Depends(get_current_user),
 ):
-    """Get key performance indicators using fiscal year context.
-    reporting_view: 'location' to use location-based values for market activities."""
-    company = companies_collection.find_one({"tenant_id": current_user["id"]})
-    
+    """Get key performance indicators using fiscal year context."""
     fiscal_years = list(fiscal_years_collection.find({
-        "tenant_id": current_user["id"]
+        "tenant_id": current_user["id"],
     }).sort("start_date", -1))
-    
-    # Determine current fiscal year
-    current_fy = None
-    previous_fy = None
-    
-    if fiscal_year_id and fiscal_year_id != 'current':
-        current_fy = fiscal_years_collection.find_one({"_id": ObjectId(fiscal_year_id)})
-        if current_fy:
-            current_start = current_fy.get("start_date", "")
-            for fy in fiscal_years:
-                if fy.get("start_date", "") < current_start:
-                    previous_fy = fy
-                    break
-    else:
-        # Find the most recent fiscal year with activities using fiscal_year_id
-        for fy in fiscal_years:
-            fy_id = str(fy["_id"])
-            
-            activity_count = activities_collection.count_documents({
-                "tenant_id": current_user["id"],
-                "fiscal_year_id": fy_id
-            })
-            
-            if activity_count > 0:
-                if not current_fy:
-                    current_fy = fy
-                elif current_fy:
-                    previous_fy = fy
-                    break
-        
-        if not current_fy:
-            for fy in fiscal_years:
-                if fy.get("status") == "draft":
-                    current_fy = fy
-                    break
-    
-    # Get context from current fiscal year (with fallback to company)
+
+    current_fy, previous_fy = resolve_current_and_previous_fy(
+        fiscal_years, fiscal_year_id, current_user["id"], activities_collection,
+    )
+
     current_fy_id = str(current_fy["_id"]) if current_fy else None
     context = get_fiscal_year_context_with_fallback(current_fy_id, current_user["id"])
-    
-    # Helper to get emissions respecting dual reporting
-    def _get_activity_emissions(act):
-        if reporting_view == "location" and act.get("reporting_method") == "market" and act.get("emissions_location") is not None:
-            return act["emissions_location"]
-        return act.get("emissions", 0) or act.get("calculated_emissions", 0) or 0
 
-    # Calculate current emissions using fiscal_year_id
+    # Current emissions
     current_emissions = 0
     current_activities_count = 0
     if current_fy:
         activities = list(activities_collection.find({
             "tenant_id": current_user["id"],
-            "fiscal_year_id": current_fy_id
+            "fiscal_year_id": current_fy_id,
         }))
-        current_emissions = sum(_get_activity_emissions(a) for a in activities)
+        current_emissions = sum(get_activity_emissions(a, reporting_view) for a in activities)
         current_activities_count = len(activities)
-    
-    # Calculate previous emissions using fiscal_year_id
+
+    # Previous emissions
     previous_emissions = 0
     if previous_fy:
         if not reporting_view and previous_fy.get("summary") and previous_fy["summary"].get("total_emissions_tco2e"):
             previous_emissions = previous_fy["summary"].get("total_emissions_tco2e", 0) * 1000
         else:
-            previous_fy_id = str(previous_fy["_id"])
-            
-            activities = list(activities_collection.find({
+            prev_activities = list(activities_collection.find({
                 "tenant_id": current_user["id"],
-                "fiscal_year_id": previous_fy_id
+                "fiscal_year_id": str(previous_fy["_id"]),
             }))
-            previous_emissions = sum(_get_activity_emissions(a) for a in activities)
-    
-    # Calculate KPIs using fiscal year context
-    variation_percent = 0
-    variation_absolute = 0
-    if previous_emissions > 0:
-        variation_absolute = current_emissions - previous_emissions
-        variation_percent = round((variation_absolute / previous_emissions) * 100, 1)
-    
-    # Use context employees/revenue instead of company values
-    context_employees = context.get("employees") or 0
-    context_revenue = context.get("revenue") or 0
-    
-    emissions_per_employee = None
-    if context_employees > 0 and current_emissions > 0:
-        emissions_per_employee = current_emissions / context_employees
-    
-    emissions_per_revenue = None
-    if context_revenue > 0 and current_emissions > 0:
-        revenue_kchf = context_revenue / 1000
-        emissions_per_revenue = current_emissions / revenue_kchf if revenue_kchf > 0 else None
-    
+            previous_emissions = sum(get_activity_emissions(a, reporting_view) for a in prev_activities)
+
+    # Calculate metrics
+    metrics = calculate_kpi_metrics(current_emissions, previous_emissions, context)
+
     products_count = products_collection.count_documents({"tenant_id": current_user["id"]})
-    
-    year_over_year_change = None
-    if previous_emissions > 0 and current_emissions > 0:
-        year_over_year_change = round(((current_emissions - previous_emissions) / previous_emissions) * 100, 1)
-    
+
     return {
         "current_emissions": round(current_emissions, 2),
         "previous_emissions": round(previous_emissions, 2),
-        "variation_percent": variation_percent,
-        "variation_absolute": round(variation_absolute, 2),
+        **metrics,
         "activities_count": current_activities_count,
         "products_count": products_count,
-        "emissions_per_employee": round(emissions_per_employee, 2) if emissions_per_employee else None,
-        "emissions_per_revenue": round(emissions_per_revenue, 2) if emissions_per_revenue else None,
-        "year_over_year_change": year_over_year_change,
         "fiscal_years_count": len(fiscal_years),
         "current_fiscal_year": current_fy.get("name") if current_fy else None,
         "previous_fiscal_year": previous_fy.get("name") if previous_fy else None,
-        # Return context values (from fiscal year or fallback)
-        "employees": context_employees if context_employees > 0 else None,
-        "revenue": context_revenue if context_revenue > 0 else None,
-        "surface_area": context.get("surface_area")
+        "employees": (context.get("employees") or 0) or None,
+        "revenue": (context.get("revenue") or 0) or None,
+        "surface_area": context.get("surface_area"),
     }

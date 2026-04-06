@@ -18,7 +18,7 @@ from config import (
 from models import FiscalYearCreate, FiscalYearDuplicate, FiscalYearContextUpdate
 from services.auth import get_current_user
 from utils import serialize_doc
-from routes.dashboard import normalize_scope_for_reporting
+from services.scope_mapping import normalize_scope_for_reporting
 
 router = APIRouter(prefix="/fiscal-years", tags=["Fiscal Years"])
 

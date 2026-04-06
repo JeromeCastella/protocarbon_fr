@@ -15,6 +15,7 @@ from services.auth import require_admin
 from services.curation_service import (
     build_factor_id_filters, build_curation_query,
     resolve_sort_field, resolve_location_names, resolve_single_location_name,
+    enrich_stats_rows, build_suggest_prompt, call_llm_suggest, map_suggestions_to_factors,
 )
 from utils import serialize_doc, ef_id_filter
 
@@ -198,7 +199,6 @@ async def bulk_apply(
     if not changes:
         raise HTTPException(400, "Aucun changement spécifié")
 
-    from bson import ObjectId
 
     or_filters = build_factor_id_filters(payload.factor_ids)
     if not or_filters:
@@ -237,56 +237,7 @@ async def curation_stats(current_user: dict = Depends(require_admin)):
     ]
 
     raw = list(emission_factors_collection.aggregate(pipeline))
-
-    # Enrich with subcategory names
-    subcat_map = {}
-    for sc in subcategories_collection.find({}):
-        subcat_map[sc["code"]] = {
-            "name_fr": sc.get("name_fr", sc["code"]),
-            "name_de": sc.get("name_de", sc["code"]),
-            "categories": sc.get("categories", []),
-        }
-
-    # Category names
-    cat_map = {}
-    for c in categories_collection.find({}):
-        cat_map[c["code"]] = {"name_fr": c.get("name_fr", c["code"]), "scope": c.get("scope", "")}
-
-    result = []
-    for row in raw:
-        code = row["_id"] or "unknown"
-        sc_info = subcat_map.get(code, {})
-        untreated = row["total"] - row["reviewed"] - row["flagged"]
-        result.append({
-            "subcategory": code,
-            "name_fr": sc_info.get("name_fr", code),
-            "name_de": sc_info.get("name_de", code),
-            "categories": sc_info.get("categories", []),
-            "total": row["total"],
-            "public": row["public"],
-            "reviewed": row["reviewed"],
-            "flagged": row["flagged"],
-            "untreated": untreated,
-            "has_custom_name": row["has_custom_name"],
-            "progress_pct": round(row["reviewed"] / row["total"] * 100) if row["total"] > 0 else 0,
-        })
-
-    # Global totals
-    g_total = sum(r["total"] for r in result)
-    g_reviewed = sum(r["reviewed"] for r in result)
-    g_flagged = sum(r["flagged"] for r in result)
-
-    return {
-        "global": {
-            "total": g_total,
-            "reviewed": g_reviewed,
-            "flagged": g_flagged,
-            "untreated": g_total - g_reviewed - g_flagged,
-            "progress_pct": round(g_reviewed / g_total * 100) if g_total > 0 else 0,
-        },
-        "by_subcategory": result,
-        "categories": {k: v for k, v in cat_map.items()},
-    }
+    return enrich_stats_rows(raw, subcategories_collection, categories_collection)
 
 
 # ==================== NAME PREFIX GROUPS ====================
@@ -336,7 +287,6 @@ async def bulk_copy_originals(
     current_user: dict = Depends(require_admin),
 ):
     """Copy name_fr/name_de or source_product_name -> name_simple_fr/de for factors where simplified name is null."""
-    from bson import ObjectId
 
     if payload.lang not in ("fr", "de"):
         raise HTTPException(400, "lang must be 'fr' or 'de'")
@@ -482,7 +432,6 @@ async def translate_preview(
     current_user: dict = Depends(require_admin),
 ):
     """Generate translation preview using AI. Only for factors with source name set and target empty."""
-    from bson import ObjectId
 
     cfg = DIRECTION_CONFIG.get(payload.direction)
     if not cfg:
@@ -573,10 +522,7 @@ async def suggest_titles(
     if len(payload.factor_ids) > 20:
         raise HTTPException(400, "Maximum 20 facteurs à la fois pour les suggestions")
 
-    from bson import ObjectId
-
     or_filters = build_factor_id_filters(payload.factor_ids)
-
     factors = list(emission_factors_collection.find(
         {"$or": or_filters, "deleted_at": None},
         {"name_fr": 1, "name_de": 1, "subcategory": 1, "default_unit": 1}
@@ -585,66 +531,11 @@ async def suggest_titles(
     if not factors:
         raise HTTPException(404, "Aucun facteur trouvé")
 
-    # Build prompt
-    lines = []
-    for f in factors:
-        fid = str(f["_id"])
-        lines.append(f'- ID: {fid} | Original FR: "{f.get("name_fr", "")}" | Original DE: "{f.get("name_de", "")}" | Unité: {f.get("default_unit", "")}')
-
-    prompt = f"""Tu es un expert en bilan carbone suisse. Simplifie les noms techniques de facteurs d'émission pour les rendre compréhensibles par un utilisateur non-technique.
-
-Règles:
-- Le titre simplifié doit être court (3-8 mots max)
-- Garde l'information essentielle (matériau, type d'énergie, usage)
-- Supprime les codes pays, variantes techniques et références
-- Le titre FR doit être en français courant suisse
-- Le titre DE doit être en allemand courant suisse (Hochdeutsch)
-- Retourne UNIQUEMENT un JSON valide, sans commentaires
-
-Facteurs à simplifier:
-{chr(10).join(lines)}
-
-Retourne un JSON array:
-[{{"id": "...", "name_simple_fr": "...", "name_simple_de": "..."}}]"""
-
     try:
-        import os
-        from emergentintegrations.llm.chat import LlmChat, UserMessage
-
-        chat = LlmChat(
-            api_key=os.environ.get("EMERGENT_LLM_KEY"),
-            session_id=f"curation-suggest-{current_user['id']}",
-            system_message="Tu es un expert en bilan carbone suisse. Tu simplifies les noms techniques de facteurs d'émission.",
-        ).with_model("openai", "gpt-4o-mini")
-
-        response = await chat.send_message(UserMessage(text=prompt))
-
-        # Parse JSON from response (response is a string)
-        import json
-        import re
-        text = response
-        # Extract JSON array from response
-        match = re.search(r'\[.*\]', text, re.DOTALL)
-        if match:
-            suggestions = json.loads(match.group())
-        else:
-            suggestions = json.loads(text)
-
-        # Map back by _id
-        result = []
-        factor_map = {str(f["_id"]): f for f in factors}
-        for s in suggestions:
-            fid = s.get("id", "")
-            if fid in factor_map:
-                result.append({
-                    "factor_id": fid,
-                    "name_fr_original": factor_map[fid].get("name_fr", ""),
-                    "name_simple_fr": s.get("name_simple_fr", ""),
-                    "name_simple_de": s.get("name_simple_de", ""),
-                })
-
+        prompt = build_suggest_prompt(factors)
+        suggestions = await call_llm_suggest(prompt, current_user["id"])
+        result = map_suggestions_to_factors(suggestions, factors)
         return {"suggestions": result}
-
     except Exception as e:
         raise HTTPException(500, f"Erreur de génération IA: {str(e)}")
 
