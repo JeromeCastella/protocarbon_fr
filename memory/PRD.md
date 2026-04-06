@@ -47,8 +47,8 @@ Application full-stack (React/FastAPI/MongoDB) pour la comptabilité carbone d'e
 - `backend/services/plausibility.py` — 11 règles métier
 - `backend/routes/dashboard.py` — API dashboard (reporting_view sur tous endpoints)
 - `frontend/src/context/LanguageContext.js` — Hook i18n
-- `frontend/src/locales/fr.json` — Traductions FR (~549 lignes)
-- `frontend/src/locales/de.json` — Traductions DE (~549 lignes)
+- `frontend/src/locales/fr.json` — Traductions FR (~1100 clés)
+- `frontend/src/locales/de.json` — Traductions DE (~1100 clés)
 
 ## API Endpoints
 - `POST /api/plausibility/check` — Diagnostic de plausibilité
@@ -59,7 +59,6 @@ Application full-stack (React/FastAPI/MongoDB) pour la comptabilité carbone d'e
 ## Backlog
 ### P0
 - **FEAT-CUR-03 — Regroupement par patterns**: Vue qui groupe les facteurs similaires
-- **i18n Phases 4-7**: Admin, Curation, Settings, Auth/Aide
 
 ### P1
 - **FEAT-03 — Multi-utilisateurs**: Rôles Admin/Éditeur/Lecteur
