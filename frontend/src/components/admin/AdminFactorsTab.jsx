@@ -409,8 +409,8 @@ const AdminFactorsTab = ({ factors, subcategories, pagination, onPageChange, onR
         {/* Expert filter */}
         <div className={`flex items-center rounded-lg border overflow-hidden ${isDark ? 'border-slate-600' : 'border-gray-200'}`}>
           {[
-            { key: 'all', label: language === 'fr' ? 'Tous' : 'Alle' },
-            { key: 'public', label: language === 'fr' ? 'Publics' : 'Öffentlich' },
+            { key: 'all', label: t('admin.factors.all') },
+            { key: 'public', label: t('admin.factors.publicFilter') },
             { key: 'expert', label: 'Experts', icon: FlaskConical }
           ].map(({ key, label, icon: Icon }) => (
             <button
@@ -581,7 +581,7 @@ const AdminFactorsTab = ({ factors, subcategories, pagination, onPageChange, onR
       {pagination && pagination.total_pages > 1 && (
         <div className="flex items-center justify-between pt-2">
           <span className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-            {((pagination.page - 1) * pagination.page_size) + 1}–{Math.min(pagination.page * pagination.page_size, pagination.total)} {language === 'fr' ? 'sur' : 'von'} {pagination.total}
+            {((pagination.page - 1) * pagination.page_size) + 1}–{Math.min(pagination.page * pagination.page_size, pagination.total)} {t('admin.factors.of')} {pagination.total}
           </span>
           <div className="flex items-center gap-2">
             <button
@@ -953,12 +953,10 @@ const AdminFactorsTab = ({ factors, subcategories, pagination, onPageChange, onR
                     <FlaskConical className={`w-5 h-5 ${!factorForm.is_public ? 'text-amber-500' : isDark ? 'text-slate-400' : 'text-gray-400'}`} />
                     <div>
                       <span className={`font-medium ${isDark ? 'text-slate-200' : 'text-gray-700'}`}>
-                        {language === 'fr' ? 'Facteur expert' : 'Experten-Faktor'}
+                        {t('admin.factors.expertFactor')}
                       </span>
                       <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-                        {language === 'fr' 
-                          ? 'Les facteurs experts ne sont visibles que si l\'utilisateur active le mode expert'
-                          : 'Experten-Faktoren sind nur im Expertenmodus sichtbar'}
+                        {t('admin.factors.expertFactorDesc')}
                       </p>
                     </div>
                   </div>

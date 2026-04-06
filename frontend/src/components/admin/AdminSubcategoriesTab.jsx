@@ -138,7 +138,7 @@ const AdminSubcategoriesTab = ({ subcategories, onRefetch }) => {
           <div className="flex items-center gap-2">
             <Layers className={`w-4 h-4 ${isDark ? 'text-purple-400' : 'text-purple-500'}`} />
             <span className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-              {language === 'fr' ? 'Sous-catégories' : 'Unterkategorien'}
+              {t('admin.subcategories.subcategoriesLabel')}
             </span>
           </div>
           <div className={`text-2xl font-bold mt-1 ${isDark ? 'text-white' : 'text-gray-900'}`}>
@@ -149,13 +149,13 @@ const AdminSubcategoriesTab = ({ subcategories, onRefetch }) => {
           <div className="flex items-center gap-2">
             <Database className={`w-4 h-4 ${isDark ? 'text-blue-400' : 'text-blue-500'}`} />
             <span className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-              {language === 'fr' ? 'Facteurs totaux' : 'Gesamtfaktoren'}
+              {t('admin.subcategories.totalFactors')}
             </span>
           </div>
           <div className={`text-2xl font-bold mt-1 ${isDark ? 'text-white' : 'text-gray-900'}`}>
             {totalEFs.toLocaleString()}
             <span className={`text-sm font-normal ml-2 ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-              ({totalPublic} {language === 'fr' ? 'publics' : 'öffentlich'})
+              ({totalPublic} {t('admin.subcategories.public')})
             </span>
           </div>
         </div>
@@ -163,7 +163,7 @@ const AdminSubcategoriesTab = ({ subcategories, onRefetch }) => {
           <div className="flex items-center gap-2">
             <FlaskConical className={`w-4 h-4 ${noPublicCount > 0 ? 'text-amber-500' : isDark ? 'text-green-400' : 'text-green-500'}`} />
             <span className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-              {language === 'fr' ? 'Sans facteur public' : 'Ohne öffentlichen Faktor'}
+              {t('admin.subcategories.noPublicFactor')}
             </span>
           </div>
           <div className={`text-2xl font-bold mt-1 ${noPublicCount > 0 ? 'text-amber-500' : isDark ? 'text-green-400' : 'text-green-600'}`}>
@@ -210,7 +210,7 @@ const AdminSubcategoriesTab = ({ subcategories, onRefetch }) => {
                 {t('admin.subcategories.linkedCategories')}
               </th>
               <th className="text-left px-4 py-3 font-medium cursor-pointer select-none" onClick={() => handleSort('ef_total')}>
-                {language === 'fr' ? 'Facteurs' : 'Faktoren'}<SortIndicator field="ef_total" />
+                {t('admin.subcategories.factors')}<SortIndicator field="ef_total" />
               </th>
               <th className="text-left px-4 py-3 font-medium cursor-pointer select-none" onClick={() => handleSort('order')}>
                 {t('common.order')}<SortIndicator field="order" />
@@ -310,7 +310,7 @@ const AdminSubcategoriesTab = ({ subcategories, onRefetch }) => {
 
       {/* Count */}
       <div className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-        {filteredSubcats.length} / {subcategories.length} {language === 'fr' ? 'sous-catégories' : 'Unterkategorien'}
+        {filteredSubcats.length} / {subcategories.length} {t('admin.subcategories.count')}
       </div>
 
       {/* Modal */}
@@ -424,7 +424,7 @@ const AdminSubcategoriesTab = ({ subcategories, onRefetch }) => {
                   <label className={`block text-sm font-medium mb-3 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
                     {t('admin.subcategories.linkedCategories')}
                     <span className={`ml-2 text-xs font-normal ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-                      ({form.categories.length} {language === 'fr' ? 'sélectionnée(s)' : 'ausgewählt'})
+                      ({form.categories.length} {t('admin.subcategories.selected')})
                     </span>
                   </label>
                   <div className="space-y-4">

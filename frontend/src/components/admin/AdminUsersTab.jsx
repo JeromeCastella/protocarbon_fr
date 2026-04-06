@@ -89,7 +89,7 @@ const AdminUsersTab = ({ users, currentUserId, onRefetch }) => {
           }`}
         >
           <UserPlus className="w-5 h-5" />
-          {language === 'fr' ? 'Créer un utilisateur' : 'Benutzer erstellen'}
+          {t('admin.users.createUser')}
         </button>
       </div>
 
@@ -163,7 +163,7 @@ const AdminUsersTab = ({ users, currentUserId, onRefetch }) => {
                       className="inline-flex items-center gap-1 px-3 py-1.5 rounded text-sm bg-red-500/10 text-red-500 hover:bg-red-500/20 transition-colors disabled:opacity-50"
                     >
                       <Trash2 className="w-4 h-4" />
-                      {language === 'fr' ? 'Supprimer' : 'Löschen'}
+                      {t('admin.users.delete')}
                     </button>
                   )}
                 </td>
@@ -179,7 +179,7 @@ const AdminUsersTab = ({ users, currentUserId, onRefetch }) => {
           <div className={`w-full max-w-md rounded-2xl shadow-2xl p-6 ${isDark ? 'bg-slate-800' : 'bg-white'}`}>
             <div className="flex items-center justify-between mb-6">
               <h3 className={`text-xl font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                {language === 'fr' ? 'Créer un utilisateur' : 'Benutzer erstellen'}
+                {t('admin.users.createUser')}
               </h3>
               <button
                 onClick={() => {
@@ -216,7 +216,7 @@ const AdminUsersTab = ({ users, currentUserId, onRefetch }) => {
               {/* Name */}
               <div>
                 <label className={`block text-sm font-medium mb-1 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
-                  {language === 'fr' ? 'Nom' : 'Name'}
+                  {t('admin.users.name')}
                 </label>
                 <input
                   type="text"
@@ -228,14 +228,14 @@ const AdminUsersTab = ({ users, currentUserId, onRefetch }) => {
                       ? 'bg-slate-700 border-slate-600 text-white focus:border-green-500' 
                       : 'bg-white border-gray-300 text-gray-900 focus:border-green-500'
                   } focus:outline-none focus:ring-2 focus:ring-green-500/20`}
-                  placeholder={language === 'fr' ? 'Jean Dupont' : 'Max Mustermann'}
+                  placeholder={t('admin.users.namePlaceholder')}
                 />
               </div>
 
               {/* Password */}
               <div>
                 <label className={`block text-sm font-medium mb-1 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
-                  {language === 'fr' ? 'Mot de passe' : 'Passwort'} *
+                  {t('admin.users.password')} *
                 </label>
                 <div className="relative">
                   <input
@@ -261,14 +261,14 @@ const AdminUsersTab = ({ users, currentUserId, onRefetch }) => {
                   </button>
                 </div>
                 <p className={`text-xs mt-1 ${isDark ? 'text-slate-500' : 'text-gray-500'}`}>
-                  {language === 'fr' ? 'Minimum 6 caractères' : 'Mindestens 6 Zeichen'}
+                  {t('admin.users.minChars')}
                 </p>
               </div>
 
               {/* Role */}
               <div>
                 <label className={`block text-sm font-medium mb-1 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
-                  {language === 'fr' ? 'Rôle' : 'Rolle'}
+                  {t('admin.users.role')}
                 </label>
                 <select
                   value={createForm.role}
@@ -306,7 +306,7 @@ const AdminUsersTab = ({ users, currentUserId, onRefetch }) => {
                       : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                   }`}
                 >
-                  {language === 'fr' ? 'Annuler' : 'Abbrechen'}
+                  {t('common.cancel')}
                 </button>
                 <button
                   type="submit"
@@ -317,10 +317,10 @@ const AdminUsersTab = ({ users, currentUserId, onRefetch }) => {
                   {loading ? (
                     <span className="flex items-center justify-center gap-2">
                       <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                      {language === 'fr' ? 'Création...' : 'Erstellen...'}
+                      {t('admin.users.creating')}
                     </span>
                   ) : (
-                    language === 'fr' ? 'Créer' : 'Erstellen'
+                    t('common.create')
                   )}
                 </button>
               </div>
@@ -339,7 +339,7 @@ const AdminUsersTab = ({ users, currentUserId, onRefetch }) => {
               </div>
               <div>
                 <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                  {language === 'fr' ? 'Confirmer la suppression' : 'Löschen bestätigen'}
+                  {t('admin.users.deleteConfirmTitle')}
                 </h3>
               </div>
               <button
@@ -351,9 +351,7 @@ const AdminUsersTab = ({ users, currentUserId, onRefetch }) => {
             </div>
             
             <p className={`mb-6 ${isDark ? 'text-slate-300' : 'text-gray-600'}`}>
-              {language === 'fr' 
-                ? `Êtes-vous sûr de vouloir supprimer l'utilisateur "${deleteConfirm.email}" ? Cette action est irréversible.`
-                : `Sind Sie sicher, dass Sie den Benutzer "${deleteConfirm.email}" löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.`}
+              {t('admin.users.deleteConfirmMsg').replace('{email}', deleteConfirm.email)}
             </p>
             
             <div className="flex gap-3 justify-end">
@@ -365,7 +363,7 @@ const AdminUsersTab = ({ users, currentUserId, onRefetch }) => {
                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                 }`}
               >
-                {language === 'fr' ? 'Annuler' : 'Abbrechen'}
+                {t('common.cancel')}
               </button>
               <button
                 onClick={() => handleDeleteUser(deleteConfirm.id)}
@@ -376,10 +374,10 @@ const AdminUsersTab = ({ users, currentUserId, onRefetch }) => {
                 {loading ? (
                   <span className="flex items-center gap-2">
                     <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                    {language === 'fr' ? 'Suppression...' : 'Löschen...'}
+                    {t('admin.users.deleting')}
                   </span>
                 ) : (
-                  language === 'fr' ? 'Supprimer définitivement' : 'Endgültig löschen'
+                  t('admin.users.deletePermanently')
                 )}
               </button>
             </div>

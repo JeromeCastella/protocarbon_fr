@@ -18,7 +18,7 @@ const INITIAL_FORM = {
 
 const AdminUnitsTab = ({ unitConversions, onRefetch }) => {
   const { isDark } = useTheme();
-  const { language } = useLanguage();
+  const { t, language } = useLanguage();
   const [search, setSearch] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [editing, setEditing] = useState(null);
@@ -45,7 +45,7 @@ const AdminUnitsTab = ({ unitConversions, onRefetch }) => {
   };
 
   const handleDelete = async (convId) => {
-    if (!window.confirm(language === 'fr' ? 'Supprimer cette conversion ?' : 'Diese Umrechnung löschen?')) return;
+    if (!window.confirm(t('admin.units.deleteConfirm'))) return;
     try {
       await axios.delete(`${API_URL}/api/admin/unit-conversions/${convId}`);
       onRefetch();
@@ -97,11 +97,11 @@ const AdminUnitsTab = ({ unitConversions, onRefetch }) => {
             {unitConversions.length}
           </span>
           <span className={`ml-2 text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-            {language === 'fr' ? 'conversions d\'unités' : 'Einheitenumrechnungen'}
+            {t('admin.units.title')}
           </span>
         </div>
         <div className={`ml-auto text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-          {Object.keys(groupedByFrom).length} {language === 'fr' ? 'unités source' : 'Quelleinheiten'}
+          {Object.keys(groupedByFrom).length} {t('admin.units.sourceUnits')}
         </div>
       </div>
 
@@ -114,7 +114,7 @@ const AdminUnitsTab = ({ unitConversions, onRefetch }) => {
             data-testid="unit-search"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder={language === 'fr' ? 'Rechercher une conversion...' : 'Umrechnung suchen...'}
+            placeholder={t('admin.units.searchPlaceholder')}
             className={`w-full pl-10 pr-4 py-2 rounded-lg border ${isDark ? 'bg-slate-700 border-slate-600 text-white' : 'bg-white border-gray-200'}`}
           />
         </div>
@@ -124,7 +124,7 @@ const AdminUnitsTab = ({ unitConversions, onRefetch }) => {
           className="flex items-center gap-2 px-4 py-2 bg-teal-500 text-white rounded-lg hover:bg-teal-600"
         >
           <Plus className="w-5 h-5" />
-          {language === 'fr' ? 'Ajouter' : 'Hinzufügen'}
+          {t('admin.units.add')}
         </button>
       </div>
 
@@ -134,20 +134,20 @@ const AdminUnitsTab = ({ unitConversions, onRefetch }) => {
           <thead>
             <tr className={isDark ? 'bg-slate-700' : 'bg-gray-50'}>
               <th className={`text-left px-4 py-3 font-medium ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
-                {language === 'fr' ? 'Unité source' : 'Quelleinheit'}
+                {t('admin.units.sourceUnit')}
               </th>
               <th className="px-4 py-3 w-10"></th>
               <th className={`text-left px-4 py-3 font-medium ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
-                {language === 'fr' ? 'Unité cible' : 'Zieleinheit'}
+                {t('admin.units.targetUnit')}
               </th>
               <th className={`text-left px-4 py-3 font-medium ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
-                {language === 'fr' ? 'Facteur' : 'Faktor'}
+                {t('admin.units.factor')}
               </th>
               <th className={`text-left px-4 py-3 font-medium ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
-                {language === 'fr' ? 'Description' : 'Beschreibung'}
+                {t('admin.units.description')}
               </th>
               <th className={`text-right px-4 py-3 font-medium ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
-                Actions
+                {t('common.actions')}
               </th>
             </tr>
           </thead>
@@ -189,14 +189,14 @@ const AdminUnitsTab = ({ unitConversions, onRefetch }) => {
                     <button
                       onClick={() => handleEdit(conv)}
                       className={`p-2 rounded-lg ${isDark ? 'hover:bg-slate-600' : 'hover:bg-gray-100'}`}
-                      title={language === 'fr' ? 'Modifier' : 'Bearbeiten'}
+                      title={t('admin.units.edit')}
                     >
                       <Edit2 className="w-4 h-4" />
                     </button>
                     <button
                       onClick={() => handleDelete(conv.id)}
                       className="p-2 rounded-lg text-red-500 hover:bg-red-500/10"
-                      title={language === 'fr' ? 'Supprimer' : 'Löschen'}
+                      title={t('admin.units.delete')}
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
@@ -207,7 +207,7 @@ const AdminUnitsTab = ({ unitConversions, onRefetch }) => {
             {filteredConversions.length === 0 && (
               <tr>
                 <td colSpan={6} className={`px-4 py-8 text-center ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-                  {language === 'fr' ? 'Aucune conversion trouvée' : 'Keine Umrechnung gefunden'}
+                  {t('admin.units.noResults')}
                 </td>
               </tr>
             )}
@@ -217,7 +217,7 @@ const AdminUnitsTab = ({ unitConversions, onRefetch }) => {
 
       {/* Count */}
       <div className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
-        {filteredConversions.length} / {unitConversions.length} {language === 'fr' ? 'conversions' : 'Umrechnungen'}
+        {filteredConversions.length} / {unitConversions.length} {t('admin.units.count')}
       </div>
 
       {/* Modal */}
@@ -243,8 +243,8 @@ const AdminUnitsTab = ({ unitConversions, onRefetch }) => {
                   <h3 className="text-xl font-bold flex items-center gap-2">
                     <Repeat className="w-6 h-6 text-teal-500" />
                     {editing
-                      ? (language === 'fr' ? 'Modifier la conversion' : 'Umrechnung bearbeiten')
-                      : (language === 'fr' ? 'Nouvelle conversion' : 'Neue Umrechnung')
+                      ? t('admin.units.editTitle')
+                      : t('admin.units.newTitle')
                     }
                   </h3>
                   <button onClick={() => setShowModal(false)} className={`p-2 rounded-lg ${isDark ? 'hover:bg-slate-700' : 'hover:bg-gray-100'}`}>
@@ -259,7 +259,7 @@ const AdminUnitsTab = ({ unitConversions, onRefetch }) => {
                 <div className="grid grid-cols-5 gap-3 items-end">
                   <div className="col-span-2">
                     <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
-                      {language === 'fr' ? 'Unité source *' : 'Quelleinheit *'}
+                      {t('admin.units.sourceUnitRequired')}
                     </label>
                     <input
                       type="text"
@@ -275,7 +275,7 @@ const AdminUnitsTab = ({ unitConversions, onRefetch }) => {
                   </div>
                   <div className="col-span-2">
                     <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
-                      {language === 'fr' ? 'Unité cible *' : 'Zieleinheit *'}
+                      {t('admin.units.targetUnitRequired')}
                     </label>
                     <input
                       type="text"
@@ -291,7 +291,7 @@ const AdminUnitsTab = ({ unitConversions, onRefetch }) => {
                 {/* Factor */}
                 <div>
                   <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
-                    {language === 'fr' ? 'Facteur de conversion *' : 'Umrechnungsfaktor *'}
+                    {t('admin.units.conversionFactorRequired')}
                   </label>
                   <input
                     type="number"
@@ -313,7 +313,7 @@ const AdminUnitsTab = ({ unitConversions, onRefetch }) => {
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
-                      Description FR
+                   {t('admin.units.descriptionFr')}
                     </label>
                     <input
                       type="text"
@@ -326,7 +326,7 @@ const AdminUnitsTab = ({ unitConversions, onRefetch }) => {
                   </div>
                   <div>
                     <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
-                      Description DE
+                      {t('admin.units.descriptionDe')}
                     </label>
                     <input
                       type="text"
@@ -347,7 +347,7 @@ const AdminUnitsTab = ({ unitConversions, onRefetch }) => {
                     onClick={() => setShowModal(false)}
                     className={`flex-1 px-4 py-3 rounded-xl border ${isDark ? 'border-slate-600 hover:bg-slate-700' : 'border-gray-200 hover:bg-gray-50'}`}
                   >
-                    {language === 'fr' ? 'Annuler' : 'Abbrechen'}
+                    {t('common.cancel')}
                   </button>
                   <button
                     data-testid="conversion-save-btn"
@@ -356,7 +356,7 @@ const AdminUnitsTab = ({ unitConversions, onRefetch }) => {
                     className="flex-1 px-4 py-3 bg-teal-500 text-white rounded-xl hover:bg-teal-600 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                   >
                     <Check className="w-5 h-5" />
-                    {editing ? (language === 'fr' ? 'Modifier' : 'Bearbeiten') : (language === 'fr' ? 'Créer' : 'Erstellen')}
+                    {editing ? t('common.edit') : t('common.create')}
                   </button>
                 </div>
               </div>

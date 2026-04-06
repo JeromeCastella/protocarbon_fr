@@ -10,7 +10,7 @@ const AdminTabs = ({ activeTab, setActiveTab, factorsCount, subcategoriesCount, 
   const tabs = [
     { id: 'factors', labelKey: 'admin.tabs.factors', icon: Database, count: factorsCount, color: 'bg-blue-500' },
     { id: 'subcategories', labelKey: 'admin.tabs.subcategories', icon: Layers, count: subcategoriesCount, color: 'bg-purple-500' },
-    { id: 'units', label: 'Conversions', icon: Repeat, count: unitsCount, color: 'bg-teal-500' },
+    { id: 'units', labelKey: 'admin.tabs.conversions', icon: Repeat, count: unitsCount, color: 'bg-teal-500' },
     { id: 'users', labelKey: 'admin.tabs.users', icon: Users, count: usersCount, color: 'bg-green-500' },
     { id: 'export', labelKey: 'admin.tabs.export', icon: Download, count: null, color: 'bg-orange-500' }
   ];
