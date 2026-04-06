@@ -16,10 +16,10 @@ Calculateur d'empreinte carbone pour entreprise suivant le GHG Protocol. Applica
     │   ├── components/
     │   │   ├── general-info/ (4 composants)
     │   │   ├── fiscal-years/ (2 composants)
-    │   │   ├── data-entry/ (2 composants)
+    │   │   ├── data-entry/ (GlobalFactorSearch, TableViewPanel, dataEntryConstants)
     │   │   ├── curation-workbench/ (9 composants)
     │   │   └── assistance/ (4 composants)
-    │   ├── hooks/ (useGeneralInfo, useFiscalYearsPage, useCurationWorkbench, useAssistance, ...)
+    │   ├── hooks/ (useGeneralInfo, useFiscalYearsPage, useCurationWorkbench, useAssistance, useDataEntry, useAdminExport, useProductVersions, useProductSale, ...)
     │   ├── pages/
     │   └── context/
 ```
@@ -46,13 +46,20 @@ Calculateur d'empreinte carbone pour entreprise suivant le GHG Protocol. Applica
 - **tests** : Secret hardcodé supprimé de `test_code_refactoring_phase5.py`.
 - Tests : iteration_69.json — 100% (26 backend + 3 frontend)
 
+### Phase B — Frontend Complexity Refactoring (06/04/2026) DONE
+- **DataEntry.js** : 884 → 445 lignes. Hook `useDataEntry.js` (235L) extrait avec toute la logique métier. Sous-composants `EmptyFiscalYearState`, `SidebarProgress`, `Category33Modal`.
+- **AdminExportTab.jsx** : 527 → 265 lignes. Hook `useAdminExport.js` (108L). Sous-composants `ResultMessage`, `MongoDumpSection`.
+- **ProductVersionsModal.js** : 544 → 286 lignes. Hook `useProductVersions.js` (126L). Sous-composants `ProfileForm`, `EmissionBadges`, `ProfilesList`.
+- **ProductSaleModal.js** : 530 → 297 lignes. Hook `useProductSale.js` (122L). Sous-composants `ProductSelector`, `ActiveProfileBadge`, `EmissionsPreview`, `DeleteConfirmation`, `EmptyProducts`.
+- **dataEntryConstants.js** : Constantes partagées (PRODUCT_SALE_CATEGORIES, iconMap, formatEmissions, normalizeScope).
+- Tests : iteration_70.json — 100% (16 backend + all frontend)
+
 ## Backlog (P0-P2)
 - **P0**: FEAT-CUR-03 — Regroupement par patterns (atelier curation)
-- **P1**: Phase B — Découpage composants restants (DataEntry 883L, AdminExportTab 516L, ProductVersionsModal 514L, ProductSaleModal 497L, FactorSelectionStep 307L, FiscalYearSelector 270L, Layout 175L)
-- **P1**: Phase C — React Hook Dependencies (107 instances)
+- **P1**: Phase C — React Hook Dependencies (107 instances de stale closures)
+- **P1**: Phase D — Ternaires imbriqués (207) + Inline Objects Props (370)
 - **P1**: FEAT-03 — Gestion multi-utilisateurs (rôles)
 - **P1**: Exports PDF/Excel
-- **P2**: Phase D — Ternaires imbriqués (207) + Inline Objects Props (370)
 - **P2**: Type Hints Python progressif
 - **P2**: Sécurité Token Storage (HTTP-only cookies)
 - **P2**: Base de données plan climat cantonal
