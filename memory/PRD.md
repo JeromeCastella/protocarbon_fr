@@ -14,12 +14,14 @@ Calculateur d'empreinte carbone pour entreprise suivant le GHG Protocol. Applica
 └── frontend/
     ├── src/
     │   ├── components/
-    │   │   ├── admin/factors/ (Phase 3 refactoring)
-    │   │   ├── dashboard-page/ (Phase 4 refactoring)
-    │   │   ├── general-info/ (Phase 5 refactoring: CompanyIdentityCard, FiscalYearContextCard, ScopePerimeterCard, WizardModal)
-    │   │   ├── fiscal-years/ (Phase 5 refactoring: FiscalYearCard, FiscalYearModals)
-    │   │   └── data-entry/ (Phase 5 refactoring: TableViewPanel, GlobalFactorSearch)
-    │   ├── hooks/ (useAdminFactors, useDashboard, useGeneralInfo, useFiscalYearsPage)
+    │   │   ├── admin/factors/
+    │   │   ├── dashboard-page/
+    │   │   ├── general-info/ (CompanyIdentityCard, FiscalYearContextCard, ScopePerimeterCard, WizardModal)
+    │   │   ├── fiscal-years/ (FiscalYearCard, FiscalYearModals)
+    │   │   ├── data-entry/ (TableViewPanel, GlobalFactorSearch)
+    │   │   ├── curation-workbench/ (StatsDashboard, BulkActionsBar, EditableCell, StatusBadge, AISuggestModal, TranslatePreviewModal, BulkPreviewModal, JsonViewerModal, CurationTable)
+    │   │   └── assistance/ (assistanceData.js, FaqTab, FactorsTab, FactorDetailModal)
+    │   ├── hooks/ (useAdminFactors, useDashboard, useGeneralInfo, useFiscalYearsPage, useCurationWorkbench, useAssistance)
     │   ├── pages/
     │   └── context/
 ```
@@ -36,41 +38,41 @@ Calculateur d'empreinte carbone pour entreprise suivant le GHG Protocol. Applica
 - Configuration guidée du périmètre (wizard)
 
 ## Revue de Code (6 phases)
-### Phase 1 — Key Props ✅ (06/04/2026)
-- 6 instances d'index-as-key corrigées (StepEndOfLife, RecommendationsList, ProductWizard, ProductDetailModal, PasswordStrength)
-- Python `is` vs `==` : confirmé faux positif (0 vrais problèmes)
+### Phase 1 — Key Props (06/04/2026)
+- 6 instances d'index-as-key corrigées
+- Python `is` vs `==` : confirmé faux positif
 
-### Phase 2 — React Hook Dependencies ✅ (06/04/2026)
-- fetchData → useCallback dans DataEntry.js, GeneralInfo.js, FiscalYears.js
-- Suppression des eslint-disable-next-line dans GeneralInfo.js et FiscalYears.js
+### Phase 2 — React Hook Dependencies (06/04/2026)
+- fetchData -> useCallback dans DataEntry.js, GeneralInfo.js, FiscalYears.js
 
-### Phase 3 — Sécurité Token Storage ⏸️ (Reporté par l'utilisateur)
-- Pros/cons présentés (HTTP-only cookies vs short-lived tokens vs statu quo)
+### Phase 3 — Sécurité Token Storage (Reporté)
 - Décision : reporter à plus tard
 
-### Phase 4 — Refactoring Backend ✅ (06/04/2026)
-- dashboard.py : 461 → ~260 lignes. 6 helpers DRY extraits vers services/dashboard_service.py
-- curation.py : curation_stats (69→21 lignes), suggest_titles (80→23 lignes), logique extraite vers services/curation_service.py
-- fiscal_years.py : import corrigé de routes.dashboard → services.scope_mapping
+### Phase 4 — Refactoring Backend (06/04/2026)
+- dashboard.py : 461 -> ~260 lignes, services/dashboard_service.py
+- curation.py : logique extraite vers services/curation_service.py
 
-### Phase 5 — Refactoring Frontend ✅ (06/04/2026)
-- GeneralInfo.js : 1338 → 91 lignes (hook + 4 sous-composants)
-- FiscalYears.js : 1047 → 77 lignes (hook + 2 sous-composants)
-- DataEntry.js : 1506 → 883 lignes (2 composants inline extraits + bug token corrigé)
-- Bug corrigé : GlobalFactorSearch utilisait `token` non défini dans son scope
+### Phase 5 — Refactoring Frontend COMPLET (06/04/2026)
+- GeneralInfo.js : 1338 -> 91 lignes (hook + 4 sous-composants)
+- FiscalYears.js : 1047 -> 77 lignes (hook + 2 sous-composants)
+- DataEntry.js : 1506 -> 883 lignes (2 composants extraits + bug token corrigé)
+- CurationWorkbench.jsx : 1193 -> 135 lignes (hook + 9 sous-composants)
+- Assistance.js : 841 -> 71 lignes (hook + 4 sous-composants)
+- Tests validés : iteration_67 (100%) + iteration_68 (100%)
 
-### Phase 6 — Type Hints Python 🔜 (À venir)
+### Phase 6 — Type Hints Python (A venir)
 
 ## Backlog (P0-P2)
 - **P0**: FEAT-CUR-03 — Regroupement par patterns (atelier curation)
 - **P1**: FEAT-03 — Gestion multi-utilisateurs (rôles)
 - **P1**: Exports PDF/Excel
-- **P1**: Refactoring CurationWorkbench.jsx (1192 lignes) et Assistance.js (840 lignes)
 - **P2**: Base de données actions plan climat cantonal
 - **P2**: Logs d'audit
 - **P2**: Optimisation requêtes DB (projections MongoDB)
 - **P2**: Type hints Python progressif
 - **P2**: Sécurité Token Storage (HTTP-only cookies ou short-lived tokens)
+- **P2**: Ternaires imbriqués (208 instances restantes)
+- **P2**: Migration TypeScript progressive
 
 ## Intégrations 3P
 - Google Gemini Pro (Emergent LLM Key) — module de curation
