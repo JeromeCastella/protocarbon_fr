@@ -18,7 +18,7 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-	  port: 22
+          port: 22
           script: |
             cd ~/protocarbon_fr
             git pull origin main
@@ -31,4 +31,4 @@ jobs:
             pip install -r requirements.txt --ignore-installed
             pkill -f uvicorn || true
             nohup python3 -m uvicorn server:app --host 127.0.0.1 --port 8001 > ~/uvicorn.log 2>&1 &
-            echo "✅ Déploiement terminé !"
+            echo "Deploiement termine !"
